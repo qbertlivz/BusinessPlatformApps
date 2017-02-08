@@ -51,7 +51,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             string clientId;
             string resource;
 
-            string oauthType = (request.DataStore.GetValue("oauthType") ?? string.Empty).ToLowerInvariant();
+            string oauthType = (request.DataStore.GetLastValue("oauthType") ?? string.Empty).ToLowerInvariant();
             switch (oauthType)
             {
                 case "mscrm":

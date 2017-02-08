@@ -1,0 +1,6 @@
+﻿<template bindable="aDescription, aLink, aLinkText, aDescription2, aLink2, aLinkText2">
+    <span>${aDescription}</span>
+    <span><a href.bind="aLink" target="_blank">${aLinkText}</a></span>
+    <span if.bind="aDescription2">${aDescription2}</span>
+    <span if.bind="aLink2"><a href.bind="aLink2" target="_blank">${aLinkText2}</a></span>
+</template>

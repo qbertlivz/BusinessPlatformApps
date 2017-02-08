@@ -34,9 +34,9 @@ BEGIN
              table_name IN ('account', 'lead', 'opportunity', 'opportunitylineitem', 'opportunitystage', 'product2', 'user', 'userrole')
            ) OR
            ( table_schema = 'smgt' AND
-             table_name IN ('AccountView', 'ActualSales', 'ActualSalesView', 'BusinessUnitView', 'configuration', 'ConfigurationView', 'date', 'DateView',
-                            'LeadView', 'MeasuresView', 'OpportunityProductView', 'OpportunityView', 'ProductView', 'Quotas', 'QuotaView', 'Targets',
-                            'TargetView', 'TempUserView', 'TerritoryView', 'UserAscendantsView', 'userMapping', 'UserView'
+             table_name IN ('accountview', 'actualsales', 'actualsalesview', 'businessunitview', 'configuration', 'configurationview', 'date', 'dateview',
+                            'leadview', 'measuresview', 'opportunityproductview', 'opportunityview', 'productview', 'quotas', 'quotaview', 'targets',
+                            'targetview', 'tempuserview', 'territoryview', 'userascendantsview', 'usermapping', 'userview'
                            )
            );
 END;

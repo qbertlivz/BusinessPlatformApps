@@ -10,10 +10,6 @@ export class SearchTerms extends ViewModelBase {
     }
 
     async OnValidate(): Promise<boolean> {
-        if (!super.OnValidate()) {
-            return false;
-        }
-
         if (this.searchQuery.length > 0) {
             this.isValidated = true;
             this.showValidation = true;

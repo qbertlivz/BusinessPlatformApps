@@ -206,8 +206,8 @@ foreach ($k in $file2table.Keys)
 
 if ( [string]::IsNullOrEmpty($sql_uid) )
 {
-    & $sqlcmd -I -a 32767 -S $DestinationServer -d $DestinationDatabase -E -i "process data.sql"
+    & $sqlcmd -I -S $DestinationServer -d $DestinationDatabase -E -i "process data.sql"
 } else
 {
-    & $sqlcmd -I -a 32767 -S $DestinationServer -d $DestinationDatabase -U $sql_uid -P $sql_pwd -i "process data.sql"
+    & $sqlcmd -I -S $DestinationServer -d $DestinationDatabase -U $sql_uid -P $sql_pwd -i "process data.sql"
 }

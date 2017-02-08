@@ -26,6 +26,7 @@ export class SqlServer extends ViewModelBase {
     showDatabases: boolean = false;
     showNewSqlOption: boolean = false;
     showSkuS1: boolean = true;
+    showSqlRecoveryModeHint: boolean = false;
     sqlInstance: string = 'ExistingSql';
     sqlServer: string = '';
     sqlSku: string = 'S1';
@@ -33,6 +34,7 @@ export class SqlServer extends ViewModelBase {
     validateWindowsCredentials: boolean = false;
     validationTextBox: string = '';
 
+    credentialTarget: string = '';
     useImpersonation: boolean = false;
 
     constructor() {
@@ -94,8 +96,10 @@ export class SqlServer extends ViewModelBase {
 
         if (this.sqlInstance === 'ExistingSql') {
             response = await this.MS.HttpService.executeAsync('Microsoft-GetSqlConnectionString', body);
+            this.MS.DataStore.addToDataStore('Database', this.database, DataStoreType.Public);
         } else if (this.sqlInstance === 'NewSql') {
             response = await this.CreateDatabaseServer();
+            this.MS.DataStore.addToDataStore('Database', this.newSqlDatabase, DataStoreType.Public);
         }
 
         if (!response || !response.IsSuccess) {
@@ -104,8 +108,8 @@ export class SqlServer extends ViewModelBase {
 
         this.MS.DataStore.addToDataStore('SqlConnectionString', response.Body.value, DataStoreType.Private);
         this.MS.DataStore.addToDataStore('Server', this.getSqlServer(), DataStoreType.Public);
-        this.MS.DataStore.addToDataStore('Database', this.database, DataStoreType.Public);
         this.MS.DataStore.addToDataStore('Username', this.username, DataStoreType.Public);
+        this.MS.DataStore.addToDataStore('Password', this.password, DataStoreType.Private);
 
         if (this.checkSqlVersion) {
             let responseVersion = await this.MS.HttpService.executeAsync('Microsoft-CheckSQLVersion', body);
@@ -115,14 +119,9 @@ export class SqlServer extends ViewModelBase {
         }
 
         if (this.useImpersonation) {
-            this.MS.DataStore.addToDataStore('CredentialTarget', 'pbi_sccm', DataStoreType.Private);
+            this.MS.DataStore.addToDataStore('CredentialTarget', this.credentialTarget, DataStoreType.Private);
             this.MS.DataStore.addToDataStore('CredentialUsername', this.username, DataStoreType.Private);
             this.MS.DataStore.addToDataStore('CredentialPassword', this.password, DataStoreType.Private);
-
-            body.CredentialTarget = 'pbi_sccm';
-            body.CredentialUsername = this.username;
-            body.CredentialPassword = this.password;
-
             let responseVersion = await this.MS.HttpService.executeAsync('Microsoft-CredentialManagerWrite', body);
             if (!responseVersion.IsSuccess) {
                 return false;
@@ -170,10 +169,8 @@ export class SqlServer extends ViewModelBase {
 
     private async CreateDatabaseServer() {
         this.navigationMessage = this.MS.Translate.SQL_SERVER_CREATING_NEW;
-
         let body = this.GetBody(true);
         body['SqlCredentials']['Database'] = this.newSqlDatabase;
-
         this.MS.DataStore.addToDataStore('SqlSku', this.sqlSku, DataStoreType.Public);
 
         return await this.MS.HttpService.executeAsync('Microsoft-CreateAzureSql', body);

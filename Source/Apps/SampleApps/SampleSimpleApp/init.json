@@ -11,7 +11,7 @@
           {
             "name": "Microsoft-TestServiceActionFailed",
             "TargetSchema": "pbist",
-            "subtitle": "$(this.subtitle, isSaved=true)"
+            "subtitle": "$save(this.subtitle)"
           }
         ]
       }

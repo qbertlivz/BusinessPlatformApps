@@ -1,13 +1,12 @@
 ﻿<template>
+    <require from="../directives/bpst-link.html"></require>
+
     <!-- Heading -->
     <h1 class="st-title">${MS.Translate.GETTING_STARTED_TITLE} ${templateName}</h1>
     <p class="st-subtitle">${subtitle}</p>
 
     <!-- Prerequisites -->
-    <div if.bind="prerequisitesDescription">
-        <span>${prerequisitesDescription}</span>
-        <a href="${prerequisitesLink}">${prerequisiteLinkText}</a>
-    </div>
+    <bpst-link if.bind="prerequisitesDescription" a-description="${prerequisitesDescription}" a-link="${prerequisitesLink}" a-link-text="${prerequisiteLinkText}"></bpst-link>
 
     <!-- Set Up -->
     <div if.bind="list1.length > 0">
@@ -37,7 +36,9 @@
 
     <!-- Registration -->
     <div class="st-text" if.bind="registration">
-        <p class"st-text">${registration}</p>
+        <p class"st-text">
+            <bpst-link a-description="${registration}" a-link="${registrationContactLink}" a-link-text="${registrationContactLinkText}"></bpst-link>
+        </p>
 
         <p class="st-text">${MS.Translate.GETTING_STARTED_FIRST_NAME}</p>
         <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registrationNameFirst" />
@@ -61,13 +62,10 @@
             </label>
         </div>
 
-        <button class="primary" click.delegate="Register()" disabled.bind="!registrationAccepted || MS.HttpService.isServiceBusy">${MS.Translate.COMMON_REGISTER}</button>
-
-        <p class="st-text" if.bind="registrationError">${registrationError}</p>
+        <button class="primary" click.trigger="Register()" disabled.bind="!registrationAccepted || MS.HttpService.isServiceBusy">${MS.Translate.COMMON_REGISTER}</button>
 
         <p class="smallFontSize">
-            <span>${registrationPrivacy}</span>
-            <span><a href.bind="registrationLink" target="_blank">${registrationPrivacyTitle}</a></span>
+            <bpst-link a-description="${registrationPrivacy}" a-link="${registrationLink}" a-link-text="${registrationPrivacyTitle}" a-description2="${MS.Translate.COMMON_AND}" a-link2="${registrationEulaLink}" a-link-text2="${registrationEulaLinkText}"></bpst-link>
         <p>
     </div>
 </template>

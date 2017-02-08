@@ -60,9 +60,9 @@
 
     <!-- Emails -->
     <div class="st-email-background if.bind="showEmailSubmission"></div>
-    <div class="st-email-background st-email-wrapper" click.delegate="showEmailSubmission = false" if.bind="showEmailSubmission">
-        <div class="st-email-submission" click.delegate="$event.stopPropagation()">
-            <span class="glyphicon pbi-glyph-close st-contact-us-close" click.delegate="showEmailSubmission = false"></span>
+    <div class="st-email-background st-email-wrapper" click.trigger="showEmailSubmission = false" if.bind="showEmailSubmission">
+        <div class="st-email-submission" click.trigger="$event.stopPropagation()">
+            <span class="glyphicon pbi-glyph-close st-contact-us-close" click.trigger="showEmailSubmission = false"></span>
             <div class="st-email-centered st-email-heading">${MS.Translate.PROGRESS_OKAY}</div>
             <div class="st-email-centered st-text">${MS.Translate.PROGRESS_SIGN_UP}</div>
             <div class="st-email-fields">
@@ -73,10 +73,10 @@
             <div class="st-email-centered st-text">
                 <span>${MS.Translate.PROGRESS_UNSUBSCRIBE}</span>
                 <span>${MS.Translate.COMMON_SEE}</span>
-                <span class="st-email-link" click.delegate="viewmodel.SubmitEmailLink()">${MS.Translate.COMMON_MS_PRIVACY_POLICY}</span>
+                <span class="st-email-link" click.trigger="viewmodel.SubmitEmailLink()">${MS.Translate.COMMON_MS_PRIVACY_POLICY}</span>
                 <span>${MS.Translate.COMMON_FOR_DETAILS}</span>
             </div>
-            <button class="primary" click.delegate="viewmodel.SubmitEmailAddress()">${MS.Translate.COMMON_SUBSCRIBE}</button>
+            <button class="primary" click.trigger="viewmodel.SubmitEmailAddress()">${MS.Translate.COMMON_SUBSCRIBE}</button>
         </div>
     </div>
 </template>

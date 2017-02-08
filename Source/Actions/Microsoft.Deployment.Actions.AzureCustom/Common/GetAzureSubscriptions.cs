@@ -32,8 +32,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
                 {
                     if (s.State.Equals("Disabled", System.StringComparison.OrdinalIgnoreCase) || s.State.Equals("Deleted", System.StringComparison.OrdinalIgnoreCase))
                         continue;
-                    else
-                        validSubscriptions.Add(s);
+
+                    validSubscriptions.Add(s);
                 }
                 
                 subscriptionWrapper.value = validSubscriptions;

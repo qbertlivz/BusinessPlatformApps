@@ -1,12 +1,13 @@
 ﻿<template>
+    <require from="../directives/bpst-link.html"></require>
+
     <h1 class="st-title">${MS.Translate.AZURE_LOGIN_CONNECT}</h1>
     <p class="st-subtitle">${MS.Translate.AZURE_LOGIN_SUBTITLE}</p>
 
     <div if.bind="isActivated && !isValidated && !showPricingConfirmation">
         <p class="st-subtitle">${MS.Translate.AZURE_LOGIN_DONT_HAVE}</p>
         <p class="st-text">
-            <span>${MS.Translate.AZURE_LOGIN_GET_STARTED}</span>
-            <a href="${MS.Translate.AZURE_LOGIN_LINK}" target="_blank">${MS.Translate.AZURE_LOGIN_LINK_DESCRIPTION}</a>.
+            <bpst-link a-description="${MS.Translate.AZURE_LOGIN_GET_STARTED}" a-link="${MS.Translate.AZURE_LOGIN_LINK}" a-link-text="${MS.Translate.AZURE_LOGIN_LINK_DESCRIPTION}"></bpst-link>
         </p>
 
         <p class="st-subtitle">${MS.Translate.AZURE_LOGIN_HAVE}</p>
@@ -22,13 +23,12 @@
             <p class="st-text">${MS.Translate.AZURE_LOGIN_DIRECTORY}</p>
             <input class="st-input" placeholder="${MS.Translate.AZURE_LOGIN_DIRECTORY_ADDRESS}" type="text" change.delegate="Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="azureDirectory" />
             <p class="st-text">
-                <span>${MS.Translate.AZURE_LOGIN_DIRECTORY_TEXT}</span>
-                <a href="${MS.Translate.AZURE_LOGIN_DIRECTORY_LINK}" target="_blank">${MS.Translate.AZURE_LOGIN_DIRECTORY_DESCRIPTION}</a>.
+                <bpst-link a-description="${MS.Translate.AZURE_LOGIN_DIRECTORY_TEXT}" a-link="${MS.Translate.AZURE_LOGIN_DIRECTORY_LINK}" a-link-text="${MS.Translate.AZURE_LOGIN_DIRECTORY_DESCRIPTION}"></bpst-link>
             </p>
         </div>
 
         <div class="st-float">
-            <button class="primary" click.delegate="connect()" disabled.bind="MS.HttpService.isServiceBusy">${MS.Translate.AZURE_LOGIN_CONNECT}</button>
+            <button class="primary" click.trigger="connect()" disabled.bind="MS.HttpService.isServiceBusy">${MS.Translate.AZURE_LOGIN_CONNECT}</button>
         </div>
     </div>
 
@@ -59,8 +59,16 @@
             <span class="st-text">${pricingCost}</span>
         </label>
         <p class="st-float st-text">
-            <span>${MS.Translate.AZURE_LOGIN_PRICING_TEXT}</span>
-            <a href="${pricingUrl}" target="_blank">${MS.Translate.COMMON_HERE}</a>
+            <bpst-link a-description="${MS.Translate.AZURE_LOGIN_PRICING_TEXT}" a-link="${pricingUrl}" a-link-text="${MS.Translate.COMMON_HERE}"></bpst-link>
         </p>
+        <div if.bind="bingUrl">
+            <label class="st-float st-text">
+                <input type="checkbox" tabindex="-1" change.delegate="verifyBing()" checked.bind="isBingChecked" disabled.bind="MS.HttpService.isServiceBusy">
+                <span class="st-text">${bingtermsofuse}</span>
+            </label>
+            <p class="st-float st-text">
+                <bpst-link a-description="${MS.Translate.AZURE_LOGIN_BING_TEXT}" a-link="${bingUrl}" a-link-text="${MS.Translate.COMMON_HERE}"></bpst-link>
+            </p>
+        </div>
     </div>
 </template>

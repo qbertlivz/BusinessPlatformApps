@@ -55,6 +55,6 @@
     </div>
 
     <p class="st-float-clear">
-        <button class="primary" click.delegate="OnValidate()" if.bind="!MS.HttpService.isServiceBusy">Validate</button>
+        <button class="primary" click.trigger="OnValidate()" if.bind="!MS.HttpService.isServiceBusy">Validate</button>
     </p>
 </template>

@@ -22,9 +22,18 @@ namespace Microsoft.Deployment.Actions.SQL
             if (version.IndexOf("Azure SQL Data Warehouse", StringComparison.OrdinalIgnoreCase) > -1)
                 return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "SQL_DenyPDW");
 
-            version = (string)result.Rows[0]["SqlVersion"];
-            int majorServerVersion = int.Parse(version.Substring(0, version.IndexOf('.')));
-            if (majorServerVersion < 11)
+            int[] minimumVersion = { 10, 50, 6000, 34 };
+            string[] versionParts = ((string)result.Rows[0]["SqlVersion"]).Split('.');
+            bool versionOk = true;
+            for (int i = 0; i < versionParts.Length; i++)
+            {
+                int currentVersionPart = int.Parse(versionParts[i]);
+                versionOk = versionOk && (currentVersionPart >= minimumVersion[i]);
+                if (currentVersionPart > minimumVersion[i])
+                    break;
+            }
+
+            if (!versionOk)
                 return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "SQL_VersionTooLow");
 
             version = (string)result.Rows[0]["SqlEdition"];

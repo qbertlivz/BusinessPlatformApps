@@ -42,7 +42,7 @@ export class SapSource extends ViewModelBase {
     }
 
     private storeCredentials() {
-        this.MS.DataStore.addToDataStore('CredentialTarget', 'Simplement.SolutionTemplate.AR.SAP', DataStoreType.Public);
+        this.MS.DataStore.addToDataStore('CredentialTarget', 'Simplement.SolutionTemplate.AR.SAP', DataStoreType.Private);
         this.MS.DataStore.addToDataStore('CredentialUsername', this.user, DataStoreType.Private);
         this.MS.DataStore.addToDataStore('CredentialPassword', this.password, DataStoreType.Private);
 

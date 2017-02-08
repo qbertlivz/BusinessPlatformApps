@@ -27,6 +27,6 @@
     </div>
 
     <p class="st-float">
-        <button class="primary" click.delegate="OnValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_VALIDATE}</button>
+        <button class="primary" click.trigger="OnValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_VALIDATE}</button>
     </p>
 </template>

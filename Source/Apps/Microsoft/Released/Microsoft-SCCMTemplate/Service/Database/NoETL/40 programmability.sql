@@ -15,7 +15,7 @@ BEGIN
     WITH TableCounts(EntityName, [Count]) AS
     (
         SELECT LEFT(ta.name, CASE WHEN CHARINDEX('_', ta.name)=0 THEN 100 ELSE CHARINDEX('_', ta.name)-1 END) AS EntityName, SUM(pa.rows) AS [Count]
-        FROM sys.tables ta INNER JOIN sys.partitions pa ON pa.OBJECT_ID = ta.OBJECT_ID
+        FROM sys.tables ta INNER JOIN sys.partitions pa ON pa.object_id = ta.object_id
                            INNER JOIN sys.schemas sc ON ta.schema_id = sc.schema_id
         WHERE
             sc.name='pbist_sccm' AND ta.is_ms_shipped = 0 AND pa.index_id IN (0,1) AND
@@ -33,9 +33,9 @@ BEGIN
     SET NOCOUNT ON;
 
     SELECT Count(*) AS ExistingObjectCount
-    FROM   information_schema.tables
-    WHERE  table_schema = 'pbist_sccm' AND
-           table_name IN ('computer', 'site', 'user', 'usercomputer', 'computerprogram', 'program', 'collection', 'computercollection', 'malware', 'computermalware', 'update', 'computerupdate', 'scanhistory',
+    FROM   INFORMATION_SCHEMA.TABLES
+    WHERE  TABLE_SCHEMA = 'pbist_sccm' AND
+           TABLE_NAME IN ('computer', 'site', 'user', 'usercomputer', 'computerprogram', 'program', 'collection', 'computercollection', 'malware', 'computermalware', 'update', 'computerupdate', 'scanhistory',
                           'computer_staging', 'site_staging', 'user_staging', 'usercomputer_staging', 'computerprogram_staging', 'program_staging', 'collection_staging', 'computercollection_staging', 'malware_staging', 'computermalware_staging', 'update_staging', 'computerupdate_staging', 'scanhistory_staging');
 END;
 go
@@ -74,7 +74,7 @@ BEGIN
                 [platform],
                 [physical memory]
             FROM   pbist_sccm.computer_staging) AS Source
-    ON ( Target.machineid = source.machineid )
+    ON ( Target.machineid = Source.machineid )
     WHEN matched AND ( Target.sitecode <> Source.sitecode OR Target.name <> Source.name OR Target.[operating system] <>
     Source.[operating system]
     OR Target.[client type] <> Source.[client type] OR Target.manufacturer <> Source.manufacturer OR Target.model <> Source.model OR

@@ -51,7 +51,7 @@
         </div>
 
         <p class="st-float">
-            <button class="primary" click.delegate="OnValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_VALIDATE}</button>
+            <button class="primary" click.trigger="OnValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_VALIDATE}</button>
         </p>
     </div>
 
@@ -89,18 +89,20 @@
                 <option value="S3">${MS.Translate.SQL_SERVER_SKU_S3}</option>
             </select>
             <p class="st-text">
-                <span>${MS.Translate.SQL_SERVER_SKU_DESCRIPTION}</span>
-                <a href="${MS.Translate.SQL_SERVER_SKU_LINK}" target="_blank">${MS.Translate.COMMON_HERE}</a>
+                <bpst-link a-description="${MS.Translate.SQL_SERVER_SKU_DESCRIPTION}" a-link="${MS.Translate.SQL_SERVER_SKU_LINK}" a-link-text="${MS.Translate.COMMON_HERE}"></bpst-link>
             </p>
         </div>
 
         <p class="st-float">
-            <button class="primary" click.delegate="OnValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.SQL_SERVER_CHECK_AVAILABILITY}</button>
+            <button class="primary" click.trigger="OnValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.SQL_SERVER_CHECK_AVAILABILITY}</button>
         </p>
     </div>
 
     <div class="st-float" if.bind="showDatabases">
-        <p>${MS.Translate.SQL_SERVER_DATABASE}</p>
+        <p>
+            <span>${MS.Translate.SQL_SERVER_DATABASE}</span>
+            <span if.bind="showSqlRecoveryModeHint">${MS.Translate.SQL_SERVER_DATABASE_RECOVERY}</span>
+        </p>
         <select class="btn btn-default dropdown-toggle st-input" disabled.bind="MS.HttpService.isServiceBusy" value.bind="database">
             <option repeat.for="database of databases">${database}</option>
         </select>

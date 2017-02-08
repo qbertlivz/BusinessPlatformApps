@@ -60,7 +60,7 @@ namespace Microsoft.Deployment.Common.Controller
 
         public void LogMetric(string metricName, double value, Dictionary<string, string> properties)
         {
-            this.telemetryClient.TrackMetric(metricName, value, properties);
+            //this.telemetryClient.TrackMetric(metricName, value, properties);
             this.Flush();
         }
 
@@ -90,21 +90,28 @@ namespace Microsoft.Deployment.Common.Controller
 
         public void LogTrace(string objectString, ActionRequest obj, string traceId)
         {
-            var objToLog  = JsonUtility.GetJObjectFromObject(obj);
-            objToLog["DataStore"]["PrivateDataStore"] = null;
-            LogTraceInAppInsights(objectString, objToLog, traceId);
+            var objToLog = JsonUtility.GetJObjectFromObject(obj);
+            if (obj?.DataStore?.PrivateDataStore != null)
+            {
+                objToLog["DataStore"]["PrivateDataStore"] = null;
+                LogTraceInAppInsights(objectString, objToLog, traceId);
+            }
         }
 
         public void LogTrace(string objectString, ActionResponse obj, string traceId)
         {
             var objToLog = JsonUtility.GetJObjectFromObject(obj);
-            
-            if (obj.IsResponseSensitive)
+
+            if (obj.IsResponseSensitive && obj.Body != null)
             {
                 objToLog["Body"] = null;
             }
-            objToLog["DataStore"]["PrivateDataStore"] = null;
-            LogTraceInAppInsights(objectString, objToLog, traceId);
+
+            if (obj?.DataStore?.PrivateDataStore != null)
+            {
+                objToLog["DataStore"]["PrivateDataStore"] = null;
+                LogTraceInAppInsights(objectString, objToLog, traceId);
+            }
         }
 
         public void LogTraceInAppInsights(string objectString, object obj, string traceId)
@@ -190,6 +197,14 @@ namespace Microsoft.Deployment.Common.Controller
             emailSubscription.Add("First Name", nameFirst);
             emailSubscription.Add("Last Name", nameLast);
             this.LogEvent("Email-Subscription", emailSubscription);
+        }
+
+        public void LogPowerBiLogin(string tenantId, string directory)
+        {
+            Dictionary<string, string> powerBiLogin = new Dictionary<string, string>();
+            powerBiLogin.Add("Tenant ID", tenantId);
+            powerBiLogin.Add("Directory Name", directory);
+            this.LogEvent("PoweBi-Login", powerBiLogin);
         }
 
         internal void LogRequest(string request, TimeSpan duration, bool sucess, ActionRequest requestBody, ActionResponse responseToReturn)

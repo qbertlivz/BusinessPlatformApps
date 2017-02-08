@@ -24,6 +24,11 @@ namespace Microsoft.Deployment.Common.Helpers
 
         public static JObject GetJObjectFromObject(object json)
         {
+            if (json == null)
+            {
+                return new JObject();
+            }
+
             JsonSerializerSettings settings = new JsonSerializerSettings();
             var obj = JObject.FromObject(json);
             return obj;

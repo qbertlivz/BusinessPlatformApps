@@ -19,7 +19,7 @@
           "Data pulled from Salesforce into an Azure SQL Database using Azure Data Factory",
           "Connect to Azure SQL and import data into Power BI"
         ],
-        "showBack": "$(false)" 
+        "showBack": "$(false)"
       },
       {
         "name": "$SiteCommon$/pagesgallery/azure-login.html",
@@ -66,7 +66,7 @@
         "displayname": "Progress",
         "finishedActionName": "Microsoft-ADFSliceStatus",
         "targetSchema": "dbo",
-        "filename": "$('SalesManagementReport.pbix', isSaved=true)",
+        "filename": "$save('SalesManagementReport.pbix')",
         "showCounts": true
       }
     ],

@@ -52,10 +52,14 @@
                     "Import data into powerful Power BI reports"
                 ],
                 "name": "$SiteCommon$/pagesgallery/getting-started.html",
-                "registration": "To use this solution template you need a trial account with Simplement. Enter your information below to register with Simplement for 30 days. To extend the trial account with Simplement or arrange a proof of concept in your environment, contact Simplement.",
+                "registration": "To use this solution template you need a trial account with Simplement. Enter your information below to register with Simplement for 30 days. To extend the trial account with Simplement or arrange a proof of concept in your environment, ",
                 "registrationAction": "Microsoft-PushToSimplement",
+                "registrationContactLink": "https://www.simplement.us/",
+                "registrationContactLinkText": " contact Simplement.",
                 "registrationEmailsToBlock": "gmail.com,.me,yahoo.com,hotmail.com,msn.com,.ba,.bf,.cd,.cq,.iq,.ir,.kr",
-                "registrationLink": "http://www.simplement.us/privacy",
+                "registrationEulaLink": "https://www.simplement.us/eula",
+                "registrationEulaLinkText": "Terms of Use",
+                "registrationLink": "https://www.simplement.us/privacy",
                 "registrationPrivacy": "By using this Simplement trial account, you agree to the",
                 "registrationPrivacyTitle": "Simplement Privacy Statement",
                 "registrationValidation": "Yes, I want to hear from Simplement on how I can extend this trial account or new offers",
@@ -65,7 +69,7 @@
             {
                 "name": "$SiteCommon$/pagesgallery/windows-auth.html",
                 "displayname": "Login",
-                "subtitle": "Specify your windows credentials to create a recurring schedule. The credentials you specify will be used to also connect to SAP",
+                "subtitle": "Specify your windows credentials to create a recurring schedule that will pull data from SAP.",
                 "onValidate": [
                     {
                         "name": "Microsoft-ValidateAdminPrivileges"
@@ -81,34 +85,28 @@
                 "useImpersonation": true
             },
             {
-                "name": "$SiteCommon$/pagesgallery/sql-server.html",
+                "credentialTarget": "Simplement.SolutionTemplate.AR.SQL",
                 "displayname": "Target",
-                "useImpersonation": true,
-                "title": "Connect to your SQL database",
-                "subtitle": "Set up a connection to your target database so we can transfer your data.",
+                "name": "$SiteCommon$/pagesgallery/sql-server.html",
                 "onNext": [
                     {
                         "name": "Microsoft-WriteSAPJson"
-                    },
-                    {
-                        "name": "Microsoft-CredentialManagerWrite",
-                        "CredentialTarget2": "$('Simplement.SolutionTemplate.AR.SQL', isSaved=true)",
-                        "CredentialUsername2": "$(this.username, isSaved=true)",
-                        "CredentialPassword2": "$(this.password, isSaved=true)",
-                        "useImpersonation": true
                     }
-                ]
+                ],
+                "subtitle": "Set up a connection to your target database so we can transfer your data.",
+                "title": "Connect to your SQL database",
+                "useImpersonation": true
             },
             {
-                "name": "customize.html",
-                "displayname": "Customize"
+                "displayname": "Customize",
+                "name": "customize.html"
             },
             {
                 "name": "$SiteCommon$/pagesgallery/progress.html",
                 "displayname": "Progress",
                 "finishedActionName": "Microsoft-GetTaskStatus",
                 "targetSchema": "sap",
-                "filename": "$('SAPSolutionTemplate.pbix', isSaved=true)",
+                "filename": "$save('SAPSolutionTemplate.pbix')",
                 "showEmailSubmission": false
             }
         ]

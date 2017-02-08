@@ -4,13 +4,13 @@ import { ViewModelBase } from '../../../../../SiteCommon/Web/services/viewmodelb
 export class Customize extends ViewModelBase {
     actuals: string = 'Closed opportunities';
     baseUrl: string = '';
-    fiscalMonth: string = 'January';
+    fiscalMonth: number = 1;
 
     async NavigatingNext(): Promise<boolean> {
         this.MS.DataStore.addToDataStoreWithCustomRoute('CustomizeActuals', 'SqlGroup', 'data', DataStoreType.Public);
         this.MS.DataStore.addToDataStoreWithCustomRoute('CustomizeActuals', 'SqlSubGroup', 'actual_sales', DataStoreType.Public);
         this.MS.DataStore.addToDataStoreWithCustomRoute('CustomizeActuals', 'SqlEntryName', 'enabled', DataStoreType.Public);
-        this.MS.DataStore.addToDataStoreWithCustomRoute('CustomizeActuals', 'SqlEntryValue', this.actuals ? 1 : 0, DataStoreType.Public);
+        this.MS.DataStore.addToDataStoreWithCustomRoute('CustomizeActuals', 'SqlEntryValue', this.actuals === "Closed opportunities" ? 0 : 1, DataStoreType.Public);
 
         this.MS.DataStore.addToDataStoreWithCustomRoute('CustomizeBaseUrl', 'SqlGroup', 'SolutionTemplate', DataStoreType.Public);
         this.MS.DataStore.addToDataStoreWithCustomRoute('CustomizeBaseUrl', 'SqlSubGroup', 'SalesManagement', DataStoreType.Public);

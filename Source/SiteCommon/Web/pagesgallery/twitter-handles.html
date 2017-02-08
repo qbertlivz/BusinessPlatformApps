@@ -8,6 +8,6 @@
     </div>
 
     <p class="st-float">
-        <button class="primary" click.delegate="viewmodel.OnValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_VALIDATE}</button>
+        <button class="primary" click.trigger="viewmodel.OnValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_VALIDATE}</button>
     </p>
 </template>

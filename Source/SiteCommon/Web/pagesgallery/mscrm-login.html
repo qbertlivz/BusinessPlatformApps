@@ -4,12 +4,11 @@
 
     <div class="st-float" if.bind="!msCrmOrganizations || msCrmOrganizations.length == 0 || !subscriptionsList || subscriptionsList.length == 0">
         <p class="st-text" if.bind="showAzureTrial">
-            <span>${MS.Translate.AZURE_LOGIN_GET_STARTED}</span>
-            <a href="${MS.Translate.AZURE_LOGIN_LINK}" target="_blank">${MS.Translate.AZURE_LOGIN_LINK_DESCRIPTION}</a>.
+            <bpst-link a-description="${MS.Translate.AZURE_LOGIN_GET_STARTED}" a-link="${MS.Translate.AZURE_LOGIN_LINK}" a-link-text="${MS.Translate.AZURE_LOGIN_LINK_DESCRIPTION}"></bpst-link>
         </p>
 
         <p class="st-text">${MS.Translate.MSCRM_LOGIN_CONNECT}</p>
-        <button class="primary" click.delegate="connect()" disabled.bind="MS.HttpService.isServiceBusy">${MS.Translate.COMMON_CONNECT}</button>
+        <button class="primary" click.trigger="connect()" disabled.bind="MS.HttpService.isServiceBusy">${MS.Translate.COMMON_CONNECT}</button>
     </div>
 
     <div class="st-float" if.bind="msCrmOrganizations && msCrmOrganizations.length > 0">
@@ -46,8 +45,7 @@
             <span class="st-text">${pricingCost}</span>
         </label>
         <p class="st-float st-text">
-            <span>${MS.Translate.AZURE_LOGIN_PRICING_TEXT}</span>
-            <a href="${pricingUrl}" target="_blank">${MS.Translate.COMMON_HERE}</a>
+            <bpst-link a-description="${MS.Translate.AZURE_LOGIN_PRICING_TEXT}" a-link="${pricingUrl}" a-link-text="${MS.Translate.COMMON_HERE}"></bpst-link>
         </p>
     </div>
 </template>

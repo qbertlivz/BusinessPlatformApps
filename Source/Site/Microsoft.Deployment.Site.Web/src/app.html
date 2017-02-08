@@ -8,7 +8,7 @@
         <span>Microsoft</span>
         <span class="st-header-bar">|</span>
         <span>Power BI</span>
-        <span class="glyphicon pbi-glyph-close glyph-small st-close" click.delegate="MS.HttpService.Close()" if.bind="MS.HttpService.isOnPremise"></span>
+        <span class="glyphicon pbi-glyph-close glyph-small st-close" click.trigger="MS.HttpService.Close()" if.bind="MS.HttpService.isOnPremise"></span>
     </div>
     <div class="st-content regularFont">
         <navbar router.bind="MS.NavigationService"></navbar>
@@ -31,6 +31,6 @@
     <!-- Contact Us -->
     <div class="st-contact-us" if.bind="MS.ErrorService.showContactUs">
         <a href="mailto:PBISolnTemplates@microsoft.com" target="_top">Experiencing an error? Click here to let us know.</a>
-        <span class="glyphicon pbi-glyph-close st-contact-us-close" click.delegate="MS.ErrorService.showContactUs = false"></span>
+        <span class="glyphicon pbi-glyph-close st-contact-us-close" click.trigger="MS.ErrorService.showContactUs = false"></span>
     </div>
 </template>

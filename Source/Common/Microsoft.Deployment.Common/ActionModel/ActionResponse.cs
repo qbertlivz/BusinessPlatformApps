@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using Microsoft.Deployment.Common.ErrorCode;
 using Microsoft.Deployment.Common.Helpers;
 using Newtonsoft.Json;
@@ -80,16 +81,20 @@ namespace Microsoft.Deployment.Common.ActionModel
 
         private static string GetInnerExceptionText(Exception exception)
         {
+            StringBuilder str = new StringBuilder();
             if (exception == null)
                 return string.Empty;
 
             Exception loopException = exception;
+            str.Append(loopException.Message);
+
             while (loopException.InnerException != null)
             {
                 loopException = loopException.InnerException;
+                str.Append(".").Append(loopException.Message);
             }
 
-            return loopException.Message;
+            return str.ToString();
         }
     }
 }

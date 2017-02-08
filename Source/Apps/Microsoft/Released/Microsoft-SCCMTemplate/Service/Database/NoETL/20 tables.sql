@@ -103,12 +103,12 @@ CREATE  TABLE  pbist_sccm.scanhistory
         [last online]                     DATETIME  NULL, 
         [health status message]           DATETIME  NULL, 
         [client state]                    SMALLINT  NULL,
-        [Last DDR]                        DATETIME  NULL,
-        [Last HW]                         DATETIME  NULL,
-        [Last SW]                         DATETIME  NULL,
-        [Last Status Message]             DATETIME  NULL,
-        [Last Policy Request]             DATETIME  NULL,
-        [Last Scan Time]                  DATETIME  NULL,
+        [last ddr]                        DATETIME  NULL,
+        [last hw]                         DATETIME  NULL,
+        [last sw]                         DATETIME  NULL,
+        [last status message]             DATETIME  NULL,
+        [last policy request]             DATETIME  NULL,
+        [last scan time]                  DATETIME  NULL,
 );
 
 CREATE TABLE pbist_sccm.[site]
@@ -200,11 +200,11 @@ CREATE TABLE pbist_sccm.[date]
    same_day_year_ago_date DATE NOT NULL,
    same_day_year_ago_key  INT NOT NULL,
    day_num_in_year           AS Datepart(dayofyear, full_date),
-   quarter_name              AS Concat('Q', [quarter]),
-   fiscal_quarter_name       AS Concat('Q', fiscal_quarter),
-   fiscalquartercompletename AS Concat('FY', Substring(CONVERT(VARCHAR, fiscal_year), 3, 2), ' Q', fiscal_quarter),
-   fiscalyearcompletename    AS Concat('FY', Substring(CONVERT(VARCHAR, fiscal_year), 3, 2)),
-   fiscalmonthcompletename   AS Concat(month_abbrev, ' ', Substring(CONVERT(VARCHAR, fiscal_year), 3, 2)),
+   quarter_name              AS 'Q' + CAST([quarter] AS NVARCHAR(10)),
+   fiscal_quarter_name       AS 'Q'+ CAST(fiscal_quarter AS NVARCHAR(10)),
+   fiscalquartercompletename AS 'FY' + Substring(CONVERT(VARCHAR, fiscal_year), 3, 2) + ' Q' + CAST(fiscal_quarter AS NVARCHAR(10)),
+   fiscalyearcompletename    AS 'FY' + Substring(CONVERT(VARCHAR, fiscal_year), 3, 2),
+   fiscalmonthcompletename   AS month_abbrev + ' ' + Substring(CONVERT(VARCHAR, fiscal_year), 3, 2),
    CONSTRAINT pk_dim_date PRIMARY KEY CLUSTERED (date_key)
 );
 

@@ -22,7 +22,7 @@ AS
            [remediation pending action],
            [is active malware]
     FROM   pbist_sccm.computermalware
-    WHERE DateDiff(day, [Detection Date], GetDate()) <=365;
+    WHERE DateDiff(day, [detection date], GetDate()) <=365;
 go
 
 
@@ -52,14 +52,14 @@ AS
 SELECT [machineid]
       ,[sitecode]
       ,[name]
-      ,case [Client Type] when 1 then 'Computer' when 3 then 'Mobile' else 'tbd' end [client type]
+      ,case [client type] when 1 then 'Computer' when 3 then 'Mobile' else 'tbd' end [client type]
       ,CASE
             when [operating system] like 'iOS%' then 'iOS'
             when [operating system] like 'Android%' then 'Android'
             when [operating system] like 'OS X%' then 'OS X'
             when [operating system]='Microsoft Windows NT Advanced Server 6.3' OR [operating system]='Microsoft Windows NT Advanced Server 6.4' OR [operating system]='Windows Technical Preview for Enterprise 6.4'
                 then 'Window Server 2012 R2'
-            when [operating System]='Microsoft Windows NT Workstation 5.0' then 'Windows 2000 Professional'
+            when [operating system]='Microsoft Windows NT Workstation 5.0' then 'Windows 2000 Professional'
             when [operating system] like '%Windows%Workstation 6.1%' then 'Windows 7'
             when [operating system] like '%Windows%Workstation 6.2%' then 'Windows 8'
             when [operating system] like '%Windows%Workstation 6.3%' OR [operating system] like '%Windows%Workstation 6.4%' OR [operating system] like 'Windows 8.1%' then 'Windows 8.1'

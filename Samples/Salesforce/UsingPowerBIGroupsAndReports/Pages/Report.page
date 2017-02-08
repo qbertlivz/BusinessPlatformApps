@@ -1,0 +1,98 @@
+<apex:page showHeader="true" controller="PowerBIController" action="{!redirectOnCallback}">
+
+<html>
+
+<head>
+
+</head>
+
+<apex:includeScript value="{!$Resource.PBIJS}"/>
+
+    <apex:outputPanel rendered="{!NOT(hasToken)}"><a href='{!authUrl}'>Login</a></apex:outputPanel>
+
+    <apex:outputPanel rendered="{!hasToken}">Already has token</apex:outputPanel>
+
+<apex:form >
+<apex:actionFunction name="refreshAccessToken" action="{!refreshAccessToken}"/>
+
+<apex:commandButton action="{!getGroups}" value="GetGroups"/>
+<div id = "groupDropdown" style="height: 60px; width: 30px;">
+<apex:selectList value="{!selectedGroup}" size="1">
+<apex:actionSupport event="onchange" action="{!getReports}"/>
+<apex:selectOptions value="{!availableGroups}"/>
+</apex:selectList>
+</div>
+
+<!--<apex:inputTextarea id="debug" value="{!debug}"/>-->
+
+<apex:commandButton action="{!getReports}" value="GetReports"/>
+<div id = "reportDropdown" style="height: 60px; width: 30px;">
+<apex:selectList value="{!selectedReport}" size="1">
+<apex:actionSupport event="onchange"/>
+<apex:selectOptions value="{!availableReports}"/>
+</apex:selectList>
+</div>
+</apex:form>
+
+
+<div id="myReport" style="height: 800px;"/>
+
+
+<script>
+
+let accessToken = '{!PBIaccess_token}';
+let refreshToken = '{!PBIrefresh_token}';
+let expires_on = '{!PBIexpires_on}';
+let validateResult = '{!validateResult}';
+
+let selectedGroup = '{!selectedGroup}';
+let selectedReport = '{!selectedReport}';
+window.onload = function() {
+    
+let expiresOn = parseInt(expires_on);
+let currentTime = Date.now()/1000;
+    
+    if(!accessToken || currentTime > expiresOn)
+    {
+        window.location.href = '{!authUrl}';
+    } else if(expiresOn <= currentTime)
+           {
+                refreshAccessToken();
+                location.reload(true);
+           }
+ }
+
+    var filter = {
+
+      $schema: "http://powerbi.com/product/schema#basic"
+
+    };
+
+
+var embedConfiguration = {
+
+    type: 'report',
+
+    embedUrl: 'https://app.powerbi.com/reportEmbed?groupId='+selectedGroup+'&reportId='+selectedReport,
+
+    settings: {
+
+            filterPaneEnabled: true,
+
+            navContentPaneEnabled: true
+
+        }
+};
+
+
+
+powerbi.accessToken = '{!PBIaccess_token}';
+
+var element = document.getElementById('myReport');
+
+var report = powerbi.embed(element, embedConfiguration);
+
+</script>
+</html>
+
+</apex:page>

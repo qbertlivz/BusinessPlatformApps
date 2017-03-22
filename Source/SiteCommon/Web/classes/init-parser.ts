@@ -91,7 +91,7 @@ export class InitParser {
     public static translateInitValue(value: string) {
         if (/^\$translate\(.*\)/.test(value)) {
             let variable: Variable = new Variable();
-            this.processInitValue(value[i], variable, VariableType.RunAndTranslateList, '$translate(');
+            this.processInitValue(value, variable, VariableType.RunAndTranslateList, '$translate(');
             value = eval(variable.value);
         }
         return value;
@@ -104,7 +104,7 @@ export class InitParser {
             variable.type = VariableType.Static;
             variable.value = value;
             return variable;
-        } else if (value && value.length > 0) {
+        } else if (Array.isArray(value)) {
             for (let i = 0; i < value.length; i++) {
                 value[i] = this.translateInitValue(value[i]);
             }

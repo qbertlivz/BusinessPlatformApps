@@ -119,14 +119,14 @@
         "name": "Microsoft-CreatePowerAppSqlConnection"
       },
       {
-        "DeploymentName": "Function",
-        "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_FUNCTION)",
-        "name": "Microsoft-DeployTwitterFunction"
+        "name": "Microsoft-DeployTwitterFunction",
+        "displayname": "Deploying Twitter function",
+        "DeploymentName": "Function"
       },
       {
-        "DeploymentName": "Function",
-        "displayname": "$translate(INIT_ACTION_VALIDATING_TWITTER_FUNCTION)",
-        "name": "Microsoft-WaitForArmDeploymentStatus"
+        "name": "Microsoft-WaitForArmDeploymentStatus",
+        "displayname": "Validating Twitter function",
+        "DeploymentName": "Function"
       },
       {
         "name": "Microsoft-DeployAzureMLWebServiceFromFile",

@@ -88,7 +88,11 @@ export class InitParser {
         }
     }
 
-    public static translateInitValue(value: string) {
+    public static translateInitValue(value: string, MS: MainService = null) {
+        if (MS !== null) {
+            this.MS = MS;
+        }
+
         if (/^\$translate\(.*\)/.test(value)) {
             let variable: Variable = new Variable();
             this.processInitValue(value, variable, VariableType.RunAndTranslateList, '$translate(');

@@ -76,6 +76,8 @@
         }
       },
       {
+        "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(10))",
+        "uniqueIdFunction": "$save(this.MS.UtilityService.GetUniqueId(10))",
         "asDatabase": "twitter",
         "displayname": "Deploy",
         "filename": "$save('TwitterTemplate.pbix')",
@@ -87,9 +89,7 @@
         "LogicAppNameHistorical": "$save(this.uniqueId)",
         "name": "$SiteCommon$/pages-gallery/progress.html",
         "powerAppFileName": "TwitterTemplate.msapp",
-        "SiteName": "$save(this.uniqueIdFunction)",
-        "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(10))",
-        "uniqueIdFunction": "$save(this.MS.UtilityService.GetUniqueId(10))"
+        "SiteName": "$save(this.uniqueIdFunction)"
       }
     ],
 

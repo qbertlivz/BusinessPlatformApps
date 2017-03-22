@@ -154,6 +154,7 @@ export class InitParser {
                 break;
             case VariableType.RunAndSave:
                 dsValue = dsValue.replace('this.', 'self.');
+                variable.saveToDataStore = true;
                 break;
             case VariableType.RunAndSaveOld:
                 dsValue = dsValue.replace('this.', 'self.');

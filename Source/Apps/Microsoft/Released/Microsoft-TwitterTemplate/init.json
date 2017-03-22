@@ -11,9 +11,9 @@
           "$translate(INIT_GETTING_STARTED_TWITTER)"
         ],
         "list2": [
-          "Full cloud solution with minimum set up and maintenance considerations",
-          "Real time data pulled from Twitter & enriched using machine learning",
-          "Connect to Azure SQL and import data into Power BI"
+          "$translate(INIT_GETTING_STARTED_CLOUD_SOLUTION)",
+          "$translate(INIT_GETTING_STARTED_TWITTER_REAL_TIME)",
+          "$translate(INIT_GETTING_STARTED_CONNECT_AS_PBI)"
         ],
         "name": "$SiteCommon$/pages-gallery/getting-started.html",
         "subtitle": "$translate(INIT_TWITTER_SUBTITLE)",

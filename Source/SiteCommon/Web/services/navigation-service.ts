@@ -18,7 +18,7 @@ export class NavigationService {
         this.MS = MainService;
     }
 
-    init(pagesJson) {
+    init(pagesJson: any) {
         this.pages = pagesJson;
 
         if (this.pages && this.pages.length && this.pages.length > 0) {

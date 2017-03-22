@@ -96,7 +96,7 @@ export class MainService {
                 this.NavigationService.init(this.templateData[pages]);
             }
             if (this.templateData && this.templateData[actions]) {
-                this.DeploymentService.actions = this.templateData[actions];
+                this.DeploymentService.init(this.templateData[actions]);
             }
         }
     }

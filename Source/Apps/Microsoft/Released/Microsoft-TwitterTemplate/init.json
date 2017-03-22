@@ -5,15 +5,15 @@
         "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-TwitterTemplate/Web/twitterArchitectureDiagram.png",
         "displayname": "Getting Started",
         "list1": [
-          "Azure Subscription",
-          "Power BI Desktop (latest version)",
-          "Power BI Pro (to share the template with your organization)",
-          "Twitter Account"
+          "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",
+          "$translate(INIT_GETTING_STARTED_PBI_DESKTOP)",
+          "$translate(INIT_GETTING_STARTED_PBI_PRO)",
+          "$translate(INIT_GETTING_STARTED_TWITTER)"
         ],
         "list2": [
-          "Full cloud solution with minimum set up and maintenance considerations",
-          "Real time data pulled from Twitter & enriched using machine learning",
-          "Connect to Azure SQL and import data into Power BI"
+          "$translate(INIT_GETTING_STARTED_CLOUD_SOLUTION)",
+          "$translate(INIT_GETTING_STARTED_TWITTER_REAL_TIME)",
+          "$translate(INIT_GETTING_STARTED_CONNECT_AS_PBI)"
         ],
         "name": "$SiteCommon$/pages-gallery/getting-started.html",
         "subtitle": "$translate(INIT_TWITTER_SUBTITLE)",
@@ -76,6 +76,8 @@
         }
       },
       {
+        "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(10))",
+        "uniqueIdFunction": "$save(this.MS.UtilityService.GetUniqueId(10))",
         "asDatabase": "twitter",
         "displayname": "Deploy",
         "filename": "$save('TwitterTemplate.pbix')",
@@ -87,35 +89,33 @@
         "LogicAppNameHistorical": "$save(this.uniqueId)",
         "name": "$SiteCommon$/pages-gallery/progress.html",
         "powerAppFileName": "TwitterTemplate.msapp",
-        "SiteName": "$save(this.uniqueIdFunction)",
-        "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(10))",
-        "uniqueIdFunction": "$save(this.MS.UtilityService.GetUniqueId(10))"
+        "SiteName": "$save(this.uniqueIdFunction)"
       }
     ],
 
     "Actions": [
       {
         "name": "Microsoft-DeploySQLScripts",
-        "displayname": "Deploying database scripts",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
         "SqlServerIndex": "0",
         "SqlScriptsFolder": "Service/Database/LogicApps"
       },
       {
         "name": "Microsoft-SetConfigValueInSql",
-        "displayname": "Deploying database configuration",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
         "SqlServerIndex": "0",
         "SqlConfigTable": "[pbist_twitter].[configuration]"
       },
       {
-        "displayname": "Deploying Logic App database",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_LOGIC_APP_DATABASE)",
         "name": "Microsoft-ConfigurePowerAppTables"
       },
       {
-        "displayname": "Retrieving PowerApp environment",
+        "displayname": "$translate(INIT_ACTION_RETRIEVING_POWERAPP_ENVIRONMENT)",
         "name": "Microsoft-GetPowerAppEnvironment"
       },
       {
-        "displayname": "Creating PowerApp SQL connection",
+        "displayname": "$translate(INIT_ACTION_CREATING_POWERAPP_SQL_CONNECTION)",
         "name": "Microsoft-CreatePowerAppSqlConnection"
       },
       {

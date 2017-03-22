@@ -23,6 +23,13 @@ export class DeploymentService {
         this.MS = MainService;
     }
 
+    init(actionsJson: any) {
+        for (let i = 0; i < actionsJson.length; i++) {
+            actionsJson[i].DisplayName = InitParser.translateInitValue(actionsJson[i].DisplayName, this.MS);
+        }
+        this.actions = actionsJson;
+    }
+
     async ExecuteActions(): Promise<boolean> {
         if (this.experienceType === ExperienceType.uninstall) {
             this.MS.LoggerService.TrackUninstallStart();

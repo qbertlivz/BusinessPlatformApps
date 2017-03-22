@@ -96,37 +96,37 @@
     "Actions": [
       {
         "name": "Microsoft-DeploySQLScripts",
-        "displayname": "Deploying database scripts",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
         "SqlServerIndex": "0",
         "SqlScriptsFolder": "Service/Database/LogicApps"
       },
       {
         "name": "Microsoft-SetConfigValueInSql",
-        "displayname": "Deploying database configuration",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
         "SqlServerIndex": "0",
         "SqlConfigTable": "[pbist_twitter].[configuration]"
       },
       {
-        "displayname": "Deploying Logic App database",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_LOGIC_APP_DATABASE)",
         "name": "Microsoft-ConfigurePowerAppTables"
       },
       {
-        "displayname": "Retrieving PowerApp environment",
+        "displayname": "$translate(INIT_ACTION_RETRIEVING_POWERAPP_ENVIRONMENT)",
         "name": "Microsoft-GetPowerAppEnvironment"
       },
       {
-        "displayname": "Creating PowerApp SQL connection",
+        "displayname": "$translate(INIT_ACTION_CREATING_POWERAPP_SQL_CONNECTION)",
         "name": "Microsoft-CreatePowerAppSqlConnection"
       },
       {
-        "name": "Microsoft-DeployTwitterFunction",
-        "displayname": "Deploying Twitter function",
-        "DeploymentName": "Function"
+        "DeploymentName": "Function",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_FUNCTION)",
+        "name": "Microsoft-DeployTwitterFunction"
       },
       {
-        "name": "Microsoft-WaitForArmDeploymentStatus",
-        "displayname": "Validating Twitter function",
-        "DeploymentName": "Function"
+        "DeploymentName": "Function",
+        "displayname": "$translate(INIT_ACTION_VALIDATING_TWITTER_FUNCTION)",
+        "name": "Microsoft-WaitForArmDeploymentStatus"
       },
       {
         "name": "Microsoft-DeployAzureMLWebServiceFromFile",

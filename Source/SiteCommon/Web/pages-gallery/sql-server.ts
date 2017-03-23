@@ -49,7 +49,7 @@ export class SqlServer extends ViewModelBase {
         super();
     }
 
-    async OnLoaded() {
+    async OnLoaded(): Promise<void> {
         this.isValidated = false;
 
         if (this.showNewSqlOption) {

@@ -37,7 +37,7 @@ export class Gettingstarted extends ViewModelBase {
         }
     }
 
-    async OnLoaded() {
+    async OnLoaded(): Promise<void> {
         this.isValidated = true;
         if (this.isDownload) {
             this.GetDownloadLink();

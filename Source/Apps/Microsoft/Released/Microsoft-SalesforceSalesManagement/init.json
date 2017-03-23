@@ -28,6 +28,10 @@
         "pricingUrl": "$translate(INIT_SALESFORCE_PRICING_URL)"
       },
       {
+        "displayname": "Data Movement",
+        "name": "$SiteCommon$/pages-gallery/data-movement.html"
+      },
+      {
         "displayname": "Salesforce",
         "name": "$SiteCommon$/pages-gallery/salesforce-login.html",
         "salesforceObjects": "Opportunity,Account,Lead,Product2,OpportunityLineItem,OpportunityStage,User,UserRole"

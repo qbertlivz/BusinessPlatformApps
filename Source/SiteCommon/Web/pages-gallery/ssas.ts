@@ -13,7 +13,7 @@ export class Customize extends ViewModelBase {
         super.Invalidate();
     }
 
-    async OnLoaded() {
+    async OnLoaded(): Promise<void> {
         this.isValidated = false;
 
         let response = await this.MS.HttpService.executeAsync('Microsoft-GetEmail', {});

@@ -17,7 +17,7 @@ export class MsCrmLogin extends AzureLogin {
         super();
     }
 
-    async OnLoaded() {
+    async OnLoaded(): Promise<void> {
         this.MS.ErrorService.Clear();
 
         this.isValidated = false;

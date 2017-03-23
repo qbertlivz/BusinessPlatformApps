@@ -19,7 +19,7 @@ export class SapSource extends ViewModelBase {
         super();
     }
 
-    async OnLoaded() {
+    async OnLoaded(): Promise<void> {
         this.languages = ['AF', 'AR', 'BG', 'CA', 'CS', 'DA', 'DE', 'EL', 'EN', 'ES', 'ET', 'FI', 'FR', 'HE', 'HR', 'HU', 'ID', 'IS', 'IT', 'JA', 'KO', 'LT', 'LV', 'MS', 'NL', 'NO', 'PL', 'PT', 'RO', 'RU', 'SH', 'SK', 'SL', 'SR', 'SV', 'TH', 'TR', 'UK', 'Z1', 'ZF', 'ZH'];
         this.isValidated = false;
     }

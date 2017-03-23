@@ -9,7 +9,7 @@ export class SearchTerms extends ViewModelBase {
         super();
     }
 
-    async OnLoaded() {
+    async OnLoaded(): Promise<void> {
         this.isValidated = false;
     }
 

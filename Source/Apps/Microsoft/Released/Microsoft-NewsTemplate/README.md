@@ -406,7 +406,7 @@ Below is a breakdown of the columns found in every table:
 | **Column Name**   | **Descrpition**                                                                                                        |
 | Id  | Document ID (unique – each document will have one sentiment score)                                                                          |
 | Score              | Sentiment score ranging from 0 (very negative) to 1 (very positive)|
-| Binned sentiment         | Sentiment grouped into intervals of 0.05 (e.g.  sentiment of 0.723 would fall into the 0.7 bucket                                                |
+| Binned sentiment         | Sentiment grouped into intervals of 0.05 (e.g.  sentiment of 0.723 would fall into the 0.7 bucket)                                                |
 | Sentiment         | Categorical variable for sentiment – categories include Very Negative, Slightly Negative, Neutral, Slightly Positive and Very Positive|
 
 | **Topic Images**         |                                                                                                                                                                                                           |

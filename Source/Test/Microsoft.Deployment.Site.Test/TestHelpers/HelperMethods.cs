@@ -93,7 +93,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
                     var resourceGroup = driver.FindElementsByCssSelector("input[class='st-input au-target']")
                                         .First(e => e.GetAttribute("value.bind").Contains("selectedResourceGroup"));
 
-                    resourceGroupName = Guid.NewGuid().ToString().Replace("-","");
+                    resourceGroupName = Guid.NewGuid().ToString().Replace("-", "");
 
                     resourceGroup.Clear();
                     resourceGroup.SendKeys(resourceGroupName);
@@ -170,7 +170,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
             button.SendKeys("Yes");
 
             ClickNextButton();
-
+            Thread.Sleep(new TimeSpan(0, 0, 2));
             var newAas = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
 
             while (newAas.Enabled != true)
@@ -237,7 +237,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
             int i = 0;
 
-            while (progressText == null && i < 30)
+            while (progressText == null && i < 60)
             {
                 progressText = driver.FindElementsByCssSelector("span[class='semiboldFont st-progress-text']")
                                      .FirstOrDefault(e => e.Text == "All done! You can now download your Power BI report and start exploring your data.");
@@ -249,7 +249,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
                     Assert.Fail(error.Text);
                 }
 
-                if(!string.IsNullOrEmpty(progressText.Text))
+                if (progressText != null && !string.IsNullOrEmpty(progressText.Text))
                 {
                     break;
                 }
@@ -258,6 +258,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
                 Thread.Sleep(new TimeSpan(0, 0, 10));
             }
 
+            Assert.IsTrue(progressText != null);
             Assert.IsTrue(progressText.Text == "All done! You can now download your Power BI report and start exploring your data.");
         }
 

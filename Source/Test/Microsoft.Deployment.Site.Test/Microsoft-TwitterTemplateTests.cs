@@ -43,7 +43,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
         }
 
         [TestMethod]
-        public void Given_CorrectInformation_And_No_AS_When_RunTwitterWithoutAS_ThenSuccess()
+        public void Given_CorrectInformation_And_No_AS_When_RunTwitter_ThenSuccess()
         {
             Given_CorrectCredentials_When_AzureAuth_Then_Success();
             HelperMethods.ClickNextButton();

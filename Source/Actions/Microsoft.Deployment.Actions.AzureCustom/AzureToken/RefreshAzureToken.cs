@@ -85,27 +85,27 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
 
         public async Task<InterceptorStatus> CanInterceptAsync(IAction actionToExecute, ActionRequest request)
         {
-            if (request.DataStore.GetValue("AzureToken") != null && request.DataStore.GetJson("AzureToken")["expires_on"] != null)
+            if (request.DataStore.GetValue("AzureToken") != null && request.DataStore.GetJson("AzureToken", "expires_on") != null)
             {
-                var expiryDateTime = UnixTimeStampToDateTime(request.DataStore.GetJson("AzureToken")["expires_on"].ToString());
+                var expiryDateTime = UnixTimeStampToDateTime(request.DataStore.GetJson("AzureToken", "expires_on"));
                 if ((expiryDateTime - DateTime.Now).TotalMinutes < 5)
                 {
                     return InterceptorStatus.Intercept;
                 }
             }
 
-            if (request.DataStore.GetValue("AzureTokenKV") != null && request.DataStore.GetJson("AzureTokenKV")["expires_on"] != null)
+            if (request.DataStore.GetValue("AzureTokenKV") != null && request.DataStore.GetJson("AzureTokenKV", "expires_on") != null)
             {
-                var expiryDateTime = UnixTimeStampToDateTime(request.DataStore.GetJson("AzureTokenKV")["expires_on"].ToString());
+                var expiryDateTime = UnixTimeStampToDateTime(request.DataStore.GetJson("AzureTokenKV", "expires_on"));
                 if ((expiryDateTime - DateTime.Now).TotalMinutes < 5)
                 {
                     return InterceptorStatus.Intercept;
                 }
             }
 
-            if (request.DataStore.GetValue("MsCrmToken") != null && request.DataStore.GetJson("MsCrmToken")["expires_on"] != null)
+            if (request.DataStore.GetValue("MsCrmToken") != null && request.DataStore.GetJson("MsCrmToken", "expires_on") != null)
             {
-                var expiryDateTime = UnixTimeStampToDateTime(request.DataStore.GetJson("MsCrmToken")["expires_on"].ToString());
+                var expiryDateTime = UnixTimeStampToDateTime(request.DataStore.GetJson("MsCrmToken", "expires_on"));
                 if ((expiryDateTime - DateTime.Now).TotalMinutes < 5)
                 {
                     return InterceptorStatus.Intercept;

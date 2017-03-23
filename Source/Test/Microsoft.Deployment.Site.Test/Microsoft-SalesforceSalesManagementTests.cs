@@ -24,15 +24,15 @@ namespace Microsoft.Deployment.Site.Web.Tests
         public void Given_CorrectInformation_And_No_AS_When_RunSalesforce_ThenSuccess()
         {
             Given_CorrectCredentials_When_AzureAuth_Then_Success();
-            HelperMethods.ClickNextButton();
+            HelperMethods.ClickButton("Next");
             Given_CorrectSalesforceCredentials_When_Validate_Then_PageValidatesSuccesfully();
-            HelperMethods.ClickNextButton();
+            HelperMethods.ClickButton("Next");
             Given_CorrectSqlCredentials_When_ExistingSqlSelected_Then_PageValidatesSuccessfully();
-            HelperMethods.ClickNextButton();
+            HelperMethods.ClickButton("Next");
             HelperMethods.NoAnalysisServices();
-            HelperMethods.ClickNextButton();
+            HelperMethods.ClickButton("Next");
             Thread.Sleep(new TimeSpan(0, 0, 3));
-            HelperMethods.ClickNextButton();
+            HelperMethods.ClickButton("Next");
             HelperMethods.ClickButton("Run");
             HelperMethods.CheckDeploymentStatus();
             HelperMethods.CleanSubscription(
@@ -48,16 +48,17 @@ namespace Microsoft.Deployment.Site.Web.Tests
         public void Given_CorrectInformation_And_AS_When_RunSalesforce_ThenSuccess()
         {
             Given_CorrectCredentials_When_AzureAuth_Then_Success();
-            HelperMethods.ClickNextButton();
+            HelperMethods.ClickButton("Next");
             Given_CorrectSalesforceCredentials_When_Validate_Then_PageValidatesSuccesfully();
-            HelperMethods.ClickNextButton();
+            HelperMethods.ClickButton("Next");
             Given_CorrectSqlCredentials_When_ExistingSqlSelected_Then_PageValidatesSuccessfully();
-            HelperMethods.ClickNextButton();
+            HelperMethods.ClickButton("Next");
             HelperMethods.NewAnalysisServices("salesforceas", Credential.Instance.ServiceAccount.Username, Credential.Instance.ServiceAccount.Password);
-            HelperMethods.ClickNextButton();
             Thread.Sleep(new TimeSpan(0, 0, 3));
-            HelperMethods.ClickNextButton();
-            HelperMethods.ClickNextButton();
+            HelperMethods.ClickButton("Next");
+            Thread.Sleep(new TimeSpan(0, 0, 3));
+            HelperMethods.ClickButton("Next");
+            HelperMethods.ClickButton("Next");
             HelperMethods.ClickButton("Run");
             HelperMethods.CheckDeploymentStatus();
             HelperMethods.CleanSubscription(
@@ -197,7 +198,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
             tokenBox.SendKeys(token);
             usernameBox.SendKeys(username);
             passwordBox.SendKeys(password);
-            HelperMethods.ClickValidateButton();
+            HelperMethods.ClickButton("Validate");
         }
     }
 }

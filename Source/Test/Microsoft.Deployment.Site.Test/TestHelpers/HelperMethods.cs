@@ -31,7 +31,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
         }
 
         public static void ClickNextButton()
-        {
+         {
             var button = driver.FindElementsByTagName("Button").First(e => e.Text == "Next");
             button.Click();
         }
@@ -141,7 +141,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
             var passwordBox = elements.First(e => e.GetAttribute("value.bind").Contains("password"));
             passwordBox.SendKeys(password);
 
-            ClickValidateButton();
+            ClickButton("Validate");
         }
 
         public static void NoAnalysisServices()
@@ -169,7 +169,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
             button.SendKeys("Yes");
 
-            ClickNextButton();
+            ClickButton("Next");
             Thread.Sleep(new TimeSpan(0, 0, 2));
             var newAas = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
 
@@ -183,9 +183,9 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
             var elements = driver.FindElementsByCssSelector("input[class='st-input au-target']");
 
-            var serverBox = elements.First(e => e.GetAttribute("value.bind").Contains("server"));
-            var usernameBox = elements.First(e => e.GetAttribute("value.bind").Contains("email"));
-            var passwordBox = elements.First(e => e.GetAttribute("value.bind").Contains("password"));
+            var serverBox = elements.FirstOrDefault(e => e.GetAttribute("value.bind").Contains("server"));
+            var usernameBox = elements.FirstOrDefault(e => e.GetAttribute("value.bind").Contains("email"));
+            var passwordBox = elements.FirstOrDefault(e => e.GetAttribute("value.bind").Contains("password"));
 
             while (usernameBox.Enabled != true && passwordBox.Enabled != true && passwordBox.Enabled != true)
             {
@@ -207,7 +207,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
             aasSku.SendKeys("Developer");
 
-            ClickValidateButton();
+            ClickButton("Validate");
         }
 
         public static void SelectSqlDatabase(string databaseName)
@@ -227,6 +227,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
         public static void CheckDeploymentStatus()
         {
+            Thread.Sleep(new TimeSpan(0, 0, 5));
             var popup = driver.FindElementByCssSelector("span[class='glyphicon pbi-glyph-close st-contact-us-close au-target']");
             popup.Click();
 

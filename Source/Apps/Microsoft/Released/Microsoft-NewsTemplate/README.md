@@ -9,7 +9,7 @@ Advanced Search with Bing News Solution Template Documentation
 5. [Architecture Deep Dive](#architecture-deep-dive)
 6. [Model Schema](#model-schema)
 7. [Reports Walkthrough](#report-walkthrough)
-8. [Updating your Search Terms](#updating-search-terms)
+8. [Updating your Search Terms](#updating-your-search-terms)
 9. [Estimated Costs](#estimated-costs)
 
 

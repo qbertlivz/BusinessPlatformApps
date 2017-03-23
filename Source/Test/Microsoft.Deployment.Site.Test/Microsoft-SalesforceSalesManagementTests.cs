@@ -179,11 +179,11 @@ namespace Microsoft.Deployment.Site.Web.Tests
             while(usernameBox == null && passwordBox == null && tokenBox == null)                
             {
                 usernameBox =
-                  driver.FindElementsByTagName("Input").First(e => e.GetAttribute("placeholder") == "username");
+                  driver.FindElementsByTagName("Input").FirstOrDefault(e => e.GetAttribute("placeholder") == "username");
                 passwordBox =
-                    driver.FindElementsByTagName("Input").First(e => e.GetAttribute("placeholder") == "password");
+                    driver.FindElementsByTagName("Input").FirstOrDefault(e => e.GetAttribute("placeholder") == "password");
                 tokenBox =
-                    driver.FindElementsByTagName("Input").First(e => e.GetAttribute("placeholder") == "token");
+                    driver.FindElementsByTagName("Input").FirstOrDefault(e => e.GetAttribute("placeholder") == "token");
                 Thread.Sleep(new TimeSpan(0, 0, 5));
             }
 

@@ -169,6 +169,8 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
         public void SalesforcePage(string username, string password, string token)
         {
+            Thread.Sleep(new TimeSpan(0, 0, 10));
+
             var usernameBox =
                 driver.FindElementsByTagName("Input").FirstOrDefault(e => e.GetAttribute("placeholder") == "username");
             var passwordBox =

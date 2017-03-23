@@ -237,7 +237,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
             int i = 0;
 
-            while (progressText == null && i < 30)
+            while (progressText == null && i < 60)
             {
                 progressText = driver.FindElementsByCssSelector("span[class='semiboldFont st-progress-text']")
                                      .FirstOrDefault(e => e.Text == "All done! You can now download your Power BI report and start exploring your data.");

@@ -9,7 +9,7 @@ Advanced Search with Bing News Solution Template Documentation
 5. [Architecture Deep Dive](#architecture-deep-dive)
 6. [Model Schema](#model-schema)
 7. [Reports Walkthrough](#report-walkthrough)
-8. [Customizations](#customizations)
+8. [Updating your Search Terms](#updating-search-terms)
 9. [Estimated Costs](#estimated-costs)
 
 
@@ -482,6 +482,21 @@ Finally, the sources page allows us to explore articles from a news publisher’
 If we want to find news articles to read from a certain publisher this is another nice way of filtering down the data.
 
 ![Image](Resources/media/image57.png)
+
+### Updating your Search Terms
+---------------------
+
+Once you set up the solution template you may want to modify the search terms you are looking at.
+If you want to change your search terms you will need to log into your Azure portal account and open your Logic App (LogicAppMainNews). Inside the Logic App you will need to open the first step (the trigger):
+
+![Image](Resources/media/image17.png)
+
+Inside this step you can see your specified Search Query. You can edit this and save the Logic App to update the query. This however will not wipe out the data from the database – it will just continue accumulating new data on top of the old data.
+
+If you would like to completely wipe out the data before updating the search term you will need to do this manually by running the SQL scripts found inside our GitHub [here](https://github.com/Microsoft/BusinessPlatformApps/tree/dev/Source/Apps/Microsoft/Released/Microsoft-NewsTemplate/Service/Database). 
+
+Running these scripts in order will clean up and recreate the database, views and stored procedures needed for the solution.
+
 
 ### Estimated Costs
 

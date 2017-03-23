@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Data;
 using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
@@ -11,6 +12,7 @@ using Microsoft.Deployment.Actions.Salesforce.Models;
 using Microsoft.Deployment.Actions.Salesforce.SalesforceSOAP;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
+using Microsoft.Deployment.Common.Enums;
 using Microsoft.Deployment.Common.Helpers;
 using Newtonsoft.Json;
 
@@ -35,8 +37,8 @@ namespace Microsoft.Deployment.Actions.Salesforce
                 adfFields.Add(new Tuple<string, List<ADFField>>(obj.name, simpleMetadata));
 
                 CreateSqlTableAndTableType(simpleMetadata, obj.fields, schema, obj.name, connString);
-                CreateIndexes(simpleMetadata, schema, obj.name, connString);
-                CreateStoredProcedure(simpleMetadata, string.Concat("spMerge", obj.name), schema, string.Concat(obj.name, "Type"), obj.name, connString);
+                CreateIndexes(simpleMetadata, schema, obj.name.ToLower(), connString);
+                CreateStoredProcedure(simpleMetadata, string.Concat("spMerge", obj.name), schema, string.Concat(obj.name.ToLowerInvariant(), "type"), obj.name.ToLowerInvariant(), connString);
             }
 
             dynamic resp = new ExpandoObject();
@@ -59,7 +61,7 @@ namespace Microsoft.Deployment.Actions.Salesforce
                 {
                     var newField = new ADFField();
                     var rawField = field.type;
-                    newField.name = field.name;
+                    newField.name = field.name.ToLowerInvariant();
                     var cleanedField = field.type.ToString().Contains('@') ? field.type.ToString().Replace('@', ' ') : field.type.ToString();
                     var netType = TypeMapper.SalesforceToDotNet.Where(p => p.Key == cleanedField).FirstOrDefault();
                     Debug.WriteLine(string.Concat(field.name, ", ", rawField, ", ", cleanedField, ", ", netType.Value));
@@ -131,65 +133,80 @@ namespace Microsoft.Deployment.Actions.Salesforce
 
         public void CreateSqlTableAndTableType(List<ADFField> fields, SalesforceSOAP.Field[] sfFields, string schemaName, string tableName, string connString)
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sbTable = new StringBuilder();
+            StringBuilder sbTableType = new StringBuilder();
 
-            string createTable = string.Format("CREATE TABLE [{0}].[{1}](", schemaName, tableName);
-            string createTableType = string.Format("CREATE TYPE [{0}].[{1}Type] AS TABLE(", schemaName, tableName);
+            string existingColumnsCmd = $"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{tableName}'";
 
-            sb.AppendLine(createTable);
+            var queryResult = SqlUtility.RunCommand(connString, existingColumnsCmd, SqlCommandType.ExecuteWithData);
+
+            var existingColumns = from DataRow dr in queryResult.Rows
+                                  select dr["COLUMN_NAME"];
+
+            string createTable = string.Format("ALTER TABLE [{0}] ADD", tableName.ToLowerInvariant());
+            string createTableType = string.Format("CREATE TYPE [{0}].[{1}Type] AS TABLE(", schemaName, tableName.ToLowerInvariant());
+
+            sbTable.AppendLine(createTable);
+            sbTableType.AppendLine(createTableType);
 
             foreach (var field in fields)
             {
-                var sqlType = TypeMapper.DotNetToSql.Where(p => p.Key == field.type).First();
-
-                if (sqlType.Key != null && sqlType.Value == "nvarchar")
+                if (!existingColumns.ToList().Contains(field.name))
                 {
-                    int nvarcharSize = sfFields.First(e => e.name == field.name).length;
+                    createTable = CreatePayload(sfFields, sbTable, field);
+                }
 
-                    string size = string.Empty;
+                createTableType = CreatePayload(sfFields, sbTableType, field);
+            }
 
-                    if (nvarcharSize > 4000)
-                    {
-                        size = "max";
-                    }
-                    if (nvarcharSize == 0)
-                    {
-                        size = "255";
-                    }
+            string tableTypeCmd = createTableType.Remove(createTableType.Length - 3, 1);
+            tableTypeCmd = tableTypeCmd + ")";
+            SqlUtility.InvokeSqlCommand(connString, tableTypeCmd, null);
 
-                    string commandFormat = string.Empty;
+            string createTableCmd = createTable + ($"CONSTRAINT [PK_{tableName}] PRIMARY KEY CLUSTERED ([Id])");
+            SqlUtility.InvokeSqlCommand(connString, createTableCmd, null);
+        }
 
-                    if (field.name == "Id")
-                    {
-                        commandFormat = "[{0}] [{1}]({2}),";
-                    }
-                    else
-                    {
-                        commandFormat = "[{0}] [{1}]({2}) NULL,";
-                    }
+        private string CreatePayload(SalesforceSOAP.Field[] sfFields, StringBuilder sb, ADFField field)
+        {
+            var sqlType = TypeMapper.DotNetToSql.Where(p => p.Key == field.type).First();
 
-                    sb.AppendLine(string.Format(commandFormat,
-                        field.name,
-                        string.IsNullOrEmpty(sqlType.Value) ? field.type.ToString() : sqlType.Value,
-                        !string.IsNullOrEmpty(size) ? size : nvarcharSize.ToString()));
+            if (sqlType.Key != null && sqlType.Value == "nvarchar")
+            {
+                int nvarcharSize = sfFields.First(e => e.name.ToLowerInvariant() == field.name).length;
+
+                string size = string.Empty;
+
+                if (nvarcharSize > 4000)
+                {
+                    size = "max";
+                }
+                if (nvarcharSize == 0)
+                {
+                    size = "255";
+                }
+
+                string commandFormat = string.Empty;
+
+                if (field.name == "id")
+                {
+                    commandFormat = "[{0}] [{1}]({2}),";
                 }
                 else
                 {
-                    sb.AppendLine(string.Format("[{0}] [{1}] NULL,", field.name, string.IsNullOrEmpty(sqlType.Value) ? field.type.ToString() : sqlType.Value));
+                    commandFormat = "[{0}] [{1}]({2}) NULL,";
                 }
+
+                sb.AppendLine(string.Format(commandFormat,
+                    field.name,
+                    string.IsNullOrEmpty(sqlType.Value) ? field.type.ToString() : sqlType.Value,
+                    !string.IsNullOrEmpty(size) ? size : nvarcharSize.ToString()));
             }
-
-            var tableType = sb.ToString();
-
-            tableType = tableType.Remove(sb.Length - 3, 1);
-            tableType = tableType + ")";
-
-            tableType = tableType.Replace(createTable, createTableType);
-            SqlUtility.InvokeSqlCommand(connString, tableType, null);
-
-            sb.AppendLine($"CONSTRAINT [PK_{tableName}] PRIMARY KEY CLUSTERED ([Id]))");
-            var createTableCmd = sb.ToString();
-            SqlUtility.InvokeSqlCommand(connString, sb.ToString(), null);
+            else
+            {
+                sb.AppendLine(string.Format("[{0}] [{1}] NULL,", field.name, string.IsNullOrEmpty(sqlType.Value) ? field.type.ToString() : sqlType.Value));
+            }
+            return sb.ToString();
         }
 
         public void CreateStoredProcedure(List<ADFField> fields, string sprocName, string schemaName, string tableTypeName, string targetTableName, string connString)

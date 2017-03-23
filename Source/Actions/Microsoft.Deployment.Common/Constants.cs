@@ -5,7 +5,8 @@
         public const string AppsPath       = "Apps";
         public const string AppsWebPath    = "Web";
         public const string SiteCommonPath = "SiteCommon";
-
+        public const string ServiceUrl = "https://bpstservice.azurewebsites.net/";
+        
         public const string ActionsPath = "Actions";
         public const string InitFile = "init.json";
         public const string BinPath = "bin";

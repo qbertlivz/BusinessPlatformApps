@@ -23,10 +23,7 @@ go
 CREATE VIEW bpst_news.vw_FullDocument
 AS
     SELECT documents.id								AS [Id],
-           documents.[text]							AS [Text],
-           documents.textLength						AS [Text Length],
-           documents.cleanedText					AS [Cleaned Text],
-           documents.cleanedTextLength				AS [Cleaned Text Length],
+           documents.abstract						AS [Abstract],
            documents.title							AS [Title],
            documents.sourceUrl						AS [Source URL],
            documents.sourceDomain					AS [Source Domain],
@@ -52,6 +49,13 @@ AS
                                          LEFT OUTER JOIN documentsentimentscores 	ON documents.id=documentsentimentscores.id;
 go
 
+CREATE VIEW bpst_news.vw_DocumentSearchTerms
+AS
+    SELECT documentsearchterms.[documentId]			AS [Document Id],
+           documentsearchterms.[searchterms]		AS [Search Terms]
+FROM bpst_news.documentsearchterms;
+go
+
 CREATE VIEW bpst_news.vw_FullDocumentTopics
 AS
     SELECT documenttopics.documentId					AS [Document Id],
@@ -64,8 +68,17 @@ AS
            documenttopicimages.imageUrl2				AS [Image URL 2],
            documenttopicimages.imageUrl3				AS [Image URL 3],
            documenttopicimages.imageUrl4				AS [Image URL 4],
-           ((1-DocumentTopics.documentDistance)*100)	AS [Weight]
-    FROM   bpst_news.documenttopics	LEFT OUTER JOIN documenttopicimages	ON documenttopics.topicid = documenttopicimages.topicid;
+           ((1-DocumentTopics.documentDistance)*100)	AS [Weight],
+		   CASE
+		      WHEN documents.imageUrl = documenttopicimages.imageUrl1 THEN 0.0001
+		      WHEN documents.imageUrl = documenttopicimages.imageUrl2 THEN 0.0002
+		      WHEN documents.imageUrl = documenttopicimages.imageUrl3 THEN 0.0003
+		      WHEN documents.imageUrl = documenttopicimages.imageUrl4 THEN 0.0004
+			  ELSE documenttopics.documentDistance
+		   END AS [Document Distance With Topic Image]
+    FROM   bpst_news.documenttopics
+    LEFT OUTER JOIN documenttopicimages	ON documenttopics.topicid = documenttopicimages.topicid
+    INNER JOIN bpst_news.documents documents ON documenttopics.documentid = documents.id;
 go
 
 
@@ -79,18 +92,26 @@ AS
             [length]					AS [Lenth],
             entityType + entityValue	AS [Entity Id],
         CASE
-            WHEN entityType = 'TIL' THEN 'fa fa-certificate'
-            WHEN entityType = 'PER' THEN 'fa fa-male'
-            WHEN entityType = 'ORG' THEN 'fa fa-sitemap'
-            WHEN entityType = 'LOC' THEN 'fa fa-globe'
-            ELSE null
+			WHEN entityType = 'TIL' THEN 'fa fa-certificate'
+			WHEN entityType = 'Title' THEN 'fa fa-certificate'
+			WHEN entityType = 'PER' THEN 'fa fa-male'
+			WHEN entityType = 'Person' THEN 'fa fa-male'
+			WHEN entityType = 'ORG' THEN 'fa fa-sitemap'
+			WHEN entityType = 'Organization' THEN 'fa fa-sitemap'
+			WHEN entityType = 'LOC' THEN 'fa fa-globe'
+			WHEN entityType = 'Location' THEN 'fa fa-globe'
+			ELSE null
             END [Entity Class],
-        CASE
-            WHEN entityType = 'TIL' THEN '#FFFFFF'
-            WHEN entityType = 'PER' THEN '#1BBB6A'
-            WHEN entityType = 'ORG' THEN '#FF001F'
-            WHEN entityType = 'LOC' THEN '#FF8000'
-            ELSE null
+		CASE
+			WHEN entityType = 'TIL' THEN '#FFFFFF'
+			WHEN entityType = 'Title' THEN '#FFFFFF'
+			WHEN entityType = 'PER' THEN '#1BBB6A'
+			WHEN entityType = 'Person' THEN '#1BBB6A'
+			WHEN entityType = 'ORG' THEN '#FF001F'
+			WHEN entityType = 'Organization' THEN '#FF001F'
+			WHEN entityType = 'LOC' THEN '#FF8000'
+			WHEN entityType = 'Location' THEN '#FF8000'
+			ELSE null
             END [Entity Color]
      FROM bpst_news.entities;
 go
@@ -147,3 +168,9 @@ AS
     FROM   bpst_news.documenttopicimages;
 go
 
+CREATE VIEW bpst_news.vw_TopicKeyPhrases
+AS
+	SELECT topicId			AS [Topic Id],
+           KeyPhrase		AS [Key Phrase]
+	FROM   bpst_news.topickeyphrases;
+go

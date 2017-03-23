@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Deployment.Actions.AzureCustom.AzureToken;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.AppLoad;
 using Microsoft.Deployment.Common.Controller;
@@ -15,22 +16,44 @@ namespace Microsoft.Deployment.Tests.Actions.TestHelpers
     public class TestManager
     {
         public static string RandomString = RandomGenerator.GetRandomLowerCaseCharacters(8);
-        public static string ResourceGroup = Environment.MachineName + "test";
+        public static string ResourceGroup = Environment.MachineName.ToLower() + "test";
 
         private static CommonController Controller { get; set; }
         public static string TemplateName = "Microsoft-NewsTemplateTest";
 
-        private static async Task<DataStore> GetDataStoreWithToken()
+        private static async Task<DataStore> GetDataStoreWithToken(bool force = false)
         {
             // Read from file DataStore
-            if (File.Exists("datastore.json"))
+            if (File.Exists("datastore.json") && !force)
             {
                 string filecontents = File.ReadAllText("datastore.json");
-                return JsonConvert.DeserializeObject<DataStore>(filecontents);
+                var jsonObj = JsonConvert.DeserializeObject<DataStore>(filecontents);
+
+
+                RefreshAzureToken token = new RefreshAzureToken();
+                ActionRequest req = new ActionRequest()
+                {
+                    DataStore = jsonObj
+                };
+
+                try
+                {
+                    var intercept = await token.CanInterceptAsync(null, req);
+                    if (intercept == InterceptorStatus.Intercept)
+                    {
+                        await TestManager.ExecuteActionAsync("Microsoft-RefreshAzureToken", jsonObj);
+                        System.IO.File.WriteAllText("datastore.json", JsonUtility.GetJObjectFromObject(jsonObj).ToString());
+                    }
+
+                    return jsonObj;
+                }
+                catch (Exception)
+                {
+                    // Skip over error and try again
+                }
             }
 
-            // Refresh Token - if refresh faile
-
+ 
             // If not found or refresh failed prompt
             Credential.Load();
             var dataStore = await AAD.GetUserTokenFromPopup();
@@ -51,11 +74,12 @@ namespace Microsoft.Deployment.Tests.Actions.TestHelpers
             return dataStore;
         }
 
-        public static async Task<DataStore> GetDataStore()
+        public static async Task<DataStore> GetDataStore(bool force = false)
         {
-            var dataStore = await GetDataStoreWithToken();
+            var dataStore = await GetDataStoreWithToken(force);
             return dataStore;
         }
+
 
         [AssemblyInitialize()]
         public static void AssemblyInit(TestContext context)
@@ -74,10 +98,10 @@ namespace Microsoft.Deployment.Tests.Actions.TestHelpers
             Credential.Load();
         }
 
-        [AssemblyCleanup()]
-        public static async void AssemblyCleanup()
-        {
-        }
+        //[AssemblyCleanup()]
+        //public static async void AssemblyCleanup()
+        //{
+        //}
 
         public static ActionResponse ExecuteAction(string actionName, DataStore datastore)
         {

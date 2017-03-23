@@ -16,7 +16,7 @@ button {
     font-size: 14px;
     height: 40px;
     text-align: center;
-    width: 150px;
+    width: 200px;
     margin-top: 20px;
     margin-bottom: 20px;
 }
@@ -46,8 +46,12 @@ ul {
 }
 
 /********************************************************************************************
-* PBIST
+* BPST
 ********************************************************************************************/
+
+.st-button-powerbi-login{
+    margin-right: 12px;
+}
 
 .st-buttons-back {
     background: #B9B9B9;

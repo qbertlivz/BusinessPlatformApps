@@ -56,23 +56,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AzureMLPS">
-      <HintPath>..\..\RefrencedAssemblies\AzureMLPS.dll</HintPath>
+      <HintPath>..\..\ReferencedAssemblies\AzureMLPS.dll</HintPath>
     </Reference>
     <Reference Include="Hyak.Common">
       <HintPath>..\..\packages\Hyak.Common.1.1.0\lib\net45\Hyak.Common.dll</HintPath>
       <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.AnalysisServices, Version=13.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\RefrencedAssemblies\Microsoft.AnalysisServices.DLL</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AnalysisServices.Core, Version=13.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\RefrencedAssemblies\Microsoft.AnalysisServices.Core.DLL</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AnalysisServices.Tabular, Version=13.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\RefrencedAssemblies\Microsoft.AnalysisServices.Tabular.DLL</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationInsights, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.ApplicationInsights.2.3.0-beta1\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
@@ -117,6 +105,14 @@
     <Reference Include="Microsoft.IdentityModel.Tokens">
       <HintPath>..\..\packages\Microsoft.IdentityModel.Tokens.5.1.2\lib\net451\Microsoft.IdentityModel.Tokens.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.PowerBI.Amo.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ReferencedAssemblies\Microsoft.PowerBI.Amo.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.PowerBI.Tabular, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ReferencedAssemblies\Microsoft.PowerBI.Tabular.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Rest.ClientRuntime">
       <HintPath>..\..\packages\Microsoft.Rest.ClientRuntime.2.3.4\lib\net45\Microsoft.Rest.ClientRuntime.dll</HintPath>
@@ -183,7 +179,7 @@
       <HintPath>..\..\packages\System.Spatial.5.8.1\lib\net40\System.Spatial.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml.Linq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processeroArchitecture=MSIL" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
@@ -202,6 +198,7 @@
     <Compile Include="AzureAS\DeployAzureASModel.cs" />
     <Compile Include="AzureAS\CheckASServerNameAvailability.cs" />
     <Compile Include="AzureAS\ValidateConnectionToAS.cs" />
+    <Compile Include="AzureML\ExportAzureMLExperiment.cs" />
     <Compile Include="AzureML\DeployAzureMLExperiment.cs" />
     <Compile Include="AzureML\DeployAzureMLWebServiceFromFile.cs" />
     <Compile Include="AzureML\WaitForAzureMLWebServiceCreation.cs" />
@@ -223,11 +220,13 @@
     <Compile Include="CDM\GetEnvironID.cs" />
     <Compile Include="CDM\GetObjID.cs" />
     <Compile Include="CDM\ProvisionCDM.cs" />
+    <Compile Include="CognitiveServices\RegisterCognitiveServices.cs" />
     <Compile Include="Common\GetEmail.cs" />
     <Compile Include="Common\CheckAzureWebsiteExists.cs" />
     <Compile Include="Common\DeployAzureFunctionConnectionStrings.cs" />
     <Compile Include="Common\DeployPrivateAssemblyToFunction.cs" />
     <Compile Include="Common\RegisterBapiService.cs" />
+    <Compile Include="Common\RegisterProviderBeta.cs" />
     <Compile Include="Common\RegisterProvider.cs" />
     <Compile Include="Common\UpdateBlobStorageConnector.cs" />
     <Compile Include="Common\CreateAzureStorageAccount.cs" />

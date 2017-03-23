@@ -27,5 +27,25 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
             response = TestManager.ExecuteAction("Microsoft-WaitForArmDeploymentStatus", dataStore);
             Assert.IsTrue(response.IsSuccess);
         }
+
+
+        [TestMethod]
+        public async Task CreateAzureFunctionForNews()
+        {
+            var dataStore = await TestManager.GetDataStore();
+
+            //// Deploy Function
+            dataStore.AddToDataStore("DeploymentName", "FunctionDeploymentTest");
+            dataStore.AddToDataStore("FunctionName", "unittestfunction8");
+            dataStore.AddToDataStore("RepoUrl", "https://github.com/juluczni/AzureFunctionsNewsTemplate");
+
+            var response = TestManager.ExecuteAction("Microsoft-DeployAzureFunction", dataStore);
+            Assert.IsTrue(response.IsSuccess);
+            response = TestManager.ExecuteAction("Microsoft-WaitForArmDeploymentStatus", dataStore);
+            Assert.IsTrue(response.IsSuccess);
+
+            response = TestManager.ExecuteAction("Microsoft-DeployPrivateAssemblyToFunction", dataStore);
+            Assert.IsTrue(response.IsSuccess);
+        }
     }
 }

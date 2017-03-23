@@ -42,6 +42,11 @@ namespace Microsoft.Deployment.Actions.SQL
             if ((result.Rows[0]["IsLocalDB"] != DBNull.Value) && ((int)result.Rows[0]["IsLocalDB"] == 1))
                 return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "SQL_DenyLocalAndExpress");
 
+            result = SqlUtility.RunCommand(connectionString, "SELECT [compatibility_level] FROM sys.databases WHERE [name]=DB_NAME()", SqlCommandType.ExecuteWithData);
+
+            if ( Convert.ToInt32(result.Rows[0]["compatibility_level"])<100)
+                return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "SQL_CompatLevelTooLow");
+
             return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
         }
     }

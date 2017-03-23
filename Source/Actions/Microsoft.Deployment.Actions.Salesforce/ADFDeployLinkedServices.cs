@@ -26,8 +26,8 @@ namespace Microsoft.Deployment.Actions.Salesforce
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var token = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
-            var subscription = request.DataStore.GetJson("SelectedSubscription")["SubscriptionId"].ToString();
+            var token = request.DataStore.GetJson("AzureToken", "access_token");
+            var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
 
             string sfUsername = request.DataStore.GetValue("SalesforceUser");
@@ -37,15 +37,13 @@ namespace Microsoft.Deployment.Actions.Salesforce
 
             string fullServerUrl = request.DataStore.GetValue("SalesforceBaseUrl");
             string connString = request.DataStore.GetValue("SqlConnectionString");
-            string fiscalMonth = request.DataStore.GetValue("fiscalMonth");
-            string actuals = request.DataStore.GetValue("actuals");
             string emails = request.DataStore.GetValue("EmailAddresses");
 
             string dataFactoryName = resourceGroup + "SalesforceCopyFactory";
             var param = new AzureArmParameterGenerator();
             var sqlCreds = SqlUtility.GetSqlCredentialsFromConnectionString(connString);
             param.AddStringParam("dataFactoryName", dataFactoryName);
-            param.AddStringParam("sqlServerName", sqlCreds.Server.Split('.')[0]);
+            param.AddStringParam("sqlServerFullyQualifiedName", sqlCreds.Server);
             param.AddStringParam("sqlServerUsername", sqlCreds.Username);
             param.AddStringParam("targetDatabaseName", sqlCreds.Database);
             param.AddStringParam("salesforceUsername", sfUsername);

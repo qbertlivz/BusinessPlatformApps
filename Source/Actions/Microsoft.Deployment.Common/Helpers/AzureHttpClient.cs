@@ -11,6 +11,7 @@ namespace Microsoft.Deployment.Common.Helpers
         public string Token { get; set; }
         public string Subscription { get; }
         public string ResourceGroup { get; }
+        public Task Providers { get; set; }
 
         public AzureHttpClient(string token)
         {

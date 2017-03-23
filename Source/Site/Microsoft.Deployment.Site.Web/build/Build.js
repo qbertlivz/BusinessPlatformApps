@@ -13,20 +13,20 @@ gulp.task('build-TS', function () {
             emitDecoratorMetadata: true,
             experimentalDecorators: true,
             module: 'commonjs',
-            noExternalResolve: false,
             noImplicitAny: false,
+            noResolve: false,
             removeComments: true,
-            sourceMap: true,
+            sourceMap: false,
             target: 'es6'
         }))
         .pipe(babel({
             plugins: ['transform-runtime'],
             presets: ['es2015']
         }))
-        .pipe(sourcemaps.write('.', {
-            includeContent: false,
-            sourceRoot: '/'
-        }))
+        //.pipe(sourcemaps.write('.', {
+        //    includeContent: false,
+        //    sourceRoot: '/'
+        //}))
         .pipe(gulp.dest('wwwroot/'));
 });
 

@@ -46,7 +46,7 @@ namespace Installer
             // Same should work when setting any header
             try
             {
-                if (request.Url.StartsWith("https://msi/") || request.Url.StartsWith("https://bpsolutiontemplates.com/"))
+                if ((request.Url.StartsWith("https://msi/") || request.Url.StartsWith("https://bpsolutiontemplates.com/")) && request.Url != "https://bpsolutiontemplates.com/?name=Microsoft-SCCMTemplate")
                 {
                     var appdir = System.Reflection.Assembly.GetEntryAssembly().Location.Replace("Microsoft.Bpst.App.Msi.exe", "");
 

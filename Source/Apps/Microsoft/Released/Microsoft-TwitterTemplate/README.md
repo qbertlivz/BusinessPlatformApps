@@ -6,15 +6,15 @@ Brand & Campaign Management Solution Template Documentation
 2. [Architecture](#architecture)
 3. [System Requirements](#system-requirements)
 4. [How to Install](#how-to-install)
-5. [Architecture Deep Dive] (#architecture-deep-dive)
-6. [Model Schema] (#model-schema)
+5. [Architecture Deep Dive](#architecture-deep-dive)
+6. [Model Schema](#model-schema)
 7. [Reports Walkthrough](#report-walkthrough)
 8. [Customizations](#customizations)
-9. [Pricing] (#pricing)
+9. [Estimated Costs](#estimated-costs)
 
 
 
-#Introduction
+### Introduction
 
 The Twitter template spins up a complete brand/campaign solution. It stands up an end-to-end solution that pulls data from Twitter, enriches the data using machine learning and stores it in Azure SQL. Users can then use pre-built Power BI reports that leverage Microsoft research technology to start analyzing their Twitter data and augmenting it with additional data sources.
 
@@ -30,7 +30,7 @@ The template lets you do things like:
 
 The following document provides a walkthrough of the architecture, a deep dive into every component, comments on customizability as well as information on additional topics like pricing. For any questions not covered in this document, please contact the team at <PBISolnTemplates@microsoft.com>
 
-#Architecture
+### Architecture
 
 ![Image](Resources/media/image46.png)
 
@@ -46,7 +46,7 @@ The flow of the Twitter solution template is as follows:
 
 -   Power BI imports data into it from Azure SQL and renders pre-defined reports
 
-#System Requirements
+### System Requirements
 
 Setting up the template requires the following:
 
@@ -58,7 +58,7 @@ Setting up the template requires the following:
 
 -   Twitter Account
 
-#How to Install
+### How to Install
 
 Before diving into the components of the solution, we will go through how to set things up. To get started with the solution, navigate to the [Twitter template page](https://powerbi.microsoft.com/en-us/solution-templates/brand-management-twitter) and click **Install Now**.
 
@@ -78,7 +78,9 @@ If you belong to a single domain, simply hover over your e-mail address in the s
 In this case, the domain is: richtkhotmail.362.onmicrosoft.com.
 
 ![Image](Resources/media/image5.png)
-Logging into Azure gives the application access to your Azure subscription and permits spinning up Azure services on your behalf. As a user navigates away from this page a new resource group gets spun up on their Azure subscription (the name is random but always prefixed by ‘SolutionTemplate-‘). All newly created resources go into this container.
+Logging into Azure gives the application access to your Azure subscription and permits spinning up Azure services on your behalf. If you want a more granular breakdown of the costs, please scroll down to the Estimated Costs section.
+
+As a user navigates away from this page a new resource group gets spun up on their Azure subscription (the name is random but always prefixed by ‘SolutionTemplate-‘). This name can be changed under the advanced settings tab. All newly created resources go into this container.
 
 **Target:** Connect to an existing SQL Server or provide details which the application will use to spin up an Azure SQL on your behalf. Only Azure SQL is supported for this template. If a user chooses to spin up a new Azure SQL, this will get deployed in their Azure subscription inside the newly created resource group.
 
@@ -651,17 +653,17 @@ The Python script inside the Azure Function is completely customizable. You can 
 
 Other examples could be to add [Cognitive APIs](https://azure.microsoft.com/en-us/services/cognitive-services/text-analytics/) to do things like topic or keyword extraction on top of the twitter data.
 
-#Pricing
+### Estimated Costs
 
-Here is an estimate of the Azure costs (Logic App, Azure Function, Azure SQL, Cognitive Services) based on the number of tweets processed:
+Here is an estimate of the Azure costs (Logic App, Azure Function, Azure SQL, Azure ML) based on the number of tweets processed:
 
-Processing 10K tweets a month will cost approximately $210
+Processing 10K tweets a month will cost approximately $160
 
-Processing 50K tweets a month will cost approximately $315
+Processing 50K tweets a month will cost approximately $265
 
-Processing 100K tweets a month will cost approximately $385
+Processing 100K tweets a month will cost approximately $335
 
-Please keep in mind these are **estimated costs and subject to change.** For a more detailed breakdown of the various components please refer to the [Azure calculator](https://azure.microsoft.com/en-us/pricing/calculator/) and select Logic App, Azure Function, Azure SQL and Congitive Services. You can tweak all the options to see what the costs will look like and what modifications may suit your needs best.
+Please keep in mind these are **estimated costs and subject to change.** For a more detailed breakdown of the various components please refer to the [Azure calculator](https://azure.microsoft.com/en-us/pricing/calculator/) and select Logic App, Azure Function, Azure SQL and Azure ML. You can tweak all the options to see what the costs will look like and what modifications may suit your needs best.
 
 The following defaults are set for you in the template (you can modify any of these after things get set up):
 
@@ -673,8 +675,8 @@ The following defaults are set for you in the template (you can modify any of th
 
 -   Azure Functions
 
--   Cognitive Services (Text Analytics API)
+-   Azure ML (S1)
 
-For example, if you know you will be processing very few tweets a month, you could change the SQL Server from S1 to Basic. In that case you could bring down the costs of processing 10K tweets a month from about $210 to about $180.
+For example, if you know you will be processing very few tweets a month, you could change the SQL Server from S1 to Basic. In that case you could bring down the costs of processing 10K tweets a month from about $160 to about $130.
 
 Whilst the default setting should cater to most twitter template requirements, we encourage you to familiarize yourself with the various pricing options and tweak things to suit your needs.

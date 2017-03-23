@@ -5,11 +5,19 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="The solution template reduces the time to implement a Power BI solution">
+    <meta name="description" content="Reduce the time to implement a Power BI solution">
     <meta name="author" content="">
-    <title>Solution template Setup</title>
+    <title>Business Platform Solution Template</title>
     <link rel="stylesheet" href="dist/SiteCommon/Web/styles/pbi.css" />
     <link rel="stylesheet" href="dist/SiteCommon/Web/styles/bpst.css" />
+    <script>
+        if (window && window.navigator && window.navigator.userAgent && /Edge\/\d./i.test(window.navigator.userAgent)) {
+            var js = document.createElement('script');
+            js.src = 'jspm_packages/npm/bluebird@3.4.1/js/browser/bluebird.min.js';
+            js.type = 'text/javascript';
+            document.getElementsByTagName('head')[0].appendChild(js);
+        }
+    </script>
 </head>
 <body aurelia-app="main">
     <div class="st-header semiboldFont">
@@ -22,17 +30,10 @@
         <div class="st-center-outer">
             <div class="st-center-inner">
                 <span class="st-loader st-loader-small"></span>
-                <p style="text-align: center">Loading page, this could take 10-15 seconds</p>
             </div>
         </div>
     </div>
-    <!-- The bluebird version is locked at 4.6.3 in the package.json file to keep this from breaking -->
-    <!-- We include bluebird to bypass Edge's very slow Native Promise implementation. The Edge team -->
-    <!-- has fixed the issues with their implementation with these fixes being distributed with the  -->
-    <!-- Windows 10 Anniversary Update on 2 August 2016. Once that update has pushed out, you may    -->
-    <!-- consider removing bluebird from your project and simply using native promises if you do     -->
-    <!-- not need to support Internet Explorer.                                                      -->
-    <script src="jspm_packages/npm/bluebird@3.4.1/js/browser/bluebird.min.js"></script>
+
     <script src="jspm_packages/system.js"></script>
     <script src="dist/SiteCommon/Web/scripts/ai.1.0.0-build00159.min.js"></script>
     <script src="config.js"></script>
@@ -41,6 +42,5 @@
         System.import('babel/browser-polyfill');
         System.import('aurelia-bootstrapper');
     </script>
-
 </body>
 </html>

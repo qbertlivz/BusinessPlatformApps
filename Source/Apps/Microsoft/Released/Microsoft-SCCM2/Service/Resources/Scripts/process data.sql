@@ -46,4 +46,4 @@ EXEC pbist_sccm.sp_populate_TasksequenceOverallTaskSequenceByComputerDeployment;
 EXEC pbist_sccm.sp_populate_TasksequenceOverallTaskSequencebyTaskSequenceDeployment;
 
 DELETE FROM pbist_sccm.[configuration] WHERE name='lastLoadTimestamp' AND configuration_group='SolutionTemplate' AND configuration_subgroup='System Center';
-INSERT INTO pbist_sccm.[configuration](configuration_group, configuration_subgroup, NAME, [value], [visible]) VALUES ('SolutionTemplate', 'System Center', 'lastLoadTimestamp', GetDate(), 1);
+INSERT INTO pbist_sccm.[configuration](configuration_group, configuration_subgroup, NAME, [value], [visible]) VALUES ('SolutionTemplate', 'System Center', 'lastLoadTimestamp', CONVERT(varchar(50), GETDATE(), 126), 1);

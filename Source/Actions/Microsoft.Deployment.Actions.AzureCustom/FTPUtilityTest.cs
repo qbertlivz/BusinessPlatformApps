@@ -12,9 +12,10 @@ namespace Microsoft.Deployment.Actions.AzureCustom
         public static FtpWebRequest GetRequest(string uri)
         {
             var request = (FtpWebRequest) WebRequest.Create(uri);
-            //request.KeepAlive = true;
-            //request.ConnectionGroupName = "UploadFunction";
-            //request.ServicePoint.ConnectionLimit = 8;
+            request.KeepAlive = true;
+            request.ConnectionGroupName = "UploadFunction";
+            //request.UsePassive = false;
+            request.ServicePoint.ConnectionLimit = 8;
             request.Timeout = -1;
             return request;
         }
@@ -43,18 +44,19 @@ namespace Microsoft.Deployment.Actions.AzureCustom
 
         public static void UploadFileToServer(string ftpserver, string user, string password, string path, string file)
         {
-            byte[] data = File.ReadAllBytes(file);
-            CreateFolder(ftpserver, user, password, path);
-            UploadFile(ftpserver, user, password, path, data);
+            RetryUtility.Retry(10, () =>
+            {
+                byte[] data = File.ReadAllBytes(file);
+                CreateFolder(ftpserver, user, password, path);
+                UploadFile(ftpserver, user, password, path, data);
+            });
         }
-
-
 
 
         public static void UploadFile(string ftpserver, string user, string password, string relPath, byte[] data)
         {
             var request = GetRequest(ftpserver + "/" + relPath);
-
+            
             request.Method = WebRequestMethods.Ftp.UploadFile;
             request.Credentials = new NetworkCredential(user, password);
             request.UseBinary = true;

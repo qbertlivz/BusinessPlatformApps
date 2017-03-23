@@ -42,8 +42,12 @@ namespace Installer
             var appdir = System.Reflection.Assembly.GetEntryAssembly().Location.Replace("Microsoft.Bpst.App.Msi.exe", "");
 
 #if DEBUG
-            //var fullpath = appdir + @"\index.html?" + argsWithQuestionMark;
-            var fullpath = appdir + @"\index.html?name=Microsoft-TwitterTemplate";
+            var fullpath = appdir + @"\index.html?" + argsWithQuestionMark;
+
+            if (System.Diagnostics.Debugger.IsAttached)
+            {
+                fullpath = appdir + @"\index.html?name=Microsoft-SCCMTemplate";
+            }
 #else
             var fullpath = appdir + @"\index.html?" + argsWithQuestionMark;
 #endif

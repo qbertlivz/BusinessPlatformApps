@@ -18,30 +18,27 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             string azureProvider = request.DataStore.GetLastValue("AzureProvider");
-            string azureToken = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
-            string subscriptionId = request.DataStore.GetJson("SelectedSubscription")["SubscriptionId"].ToString();
+            string azureToken = request.DataStore.GetJson("AzureToken", "access_token");
+            string subscriptionId = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
 
             SubscriptionCloudCredentials creds = new TokenCloudCredentials(subscriptionId, azureToken);
 
             using (ResourceManagementClient managementClient = new ResourceManagementClient(creds))
             {
-                bool isRegistered = false;
-                ProviderListResult providers = managementClient.Providers.List(null);
 
-                foreach (var provider in providers.Providers)
-                {
-                    if (provider.Namespace.EqualsIgnoreCase(azureProvider))
-                    {
-                        isRegistered = provider.RegistrationState.EqualsIgnoreCase(REGISTERED);
-                        break;
-                    }
-                }
-
-                if (!isRegistered)
+                var prov = await managementClient.Providers.GetAsync(azureProvider);
+                if (!prov.Provider.RegistrationState.EqualsIgnoreCase((REGISTERED)))
                 {
                     AzureOperationResponse operationResponse = managementClient.Providers.Register(azureProvider);
-                    if (!(operationResponse.StatusCode == System.Net.HttpStatusCode.OK || operationResponse.StatusCode == System.Net.HttpStatusCode.Accepted))
+                    if (
+                        !(operationResponse.StatusCode == System.Net.HttpStatusCode.OK ||
+                          operationResponse.StatusCode == System.Net.HttpStatusCode.Accepted))
+                    {
                         return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "RegisterProviderError");
+                    }
+
+                    // Temporary hack to wait for registration to complete
+                    await Task.Delay(20000);
                 }
             }
 

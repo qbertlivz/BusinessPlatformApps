@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -25,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -44,7 +44,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
@@ -102,12 +101,16 @@
     <Compile Include="Helpers\ResponseObjectConverter.cs" />
     <Compile Include="Helpers\RestClient.cs" />
     <Compile Include="Helpers\RetryUtility.cs" />
+    <Compile Include="Helpers\ScribeUtility.cs" />
     <Compile Include="Helpers\SqlUtility.cs" />
     <Compile Include="Helpers\StringEnumConverterLower.cs" />
     <Compile Include="Helpers\StringExtension.cs" />
     <Compile Include="Controller\Logger.cs" />
     <Compile Include="Model\PbixConnection.cs" />
     <Compile Include="Model\QDEFF.cs" />
+    <Compile Include="Model\Scribe\ScribeObject.cs" />
+    <Compile Include="Model\Scribe\ScribeOrganization.cs" />
+    <Compile Include="Model\Scribe\ScribeSubscription.cs" />
     <Compile Include="Model\SqlCredentials.cs" />
     <Compile Include="Model\TagReturn.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

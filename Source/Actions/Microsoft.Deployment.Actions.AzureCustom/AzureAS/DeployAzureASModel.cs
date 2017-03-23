@@ -45,7 +45,15 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
             {
                 return new ActionResponse(ActionStatus.Failure, response[0].Value);
             }
-            server.Refresh(true);
+
+            server = new Server();
+            server.Connect(connectionString);
+            db = server.Databases.Find(asDatabase);
+            if (db == null)
+            {
+                return new ActionResponse(ActionStatus.Failure, string.Empty, null, null,"AS Database was not deployed");
+            }
+
             return new ActionResponse(ActionStatus.Success);
         }
     }

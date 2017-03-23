@@ -12,6 +12,7 @@ using OpenQA.Selenium.Remote;
 namespace Microsoft.Deployment.Site.Web.Tests
 {
     [TestClass]
+    [Ignore]
     public class SCCMTemplateTests
     {
         // For the tests to work we need the following on the test box
@@ -169,7 +170,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
             options.AddArgument("?name=Microsoft-SCCMTemplate");
 
             driver = new ChromeDriver(options);
-            driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(30));
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(30);
         }
 
         public void DownloadAndInstallMSI()

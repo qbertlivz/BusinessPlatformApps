@@ -26,6 +26,7 @@ CREATE TABLE bpst_news.documents
     textLength        INT,
     cleanedText       NVARCHAR(max),
     cleanedTextLength INT,
+	abstract		  NVARCHAR(4000),
     title			  NVARCHAR(2000),
     sourceUrl		  NVARCHAR(2000),
     sourceDomain	  NVARCHAR(1000),
@@ -36,14 +37,11 @@ CREATE TABLE bpst_news.documents
     CONSTRAINT pk_documents PRIMARY KEY CLUSTERED (id)
 );
 
-
 CREATE TABLE bpst_news.documentsearchterms
 (
 	[documentId]		NCHAR(64),
     [searchterms]		NVARCHAR(130)
-	CONSTRAINT pk_documentsearchterms PRIMARY KEY CLUSTERED (searchterms)
 );
-
 
 CREATE TABLE bpst_news.documentpublishedtimes
 (
@@ -83,7 +81,7 @@ CREATE TABLE bpst_news.documentsentimentscores
 CREATE TABLE bpst_news.documentkeyphrases
 (
     documentid	NCHAR(64) NOT NULL,
-    phrase		NVARCHAR(2000) NOT NULL
+    phrase		NVARCHAR(max) NOT NULL
 );
 
 
@@ -99,6 +97,13 @@ CREATE TABLE bpst_news.documenttopics
 );
 
 
+CREATE TABLE bpst_news.topickeyphrases
+(
+    topicId			INT NOT NULL,
+    KeyPhrase		NVARCHAR(2000) NOT NULL
+);
+
+
 CREATE TABLE bpst_news.documenttopicimages
 (
     topicId		NCHAR(36) NOT NULL,
@@ -110,8 +115,10 @@ CREATE TABLE bpst_news.documenttopicimages
 );
 
 
+
 CREATE TABLE bpst_news.entities
 (
+	id							BIGINT NOT NULL IDENTITY (1, 1),
     documentId					NCHAR(64) NOT NULL,
     entityType					NVARCHAR(30) NOT NULL,
     entityValue					NVARCHAR(MAX) NULL,

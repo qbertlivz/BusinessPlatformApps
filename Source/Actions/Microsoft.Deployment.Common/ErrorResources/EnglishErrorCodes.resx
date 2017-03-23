@@ -175,7 +175,7 @@
     <value>The target SQL server must be at least version 2008 R2 SP3</value>
   </data>
   <data name="TwitterAccountsInvalid" xml:space="preserve">
-    <value>Sorry, one or more of the accounts you entered could not be found</value>
+    <value>One or more of the accounts you entered could not be found</value>
   </data>
   <data name="CreateTaskPasswordMissing" xml:space="preserve">
     <value>The password is missing</value>
@@ -242,5 +242,11 @@
   </data>
   <data name="PowerAppNoEnvironment" xml:space="preserve">
     <value>No PowerApp environments were found for this Azure account</value>
+  </data>
+  <data name="SQL_CompatLevelTooLow" xml:space="preserve">
+    <value>Target database's compatibility level should be at least 100</value>
+  </data>
+  <data name="Scribe_No_Organizations" xml:space="preserve">
+    <value>No Scribe organizations with an active Replication Services subscription were found for your account</value>
   </data>
 </root>

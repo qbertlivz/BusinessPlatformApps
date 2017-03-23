@@ -28,6 +28,6 @@
     class PbixConnection
     {
         public int Version = 1;
-        public SSASConnectionElement[] Connections;
+        public SSASConnectionElement[] Connections = new SSASConnectionElement[0];
     }
 }

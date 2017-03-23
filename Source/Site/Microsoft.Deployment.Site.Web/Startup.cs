@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,22 +19,6 @@ namespace Microsoft.Deployment.Web
         {
             app.UseDefaultFiles();
             app.UseStaticFiles();
-
-            //app.Use(async (context, next) =>
-            //{
-            //    if (context.Request.IsHttps)
-            //    {
-            //        await next();
-            //    }
-            //    else
-            //    {
-
-            //        var withHttps = "https://" + context.Request.Host + context.Request.Path +
-            //                        context.Request.QueryString;
-            //        context.Response.Redirect(withHttps);
-
-            //    }
-            //});
         }
     }
 }

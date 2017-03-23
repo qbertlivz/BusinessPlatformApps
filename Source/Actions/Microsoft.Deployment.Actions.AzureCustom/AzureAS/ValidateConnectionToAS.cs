@@ -31,13 +31,14 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
             if (!string.IsNullOrEmpty(password))
             {
                 connectionString +=
-                    $"User ID={username};Password={password};Persist Security Info=True; Impersonation Level=Impersonate;";
+                    $"User ID={username};Password={password};Persist Security Info=True; Impersonation Level=Impersonate;UseADALCache=0";
             }
 
             try
             {
                 Server server = new Server();
                 server.Connect(connectionString);
+                
                 request.DataStore.AddToDataStore("ASConnectionString", connectionString, DataStoreType.Private);
             }
             catch (Exception ex)

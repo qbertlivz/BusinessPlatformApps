@@ -1,14 +1,9 @@
-﻿import { ViewModelBase } from '../../../../../SiteCommon/Web/services/viewmodelbase'
-import { DataStoreType } from '../../../../../SiteCommon/Web/services/datastore'
+﻿import { DataStoreType } from '../../../../../SiteCommon/Web/enums/data-store-type'
+
+import { ViewModelBase } from '../../../../../SiteCommon/Web/services/view-model-base'
 
 export class CognitiveText extends ViewModelBase {
-    bingUrl: string = '';
-    bingtermsofuse: string = '';
-    cognitiveUrl: string = '';
-    cognitivetermsofuse: string = '';
-
     isBingChecked: boolean = false;
-    isCognitiveChecked: boolean = false;
 
     constructor() {
         super();
@@ -16,11 +11,6 @@ export class CognitiveText extends ViewModelBase {
     }
 
     verifyBing() {
-        this.isValidated = this.isBingChecked && this.isCognitiveChecked;
+        this.isValidated = this.isBingChecked;
     }
-
-    verifyCognitive() {
-        this.isValidated = this.isBingChecked && this.isCognitiveChecked;
-    }
-
 }

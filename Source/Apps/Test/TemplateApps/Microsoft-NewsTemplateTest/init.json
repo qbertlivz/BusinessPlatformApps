@@ -1,74 +1,5 @@
 ﻿{
   "Install": {
-    "Pages": [
-      {
-        "architectureDiagram": "dist/Apps/Test/TemplateApps/Microsoft-NewsTemplateTest/Web/Images/newsarchdiagram.png",
-        "displayname": "Getting Started",
-        "list1": [
-          "Azure Subscription",
-          "Azure access to Cognitive Services",
-          "Power BI Desktop (latest version)",
-          "Power BI Pro (to share the template with your organization)"
-        ],
-        "list2": [
-          "Find articles from hundreds of news publishers",
-          "Data enriched using machine learning techniques like topic modelling and entity extraction",
-          "Full cloud solution with minimum set up and maintenance considerations"
-        ],
-        "name": "$SiteCommon$/pagesgallery/getting-started.html",
-        "subtitle": "Welcome to the Bing News solution template.",
-        "templateName": "Advanced Search with Bing News"
-      },
-      {
-        "azureProviders": [
-          "Microsoft.MachineLearning"
-        ],
-        "defaultLocation": "5",
-        "displayname": "Login",
-        "name": "$SiteCommon$/pagesgallery/azure-login.html",
-        "pricingCost": "$run('By clicking next and deploying the template, you authorize Microsoft to create Azure resources on your subscription and bill based on their respective pricing rates.  The approximate base cost of the Azure resources used by this template is $7 a day, and every 1,000 articles will incur an additional cost of approximately $12.  These costs are estimates only and subject to change.')",
-        "pricingUrl": "https://github.com/Microsoft/BusinessPlatformApps/tree/master/Source/Apps/Microsoft/Released/Microsoft-TwitterTemplate#pricing",
-        "pricingCalculatorUrl": "https://azure.microsoft.com/en-us/pricing/calculator/"
-      },
-      {
-        "displayname": "Cognitive API",
-        "name": "cognitive-text.html",
-        "cognitiveUrl": "placeholder",
-        "bingUrl": "placeholder"
-      },
-      {
-        "name": "$SiteCommon$/pagesgallery/sql-server.html",
-        "displayname": "Source",
-        "isAzureSql": true,
-        "showAzureSql": false,
-        "showNewSqlOption": "true",
-        "subtitle": "Set up a connection to SQL so we can bring in Bing news data.",
-        "title": "Connect to your SQL Database",
-        "sqlInstance": "NewSql",
-        "newSqlDatabase": "bingNews"
-      },
-      {
-        "name": "search-terms.html",
-        "displayname": "Search Terms"
-      },
-      {
-        "name": "$SiteCommon$/pagesgallery/summary.html",
-        "displayname": "Summary",
-        "values": {
-          "Target Server": "$(this.MS.DataStore.getValue('Server'))",
-          "Target Database": "$(this.MS.DataStore.getValue('Database'))",
-          "Target Username": "$(this.MS.DataStore.getValue('Username'))",
-          "Search Query": "$(this.MS.DataStore.getValue('SearchQuery'))"
-        }
-      },
-      {
-        "name": "$SiteCommon$/pagesgallery/progress.html",
-        "displayname": "Deploy",
-        "filename": "$save('BingNewsTemplate.pbix')",
-        "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(8))"
-      }
-    ],
-
     "Actions": [
       {
         "name": "Microsoft-DeploySQLScripts",
@@ -267,6 +198,74 @@
         "name": "Microsoft-WaitForArmDeploymentStatus",
         "displayname": "Validate Logic App",
         "DeploymentName": "LogicAppNewsTemplate"
+      }
+    ],
+    "Pages": [
+      {
+        "architectureDiagram": "dist/Apps/Test/TemplateApps/Microsoft-NewsTemplateTest/Web/Images/newsarchdiagram.png",
+        "displayname": "Getting Started",
+        "list1": [
+          "Azure Subscription",
+          "Azure access to Cognitive Services",
+          "Power BI Desktop (latest version)",
+          "Power BI Pro (to share the template with your organization)"
+        ],
+        "list2": [
+          "Search articles from hundreds of news publishers to find the most relevant results",
+          "Data and search results enriched using machine learning techniques like topic modelling and entity extraction",
+          "Full cloud solution with minimum set up and maintenance considerations"
+        ],
+        "name": "$SiteCommon$/pages-gallery/getting-started.html",
+        "subtitle": "Welcome to the Bing News Advanced Search solution template.",
+        "templateName": "Advanced Search with Bing News"
+      },
+      {
+        "azureProviders": [
+          "Microsoft.MachineLearning"
+        ],
+        "defaultLocation": "5",
+        "displayname": "Login",
+        "name": "$SiteCommon$/pages-gallery/azure-login.html",
+        "pricingCost": "$run('By clicking next and deploying the template, you authorize Microsoft to create Azure resources on your subscription and bill based on their respective pricing rates.  The approximate base cost of the Azure resources used by this template is $7 a day, and every 1,000 articles will incur an additional cost of approximately $12.  These costs are estimates only and subject to change.')",
+        "pricingUrl": "https://github.com/Microsoft/BusinessPlatformApps/tree/master/Source/Apps/Microsoft/Released/Microsoft-TwitterTemplate#pricing",
+        "pricingCalculatorUrl": "https://azure.microsoft.com/en-us/pricing/calculator/"
+      },
+      {
+        "displayname": "Cognitive API",
+        "name": "cognitive-text.html",
+        "cognitiveUrl": "placeholder",
+        "bingUrl": "placeholder"
+      },
+      {
+        "name": "$SiteCommon$/pages-gallery/sql-server.html",
+        "displayname": "Source",
+        "isAzureSql": true,
+        "showAzureSql": false,
+        "showNewSqlOption": "true",
+        "subtitle": "Set up a connection to SQL so we can bring in Bing News data.",
+        "title": "Connect to your SQL Database",
+        "sqlInstance": "NewSql",
+        "newSqlDatabase": "bingNews"
+      },
+      {
+        "name": "search-terms.html",
+        "displayname": "Search Terms"
+      },
+      {
+        "name": "$SiteCommon$/pages-gallery/summary.html",
+        "displayname": "Summary",
+        "values": {
+          "Target Server": "$(this.MS.DataStore.getValue('Server'))",
+          "Target Database": "$(this.MS.DataStore.getValue('Database'))",
+          "Target Username": "$(this.MS.DataStore.getValue('Username'))",
+          "Search Query": "$(this.MS.DataStore.getValue('SearchQuery'))"
+        }
+      },
+      {
+        "name": "$SiteCommon$/pages-gallery/progress.html",
+        "displayname": "Deploy",
+        "filename": "$save('BingNewsTemplate.pbix')",
+        "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(8))"
       }
     ]
   }

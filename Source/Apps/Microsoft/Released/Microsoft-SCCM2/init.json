@@ -8,13 +8,13 @@
     "Pages": [
       // Getting Started
       {
-        "name": "$SiteCommon$/pagesgallery/getting-started.html",
+        "name": "$SiteCommon$/pages-gallery/getting-started.html",
         "displayname": "Getting Started",
         "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-SCCM2/Web/Images/SCCMArchitectureDiagram.png",
         "list1": [
           "System Center 2012 Configuration Manager R2 SP1 or later. Read access to System Center Configuration Manager database is required.",
           "Destination database: Azure SQL database or SQL Server database (SQL Server 2008 R2 SP3 or later).",
-          "For the machine where the installation is run, Microsoft .NET Framework 4.5 or later & PowerShell version 3.0 or later.",
+          "For the machine where the installation is run, Microsoft .NET Framework 4.5 or later & PowerShell version 5.0 or later.",
           "Power BI Desktop (latest version)",
           "Power BI Pro (to share the template with your organization)"
         ],
@@ -30,7 +30,7 @@
 
       // Login
       {
-        "name": "$SiteCommon$/pagesgallery/windows-auth.html",
+        "name": "$SiteCommon$/pages-gallery/windows-auth.html",
         "displayname": "Login",
         "subtitle": "Specify your windows credentials to create a recurring schedule. The credentials you specify will be used to also connect to the SCCM database",
         "onValidate": [
@@ -49,7 +49,7 @@
       //SQL Server
       {
         "credentialTarget": "pbi_sccm",
-        "name": "$SiteCommon$/pagesgallery/sql-server.html",
+        "name": "$SiteCommon$/pages-gallery/sql-server.html",
         "displayname": "Source",
         "hideSqlAuth": true,
         "title": "Connect to your System Center Configuration Manager database",
@@ -68,7 +68,7 @@
 
       // Target
       {
-        "name": "$SiteCommon$/pagesgallery/sql-server.html",
+        "name": "$SiteCommon$/pages-gallery/sql-server.html",
         "displayname": "Target",
         "credentialTarget": "pbi_sccm",
         "checkSqlVersion": true,
@@ -94,9 +94,20 @@
         "displayname": "Customize"
       },
 
+      // Summary
+      {
+        "displayname": "Summary",
+        "name": "$SiteCommon$/pages-gallery/summary.html",
+        "values": {
+          "Target Server": "$(this.MS.DataStore.getValue('Server'))",
+          "Target Database": "$(this.MS.DataStore.getValue('Database'))",
+          "Target Username": "$(this.MS.DataStore.getValue('Username'))"
+        }
+      },
+
       // Progress
       {
-        "name": "$SiteCommon$/pagesgallery/progress.html",
+        "name": "$SiteCommon$/pages-gallery/progress.html",
         "displayname": "Progress",
         "finishedActionName": "Microsoft-GetTaskStatus",
         "targetSchema": "pbist_sccm",
@@ -157,7 +168,7 @@
   "Uninstall": {
     "Pages": [
       {
-        "name": "$SiteCommon$/pagesgallery/uninstall.html",
+        "name": "$SiteCommon$/pages-gallery/uninstall.html",
         "displayname": "Uninstall",
         "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-SCCM2/Web/Images/SCCMArchitectureDiagram.png",
         "templateName": "System Center Configuration Manager",
@@ -165,11 +176,10 @@
         "uninstallList": [
           "The task used to move data between the SCCM database and the target database",
           "The scripts used to create the initial tables in the target database"
-        ],
-        "showBack": "$(false)"
+        ]
       },
       {
-        "name": "$SiteCommon$/pagesgallery/progress.html",
+        "name": "$SiteCommon$/pages-gallery/progress.html",
         "displayname": "Uninstall Progress",
         "successMessage": "Uninstall complete",
         "isUninstall": true,

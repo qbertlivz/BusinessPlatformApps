@@ -223,8 +223,8 @@
         "displayname": "Copy dataload scripts"
       },
       {
-        "name": "Microsoft-AddLogonAsBatchPermission",
-        "displayname": "Grant permission for logging as a batch job"
+        "displayname": "$translate(INIT_ACTION_BATCH_PERMISSION)",
+        "name": "Microsoft-AddLogonAsBatchPermission"
       },
       {
         "name": "Microsoft-CreateTask",

@@ -110,6 +110,7 @@
     <Compile Include="Model\QDEFF.cs" />
     <Compile Include="Model\Scribe\ScribeObject.cs" />
     <Compile Include="Model\Scribe\ScribeOrganization.cs" />
+    <Compile Include="Model\Scribe\ScribeSecurityRule.cs" />
     <Compile Include="Model\Scribe\ScribeSubscription.cs" />
     <Compile Include="Model\SqlCredentials.cs" />
     <Compile Include="Model\TagReturn.cs" />

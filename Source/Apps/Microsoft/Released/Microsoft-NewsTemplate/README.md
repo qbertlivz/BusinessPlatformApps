@@ -9,7 +9,7 @@ Advanced Search with Bing News Solution Template Documentation
 5. [Architecture Deep Dive](#architecture-deep-dive)
 6. [Model Schema](#model-schema)
 7. [Reports Walkthrough](#report-walkthrough)
-8. [Customizations](#customizations)
+8. [Updating your Search Terms](#updating-your-search-terms)
 9. [Estimated Costs](#estimated-costs)
 
 
@@ -318,9 +318,9 @@ Here is an overview of the tables found in the Power BI (names correspond to the
 | Compressed Entities        | Document ID and an JSON object of the entities found. The document strippet custom visual uses the JSON to visualize the entities that appear in an article hence the JSON structure. The JSON stores the entity value, entity type as well as a CSS color and class.                                                                                                                                                                                |
 | Entities | Stores the same information as the Compressed Entities table but in a structured format vs. JSON. |
 | Key Phrases  | Stores the key phrases found with the corresponding document ID. A key phrase can belong to many documents and a document can belong to many key phrases)                                                                                                                                                                      |
-| Sentiment Scores  | Stores the sentiment of an article along with the binned sentiment score and categorical score                                                                                                                                                                                |
-| Topic Images       | Stores the topic ID and up to 4 image URLs that are found to be associated with the given topic                                                                                                                                                                                |
-| Topic Key Phrases| Stores the topic ID with the word version of the key phrases that are used in the reports instead of the numerical output of the LDA model                                                                                                                                                                                |
+| Sentiment Scores  | Stores the sentiment of an article along with the binned sentiment score and categorical score|
+| Topic Images       | Stores the topic ID and up to 4 image URLs that are found to be associated with the given topic|
+| Topic Key Phrases| Stores the topic ID with the word version of the key phrases that are used in the reports instead of the numerical output of the LDA model|
 
 Below is a breakdown of the columns found in every table:
 
@@ -361,16 +361,17 @@ Below is a breakdown of the columns found in every table:
 |--------------------|--------------------------------------|
 | **Column Name**    | **Description**                      |
 | Document Id                 | Document Id (a document belongs to one topic)     |
-| Topic Id                 | Short snippet from the news article     |
-| Document Distance                   | Measure used to figure out how much of a match a document is to a topic cluster. The closer the number is to 1 the better the match.                              |
-| Topic Score             | |
+| Topic Id                 | Id of the topic cluster     |
+| Document Distance                   | A score between 0 and 1 that represents how well a document fits within a topic.  0 is perfect and 1 is very poor.  
+|
+| Topic Score             | The number of documents in each topic|
 | Topic Key Phrase                  | Numerical representation of the keywords a topic is associated with               |
 | Image URL 1            | First image associated with topic |
 | Image URL  2                | Second image associated with topic                            |
 | Image URL  3                | Third image associated with topic                            |
 | Image URL  4                | Fourth image associated with topic                            |
-| Weight | |
-| Document Distance With Topic Image| The distance the image itself is from the topic cluster                            |
+| Weight | Converts the document distance to scale of 0 to 100 with 100 as the highest. Higher weighted documents are a better fit for the topic cluster.  The formula is (1 - distance) * 100.
+ |
 
 | **Compressed Entities** |                                      |
 |--------------------|--------------------------------------|
@@ -384,13 +385,117 @@ Below is a breakdown of the columns found in every table:
 | Document Id           | Document Id (not unique – a document can have multiple entities associated with it) |
 | Entity Type              | Categorical variable of the type of entity found. ORG refers to Organization, LOC to Location and PER to Person|
 | Entity Value              |The actual name of the entity that was found |
-| Offset           | |
-| Offset Document Percentage         | |
+| Offset           |Character position of the start of the entity within the document.  |
+| Offset Document Percentage         |Offset divided by document length.  A value of .25 indicates that the entity is found 25% through the document |
 | Length           | Entity character length |
 | Entity ID           | Merge of entity type with entity value (unique) |
 | Entity Class           | Font awesome icons (scalable vector icons) |
+
 | Entity Color           |Color (specified in hex) |
-|
+
+
+
+| **Key Phrases**         |                                                                                                                                                                                                           |
+|-----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Column Name**             | **Description**                                                                                                                                                                                           |
+| Document ID                   | Document ID (one document can have multiple key phrases)                                                                                                                                                     |
+| Phrases                    | A key phrase found inside an article |
+
+| **Sentiment Scores**        |                                                                                                                        |
+|-------------------|------------------------------------------------------------------------------------------------------------------------|
+| **Column Name**   | **Descrpition**                                                                                                        |
+| Id  | Document ID (unique – each document will have one sentiment score)                                                                          |
+| Score              | Sentiment score ranging from 0 (very negative) to 1 (very positive)|
+| Binned sentiment         | Sentiment grouped into intervals of 0.05 (e.g.  sentiment of 0.723 would fall into the 0.7 bucket)                                                |
+| Sentiment         | Categorical variable for sentiment – categories include Very Negative, Slightly Negative, Neutral, Slightly Positive and Very Positive|
+
+| **Topic Images**         |                                                                                                                                                                                                           |
+|-----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Column Name**             | **Description**                                                                                                                                                                                           |
+| Topic Id                   | Id of the topic cluster                                                                                                                                                     |
+| Image URL 1            | First image associated with topic |
+| Image URL  2                | Second image associated with topic                            |
+| Image URL  3                | Third image associated with topic                            |
+| Image URL  4                | Fourth image associated with topic                            |
+
+| **Topic Key Phrases**         |                                                                                                                                                                                                           |
+|-----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Column Name**             | **Description**                                                                                                                                                                                           |
+| Topic Id                   | Id of the topic cluster                                                                                                                                                     |
+| Key Phrase                    | The word descriptor of the topic cluster (usually 3 keywords) |
+
+### Report Walkthrough
+------------------
+
+The following section walks through each report page outlining the intent of the page. 
+In the sample report below we are tracking the Microsoft keyword and have been collecting data for the past 2 weeks. If you have just set up the template and don't see any data please be patient – the Azure ML experiments need to run prior to the topic clustering and entity extraction visuals loading. This could take a few hours (depending on whether you configure the schedule).
+
+![Image](Resources/media/image52.png)
+
+The template uses many custom visuals built by MSR for effective information retrieval. On the left hand side we can see the topic clustering visual (this is the output of the Azure ML Topic web service). This visualizes all the clusters generated by the machine learning model with the size of the visual determined by how many documents are present in a cluster. We also visualize the top 3 keywords that are associated with a cluster across the center.
+
+The middle visual is the entity extraction visual that meaningfully represents the organizations, locations and people found inside the articles. This visual represents the output of the Azure ML entity web service. The colors of the entities are defined by the hex colors specified in the Entity Color field and the icons that appear next to each type of entity is specified by the Entity Class. 
+
+The document strippet visual represents each article by an image, title and source. Clicking into a specific tile shows a short contextual snippet taken from the article. When clicking into a tile you will also notice more Entity Class icons appearing on the side. Hovering over these icons shows the specific entity they are associated with. The icons that appear represent all the entities found inside each article (and this visual is generated via the Compressed Entities JSON field).
+
+Upon finding an article of interest you can navigate to read the full article by clicking on the article link.
+
+![Image](Resources/media/image58.png)
+
+Finally we also have a list of trending keyphrases (output of the key phrase cognitive service) and the average sentiment (output of the sentiment cognitive service).
+
+As you can see, the overview page brings together the outputs of 4 different machine learning algorithms!
+
+The following pages do a deep dive into one specific machine learning area but the intent of each page is the same - connect you with the articles most relevant and interesting to you. 
+
+### Sentiment Analysis
+
+The sentiment page allows you to answer questions like which entities linked to Microsoft are being perceived most negatively in the news as well as help you uncover why that is the case.
+
+![Image](Resources/media/image53.png)
+
+The left-hand side and middle visuals let you quickly identify and topics or entities that are consistently being talked about in a positive or negative way. The report displays sentiment on the x axis and the volume of documents on the y axis. Documents are grouped by either topics (left side) or entities (middle). Articles appearing in the top left hand corner of the graph are a cause of concern (topics/entities that are consistently negative) whereas top right hand corner articles indicate lots of positivity.
+
+You can also drill into a specific sentiment bin to quickly isolate e.g. only the most negative articles or only the neutral ones. You can also see how sentiment changes across time.
+
+### Topics
+
+The topics page gives you added perspectives like which topics were trending last vs. this week. The trending key phrases complement the topic visualization very well. Upon drilling into  a topic, explore the keywords that are trending within the topic to get a very quick understanding of what the topic describes.
+
+![Image](Resources/media/image54.png)
+
+### Entities
+
+We can dive deeper into entities by e.g. visualizing all of the location entities on a map. We can also take a look at which entities have been trending across time.
+
+![Image](Resources/media/image55.png)
+
+### Phrases
+
+The phrases page allows us to explore which keywords the machine learning models have picked up as being trending, both on aggregate as well as across time. We can also see key phrases by sentiment – which phrases are associated with a negative vs. positive sentiment.
+
+![Image](Resources/media/image56.png)
+
+### Source
+
+Finally, the sources page allows us to explore articles from a news publisher’s perspective. We can see which news publishers write about our search terms most frequently, and which are the most popular topics or entities they bring up.
+If we want to find news articles to read from a certain publisher this is another nice way of filtering down the data.
+
+![Image](Resources/media/image57.png)
+
+### Updating your Search Terms
+---------------------
+
+Once you set up the solution template you may want to modify the search terms you are looking at.
+If you want to change your search terms you will need to log into your Azure portal account and open your Logic App (LogicAppMainNews). Inside the Logic App you will need to open the first step (the trigger):
+
+![Image](Resources/media/image17.png)
+
+Inside this step you can see your specified Search Query. You can edit this and save the Logic App to update the query. This however will not wipe out the data from the database – it will just continue accumulating new data on top of the old data.
+
+If you would like to completely wipe out the data before updating the search term you will need to do this manually by running the SQL scripts found inside our GitHub [here](https://github.com/Microsoft/BusinessPlatformApps/tree/dev/Source/Apps/Microsoft/Released/Microsoft-NewsTemplate/Service/Database). 
+
+Running these scripts in order will clean up and recreate the database, views and stored procedures needed for the solution.
 
 
 ### Estimated Costs

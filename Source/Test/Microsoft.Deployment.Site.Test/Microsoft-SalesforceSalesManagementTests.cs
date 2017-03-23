@@ -169,6 +169,8 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
         public void SalesforcePage(string username, string password, string token)
         {
+            Thread.Sleep(new TimeSpan(0, 0, 10));
+
             var usernameBox =
                 driver.FindElementsByTagName("Input").FirstOrDefault(e => e.GetAttribute("placeholder") == "username");
             var passwordBox =
@@ -176,16 +178,15 @@ namespace Microsoft.Deployment.Site.Web.Tests
             var tokenBox =
                 driver.FindElementsByTagName("Input").FirstOrDefault(e => e.GetAttribute("placeholder") == "token");
 
-            while(usernameBox == null && passwordBox == null && tokenBox == null)
-                
+            while(usernameBox == null && passwordBox == null && tokenBox == null)                
             {
-                Thread.Sleep(new TimeSpan(0, 0, 3));
                 usernameBox =
-                  driver.FindElementsByTagName("Input").First(e => e.GetAttribute("placeholder") == "username");
+                  driver.FindElementsByTagName("Input").FirstOrDefault(e => e.GetAttribute("placeholder") == "username");
                 passwordBox =
-                    driver.FindElementsByTagName("Input").First(e => e.GetAttribute("placeholder") == "password");
+                    driver.FindElementsByTagName("Input").FirstOrDefault(e => e.GetAttribute("placeholder") == "password");
                 tokenBox =
-                    driver.FindElementsByTagName("Input").First(e => e.GetAttribute("placeholder") == "token");
+                    driver.FindElementsByTagName("Input").FirstOrDefault(e => e.GetAttribute("placeholder") == "token");
+                Thread.Sleep(new TimeSpan(0, 0, 5));
             }
 
             while (usernameBox.Enabled != true && passwordBox.Enabled != true && tokenBox.Enabled != true)

@@ -1,4 +1,10 @@
 ﻿<template>
-    <h1 class="st-title">${MS.Translate.COMMON_CUSTOMIZE}</h1>
-    <p class="st-subtitle">${MS.Translate.CUSTOMIZE_SPECIFIC}</p>
+    <h1 class="st-title">${MS.Translate.DATA_MOVEMENT_TITLE}</h1>
+    <p class="st-subtitle">${MS.Translate.DATA_MOVEMENT_SUBTITLE}</p>
+
+    <select class="btn btn-default dropdown-toggle st-input" value.bind="dataMovement">
+        <option value="ADF">${MS.Translate.DATA_MOVEMENT_AZURE_DATA_FACTORY}</option>
+        <option value="Informatica">${MS.Translate.DATA_MOVEMENT_INFORMATICA}</option>
+        <option value="Scribe">${MS.Translate.DATA_MOVEMENT_SCRIBE}</option>
+    </select>
 </template>

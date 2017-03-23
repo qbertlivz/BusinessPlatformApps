@@ -170,7 +170,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
             button.SendKeys("Yes");
 
             ClickNextButton();
-
+            Thread.Sleep(new TimeSpan(0, 0, 2));
             var newAas = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
 
             while (newAas.Enabled != true)

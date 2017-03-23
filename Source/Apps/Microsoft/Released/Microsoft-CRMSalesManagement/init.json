@@ -1,98 +1,5 @@
 ﻿{
   "Install": {
-    "Actions": [
-      {
-        "name": "Microsoft-DeploySQLScripts",
-        "displayname": "Deploy DB Scripts",
-        "SqlServerIndex": "0",
-        "SqlScriptsFolder": "Database"
-      },
-      {
-        "name": "Microsoft-SetConfigValueInSql",
-        "displayname": "Deploy DB Configuration",
-        "SqlServerIndex": "0",
-        "SqlConfigTable": "[smgt].[configuration]"
-      },
-      {
-        "name": "Microsoft-SetConfigValueInSql",
-        "displayname": "Deploy DB Configuration",
-        "SqlServerIndex": "0",
-        "SqlConfigTable": "[smgt].[configuration]",
-        "SqlGroup": "SolutionTemplate",
-        "SqlSubGroup": "SSAS",
-        "SqlEntryName": "FunctionName",
-        "SqlEntryValue": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
-        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
-      },
-      {
-        "name": "Microsoft-DeployAzureASModel",
-        "displayname": "Deploy AS Model",
-        "xmlaFilePath": "Service/AzureAS/SalesManagement.xmla",
-        "SqlConnectionString": "$dsall(SqlConnectionString)[0]",
-        "ASDatabase": "d365",
-        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
-      },
-      {
-        "name": "Microsoft-DeployAzureFunction",
-        "displayname": "Deploying scheduler",
-        "DeploymentName": "ASFunction",
-        "FunctionName": "$save('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
-        "RepoUrl": "https://github.com/MohaaliMicrosoft/AnalysisServicesRefresh",
-        "sku": "Standard",
-        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
-      },
-      {
-        "name": "Microsoft-WaitForArmDeploymentStatus",
-        "displayname": "Waiting for scheduler",
-        "DeploymentName": "ASFunction",
-        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
-      },
-      {
-        "name": "Microsoft-DeployAzureFunctionConnectionStrings",
-        "displayname": "Setting up scheduler",
-        "DeploymentName": "ASFunction",
-        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
-        "AppSettingKeys": {
-          "connStringAS": "$ds(ASConnectionString)",
-          "connStringSql": "$dsall(SqlConnectionString)[0]",
-          "schema": "[smgt]",
-          "databaseAS": "d365",
-          "functionName": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))"
-        }
-      },
-      {
-        "displayname": "Configuring Azure Key Vault",
-        "name": "Microsoft-CrmCreateVaultSecret"
-      },
-      {
-        "displayname": "Validating Dynamics 365 Entities",
-        "name": "Microsoft-CrmValidateEntities"
-      },
-      {
-        "displayname": "Cleaning Dynamics 365 Environment",
-        "name": "Microsoft-CrmDeleteProfile"
-      },
-      {
-        "displayname": "Validating Dynamics 365 Profile",
-        "name": "Microsoft-CrmValidateProfile"
-      },
-      {
-        "displayname": "Creating Dynamics 365 Profile",
-        "name": "Microsoft-CrmCreateProfile"
-      },
-      {
-        "displayname": "Starting Dynamics 365 Profile",
-        "name": "Microsoft-CrmStartProfile"
-      },
-      {
-        "name": "Microsoft-GetDataPullStatus",
-        "displayname": "Waiting for data to appear in the destination",
-        "SqlServerIndex": 0,
-        "TargetSchema": "dbo",
-        "IsWaiting": true,
-        "FinishedActionName": "Microsoft-CrmGetProfileStatus"
-      }
-    ],
     "Pages": [
       {
         "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-CRMSalesManagement/Web/Images/crm-sales-management.png",
@@ -202,6 +109,100 @@
         "asDatabase": "d365",
         "filenameSSAS": "SalesManagementReportAS.pbix",
         "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(10))"
+      }
+    ],
+
+    "Actions": [
+      {
+        "name": "Microsoft-DeploySQLScripts",
+        "displayname": "Deploy DB Scripts",
+        "SqlServerIndex": "0",
+        "SqlScriptsFolder": "Database"
+      },
+      {
+        "name": "Microsoft-SetConfigValueInSql",
+        "displayname": "Deploy DB Configuration",
+        "SqlServerIndex": "0",
+        "SqlConfigTable": "[smgt].[configuration]"
+      },
+      {
+        "name": "Microsoft-SetConfigValueInSql",
+        "displayname": "Deploy DB Configuration",
+        "SqlServerIndex": "0",
+        "SqlConfigTable": "[smgt].[configuration]",
+        "SqlGroup": "SolutionTemplate",
+        "SqlSubGroup": "SSAS",
+        "SqlEntryName": "FunctionName",
+        "SqlEntryValue": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
+      },
+      {
+        "name": "Microsoft-DeployAzureASModel",
+        "displayname": "Deploy AS Model",
+        "xmlaFilePath": "Service/AzureAS/SalesManagement.xmla",
+        "SqlConnectionString": "$dsall(SqlConnectionString)[0]",
+        "ASDatabase": "d365",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
+      },
+      {
+        "name": "Microsoft-DeployAzureFunction",
+        "displayname": "Deploying scheduler",
+        "DeploymentName": "ASFunction",
+        "FunctionName": "$save('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
+        "RepoUrl": "https://github.com/MohaaliMicrosoft/AnalysisServicesRefresh",
+        "sku": "Standard",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
+      },
+      {
+        "name": "Microsoft-WaitForArmDeploymentStatus",
+        "displayname": "Waiting for scheduler",
+        "DeploymentName": "ASFunction",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
+      },
+      {
+        "name": "Microsoft-DeployAzureFunctionConnectionStrings",
+        "displayname": "Setting up scheduler",
+        "DeploymentName": "ASFunction",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
+        "AppSettingKeys": {
+          "connStringAS": "$ds(ASConnectionString)",
+          "connStringSql": "$dsall(SqlConnectionString)[0]",
+          "schema": "[smgt]",
+          "databaseAS": "d365",
+          "functionName": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))"
+        }
+      },
+      {
+        "displayname": "Configuring Azure Key Vault",
+        "name": "Microsoft-CrmCreateVaultSecret"
+      },
+      {
+        "displayname": "Validating Dynamics 365 Entities",
+        "name": "Microsoft-CrmValidateEntities"
+      },
+      {
+        "displayname": "Cleaning Dynamics 365 Environment",
+        "name": "Microsoft-CrmDeleteProfile"
+      },
+      {
+        "displayname": "Validating Dynamics 365 Profile",
+        "name": "Microsoft-CrmValidateProfile"
+      },
+      {
+        "displayname": "Creating Dynamics 365 Profile",
+        "name": "Microsoft-CrmCreateProfile"
+      },
+      {
+        "displayname": "Starting Dynamics 365 Profile",
+        "name": "Microsoft-CrmStartProfile"
+      },
+      {
+        "name": "Microsoft-GetDataPullStatus",
+        "displayname": "Waiting for data to appear in the destination",
+        "SqlServerIndex": 0,
+        "TargetSchema": "dbo",
+        "IsWaiting": true,
+        "FinishedActionName": "Microsoft-CrmGetProfileStatus"
       }
     ]
   }

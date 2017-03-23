@@ -21,14 +21,14 @@ namespace Microsoft.Deployment.Site.Web.Tests
         public void Given_CorrectInformation_And_AS_When_RunTwitter_ThenSuccess()
         {
             Given_CorrectCredentials_When_AzureAuth_Then_Success();
-            HelperMethods.ClickNextButton();
+            HelperMethods.ClickButton("Next");
             Given_CorrectSqlCredentials_When_ExistingSqlSelected_Then_PageValidatesSuccessfully();
-            HelperMethods.ClickNextButton();
+            HelperMethods.ClickButton("Next");
             Given_CorrectTwitterCredentials_When_Authenticating_Then_Success();
             Given_CorrectSearchTerms_When_Validating_Then_Success();
-            HelperMethods.ClickNextButton();
+            HelperMethods.ClickButton("Next");
             Given_CorrectHandles_When_Validating_Then_Success();
-            HelperMethods.ClickNextButton();
+            HelperMethods.ClickButton("Next");
             HelperMethods.NewAnalysisServices("twitteraas", Credential.Instance.ServiceAccount.Username, Credential.Instance.ServiceAccount.Password);
             HelperMethods.ClickButton("Next");
             HelperMethods.ClickButton("Run");
@@ -46,14 +46,14 @@ namespace Microsoft.Deployment.Site.Web.Tests
         public void Given_CorrectInformation_And_No_AS_When_RunTwitter_ThenSuccess()
         {
             Given_CorrectCredentials_When_AzureAuth_Then_Success();
-            HelperMethods.ClickNextButton();
+            HelperMethods.ClickButton("Next");
             Given_CorrectSqlCredentials_When_ExistingSqlSelected_Then_PageValidatesSuccessfully();
-            HelperMethods.ClickNextButton();
+            HelperMethods.ClickButton("Next");
             Given_CorrectTwitterCredentials_When_Authenticating_Then_Success();
             Given_CorrectSearchTerms_When_Validating_Then_Success();
-            HelperMethods.ClickNextButton();
+            HelperMethods.ClickButton("Next");
             Given_CorrectHandles_When_Validating_Then_Success();
-            HelperMethods.ClickNextButton();
+            HelperMethods.ClickButton("Next");
             HelperMethods.NoAnalysisServices();
             HelperMethods.ClickButton("Next");
             HelperMethods.ClickButton("Run");
@@ -138,7 +138,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
             searchTermsInput.SendKeys(searchTerms);
 
-            HelperMethods.ClickValidateButton();
+            HelperMethods.ClickButton("Validate");
 
             var validated = driver.FindElementByClassName("st-validated");
 
@@ -157,7 +157,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
             handlesInput.SendKeys(handles);
 
-            HelperMethods.ClickValidateButton();
+            HelperMethods.ClickButton("Validate");
 
             var validated = driver.FindElementByClassName("st-validated");
 

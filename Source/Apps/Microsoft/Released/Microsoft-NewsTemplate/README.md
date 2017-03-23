@@ -318,9 +318,9 @@ Here is an overview of the tables found in the Power BI (names correspond to the
 | Compressed Entities        | Document ID and an JSON object of the entities found. The document strippet custom visual uses the JSON to visualize the entities that appear in an article hence the JSON structure. The JSON stores the entity value, entity type as well as a CSS color and class.                                                                                                                                                                                |
 | Entities | Stores the same information as the Compressed Entities table but in a structured format vs. JSON. |
 | Key Phrases  | Stores the key phrases found with the corresponding document ID. A key phrase can belong to many documents and a document can belong to many key phrases)                                                                                                                                                                      |
-| Sentiment Scores  | Stores the sentiment of an article along with the binned sentiment score and categorical score                                                                                                                                                                                |
-| Topic Images       | Stores the topic ID and up to 4 image URLs that are found to be associated with the given topic                                                                                                                                                                                |
-| Topic Key Phrases| Stores the topic ID with the word version of the key phrases that are used in the reports instead of the numerical output of the LDA model                                                                                                                                                                                |
+| Sentiment Scores  | Stores the sentiment of an article along with the binned sentiment score and categorical score|
+| Topic Images       | Stores the topic ID and up to 4 image URLs that are found to be associated with the given topic|
+| Topic Key Phrases| Stores the topic ID with the word version of the key phrases that are used in the reports instead of the numerical output of the LDA model|
 
 Below is a breakdown of the columns found in every table:
 
@@ -361,16 +361,17 @@ Below is a breakdown of the columns found in every table:
 |--------------------|--------------------------------------|
 | **Column Name**    | **Description**                      |
 | Document Id                 | Document Id (a document belongs to one topic)     |
-| Topic Id                 | Short snippet from the news article     |
-| Document Distance                   | Measure used to figure out how much of a match a document is to a topic cluster. The closer the number is to 1 the better the match.                              |
-| Topic Score             | |
+| Topic Id                 | Id of the topic cluster     |
+| Document Distance                   | A score between 0 and 1 that represents how well a document fits within a topic.  0 is perfect and 1 is very poor.  
+|
+| Topic Score             | The number of documents in each topic|
 | Topic Key Phrase                  | Numerical representation of the keywords a topic is associated with               |
 | Image URL 1            | First image associated with topic |
 | Image URL  2                | Second image associated with topic                            |
 | Image URL  3                | Third image associated with topic                            |
 | Image URL  4                | Fourth image associated with topic                            |
-| Weight | |
-| Document Distance With Topic Image| The distance the image itself is from the topic cluster                            |
+| Weight | Converts the document distance to scale of 0 to 100 with 100 as the highest. Higher weighted documents are a better fit for the topic cluster.  The formula is (1 - distance) * 100.
+ |
 
 | **Compressed Entities** |                                      |
 |--------------------|--------------------------------------|
@@ -384,13 +385,44 @@ Below is a breakdown of the columns found in every table:
 | Document Id           | Document Id (not unique – a document can have multiple entities associated with it) |
 | Entity Type              | Categorical variable of the type of entity found. ORG refers to Organization, LOC to Location and PER to Person|
 | Entity Value              |The actual name of the entity that was found |
-| Offset           | |
-| Offset Document Percentage         | |
+| Offset           |Character position of the start of the entity within the document.  |
+| Offset Document Percentage         |Offset divided by document length.  A value of .25 indicates that the entity is found 25% through the document |
 | Length           | Entity character length |
 | Entity ID           | Merge of entity type with entity value (unique) |
 | Entity Class           | Font awesome icons (scalable vector icons) |
+
 | Entity Color           |Color (specified in hex) |
-|
+
+
+
+| **Key Phrases**         |                                                                                                                                                                                                           |
+|-----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Column Name**             | **Description**                                                                                                                                                                                           |
+| Document ID                   | Document ID (one document can have multiple key phrases)                                                                                                                                                     |
+| Phrases                    | A key phrase found inside an article |
+
+| **Sentiment Scores**        |                                                                                                                        |
+|-------------------|------------------------------------------------------------------------------------------------------------------------|
+| **Column Name**   | **Descrpition**                                                                                                        |
+| Id  | Document ID (unique – each document will have one sentiment score)                                                                          |
+| Score              | Sentiment score ranging from 0 (very negative) to 1 (very positive)|
+| Binned sentiment         | Sentiment grouped into intervals of 0.05 (e.g.  sentiment of 0.723 would fall into the 0.7 bucket                                                |
+| Sentiment         | Categorical variable for sentiment – categories include Very Negative, Slightly Negative, Neutral, Slightly Positive and Very Positive|
+
+| **Topic Images**         |                                                                                                                                                                                                           |
+|-----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Column Name**             | **Description**                                                                                                                                                                                           |
+| Topic Id                   | Id of the topic cluster                                                                                                                                                     |
+| Image URL 1            | First image associated with topic |
+| Image URL  2                | Second image associated with topic                            |
+| Image URL  3                | Third image associated with topic                            |
+| Image URL  4                | Fourth image associated with topic                            |
+
+| **Topic Key Phrases**         |                                                                                                                                                                                                           |
+|-----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Column Name**             | **Description**                                                                                                                                                                                           |
+| Topic Id                   | Id of the topic cluster                                                                                                                                                     |
+| Key Phrase                    | The word descriptor of the topic cluster (usually 3 keywords) |
 
 
 ### Estimated Costs

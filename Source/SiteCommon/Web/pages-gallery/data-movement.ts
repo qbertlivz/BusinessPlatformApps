@@ -1,9 +1,18 @@
-﻿import { DataStoreType } from '../enums/data-store-type';
+﻿import { DataMovementType } from '../enums/data-movement-type';
+import { DataStoreType } from '../enums/data-store-type';
 
 import { ViewModelBase } from '../services/view-model-base';
 
 export class DataMovement extends ViewModelBase {
-    dataMovement: string = 'ADF';
+    DataMovementType: any = DataMovementType;
+
+    dataMovement: DataMovementType = DataMovementType.ADF;
+    password: string = '';
+    username: string = '';
+
+    OnDataMovementChanged(): void {
+        this.isValidated = this.dataMovement === DataMovementType.ADF;
+    }
 
     async OnLoaded(): Promise<void> {
         this.isValidated = true;

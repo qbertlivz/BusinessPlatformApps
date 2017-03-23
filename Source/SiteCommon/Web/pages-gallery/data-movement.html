@@ -2,9 +2,17 @@
     <h1 class="st-title">${MS.Translate.DATA_MOVEMENT_TITLE}</h1>
     <p class="st-subtitle">${MS.Translate.DATA_MOVEMENT_SUBTITLE}</p>
 
-    <select class="btn btn-default dropdown-toggle st-input" value.bind="dataMovement">
-        <option value="ADF">${MS.Translate.DATA_MOVEMENT_AZURE_DATA_FACTORY}</option>
-        <option value="Informatica">${MS.Translate.DATA_MOVEMENT_INFORMATICA}</option>
-        <option value="Scribe">${MS.Translate.DATA_MOVEMENT_SCRIBE}</option>
+    <select class="btn btn-default dropdown-toggle st-input" change.delegate="OnDataMovementChanged()" value.bind="dataMovement">
+        <option value="${DataMovementType.ADF}">${MS.Translate.DATA_MOVEMENT_AZURE_DATA_FACTORY}</option>
+        <option value="${DataMovementType.Informatica}">${MS.Translate.DATA_MOVEMENT_INFORMATICA}</option>
+        <option value="${DataMovementType.Scribe}">${MS.Translate.DATA_MOVEMENT_SCRIBE}</option>
     </select>
+
+    <div if.bind="dataMovement != DataMovementType.ADF">
+        <p class="st-text">${MS.Translate.DATA_MOVEMENT_USERNAME}</p>
+        <input class="st-input" type="text" change.delegate="Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="username" />
+
+        <p class="st-text">${MS.Translate.DATA_MOVEMENT_PASSWORD}</p>
+        <input class="st-input" type="password" change.delegate="Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="password" />
+    </div>
 </template>

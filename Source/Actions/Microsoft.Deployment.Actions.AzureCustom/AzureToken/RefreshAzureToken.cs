@@ -129,16 +129,18 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                 var datastoreItem = request.DataStore.GetDataStoreItem("AzureToken");
                 request.DataStore.UpdateValue(datastoreItem.DataStoreType, datastoreItem.Route, datastoreItem.Key, JObject.FromObject(tokenRefreshResponse.Body)["AzureToken"]);
 
-                var datastoreItemCrm = request.DataStore.GetDataStoreItem("AzureTokenKV");
-                if (datastoreItemCrm != null)
+                
+                if (request.DataStore.GetJson("AzureTokenKV") != null)
                 {
-                    request.DataStore.UpdateValue(datastoreItem.DataStoreType, datastoreItem.Route, datastoreItem.Key, JObject.FromObject(tokenRefreshResponse.Body)["AzureTokenKV"]);
+                    var datastoreItemCrm = request.DataStore.GetDataStoreItem("AzureTokenKV");
+                    request.DataStore.UpdateValue(datastoreItemCrm.DataStoreType, datastoreItemCrm.Route, datastoreItemCrm.Key, JObject.FromObject(tokenRefreshResponse.Body)["AzureTokenKV"]);
                 }
 
-                var datastoreItemKeyVault = request.DataStore.GetDataStoreItem("MsCrmToken");
-                if (datastoreItemKeyVault != null)
+                
+                if (request.DataStore.GetJson("MsCrmToken") != null)
                 {
-                    request.DataStore.UpdateValue(datastoreItem.DataStoreType, datastoreItem.Route, datastoreItem.Key, JObject.FromObject(tokenRefreshResponse.Body)["MsCrmToken"]);
+                    var datastoreItemKeyVault = request.DataStore.GetDataStoreItem("MsCrmToken");
+                    request.DataStore.UpdateValue(datastoreItemKeyVault.DataStoreType, datastoreItemKeyVault.Route, datastoreItemKeyVault.Key, JObject.FromObject(tokenRefreshResponse.Body)["MsCrmToken"]);
                 }
             }
 

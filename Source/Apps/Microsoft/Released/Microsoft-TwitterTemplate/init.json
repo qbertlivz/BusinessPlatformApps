@@ -95,16 +95,16 @@
 
     "Actions": [
       {
-        "name": "Microsoft-DeploySQLScripts",
         "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
+        "name": "Microsoft-DeploySQLScripts",
         "SqlServerIndex": "0",
         "SqlScriptsFolder": "Service/Database/LogicApps"
       },
       {
-        "name": "Microsoft-SetConfigValueInSql",
         "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
-        "SqlServerIndex": "0",
-        "SqlConfigTable": "[pbist_twitter].[configuration]"
+        "name": "Microsoft-SetConfigValueInSql",
+        "SqlConfigTable": "[pbist_twitter].[configuration]",
+        "SqlServerIndex": "0"
       },
       {
         "displayname": "$translate(INIT_ACTION_DEPLOYING_LOGIC_APP_DATABASE)",
@@ -119,42 +119,39 @@
         "name": "Microsoft-CreatePowerAppSqlConnection"
       },
       {
-        "name": "Microsoft-DeployTwitterFunction",
-        "displayname": "Deploying Twitter function",
-        "DeploymentName": "Function"
+        "DeploymentName": "Function",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_FUNCTION)",
+        "name": "Microsoft-DeployTwitterFunction"
       },
       {
-        "name": "Microsoft-WaitForArmDeploymentStatus",
-        "displayname": "Validating Twitter function",
-        "DeploymentName": "Function"
+        "DeploymentName": "Function",
+        "displayname": "$translate(INIT_ACTION_VALIDATING_TWITTER_FUNCTION)",
+        "name": "Microsoft-WaitForArmDeploymentStatus"
       },
       {
-        "name": "Microsoft-DeployAzureMLWebServiceFromFile",
-        "displayname": "Deploying Azure ML web service",
         "DeploymentName": "AzureML",
-        "IsRequestResponse": true,
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_AZURE_ML)",
         "CommitmentPlan": "commitmentplan",
+        "IsRequestResponse": true,
+        "name": "Microsoft-DeployAzureMLWebServiceFromFile",
         "WebServiceFile": "Service/AzureArm/SentimentAnalysisWebServiceNew.json",
         "WebServiceName": "$run('SentimentService' + this.MS.DataStore.getValue('uniqueId'))"
       },
       {
-        "name": "Microsoft-DeployTwitterCSharpFunctionAssets",
-        "displayname": "Deploying Twitter function assets"
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_ASSETS)",
+        "name": "Microsoft-DeployTwitterCSharpFunctionAssets"
       },
       {
-        "name": "Microsoft-DeployTwitterHistoricalLogicApp",
-        "displayname": "Deploying Twitter logic app",
-        "DeploymentName": "LogicApp"
+        "DeploymentName": "LogicApp",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_LOGIC_APP)",
+        "name": "Microsoft-DeployTwitterHistoricalLogicApp"
       },
       {
-        "name": "Microsoft-WaitForArmDeploymentStatus",
-        "displayname": "Validating Logic App",
-        "DeploymentName": "LogicApp"
+        "DeploymentName": "LogicApp",
+        "displayname": "$translate(INIT_ACTION_VALIDATING_LOGIC_APP)",
+        "name": "Microsoft-WaitForArmDeploymentStatus"
       },
       {
-        "name": "Microsoft-CreateConnectorToLogicApp",
-        "displayname": "Creating Logic App connector",
-        "DeploymentName": "sql",
         "ConnectorName": "sql",
         "ConnectorDisplayName": "SQLConnector",
         "ConnectorPayload": {
@@ -163,12 +160,12 @@
           "password": "$ds(Password)",
           "server": "$ds(Server)",
           "username": "$ds(Username)"
-        }
+        },
+        "DeploymentName": "sql",
+        "displayname": "$translate(INIT_ACTION_CREATING_LOGIC_APP_CONNECTOR)",
+        "name": "Microsoft-CreateConnectorToLogicApp"
       },
       {
-        "name": "Microsoft-UpdateBlobStorageConnector",
-        "displayname": "Updating Logic App connector",
-        "DeploymentName": "sql",
         "ConnectorName": "sql",
         "ConnectorDisplayName": "SQLConnector",
         "ConnectorPayload": {
@@ -177,69 +174,72 @@
           "password": "$ds(Password)",
           "server": "$ds(Server)",
           "username": "$ds(Username)"
-        }
+        },
+        "DeploymentName": "sql",
+        "displayname": "$translate(INIT_ACTION_UPDATING_LOGIC_APP_CONNECTOR)",
+        "name": "Microsoft-UpdateBlobStorageConnector"
       },
       {
-        "name": "Microsoft-RunLogicAppHistorical",
-        "displayname": "Running Logic App historical",
-        "DeploymentName": "LogicApp"
+        "DeploymentName": "LogicApp",
+        "displayname": "$translate(INIT_ACTION_RUNNING_LOGIC_APP_HISTORICAL)",
+        "name": "Microsoft-RunLogicAppHistorical"
       },
       {
-        "name": "Microsoft-DeployTwitterLogicApp",
-        "displayname": "Deploying Twitter Logic App",
-        "DeploymentName": "LogicApp"
+        "DeploymentName": "LogicApp",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_LOGIC_APP)",
+        "name": "Microsoft-DeployTwitterLogicApp"
       },
       {
-        "name": "Microsoft-WaitForArmDeploymentStatus",
-        "displayname": "Validating Twitter Logic App",
-        "DeploymentName": "LogicApp"
+        "DeploymentName": "LogicApp",
+        "displayname": "$translate(INIT_ACTION_VALIDATING_LOGIC_APP)",
+        "name": "Microsoft-WaitForArmDeploymentStatus"
       },
       {
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
         "name": "Microsoft-SetConfigValueInSql",
-        "displayname": "Deploying database configuration",
-        "SqlServerIndex": "0",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
         "SqlConfigTable": "[pbist_twitter].[configuration]",
-        "SqlGroup": "SolutionTemplate",
-        "SqlSubGroup": "SSAS",
         "SqlEntryName": "FunctionName",
         "SqlEntryValue": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
-        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
+        "SqlGroup": "SolutionTemplate",
+        "SqlServerIndex": "0",
+        "SqlSubGroup": "SSAS"
       },
       {
-        "name": "Microsoft-DeployAzureASModel",
-        "displayname": "Deploy AS Model",
-        "xmlaFilePath": "Service/SSAS/twitter.xmla",
-        "SqlConnectionString": "$dsall(SqlConnectionString)[0]",
         "ASDatabase": "twitter",
-        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
-      },
-      {
-        "name": "Microsoft-DeployAzureFunction",
-        "displayname": "Deploying scheduler",
-        "DeploymentName": "ASFunction",
-        "FunctionName": "$save('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
-        "RepoUrl": "https://github.com/MohaaliMicrosoft/AnalysisServicesRefresh",
-        "sku": "Standard",
-        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
-      },
-      {
-        "name": "Microsoft-WaitForArmDeploymentStatus",
-        "displayname": "Waiting for scheduler",
-        "DeploymentName": "ASFunction",
-        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
-      },
-      {
-        "name": "Microsoft-DeployAzureFunctionConnectionStrings",
-        "displayname": "Setting up scheduler",
-        "DeploymentName": "ASFunction",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_AS_MODEL)",
+        "name": "Microsoft-DeployAzureASModel",
         "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
+        "SqlConnectionString": "$dsall(SqlConnectionString)[0]",
+        "xmlaFilePath": "Service/SSAS/twitter.xmla"
+      },
+      {
+        "DeploymentName": "ASFunction",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_AS_SCHEDULER)",
+        "FunctionName": "$save('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
+        "name": "Microsoft-DeployAzureFunction",
+        "RepoUrl": "https://github.com/MohaaliMicrosoft/AnalysisServicesRefresh",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
+        "sku": "Standard"
+      },
+      {
+        "DeploymentName": "ASFunction",
+        "displayname": "$translate(INIT_ACTION_WAITING_AS_SCHEDULER)",
+        "name": "Microsoft-WaitForArmDeploymentStatus",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
+      },
+      {
         "AppSettingKeys": {
           "connStringAS": "$ds(ASConnectionString)",
           "connStringSql": "$dsall(SqlConnectionString)[0]",
           "schema": "[pbist_twitter]",
           "databaseAS": "twitter",
           "functionName": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))"
-        }
+        },
+        "DeploymentName": "ASFunction",
+        "displayname": "$translate(INIT_ACTION_SETTING_UP_AS_SCHEDULER)",
+        "name": "Microsoft-DeployAzureFunctionConnectionStrings",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
       }
     ]
   }

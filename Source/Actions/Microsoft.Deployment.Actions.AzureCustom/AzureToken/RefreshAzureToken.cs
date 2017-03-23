@@ -64,9 +64,9 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
         public async Task<InterceptorStatus> CanInterceptAsync(IAction actionToExecute, ActionRequest request)
         {
             //TODO - fix to ensure it only works when token has expired
-            if (request.DataStore.GetValue("AzureToken") != null && request.DataStore.GetJson("AzureToken", "expires_on") != null)
+            if (request.DataStore.GetValue("AzureToken") != null && request.DataStore.GetJson("AzureToken")["expires_on"].ToString() != null)
             {
-               var expiryDateTime = UnixTimeStampToDateTime(request.DataStore.GetJson("AzureToken", "expires_on"));
+               var expiryDateTime = UnixTimeStampToDateTime(request.DataStore.GetJson("AzureToken")["expires_on"].ToString());
                 if ((expiryDateTime - DateTime.Now).TotalMinutes < 5)
                 {
                     return InterceptorStatus.Intercept;

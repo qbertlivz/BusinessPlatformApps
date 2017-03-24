@@ -114,6 +114,8 @@
     DATA_MOVEMENT_INFORMATICA: `Informatica`,
     DATA_MOVEMENT_PASSWORD: `Password:`,
     DATA_MOVEMENT_SCRIBE: `Scribe`,
+    DATA_MOVEMENT_SCRIBE_DESCRIPTION: `Scribe is a third party service that enables you to pull data from Salesforce. When we run the setup, Scribe will copy all of your Salesforce data into your database. Once all your data is copied, Scribe will only update new and changed records making future data pulls extremely fast.`,
+    DATA_MOVEMENT_SCRIBE_DESCRIPTION_LINK: `Get your Scribe account ready `,
     DATA_MOVEMENT_SCRIBE_ORGANIZATION: `Scribe Organization:`,
     DATA_MOVEMENT_SUBTITLE: `Specify how data should be pulled from Salesforce and moved to the destination.`,
     DATA_MOVEMENT_TITLE: `Move Data`,

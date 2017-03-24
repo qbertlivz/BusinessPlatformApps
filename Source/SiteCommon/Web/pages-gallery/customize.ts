@@ -17,7 +17,7 @@ export class Customize extends ViewModelBase {
     showRecurrenceOptions: boolean = false;
     sourceApplication: string = '';
 
-    async OnLoaded() {
+    async OnLoaded(): Promise<void> {
         this.emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         this.isValidated = true;
         if (this.showCrmUrl) {
@@ -59,7 +59,6 @@ export class Customize extends ViewModelBase {
     }
 
     async NavigatingNext(): Promise<boolean> {
-
         if (this.sourceApplication === 'Salesforce') {
             switch (this.recurrent) {
                 case 'Every 15 minutes':
@@ -95,8 +94,7 @@ export class Customize extends ViewModelBase {
 
             if (this.recurrent == 'Never') {
                 this.MS.DataStore.addToDataStore('historicalOnly', 'true', DataStoreType.Public);
-            }
-            else {
+            } else {
                 this.MS.DataStore.addToDataStore('historicalOnly', 'false', DataStoreType.Public);
             }
 

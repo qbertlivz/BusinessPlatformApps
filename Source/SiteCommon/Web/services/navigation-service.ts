@@ -94,7 +94,7 @@ export class NavigationService {
         while (this.pages[this.index].Parameters.skip) {
             let body: any = {};
             InitParser.loadVariables(body, this.pages[this.index].Parameters, this.MS, this);
-            if (body.skip && body.skip.toLowerCase() === "true") {
+            if (body.skip && body.skip.toString().toLowerCase() === 'true') {
                 this.index = this.index + 1;
                 continue;
             }
@@ -115,7 +115,7 @@ export class NavigationService {
         while (this.pages[this.index].Parameters.skip && this.index > 0) {
             let body: any = {};
             InitParser.loadVariables(body, this.pages[this.index].Parameters, this.MS, this);
-            if (body.skip && body.skip.toLowerCase() === "true") {
+            if (body.skip && body.skip.toString().toLowerCase() === 'true') {
                 this.index = this.index - 1;
                 continue;
             }

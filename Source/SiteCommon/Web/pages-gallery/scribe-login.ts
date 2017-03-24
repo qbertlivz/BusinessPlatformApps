@@ -22,7 +22,7 @@ export class ScribeLogin extends ViewModelBase {
         return true;
     }
 
-    async OnLoaded() {
+    async OnLoaded(): Promise<void> {
         this.isValidated = false;
     }
 

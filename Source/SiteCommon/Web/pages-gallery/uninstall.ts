@@ -16,7 +16,7 @@ export class Uninstall extends ViewModelBase {
         super();
     }
 
-    async OnLoaded() {
+    async OnLoaded(): Promise<void> {
         this.showPrivacy = true;
         this.isValidated = true;
 

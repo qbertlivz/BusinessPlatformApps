@@ -210,11 +210,8 @@ The Run method reads the tweet + all of it's metadata in from the request and pa
 ```C#
 public static async Task<object> Run(HttpRequestMessage req, TraceWriter log)
 {
-    // Read all connectionstrings and keys for SQL
     string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["connectionString"].ConnectionString;
-    TweetHandler tweetHandler = new TweetHandler(connectionString);
-    
-    // Read json string from request and parse tweets
+    TweetHandler tweetHandler = new TweetHandler(connectionString, log);
     string jsonContent = await req.Content.ReadAsStringAsync();
     var tweets = JsonConvert.DeserializeObject(jsonContent);
     if (tweets is JArray)
@@ -222,26 +219,27 @@ public static async Task<object> Run(HttpRequestMessage req, TraceWriter log)
         foreach (var item in (JArray)tweets)
         {
             var individualtweet = item.ToString();
-            tweetHandler.ParseTweet(individualtweet);
+            //log.Info("********************Run**************************" + individualtweet.ToString());
+
+            await tweetHandler.ParseTweet(individualtweet, log);
         }
     }
     else
     {
-        tweetHandler.ParseTweet(jsonContent);
+        //log.Info("********************Run**************************" + jsonContent.ToString());
+        await tweetHandler.ParseTweet(jsonContent, log);
     }
 
     // log.Info($"{data}");
-
-    //Return status ok if no exception encountered
     return req.CreateResponse(HttpStatusCode.OK, "");
 }
 
 ```
 
-Inside the ParseTweet method we parse the tweet +metadata and read in the Twitter handles and Twitter handle IDs that the user wants to track (this was defined on the Twitter Handles page). The Twitter handles and IDs come from the SQL ‘Configuration table’. The handles and IDs are saved into a  dictionary.
+Inside the ParseTweet method we parse the tweet + metadata and read in the Twitter handles and Twitter handle IDs that the user wants to track (this was defined on the Twitter Handles page). The Twitter handles and IDs come from the SQL ‘Configuration table’. The handles and IDs are saved into a  dictionary.
 
 ```C#
-    public async Task<bool> ParseTweet(string entireTweet)
+    public async Task<bool> ParseTweet(string entireTweet, TraceWriter log)
     {
         // Convert JSON to dynamic C# object
         tweetObj = JObject.Parse(entireTweet);
@@ -253,6 +251,7 @@ Inside the ParseTweet method we parse the tweet +metadata and read in the Twitte
         string twitterHandleId =
             ExecuteSqlQuery("select value FROM pbist_twitter.configuration where name = \'twitterHandleId\'",
                 "value");
+        ExecuteSqlNonQuery($"UPDATE pbist_twitter.twitter_query SET TweetId='{tweet["TweetId"]}' WHERE Id = 1");
 
         // Split out all the handles & create dictionary
         String[] handle = null;
@@ -269,24 +268,23 @@ Inside the ParseTweet method we parse the tweet +metadata and read in the Twitte
             }
         }
 ```        
-We currently support English, Spanish, French and Portugese for sentiment detection. Assuming the tweet is in one of those languages the sentiment is worked out. We do this by calling the sentiment Cognitive API (MakeSentimentRequest method). The score gets discretized and a categorical variable is defined which indicates whether the tweet is positive, negative or neutral.
+We currently only support English for sentiment detection. We do this by calling the Azure ML web service experiment from inside the function. The score gets discretized and a categorical variable is defined which indicates whether the tweet is positive, negative or neutral.
 
 
 ```
-        // Check if language of tweet is supported for sentiment analysis
         originalTweets["lang"] = tweet.TweetLanguageCode.ToString();
-        if (originalTweets["lang"] == "en" || originalTweets["lang"] == "fr" || originalTweets["lang"] == "es" || originalTweets["lang"] == "pt")
+        if (originalTweets["lang"] == "en")
         {
-            //Sentiment analysis - Cognitive APIs 
-            string sentiment = await MakeSentimentRequest(tweet);
-            sentiment = (double.Parse(sentiment) * 2 - 1).ToString(CultureInfo.InvariantCulture);
+            //log.Info("********************ParseTweet**************************" + tweet.TweetId.ToString());
+            string sentiment = await MakeSentimentRequest(tweet, log);
+            //log.Info("********************ParseTweet************************** Sentiment: " + sentiment);
             string sentimentBin = (Math.Floor(double.Parse(sentiment) * 10) / 10).ToString(CultureInfo.InvariantCulture);
             string sentimentPosNeg = String.Empty;
-            if (double.Parse(sentimentBin) > 0)
+            if (double.Parse(sentimentBin) > 0.1)
             {
                 sentimentPosNeg = "Positive";
             }
-            else if (double.Parse(sentimentBin) < 0)
+            else if (double.Parse(sentimentBin) < -0.1)
             {
                 sentimentPosNeg = "Negative";
             }
@@ -656,7 +654,7 @@ Clicking on a tweet will cross filter the ‘influence’ stats on the left hand
 
 ![Image](Resources/media/image44.png)
 
-#Customizations
+### Customizations
 
 Updating the Solution
 ---------------------

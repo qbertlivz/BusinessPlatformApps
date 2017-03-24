@@ -119,7 +119,7 @@ export class ViewModelBase {
 
         // Persistence is lost here for maintaining pages the user has visited
         this.MS.NavigationService.NavigateBack();
-        this.MS.DeploymentService.hasError = false;
+        //this.MS.DeploymentService.hasError = false;
         this.MS.ErrorService.Clear();
 
         this.MS.NavigationService.isCurrentlyNavigating = false;

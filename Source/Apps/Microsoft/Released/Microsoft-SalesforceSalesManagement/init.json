@@ -125,6 +125,13 @@
         "SqlServerIndex": "0"
       },
       {
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
+        "name": "Microsoft-DeploySQLScripts",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')",
+        "SqlScriptsFolder": "Service/Database/Scribe",
+        "SqlServerIndex": "0"
+      },
+      {
         "displayname": "$translate(INIT_ACTION_RETRIEVING_SALESFORCE_METADATA)",
         "name": "Microsoft-SalesforceGetObjectMetadata",
         "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"

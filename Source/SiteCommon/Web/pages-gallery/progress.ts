@@ -37,51 +37,49 @@ export class ProgressViewModel extends ViewModelBase {
             return;
         }
 
-        if (!this.MS.DeploymentService.isFinished) {
-            this.hasPowerApp = this.hasPowerApp && this.MS.DataStore.getValue('SkipPowerApp') == null;
+        this.hasPowerApp = this.hasPowerApp && this.MS.DataStore.getValue('SkipPowerApp') == null;
 
-            // Run all actions
-            let success: boolean = await this.MS.DeploymentService.ExecuteActions();
+        // Run all actions
+        let success: boolean = await this.MS.DeploymentService.ExecuteActions();
 
-            if (!success) {
-                return;
+        if (!success) {
+            return;
+        }
+
+        if (!this.isUninstall) {
+            let body: any = {};
+            let ssas = this.MS.DataStore.getValue("ssasDisabled");
+            let response = null;
+            if (ssas && ssas === 'false') {
+                body.FileNameSSAS = this.filenameSSAS;
+                body.ASDatabase = this.asDatabase;
+                response = await this.MS.HttpService.executeAsync('Microsoft-WranglePBISSAS', body);
+            } else {
+                body.FileName = this.filename;
+                body.SqlServerIndex = this.sqlServerIndex;
+                response = await this.MS.HttpService.executeAsync('Microsoft-WranglePBI', body);
             }
 
-            if (!this.isUninstall) {
-                let body: any = {};
-                let ssas = this.MS.DataStore.getValue("ssasDisabled");
-                let response = null;
-                if (ssas && ssas === 'false') {
-                    body.FileNameSSAS = this.filenameSSAS;
-                    body.ASDatabase = this.asDatabase;
-                    response = await this.MS.HttpService.executeAsync('Microsoft-WranglePBISSAS', body);
-                } else {
-                    body.FileName = this.filename;
-                    body.SqlServerIndex = this.sqlServerIndex;
-                    response = await this.MS.HttpService.executeAsync('Microsoft-WranglePBI', body);
-                }
-               
-                if (response.IsSuccess) {
-                    this.pbixDownloadLink = response.Body.value;
-                    this.isPbixReady = true;
-                }
-
-                if (this.hasPowerApp) {
-                    let bodyPowerApp: any = {};
-                    bodyPowerApp.PowerAppFileName = this.powerAppFileName;
-                    let responsePowerApp = await this.MS.HttpService.executeAsync('Microsoft-WranglePowerApp', bodyPowerApp);
-                    if (responsePowerApp.IsSuccess) {
-                        this.isPowerAppReady = true;
-                        this.powerAppDownloadLink = responsePowerApp.Body.value;
-                    }
-                }
-
-                this.QueryRecordCounts();
+            if (response.IsSuccess) {
+                this.pbixDownloadLink = response.Body.value;
+                this.isPbixReady = true;
             }
+
+            if (this.hasPowerApp) {
+                let bodyPowerApp: any = {};
+                bodyPowerApp.PowerAppFileName = this.powerAppFileName;
+                let responsePowerApp = await this.MS.HttpService.executeAsync('Microsoft-WranglePowerApp', bodyPowerApp);
+                if (responsePowerApp.IsSuccess) {
+                    this.isPowerAppReady = true;
+                    this.powerAppDownloadLink = responsePowerApp.Body.value;
+                }
+            }
+
+            this.QueryRecordCounts();
         }
     }
 
-    async QueryRecordCounts() {
+    async QueryRecordCounts(): Promise<void> {
         if (this.showCounts && !this.isDataPullDone && !this.MS.DeploymentService.hasError) {
             let body: any = {};
             body.FinishedActionName = this.finishedActionName;

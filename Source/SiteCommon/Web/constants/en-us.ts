@@ -153,6 +153,7 @@
     INIT_ACTION_DEPLOYING_TWITTER_FUNCTION: `Deploying Twitter function`,
     INIT_ACTION_DEPLOYING_TWITTER_LOGIC_APP: `Deploying Twitter logic app`,
     INIT_ACTION_FINISHING_CLEANUP: `Finishing cleanup`,
+    INIT_ACTION_PROCESS_SCRIBE_SOLUTION: `Processing Scribe solution`,
     INIT_ACTION_REMOVING_FILES: `Removing files`,
     INIT_ACTION_REMOVING_TASK: `Removing task`,
     INIT_ACTION_RETRIEVING_POWERAPP_ENVIRONMENT: `Retrieving PowerApp environment`,

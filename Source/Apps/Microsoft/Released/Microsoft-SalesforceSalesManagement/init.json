@@ -86,7 +86,7 @@
         "displayname": "Progress",
         "filename": "$save('SalesManagementReport.pbix')",
         "filenameSSAS": "SalesManagementReportAS.pbix",
-        "finishedActionName": "$run(this.MS.DataStore.getValue('DataMovement') === 'ADF' ? 'Microsoft-ADFSliceStatus' : '')",
+        "finishedActionName": "$run(this.MS.DataStore.getValue('DataMovement') === 'ADF' ? 'Microsoft-ADFSliceStatus' : 'Microsoft-GetScribeSolutionStatus')",
         "name": "$SiteCommon$/pages-gallery/progress.html",
         "showCounts": true,
         "targetSchema": "dbo",
@@ -225,6 +225,20 @@
         "Entities": "Account,Lead,Opportunity,OpportunityLineItem,OpportunityStage,UserRole,User,Product2",
         "name": "Microsoft-CreateScribeSolution",
         "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_PROCESS_SCRIBE_SOLUTION)",
+        "name": "Microsoft-ProcessScribeSolution",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CHECKING_DATA)",
+        "FinishedActionName": "Microsoft-GetScribeSolutionStatus",
+        "IsWaiting": true,
+        "name": "Microsoft-GetDataPullStatus",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')",
+        "SqlServerIndex": 0,
+        "TargetSchema": "dbo"
       }
     ]
   }

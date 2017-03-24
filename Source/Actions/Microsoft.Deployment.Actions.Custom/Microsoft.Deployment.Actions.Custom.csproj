@@ -135,6 +135,8 @@
     <Compile Include="Scribe\CreateScribeConnectionSql.cs" />
     <Compile Include="Scribe\CreateScribeSolution.cs" />
     <Compile Include="Scribe\GetScribeOrganizations.cs" />
+    <Compile Include="Scribe\GetScribeSolutionStatus.cs" />
+    <Compile Include="Scribe\ProcessScribeSolution.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

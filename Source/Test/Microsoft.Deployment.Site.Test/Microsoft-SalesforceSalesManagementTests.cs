@@ -24,12 +24,16 @@ namespace Microsoft.Deployment.Site.Web.Tests
         public void Given_CorrectInformation_And_No_AS_When_RunSalesforce_ThenSuccess()
         {
             Given_CorrectCredentials_When_AzureAuth_Then_Success();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
             HelperMethods.ClickButton("Next");
             Given_CorrectSalesforceCredentials_When_Validate_Then_PageValidatesSuccesfully();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
             HelperMethods.ClickButton("Next");
             Given_CorrectSqlCredentials_When_ExistingSqlSelected_Then_PageValidatesSuccessfully();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
             HelperMethods.ClickButton("Next");
             HelperMethods.NoAnalysisServices();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
             HelperMethods.ClickButton("Next");
             Thread.Sleep(new TimeSpan(0, 0, 3));
             HelperMethods.ClickButton("Next");
@@ -48,12 +52,15 @@ namespace Microsoft.Deployment.Site.Web.Tests
         public void Given_CorrectInformation_And_AS_When_RunSalesforce_ThenSuccess()
         {
             Given_CorrectCredentials_When_AzureAuth_Then_Success();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
             HelperMethods.ClickButton("Next");
             Given_CorrectSalesforceCredentials_When_Validate_Then_PageValidatesSuccesfully();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
             HelperMethods.ClickButton("Next");
             Given_CorrectSqlCredentials_When_ExistingSqlSelected_Then_PageValidatesSuccessfully();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
             HelperMethods.ClickButton("Next");
-            HelperMethods.NewAnalysisServices("salesforceas", Credential.Instance.ServiceAccount.Username, Credential.Instance.ServiceAccount.Password);
+            HelperMethods.NewAnalysisServices("salesforceas" + HelperMethods.resourceGroupName, Credential.Instance.ServiceAccount.Username, Credential.Instance.ServiceAccount.Password);
             Thread.Sleep(new TimeSpan(0, 0, 3));
             HelperMethods.ClickButton("Next");
             Thread.Sleep(new TimeSpan(0, 0, 3));
@@ -173,7 +180,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
             var elements = driver.FindElementsByCssSelector("input[class='st-input au-target']");
 
-            while(elements.Count < 3)
+            while (elements.Count < 3)
             {
                 elements = driver.FindElementsByCssSelector("input[class='st-input au-target']");
             }

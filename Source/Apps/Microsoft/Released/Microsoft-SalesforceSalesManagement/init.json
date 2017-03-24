@@ -62,8 +62,8 @@
       {
         "displayname": "Customize",
         "name": "$SiteCommon$/pages-gallery/customize.html",
-        "showEmails": true,
-        "showRecurrenceOptions": true,
+        "showEmails": "$run(this.MS.DataStore.getValue('DataMovement') === 'ADF')",
+        "showRecurrenceOptions": "$run(this.MS.DataStore.getValue('DataMovement') === 'ADF')",
         "sourceApplication": "Salesforce"
       },
       {
@@ -86,7 +86,7 @@
         "displayname": "Progress",
         "filename": "$save('SalesManagementReport.pbix')",
         "filenameSSAS": "SalesManagementReportAS.pbix",
-        "finishedActionName": "Microsoft-ADFSliceStatus",
+        "finishedActionName": "$run(this.MS.DataStore.getValue('DataMovement') === 'ADF' ? 'Microsoft-ADFSliceStatus' : '')",
         "name": "$SiteCommon$/pages-gallery/progress.html",
         "showCounts": true,
         "targetSchema": "dbo",
@@ -103,11 +103,13 @@
       },
       {
         "displayname": "$translate(INIT_ACTION_RETRIEVING_SALESFORCE_METADATA)",
-        "name": "Microsoft-SalesforceGetObjectMetadata"
+        "name": "Microsoft-SalesforceGetObjectMetadata",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
       },
       {
         "displayname": "$translate(INIT_ACTION_CREATING_SALESFORCE_TABLES)",
-        "name": "Microsoft-SalesforceSqlArtefacts"
+        "name": "Microsoft-SalesforceSqlArtefacts",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
       },
       {
         "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
@@ -165,35 +167,41 @@
       {
         "DeploymentName": "ADFDeployment",
         "displayname": "$translate(INIT_ACTION_CREATING_DATA_CONNECTIONS)",
-        "name": "Microsoft-ADFDeployLinkedServices"
+        "name": "Microsoft-ADFDeployLinkedServices",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
       },
       {
         "DeploymentName": "ADFPreDeploymentDatasets",
         "displayname": "$translate(INIT_ACTION_CREATING_MAPPINGS)",
-        "name": "Microsoft-ADFDeployDatasets"
+        "name": "Microsoft-ADFDeployDatasets",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
       },
       {
         "DeploymentName": "ADFPreDeploymentPipeline",
         "displayname": "$translate(INIT_ACTION_SCHEDULING_HISTORICAL)",
-        "name": "Microsoft-ADFDeployPipelines"
+        "name": "Microsoft-ADFDeployPipelines",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
       },
       {
         "DeploymentName": "ADFPostDeploymentDatasets",
         "displayname": "$translate(INIT_ACTION_CREATING_MAPPINGS_FUTURE)",
         "name": "Microsoft-ADFDeployDatasets",
-        "postDeploymentPipelineType": "PostDeployment"
+        "postDeploymentPipelineType": "PostDeployment",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
       },
       {
         "DeploymentName": "ADFPostDeploymentPipeline",
         "displayname": "$translate(INIT_ACTION_SCHEDULING_DATA_LOADS)",
         "name": "Microsoft-ADFDeployPipelines",
-        "postDeploymentPipelineType": "PostDeployment"
+        "postDeploymentPipelineType": "PostDeployment",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
       },
       {
         "displayname": "$translate(INIT_ACTION_CHECKING_DATA)",
         "FinishedActionName": "Microsoft-ADFSliceStatus",
         "IsWaiting": true,
         "name": "Microsoft-GetDataPullStatus",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')",
         "SqlServerIndex": 0,
         "TargetSchema": "dbo"
       }

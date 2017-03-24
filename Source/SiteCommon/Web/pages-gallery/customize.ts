@@ -94,8 +94,7 @@ export class Customize extends ViewModelBase {
 
             if (this.recurrent == 'Never') {
                 this.MS.DataStore.addToDataStore('historicalOnly', 'true', DataStoreType.Public);
-            }
-            else {
+            } else {
                 this.MS.DataStore.addToDataStore('historicalOnly', 'false', DataStoreType.Public);
             }
 

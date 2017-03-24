@@ -56,7 +56,7 @@ export class DeploymentService {
             InitParser.loadVariables(param, param, this.MS, this);
 
             // Skip action if requested to do so by variable
-            if (param && param.skip && param.skip.toLowerCase() === 'true') {
+            if (param && param.skip && param.skip.toString().toLowerCase() === 'true') {
                 continue;
             }
 

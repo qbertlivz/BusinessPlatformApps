@@ -17,6 +17,7 @@ gulp.task('build-TS', function () {
             noResolve: false,
             removeComments: true,
             sourceMap: false,
+            //sourceMap: true,
             target: 'es6'
         }))
         .pipe(babel({

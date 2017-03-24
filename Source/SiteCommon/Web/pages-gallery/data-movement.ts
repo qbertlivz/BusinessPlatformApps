@@ -36,7 +36,7 @@ export class DataMovement extends ViewModelBase {
                 let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetScribeOrganizations');
 
                 if (response.IsSuccess) {
-                    this.scribeOrganizations = response.Body.value;
+                    this.scribeOrganizations = JSON.parse(response.Body.value);
 
                     if (this.scribeOrganizations && this.scribeOrganizations.length > 0) {
                         this.scribeOrganizationId = this.scribeOrganizations[0].id;

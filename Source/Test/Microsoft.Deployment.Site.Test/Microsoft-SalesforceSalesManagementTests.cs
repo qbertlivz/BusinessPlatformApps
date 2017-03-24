@@ -65,7 +65,6 @@ namespace Microsoft.Deployment.Site.Web.Tests
             HelperMethods.ClickButton("Next");
             Thread.Sleep(new TimeSpan(0, 0, 3));
             HelperMethods.ClickButton("Next");
-            HelperMethods.ClickButton("Next");
             HelperMethods.ClickButton("Run");
             HelperMethods.CheckDeploymentStatus();
             HelperMethods.CleanSubscription(

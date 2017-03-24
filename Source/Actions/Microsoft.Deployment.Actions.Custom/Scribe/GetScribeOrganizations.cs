@@ -24,7 +24,7 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            RestClient rc = ScribeUtility.Initialize(request.DataStore.GetLastValue("ScribeUsername"), request.DataStore.GetLastValue("ScribePassword"));
+            RestClient rc = ScribeUtility.Initialize(request.DataStore.GetValue("ScribeUsername"), request.DataStore.GetValue("ScribePassword"));
 
             List<ScribeOrganization> orgs = JsonConvert.DeserializeObject<List<ScribeOrganization>>(await rc.Get(URL_ORGANIZATIONS));
             List<ScribeOrganization> configuredOrgs = new List<ScribeOrganization>();

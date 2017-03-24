@@ -22,7 +22,7 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            RestClient rc = ScribeUtility.Initialize(request.DataStore.GetLastValue("ScribeUsername"), request.DataStore.GetLastValue("ScribePassword"));
+            RestClient rc = ScribeUtility.Initialize(request.DataStore.GetValue("ScribeUsername"), request.DataStore.GetValue("ScribePassword"));
 
             string orgId = request.DataStore.GetLastValue("ScribeOrganizationId");
 

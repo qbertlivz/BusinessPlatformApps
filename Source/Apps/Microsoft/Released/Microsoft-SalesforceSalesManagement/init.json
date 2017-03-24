@@ -214,6 +214,17 @@
         "displayname": "$translate(INIT_ACTION_CREATING_SCRIBE_CONNECTION_SALESFORCE)",
         "name": "Microsoft-CreateScribeConnectionSalesforce",
         "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CREATING_SCRIBE_CONNECTION_SQL)",
+        "name": "Microsoft-CreateScribeConnectionSql",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CREATING_SCRIBE_SOLUTION)",
+        "Entities": "Account,Lead,Opportunity,OpportunityLineItem,OpportunityStage,UserRole,User,Product2",
+        "name": "Microsoft-CreateScribeSolution",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
       }
     ]
   }

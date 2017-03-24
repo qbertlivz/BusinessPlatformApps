@@ -13,9 +13,9 @@ using Microsoft.Deployment.Common.Model.Scribe;
 namespace Microsoft.Deployment.Actions.Custom.Scribe
 {
     [Export(typeof(IAction))]
-    public class CreateScribeConnectionSalesforce : BaseAction
+    public class CreateScribeConnectionSql : BaseAction
     {
-        private const string CONNECTOR_ID = "8ADD76FC-525F-4B4B-B79E-945A6A762792";
+        private const string CONNECTOR_ID = "AC103458-FCB6-41D3-94A0-43D25B4F4FF4";
         private const string URL_CONNECTIONS = "/v1/orgs/{0}/connections";
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
@@ -31,30 +31,31 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
             {
                 ConnectorId = CONNECTOR_ID,
                 Color = "#FFEA69A6",
-                Name = ScribeUtility.BPST_SOURCE_NAME,
+                Name = ScribeUtility.BPST_TARGET_NAME,
                 Properties = new List<ScribeKeyValue>()
             };
 
-            // Set discovery URL
-            ScribeKeyValue kvp = new ScribeKeyValue { Key = "Url", Value = ScribeUtility.AesEncrypt(apiToken, request.DataStore.GetValue("SalesforceUrl")) };
+            // Set authentication
+            ScribeKeyValue kvp = new ScribeKeyValue
+            {
+                Key = "WindowsAuthentication",
+                Value = request.DataStore.GetJson("SqlCredentials", "AuthType").EqualsIgnoreCase("Windows") ? ScribeUtility.AesEncrypt(apiToken, "false") : ScribeUtility.AesEncrypt(apiToken, "true")
+            };
             connection.Properties.Add(kvp);
-            // Set CRM user name
-            kvp = new ScribeKeyValue { Key = "UserId", Value = ScribeUtility.AesEncrypt(apiToken, request.DataStore.GetValue("SalesforceUser")) };
+            // Set server name
+            kvp = new ScribeKeyValue { Key = "Server", Value = ScribeUtility.AesEncrypt(apiToken, request.DataStore.GetValue("Server")) };
             connection.Properties.Add(kvp);
-            // Set CRM user password
-            kvp = new ScribeKeyValue { Key = "Password", Value = ScribeUtility.AesEncrypt(apiToken, request.DataStore.GetValue("SalesforcePassword")) };
+            // Set database
+            kvp = new ScribeKeyValue { Key = "Database", Value = ScribeUtility.AesEncrypt(apiToken, request.DataStore.GetValue("Database")) };
             connection.Properties.Add(kvp);
-            // Set bulk APIs
-            kvp = new ScribeKeyValue { Key = "UseBulkApiRS", Value = ScribeUtility.AesEncrypt(apiToken, "true") };
+            // Set user name
+            kvp = new ScribeKeyValue { Key = "UserName", Value = ScribeUtility.AesEncrypt(apiToken, request.DataStore.GetValue("Username")) };
             connection.Properties.Add(kvp);
-            // Set metadata refresh
-            kvp = new ScribeKeyValue { Key = "RefeshMetaDataUponReconnect", Value = ScribeUtility.AesEncrypt(apiToken, "true") };
-            connection.Properties.Add(kvp);
-            // Set organization name
-            kvp = new ScribeKeyValue { Key = "SecurityToken", Value = ScribeUtility.AesEncrypt(apiToken, request.DataStore.GetValue("SalesforceToken")) };
+            // Set password
+            kvp = new ScribeKeyValue { Key = "Password", Value = ScribeUtility.AesEncrypt(apiToken, request.DataStore.GetValue("Password")) };
             connection.Properties.Add(kvp);
 
-            await rc.Post(string.Format(CultureInfo.InvariantCulture, URL_CONNECTIONS, orgId), JsonConvert.SerializeObject(connection, Formatting.Indented));
+            await rc.Post(string.Format(CultureInfo.InvariantCulture, URL_CONNECTIONS, orgId), JsonConvert.SerializeObject(connection, Formatting.Indented), null);
 
             return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
         }

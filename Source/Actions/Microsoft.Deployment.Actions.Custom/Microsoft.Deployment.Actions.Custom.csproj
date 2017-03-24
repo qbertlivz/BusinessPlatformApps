@@ -132,6 +132,8 @@
     <Compile Include="SCCM\InstallSCCM.cs" />
     <Compile Include="Scribe\CleanScribeEnvironment.cs" />
     <Compile Include="Scribe\CreateScribeConnectionSalesforce.cs" />
+    <Compile Include="Scribe\CreateScribeConnectionSql.cs" />
+    <Compile Include="Scribe\CreateScribeSolution.cs" />
     <Compile Include="Scribe\GetScribeOrganizations.cs" />
   </ItemGroup>
   <ItemGroup>

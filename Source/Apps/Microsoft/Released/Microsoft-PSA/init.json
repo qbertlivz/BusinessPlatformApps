@@ -58,9 +58,6 @@
           "Connect to Azure SQL and import data into Power BI"
         ],
         "name": "$SiteCommon$/pages-gallery/getting-started.html",
-        "prerequisiteDescription": "IMPORTANT: In order to use this solution template you will first need to enable change tracking using",
-        "prerequisiteLink": "https://www.microsoft.com/en-us/download/details.aspx?id=54769",
-        "prerequisiteLinkText": "this installer",
         "templateName": "Professional Services for Dynamics 365"
       },
       {

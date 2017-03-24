@@ -26,7 +26,7 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
 
             string orgId = request.DataStore.GetValue("ScribeOrganizationId");
 
-            string response = await rc.Get(string.Format(CultureInfo.InvariantCulture, URL_SOLUTION, orgId, GetSolutionId(rc, orgId, ScribeUtility.BPST_SOLUTION_NAME));
+            string response = await rc.Get(string.Format(CultureInfo.InvariantCulture, URL_SOLUTION, orgId, GetSolutionId(rc, orgId, ScribeUtility.BPST_SOLUTION_NAME)));
             var result = JsonConvert.DeserializeObject<ScribeSolution>(response);
 
             string status = result.status ?? string.Empty;

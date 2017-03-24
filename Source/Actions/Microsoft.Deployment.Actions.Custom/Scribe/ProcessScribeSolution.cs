@@ -24,7 +24,7 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
 
             string orgId = request.DataStore.GetValue("ScribeOrganizationId");
 
-            await rc.Post(string.Format(CultureInfo.InvariantCulture, URL_SOLUTION_PROCESS, orgId, GetSolutionId(rc, orgId, ScribeUtility.BPST_SOLUTION_NAME)), string.Empty);
+            await rc.Post(string.Format(CultureInfo.InvariantCulture, URL_SOLUTION_PROCESS, orgId, await GetSolutionId(rc, orgId, ScribeUtility.BPST_SOLUTION_NAME)), string.Empty);
 
             return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
         }

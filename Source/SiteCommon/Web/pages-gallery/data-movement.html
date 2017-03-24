@@ -14,8 +14,8 @@
         <div if.bind="dataMovement == dataMovementType.Scribe">
             <div class="st-float st-text">
                 <p>${MS.Translate.DATA_MOVEMENT_SCRIBE_DESCRIPTION}</p>
-                <bpst-link a-description="${MS.Translate.DATA_MOVEMENT_SCRIBE_NEW_ACCOUNT}" a-link="http://info.scribesoft.com/ScribeOnlineAccountSignUp.html" a-link-text="${MS.Translate.COMMON_HERE}"></bpst-link>
-                <bpst-link a-description="${MS.Translate.DATA_MOVEMENT_SCRIBE_DESCRIPTION_LINK}" a-link="https://help.scribesoft.com/scribe/en/sol/org/orgsecurity.htm" a-link-text="${MS.Translate.COMMON_HERE}"></bpst-link>
+                <bpst-link class="st-float" a-description="${MS.Translate.DATA_MOVEMENT_SCRIBE_NEW_ACCOUNT}" a-link="http://info.scribesoft.com/ScribeOnlineAccountSignUp.html" a-link-text="${MS.Translate.COMMON_HERE}"></bpst-link>
+                <bpst-link class="st-float" a-description="${MS.Translate.DATA_MOVEMENT_SCRIBE_DESCRIPTION_LINK}" a-link="http://blog.scribesoft.com/microsoft-power-bi-and-scribe-online/" a-link-text="${MS.Translate.COMMON_HERE}"></bpst-link>
             </div>
 
             <div class="st-float" if.bind="scribeOrganizations && scribeOrganizations.length > 0">

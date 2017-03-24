@@ -130,6 +130,7 @@
     <Compile Include="SAP\WriteSAPJson.cs" />
     <Compile Include="SCCM\CheckSCCMVersion.cs" />
     <Compile Include="SCCM\InstallSCCM.cs" />
+    <Compile Include="Scribe\CleanScribeEnvironment.cs" />
     <Compile Include="Scribe\GetScribeOrganizations.cs" />
   </ItemGroup>
   <ItemGroup>

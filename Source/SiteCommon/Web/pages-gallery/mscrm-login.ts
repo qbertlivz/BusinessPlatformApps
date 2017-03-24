@@ -88,8 +88,8 @@ export class MsCrmLogin extends AzureLogin {
 
         if (msCrmOrganization) {
             this.MS.DataStore.addToDataStore('Entities', this.entities, DataStoreType.Public);
-            this.MS.DataStore.addToDataStore('OrganizationId', msCrmOrganization.OrganizationId, DataStoreType.Private);
-            this.MS.DataStore.addToDataStore('OrganizationUrl', msCrmOrganization.OrganizationUrl, DataStoreType.Private);
+            this.MS.DataStore.addToDataStore('OrganizationId', msCrmOrganization.OrganizationId, DataStoreType.Public);
+            this.MS.DataStore.addToDataStore('OrganizationUrl', msCrmOrganization.OrganizationUrl, DataStoreType.Public);
 
             let response2 = await this.MS.HttpService.executeAsync('Microsoft-CrmGetOrganization', {});
 

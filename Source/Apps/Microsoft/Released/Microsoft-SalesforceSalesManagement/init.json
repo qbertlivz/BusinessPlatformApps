@@ -204,6 +204,11 @@
         "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')",
         "SqlServerIndex": 0,
         "TargetSchema": "dbo"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CLEANING_SCRIBE_ENVIRONMENT)",
+        "name": "Microsoft-CleanScribeEnvironment",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
       }
     ]
   }

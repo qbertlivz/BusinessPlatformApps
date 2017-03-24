@@ -132,6 +132,7 @@
     GETTING_STARTED_TITLE: `Get started with`,
     INIT_ACTION_BATCH_PERMISSION: `Granting permission for logging as a batch job`,
     INIT_ACTION_CHECKING_DATA: `Checking data exists in target`,
+    INIT_ACTION_CLEANING_SCRIBE_ENVIRONMENT: `Cleaning up the Scribe environment`,
     INIT_ACTION_COPYING_DATALOAD_SCRIPTS: `Copy dataload scripts`,
     INIT_ACTION_CREATING_DATA_CONNCECTIONS: `Creating data connections`,
     INIT_ACTION_CREATING_LOGIC_APP_CONNECTOR: `Creating Logic App connector`,

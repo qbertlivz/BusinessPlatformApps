@@ -15,6 +15,10 @@ namespace Microsoft.Deployment.Common.Helpers
 {
     public class ScribeUtility
     {
+        public const string BPST_SOLUTION_NAME = "PBI Solution";
+        public const string BPST_SOURCE_NAME = "PBI Source";
+        public const string BPST_TARGET_NAME = "PBI Target";
+
         private const string URL_ENDPOINT = "https://api.scribesoft.com";
 
         public static RestClient Initialize(string username, string password)

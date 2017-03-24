@@ -39,7 +39,7 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
             ScribeKeyValue kvp = new ScribeKeyValue
             {
                 Key = "WindowsAuthentication",
-                Value = request.DataStore.GetJson("SqlCredentials", "AuthType").EqualsIgnoreCase("Windows") ? ScribeUtility.AesEncrypt(apiToken, "false") : ScribeUtility.AesEncrypt(apiToken, "true")
+                Value = request.DataStore.GetJson("SqlCredentials", "AuthType").EqualsIgnoreCase("Windows") ? ScribeUtility.AesEncrypt(apiToken, "true") : ScribeUtility.AesEncrypt(apiToken, "false")
             };
             connection.Properties.Add(kvp);
             // Set server name

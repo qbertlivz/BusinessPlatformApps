@@ -36,7 +36,7 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
             };
 
             // Set discovery URL
-            ScribeKeyValue kvp = new ScribeKeyValue { Key = "Url", Value = ScribeUtility.AesEncrypt(apiToken, request.DataStore.GetValue("SalesforceUrl")) };
+            ScribeKeyValue kvp = new ScribeKeyValue { Key = "Url", Value = ScribeUtility.AesEncrypt(apiToken, $"https://{request.DataStore.GetValue("SalesforceUrl")}/services/Soap/u/33.0") };
             connection.Properties.Add(kvp);
             // Set CRM user name
             kvp = new ScribeKeyValue { Key = "UserId", Value = ScribeUtility.AesEncrypt(apiToken, request.DataStore.GetValue("SalesforceUser")) };

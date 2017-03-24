@@ -108,8 +108,16 @@
     <Compile Include="Controller\Logger.cs" />
     <Compile Include="Model\PbixConnection.cs" />
     <Compile Include="Model\QDEFF.cs" />
+    <Compile Include="Model\Scribe\ScribeAgent.cs" />
+    <Compile Include="Model\Scribe\ScribeConnection.cs" />
+    <Compile Include="Model\Scribe\ScribeConnector.cs" />
+    <Compile Include="Model\Scribe\ScribeKeyValue.cs" />
     <Compile Include="Model\Scribe\ScribeObject.cs" />
     <Compile Include="Model\Scribe\ScribeOrganization.cs" />
+    <Compile Include="Model\Scribe\ScribeReplicationSettings.cs" />
+    <Compile Include="Model\Scribe\ScribeSecurityRule.cs" />
+    <Compile Include="Model\Scribe\ScribeSolution.cs" />
+    <Compile Include="Model\Scribe\ScribeSolutionSchedule.cs" />
     <Compile Include="Model\Scribe\ScribeSubscription.cs" />
     <Compile Include="Model\SqlCredentials.cs" />
     <Compile Include="Model\TagReturn.cs" />

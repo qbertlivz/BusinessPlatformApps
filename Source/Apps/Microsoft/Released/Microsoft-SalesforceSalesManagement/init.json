@@ -4,6 +4,7 @@
       {
         "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-SalesforceSalesManagement/Web/Images/salesforceArchitectureDiagram.png",
         "displayname": "Getting Started",
+        "downloadLink": "https://pbistservice.azurewebsites.net/Installers/Salesforce_Template_Installer.exe",
         "list1": [
           "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",
           "$translate(INIT_GETTING_STARTED_SALESFORCE_SUBSCRIPTION)",
@@ -17,6 +18,28 @@
           "$translate(INIT_GETTING_STARTED_CONNECT_AS_PBI)"
         ],
         "name": "$SiteCommon$/pages-gallery/getting-started.html",
+        "selection": {
+          "choice": "Azure SQL",
+          "choiceDownload": "SQL Server On Premise",
+          "label": "Where do you want to copy your data?",
+          "list1": [
+            "SQL Server (2012 R2 or later)",
+            "Azure VM/On Premises Environment",
+            "Power BI Desktop (latest version)",
+            "Power BI Pro (to share the template with your organization)"
+          ],
+          "list2": [
+            "Use an on premises SQL Server but without a dedicated Analysis Services Server",
+            "Pull data into SQL Server (this could be on an Azure VM or on premises)",
+            "Import a data model into Power BI",
+            "Your data model doesn't exceed 1GB (about 10 million rows for opportunities, accounts, and leads)",
+            "Set up an Enterprise Gateway to talk to Power BI"
+          ],
+          "options": [
+            "Azure SQL",
+            "SQL Server On Premise"
+          ]
+        },
         "subtitle": "$translate(INIT_SALESFORCE_SUBTITLE)",
         "templateName": "$translate(INIT_SALESFORCE_TITLE)"
       },
@@ -26,6 +49,10 @@
         "pricingCalculatorUrl": "$translate(INIT_SALESFORCE_PRICING_CALCULATOR_URL)",
         "pricingCost": "$translate(INIT_SALESFORCE_PRICING_COST)",
         "pricingUrl": "$translate(INIT_SALESFORCE_PRICING_URL)"
+      },
+      {
+        "displayname": "Data Movement",
+        "name": "$SiteCommon$/pages-gallery/data-movement.html"
       },
       {
         "displayname": "Salesforce",
@@ -58,8 +85,8 @@
       {
         "displayname": "Customize",
         "name": "$SiteCommon$/pages-gallery/customize.html",
-        "showEmails": true,
-        "showRecurrenceOptions": true,
+        "showEmails": "$run(this.MS.DataStore.getValue('DataMovement') === 'ADF')",
+        "showRecurrenceOptions": "$run(this.MS.DataStore.getValue('DataMovement') === 'ADF')",
         "sourceApplication": "Salesforce"
       },
       {
@@ -82,7 +109,7 @@
         "displayname": "Progress",
         "filename": "$save('SalesManagementReport.pbix')",
         "filenameSSAS": "SalesManagementReportAS.pbix",
-        "finishedActionName": "Microsoft-ADFSliceStatus",
+        "finishedActionName": "$run(this.MS.DataStore.getValue('DataMovement') === 'ADF' ? 'Microsoft-ADFSliceStatus' : 'Microsoft-GetScribeSolutionStatus')",
         "name": "$SiteCommon$/pages-gallery/progress.html",
         "showCounts": true,
         "targetSchema": "dbo",
@@ -99,11 +126,13 @@
       },
       {
         "displayname": "$translate(INIT_ACTION_RETRIEVING_SALESFORCE_METADATA)",
-        "name": "Microsoft-SalesforceGetObjectMetadata"
+        "name": "Microsoft-SalesforceGetObjectMetadata",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
       },
       {
         "displayname": "$translate(INIT_ACTION_CREATING_SALESFORCE_TABLES)",
-        "name": "Microsoft-SalesforceSqlArtefacts"
+        "name": "Microsoft-SalesforceSqlArtefacts",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
       },
       {
         "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
@@ -161,35 +190,76 @@
       {
         "DeploymentName": "ADFDeployment",
         "displayname": "$translate(INIT_ACTION_CREATING_DATA_CONNECTIONS)",
-        "name": "Microsoft-ADFDeployLinkedServices"
+        "name": "Microsoft-ADFDeployLinkedServices",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
       },
       {
         "DeploymentName": "ADFPreDeploymentDatasets",
         "displayname": "$translate(INIT_ACTION_CREATING_MAPPINGS)",
-        "name": "Microsoft-ADFDeployDatasets"
+        "name": "Microsoft-ADFDeployDatasets",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
       },
       {
         "DeploymentName": "ADFPreDeploymentPipeline",
         "displayname": "$translate(INIT_ACTION_SCHEDULING_HISTORICAL)",
-        "name": "Microsoft-ADFDeployPipelines"
+        "name": "Microsoft-ADFDeployPipelines",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
       },
       {
         "DeploymentName": "ADFPostDeploymentDatasets",
         "displayname": "$translate(INIT_ACTION_CREATING_MAPPINGS_FUTURE)",
         "name": "Microsoft-ADFDeployDatasets",
-        "postDeploymentPipelineType": "PostDeployment"
+        "postDeploymentPipelineType": "PostDeployment",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
       },
       {
         "DeploymentName": "ADFPostDeploymentPipeline",
         "displayname": "$translate(INIT_ACTION_SCHEDULING_DATA_LOADS)",
         "name": "Microsoft-ADFDeployPipelines",
-        "postDeploymentPipelineType": "PostDeployment"
+        "postDeploymentPipelineType": "PostDeployment",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
       },
       {
         "displayname": "$translate(INIT_ACTION_CHECKING_DATA)",
         "FinishedActionName": "Microsoft-ADFSliceStatus",
         "IsWaiting": true,
         "name": "Microsoft-GetDataPullStatus",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')",
+        "SqlServerIndex": 0,
+        "TargetSchema": "dbo"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CLEANING_SCRIBE_ENVIRONMENT)",
+        "name": "Microsoft-CleanScribeEnvironment",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CREATING_SCRIBE_CONNECTION_SALESFORCE)",
+        "name": "Microsoft-CreateScribeConnectionSalesforce",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CREATING_SCRIBE_CONNECTION_SQL)",
+        "name": "Microsoft-CreateScribeConnectionSql",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CREATING_SCRIBE_SOLUTION)",
+        "Entities": "Account,Lead,Opportunity,OpportunityLineItem,OpportunityStage,UserRole,User,Product2",
+        "name": "Microsoft-CreateScribeSolution",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_PROCESS_SCRIBE_SOLUTION)",
+        "name": "Microsoft-ProcessScribeSolution",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CHECKING_DATA)",
+        "FinishedActionName": "Microsoft-GetScribeSolutionStatus",
+        "IsWaiting": true,
+        "name": "Microsoft-GetDataPullStatus",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')",
         "SqlServerIndex": 0,
         "TargetSchema": "dbo"
       }

@@ -134,7 +134,7 @@ Architecture Deep Dive
 
 The following section will break down how the template works by going through all the components of the solution.
 
-![Image](Resources/media/image1.png)
+![Image](Resources/media/image46.png)
 
 Azure Resources:
 ----------------
@@ -161,11 +161,41 @@ Whatever tweets are found in the 3-minute interval, are batched up and sent sequ
 
 ![Image](Resources/media/image16.png)
 
-### Cognitive Services:
+### Azure ML Web Service:
 
-The Azure Cogntivie Service for Textual Analytics is used inside the Azure Function (covered in the next section). There are many services available but we use it for the sentiment API. With regards to the Cognitive Service resource itself, there are a few configurations that can be done inside the Azure portal. 
+The Azure Machine Learning web service is called inside the Azure Function (covered in the next section). In the case of the template, we only deploy the web service and not the experiment itself so the code cannot be changed (this is due to ease of deployment rather than protecting IP). The code inside the Azure ML experiment is as follows:
 
-Most importantly, a user is able to change the SKU they want to use for the Cognitive Service. As a default, we set it to S1 (100K calls) which costs $150 per month. Depending on the anticipated traffic you can change the SKU to meet your needs.
+```Python#
+# The entry point function can contain up to two input arguments:
+#   Param<dataframe1>: a pandas.DataFrame
+#   Param<dataframe2>: a pandas.DataFrame
+
+def azureml_main(dataframe1 = None, dataframe2 = None):
+
+text = dataframe1.Text[0]
+lines_list = tokenize.sent_tokenize(text)  
+# takes tweet text and takes out individual words and separates them into an array
+
+sid = SentimentIntensityAnalyzer()  
+
+# instantiates the class that will do sentiment analysis   
+
+composite = 0  
+
+# initiates initial starting score
+
+for line in lines_list:        
+	ss = sid.polarity_scores(line)  
+	# give you the sentiment for a line        
+	composite += float(ss['compound'])  
+	# adds up all the sentiments       
+	# for now, just average the scores together     
+	sentiment = composite / len(lines_list) 
+	# finds average sentiment  
+	result = pd.DataFrame({\"text\" : [text], \"score\": [sentiment]}, index = [1])
+return result
+
+```
 
 ![Image](Resources/media/image48.PNG)
 

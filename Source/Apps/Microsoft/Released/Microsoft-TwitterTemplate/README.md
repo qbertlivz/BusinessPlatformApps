@@ -159,7 +159,8 @@ You can also customize the frequency at which tweets are brought in. In this exa
 
 Whatever tweets are found in the 3-minute interval, are batched up and sent sequentially through the Azure Function. We will go into more detail about what gets done inside the function next.
 
-![Image](Resources/media/image16.png)
+
+![Image](Resources/media/image52.PNG)
 
 ### Azure ML Web Service:
 
@@ -197,7 +198,8 @@ return result
 
 ```
 
-![Image](Resources/media/image48.PNG)
+
+![Image](Resources/media/image16.png)
 
 ### Azure Function: 
 

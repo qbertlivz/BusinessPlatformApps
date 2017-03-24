@@ -24,12 +24,16 @@ namespace Microsoft.Deployment.Site.Web.Tests
         public void Given_CorrectInformation_And_No_AS_When_RunSalesforce_ThenSuccess()
         {
             Given_CorrectCredentials_When_AzureAuth_Then_Success();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
             HelperMethods.ClickButton("Next");
             Given_CorrectSalesforceCredentials_When_Validate_Then_PageValidatesSuccesfully();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
             HelperMethods.ClickButton("Next");
             Given_CorrectSqlCredentials_When_ExistingSqlSelected_Then_PageValidatesSuccessfully();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
             HelperMethods.ClickButton("Next");
             HelperMethods.NoAnalysisServices();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
             HelperMethods.ClickButton("Next");
             Thread.Sleep(new TimeSpan(0, 0, 3));
             HelperMethods.ClickButton("Next");
@@ -48,12 +52,15 @@ namespace Microsoft.Deployment.Site.Web.Tests
         public void Given_CorrectInformation_And_AS_When_RunSalesforce_ThenSuccess()
         {
             Given_CorrectCredentials_When_AzureAuth_Then_Success();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
             HelperMethods.ClickButton("Next");
             Given_CorrectSalesforceCredentials_When_Validate_Then_PageValidatesSuccesfully();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
             HelperMethods.ClickButton("Next");
             Given_CorrectSqlCredentials_When_ExistingSqlSelected_Then_PageValidatesSuccessfully();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
             HelperMethods.ClickButton("Next");
-            HelperMethods.NewAnalysisServices("salesforceas", Credential.Instance.ServiceAccount.Username, Credential.Instance.ServiceAccount.Password);
+            HelperMethods.NewAnalysisServices("salesforceas" + HelperMethods.resourceGroupName, Credential.Instance.ServiceAccount.Username, Credential.Instance.ServiceAccount.Password);
             Thread.Sleep(new TimeSpan(0, 0, 3));
             HelperMethods.ClickButton("Next");
             Thread.Sleep(new TimeSpan(0, 0, 3));
@@ -170,34 +177,23 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
         public void SalesforcePage(string username, string password, string token)
         {
-            Thread.Sleep(new TimeSpan(0, 0, 10));
 
-            var usernameBox =
-                driver.FindElementsByTagName("Input").FirstOrDefault(e => e.GetAttribute("placeholder") == "username");
-            var passwordBox =
-                driver.FindElementsByTagName("Input").FirstOrDefault(e => e.GetAttribute("placeholder") == "password");
-            var tokenBox =
-                driver.FindElementsByTagName("Input").FirstOrDefault(e => e.GetAttribute("placeholder") == "token");
+            var elements = driver.FindElementsByCssSelector("input[class='st-input au-target']");
 
-            while(usernameBox == null && passwordBox == null && tokenBox == null)                
+            while (elements.Count < 3)
             {
-                usernameBox =
-                  driver.FindElementsByTagName("Input").FirstOrDefault(e => e.GetAttribute("placeholder") == "username");
-                passwordBox =
-                    driver.FindElementsByTagName("Input").FirstOrDefault(e => e.GetAttribute("placeholder") == "password");
-                tokenBox =
-                    driver.FindElementsByTagName("Input").FirstOrDefault(e => e.GetAttribute("placeholder") == "token");
-                Thread.Sleep(new TimeSpan(0, 0, 5));
+                elements = driver.FindElementsByCssSelector("input[class='st-input au-target']");
             }
 
-            while (usernameBox.Enabled != true && passwordBox.Enabled != true && tokenBox.Enabled != true)
-            {
-                Thread.Sleep(new TimeSpan(0, 0, 3));
-            }
-
+            var tokenBox = elements.First(e => e.GetAttribute("value.bind").Contains("salesforceToken"));
             tokenBox.SendKeys(token);
+
+            var usernameBox = elements.First(e => e.GetAttribute("value.bind").Contains("salesforceUsername"));
             usernameBox.SendKeys(username);
+
+            var passwordBox = elements.First(e => e.GetAttribute("value.bind").Contains("salesforcePassword"));
             passwordBox.SendKeys(password);
+
             HelperMethods.ClickButton("Validate");
         }
     }

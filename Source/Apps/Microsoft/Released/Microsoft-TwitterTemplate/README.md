@@ -463,7 +463,7 @@ At this point we have collected all the information we need. We just need to wri
 
 
 
-#Model Schema
+### Model Schema
 
 
 Here is an overview of the tables found in the model:

@@ -36,7 +36,7 @@ export class AzureLogin extends ViewModelBase {
         super();
     }
 
-    async OnLoaded() {
+    async OnLoaded(): Promise<void> {
         this.isValidated = false;
         this.showValidation = false;
         if (this.subscriptionsList.length > 0) {

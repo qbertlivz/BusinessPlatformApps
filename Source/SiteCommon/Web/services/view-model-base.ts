@@ -205,7 +205,7 @@ export class ViewModelBase {
     }
 
     // Called when the view model is attached completely
-    async OnLoaded() {
+    async OnLoaded(): Promise<void> {
         this.isValidated = false;
     }
 }

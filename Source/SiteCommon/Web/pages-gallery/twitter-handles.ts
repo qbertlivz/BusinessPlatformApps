@@ -11,7 +11,7 @@ export class TwitterHandles extends ViewModelBase {
         super();
     }
 
-    async OnLoaded() {
+    async OnLoaded(): Promise<void> {
         this.isValidated = true;
         this.showValidation = false;
     }

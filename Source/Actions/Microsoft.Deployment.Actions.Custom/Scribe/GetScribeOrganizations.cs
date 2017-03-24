@@ -19,11 +19,12 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
         private const string REPLICATION_SERVICES = "Replication Services (RS)";
         private const string URL_ORGANIZATIONS = "/v1/orgs";
         private const string URL_PROVISION_CLOUD_AGENT = "/v1/orgs/{0}/agents/provision_cloud_agent";
+        private const string URL_SECURITY_RULES = "/v1/orgs/{0}/securityrules";
         private const string URL_SUBSCRIPTIONS = "/v1/orgs/{0}/subscriptions";
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            RestClient rc = ScribeUtility.Initialize(request.DataStore.GetLastValue("ScribeUsername"), request.DataStore.GetLastValue("ScribePassword"));
+            RestClient rc = ScribeUtility.Initialize(request.DataStore.GetValue("ScribeUsername"), request.DataStore.GetValue("ScribePassword"));
 
             List<ScribeOrganization> orgs = JsonConvert.DeserializeObject<List<ScribeOrganization>>(await rc.Get(URL_ORGANIZATIONS));
             List<ScribeOrganization> configuredOrgs = new List<ScribeOrganization>();
@@ -32,6 +33,8 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
             {
                 foreach(ScribeOrganization org in orgs)
                 {
+                    await SafeList(rc, org);
+
                     if (await IsConfigured(rc, org))
                     {
                         await ProvisionCloudAgent(rc, org);
@@ -77,9 +80,21 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
             {
                 await rc.Post(string.Format(CultureInfo.InvariantCulture, URL_PROVISION_CLOUD_AGENT, org.Id), string.Empty);
             }
-            catch (Exception)
+            catch
             {
                 // Silently ignore exception if the cloud agent was already provisioned
+            }
+        }
+
+        private async Task SafeList(RestClient rc, ScribeOrganization org)
+        {
+            try
+            {
+                await rc.Post(string.Format(CultureInfo.InvariantCulture, URL_SECURITY_RULES, org.Id), JsonUtility.GetJsonStringFromObject(new ScribeSecurityRule()));
+            }
+            catch
+            {
+                // Failed to apply security rule
             }
         }
     }

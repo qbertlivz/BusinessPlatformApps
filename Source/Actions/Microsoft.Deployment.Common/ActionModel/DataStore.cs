@@ -132,7 +132,8 @@ namespace Microsoft.Deployment.Common.ActionModel
 
         public string GetValue(string key, DataStoreType dataStoreType = DataStoreType.Any)
         {
-            return this.GetFirstValueFromDataStore(key, dataStoreType)?.ToString();
+            return this.GetLastValue(key, dataStoreType);
+            //return this.GetFirstValueFromDataStore(key, dataStoreType)?.ToString();
         }
 
         public string GetLastValue(string key, DataStoreType dataStoreType = DataStoreType.Any)

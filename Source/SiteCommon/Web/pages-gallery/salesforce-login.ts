@@ -18,7 +18,7 @@ export class Salesforce extends ViewModelBase {
         this.salesforceUrl = 'login.salesforce.com';
     }
 
-    async OnLoaded() {
+    async OnLoaded(): Promise<void> {
         this.isValidated = false;
         this.showValidation = false;
     }

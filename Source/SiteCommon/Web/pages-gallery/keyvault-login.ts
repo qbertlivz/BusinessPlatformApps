@@ -13,7 +13,7 @@ export class KeyVaultLogin extends AzureLogin {
         super();
     }
 
-    async OnLoaded() {
+    async OnLoaded(): Promise<void> {
         this.isValidated = false;
         this.showValidation = false;
 

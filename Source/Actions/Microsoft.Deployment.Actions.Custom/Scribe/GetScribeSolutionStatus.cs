@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Globalization;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json;
@@ -16,6 +17,7 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
     [Export(typeof(IAction))]
     public class GetScribeSolutionStatus : BaseAction
     {
+        private const int SOLUTION_STATUS_WAIT = 5000;
         private const string URL_SOLUTION = "/v1/orgs/{0}/solutions/{1}";
         private const string URL_SOLUTION_PROCESS = "v1/orgs/{0}/solutions/{1}/start";
         private const string URL_SOLUTIONS = "/v1/orgs/{0}/solutions";
@@ -25,6 +27,8 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
             RestClient rc = ScribeUtility.Initialize(request.DataStore.GetValue("ScribeUsername"), request.DataStore.GetValue("ScribePassword"));
 
             string orgId = request.DataStore.GetValue("ScribeOrganizationId");
+
+            Thread.Sleep(SOLUTION_STATUS_WAIT);
 
             string response = await rc.Get(string.Format(CultureInfo.InvariantCulture, URL_SOLUTION, orgId, await GetSolutionId(rc, orgId, ScribeUtility.BPST_SOLUTION_NAME)));
             var result = JsonConvert.DeserializeObject<ScribeSolution>(response);

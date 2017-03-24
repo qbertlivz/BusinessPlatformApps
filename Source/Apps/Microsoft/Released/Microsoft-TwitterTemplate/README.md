@@ -100,8 +100,21 @@ As a user navigates away from this page a new resource group gets spun up on the
 
 **Twitter Handles:** The template can enrich the data that comes in with the tweet direction. In order to do that it needs to know which specific Twitter handles you are interested in tracking. Please input these into the Twitter handle box as demonstrated in the example. If you would like to learn how you can change your Twitter Handles after the solution is deployed, please look at the ‘Customizing solution’ section.
 
-![Image](Resources/media/image9.png)
+**Azure Analysis Services Selection**
 
+Choose whether Azure Analysis Services is to be used in the solution
+
+![Image](Resources/media/image50.png)
+
+**Configure Azure Analysis Services (Optional)**
+
+If Azure Analysis Services was chosen, create a new instance of Analysis Services or use an existing one.
+
+![Image](Resources/media/image51.png)
+
+For new instances, select the Azure Analysis Services service tier. Learn more about Azure Analysis Services service tiers [here](https://azure.microsoft.com/en-us/pricing/details/analysis-services/).
+
+The credentials provided are used as the system administrator for the Azure Analysis Services instance. When connecting to this instance, these credentials must be used (unless other users have been provided access separately).
 **Summary:** Summary page outlining all the choices the user made.
 
 ![Image](Resources/media/image10.png)

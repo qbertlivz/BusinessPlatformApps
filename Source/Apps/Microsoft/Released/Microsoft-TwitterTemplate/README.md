@@ -42,7 +42,7 @@ The flow of the Twitter solution template is as follows:
 
 -   Azure Function enriches tweet and writes it to Azure SQL
 
--   Azure Function also calls textual analytics cognitive service to work out sentiment of tweet
+-   Azure Function also calls Azure ML experiment running Python script to work out sentiment of tweet
 
 -   Power BI imports data into it from Azure SQL and renders pre-defined reports
 
@@ -119,7 +119,7 @@ The credentials provided are used as the system administrator for the Azure Anal
 
 ![Image](Resources/media/image10.png)
 
-**Deploy:** When you navigate to the deployment page the setup process gets kicked off. SQL scripts run to create the necessary tables and views. An Azure Function then gets spun up on your Azure subscription. This step could take even 5 minutes as required Python packages need to be uploaded. Finally, a Logic App is created that has a connection to your Azure Function.
+**Deploy:** When you navigate to the deployment page the setup process gets kicked off. SQL scripts run to create the necessary tables and views. An Azure Function then gets spun up on your Azure subscription. An Azure ML webservice is deployed to your subscription that will do the sentiment scoring. Finally, a Logic App is created that has a connection to your Azure Function.
 
 **It is important that you do not navigate away from this page while deployment takes place.** Once everything gets deployed a download link will appear for a Power BI file which consists of the pre-defined reports.
 
@@ -134,7 +134,7 @@ Architecture Deep Dive
 
 The following section will break down how the template works by going through all the components of the solution.
 
-![Image](Resources/media/image1.png)
+![Image](Resources/media/image46.png)
 
 Azure Resources:
 ----------------
@@ -159,15 +159,47 @@ You can also customize the frequency at which tweets are brought in. In this exa
 
 Whatever tweets are found in the 3-minute interval, are batched up and sent sequentially through the Azure Function. We will go into more detail about what gets done inside the function next.
 
+
+![Image](Resources/media/image52.png)
+
+### Azure ML Web Service:
+
+The Azure Machine Learning web service is called inside the Azure Function (covered in the next section). In the case of the template, we only deploy the web service and not the experiment itself so the code cannot be changed (this is due to ease of deployment rather than protecting IP). The code inside the Azure ML experiment is as follows:
+
+```Python#
+# The entry point function can contain up to two input arguments:
+#   Param<dataframe1>: a pandas.DataFrame
+#   Param<dataframe2>: a pandas.DataFrame
+
+def azureml_main(dataframe1 = None, dataframe2 = None):
+
+text = dataframe1.Text[0]
+lines_list = tokenize.sent_tokenize(text)  
+# takes tweet text and takes out individual words and separates them into an array
+
+sid = SentimentIntensityAnalyzer()  
+
+# instantiates the class that will do sentiment analysis   
+
+composite = 0  
+
+# initiates initial starting score
+
+for line in lines_list:        
+	ss = sid.polarity_scores(line)  
+	# give you the sentiment for a line        
+	composite += float(ss['compound'])  
+	# adds up all the sentiments       
+	# for now, just average the scores together     
+	sentiment = composite / len(lines_list) 
+	# finds average sentiment  
+	result = pd.DataFrame({\"text\" : [text], \"score\": [sentiment]}, index = [1])
+return result
+
+```
+
+
 ![Image](Resources/media/image16.png)
-
-### Cognitive Services:
-
-The Azure Cogntivie Service for Textual Analytics is used inside the Azure Function (covered in the next section). There are many services available but we use it for the sentiment API. With regards to the Cognitive Service resource itself, there are a few configurations that can be done inside the Azure portal. 
-
-Most importantly, a user is able to change the SKU they want to use for the Cognitive Service. As a default, we set it to S1 (100K calls) which costs $150 per month. Depending on the anticipated traffic you can change the SKU to meet your needs.
-
-![Image](Resources/media/image48.PNG)
 
 ### Azure Function: 
 
@@ -178,11 +210,8 @@ The Run method reads the tweet + all of it's metadata in from the request and pa
 ```C#
 public static async Task<object> Run(HttpRequestMessage req, TraceWriter log)
 {
-    // Read all connectionstrings and keys for SQL
     string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["connectionString"].ConnectionString;
-    TweetHandler tweetHandler = new TweetHandler(connectionString);
-    
-    // Read json string from request and parse tweets
+    TweetHandler tweetHandler = new TweetHandler(connectionString, log);
     string jsonContent = await req.Content.ReadAsStringAsync();
     var tweets = JsonConvert.DeserializeObject(jsonContent);
     if (tweets is JArray)
@@ -190,26 +219,27 @@ public static async Task<object> Run(HttpRequestMessage req, TraceWriter log)
         foreach (var item in (JArray)tweets)
         {
             var individualtweet = item.ToString();
-            tweetHandler.ParseTweet(individualtweet);
+            //log.Info("********************Run**************************" + individualtweet.ToString());
+
+            await tweetHandler.ParseTweet(individualtweet, log);
         }
     }
     else
     {
-        tweetHandler.ParseTweet(jsonContent);
+        //log.Info("********************Run**************************" + jsonContent.ToString());
+        await tweetHandler.ParseTweet(jsonContent, log);
     }
 
     // log.Info($"{data}");
-
-    //Return status ok if no exception encountered
     return req.CreateResponse(HttpStatusCode.OK, "");
 }
 
 ```
 
-Inside the ParseTweet method we parse the tweet +metadata and read in the Twitter handles and Twitter handle IDs that the user wants to track (this was defined on the Twitter Handles page). The Twitter handles and IDs come from the SQL ‘Configuration table’. The handles and IDs are saved into a  dictionary.
+Inside the ParseTweet method we parse the tweet + metadata and read in the Twitter handles and Twitter handle IDs that the user wants to track (this was defined on the Twitter Handles page). The Twitter handles and IDs come from the SQL ‘Configuration table’. The handles and IDs are saved into a  dictionary.
 
 ```C#
-    public async Task<bool> ParseTweet(string entireTweet)
+    public async Task<bool> ParseTweet(string entireTweet, TraceWriter log)
     {
         // Convert JSON to dynamic C# object
         tweetObj = JObject.Parse(entireTweet);
@@ -221,6 +251,7 @@ Inside the ParseTweet method we parse the tweet +metadata and read in the Twitte
         string twitterHandleId =
             ExecuteSqlQuery("select value FROM pbist_twitter.configuration where name = \'twitterHandleId\'",
                 "value");
+        ExecuteSqlNonQuery($"UPDATE pbist_twitter.twitter_query SET TweetId='{tweet["TweetId"]}' WHERE Id = 1");
 
         // Split out all the handles & create dictionary
         String[] handle = null;
@@ -237,24 +268,23 @@ Inside the ParseTweet method we parse the tweet +metadata and read in the Twitte
             }
         }
 ```        
-We currently support English, Spanish, French and Portugese for sentiment detection. Assuming the tweet is in one of those languages the sentiment is worked out. We do this by calling the sentiment Cognitive API (MakeSentimentRequest method). The score gets discretized and a categorical variable is defined which indicates whether the tweet is positive, negative or neutral.
+We currently only support English for sentiment detection. We do this by calling the Azure ML web service experiment from inside the function. The score gets discretized and a categorical variable is defined which indicates whether the tweet is positive, negative or neutral.
 
 
 ```
-        // Check if language of tweet is supported for sentiment analysis
         originalTweets["lang"] = tweet.TweetLanguageCode.ToString();
-        if (originalTweets["lang"] == "en" || originalTweets["lang"] == "fr" || originalTweets["lang"] == "es" || originalTweets["lang"] == "pt")
+        if (originalTweets["lang"] == "en")
         {
-            //Sentiment analysis - Cognitive APIs 
-            string sentiment = await MakeSentimentRequest(tweet);
-            sentiment = (double.Parse(sentiment) * 2 - 1).ToString(CultureInfo.InvariantCulture);
+            //log.Info("********************ParseTweet**************************" + tweet.TweetId.ToString());
+            string sentiment = await MakeSentimentRequest(tweet, log);
+            //log.Info("********************ParseTweet************************** Sentiment: " + sentiment);
             string sentimentBin = (Math.Floor(double.Parse(sentiment) * 10) / 10).ToString(CultureInfo.InvariantCulture);
             string sentimentPosNeg = String.Empty;
-            if (double.Parse(sentimentBin) > 0)
+            if (double.Parse(sentimentBin) > 0.1)
             {
                 sentimentPosNeg = "Positive";
             }
-            else if (double.Parse(sentimentBin) < 0)
+            else if (double.Parse(sentimentBin) < -0.1)
             {
                 sentimentPosNeg = "Negative";
             }
@@ -431,7 +461,7 @@ At this point we have collected all the information we need. We just need to wri
 
 
 
-#Model Schema
+### Model Schema
 
 
 Here is an overview of the tables found in the model:
@@ -624,7 +654,7 @@ Clicking on a tweet will cross filter the ‘influence’ stats on the left hand
 
 ![Image](Resources/media/image44.png)
 
-#Customizations
+### Customizations
 
 Updating the Solution
 ---------------------

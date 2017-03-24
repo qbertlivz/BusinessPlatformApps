@@ -4,6 +4,7 @@
       {
         "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-SalesforceSalesManagement/Web/Images/salesforceArchitectureDiagram.png",
         "displayname": "Getting Started",
+        "downloadLink": "https://pbistservice.azurewebsites.net/Installers/Salesforce_Template_Installer.exe",
         "list1": [
           "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",
           "$translate(INIT_GETTING_STARTED_SALESFORCE_SUBSCRIPTION)",
@@ -17,6 +18,28 @@
           "$translate(INIT_GETTING_STARTED_CONNECT_AS_PBI)"
         ],
         "name": "$SiteCommon$/pages-gallery/getting-started.html",
+        "selection": {
+          "choice": "Azure SQL",
+          "choiceDownload": "SQL Server On Premise",
+          "label": "Where do you want to copy your data?",
+          "list1": [
+            "SQL Server (2012 R2 or later)",
+            "Azure VM/On Premises Environment",
+            "Power BI Desktop (latest version)",
+            "Power BI Pro (to share the template with your organization)"
+          ],
+          "list2": [
+            "Use an on premises SQL Server but without a dedicated Analysis Services Server",
+            "Pull data into SQL Server (this could be on an Azure VM or on premises)",
+            "Import a data model into Power BI",
+            "Your data model doesn't exceed 1GB (about 10 million rows for opportunities, accounts, and leads)",
+            "Set up an Enterprise Gateway to talk to Power BI"
+          ],
+          "options": [
+            "Azure SQL",
+            "SQL Server On Premise"
+          ]
+        },
         "subtitle": "$translate(INIT_SALESFORCE_SUBTITLE)",
         "templateName": "$translate(INIT_SALESFORCE_TITLE)"
       },

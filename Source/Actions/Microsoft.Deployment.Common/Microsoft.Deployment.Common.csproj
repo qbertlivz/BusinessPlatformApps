@@ -109,6 +109,7 @@
     <Compile Include="Model\PbixConnection.cs" />
     <Compile Include="Model\QDEFF.cs" />
     <Compile Include="Model\Scribe\ScribeConnection.cs" />
+    <Compile Include="Model\Scribe\ScribeConnector.cs" />
     <Compile Include="Model\Scribe\ScribeKeyValue.cs" />
     <Compile Include="Model\Scribe\ScribeObject.cs" />
     <Compile Include="Model\Scribe\ScribeOrganization.cs" />

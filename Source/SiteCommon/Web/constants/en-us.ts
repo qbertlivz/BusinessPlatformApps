@@ -140,6 +140,7 @@
     INIT_ACTION_CREATING_MAPPINGS_FUTURE: `Creating mappings to future data`,
     INIT_ACTION_CREATING_POWERAPP_SQL_CONNECTION: `Creating PowerApp SQL connection`,
     INIT_ACTION_CREATING_SALESFORCE_TABLES: `Creating tables in database`,
+    INIT_ACTION_CREATING_SCRIBE_CONNECTION_SALESFORCE: `Creating Salesforce connection in Scribe`,
     INIT_ACTION_DEPLOYING_AS_MODEL: `Deploying Analysis Services model`,
     INIT_ACTION_DEPLOYING_AS_SCHEDULER: `Deploying Analysis Services scheduler`,
     INIT_ACTION_DEPLOYING_AZURE_ML: `Deploying Azure ML web service`,

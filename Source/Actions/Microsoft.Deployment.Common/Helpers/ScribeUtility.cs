@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
@@ -19,6 +20,8 @@ namespace Microsoft.Deployment.Common.Helpers
         public const string BPST_SOURCE_NAME = "PBI Source";
         public const string BPST_TARGET_NAME = "PBI Target";
 
+        private const string URL_CONNECTORS = "/v1/orgs/{0}/connectors";
+        private const string URL_CONNECTORSINSTALL = "/v1/orgs/{0}/connectors/{1}/install";
         private const string URL_ENDPOINT = "https://api.scribesoft.com";
 
         public static RestClient Initialize(string username, string password)
@@ -26,7 +29,7 @@ namespace Microsoft.Deployment.Common.Helpers
             return new RestClient(URL_ENDPOINT, new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes(string.Concat(username, ":", password)))));
         }
 
-        public string AesEncrypt(string apiToken, string message)
+        public static string AesEncrypt(string apiToken, string message)
         {
             const string salt = "ac103458-fcb6-41d3-94r0-43d25b4f4ff4";
             byte[] saltBytes = Encoding.UTF8.GetBytes(salt);
@@ -74,6 +77,17 @@ namespace Microsoft.Deployment.Common.Helpers
             }
 
             return result;
+        }
+
+        public static async Task InstallConnector(RestClient rc, string orgId, string connectorId)
+        {
+            var response = await rc.Get(string.Format(CultureInfo.InvariantCulture, URL_CONNECTORS, orgId));
+            List<ScribeConnector> connectors = JsonConvert.DeserializeObject<List<ScribeConnector>>(response);
+
+            if (!connectors.Any(p => p.Id.Equals(connectorId, StringComparison.OrdinalIgnoreCase)))
+            {
+                await rc.Post(string.Format(CultureInfo.InvariantCulture, URL_CONNECTORSINSTALL, orgId, connectorId), string.Empty, null, null);
+            }
         }
     }
 }

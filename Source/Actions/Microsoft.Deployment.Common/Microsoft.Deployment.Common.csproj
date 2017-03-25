@@ -92,6 +92,7 @@
     <Compile Include="Helpers\FTPUtility.cs" />
     <Compile Include="Helpers\HttpClientUtility.cs" />
     <Compile Include="Helpers\ImpersonateUtility.cs" />
+    <Compile Include="Helpers\InformaticaUtility.cs" />
     <Compile Include="Helpers\JsonUtility.cs" />
     <Compile Include="Helpers\NTHelper.cs" />
     <Compile Include="Helpers\NTPermissionUtility.cs" />
@@ -106,6 +107,14 @@
     <Compile Include="Helpers\StringEnumConverterLower.cs" />
     <Compile Include="Helpers\StringExtension.cs" />
     <Compile Include="Controller\Logger.cs" />
+    <Compile Include="Model\Informatica\InformaticaLicense.cs" />
+    <Compile Include="Model\Informatica\InformaticaLicenseInformation.cs" />
+    <Compile Include="Model\Informatica\InformaticaLicenseParameter.cs" />
+    <Compile Include="Model\Informatica\InformaticaLogin.cs" />
+    <Compile Include="Model\Informatica\InformaticaObject.cs" />
+    <Compile Include="Model\Informatica\InformaticaOrganizationEdition.cs" />
+    <Compile Include="Model\Informatica\InformaticaOrganizationLicenseInformation.cs" />
+    <Compile Include="Model\Informatica\InformaticaUser.cs" />
     <Compile Include="Model\PbixConnection.cs" />
     <Compile Include="Model\QDEFF.cs" />
     <Compile Include="Model\Scribe\ScribeAgent.cs" />

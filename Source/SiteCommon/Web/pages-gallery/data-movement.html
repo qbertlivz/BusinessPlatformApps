@@ -6,7 +6,7 @@
 
     <select class="btn btn-default dropdown-toggle st-input" change.delegate="OnDataMovementChanged()" value.bind="dataMovement">
         <option value.bind="dataMovementType.ADF">${MS.Translate.DATA_MOVEMENT_AZURE_DATA_FACTORY}</option>
-        <!--<option value.bind="dataMovementType.Informatica">${MS.Translate.DATA_MOVEMENT_INFORMATICA}</option>-->
+        <option value.bind="dataMovementType.Informatica">${MS.Translate.DATA_MOVEMENT_INFORMATICA}</option>
         <option value.bind="dataMovementType.Scribe">${MS.Translate.DATA_MOVEMENT_SCRIBE}</option>
     </select>
 

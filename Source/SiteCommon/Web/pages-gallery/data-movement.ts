@@ -28,13 +28,14 @@ export class DataMovement extends ViewModelBase {
 
         switch (this.dataMovement) {
             case this.dataMovementType.Informatica:
-                this.MS.DataStore.addToDataStore('ScribeUsername', this.username, DataStoreType.Private);
-                this.MS.DataStore.addToDataStore('ScribePassword', this.password, DataStoreType.Private);
+                this.MS.DataStore.addToDataStore('InformaticaUsername', this.username, DataStoreType.Private);
+                this.MS.DataStore.addToDataStore('InformaticaPassword', this.password, DataStoreType.Private);
 
-                let responseInformatica: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-InformaticaLogin');
+                let responseInformatica: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-VerifyInformaticaCredentials');
 
                 if (responseInformatica.IsSuccess) {
                     this.isValidated = true;
+                    this.showValidation = true;
                 }
 
                 break;
@@ -51,6 +52,7 @@ export class DataMovement extends ViewModelBase {
                         this.scribeOrganizationId = this.scribeOrganizations[0].id;
 
                         this.isValidated = true;
+                        this.showValidation = true;
                     }
                 }
 

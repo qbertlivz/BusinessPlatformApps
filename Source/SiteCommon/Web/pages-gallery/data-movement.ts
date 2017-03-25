@@ -15,6 +15,8 @@ export class DataMovement extends ViewModelBase {
     username: string = '';
 
     OnDataMovementChanged(): void {
+        this.Invalidate();
+
         this.isValidated = this.dataMovement === this.dataMovementType.ADF;
     }
 

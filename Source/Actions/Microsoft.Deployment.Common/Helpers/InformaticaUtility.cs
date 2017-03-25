@@ -37,11 +37,9 @@ namespace Microsoft.Deployment.Common.Helpers
             string response = await rc.Post(URL_LOGIN, JsonConvert.SerializeObject(informaticaLogin));
             InformaticaUser u = JsonConvert.DeserializeObject<InformaticaUser>(response);
 
-            Dictionary<string, string> sessionId = new Dictionary<string, string> { { "icSessionId", u.IcSessionId } };
+            rc = new RestClient(u.ServerUrl[u.ServerUrl.Length - 1] == '/' ? u.ServerUrl : u.ServerUrl + '/', null, new Dictionary<string, string> { { "icSessionId", u.IcSessionId } });
 
-            rc = new RestClient(u.ServerUrl[u.ServerUrl.Length - 1] == '/' ? u.ServerUrl : u.ServerUrl + '/');
-
-            InformaticaOrganizationLicenseInformation li = await GetLicensingInformation(rc, sessionId);
+            InformaticaOrganizationLicenseInformation li = await GetLicensingInformation(rc);
 
             Dictionary<string, bool> licenses = new Dictionary<string, bool>
             {
@@ -87,9 +85,9 @@ namespace Microsoft.Deployment.Common.Helpers
             throw new Exception(string.Format(CultureInfo.InvariantCulture, MSG_MISSING_LICENSES, licensesNeeded));
         }
 
-        private static async Task<InformaticaOrganizationLicenseInformation> GetLicensingInformation(RestClient rc, Dictionary<string, string> sessionId)
+        private static async Task<InformaticaOrganizationLicenseInformation> GetLicensingInformation(RestClient rc)
         {
-            string response = await rc.Get(URL_LICENSE_INFO, null, sessionId);
+            string response = await rc.Get(URL_LICENSE_INFO);
             return JsonConvert.DeserializeObject<InformaticaOrganizationLicenseInformation>(response);
         }
     }

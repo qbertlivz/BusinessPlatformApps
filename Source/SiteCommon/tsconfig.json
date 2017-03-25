@@ -1,0 +1,14 @@
+﻿{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "declaration": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "module": "commonjs",
+    "noImplicitAny": false,
+    "noResolve": false,
+    "removeComments": true,
+    "sourceMap": false,
+    "target": "es6"
+  }
+}

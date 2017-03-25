@@ -28,15 +28,24 @@ export class DataMovement extends ViewModelBase {
 
         switch (this.dataMovement) {
             case this.dataMovementType.Informatica:
+                this.MS.DataStore.addToDataStore('ScribeUsername', this.username, DataStoreType.Private);
+                this.MS.DataStore.addToDataStore('ScribePassword', this.password, DataStoreType.Private);
+
+                let responseInformatica: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-InformaticaLogin');
+
+                if (responseInformatica.IsSuccess) {
+                    this.isValidated = true;
+                }
+
                 break;
             case this.dataMovementType.Scribe:
                 this.MS.DataStore.addToDataStore('ScribeUsername', this.username, DataStoreType.Private);
                 this.MS.DataStore.addToDataStore('ScribePassword', this.password, DataStoreType.Private);
 
-                let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetScribeOrganizations');
+                let responseScribe: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetScribeOrganizations');
 
-                if (response.IsSuccess) {
-                    this.scribeOrganizations = JSON.parse(response.Body.value);
+                if (responseScribe.IsSuccess) {
+                    this.scribeOrganizations = JSON.parse(responseScribe.Body.value);
 
                     if (this.scribeOrganizations && this.scribeOrganizations.length > 0) {
                         this.scribeOrganizationId = this.scribeOrganizations[0].id;

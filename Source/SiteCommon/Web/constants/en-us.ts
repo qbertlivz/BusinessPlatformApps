@@ -112,6 +112,8 @@
     CUSTOMIZE_RECURRENCE_OPTIONS: `Configure how often you want to do an incremental refresh:`,
     DATA_MOVEMENT_AZURE_DATA_FACTORY: `Azure Data Factory`,
     DATA_MOVEMENT_INFORMATICA: `Informatica`,
+    DATA_MOVEMENT_INFORMATICA_DESCRIPTION: `Informatica is a third party service that enables you to pull data from Salesforce. When we run the setup, Informatica will copy all of your Salesforce data into your database. Once all your data is copied, Informatica will only update new and changed records making future data pulls extremely fast.`,
+    DATA_MOVEMENT_INFORMATICA_NEW_ACCOUNT: `Create a new Informatica account `,
     DATA_MOVEMENT_PASSWORD: `Password:`,
     DATA_MOVEMENT_SCRIBE: `Scribe`,
     DATA_MOVEMENT_SCRIBE_DESCRIPTION: `Scribe is a third party service that enables you to pull data from Salesforce. When we run the setup, Scribe will copy all of your Salesforce data into your database. Once all your data is copied, Scribe will only update new and changed records making future data pulls extremely fast.`,

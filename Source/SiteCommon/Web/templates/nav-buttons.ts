@@ -1,4 +1,6 @@
-﻿import { bindable } from 'aurelia-framework';
+﻿/// <reference path="../../../Site/Microsoft.Deployment.Site.Web/typings/index.d.ts" />
+
+import { bindable } from 'aurelia-framework';
 
 export class NavButtons {
     @bindable viewmodel = null;

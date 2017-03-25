@@ -37,7 +37,7 @@ BEGIN
 	SET @quarter_start_date = Datefromparts(@year, ( @quarter - 1 ) * 3 + 1, 1);
 	SET @quarter_end_date = Dateadd(day, -1, Dateadd(month, 3, @quarter_start_date));
 
-	INSERT psa.date
+	INSERT psa.[date]
 		 ([full_date],
 		  [year],
 		  [quarter],
@@ -110,5 +110,5 @@ go
 *************************************/
 INSERT psa.[configuration] (configuration_group, configuration_subgroup, [name], [value],[visible])
     VALUES (N'SolutionTemplate', N'PSA', N'version', N'1.0', 0),
-           (N'SolutionTemplate', N'PSA', N'versionImage', N'https://bpstservice.azurewebsites.net/api/telemetry/Microsoft-SCCMTemplate', 1);
+           (N'SolutionTemplate', N'PSA', N'versionImage', N'https://bpstservice.azurewebsites.net/api/telemetry/Microsoft-PSA', 1);
 go

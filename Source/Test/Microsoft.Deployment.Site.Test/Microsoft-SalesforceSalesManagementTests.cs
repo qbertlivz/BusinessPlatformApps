@@ -24,15 +24,19 @@ namespace Microsoft.Deployment.Site.Web.Tests
         public void Given_CorrectInformation_And_No_AS_When_RunSalesforce_ThenSuccess()
         {
             Given_CorrectCredentials_When_AzureAuth_Then_Success();
-            HelperMethods.ClickNextButton();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
+            HelperMethods.ClickButton("Next");
             Given_CorrectSalesforceCredentials_When_Validate_Then_PageValidatesSuccesfully();
-            HelperMethods.ClickNextButton();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
+            HelperMethods.ClickButton("Next");
             Given_CorrectSqlCredentials_When_ExistingSqlSelected_Then_PageValidatesSuccessfully();
-            HelperMethods.ClickNextButton();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
+            HelperMethods.ClickButton("Next");
             HelperMethods.NoAnalysisServices();
-            HelperMethods.ClickNextButton();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
+            HelperMethods.ClickButton("Next");
             Thread.Sleep(new TimeSpan(0, 0, 3));
-            HelperMethods.ClickNextButton();
+            HelperMethods.ClickButton("Next");
             HelperMethods.ClickButton("Run");
             HelperMethods.CheckDeploymentStatus();
             HelperMethods.CleanSubscription(
@@ -48,16 +52,19 @@ namespace Microsoft.Deployment.Site.Web.Tests
         public void Given_CorrectInformation_And_AS_When_RunSalesforce_ThenSuccess()
         {
             Given_CorrectCredentials_When_AzureAuth_Then_Success();
-            HelperMethods.ClickNextButton();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
+            HelperMethods.ClickButton("Next");
             Given_CorrectSalesforceCredentials_When_Validate_Then_PageValidatesSuccesfully();
-            HelperMethods.ClickNextButton();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
+            HelperMethods.ClickButton("Next");
             Given_CorrectSqlCredentials_When_ExistingSqlSelected_Then_PageValidatesSuccessfully();
-            HelperMethods.ClickNextButton();
-            HelperMethods.NewAnalysisServices("salesforceas", Credential.Instance.ServiceAccount.Username, Credential.Instance.ServiceAccount.Password);
-            HelperMethods.ClickNextButton();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
+            HelperMethods.ClickButton("Next");
+            HelperMethods.NewAnalysisServices("salesforceas" + HelperMethods.resourceGroupName, Credential.Instance.ServiceAccount.Username, Credential.Instance.ServiceAccount.Password);
             Thread.Sleep(new TimeSpan(0, 0, 3));
-            HelperMethods.ClickNextButton();
-            HelperMethods.ClickNextButton();
+            HelperMethods.ClickButton("Next");
+            Thread.Sleep(new TimeSpan(0, 0, 3));
+            HelperMethods.ClickButton("Next");
             HelperMethods.ClickButton("Run");
             HelperMethods.CheckDeploymentStatus();
             HelperMethods.CleanSubscription(
@@ -167,38 +174,26 @@ namespace Microsoft.Deployment.Site.Web.Tests
             this.driver = HelperMethods.driver;
         }
 
-        [Ignore]
-        [TestMethod]
         public void SalesforcePage(string username, string password, string token)
         {
-            var usernameBox =
-                driver.FindElementsByTagName("Input").FirstOrDefault(e => e.GetAttribute("placeholder") == "username");
-            var passwordBox =
-                driver.FindElementsByTagName("Input").FirstOrDefault(e => e.GetAttribute("placeholder") == "password");
-            var tokenBox =
-                driver.FindElementsByTagName("Input").FirstOrDefault(e => e.GetAttribute("placeholder") == "token");
 
-            while(usernameBox == null && passwordBox == null && tokenBox == null)
-                
+            var elements = driver.FindElementsByCssSelector("input[class='st-input au-target']");
+
+            while (elements.Count < 3)
             {
-                Thread.Sleep(new TimeSpan(0, 0, 1));
-                usernameBox =
-                  driver.FindElementsByTagName("Input").First(e => e.GetAttribute("placeholder") == "username");
-                passwordBox =
-                    driver.FindElementsByTagName("Input").First(e => e.GetAttribute("placeholder") == "password");
-                tokenBox =
-                    driver.FindElementsByTagName("Input").First(e => e.GetAttribute("placeholder") == "token");
+                elements = driver.FindElementsByCssSelector("input[class='st-input au-target']");
             }
 
-            while (usernameBox.Enabled != true && passwordBox.Enabled != true && tokenBox.Enabled != true)
-            {
-                Thread.Sleep(new TimeSpan(0, 0, 1));
-            }
-
+            var tokenBox = elements.First(e => e.GetAttribute("value.bind").Contains("salesforceToken"));
             tokenBox.SendKeys(token);
+
+            var usernameBox = elements.First(e => e.GetAttribute("value.bind").Contains("salesforceUsername"));
             usernameBox.SendKeys(username);
+
+            var passwordBox = elements.First(e => e.GetAttribute("value.bind").Contains("salesforcePassword"));
             passwordBox.SendKeys(password);
-            HelperMethods.ClickValidateButton();
+
+            HelperMethods.ClickButton("Validate");
         }
     }
 }

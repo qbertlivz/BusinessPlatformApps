@@ -49,9 +49,15 @@ go
 
 CREATE VIEW pbist_sccm.vw_SoftwareDistributionAllPackageIDs
 AS
-    SELECT DISTINCT SoftwareName AS [Package Name], packageid AS PackageID, 'Applications' AS [Type] FROM pbist_sccm.vw_SoftwareDistributionOverallApplicationDeployment
+    SELECT Max(SoftwareName) AS [Package Name], packageid AS PackageID, 'Applications' AS [Type]
+	FROM pbist_sccm.vw_SoftwareDistributionOverallApplicationDeployment
+	WHERE packageid IS NOT NULL
+	GROUP BY packageid 
     UNION
-    SELECT DISTINCT SoftwareName AS [Package Name], packageid AS PackageID, 'Package' AS [Type] FROM pbist_sccm.vw_SoftwareDistributionOverallPackageDeployment;
+    SELECT Max(SoftwareName) AS [Package Name], packageid AS PackageID, 'Package' AS [Type]
+	FROM pbist_sccm.vw_SoftwareDistributionOverallPackageDeployment
+	WHERE packageid IS NOT NULL -- AND packageid NOT IN (SELECT DISTINCT packageid FROM pbist_sccm.vw_SoftwareDistributionOverallApplicationDeployment)
+	GROUP BY packageid;
 go
 
 

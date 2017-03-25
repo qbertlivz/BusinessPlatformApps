@@ -64,12 +64,29 @@ Enter a server name for your SCCM database, provide a credential to the server, 
 Enter a server name for your destination database, validate a connection to the server, and choose your database.
 
 -   Option 1 (Azure SQL): SQL user name and password is required.
+  - Option 1a : Azure Analysis Services
+	- Option 1b : PowerBI Import
+
 
 -   Option 2 (SQL server): either Windows authentication or SQL authentication.
 
 Note that database owner role is required to create tables and execute stored procedures.
 
 ![Image4](Resources/Images/image4.png)
+
+**Step 3a: Azure Analysis Services Election**
+
+Choose whether Azure Analysis Services is to be used in the solution.
+![Image3a](Resources/Images/sccmAsSelection.png)
+
+**Step 4a: Configure Azure Analysis Services**
+
+If Azure Analysis Services was chosen, create a new instance of Analysis Services or use an existing one.
+
+![Image4a](Resources/Images/sccmAsConfig.png)
+
+For new instances, select the Azure Analysis Services service tier. Learn more about Azure Analysis Services service tiers here
+The credentials provided are used as the system administrator for the Azure Analysis Services instance. When connecting to this instance, these credentials must be used (unless other users have been provided access separately).
 
 **Step 3: Customize your settings**
 
@@ -127,19 +144,19 @@ At this point, you should be able to see your SCCM data. If you are interested i
 
 The report provides a high level overview of key SCCM metrics to quickly identify machines not up-to-date with software updates, failed mitigations to malware infections to be able to act promptly, failed updates and more.
 
-![Image12](Resources/Images/image12.png)
+![Image12](Resources/Images/image12.PNG)
 
 ### Protection:
 
 You can track key protection measures for the period you configured during the installation.
 
-![Image13](Resources/Images/image13.png)
+![Image13](Resources/Images/image13.PNG)
 
 ### Malware:
 
 The report shows trend of resolved/unresolved malware count by severity, OS, and remediation type. Malware Category chart (lower-left) shows numbers of resolved malware (color saturation by unresolved malware).
 
-![Image14](Resources/Images/image14.png)
+![Image14](Resources/Images/image14.PNG)
 
 Note that you can enable drill down by selecting the arrow icon in the top right corner of the bar chart. To drill down one field at a time, double-click one of the chart bars. For drill down in details, please click [here](https://powerbi.microsoft.com/en-us/documentation/powerbi-service-drill-down-in-a-visualization/).
 
@@ -149,7 +166,7 @@ Note that you can enable drill down by selecting the arrow icon in the top right
 
 The report lists missing updates by severity and device that can be used to take action.
 
-![Image16](Resources/Images/image16.png)
+![Image16](Resources/Images/image16.PNG)
 
 We provide hyperlinks for the missing updates in the table (lower-left). You can click the urls for more information.
 
@@ -159,7 +176,7 @@ We provide hyperlinks for the missing updates in the table (lower-left). You can
 
 The report allows users to select a machine to show installed programs or select a program to show related machines.
 
-![Image18](Resources/Images/image18.png)
+![Image18](Resources/Images/image18.PNG)
 
 
 # Technical Description
@@ -1030,7 +1047,7 @@ is renamed as the destination table, and a new staging table is created.
 Once you set up the solution template you may want to modify your settings. In order to do this,
  you will the solution template configuration table. It should look something like this:
 
-![Image19](Resources/Images/image19.png)
+![Image19](Resources/Images/image19.PNG)
 
 If you want to change, for example, the data retention days from 120 days to 60 days, the SQL query will be following:
 
@@ -1067,9 +1084,6 @@ $file2table = [ordered]@{ "site.sql"                = "pbist_sccm.site_staging";
                           ...
                          };
 ```
-
-
-
 
 ## Cost
 

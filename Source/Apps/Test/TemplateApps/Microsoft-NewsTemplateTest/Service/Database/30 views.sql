@@ -167,7 +167,7 @@ CREATE VIEW bpst_news.vw_DocumentCompressedEntities
 as
 	SELECT [id] AS [Document Id],
 	COALESCE((
-		SELECT [Entity Type] AS entityType
+		SELECT TOP 160 [Entity Type] AS entityType
 			,[Entity Value] AS entityValue
 			,[Offset] AS offset
 			,[Offset Document Percentage] AS offsetPercentage

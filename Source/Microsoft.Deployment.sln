@@ -48,7 +48,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Deployment.Action
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bpst.App.Msi", "Site\Microsoft.Deployment.Site.Msi\Microsoft.Bpst.App.Msi.csproj", "{55BCDD2B-279C-4C91-8ECF-E46282A6E2B0}"
 	ProjectSection(ProjectDependencies) = postProject
-		{B28BB976-B0FF-44CD-B042-125A3EA4545C} = {B28BB976-B0FF-44CD-B042-125A3EA4545C}
+		{46648F0F-114B-4CFB-8239-DBF09392237F} = {46648F0F-114B-4CFB-8239-DBF09392237F}
+		{FEC8E72F-A9F7-4727-A6B0-F056E7AF40DE} = {FEC8E72F-A9F7-4727-A6B0-F056E7AF40DE}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Deployment.Site.Service", "Site\Microsoft.Deployment.Site.Service\Microsoft.Deployment.Site.Service.csproj", "{398721F5-390C-434D-94DA-6AC281CC7318}"
@@ -77,6 +78,9 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Apps", "Apps\", "{46648F0F-
 		VWDPort = "1239"
 		SlnRelativePath = "Apps\"
 	EndProjectSection
+	ProjectSection(ProjectDependencies) = postProject
+		{B28BB976-B0FF-44CD-B042-125A3EA4545C} = {B28BB976-B0FF-44CD-B042-125A3EA4545C}
+	EndProjectSection
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SiteCommon", "SiteCommon\", "{FEC8E72F-A9F7-4727-A6B0-F056E7AF40DE}"
 	ProjectSection(WebsiteProperties) = preProject
@@ -96,6 +100,10 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SiteCommon", "SiteCommon\",
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "1202"
+		SlnRelativePath = "SiteCommon\"
+	EndProjectSection
+	ProjectSection(ProjectDependencies) = postProject
+		{B28BB976-B0FF-44CD-B042-125A3EA4545C} = {B28BB976-B0FF-44CD-B042-125A3EA4545C}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Deployment.Tests.Actions", "Test\Microsoft.Deployment.Tests.Actions\Microsoft.Deployment.Tests.Actions.csproj", "{535200ED-F603-4706-9905-33CD1E40729A}"

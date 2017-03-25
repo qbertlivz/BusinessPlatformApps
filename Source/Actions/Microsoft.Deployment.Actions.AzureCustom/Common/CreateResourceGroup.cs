@@ -23,7 +23,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             Microsoft.Azure.Management.Resources.ResourceManagementClient client = new ResourceManagementClient(creds);
             var param = new ResourceGroup {Location = location};
             var createdResourceGroup = await client.ResourceGroups.CreateOrUpdateAsync(resourceGroup, param, new CancellationToken());
-            
+
             return new ActionResponse(ActionStatus.Success, createdResourceGroup);
         }
     }

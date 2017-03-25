@@ -64,12 +64,29 @@ Enter a server name for your SCCM database, provide a credential to the server, 
 Enter a server name for your destination database, validate a connection to the server, and choose your database.
 
 -   Option 1 (Azure SQL): SQL user name and password is required.
+  - Option 1a : Azure Analysis Services
+	- Option 1b : PowerBI Import
+
 
 -   Option 2 (SQL server): either Windows authentication or SQL authentication.
 
 Note that database owner role is required to create tables and execute stored procedures.
 
 ![Image4](Resources/Images/image4.png)
+
+**Step 3a: Azure Analysis Services Election**
+
+Choose whether Azure Analysis Services is to be used in the solution.
+![Image3a](Resources/Images/sccmAsSelection.png)
+
+**Step 4a: Configure Azure Analysis Services**
+
+If Azure Analysis Services was chosen, create a new instance of Analysis Services or use an existing one.
+
+![Image4a](Resources/Images/sccmAsConfig.png)
+
+For new instances, select the Azure Analysis Services service tier. Learn more about Azure Analysis Services service tiers here
+The credentials provided are used as the system administrator for the Azure Analysis Services instance. When connecting to this instance, these credentials must be used (unless other users have been provided access separately).
 
 **Step 3: Customize your settings**
 

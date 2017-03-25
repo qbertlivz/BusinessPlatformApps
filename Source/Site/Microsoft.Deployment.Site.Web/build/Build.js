@@ -5,9 +5,9 @@ var gulp = require('gulp');
 var sourcemaps = require('gulp-sourcemaps');
 var typescript = require('gulp-typescript');
 
-gulp.task('build-TS', function () {
+gulp.task('build-typescript', function () {
     return gulp.src(['wwwroot/**/*.ts', 'typings/**.*'])
-        .pipe(sourcemaps.init({ loadMaps: true }))
+        //.pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(typescript({
             declaration: false,
             emitDecoratorMetadata: true,
@@ -30,5 +30,3 @@ gulp.task('build-TS', function () {
         //}))
         .pipe(gulp.dest('wwwroot/'));
 });
-
-gulp.task('Build', ['build-TS'], function () {});

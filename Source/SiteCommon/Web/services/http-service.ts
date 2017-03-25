@@ -1,4 +1,6 @@
-﻿import { ActionStatus } from '../enums/action-status';
+﻿/// <reference path="../../../Site/Microsoft.Deployment.Site.Web/typings/index.d.ts" />
+
+import { ActionStatus } from '../enums/action-status';
 
 import { ActionRequest } from '../models/action-request';
 import { ActionResponse } from '../models/action-response';

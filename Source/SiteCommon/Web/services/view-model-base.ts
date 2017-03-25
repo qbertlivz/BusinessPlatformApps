@@ -1,4 +1,6 @@
-﻿import { activationStrategy } from 'aurelia-router';
+﻿/// <reference path="../../../Site/Microsoft.Deployment.Site.Web/typings/index.d.ts" />
+
+import { activationStrategy } from 'aurelia-router';
 
 import { InitParser } from '../classes/init-parser';
 

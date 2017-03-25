@@ -1,4 +1,6 @@
-﻿import { MainService } from './main-service';
+﻿/// <reference path="../scripts/ai.1.0.0-build00159.d.ts" />
+
+import { MainService } from './main-service';
 
 export class LoggerService {
     MS: MainService;

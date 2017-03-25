@@ -10,5 +10,9 @@
     "removeComments": true,
     "sourceMap": false,
     "target": "es6"
-  }
+  },
+  "exclude": [
+    "jspm_packages",
+    "node_modules"
+  ]
 }

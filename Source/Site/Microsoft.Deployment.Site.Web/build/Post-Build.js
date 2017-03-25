@@ -47,22 +47,7 @@ var config = {
     }
 };
 
-gulp.task('Clean-Bundle', function () {
-    return del([
-        'wwwroot/dist/aurelia.js',
-        'wwwroot/dist/app-build.js'
-    ]);
-});
-
-gulp.task('Post-Build', function (callback) {
-    runSequence('bundle', callback);
-    //runSequence('unbundle', callback);
-});
-
-gulp.task('bundle', function () {
+gulp.task('post-build', function (callback) {
     return bundler.bundle(config);
-});
-
-gulp.task('unbundle', function () {
-    return bundler.unbundle(config);
+    //return bundler.unbundle(config);
 });

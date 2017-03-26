@@ -107,6 +107,8 @@
     <Compile Include="Helpers\StringEnumConverterLower.cs" />
     <Compile Include="Helpers\StringExtension.cs" />
     <Compile Include="Controller\Logger.cs" />
+    <Compile Include="Model\Informatica\InformaticaAgent.cs" />
+    <Compile Include="Model\Informatica\InformaticaConnection.cs" />
     <Compile Include="Model\Informatica\InformaticaLicense.cs" />
     <Compile Include="Model\Informatica\InformaticaLicenseInformation.cs" />
     <Compile Include="Model\Informatica\InformaticaLicenseParameter.cs" />
@@ -114,6 +116,9 @@
     <Compile Include="Model\Informatica\InformaticaObject.cs" />
     <Compile Include="Model\Informatica\InformaticaOrganizationEdition.cs" />
     <Compile Include="Model\Informatica\InformaticaOrganizationLicenseInformation.cs" />
+    <Compile Include="Model\Informatica\InformaticaRuntimeEnvironment.cs" />
+    <Compile Include="Model\Informatica\InformaticaTask.cs" />
+    <Compile Include="Model\Informatica\InformaticaTaskEmail.cs" />
     <Compile Include="Model\Informatica\InformaticaUser.cs" />
     <Compile Include="Model\PbixConnection.cs" />
     <Compile Include="Model\QDEFF.cs" />

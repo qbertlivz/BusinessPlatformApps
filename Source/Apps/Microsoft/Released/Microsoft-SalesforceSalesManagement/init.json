@@ -109,7 +109,7 @@
         "displayname": "Progress",
         "filename": "$save('SalesManagementReport.pbix')",
         "filenameSSAS": "SalesManagementReportAS.pbix",
-        "finishedActionName": "$run(this.MS.DataStore.getValue('DataMovement') === 'ADF' ? 'Microsoft-ADFSliceStatus' : 'Microsoft-GetScribeSolutionStatus')",
+        "finishedActionName": "$run(this.MS.DataStore.getValue('DataMovement') === 'ADF' ? 'Microsoft-ADFSliceStatus' : this.MS.DataStore.getValue('DataMovement') === 'Scribe' ? 'Microsoft-GetScribeSolutionStatus' : '')",
         "name": "$SiteCommon$/pages-gallery/progress.html",
         "showCounts": true,
         "targetSchema": "dbo",
@@ -234,6 +234,16 @@
         "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')",
         "SqlServerIndex": 0,
         "TargetSchema": "dbo"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CLEANING_INFORMATICA_ENVIRONMENT)",
+        "name": "Microsoft-CleanInformaticaEnvironment",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Informatica')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CREATING_INFORMATICA_CONNECTION_SALESFORCE)",
+        "name": "Microsoft-CreateInformaticaConnectionSalesforce",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Informatica')"
       },
       {
         "displayname": "$translate(INIT_ACTION_CLEANING_SCRIBE_ENVIRONMENT)",

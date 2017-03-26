@@ -11,9 +11,9 @@ namespace Microsoft.Deployment.Common.Helpers
 {
     public class InformaticaUtility
     {
-        public const string BPST_SOLUTION_NAME = "PBI Solution";
-        public const string BPST_SOURCE_NAME = "PBI Source";
-        public const string BPST_TARGET_NAME = "PBI Target";
+        public const string BPST_SOLUTION_NAME = "BPST Solution";
+        public const string BPST_SOURCE_NAME = "BPST Source";
+        public const string BPST_TARGET_NAME = "BPST Target";
 
         private const string CLOUD_AGENT_NAME = "Informatica Cloud Hosted Agent";
         private const string MSG_MISSING_LICENSES = "You do not have the following required licenses: {0}. Contact Informatica Support to obtain them. Alternatively, you can choose to create a new Informatica account as a 90-day trial account.";
@@ -21,6 +21,7 @@ namespace Microsoft.Deployment.Common.Helpers
         //private const string ENDPOINT_LOGIN = "https://app.informaticaondemand.com";
         private const string ENDPOINT_LOGIN = "https://expo.informaticaondemand.com";
 
+        private const string URL_AGENT = "api/v2/runtimeEnvironment";
         private const string URL_LICENSE_INFO = "api/v2/licenseInfo";
         private const string URL_LOGIN = "ma/api/v2/user/login";
 
@@ -37,7 +38,7 @@ namespace Microsoft.Deployment.Common.Helpers
             string response = await rc.Post(URL_LOGIN, JsonConvert.SerializeObject(informaticaLogin));
             InformaticaUser u = JsonConvert.DeserializeObject<InformaticaUser>(response);
 
-            rc = new RestClient(u.ServerUrl[u.ServerUrl.Length - 1] == '/' ? u.ServerUrl : u.ServerUrl + '/', null, new Dictionary<string, string> { { "icSessionId", u.IcSessionId } });
+            rc = new RestClient(u.ServerUrl[u.ServerUrl.Length - 1] == '/' ? u.ServerUrl : u.ServerUrl + '/', null, new Dictionary<string, string> { { "icSessionId", u.IcSessionId } }, u.OrgId);
 
             InformaticaOrganizationLicenseInformation li = await GetLicensingInformation(rc);
 
@@ -83,6 +84,24 @@ namespace Microsoft.Deployment.Common.Helpers
             }
 
             throw new Exception(string.Format(CultureInfo.InvariantCulture, MSG_MISSING_LICENSES, licensesNeeded));
+        }
+
+        public static async Task<string> GetRuntimeEnvironmentId(RestClient rc)
+        {
+            string response = await rc.Get(URL_AGENT);
+            InformaticaRuntimeEnvironment[] environments = JsonConvert.DeserializeObject<InformaticaRuntimeEnvironment[]>(response);
+
+            string id = null;
+            for (int i = 0; i < environments.Length; i++)
+            {
+                if (environments[i].Name.EqualsIgnoreCase(CLOUD_AGENT_NAME))
+                {
+                    id = environments[i].Id;
+                    break;
+                }
+            }
+
+            return id;
         }
 
         private static async Task<InformaticaOrganizationLicenseInformation> GetLicensingInformation(RestClient rc)

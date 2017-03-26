@@ -3,7 +3,7 @@
 namespace Microsoft.Deployment.Common.Model.Informatica
 {
 #pragma warning disable 649
-    class InformaticaUser : InformaticaObject
+    public class InformaticaUser : InformaticaObject
     {
         [JsonProperty("orgId", NullValueHandling = NullValueHandling.Ignore)]
         public string OrgId;

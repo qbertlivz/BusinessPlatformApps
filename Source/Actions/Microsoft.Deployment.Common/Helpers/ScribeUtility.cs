@@ -16,9 +16,9 @@ namespace Microsoft.Deployment.Common.Helpers
 {
     public class ScribeUtility
     {
-        public const string BPST_SOLUTION_NAME = "PBI Solution";
-        public const string BPST_SOURCE_NAME = "PBI Source";
-        public const string BPST_TARGET_NAME = "PBI Target";
+        public const string BPST_SOLUTION_NAME = "BPST Solution";
+        public const string BPST_SOURCE_NAME = "BPST Source";
+        public const string BPST_TARGET_NAME = "BPST Target";
 
         private const string URL_CONNECTORS = "/v1/orgs/{0}/connectors";
         private const string URL_CONNECTORSINSTALL = "/v1/orgs/{0}/connectors/{1}/install";

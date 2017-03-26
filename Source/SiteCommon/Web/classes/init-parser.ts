@@ -112,6 +112,18 @@ export class InitParser {
             for (let i = 0; i < value.length; i++) {
                 value[i] = this.translateInitValue(value[i]);
             }
+        } else if (typeof value === 'object') {
+            for (let key in value) {
+                if (value.hasOwnProperty(key)) {
+                    if (Array.isArray(value[key])) {
+                        for (let i = 0; i < value[key].length; i++) {
+                            value[key][i] = this.translateInitValue(value[key][i]);
+                        }
+                    } else {
+                        value[key] = this.translateInitValue(value[key]);
+                    }
+                }
+            }
         }
 
         let ciValue: string = value.toString().toLowerCase();

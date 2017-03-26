@@ -12,11 +12,13 @@ namespace Microsoft.Deployment.Common.Helpers
 {
     public class RestClient
     {
+        public readonly string ID;
+
         private readonly HttpClient _client;
         private readonly Dictionary<string, string> _headers;
         private readonly string _mediaType;
 
-        public RestClient(string baseUri, AuthenticationHeaderValue authenticationInfo = null, Dictionary<string, string> headers = null, string mediaType = "application/json")
+        public RestClient(string baseUri, AuthenticationHeaderValue authenticationInfo = null, Dictionary<string, string> headers = null, string id = null, string mediaType = "application/json")
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             ServicePointManager.Expect100Continue = false;
@@ -24,6 +26,8 @@ namespace Microsoft.Deployment.Common.Helpers
             _client = new HttpClient { BaseAddress = new Uri(baseUri) };
             _headers = headers;
             _mediaType = mediaType;
+
+            ID = id;
 
             // Set authorization 
             if (authenticationInfo != null)

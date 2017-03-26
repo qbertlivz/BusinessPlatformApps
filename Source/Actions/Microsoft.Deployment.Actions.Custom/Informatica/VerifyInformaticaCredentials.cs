@@ -12,7 +12,10 @@ namespace Microsoft.Deployment.Actions.Custom.Informatica
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            RestClient rc = await InformaticaUtility.Initialize(request.DataStore.GetValue("InformaticaUsername"), request.DataStore.GetValue("InformaticaPassword"));
+            string username = request.DataStore.GetValue("InformaticaUsername");
+            string password = request.DataStore.GetValue("InformaticaPassword");
+            RestClient rc = await InformaticaUtility.Initialize(username, password);
+            await InformaticaUtility.Logout(rc, username, password);
             return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
         }
     }

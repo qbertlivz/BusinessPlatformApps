@@ -17,7 +17,9 @@ namespace Microsoft.Deployment.Actions.Custom.Informatica
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            RestClient rc = await InformaticaUtility.Initialize(request.DataStore.GetValue("InformaticaUsername"), request.DataStore.GetValue("InformaticaPassword"));
+            string username = request.DataStore.GetValue("InformaticaUsername");
+            string password = request.DataStore.GetValue("InformaticaPassword");
+            RestClient rc = await InformaticaUtility.Initialize(username, password);
 
             bool isWindowsAuth = request.DataStore.GetJson("SqlCredentials", "AuthType").EqualsIgnoreCase("Windows");
 
@@ -54,12 +56,14 @@ namespace Microsoft.Deployment.Actions.Custom.Informatica
             }
             else
             {
-                string username = request.DataStore.GetValue("Username");
+                string sqlUsername = request.DataStore.GetValue("Username");
                 ic.password = request.DataStore.GetValue("Password");
-                ic.username = username.Contains("@") ? username : username + "@" + ic.Host;
+                ic.username = sqlUsername.Contains("@") ? sqlUsername : sqlUsername + "@" + ic.Host;
             }
 
             await rc.Post(URL_CONNECTIONS, JsonConvert.SerializeObject(ic));
+
+            await InformaticaUtility.Logout(rc, username, password);
 
             return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
         }

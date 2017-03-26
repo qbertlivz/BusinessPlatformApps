@@ -14,7 +14,7 @@
 
     <div class ="st-float">
         <p class="st-text">${MS.Translate.SALESFORCE_LOGIN_URL}</p>
-        <select class="btn btn-default dropdown-toggle st-input" value.bind="salesforceUrl">
+        <select class="btn btn-default dropdown-toggle st-input" change.delegate="Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="salesforceUrl">
             <option>login.salesforce.com</option>
             <option>test.salesforce.com</option>
         </select>

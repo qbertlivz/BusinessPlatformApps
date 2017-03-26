@@ -11,9 +11,9 @@ using Microsoft.Deployment.Common.Model.Informatica;
 namespace Microsoft.Deployment.Actions.Custom.Informatica
 {
     [Export(typeof(IAction))]
-    public class CreateInformaticaConnectionSalesforce : BaseAction
+    public class StartInformaticaTask : BaseAction
     {
-        private const string URL_CONNECTIONS = "api/v2/connection";
+        private const string URL_JOB = "api/v2/job";
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
@@ -21,19 +21,13 @@ namespace Microsoft.Deployment.Actions.Custom.Informatica
             string password = request.DataStore.GetValue("InformaticaPassword");
             RestClient rc = await InformaticaUtility.Initialize(username, password);
 
-            InformaticaConnection ic = new InformaticaConnection
+            InformaticaJob job = new InformaticaJob
             {
-                username = request.DataStore.GetValue("SalesforceUser"),
-                password = request.DataStore.GetValue("SalesforcePassword"),
-                securityToken = request.DataStore.GetValue("SalesforceToken"),
-                serviceUrl = $"https://{request.DataStore.GetValue("SalesforceUrl")}/services/Soap/u/34.0",
-                Name = InformaticaUtility.BPST_SOURCE_NAME,
-                OrgId = rc.ID,
-                ConnectionType = "Salesforce",
-                RuntimeEnvironmentId = await InformaticaUtility.GetRuntimeEnvironmentId(rc)
+                TaskId = await InformaticaUtility.GetTaskId(rc, InformaticaUtility.BPST_TASK_NAME),
+                TaskName = InformaticaUtility.BPST_TASK_NAME,
+                TaskType = "DRS"
             };
-
-            await rc.Post(URL_CONNECTIONS, JsonConvert.SerializeObject(ic));
+            await rc.Post(URL_JOB, JsonConvert.SerializeObject(job));
 
             await InformaticaUtility.Logout(rc, username, password);
 

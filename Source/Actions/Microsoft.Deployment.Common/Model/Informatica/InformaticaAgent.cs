@@ -3,7 +3,7 @@
 namespace Microsoft.Deployment.Common.Model.Informatica
 {
 #pragma warning disable 649
-    internal class InformaticaAgent : InformaticaObject
+    public class InformaticaAgent : InformaticaObject
     {
         // Organization ID
         [JsonProperty("orgId")]

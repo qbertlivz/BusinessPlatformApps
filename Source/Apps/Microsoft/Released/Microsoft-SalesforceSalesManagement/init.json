@@ -75,7 +75,7 @@
         "displayname": "AAS",
         "name": "$SiteCommon$/pages-gallery/choose-analysis-server.html",
         "showDescription": true,
-        "skip": "$dsall(azureSqlDisabled)[0]"
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
       },
       {
         "displayname": "AAS Login",
@@ -109,7 +109,7 @@
         "displayname": "Progress",
         "filename": "$save('SalesManagementReport.pbix')",
         "filenameSSAS": "SalesManagementReportAS.pbix",
-        "finishedActionName": "$run(this.MS.DataStore.getValue('DataMovement') === 'ADF' ? 'Microsoft-ADFSliceStatus' : this.MS.DataStore.getValue('DataMovement') === 'Scribe' ? 'Microsoft-GetScribeSolutionStatus' : '')",
+        "finishedActionName": "$run(this.MS.DataStore.getValue('DataMovement') === 'ADF' ? 'Microsoft-ADFSliceStatus' : this.MS.DataStore.getValue('DataMovement') === 'Scribe' ? 'Microsoft-GetScribeSolutionStatus' : 'Microsoft-GetInformaticaTaskStatus')",
         "name": "$SiteCommon$/pages-gallery/progress.html",
         "showCounts": true,
         "targetSchema": "dbo",
@@ -244,6 +244,31 @@
         "displayname": "$translate(INIT_ACTION_CREATING_INFORMATICA_CONNECTION_SALESFORCE)",
         "name": "Microsoft-CreateInformaticaConnectionSalesforce",
         "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Informatica')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CREATING_INFORMATICA_CONNECTION_SQL)",
+        "name": "Microsoft-CreateInformaticaConnectionSql",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Informatica')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CREATING_INFORMATICA_TASK)",
+        "Entities": "Account,Lead,Opportunity,OpportunityLineItem,OpportunityStage,UserRole,User,Product2",
+        "name": "Microsoft-CreateInformaticaTask",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Informatica')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_STARTING_INFORMATICA_TASK)",
+        "name": "Microsoft-StartInformaticaTask",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Informatica')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CHECKING_DATA)",
+        "FinishedActionName": "Microsoft-GetInformaticaTaskStatus",
+        "IsWaiting": true,
+        "name": "Microsoft-GetDataPullStatus",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Informatica')",
+        "SqlServerIndex": 0,
+        "TargetSchema": "dbo"
       },
       {
         "displayname": "$translate(INIT_ACTION_CLEANING_SCRIBE_ENVIRONMENT)",

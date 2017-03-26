@@ -19,25 +19,25 @@
         ],
         "name": "$SiteCommon$/pages-gallery/getting-started.html",
         "selection": {
-          "choice": "Azure SQL",
-          "choiceDownload": "SQL Server On Premise",
-          "label": "Where do you want to copy your data?",
+          "choice": "$translate(INIT_GETTING_STARTED_AZURE_SQL)",
+          "choiceDownload": "$translate(INIT_GETTING_STARTED_SQL_ONPREMISE)",
+          "label": "$translate(INIT_GETTING_STARTED_WHERE)",
           "list1": [
-            "SQL Server (2012 R2 or later)",
-            "Azure VM/On Premises Environment",
-            "Power BI Desktop (latest version)",
-            "Power BI Pro (to share the template with your organization)"
+            "$translate(INIT_GETTING_STARTED_SQL_SERVER)",
+            "$translate(INIT_GETTING_STARTED_AZURE_VM)",
+            "$translate(INIT_GETTING_STARTED_PBI_DESKTOP)",
+            "$translate(INIT_GETTING_STARTED_PBI_PRO)"
           ],
           "list2": [
-            "Use an on premises SQL Server but without a dedicated Analysis Services Server",
-            "Pull data into SQL Server (this could be on an Azure VM or on premises)",
-            "Import a data model into Power BI",
-            "Your data model doesn't exceed 1GB (about 10 million rows for opportunities, accounts, and leads)",
-            "Set up an Enterprise Gateway to talk to Power BI"
+            "$translate(INIT_GETTING_STARTED_DEDICATED_SSAS)",
+            "$translate(INIT_GETTING_STARTED_PULL_DATA)",
+            "$translate(INIT_GETTING_STARTED_DATA_MODEL)",
+            "$translate(INIT_GETTING_STARTED_DATA_MODEL_EXCEED)",
+            "$translate(INIT_GETTING_STARTED_ENTERPRISE_GATEWAY)"
           ],
           "options": [
-            "Azure SQL",
-            "SQL Server On Premise"
+            "$translate(INIT_GETTING_STARTED_AZURE_SQL)",
+            "$translate(INIT_GETTING_STARTED_SQL_ONPREMISE)"
           ]
         },
         "subtitle": "$translate(INIT_SALESFORCE_SUBTITLE)",

@@ -75,7 +75,7 @@
         "displayname": "AAS",
         "name": "$SiteCommon$/pages-gallery/choose-analysis-server.html",
         "showDescription": true,
-        "skip": "$dsall(azureSqlDisabled)[0]"
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
       },
       {
         "displayname": "AAS Login",

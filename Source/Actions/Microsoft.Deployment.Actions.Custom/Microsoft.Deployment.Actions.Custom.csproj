@@ -126,6 +126,7 @@
     <Compile Include="CustomerData\PushToSimplement.cs" />
     <Compile Include="Informatica\CleanInformaticaEnvironment.cs" />
     <Compile Include="Informatica\CreateInformaticaConnectionSalesforce.cs" />
+    <Compile Include="Informatica\CreateInformaticaConnectionSql.cs" />
     <Compile Include="Informatica\VerifyInformaticaCredentials.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoveFiles.cs" />

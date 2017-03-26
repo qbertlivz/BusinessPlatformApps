@@ -4,7 +4,7 @@
     <h1 class="st-title">${MS.Translate.DATA_MOVEMENT_TITLE}</h1>
     <p class="st-subtitle">${MS.Translate.DATA_MOVEMENT_SUBTITLE}</p>
 
-    <select class="btn btn-default dropdown-toggle st-input" change.delegate="OnDataMovementChanged()" value.bind="dataMovement">
+    <select class="btn btn-default dropdown-toggle st-input" change.delegate="OnDataMovementChanged()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="dataMovement">
         <option value.bind="dataMovementType.ADF">${MS.Translate.DATA_MOVEMENT_AZURE_DATA_FACTORY}</option>
         <option value.bind="dataMovementType.Informatica">${MS.Translate.DATA_MOVEMENT_INFORMATICA}</option>
         <option value.bind="dataMovementType.Scribe">${MS.Translate.DATA_MOVEMENT_SCRIBE}</option>

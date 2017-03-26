@@ -109,6 +109,8 @@
     <Compile Include="Controller\Logger.cs" />
     <Compile Include="Model\Informatica\InformaticaAgent.cs" />
     <Compile Include="Model\Informatica\InformaticaConnection.cs" />
+    <Compile Include="Model\Informatica\InformaticaConnectionAzureSql.cs" />
+    <Compile Include="Model\Informatica\InformaticaConnectionParameters.cs" />
     <Compile Include="Model\Informatica\InformaticaLicense.cs" />
     <Compile Include="Model\Informatica\InformaticaLicenseInformation.cs" />
     <Compile Include="Model\Informatica\InformaticaLicenseParameter.cs" />

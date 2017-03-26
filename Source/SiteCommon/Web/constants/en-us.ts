@@ -146,6 +146,7 @@
     INIT_ACTION_CREATING_D365_PROFILE: `Creating Dynamics 365 Profile`,
     INIT_ACTION_CREATING_DATA_CONNCECTIONS: `Creating data connections`,
     INIT_ACTION_CREATING_INFORMATICA_CONNECTION_SALESFORCE: `Creating Salesforce connection in Informatica`,
+    INIT_ACTION_CREATING_INFORMATICA_CONNECTION_SQL: `Creating SQL connection in Informatica`,
     INIT_ACTION_CREATING_LOGIC_APP_CONNECTOR: `Creating Logic App connector`,
     INIT_ACTION_CREATING_MAPPINGS: `Creating mappings to historical data`,
     INIT_ACTION_CREATING_MAPPINGS_FUTURE: `Creating mappings to future data`,

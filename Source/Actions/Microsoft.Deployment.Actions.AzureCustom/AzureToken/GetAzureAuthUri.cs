@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
@@ -12,7 +13,6 @@ using Microsoft.Deployment.Common.Helpers;
 using Microsoft.Azure;
 using Microsoft.Azure.Management.Resources;
 using Microsoft.Azure.Management.Resources.Models;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
 {

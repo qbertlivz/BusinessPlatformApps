@@ -51,6 +51,7 @@
         "pricingUrl": "$translate(INIT_SALESFORCE_PRICING_URL)"
       },
       {
+        "dataMovement": "ADF",
         "displayname": "Data Movement",
         "name": "$SiteCommon$/pages-gallery/data-movement.html"
       },

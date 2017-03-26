@@ -10,8 +10,14 @@ export class DataMovement extends ViewModelBase {
     dataMovement: string = '';
     dataMovementType: DataMovementType = new DataMovementType();
     password: string = '';
+    passwordD365: string = '';
     scribeOrganizationId: string = '';
     scribeOrganizations: ScribeOrganization[] = [];
+    showAdf: boolean = true;
+    showD365: boolean = false;
+    showInformatica: boolean = true;
+    showScribe: boolean = true;
+    subtitle: string = this.MS.Translate.DATA_MOVEMENT_SUBTITLE;
     username: string = '';
 
     OnDataMovementChanged(): void {
@@ -21,7 +27,6 @@ export class DataMovement extends ViewModelBase {
     }
 
     async OnLoaded(): Promise<void> {
-        this.dataMovement = this.dataMovementType.ADF;
         this.isValidated = true;
     }
 
@@ -73,6 +78,7 @@ export class DataMovement extends ViewModelBase {
                 break;
             case this.dataMovementType.Scribe:
                 let scribeOrganization: ScribeOrganization = this.scribeOrganizations.find(x => x.id === this.scribeOrganizationId);
+                this.MS.DataStore.addToDataStore('D365Password', this.passwordD365, DataStoreType.Private);
                 this.MS.DataStore.addToDataStore('ScribeApiToken', scribeOrganization.apiToken, DataStoreType.Private);
                 this.MS.DataStore.addToDataStore('ScribeOrganizationId', scribeOrganization.id, DataStoreType.Private);
                 this.MS.DataStore.addToDataStore('ssasDisabled', 'true', DataStoreType.Public);

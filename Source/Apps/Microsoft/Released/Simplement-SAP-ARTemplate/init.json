@@ -25,15 +25,15 @@
         "registration": {
           "action": "Microsoft-PushToSimplement",
           "contactLink": "https://www.simplement.us/",
-          "contactLinkText": " contact Simplement.",
+          "contactLinkText": "$translate(INIT_SIMPLEMENT_CONTACT)",
           "emailsToBlock": "gmail.com,.me,yahoo.com,hotmail.com,msn.com,.ba,.bf,.cd,.cq,.iq,.ir,.kr",
           "eulaLink": "https://www.simplement.us/eula",
-          "eulaLinkText": "Terms of Use",
+          "eulaLinkText": "$translate(COMMON_TERMS_OF_USE)",
           "link": "https://www.simplement.us/privacy",
-          "privacy": "By using this Simplement trial account, you agree to the",
-          "privacyTitle": "Simplement Privacy Statement",
-          "text": "To use this solution template you need a trial account with Simplement. Enter your information below to register with Simplement for 30 days. To extend the trial account with Simplement or arrange a proof of concept in your environment",
-          "validation": "Yes, I want to hear from Simplement on how I can extend this trial account or new offers"
+          "privacy": "$translate(INIT_SIMPLEMENT_PRIVACY)",
+          "privacyTitle": "$translate(INIT_SIMPLEMENT_PRIVACY_TITLE)",
+          "text": "$translate(INIT_SIMPLEMENT_TRIAL)",
+          "validation": "$translate(INIT_SIMPLEMENT_YES)"
         },
         "subtitle": "$translate(INIT_SAP_SUBTITLE)",
         "templateName": "$translate(INIT_SAP_TITLE)"

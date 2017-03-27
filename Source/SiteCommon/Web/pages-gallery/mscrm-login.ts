@@ -55,7 +55,7 @@ export class MsCrmLogin extends AzureLogin {
                                 if (!this.subscriptionsList ||
                                     (this.subscriptionsList && this.subscriptionsList.length === 0)) {
                                     this.MS.ErrorService.message = this.MS.Translate.AZURE_LOGIN_SUBSCRIPTION_ERROR_CRM;
-                                    this.showAzureTrial = false;
+                                    this.showAzureTrial = true;
                                 } else {
                                     this.selectedSubscriptionId = this.subscriptionsList[0].SubscriptionId;
                                     this.showPricingConfirmation = true;
@@ -89,6 +89,7 @@ export class MsCrmLogin extends AzureLogin {
         if (msCrmOrganization) {
             this.MS.DataStore.addToDataStore('Entities', this.entities, DataStoreType.Public);
             this.MS.DataStore.addToDataStore('OrganizationId', msCrmOrganization.OrganizationId, DataStoreType.Public);
+            this.MS.DataStore.addToDataStore('OrganizationName', msCrmOrganization.OrganizationName, DataStoreType.Public);
             this.MS.DataStore.addToDataStore('OrganizationUrl', msCrmOrganization.OrganizationUrl, DataStoreType.Public);
 
             let response2 = await this.MS.HttpService.executeAsync('Microsoft-CrmGetOrganization', {});

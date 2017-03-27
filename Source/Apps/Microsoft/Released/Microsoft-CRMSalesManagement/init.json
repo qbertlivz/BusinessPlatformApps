@@ -19,29 +19,37 @@
           "$translate(INIT_GETTING_STARTED_CONNECT_AS_PBI)"
         ],
         "name": "$SiteCommon$/pages-gallery/getting-started.html",
-        "selection": {
-          "choice": "$translate(INIT_GETTING_STARTED_D365_ONLINE)",
-          "choiceDownload": "$translate(INIT_GETTING_STARTED_D365_ONPREMISE)",
-          "label": "$translate(INIT_GETTING_STARTED_WHAT_D365)",
-          "list1": [
-            "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",
-            "$translate(INIT_GETTING_STARTED_AZURE_SQL)",
-            "$translate(INIT_GETTING_STARTED_PBI_DESKTOP)",
-            "$translate(INIT_GETTING_STARTED_PBI_PRO)"
-          ],
-          "list2": [
-            "$translate(INIT_GETTING_STARTED_CLOUD_SOLUTION)",
-            "$translate(INIT_GETTING_STARTED_D365_PULL)",
-            "$translate(INIT_GETTING_STARTED_CONNECT_AS_PBI)",
-            "$translate(INIT_GETTING_STARTED_DATA_MODEL_EXCEED)"
-          ],
-          "options": [
-            "$translate(INIT_GETTING_STARTED_D365_ONLINE)",
-            "$translate(INIT_GETTING_STARTED_D365_ONPREMISE)"
-          ]
-        },
-        "showSelection": true,
+        //"selection": {
+        //  "choice": "$translate(INIT_GETTING_STARTED_D365_ONLINE)",
+        //  "choiceDownload": "$translate(INIT_GETTING_STARTED_D365_ONPREMISE)",
+        //  "label": "$translate(INIT_GETTING_STARTED_WHAT_D365)",
+        //  "list1": [
+        //    "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",
+        //    "$translate(INIT_GETTING_STARTED_AZURE_SQL)",
+        //    "$translate(INIT_GETTING_STARTED_PBI_DESKTOP)",
+        //    "$translate(INIT_GETTING_STARTED_PBI_PRO)"
+        //  ],
+        //  "list2": [
+        //    "$translate(INIT_GETTING_STARTED_CLOUD_SOLUTION)",
+        //    "$translate(INIT_GETTING_STARTED_D365_PULL)",
+        //    "$translate(INIT_GETTING_STARTED_CONNECT_AS_PBI)",
+        //    "$translate(INIT_GETTING_STARTED_DATA_MODEL_EXCEED)"
+        //  ],
+        //  "options": [
+        //    "$translate(INIT_GETTING_STARTED_D365_ONLINE)",
+        //    "$translate(INIT_GETTING_STARTED_D365_ONPREMISE)"
+        //  ]
+        //},
         "templateName": "$translate(INIT_D365_TITLE)"
+      },
+      {
+        "dataMovement": "D365",
+        "displayname": "Data Movement",
+        "name": "$SiteCommon$/pages-gallery/data-movement.html",
+        "showAdf": false,
+        "showD365": true,
+        "showInformatica": false,
+        "subtitle": "$translate(DATA_MOVEMENT_SUBTITLE_D365)"
       },
       {
         "displayname": "Dynamics 365 Login",
@@ -50,12 +58,19 @@
         "oauthType": "mscrm",
         "pricingCalculatorUrl": "$translate(INIT_D365_CALCULATOR)",
         "pricingCost": "$translate(INIT_D365_PRICING_COST)",
-        "pricingUrl": "$translate(INIT_D365_PRICING_URL)"
+        "pricingUrl": "$translate(INIT_D365_PRICING_URL)",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'D365')"
       },
       {
         "displayname": "Login to the Key Vault",
         "name": "$SiteCommon$/pages-gallery/keyvault-login.html",
-        "oauthType": "keyvault"
+        "oauthType": "keyvault",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'D365')"
+      },
+      {
+        "displayname": "Dynamics 365",
+        "name": "$SiteCommon$/pages-gallery/d365-login.html",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
       },
       {
         "name": "$SiteCommon$/pages-gallery/sql-server.html",
@@ -63,9 +78,9 @@
         "isAzureSql": true,
         "newSqlDatabase": "$(this.MS.UtilityService.GetUniqueId(10))",
         "showAzureSql": false,
-        "showNewSqlOption": true,
+        "showNewSqlOption": "$run(this.MS.DataStore.getValue('DataMovement') === 'D365')",
         "showSkuS1": false,
-        "sqlInstance": "NewSql",
+        "sqlInstance": "$run(this.MS.DataStore.getValue('DataMovement') === 'D365' ? 'NewSql' : 'ExistingSql')",
         "sqlSku": "S2",
         "subtitle": "$translate(INIT_SQL_SUBTITLE_D365)",
         "title": "$translate(INIT_SQL_TITLE)"
@@ -74,9 +89,8 @@
         "name": "$SiteCommon$/pages-gallery/choose-analysis-server.html",
         "displayname": "AAS",
         "showDescription": true,
-        "skip": "$dsall(azureSqlDisabled)[0]"
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'D365')"
       },
-
       {
         "name": "$SiteCommon$/pages-gallery/ssas.html",
         "displayname": "AAS Login",
@@ -105,7 +119,7 @@
         "name": "$SiteCommon$/pages-gallery/progress.html",
         "filename": "$save('SalesManagementReport.pbix')",
         "showCounts": true,
-        "finishedActionName": "Microsoft-CrmGetProfileStatus",
+        "finishedActionName": "$run(this.MS.DataStore.getValue('DataMovement') === 'D365' ? 'Microsoft-CrmGetProfileStatus' : 'Microsoft-GetScribeSolutionStatus')",
         "asDatabase": "d365",
         "filenameSSAS": "SalesManagementReportAS.pbix",
         "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(10))"
@@ -118,6 +132,13 @@
         "name": "Microsoft-DeploySQLScripts",
         "SqlServerIndex": "0",
         "SqlScriptsFolder": "Database"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
+        "name": "Microsoft-DeploySQLScripts",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')",
+        "SqlScriptsFolder": "Database/Scribe",
+        "SqlServerIndex": "0"
       },
       {
         "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
@@ -174,33 +195,75 @@
       },
       {
         "displayname": "$translate(INIT_ACTION_CONFIGURING_KEY_VAULT)",
-        "name": "Microsoft-CrmCreateVaultSecret"
+        "name": "Microsoft-CrmCreateVaultSecret",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'D365')"
       },
       {
         "displayname": "$translate(INIT_ACTION_VALIDATING_D365_ENTITIES)",
-        "name": "Microsoft-CrmValidateEntities"
+        "name": "Microsoft-CrmValidateEntities",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'D365')"
       },
       {
         "displayname": "$translate(INIT_ACTION_CLEANING_D365_ENVIRONMENT)",
-        "name": "Microsoft-CrmDeleteProfile"
+        "name": "Microsoft-CrmDeleteProfile",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'D365')"
       },
       {
         "displayname": "$translate(INIT_ACTION_VALIDATING_D365_PROFILE)",
-        "name": "Microsoft-CrmValidateProfile"
+        "name": "Microsoft-CrmValidateProfile",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'D365')"
       },
       {
         "displayname": "$translate(INIT_ACTION_CREATING_D365_PROFILE)",
-        "name": "Microsoft-CrmCreateProfile"
+        "name": "Microsoft-CrmCreateProfile",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'D365')"
       },
       {
         "displayname": "$translate(INIT_ACTION_STARTING_D365_PROFILE)",
-        "name": "Microsoft-CrmStartProfile"
+        "name": "Microsoft-CrmStartProfile",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'D365')"
       },
       {
         "displayname": "$translate(INIT_ACTION_WAITING_DATA)",
         "FinishedActionName": "Microsoft-CrmGetProfileStatus",
         "IsWaiting": true,
         "name": "Microsoft-GetDataPullStatus",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'D365')",
+        "SqlServerIndex": 0,
+        "TargetSchema": "dbo"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CLEANING_SCRIBE_ENVIRONMENT)",
+        "name": "Microsoft-CleanScribeEnvironment",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CREATING_SCRIBE_CONNECTION_D365)",
+        "name": "Microsoft-CreateScribeConnectionD365",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CREATING_SCRIBE_CONNECTION_SQL)",
+        "name": "Microsoft-CreateScribeConnectionSql",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CREATING_SCRIBE_SOLUTION)",
+        "Entities": "opportunityproduct,territory,lead,opportunity,account,systemusermanagermap,businessunit,systemuser,product",
+        "name": "Microsoft-CreateScribeSolution",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_PROCESS_SCRIBE_SOLUTION)",
+        "name": "Microsoft-ProcessScribeSolution",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CHECKING_DATA)",
+        "FinishedActionName": "Microsoft-GetScribeSolutionStatus",
+        "IsWaiting": true,
+        "name": "Microsoft-GetDataPullStatus",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')",
         "SqlServerIndex": 0,
         "TargetSchema": "dbo"
       }

@@ -12,16 +12,20 @@ export class DataMovement extends ViewModelBase {
     password: string = '';
     scribeOrganizationId: string = '';
     scribeOrganizations: ScribeOrganization[] = [];
+    showAdf: boolean = true;
+    showD365: boolean = false;
+    showInformatica: boolean = true;
+    showScribe: boolean = true;
+    subtitle: string = this.MS.Translate.DATA_MOVEMENT_SUBTITLE;
     username: string = '';
 
     OnDataMovementChanged(): void {
         this.Invalidate();
 
-        this.isValidated = this.dataMovement === this.dataMovementType.ADF;
+        this.isValidated = this.dataMovement === this.dataMovementType.ADF || this.dataMovement === this.dataMovementType.D365;
     }
 
     async OnLoaded(): Promise<void> {
-        this.dataMovement = this.dataMovementType.ADF;
         this.isValidated = true;
     }
 

@@ -18,8 +18,8 @@ namespace Microsoft.Deployment.Common.Helpers
         private const string CLOUD_AGENT_NAME = "Informatica Cloud Hosted Agent";
         private const string MSG_MISSING_LICENSES = "You do not have the following required licenses: {0}. Contact Informatica Support to obtain them. Alternatively, you can choose to create a new Informatica account as a 90-day trial account.";
 
-        //private const string ENDPOINT_LOGIN = "https://app.informaticaondemand.com";
-        private const string ENDPOINT_LOGIN = "https://expo.informaticaondemand.com";
+        private const string ENDPOINT_LOGIN = "https://app.informaticaondemand.com";
+        //private const string ENDPOINT_LOGIN = "https://expo.informaticaondemand.com";
 
         private const string URL_AGENT = "api/v2/runtimeEnvironment";
         private const string URL_CONNECTIONS = "api/v2/connection";

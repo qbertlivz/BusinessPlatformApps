@@ -1,8 +1,7 @@
 ﻿{
-
-  "MSI": {
-    "Guid": "88DC5CAB-D05D-4193-A432-30A09138D26D"
-  },
+  //"MSI": {
+  //  "Guid": "88DC5CAB-D05D-4193-A432-30A09138D26D"
+  //},
 
   "Install": {
     "Pages": [

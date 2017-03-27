@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Globalization;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -37,7 +36,7 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
                 Properties = new List<ScribeKeyValue>()
             };
 
-            string username = GetD365Username(request.DataStore.GetJson("MsCrmToken", "access_token"));
+            string username = request.DataStore.GetValue("D365Username");
 
             // Set authentication
             ScribeKeyValue kvp = new ScribeKeyValue { Key = "DeploymentType", Value = ScribeUtility.AesEncrypt(apiToken, "Online") }; // OnPremise
@@ -62,22 +61,6 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
             await rc.Post(string.Format(CultureInfo.InvariantCulture, URL_CONNECTIONS, orgId), JsonConvert.SerializeObject(connection, Formatting.Indented));
 
             return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
-        }
-
-        private string GetD365Username(string token)
-        {
-            string username = null;
-
-            foreach (var c in new JwtSecurityToken(token).Claims)
-            {
-                if (c.Type.ToLowerInvariant().EqualsIgnoreCase("upn"))
-                {
-                    username = c.Value;
-                    break;
-                }
-            }
-
-            return username;
         }
     }
 }

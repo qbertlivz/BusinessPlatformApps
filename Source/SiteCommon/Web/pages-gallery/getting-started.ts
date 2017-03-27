@@ -28,7 +28,7 @@ export class Gettingstarted extends ViewModelBase {
         super();
     }
 
-    async GetDownloadLink() {
+    async GetDownloadLink(): Promise<void> {
         let response = await this.MS.HttpService.executeAsync('Microsoft-GetMsiDownloadLink');
         if (this.registration.text) {
             this.registration.download = response.Body.value;
@@ -53,7 +53,7 @@ export class Gettingstarted extends ViewModelBase {
         }
     }
 
-    async Register() {
+    async Register(): Promise<void> {
         this.MS.ErrorService.Clear();
 
         this.registration.nameFirst = this.registration.nameFirst.trim();
@@ -94,7 +94,7 @@ export class Gettingstarted extends ViewModelBase {
         }
     }
 
-    SelectionChanged() {
+    SelectionChanged(): void {
         if (this.selection.choice === this.selection.choiceDownload) {
             this.isDownload = true;
             this.selection.list1Previous = this.list1;
@@ -108,7 +108,7 @@ export class Gettingstarted extends ViewModelBase {
         }
     }
 
-    OpenNewMSILink() {
+    OpenNewMSILink(): void {
         window.open("https://bpsolutiontemplates.com/?name=Microsoft-SCCMTemplate");
     }
 }

@@ -33,11 +33,6 @@
 
             <p class="st-text">${MS.Translate.DATA_MOVEMENT_PASSWORD}</p>
             <input class="st-input" type="password" change.delegate="Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="password" />
-
-            <div if.bind="showD365">
-                <p class="st-text">${MS.Translate.DATA_MOVEMENT_D365_PASSWORD}</p>
-                <input class="st-input" type="password" change.delegate="Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="passwordD365" />
-            </div>
         </div>
 
         <button class="primary st-float" click.trigger="OnValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_LOGIN}</button>

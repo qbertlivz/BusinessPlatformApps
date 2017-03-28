@@ -110,10 +110,6 @@
             <select class="btn btn-default dropdown-toggle st-input" disabled.bind="MS.HttpService.isServiceBusy" value.bind="sqlLocation">
                 <option repeat.for="azureLocation of azureLocations" value.bind="azureLocation.Name">${azureLocation.DisplayName}</option>
             </select>
-            <p class="st-text">${MS.Translate.SQL_SERVER_LOCATION}</p>
-            <select class="btn btn-default dropdown-toggle st-input" disabled.bind="MS.HttpService.isServiceBusy" value.bind="sqlLocation">
-                <option repeat.for="azureLocation of azureLocations" value.bind="azureLocation.Name">${azureLocation.DisplayName}</option>
-            </select>
         </div>
 
         <p class="st-float">

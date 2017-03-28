@@ -92,9 +92,7 @@ export class ViewModelBase {
             this.MS.DataStore.addToDataStore('HasNavigated', true, DataStoreType.Public);
         }
 
-        setTimeout(() => {
-            this.VerifyNavigation();
-        }, 500);
+        this.VerifyNavigation();
     }
 
     NavigateBack() {
@@ -126,9 +124,7 @@ export class ViewModelBase {
 
         this.MS.NavigationService.isCurrentlyNavigating = false;
 
-        setTimeout(() => {
-            this.VerifyNavigation();
-        }, 500);
+        this.VerifyNavigation();
     }
 
     async activate(params, navigationInstruction) {
@@ -161,7 +157,8 @@ export class ViewModelBase {
 
     VerifyNavigation(): void {
         if (this.MS.UtilityService.isEdge()) {
-            this.MS.NavigationService.NavigateToIndex();
+            //this.MS.NavigationService.NavigateToIndex();
+            this.MS.UtilityService.Reload();
         }
     }
 

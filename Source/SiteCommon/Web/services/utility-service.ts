@@ -57,12 +57,18 @@ export class UtilityService {
         return obj;
     }
 
-    HasInternetAccess() {
+    HasInternetAccess(): boolean {
         let response = true;
         if (window.navigator && window.navigator.onLine !== null && window.navigator.onLine !== undefined) {
             response = window.navigator.onLine;
         }
         return response;
+    }
+
+    Reload(): void {
+        if (window && window.location && window.location.reload) {
+            window.location.reload(true);
+        }
     }
 
     extractDomain(username: string): string {

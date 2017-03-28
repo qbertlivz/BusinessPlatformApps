@@ -110,8 +110,10 @@ Click “Next” to continue.
 Connect to an existing SQL Server or provide details which the application will use to spin up an Azure SQL on your behalf. Only Azure SQL is supported for this template. If a user chooses to spin up a new Azure SQL, this will get deployed in their Azure subscription inside the newly created resource group.
 ![ConnectSQL](Resources/Images/ConnectAzureSQL.png)
 
+Open the advanced tab to change the service tier of the destination Azure SQL Database or datacenter location.
 
-Important note: If you use an existing Azure SQL DB, you **_must_** safelist your client IP address shown on this page in the Azure portal before you continue.
+
+**_Important note_**: If you use an existing Azure SQL DB, you **_must_** safelist your client IP address shown on this page in the Azure portal before you continue.
 If you do not, you will not be able to read data from Azure SQL DB to populate the Power BI file. To safe-list the IP addresses, follow the instructions [here](https://azure.microsoft.com/en-us/documentation/articles/sql-database-configure-firewall-settings/).
 
 Click “Next” to continue.
@@ -198,7 +200,7 @@ If on-premise Dynamics 365 was selected earlier, the URL can be edited directly.
 
 
 
-### Step 5b: Connect to SQL Server Database/SQL Server Database with Analysis Services
+### Step 5b: Connect to SQL Server Database
 
 Provide your Azure SQL Database credentials to gain access to the destination SQL Server database. Click validate check your credentials.
 

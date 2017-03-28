@@ -76,7 +76,7 @@ export class SqlServer extends ViewModelBase {
     }
 
     async OnValidate(): Promise<boolean> {
-        this.isValidated = false;
+        this.Invalidate();
 
         this.sqlServer = this.sqlServer.toLowerCase();
         if (this.sqlInstance === 'ExistingSql') {

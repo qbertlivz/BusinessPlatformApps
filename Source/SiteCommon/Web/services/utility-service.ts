@@ -67,7 +67,7 @@ export class UtilityService {
 
     Reload(): void {
         if (window && window.location && window.location.reload) {
-            window.location.reload(true);
+            window.location.reload();
         }
     }
 

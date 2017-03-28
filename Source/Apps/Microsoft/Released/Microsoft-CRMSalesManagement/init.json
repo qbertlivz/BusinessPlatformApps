@@ -42,15 +42,15 @@
         },
         "templateName": "$translate(INIT_D365_TITLE)"
       },
-      {
-        "dataMovement": "D365",
-        "displayname": "Data Movement",
-        "name": "$SiteCommon$/pages-gallery/data-movement.html",
-        "showAdf": false,
-        "showD365": true,
-        "showInformatica": false,
-        "subtitle": "$translate(DATA_MOVEMENT_SUBTITLE_D365)"
-      },
+      //{
+      //  "dataMovement": "D365",
+      //  "displayname": "Data Movement",
+      //  "name": "$SiteCommon$/pages-gallery/data-movement.html",
+      //  "showAdf": false,
+      //  "showD365": true,
+      //  "showInformatica": false,
+      //  "subtitle": "$translate(DATA_MOVEMENT_SUBTITLE_D365)"
+      //},
       {
         "displayname": "Dynamics 365 Login",
         "entities": "account,lead,opportunity,opportunityproduct,product,systemuser,systemusermanagermap,territory",
@@ -59,7 +59,7 @@
         "pricingCalculatorUrl": "$translate(INIT_D365_CALCULATOR)",
         "pricingCost": "$translate(INIT_D365_PRICING_COST)",
         "pricingUrl": "$translate(INIT_D365_PRICING_URL)",
-        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'D365')"
+        //"skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'D365')"
       },
       {
         "displayname": "Login to the Key Vault",
@@ -67,11 +67,11 @@
         "oauthType": "keyvault",
         "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'D365')"
       },
-      {
-        "displayname": "Dynamics 365",
-        "name": "$SiteCommon$/pages-gallery/d365-login.html",
-        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
-      },
+      //{
+      //  "displayname": "Dynamics 365",
+      //  "name": "$SiteCommon$/pages-gallery/d365-login.html",
+      //  "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
+      //},
       {
         "name": "$SiteCommon$/pages-gallery/sql-server.html",
         "displayname": "Target",
@@ -89,7 +89,7 @@
         "name": "$SiteCommon$/pages-gallery/choose-analysis-server.html",
         "displayname": "AAS",
         "showDescription": true,
-        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'D365')"
+        "skip": "$dsall(azureSqlDisabled)[0]"
       },
       {
         "name": "$SiteCommon$/pages-gallery/ssas.html",

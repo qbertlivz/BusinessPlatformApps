@@ -94,7 +94,7 @@ export class ViewModelBase {
 
         setTimeout(() => {
             this.VerifyNavigation();
-        }, 100);
+        }, 500);
     }
 
     NavigateBack() {
@@ -128,7 +128,7 @@ export class ViewModelBase {
 
         setTimeout(() => {
             this.VerifyNavigation();
-        }, 100);
+        }, 500);
     }
 
     async activate(params, navigationInstruction) {

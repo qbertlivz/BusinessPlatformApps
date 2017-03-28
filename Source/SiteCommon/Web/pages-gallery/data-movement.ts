@@ -73,13 +73,11 @@ export class DataMovement extends ViewModelBase {
 
         switch (this.dataMovement) {
             case this.dataMovementType.Informatica:
-                this.MS.DataStore.addToDataStore('ssasDisabled', 'true', DataStoreType.Public);
                 break;
             case this.dataMovementType.Scribe:
                 let scribeOrganization: ScribeOrganization = this.scribeOrganizations.find(x => x.id === this.scribeOrganizationId);
                 this.MS.DataStore.addToDataStore('ScribeApiToken', scribeOrganization.apiToken, DataStoreType.Private);
                 this.MS.DataStore.addToDataStore('ScribeOrganizationId', scribeOrganization.id, DataStoreType.Private);
-                this.MS.DataStore.addToDataStore('ssasDisabled', 'true', DataStoreType.Public);
                 break;
         }
 

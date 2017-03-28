@@ -84,6 +84,8 @@ export class MsCrmLogin extends AzureLogin {
     }
 
     public async NavigatingNext(): Promise<boolean> {
+        this.MS.DataStore.addToDataStore('DataMovement', 'D365', DataStoreType.Public);
+
         let msCrmOrganization: MsCrmOrganization = this.msCrmOrganizations.find(o => o.OrganizationId === this.msCrmOrganizationId);
 
         if (msCrmOrganization) {

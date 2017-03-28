@@ -136,7 +136,7 @@ namespace Microsoft.Deployment.Actions.Salesforce
             StringBuilder sbTable = new StringBuilder();
             StringBuilder sbTableType = new StringBuilder();
 
-            string existingColumnsCmd = $"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{tableName}'";
+            string existingColumnsCmd = $"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{tableName}' AND TABLE_SCHEMA = 'dbo'";
 
             var queryResult = SqlUtility.RunCommand(connString, existingColumnsCmd, SqlCommandType.ExecuteWithData);
 

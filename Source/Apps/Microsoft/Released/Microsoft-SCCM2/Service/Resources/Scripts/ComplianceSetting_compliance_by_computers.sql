@@ -149,7 +149,8 @@ SELECT r.netbios_name0    AS MachineName,
        TargetCompliance.compliancestate,
        TargetCompliance.maxnoncompliancecriticality,
        assstatus.lastcompliancemessagetime,
-       assign.ci_uniqueid AS Baseline_UniqueID
+       assign.ci_uniqueid AS Baseline_UniqueID,
+	   r.ResourceId MachineId
 FROM   (SELECT DISTINCT displayname,
                         ci_id,
                         civersion,

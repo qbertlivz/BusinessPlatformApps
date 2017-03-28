@@ -26,6 +26,9 @@ namespace Microsoft.Deployment.Site.Web.Tests
             Given_CorrectCredentials_When_AzureAuth_Then_Success();
             Thread.Sleep(new TimeSpan(0, 0, 5));
             HelperMethods.ClickButton("Next");
+            Thread.Sleep(new TimeSpan(0, 0, 5));
+            // Skip over Data Movement page
+            HelperMethods.ClickButton("Next");
             Given_CorrectSalesforceCredentials_When_Validate_Then_PageValidatesSuccesfully();
             Thread.Sleep(new TimeSpan(0, 0, 5));
             HelperMethods.ClickButton("Next");
@@ -53,6 +56,9 @@ namespace Microsoft.Deployment.Site.Web.Tests
         {
             Given_CorrectCredentials_When_AzureAuth_Then_Success();
             Thread.Sleep(new TimeSpan(0, 0, 5));
+            HelperMethods.ClickButton("Next");
+            Thread.Sleep(new TimeSpan(0, 0, 5));
+            // Skip over Data Movement page
             HelperMethods.ClickButton("Next");
             Given_CorrectSalesforceCredentials_When_Validate_Then_PageValidatesSuccesfully();
             Thread.Sleep(new TimeSpan(0, 0, 5));

@@ -82,7 +82,7 @@ export class AzureLogin extends ViewModelBase {
         }
     }
 
-    AzureTrialClicked(event) {
+    AzureTrialClicked(event: any) {
         this.MS.LoggerService.TrackEvent('AzureTrialClicked');
         return event;
     }

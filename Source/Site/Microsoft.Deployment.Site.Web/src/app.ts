@@ -7,7 +7,7 @@ import { MainService } from './SiteCommon/Web/services/main-service';
 export class App {
     MS: MainService;
 
-    constructor(MainService) {
+    constructor(MainService: MainService) {
         this.MS = MainService;
     }
 

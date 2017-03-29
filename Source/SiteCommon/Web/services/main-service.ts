@@ -35,7 +35,7 @@ export class MainService {
     UtilityService: UtilityService;
     templateData: any;
 
-    constructor(router, httpClient) {
+    constructor(router: any, httpClient: HttpClient) {
         this.Router = router;
         (<any>window).MainService = this;
 
@@ -43,7 +43,7 @@ export class MainService {
         this.appName = this.UtilityService.GetQueryParameter(QueryParameter.NAME); 
 
         let experienceTypeString: string = this.UtilityService.GetQueryParameter(QueryParameter.TYPE);
-        this.experienceType = ExperienceType[<string>experienceTypeString];
+        this.experienceType = (<any>ExperienceType)[experienceTypeString];
 
         this.ErrorService = new ErrorService(this);
         this.HttpService = new HttpService(this, httpClient);

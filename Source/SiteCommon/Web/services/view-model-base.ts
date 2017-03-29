@@ -127,7 +127,7 @@ export class ViewModelBase {
         this.VerifyNavigation();
     }
 
-    async activate(params, navigationInstruction) {
+    async activate(params: any, navigationInstruction: any) {
         this.isActivated = false;
         this.MS.UtilityService.SaveItem('Current Page', window.location.href);
         let currentRoute = this.MS.NavigationService.getCurrentSelectedPage().RoutePageName.toLowerCase();
@@ -138,7 +138,7 @@ export class ViewModelBase {
         if (viewmodelPreviousSave) {
             let jsonParsed = JSON.parse(viewmodelPreviousSave);
             for (let propertyName in jsonParsed) {
-                this[propertyName] = jsonParsed[propertyName];
+                (<any>this)[propertyName] = jsonParsed[propertyName];
             }
 
             this.viewmodel = this;

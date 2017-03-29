@@ -13,7 +13,7 @@ gulp.task('build-typescript', function () {
             emitDecoratorMetadata: true,
             experimentalDecorators: true,
             module: 'commonjs',
-            noImplicitAny: false,
+            noImplicitAny: true,
             noResolve: false,
             removeComments: true,
             sourceMap: false,

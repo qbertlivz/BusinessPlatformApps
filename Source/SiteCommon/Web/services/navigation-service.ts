@@ -16,7 +16,7 @@ export class NavigationService {
     MS: MainService;
     pages: any[] = [];
 
-    constructor(MainService) {
+    constructor(MainService: MainService) {
         this.MS = MainService;
     }
 
@@ -126,7 +126,7 @@ export class NavigationService {
         this.NavigateToIndex();
     }
 
-    JumpTo(index) {
+    JumpTo(index: any) {
         this.index = index;
         this.NavigateToIndex();
     }

@@ -19,7 +19,7 @@ export class DeploymentService {
     message: string = '';
     progressPercentage: number = 0;
 
-    constructor(MainService) {
+    constructor(MainService: MainService) {
         this.MS = MainService;
     }
 

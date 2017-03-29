@@ -14,7 +14,7 @@ export class DataStore {
     CurrentRoutePage: string = '';
     DeploymentIndex: string = '';
 
-    constructor(MainService) {
+    constructor(MainService: MainService) {
         this.MS = MainService;
         this.PrivateDataStore = new Dictionary<Dictionary<any>>();
         this.PublicDataStore = new Dictionary<Dictionary<any>>();

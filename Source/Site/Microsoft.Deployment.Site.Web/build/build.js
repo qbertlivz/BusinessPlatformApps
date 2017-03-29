@@ -17,6 +17,7 @@ gulp.task('build-typescript', function () {
             noImplicitReturns: true,
             noImplicitThis: true,
             noUnusedLocals: true,
+            noUnusedParameters: true,
             removeComments: true,
             //sourceMap: true,
             target: 'es6'

@@ -113,7 +113,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [smgt].[accountview].* FROM [smgt].[accountview] ",
-                                    "dataSource": "pbisttest"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -172,7 +172,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [smgt].[configurationview].* FROM [smgt].[configurationview] ",
-                                    "dataSource": "pbisttest"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -419,7 +419,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [smgt].[dateview].* FROM [smgt].[dateview] ",
-                                    "dataSource": "pbisttest"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -669,7 +669,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [smgt].[leadview].* FROM [smgt].[leadview] ",
-                                    "dataSource": "pbisttest"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -705,7 +705,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [smgt].[measuresview].* FROM [smgt].[measuresview] ",
-                                    "dataSource": "pbisttest"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -991,7 +991,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [smgt].[opportunityproductview].* FROM [smgt].[opportunityproductview] ",
-                                    "dataSource": "pbisttest"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -1195,7 +1195,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [smgt].[opportunityview].* FROM [smgt].[opportunityview] ",
-                                    "dataSource": "pbisttest"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -1260,7 +1260,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [smgt].[productview].* FROM [smgt].[productview] ",
-                                    "dataSource": "pbisttest"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -1350,7 +1350,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [smgt].[userview].* FROM [smgt].[userview] ",
-                                    "dataSource": "pbisttest"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],

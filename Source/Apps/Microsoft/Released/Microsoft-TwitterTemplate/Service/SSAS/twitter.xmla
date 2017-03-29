@@ -60,7 +60,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [pbist_twitter].[vw_authorhashtag_graph].* FROM [pbist_twitter].[vw_authorhashtag_graph] ",
-                                    "dataSource": "SqlServer tcpcdstest.database.windows.net TwitterTest"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -119,7 +119,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [pbist_twitter].[vw_authormention_graph].* FROM [pbist_twitter].[vw_authormention_graph] ",
-                                    "dataSource": "SqlServer tcpcdstest.database.windows.net TwitterTest"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -179,7 +179,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [pbist_twitter].[vw_configuration].* FROM [pbist_twitter].[vw_configuration] ",
-                                    "dataSource": "SqlServer tcpcdstest.database.windows.net TwitterTest"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -220,7 +220,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [pbist_twitter].[vw_hashtag_slicer].* FROM [pbist_twitter].[vw_hashtag_slicer] ",
-                                    "dataSource": "SqlServer tcpcdstest.database.windows.net TwitterTest"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -261,7 +261,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [pbist_twitter].[vw_mention_slicer].* FROM [pbist_twitter].[vw_mention_slicer] ",
-                                    "dataSource": "SqlServer tcpcdstest.database.windows.net TwitterTest"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -296,7 +296,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [pbist_twitter].[vw_minimum_tweets].* FROM [pbist_twitter].[vw_minimum_tweets] ",
-                                    "dataSource": "SqlServer tcpcdstest.database.windows.net TwitterTest"
+                                    "dataSource": "ST_DS"
                                 },
                                 "annotations": [
                                     {
@@ -479,7 +479,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [pbist_twitter].[vw_tweets_normalized].* FROM [pbist_twitter].[vw_tweets_normalized] ",
-                                    "dataSource": "SqlServer tcpcdstest.database.windows.net TwitterTest"
+                                    "dataSource": "ST_DS"
                                 },
                                 "annotations": [
                                     {
@@ -1032,7 +1032,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [pbist_twitter].[vw_tweets_processed].* FROM [pbist_twitter].[vw_tweets_processed] ",
-                                    "dataSource": "SqlServer tcpcdstest.database.windows.net TwitterTest"
+                                    "dataSource": "ST_DS"
                                 },
                                 "annotations": [
                                     {

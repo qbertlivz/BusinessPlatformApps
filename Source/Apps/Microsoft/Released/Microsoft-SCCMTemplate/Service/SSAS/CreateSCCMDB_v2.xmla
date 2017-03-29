@@ -42,7 +42,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [pbist_sccm].[vw_collection].* FROM [pbist_sccm].[vw_collection] ",
-                                    "dataSource": "SqlServer richtk01 SCCMTest"
+                                    "dataSource": "ST_DS"
                                 },
                                 "annotations": [
                                     {
@@ -238,7 +238,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [pbist_sccm].[vw_computer].[machineid],[pbist_sccm].[vw_computer].[sitecode],[pbist_sccm].[vw_computer].[name],[pbist_sccm].[vw_computer].[client type],[pbist_sccm].[vw_computer].[operating system name],[pbist_sccm].[vw_computer].[manufacturer],[pbist_sccm].[vw_computer].[model],[pbist_sccm].[vw_computer].[platform],[pbist_sccm].[vw_computer].[physical memory] FROM [pbist_sccm].[vw_computer] ",
-                                    "dataSource": "SqlServer richtk01 SCCMTest"
+                                    "dataSource": "ST_DS"
                                 },
                                 "annotations": [
                                     {
@@ -699,7 +699,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [pbist_sccm].[vw_computercollection].* FROM [pbist_sccm].[vw_computercollection] ",
-                                    "dataSource": "SqlServer richtk01 SCCMTest"
+                                    "dataSource": "ST_DS"
                                 },
                                 "annotations": [
                                     {
@@ -907,7 +907,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [pbist_sccm].[vw_computermalware].* FROM [pbist_sccm].[vw_computermalware] ",
-                                    "dataSource": "SqlServer richtk01 SCCMTest"
+                                    "dataSource": "ST_DS"
                                 },
                                 "annotations": [
                                     {
@@ -1399,7 +1399,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [pbist_sccm].[vw_computerprogram].* FROM [pbist_sccm].[vw_computerprogram] ",
-                                    "dataSource": "SqlServer richtk01 SCCMTest"
+                                    "dataSource": "ST_DS"
                                 },
                                 "annotations": [
                                     {
@@ -1712,7 +1712,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [pbist_sccm].[vw_computerupdate].* FROM [pbist_sccm].[vw_computerupdate] ",
-                                    "dataSource": "SqlServer richtk01 SCCMTest"
+                                    "dataSource": "ST_DS"
                                 },
                                 "annotations": [
                                     {
@@ -2097,7 +2097,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [pbist_sccm].[vw_date].* FROM [pbist_sccm].[vw_date] ",
-                                    "dataSource": "SqlServer richtk01 SCCMTest"
+                                    "dataSource": "ST_DS"
                                 },
                                 "annotations": [
                                     {
@@ -2785,7 +2785,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [pbist_sccm].[malware].* FROM [pbist_sccm].[malware] ",
-                                    "dataSource": "SqlServer richtk01 SCCMTest"
+                                    "dataSource": "ST_DS"
                                 },
                                 "annotations": [
                                     {
@@ -3018,7 +3018,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [pbist_sccm].[vw_program].* FROM [pbist_sccm].[vw_program] ",
-                                    "dataSource": "SqlServer richtk01 SCCMTest"
+                                    "dataSource": "ST_DS"
                                 },
                                 "annotations": [
                                     {
@@ -3381,7 +3381,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [pbist_sccm].[vw_scanhistory].* FROM [pbist_sccm].[vw_scanhistory] ",
-                                    "dataSource": "SqlServer richtk01 SCCMTest"
+                                    "dataSource": "ST_DS"
                                 },
                                 "annotations": [
                                     {
@@ -4285,7 +4285,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [pbist_sccm].[site].* FROM [pbist_sccm].[site] ",
-                                    "dataSource": "SqlServer richtk01 SCCMTest"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -4391,7 +4391,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [pbist_sccm].[vw_update].* FROM [pbist_sccm].[vw_update] ",
-                                    "dataSource": "SqlServer richtk01 SCCMTest"
+                                    "dataSource": "ST_DS"
                                 },
                                 "annotations": [
                                     {
@@ -4724,7 +4724,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [pbist_sccm].[vw_user].* FROM [pbist_sccm].[vw_user] ",
-                                    "dataSource": "SqlServer richtk01 SCCMTest"
+                                    "dataSource": "ST_DS"
                                 },
                                 "annotations": [
                                     {
@@ -4892,7 +4892,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [pbist_sccm].[vw_usercomputer].* FROM [pbist_sccm].[vw_usercomputer] ",
-                                    "dataSource": "SqlServer richtk01 SCCMTest"
+                                    "dataSource": "ST_DS"
                                 },
                                 "annotations": [
                                     {
@@ -5097,7 +5097,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [pbist_sccm].[vw_configuration].* FROM [pbist_sccm].[vw_configuration] ",
-                                    "dataSource": "SqlServer richtk01 SCCMTest"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],

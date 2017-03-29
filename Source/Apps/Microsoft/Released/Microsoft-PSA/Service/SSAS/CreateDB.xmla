@@ -145,7 +145,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [psa].[BusinessTransactionView].* FROM [psa].[BusinessTransactionView] ",
-                                    "dataSource": "SqlServer PSA Source"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -222,7 +222,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [psa].[ContractView].* FROM [psa].[ContractView] ",
-                                    "dataSource": "SqlServer PSA Source"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -327,7 +327,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [psa].[CustomerView].* FROM [psa].[CustomerView] ",
-                                    "dataSource": "SqlServer PSA Source"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -543,7 +543,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [psa].[DateView].* FROM [psa].[DateView] ",
-                                    "dataSource": "SqlServer PSA Source"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -578,7 +578,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [psa].[MeasuresView].* FROM [psa].[MeasuresView] ",
-                                    "dataSource": "SqlServer PSA Source"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -1116,7 +1116,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [psa].[OpportunityView].* FROM [psa].[OpportunityView] ",
-                                    "dataSource": "SqlServer PSA Source"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -1269,7 +1269,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [psa].[ProjectView].* FROM [psa].[ProjectView] ",
-                                    "dataSource": "SqlServer PSA Source"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -1420,7 +1420,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [psa].[QuoteLineView].* FROM [psa].[QuoteLineView] ",
-                                    "dataSource": "SqlServer PSA Source"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -1817,7 +1817,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [psa].[QuoteView].* FROM [psa].[QuoteView] ",
-                                    "dataSource": "SqlServer PSA Source"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -1852,7 +1852,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [psa].[MeasuresView].* FROM [psa].[MeasuresView] ",
-                                    "dataSource": "SqlServer PSA Source"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -1941,7 +1941,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [psa].[ContractLineView].* FROM [psa].[ContractLineView] ",
-                                    "dataSource": "SqlServer PSA Source"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -2006,7 +2006,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [psa].[DefaultResourceCategoryView].* FROM [psa].[DefaultResourceCategoryView] ",
-                                    "dataSource": "SqlServer PSA Source"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -2095,7 +2095,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [psa].[ResourceView].* FROM [psa].[ResourceView] ",
-                                    "dataSource": "SqlServer PSA Source"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -2149,7 +2149,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [psa].[ZResourceCapacityView].* FROM [psa].[ZResourceCapacityView] ",
-                                    "dataSource": "SqlServer PSA Source"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -2196,7 +2196,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [psa].[DefaultResourceCategoryView].* FROM [psa].[DefaultResourceCategoryView] ",
-                                    "dataSource": "SqlServer PSA Source"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -2292,7 +2292,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [psa].[ResourceBookingView].* FROM [psa].[ResourceBookingView] ",
-                                    "dataSource": "SqlServer PSA Source"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -2388,7 +2388,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [psa].[ResourceRequestView].* FROM [psa].[ResourceRequestView] ",
-                                    "dataSource": "SqlServer PSA Source"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -2436,7 +2436,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [psa].[ResourceRequirementDetailView].* FROM [psa].[ResourceRequirementDetailView] ",
-                                    "dataSource": "SqlServer PSA Source"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -2563,7 +2563,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [psa].[ResourceRequirementView].* FROM [psa].[ResourceRequirementView] ",
-                                    "dataSource": "SqlServer PSA Source"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -2622,7 +2622,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [psa].[BookingStatusView].* FROM [psa].[BookingStatusView] ",
-                                    "dataSource": "SqlServer PSA Source"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -2681,7 +2681,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [psa].[OrganizationalUnitView].* FROM [psa].[OrganizationalUnitView] ",
-                                    "dataSource": "SqlServer PSA Source"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],
@@ -2722,7 +2722,7 @@
                                 "dataView": "full",
                                 "source": {
                                     "query": " SELECT [psa].[TransactionCategoryView].* FROM [psa].[TransactionCategoryView] ",
-                                    "dataSource": "SqlServer PSA Source"
+                                    "dataSource": "ST_DS"
                                 }
                             }
                         ],

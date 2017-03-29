@@ -9,14 +9,10 @@ gulp.task('build-typescript', function () {
     return gulp.src(['wwwroot/**/*.ts', 'typings/**.*'])
         //.pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(typescript({
-            declaration: false,
             emitDecoratorMetadata: true,
             experimentalDecorators: true,
-            module: 'commonjs',
             noImplicitAny: true,
-            noResolve: false,
             removeComments: true,
-            sourceMap: false,
             //sourceMap: true,
             target: 'es6'
         }))

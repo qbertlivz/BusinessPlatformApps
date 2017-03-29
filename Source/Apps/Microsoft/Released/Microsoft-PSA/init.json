@@ -1,93 +1,54 @@
 ﻿{
   "Install": {
-    "Actions": [
-      {
-        "name": "Microsoft-DeploySQLScripts",
-        "displayname": "Deploy DB Scripts",
-        "SqlServerIndex": "0",
-        "SqlScriptsFolder": "Service/Database"
-      },
-      {
-        "displayname": "Configuring Azure Key Vault",
-        "name": "Microsoft-CrmCreateVaultSecret"
-      },
-      {
-        "displayname": "Removing Dynamics 365 Data Export Profile",
-        "name": "Microsoft-CrmDeleteProfile"
-      },
-      {
-        "displayname": "Validating Dynamics 365 Data Export Profile",
-        "name": "Microsoft-CrmValidateProfile"
-      },
-      {
-        "displayname": "Creating Dynamics 365 Data Export Profile",
-        "name": "Microsoft-CrmCreateProfile"
-      },
-      {
-        "displayname": "Starting Dynamics 365 Data Export Profile",
-        "name": "Microsoft-CrmStartProfile"
-      },
-      {
-        "name": "Microsoft-GetDataPullStatus",
-        "displayname": "Waiting for data to appear in the destination",
-        "SqlServerIndex": 0,
-        "TargetSchema": "psa",
-        "IsWaiting": true,
-        "FinishedActionName": "Microsoft-CrmGetProfileStatus"
-      }
-    ],
     "Pages": [
       {
         "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-CRMSalesManagement/Web/Images/crm-sales-management.png",
         "displayname": "Getting Started",
         "list1": [
-          "December 2016 update for Microsoft Dynamics 365 (online) or a later instance",
-          "You must be a Dynamics 365 Administrator",
-          "A valid Azure subscription in the same Azure tenant as the Dynamics 365 instance",
-          "The target Azure Database must support the volume of data being replicated from your Dynamics 365 instance",
-          "Power BI Desktop (latest version)",
-          "Power BI Pro (to share the template with your organization)"
+          "$translate(INIT_GETTING_STARTED_D365_DECEMBER)",
+          "$translate(INIT_GETTING_STARTED_D365_ADMIN)",
+          "$translate(INIT_GETTING_STARTED_D365_AZURE_TENANT)",
+          "$translate(INIT_GETTING_STARTED_D365_VOLUME)",
+          "$translate(INIT_GETTING_STARTED_PBI_DESKTOP)",
+          "$translate(INIT_GETTING_STARTED_PBI_PRO)"
         ],
         "list2": [
-          "Full cloud solution with minimum set up and maintenance considerations",
-          "Data pulled from Dynamics 365 into an Azure SQL Database using the Dynamics 365 Export Service",
-          "Connect to Azure SQL and import data into Power BI"
+          "$translate(INIT_GETTING_STARTED_CLOUD_SOLUTION)",
+          "$translate(INIT_GETTING_STARTED_D365_EXPORT)",
+          "$translate(INIT_GETTING_STARTED_CONNECT_AS_PBI)"
         ],
-        "name": "$SiteCommon$/pagesgallery/getting-started.html",
-        "prerequisiteDescription": "IMPORTANT: In order to use this solution template you will first need to enable change tracking using",
-        "prerequisiteLink": "https://www.microsoft.com/en-us/download/details.aspx?id=54769",
-        "prerequisiteLinkText": "this installer",
-        "templateName": "Professional Services for Dynamics 365"
+        "name": "$SiteCommon$/pages-gallery/getting-started.html",
+        "templateName": "$translate(INIT_D365_PSA_TITLE)"
       },
       {
         "displayname": "Dynamics 365 Login",
         "entities": "systemuser, salesorderdetail, salesorder, quotedetail, quote, opportunity, msdyn_transactioncategory, msdyn_timeentry, msdyn_resourcerequirementdetail, msdyn_resourcerequirement, msdyn_resourcerequest, msdyn_project, msdyn_organizationalunit, msdyn_orderlineresourcecategory, msdyn_estimateline, msdyn_actual, bookingstatus, bookableresourcecategoryassn, bookableresourcecategory, bookableresourcebooking, bookableresource, account",
-        "name": "$SiteCommon$/pagesgallery/mscrm-login.html",
+        "name": "$SiteCommon$/pages-gallery/mscrm-login.html",
         "oauthType": "mscrm",
-        "pricingCost": "By deploying the template you authorize the creation of Azure resources in your subscription. The estimated cost for the Azure SQL Database and Azure Key Vault required are approximately $75 per month (this is an estimate only). Note that Azure premium tier Azure SQL Database is recommended during initial data export and can be moved to a less expensive service tier after this step is completed.",
-        "pricingUrl": "https://azure.microsoft.com/en-us/pricing/details/sql-database"
+        "pricingCost": "$translate(INIT_D365_PRICING_COST)",
+        "pricingUrl": "$translate(INIT_D365_PRICING_URL)"
       },
       {
         "displayname": "Login to the Key Vault",
-        "name": "$SiteCommon$/pagesgallery/keyvault-login.html",
+        "name": "$SiteCommon$/pages-gallery/keyvault-login.html",
         "oauthType": "keyvault"
       },
       {
-        "name": "$SiteCommon$/pagesgallery/sql-server.html",
         "displayname": "Target",
         "isAzureSql": true,
+        "name": "$SiteCommon$/pages-gallery/sql-server.html",
         "newSqlDatabase": "$(this.MS.UtilityService.GetUniqueId(10))",
         "showAzureSql": false,
         "showNewSqlOption": true,
         "showSkuS1": false,
         "sqlInstance": "NewSql",
         "sqlSku": "S2",
-        "subtitle": "Set up a connection to SQL so we can bring in your Dynamics 365 data.",
-        "title": "Connect to your SQL Database"
+        "subtitle": "$translate(INIT_SQL_SUBTITLE_D365)",
+        "title": "$translate(INIT_SQL_TITLE)"
       },
       {
         "displayname": "Summary",
-        "name": "$SiteCommon$/pagesgallery/summary.html",
+        "name": "$SiteCommon$/pages-gallery/summary.html",
         "values": {
           "Organization URL": "$(this.MS.DataStore.getValue('OrganizationUrl'))",
           "Target Server": "$(this.MS.DataStore.getValue('Server'))",
@@ -97,15 +58,52 @@
       },
       {
         "displayname": "Progress",
-        "name": "$SiteCommon$/pagesgallery/progress.html",
+        "name": "$SiteCommon$/pages-gallery/progress.html",
         "filename": "$save('PSA_AccountManager.pbix|PSA_PracticeManager.pbix|PSA_ResourceManager.pbix')",
         "showCounts": true,
         "finishedActionName": "Microsoft-CrmGetProfileStatus"
       }
+    ],
+
+    "Actions": [
+      {
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
+        "name": "Microsoft-DeploySQLScripts",
+        "SqlScriptsFolder": "Service/Database",
+        "SqlServerIndex": "0"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CONFIGURING_KEY_VAULT)",
+        "name": "Microsoft-CrmCreateVaultSecret"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_VALIDATING_D365_ENTITIES)",
+        "name": "Microsoft-CrmValidateEntities"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CLEANING_D365_ENVIRONMENT)",
+        "name": "Microsoft-CrmDeleteProfile"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_VALIDATING_D365_PROFILE)",
+        "name": "Microsoft-CrmValidateProfile"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CREATING_D365_PROFILE)",
+        "name": "Microsoft-CrmCreateProfile"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_STARTING_D365_PROFILE)",
+        "name": "Microsoft-CrmStartProfile"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_WAITING_DATA)",
+        "FinishedActionName": "Microsoft-CrmGetProfileStatus",
+        "IsWaiting": true,
+        "name": "Microsoft-GetDataPullStatus",
+        "SqlServerIndex": 0,
+        "TargetSchema": "psa"
+      }
     ]
-  },
-  "Uninstall": {
-    "Pages": [],
-    "Actions": []
   }
 }

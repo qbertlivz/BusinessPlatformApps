@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
@@ -12,7 +13,6 @@ using Microsoft.Deployment.Common.Helpers;
 using Microsoft.Azure;
 using Microsoft.Azure.Management.Resources;
 using Microsoft.Azure.Management.Resources.Models;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
 {
@@ -65,8 +65,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                     resource = Constants.AzureManagementApi;
                     break;
                 case "keyvault":
-                    string azureToken = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
-                    string subscriptionId = request.DataStore.GetJson("SelectedSubscription")["SubscriptionId"].ToString();
+                    string azureToken = request.DataStore.GetJson("AzureToken", "access_token");
+                    string subscriptionId = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
                     string resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
 
 

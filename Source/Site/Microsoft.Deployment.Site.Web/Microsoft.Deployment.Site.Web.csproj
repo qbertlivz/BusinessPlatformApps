@@ -4,7 +4,7 @@
     <Description>This is the main web project which shows the wizard experience to the end user</Description>
     <Copyright>Microsoft Corp 2016</Copyright>
     <AssemblyTitle>Microsoft.Deployment.Site.Web</AssemblyTitle>
-    <TargetFrameworks>netcoreapp1.0;net452</TargetFrameworks>
+    <TargetFramework>netcoreapp1.0</TargetFramework>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <AssemblyName>Microsoft.Deployment.Site.Web</AssemblyName>
     <OutputType>Exe</OutputType>
@@ -14,12 +14,10 @@
     <PackageTargetFallback>$(PackageTargetFallback);dotnet5.6;dnxcore50;portable-net45+win8</PackageTargetFallback>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
-    <PreBuildEvent>cd /d "$(ProjectDir)"
-call gulp.cmd Pre-Build</PreBuildEvent>
-    <PostBuildEvent>cd /d "$(ProjectDir)"
-call gulp.cmd Build
-call gulp.cmd Post-Build
-</PostBuildEvent>
+    <PreBuildEvent>call gulp.cmd pre-build
+call gulp.cmd strip-typescript-reference-paths</PreBuildEvent>
+    <PostBuildEvent>call gulp.cmd build-typescript
+call gulp.cmd post-build</PostBuildEvent>
   </PropertyGroup>
 
   <ItemGroup>

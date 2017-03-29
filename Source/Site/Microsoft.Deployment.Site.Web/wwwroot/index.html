@@ -12,6 +12,12 @@
     <link rel="stylesheet" href="dist/SiteCommon/Web/styles/bpst.css" />
     <script>
         if (window && window.navigator && window.navigator.userAgent && /Edge\/\d./i.test(window.navigator.userAgent)) {
+            setTimeout(function () {
+                if (document.getElementById('bpst-loading')) {
+                    location.reload(true);
+                }
+            }, 7500);
+
             var js = document.createElement('script');
             js.src = 'jspm_packages/npm/bluebird@3.4.1/js/browser/bluebird.min.js';
             js.type = 'text/javascript';
@@ -29,7 +35,7 @@
     <div class="st-content regularFont">
         <div class="st-center-outer">
             <div class="st-center-inner">
-                <span class="st-loader st-loader-small"></span>
+                <span class="st-loader st-loader-small" id="bpst-loading"></span>
             </div>
         </div>
     </div>

@@ -4,8 +4,6 @@ import { ActionStatus } from '../enums/action-status';
 import { DataStoreType } from '../enums/data-store-type';
 import { ExperienceType } from '../enums/experience-type';
 
-import { ActionResponse } from '../models/action-response';
-
 import { MainService } from './main-service';
 
 export class DeploymentService {

@@ -6,8 +6,6 @@ import { InitParser } from '../classes/init-parser';
 
 import { DataStoreType } from '../enums/data-store-type';
 
-import { ActionResponse } from '../models/action-response';
-
 import { MainService } from './main-service';
 
 export class ViewModelBase {

@@ -40,10 +40,11 @@ export class CognitiveService extends ViewModelBase {
                 this.isValidated = true;
                 this.showValidation = true;
             }
-        }
-        else if (this.cognitiveSelectedType === 'NewKey') {
+        } else if (this.cognitiveSelectedType === 'NewKey') {
             this.isValidated = true;
         }
+
+        return this.isValidated;
     }
 
     async NavigatingNext(): Promise<boolean> {

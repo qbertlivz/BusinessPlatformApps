@@ -1,9 +1,14 @@
 ﻿{
   "compileOnSave": false,
   "compilerOptions": {
+    "alwaysStrict": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
     "removeComments": true,
     "target": "es6"
   },

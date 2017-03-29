@@ -1,9 +1,4 @@
-﻿/// <reference path="../../../Site/Microsoft.Deployment.Site.Web/typings/index.d.ts" />
-
-import { Aurelia } from 'aurelia-framework';
-import { inject } from 'aurelia-framework';
-
-import { InitParser } from "../classes/init-parser";
+﻿import { InitParser } from "../classes/init-parser";
 
 import { MainService } from './main-service';
 

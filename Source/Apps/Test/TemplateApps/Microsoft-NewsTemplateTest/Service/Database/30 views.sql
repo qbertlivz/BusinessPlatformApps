@@ -49,6 +49,13 @@ AS
                                          LEFT OUTER JOIN documentsentimentscores 	ON documents.id=documentsentimentscores.id;
 go
 
+CREATE VIEW bpst_news.vw_DocumentSearchTerms
+AS
+    SELECT documentsearchterms.[documentId]			AS [Document Id],
+           documentsearchterms.[searchterms]		AS [Search Terms]
+FROM bpst_news.documentsearchterms;
+go
+
 CREATE VIEW bpst_news.vw_FullDocumentTopics
 AS
     SELECT documenttopics.documentId					AS [Document Id],
@@ -61,8 +68,17 @@ AS
            documenttopicimages.imageUrl2				AS [Image URL 2],
            documenttopicimages.imageUrl3				AS [Image URL 3],
            documenttopicimages.imageUrl4				AS [Image URL 4],
-           ((1-DocumentTopics.documentDistance)*100)	AS [Weight]
-    FROM   bpst_news.documenttopics	LEFT OUTER JOIN documenttopicimages	ON documenttopics.topicid = documenttopicimages.topicid;
+           ((1-DocumentTopics.documentDistance)*100)	AS [Weight],
+		   CASE
+		      WHEN documents.imageUrl = documenttopicimages.imageUrl1 THEN 0.0001
+		      WHEN documents.imageUrl = documenttopicimages.imageUrl2 THEN 0.0002
+		      WHEN documents.imageUrl = documenttopicimages.imageUrl3 THEN 0.0003
+		      WHEN documents.imageUrl = documenttopicimages.imageUrl4 THEN 0.0004
+			  ELSE documenttopics.documentDistance
+		   END AS [Document Distance With Topic Image]
+    FROM   bpst_news.documenttopics
+    LEFT OUTER JOIN documenttopicimages	ON documenttopics.topicid = documenttopicimages.topicid
+    INNER JOIN bpst_news.documents documents ON documenttopics.documentid = documents.id;
 go
 
 
@@ -97,7 +113,20 @@ AS
 			WHEN entityType = 'Location' THEN '#FF8000'
 			ELSE null
             END [Entity Color]
-     FROM bpst_news.entities;
+     FROM bpst_news.entities
+	 UNION ALL
+     SELECT
+			[entities].documentId							AS [Document Id],
+            [entities].entityType							AS [Entity Type],
+            [entities].entityValue							AS [Entity Value],
+            [entities].offset								AS [Offset],
+            [entities].offsetDocumentPercentage				AS [Offset Document Percentage],
+            [entities].[length]								AS [Lenth],
+            [entities].entityType + [entities].entityValue	AS [Entity Id],
+			[types].icon									AS [Entity Class],
+			[types].color									AS [Entity Color]
+     FROM bpst_news.userdefinedentities AS entities
+	 INNER JOIN bpst_news.typedisplayinformation AS [types] ON [entities].entityType = [types].entityType;
 go
 
 CREATE VIEW bpst_news.vw_EntityRankings AS
@@ -135,21 +164,22 @@ go
 
 
 CREATE VIEW bpst_news.vw_DocumentCompressedEntities
-AS
-    SELECT documentid				AS [Document Id],
-           compressedEntitiesJson	AS [Compressed Entities Json]
-    FROM bpst_news.documentcompressedentities;
-go
-
-
-CREATE VIEW bpst_news.vw_DocumentTopicImages
-AS
-    SELECT topicId			AS [Topic Id],
-           imageUrl1		AS [Image URL 1],
-           imageUrl2		AS [Image URL 2],
-           imageUrl3		AS [Image URL 3],
-           imageUrl4		AS [Image URL 4]
-    FROM   bpst_news.documenttopicimages;
+as
+	SELECT [id] AS [Document Id],
+	COALESCE((
+		SELECT TOP 160 [Entity Type] AS entityType
+			,[Entity Value] AS entityValue
+			,[Offset] AS offset
+			,[Offset Document Percentage] AS offsetPercentage
+			,[Lenth] AS [length]
+			,[Entity Id] AS [entityId]
+			,[Entity Class] AS [cssClass]
+			,[Entity Color] AS [cssColor]
+		FROM [bpst_news].[vw_FullEntities]
+		where [document id] = docs.id
+		FOR JSON AUTO
+	), '[]') AS [Compressed Entities Json] FROM
+	bpst_news.documents AS docs;
 go
 
 CREATE VIEW bpst_news.vw_TopicKeyPhrases

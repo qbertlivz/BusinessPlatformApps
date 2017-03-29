@@ -13,6 +13,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
     [Export(typeof(IAction))]
     public class ConfigurePowerAppTables : BaseAction
     {
+        private char[] TERMINATORS = new char[] { ' ', '(', ')', '"' };
+
         private const string INSERT_INTO_TWITTER_QUERY = "INSERT INTO [pbist_twitter].[twitter_query] ([Id], [IsAdvanced], [QueryString]) VALUES ({0}, {1}, '{2}')";
         private const string INSERT_INTO_TWITTER_QUERY_DETAILS = "INSERT INTO [pbist_twitter].[twitter_query_details] ([Id], [ReadableId], [Operator], [Operand]) VALUES ({0}, {1}, '{2}', '{3}')";
         private const string INSERT_INTO_TWITTER_QUERY_READABLE = "INSERT INTO [pbist_twitter].[twitter_query_readable] ([Id], [QueryId], [QueryReadable], [Query]) VALUES ({0}, {1}, '{2}', '{3}')";
@@ -189,6 +191,23 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
             return isAdvanced;
         }
 
+        private bool IsOrTerminated(string query, int i)
+        {
+            return (i == 0 && query.Length > 2 && IsTerminator(query[2])) || // OR is the first part of the query
+                   (i > 0 && i < query.Length - 2 && IsTerminator(query[i - 1]) && IsTerminator(query[i + 2])) || // OR is somewhere in the middle
+                   (i != 0 && i == query.Length - 2 && IsTerminator(query[i - 1])); // OR is the last part of the query
+        }
+
+        private bool IsTerminator(char c)
+        {
+            bool isTerminator = false;
+            for (int i = 0; i < TERMINATORS.Length && !isTerminator; i++)
+            {
+                isTerminator = c == TERMINATORS[i];
+            }
+            return isTerminator;
+        }
+
         private List<string> SplitQueryByOr(string query)
         {
             List<string> parts = new List<string>();
@@ -200,15 +219,23 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
             {
                 switch (query[i])
                 {
-                    case 'O':
-                        if (!isOpenQuote && i < query.Length - 1 && query[i + 1] == 'R')
+                    case 'O': // found an OR if
+                        if (!isOpenQuote && // don't have an open quote active
+                            i < query.Length - 1 && // not the last character
+                            query[i + 1] == 'R' && // following character is an 'R'
+                            IsOrTerminated(query, i))
                         {
-                            if (sb.Length > 0)
+                            string partTrimmed = sb.ToString().Trim();
+                            if (partTrimmed.Length > 0)
                             {
-                                parts.Add(sb.ToString().Trim());
+                                parts.Add(partTrimmed);
                                 sb.Clear();
                             }
                             i++;
+                        }
+                        else
+                        {
+                            sb.Append(query[i]);
                         }
                         break;
                     case '"':
@@ -221,9 +248,10 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
                 }
             }
 
-            if (sb.Length > 0)
+            string lastTrim = sb.ToString().Trim();
+            if (lastTrim.Length > 0)
             {
-                parts.Add(sb.ToString().Trim());
+                parts.Add(lastTrim);
             }
 
             return parts;

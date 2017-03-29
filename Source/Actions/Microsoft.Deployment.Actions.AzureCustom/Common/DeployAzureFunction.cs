@@ -17,13 +17,23 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var azureToken = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
-            var subscription = request.DataStore.GetJson("SelectedSubscription")["SubscriptionId"].ToString();
+            var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
+            var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
 
             var deploymentName = request.DataStore.GetValue("DeploymentName");
             var repoUrl = request.DataStore.GetValue("RepoUrl");
             var name = request.DataStore.GetValue("FunctionName");
+
+            var hostingPlanName = request.DataStore.GetValue("hostingPlanName") ?? "apphostingplan";
+            var hostingEnvironment = request.DataStore.GetValue("hostingEnvironment") ?? string.Empty;
+            var sku = request.DataStore.GetValue("sku") ?? "Dynamic";
+            var skuCode = request.DataStore.GetValue("skuCode") ?? "S1";
+            var workerSize = request.DataStore.GetValue("workerSize") ?? "0";
+
+            string functionArmDeploymentRelatovePath = sku.ToLower() == "standard"
+                ? "Service/Arm/AzureFunctionsStaticAppPlan.json"
+                : "Service/Arm/AzureFunctions.json";
 
             var param = new AzureArmParameterGenerator();
             param.AddStringParam("storageaccountname", "solutiontemplate" + Path.GetRandomFileName().Replace(".", "").Substring(0, 8));
@@ -31,8 +41,13 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             param.AddStringParam("repoUrl", repoUrl);
             param.AddStringParam("resourcegroup", resourceGroup);
             param.AddStringParam("subscription", subscription);
+            param.AddStringParam("hostingPlanName", hostingPlanName);
+            param.AddStringParam("hostingEnvironment", hostingEnvironment);
+            param.AddStringParam("sku", sku);
+            param.AddStringParam("skuCode", skuCode);
+            param.AddStringParam("workerSize", workerSize);
 
-            var armTemplate = JsonUtility.GetJObjectFromJsonString(System.IO.File.ReadAllText(Path.Combine(request.ControllerModel.SiteCommonFilePath, "Service/Arm/AzureFunctions.json")));
+            var armTemplate = JsonUtility.GetJObjectFromJsonString(System.IO.File.ReadAllText(Path.Combine(request.ControllerModel.SiteCommonFilePath, functionArmDeploymentRelatovePath)));
             var armParamTemplate = JsonUtility.GetJObjectFromObject(param.GetDynamicObject());
             armTemplate.Remove("parameters");
             armTemplate.Add("parameters", armParamTemplate["parameters"]);

@@ -1,4 +1,6 @@
-﻿################################################################################
+﻿.idea
+
+################################################################################
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
@@ -40,3 +42,14 @@
 /Source/Site/Microsoft.Deployment.Site.Service/PartnerServiceWSDL/partner.xml
 /Source/Apps/Test/TemplateApps/Microsoft-NewsTemplateTest/v1.txt
 /Source/Apps/Test/TemplateApps/Microsoft-NewsTemplateTest/v2.txt
+/.vs
+/Source/Apps/Microsoft/Released/Microsoft-TwitterTemplate/Service/PowerApp
+/Source/Apps/Microsoft/Released/Simplement-SAP-ARTemplate/Simplement-SAP-ARTemplate.exe
+/Source/Apps/Microsoft/Released/Simplement-SAP-ARTemplate/Simplement-SAP-ARTemplate.msi
+/Source/Apps/Microsoft/Released/Microsoft-SCCM2/Microsoft-SCCM2.exe
+/Source/Apps/Microsoft/Released/Microsoft-SCCM2/Microsoft-SCCM2.msi
+
+/Source/Site/Microsoft.Deployment.Site.Web/global.json
+*.user
+*js.map
+/Source/SiteCommon/Web/**/*.js

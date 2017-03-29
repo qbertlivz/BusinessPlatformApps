@@ -17,17 +17,19 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var azureToken = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
-            var subscription = request.DataStore.GetJson("SelectedSubscription")["SubscriptionId"].ToString();
+            var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
+            var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
-            var location = request.DataStore.GetJson("SelectedLocation")["Name"].ToString();
+            var location = request.DataStore.GetJson("SelectedLocation", "Name");
 
             var deploymentName = request.DataStore.GetValue("DeploymentName");
             var functionAppHostingPlan = request.DataStore.GetValue("functionAppHostingPlan");
             var sitename = request.DataStore.GetValue("SiteName");
 
             var param = new AzureArmParameterGenerator();
-            param.AddStringParam("storageaccountname", "solutiontemplate" + Path.GetRandomFileName().Replace(".", "").Substring(0, 8));
+            string storageAccountName = "solutiontemplate" + Path.GetRandomFileName().Replace(".", "").Substring(0, 8);
+            request.DataStore.AddToDataStore("StorageAccountName", storageAccountName);
+            param.AddStringParam("storageaccountname", storageAccountName);
             param.AddStringParam("sitename", sitename);
             param.AddStringParam("AppHostingPlan", functionAppHostingPlan);
             param.AddStringParam("resourcegroup", resourceGroup);

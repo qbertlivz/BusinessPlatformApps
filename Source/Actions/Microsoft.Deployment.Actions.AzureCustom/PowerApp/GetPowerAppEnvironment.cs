@@ -15,7 +15,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var azureToken = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
+            var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
             AzureHttpClient client = new AzureHttpClient(azureToken);
 
             string environmentBody = "{}";
@@ -24,6 +24,17 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
             var environmentsResponse = await client.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Get, environmentUrl, environmentBody);
             var environmentsString = await environmentsResponse.Content.ReadAsStringAsync();
             var environments = JsonUtility.GetJsonObjectFromJsonString(environmentsString);
+
+            if (environments["value"] == null)
+            {
+                var skipPowerApp = request.DataStore.GetValue("SkipPowerApp");
+                if (skipPowerApp == null)
+                {
+                    request.DataStore.AddToDataStore("SkipPowerApp", "true", DataStoreType.Public);
+                    //return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "PowerAppNoEnvironment");
+                }
+                return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            }
 
             foreach (var environment in environments["value"])
             {
@@ -37,7 +48,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
             }
 
             return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "PowerAppNoEnvironment");
-            //TODO: Add this error message to common
         }
     }
 }

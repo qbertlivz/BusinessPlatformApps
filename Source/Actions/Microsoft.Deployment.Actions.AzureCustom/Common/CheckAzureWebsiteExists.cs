@@ -12,10 +12,10 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
     [Export(typeof(IAction))]
     public class CheckAzureWebsiteExists : BaseAction
     {
-        public async override Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
+        public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var token = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
-            var subscription = request.DataStore.GetJson("SelectedSubscription")["SubscriptionId"].ToString();
+            var token = request.DataStore.GetJson("AzureToken", "access_token");
+            var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var sitename = request.DataStore.GetJson("SiteName");
 
             dynamic obj = new ExpandoObject();

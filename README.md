@@ -1,4 +1,4 @@
-
+ 
 # BusinessPlatformApps
 
-Documentation to follow shortly
+Documentation will follow shortly.

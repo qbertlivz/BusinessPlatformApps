@@ -16,7 +16,7 @@ button {
     font-size: 14px;
     height: 40px;
     text-align: center;
-    width: 150px;
+    width: 200px;
     margin-top: 20px;
     margin-bottom: 20px;
 }
@@ -46,8 +46,12 @@ ul {
 }
 
 /********************************************************************************************
-* PBIST
+* BPST
 ********************************************************************************************/
+
+.st-button-powerbi-login{
+    margin-right: 12px;
+}
 
 .st-buttons-back {
     background: #B9B9B9;
@@ -265,6 +269,11 @@ ul {
     padding-left: 8px;
 }
 
+.st-icon-tab-large {
+    font-size: 9px;
+    padding-left: 6px;
+}
+
 .st-import {
     height: 30px;
     line-height: 30px;
@@ -279,7 +288,7 @@ ul {
 }
 
 .st-input[disabled] {
-    border-color:inherit;
+    border-color: inherit;
 }
 
 .st-input-column {
@@ -426,6 +435,17 @@ ul {
 
 .st-progress {
     line-height: 50px;
+}
+
+.st-progress-bar-wrapper {
+    border: 2px solid #4a4a4a;
+    height: 40px;
+    width: 800px;
+}
+
+.st-progress-bar {
+    background-color: #F2C811;
+    height: 40px;
 }
 
 .st-progress-text {

@@ -31,8 +31,8 @@ namespace Microsoft.Deployment.Actions.Salesforce
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var token = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
-            var subscription = request.DataStore.GetJson("SelectedSubscription")["SubscriptionId"].ToString();
+            var token = request.DataStore.GetJson("AzureToken", "access_token");
+            var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
             var dataFactory = resourceGroup + "SalesforceCopyFactory";
 
@@ -52,9 +52,10 @@ namespace Microsoft.Deployment.Actions.Salesforce
 
             if (!connection.IsSuccessStatusCode)
             {
+                var result = connection.Content.ReadAsStringAsync().Result;
                 return new ActionResponse(ActionStatus.FailureExpected,
-                    JsonUtility.GetJObjectFromJsonString(connection.Content.ReadAsStringAsync().Result), null, DefaultErrorCodes.DefaultErrorCode,
-                    "Failed to get consent");
+                    JsonUtility.GetJObjectFromJsonString(result), null, DefaultErrorCodes.DefaultErrorCode,
+                    result);
             }
 
             var connectionData = JsonUtility.GetJObjectFromJsonString(connection.Content.ReadAsStringAsync().Result);
@@ -80,9 +81,10 @@ namespace Microsoft.Deployment.Actions.Salesforce
 
                         if (!sliceConnection.IsSuccessStatusCode)
                         {
+                            var result = connection.Content.ReadAsStringAsync().Result;
                             return new ActionResponse(ActionStatus.FailureExpected,
-                                JsonUtility.GetJObjectFromJsonString(connection.Content.ReadAsStringAsync().Result), null, DefaultErrorCodes.DefaultErrorCode,
-                                "Failed to get consent");
+                                JsonUtility.GetJObjectFromJsonString(result), null, DefaultErrorCodes.DefaultErrorCode,
+                                result);
                         }
 
                         var data = JsonUtility.GetJObjectFromJsonString(sliceConnection.Content.ReadAsStringAsync().Result);

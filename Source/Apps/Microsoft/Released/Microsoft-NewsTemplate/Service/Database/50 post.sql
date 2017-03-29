@@ -15,3 +15,27 @@ go
 * Tables to truncate                *
 *************************************/
 -- TRUNCATE TABLE ...;
+
+INSERT INTO [bpst_news].[documents]
+           ([id]
+           ,[text]
+           ,[textLength]
+           ,[cleanedText]
+           ,[cleanedTextLength]
+           ,[title]
+           ,[sourceUrl]
+           ,[sourceDomain]
+         
+		   )
+     VALUES
+           (00
+           ,'test'
+           ,4
+           ,'test'
+           ,4
+           ,'test'
+           ,'www.test.com'
+           ,'test'
+           
+           )
+GO

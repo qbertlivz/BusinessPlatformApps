@@ -34,7 +34,7 @@
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            _token = request.DataStore.GetJson("MsCrmToken")["access_token"].ToString();
+            _token = request.DataStore.GetJson("MsCrmToken", "access_token");
             _orgId = request.DataStore.GetValue("OrganizationId");
             AuthenticationHeaderValue bearer = new AuthenticationHeaderValue("Bearer", _token);
             _rc = new RestClient(request.DataStore.GetValue("ConnectorUrl"), bearer);
@@ -45,6 +45,11 @@
             {
                 string response = await _rc.Post(string.Format(MsCrmEndpoints.URL_PROFILES_ACTIVATE, profileId), string.Empty);
                 MsCrmProfile validatedProfile = JsonConvert.DeserializeObject<MsCrmProfile>(response);
+
+                var properties = new System.Collections.Generic.Dictionary<string, string> { { "OrganizationId", validatedProfile.OrganizationId },
+                                                                                             { "OrganizationUrl", validatedProfile.OrganizationUrl }
+                                                                                           };
+                request.Logger.LogEvent("MSCRM-ProfileStarted", properties);
 
                 return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
             }

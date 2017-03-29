@@ -24,10 +24,10 @@ namespace Microsoft.Deployment.Actions.OnPremise.TaskScheduler
             var taskProgram = request.DataStore.GetValue("TaskProgram");
             var taskStartTime = request.DataStore.GetValue("TaskStartTime");
 
-            var taskUsername = request.DataStore.GetValue("ImpersonationUsername") == null || string.IsNullOrEmpty(request.DataStore.GetValue("ImpersonationUsername"))
+            var taskUsername = string.IsNullOrEmpty(request.DataStore.GetValue("ImpersonationUsername"))
                 ? WindowsIdentity.GetCurrent().Name
                 : NTHelper.CleanDomain(request.DataStore.GetValue("ImpersonationDomain")) + "\\" + NTHelper.CleanUsername(request.DataStore.GetValue("ImpersonationUsername"));
-            var taskPassword = request.DataStore.GetValue("ImpersonationPassword") == null || string.IsNullOrEmpty(request.DataStore.GetValue("ImpersonationPassword"))
+            var taskPassword = string.IsNullOrEmpty(request.DataStore.GetValue("ImpersonationPassword"))
                 ? null
                 : request.DataStore.GetValue("ImpersonationPassword");
 

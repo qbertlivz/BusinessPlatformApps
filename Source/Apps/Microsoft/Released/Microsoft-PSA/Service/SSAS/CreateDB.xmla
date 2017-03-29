@@ -8,9 +8,8 @@
                 "dataSources": [
                     {
                         "name": "ST_DS",
-                        "connectionString": "Data Source=tcp:a.database.windows.net;Persist Security Info=False;User ID=pbiadmin;Initial Catalog=PSADB",
+                        "connectionString": "Provider=SQLNCLI11;Data Source=tcp:a.database.windows.net;Persist Security Info=False;User ID=pbiadmin;Initial Catalog=PSADB",
                         "impersonationMode": "impersonateServiceAccount",
-                        "provider": "System.Data.SqlClient",
                         "annotations": [
                             {
                                 "name": "ConnectionEditUISource",

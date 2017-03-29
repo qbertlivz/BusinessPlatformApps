@@ -45,8 +45,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
                     // Reload metadata and update connection string
                     server.Refresh(true);
                     db = server.Databases.FindByName(asDatabase);
-                    ((ProviderDataSource)db.Model.DataSources[0]).Provider = "System.Data.SqlClient";
-                    ((ProviderDataSource)db.Model.DataSources[0]).ConnectionString = $"Data Source=tcp:{connectionStringObj.Server};Persist Security Info=False;User ID={connectionStringObj.Username};Password={connectionStringObj.Password};Initial Catalog={connectionStringObj.Database}";
+                    ((ProviderDataSource)db.Model.DataSources[0]).ConnectionString = $"Provider=SQLNCLI11;Data Source=tcp:{connectionStringObj.Server};Persist Security Info=True;User ID={connectionStringObj.Username};Password={connectionStringObj.Password};Initial Catalog={connectionStringObj.Database}";
 
                     db.Update(UpdateOptions.ExpandFull);
                 }

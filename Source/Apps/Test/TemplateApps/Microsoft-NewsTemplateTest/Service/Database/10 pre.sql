@@ -71,6 +71,13 @@ IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='bpst_news
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='bpst_news' AND TABLE_NAME='stg_documenttopicimages' AND TABLE_TYPE='BASE TABLE')
     DROP TABLE bpst_news.stg_documenttopicimages;
 
+-- Bring-Your-Own Entities tables here
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='bpst_news' AND TABLE_NAME='userdefinedentities' AND TABLE_TYPE='BASE TABLE')
+    DROP TABLE bpst_news.userdefinedentities;
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='bpst_news' AND TABLE_NAME='userdefinedentitydefinitions' AND TABLE_TYPE='BASE TABLE')
+    DROP TABLE bpst_news.userdefinedentitydefinitions;
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='bpst_news' AND TABLE_NAME='typedisplayinformation' AND TABLE_TYPE='BASE TABLE')
+    DROP TABLE bpst_news.typedisplayinformation;
 
 -- Stored procedures
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='bpst_news' AND ROUTINE_NAME='sp_get_replication_counts' AND ROUTINE_TYPE='PROCEDURE')

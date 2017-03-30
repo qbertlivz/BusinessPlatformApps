@@ -41,11 +41,11 @@ export class HttpService {
         }
     }
 
-    Close() {
+    Close(): void {
         this.command.close(!this.MS.DeploymentService.hasError && this.MS.DeploymentService.isFinished);
     }
 
-    async getApp(name: string) {
+    async getApp(name: string): Promise<any> {
         var response = null;
         let uniqueId = this.MS.UtilityService.GetUniqueId(20);
         this.MS.LoggerService.TrackStartRequest('GetApp-name', uniqueId);
@@ -126,7 +126,7 @@ export class HttpService {
         return this.executeAsync(method, content);
     }
 
-    private getRequestObject(method: string, relativeUrl: string, body: any = {}) {
+    private getRequestObject(method: string, relativeUrl: string, body: any = {}): any {
         let uniqueId = this.MS.UtilityService.GetUniqueId(20);
         var request = this.HttpClient.createRequest(relativeUrl);
         request = request

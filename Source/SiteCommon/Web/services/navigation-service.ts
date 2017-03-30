@@ -15,7 +15,7 @@ export class NavigationService {
         this.MS = MainService;
     }
 
-    init(pagesJson: any) {
+    init(pagesJson: any): void {
         this.pages = pagesJson;
 
         if (this.pages && this.pages.length && this.pages.length > 0) {
@@ -66,7 +66,7 @@ export class NavigationService {
         return route.replace('#', '').replace('/', '');
     }
 
-    UpdateIndex() {
+    UpdateIndex(): any {
         let routePageName = this.GetRoute();
         for (let i = 0; i < this.pages.length; i++) {
             if (this.pages[i].RoutePageName.toLowerCase() === routePageName.toLowerCase()) {
@@ -80,7 +80,7 @@ export class NavigationService {
         return this.index;
     }
 
-    NavigateNext() {
+    NavigateNext(): void {
         this.UpdateIndex();
         if (this.index >= this.pages.length - 1 && this.index < this.pages.length - 1) {
             return;
@@ -101,7 +101,7 @@ export class NavigationService {
         this.NavigateToIndex();
     }
 
-    NavigateBack() {
+    NavigateBack(): void {
         this.UpdateIndex();
         if (this.index == 0) {
             return;
@@ -121,12 +121,12 @@ export class NavigationService {
         this.NavigateToIndex();
     }
 
-    JumpTo(index: any) {
+    JumpTo(index: any): void {
         this.index = index;
         this.NavigateToIndex();
     }
 
-    NavigateToIndex() {
+    NavigateToIndex(): void {
         // do not update index here
 
         // Initialize the page
@@ -139,7 +139,7 @@ export class NavigationService {
         this.MS.LoggerService.TrackPageView(this.appName + '/' + this.pages[this.index].RoutePageName.toLowerCase(), window.location.href);
     }
 
-    getCurrentSelectedPage() {
+    getCurrentSelectedPage(): any {
         return this.pages[this.index];
     }
 
@@ -155,7 +155,7 @@ export class NavigationService {
         return this.getIndex() === 0;
     }
 
-    NavigateHome() {
+    NavigateHome(): void {
         this.index = 0;
         this.pages[0].isActive = true;
         let body: any = {};

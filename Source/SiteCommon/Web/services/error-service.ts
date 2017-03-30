@@ -11,7 +11,7 @@ export class ErrorService {
         this.MS = MainService;
     }
 
-    Clear() {
+    Clear(): void {
         this.details = '';
         this.logLocation = '';
         this.message = '';

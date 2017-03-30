@@ -21,7 +21,7 @@ export class DeploymentService {
         this.MS = MainService;
     }
 
-    init(actionsJson: any) {
+    init(actionsJson: any): void {
         for (let i = 0; i < actionsJson.length; i++) {
             actionsJson[i].DisplayName = InitParser.translateInitValue(actionsJson[i].DisplayName, this.MS);
         }

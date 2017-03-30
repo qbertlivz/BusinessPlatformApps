@@ -67,7 +67,7 @@ export class MainService {
     }
 
     // Uninstall or any other types go here
-    async init() {
+    async init(): Promise<void> {
         let pages: string = '';
         let actions: string = '';
 

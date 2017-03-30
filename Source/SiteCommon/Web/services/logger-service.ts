@@ -28,7 +28,7 @@ export class LoggerService {
         this.OperationId = applicationInsights.context.operation.id;
     }
 
-    TrackStartRequest(request: any, uniqueId: any) {
+    TrackStartRequest(request: any, uniqueId: any): void {
         let properties: any = this.GetPropertiesForTelemtry();
         properties.UserGenId = this.UserGenId;
         properties.SessionId = this.SessionId;
@@ -41,7 +41,7 @@ export class LoggerService {
         this.appInsights.flush();
     }
 
-    TrackEndRequest(request: any, uniqueId: any, isSucess: any) {
+    TrackEndRequest(request: any, uniqueId: any, isSucess: any): void {
         let properties: any = this.GetPropertiesForTelemtry();
         properties.UserGenId = this.UserGenId;
         properties.SessionId = this.SessionId;
@@ -55,7 +55,7 @@ export class LoggerService {
         this.appInsights.flush();
     }
 
-    TrackEvent(requestName: any) {
+    TrackEvent(requestName: any): void {
         let properties: any = this.GetPropertiesForTelemtry();
         properties.UserGenId = this.UserGenId;
         properties.SessionId = this.SessionId;
@@ -66,7 +66,7 @@ export class LoggerService {
         this.appInsights.flush();
     }
 
-    TrackDeploymentStepStartEvent(deploymentIndex: any, deploymentName: any) {
+    TrackDeploymentStepStartEvent(deploymentIndex: any, deploymentName: any): void {
         let properties: any = this.GetPropertiesForTelemtry();
         properties.UserGenId = this.UserGenId;
         properties.SessionId = this.SessionId;
@@ -79,7 +79,7 @@ export class LoggerService {
         this.appInsights.flush();
     }
 
-    TrackDeploymentStepStoptEvent(deploymentIndex: any, deploymentName: any, isSuccess: any) {
+    TrackDeploymentStepStoptEvent(deploymentIndex: any, deploymentName: any, isSuccess: any): void {
         let properties: any = this.GetPropertiesForTelemtry();
         properties.UserGenId = this.UserGenId;
         properties.SessionId = this.SessionId;
@@ -93,7 +93,7 @@ export class LoggerService {
         this.appInsights.flush();
     }
 
-    TrackDeploymentStart() {
+    TrackDeploymentStart(): void {
         let properties: any = this.GetPropertiesForTelemtry();
         properties.UserGenId = this.UserGenId;
         properties.SessionId = this.SessionId;
@@ -105,7 +105,7 @@ export class LoggerService {
         this.appInsights.flush();
     }
 
-    TrackUninstallStart() {
+    TrackUninstallStart(): void {
         let properties: any = this.GetPropertiesForTelemtry();
         properties.UserGenId = this.UserGenId;
         properties.SessionId = this.SessionId;
@@ -117,7 +117,7 @@ export class LoggerService {
         this.appInsights.flush();
     }
 
-    TrackUninstallEnd(isSuccess: any) {
+    TrackUninstallEnd(isSuccess: any): void {
         let properties: any = this.GetPropertiesForTelemtry();
         properties.UserGenId = this.UserGenId;
         properties.SessionId = this.SessionId;
@@ -129,7 +129,7 @@ export class LoggerService {
         this.appInsights.flush();
     }
 
-    TrackDeploymentEnd(isSucess: any) {
+    TrackDeploymentEnd(isSucess: any): void {
         let properties: any = this.GetPropertiesForTelemtry();
         properties.UserGenId = this.UserGenId;
         properties.SessionId = this.SessionId;
@@ -160,13 +160,13 @@ export class LoggerService {
         return obj;
     }
 
-    TrackPageView(page: any, url: any) {
+    TrackPageView(page: any, url: any): void {
         let properties: any = this.GetPropertiesForTelemtry();
         this.appInsights.trackPageView(page, url, properties);
         this.appInsights.flush();
     }
 
-    TrackTrace(trace: string) {
+    TrackTrace(trace: string): void {
         this.appInsights.trackTrace('UI-' + trace);
         this.appInsights.flush();
     }

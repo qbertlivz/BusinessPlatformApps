@@ -36,7 +36,7 @@ export class ViewModelBase {
         this.viewmodel = this;
     }
 
-    loadParameters() {
+    loadParameters(): void {
         // Load the parameters from the additionalParamters section
         if (!this.parametersLoaded) {
             var parameters = this.MS.NavigationService.getCurrentSelectedPage().Parameters;
@@ -46,7 +46,7 @@ export class ViewModelBase {
         this.parametersLoaded = true;
     }
 
-    async NavigateNext() {
+    async NavigateNext(): Promise<void> {
         if (this.MS.NavigationService.isCurrentlyNavigating) {
             return;
         }
@@ -93,7 +93,7 @@ export class ViewModelBase {
         this.VerifyNavigation();
     }
 
-    NavigateBack() {
+    NavigateBack(): void {
         if (this.MS.NavigationService.isCurrentlyNavigating) {
             return;
         }
@@ -125,7 +125,7 @@ export class ViewModelBase {
         this.VerifyNavigation();
     }
 
-    async activate() {
+    async activate(): Promise<void> {
         this.isActivated = false;
         this.MS.UtilityService.SaveItem('Current Page', window.location.href);
         let currentRoute = this.MS.NavigationService.getCurrentSelectedPage().RoutePageName.toLowerCase();
@@ -160,11 +160,11 @@ export class ViewModelBase {
         }
     }
 
-    async attached() {
+    async attached(): Promise<void> {
         await this.OnLoaded();
     }
 
-    determineActivationStrategy() {
+    determineActivationStrategy(): any {
         return activationStrategy.replace; //replace the viewmodel with a new instance
     }
 
@@ -173,7 +173,7 @@ export class ViewModelBase {
     ///////////////////////////////////////////////////////////////////////
 
     // Called when object is no longer valid
-    Invalidate() {
+    Invalidate(): void {
         this.isValidated = false;
         this.showValidation = false;
         this.validationText = null;

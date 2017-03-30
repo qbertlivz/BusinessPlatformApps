@@ -10,20 +10,20 @@
         "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-SCCM2/Web/Images/SCCMArchitectureDiagram.png",
         "isDownload": "$(!this.MS.HttpService.isOnPremise)",
         "list1": [
-          "System Center 2012 Configuration Manager R2 SP1 or later. Read access to System Center Configuration Manager database is required.",
-          "Destination database: Azure SQL database or SQL Server database (SQL Server 2008 R2 SP3 or later).",
-          "For the machine where the installation is run, Microsoft .NET Framework 4.5 or later & PowerShell version 5.0 or later.",
-          "Power BI Desktop (latest version)",
-          "Power BI Pro (to share the template with your organization)"
+          "$translate(INIT_GETTING_STARTED_SCCM)",
+          "$translate(INIT_GETTING_STARTED_DESTINATION)",
+          "$translate(INIT_GETTING_STARTED_NET)",
+          "$translate(INIT_GETTING_STARTED_PBI_DESKTOP)",
+          "$translate(INIT_GETTING_STARTED_PBI_PRO)"
         ],
         "list2": [
-          "Scalable and extensible solution with minimum set up and maintenance considerations",
-          "Data pulled daily from System Center Configuration Manager & stored in a SQL database optimized for reporting",
-          "Import data into powerful Power BI reports"
+          "$translate(INIT_GETTING_STARTED_SCALABLE)",
+          "$translate(INIT_GETTING_STARTED_DATA_PULL_SCCM)",
+          "$translate(INIT_GETTING_STARTED_IMPORT_DATA_PBI)"
         ],
         "name": "$SiteCommon$/pages-gallery/getting-started.html",
-        "subtitle": "Welcome to the System Center Configuration Manager solution template.",
-        "templateName": "System Center Configuration Manager"
+        "subtitle": "$translate(INIT_SCCM_SUBTITLE)",
+        "templateName": "$translate(INIT_SCCM_TITLE)"
       },
       {
         "displayname": "Login",
@@ -39,7 +39,7 @@
           }
         ],
         "name": "$SiteCommon$/pages-gallery/windows-auth.html",
-        "subtitle": "Specify your windows credentials to create a recurring schedule. The credentials you specify will be used to also connect to the SCCM database"
+        "subtitle": "$translate(INIT_SCCM_LOGIN)"
       },
       {
         "credentialTarget": "pbi_sccm",
@@ -54,8 +54,8 @@
         ],
         "showAllWriteableDatabases": false,
         "showAzureSql": false,
-        "subtitle": "Set up a connection to your SCCM database so we can bring in your data.",
-        "title": "Connect to your System Center Configuration Manager database",
+        "subtitle": "$translate(INIT_SOURCE_SCCM_SUBTITLE)",
+        "title": "$translate(INIT_SOURCE_SCCM_TITLE)",
         "useImpersonation": true
       },
       {
@@ -74,8 +74,8 @@
           }
         ],
         "showSqlRecoveryModeHint": true,
-        "subtitle": "Set up a connection to your target database so we can transfer your data.",
-        "title": "Connect to your SQL database",
+        "subtitle": "$translate(INIT_SQL_SUBTITLE)",
+        "title": "$translate(INIT_SQL_TITLE)",
         "useImpersonation": true
       },
       {
@@ -105,41 +105,41 @@
 
     "Actions": [
       {
-        "displayname": "Deploy DB scripts",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
         "name": "Microsoft-DeploySQLScripts",
         "SqlScriptsFolder": "Service/Database/NoETL",
         "SqlServerIndex": "1",
         "useImpersonation": true
       },
       {
-        "displayname": "Deploy DB Configuration",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
         "name": "Microsoft-SetConfigValueInSql",
         "SqlConfigTable": "pbist_sccm.[configuration]",
         "SqlServerIndex": "1",
         "useImpersonation": true
       },
       {
-        "displayname": "Installing SQL Tools",
+        "displayname": "$translate(INIT_ACTION_SQL_TOOLS)",
         "name": "Microsoft-InstallSqlTools"
       },
       {
-        "displayname": "Copy dataload scripts",
+        "displayname": "$translate(INIT_ACTION_COPYING_DATALOAD_SCRIPTS)",
         "name": "Microsoft-InstallSCCM"
       },
       {
-        "displayname": "Grant permission for logging as a batch job",
+        "displayname": "$translate(INIT_ACTION_BATCH_PERMISSION)",
         "name": "Microsoft-AddLogonAsBatchPermission"
       },
       {
-        "displayname": "Schedule tasks",
+        "displayname": "$translate(INIT_ACTION_SCHEDULING_TASK)",
         "name": "Microsoft-CreateTask"
       },
       {
-        "displayname": "Run tasks",
+        "displayname": "$translate(INIT_ACTION_RUNNING_TASK)",
         "name": "Microsoft-RunTask"
       },
       {
-        "displayname": "Waiting for data to come in",
+        "displayname": "$translate(INIT_ACTION_WAITING_DATA)",
         "FinishedActionName": "Microsoft-GetTaskStatus",
         "IsWaiting": true,
         "name": "Microsoft-GetDataPullStatus",
@@ -159,8 +159,8 @@
         "name": "$SiteCommon$/pages-gallery/uninstall.html",
         "templateName": "System Center Configuration Manager",
         "uninstallList": [
-          "The task used to move data between the SCCM database and the target database",
-          "The scripts used to create the initial tables in the target database"
+          "$translate(INIT_UNINSTALL_SCCM)",
+          "$translate(INIT_UNINSTALL_SQL)"
         ]
       },
       {
@@ -168,22 +168,22 @@
         "isUninstall": true,
         "name": "$SiteCommon$/pages-gallery/progress.html",
         "showEmailSubmission": false,
-        "successMessage": "Uninstall complete"
+        "successMessage": "$translate(INIT_UNINSTALL_SUCCESS)"
       }
     ],
 
     "Actions": [
       {
-        "displayname": "Remove task",
+        "displayname": "$translate(INIT_ACTION_REMOVING_TASK)",
         "name": "Microsoft-RemoveTask",
         "TaskName": "Power BI Solution Template - SCCM"
       },
       {
-        "displayname": "Remove files",
+        "displayname": "$translate(INIT_ACTION_REMOVING_FILES)",
         "name": "Microsoft-RemoveFiles"
       },
       {
-        "displayname": "Finishing cleanup",
+        "displayname": "$translate(INIT_ACTION_FINISHING_CLEANUP)",
         "name": "Microsoft-RemoveFiles",
         "TargetPath": "C:\\Program Files\\Microsoft Templates\\Microsoft-SCCM2\\Apps\\Microsoft\\Released\\Microsoft-SCCM2\\Temp"
       }

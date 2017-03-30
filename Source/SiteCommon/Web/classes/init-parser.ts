@@ -4,14 +4,12 @@ import { VariableType } from '../enums/variable-type';
 import { ActionResponse } from '../models/action-response';
 import { Variable } from '../models/variable';
 
-import { DataStore } from '../services/data-store';
-import { HttpService } from '../services/http-service';
 import { MainService } from '../services/main-service';
 
 export class InitParser {
     public static MS: MainService;
 
-    public static async executeActions(actions: any[], obj: any, MS: MainService, self: any): Promise<boolean> {
+    public static async executeActions(actions: any[], self: any): Promise<boolean> {
         for (let index in actions) {
             let actionToExecute: any = actions[index];
             let name: string = actionToExecute.name;
@@ -78,7 +76,7 @@ export class InitParser {
                 break;
         }
 
-        if (command) {
+        if (command && self) {
             result = eval(command);
         }
 

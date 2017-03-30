@@ -6,8 +6,6 @@ import { InitParser } from '../classes/init-parser';
 
 import { DataStoreType } from '../enums/data-store-type';
 
-import { ActionResponse } from '../models/action-response';
-
 import { MainService } from './main-service';
 
 export class ViewModelBase {
@@ -61,7 +59,7 @@ export class ViewModelBase {
             let isNavigationSuccessful: boolean = await this.NavigatingNext();
             let isExtendedNavigationSuccessful: boolean = false;
             if (isNavigationSuccessful) {
-                 isExtendedNavigationSuccessful = await InitParser.executeActions(this.onNext, this, this.MS, this);
+                 isExtendedNavigationSuccessful = await InitParser.executeActions(this.onNext, this);
             }
 
             this.navigationMessage = '';
@@ -127,7 +125,7 @@ export class ViewModelBase {
         this.VerifyNavigation();
     }
 
-    async activate(params, navigationInstruction) {
+    async activate() {
         this.isActivated = false;
         this.MS.UtilityService.SaveItem('Current Page', window.location.href);
         let currentRoute = this.MS.NavigationService.getCurrentSelectedPage().RoutePageName.toLowerCase();
@@ -138,7 +136,7 @@ export class ViewModelBase {
         if (viewmodelPreviousSave) {
             let jsonParsed = JSON.parse(viewmodelPreviousSave);
             for (let propertyName in jsonParsed) {
-                this[propertyName] = jsonParsed[propertyName];
+                (<any>this)[propertyName] = jsonParsed[propertyName];
             }
 
             this.viewmodel = this;
@@ -193,7 +191,7 @@ export class ViewModelBase {
         this.isValidated = false;
         this.showValidation = false;
         this.MS.ErrorService.Clear();
-        this.isValidated = await InitParser.executeActions(this.onValidate, this, this.MS, this);
+        this.isValidated = await InitParser.executeActions(this.onValidate, this);
         this.showValidation = true;
         return this.isValidated;
     }

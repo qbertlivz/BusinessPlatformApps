@@ -3,7 +3,7 @@
 export class UtilityService {
     MS: MainService;
 
-    constructor(mainservice) {
+    constructor(mainservice: MainService) {
         this.MS = mainservice;
     }
 
@@ -16,7 +16,7 @@ export class UtilityService {
         return dailyTriggers;
     }
 
-    GetQueryParameter(id) {
+    GetQueryParameter(id: any) {
         var regex = new RegExp('[?&]' + id.replace(/[\[\]]/g, '\\$&') + '(=([^&#]*)|&|#|$)');
         var results = regex.exec(window.location.href);
         return (!results || !results[2])
@@ -24,7 +24,7 @@ export class UtilityService {
             : decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
 
-    GetQueryParameterFromUrl(name, url) {
+    GetQueryParameterFromUrl(name: any, url: any) {
         var regex = new RegExp('[?&]' + name.replace(/[\[\]]/g, '\\$&') + '(=([^&#]*)|&|#|$)');
         var results = regex.exec(url);
         return (!results || !results[2])
@@ -96,7 +96,7 @@ export class UtilityService {
     }
 
     // Add items to the session storage - should use DataStore where possible
-    SaveItem(key, value) {
+    SaveItem(key: any, value: any) {
         let val = JSON.stringify(value);
         if (window.sessionStorage.getItem(key)) {
             window.sessionStorage.removeItem(key);
@@ -108,12 +108,12 @@ export class UtilityService {
         window.sessionStorage.clear();
     }
 
-    GetItem(key) {
+    GetItem(key: any) {
         let item = JSON.parse(window.sessionStorage.getItem(key));
         return item;
     }
 
-    RemoveItem(key) {
+    RemoveItem(key: any) {
         window.sessionStorage.removeItem(key);
     }
 }

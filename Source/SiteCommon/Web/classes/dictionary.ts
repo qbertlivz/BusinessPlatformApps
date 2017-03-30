@@ -66,7 +66,7 @@
     }
 
     toJSON() {
-        var toConvert = {};
+        let toConvert: any = {};
 
         for (var i = 0; i < this.length(); i++) {
             toConvert[this.internalKeys[i]] = this.internalValues[i];

@@ -14,7 +14,7 @@ export class DataStore {
     CurrentRoutePage: string = '';
     DeploymentIndex: string = '';
 
-    constructor(MainService) {
+    constructor(MainService: MainService) {
         this.MS = MainService;
         this.PrivateDataStore = new Dictionary<Dictionary<any>>();
         this.PublicDataStore = new Dictionary<Dictionary<any>>();
@@ -182,14 +182,14 @@ export class DataStore {
         var values: DataStoreItem[];
 
         if (dataStoreType === DataStoreType.Private || dataStoreType === DataStoreType.Any) {
-            values = DataStore.getValueAndRoutesFromDataStore(this.PrivateDataStore, key, DataStoreType.Private);
+            values = DataStore.getValueAndRoutesFromDataStore(this.PrivateDataStore, key);
             if (values.length > 0) {
                 return values[0].value;
             }
         }
 
         if (dataStoreType === DataStoreType.Public || dataStoreType === DataStoreType.Any) {
-            values = DataStore.getValueAndRoutesFromDataStore(this.PublicDataStore, key, DataStoreType.Private);
+            values = DataStore.getValueAndRoutesFromDataStore(this.PublicDataStore, key);
             if (values.length > 0) {
                 return values[0].value;
             }
@@ -201,7 +201,7 @@ export class DataStore {
     private getAllValueFromDataStore(key: string, dataStoreType: DataStoreType = DataStoreType.Any): any[] {
         var items: DataStoreItem[] = this.getValueAndRoutesFromDataStore(dataStoreType, key);
 
-        return items.map((value, index, array) => { return value.value });
+        return items.map((value) => { return value.value });
     }
 
     private getValueAndRoutesFromDataStore(dataStoreType: DataStoreType, key: string): DataStoreItem[] {
@@ -209,11 +209,11 @@ export class DataStore {
 
         if (dataStoreType === DataStoreType.Private || dataStoreType === DataStoreType.Any) {
 
-            valuesToReturn = valuesToReturn.concat(DataStore.getValueAndRoutesFromDataStore(this.PrivateDataStore, key, DataStoreType.Private));
+            valuesToReturn = valuesToReturn.concat(DataStore.getValueAndRoutesFromDataStore(this.PrivateDataStore, key));
         }
 
         if (dataStoreType === DataStoreType.Public || dataStoreType === DataStoreType.Any) {
-            valuesToReturn = valuesToReturn.concat(DataStore.getValueAndRoutesFromDataStore(this.PublicDataStore, key, DataStoreType.Public));
+            valuesToReturn = valuesToReturn.concat(DataStore.getValueAndRoutesFromDataStore(this.PublicDataStore, key));
         }
 
         return valuesToReturn;
@@ -258,9 +258,7 @@ export class DataStore {
         }
     }
 
-    private static getValueAndRoutesFromDataStore(store: Dictionary<Dictionary<any>>,
-        key: string,
-        dataStoreType: DataStoreType): DataStoreItem[] {
+    private static getValueAndRoutesFromDataStore(store: Dictionary<Dictionary<any>>, key: string): DataStoreItem[] {
         var itemsMatching = new Array<DataStoreItem>();
 
         for (var i = 0; i < store.length(); i++) {

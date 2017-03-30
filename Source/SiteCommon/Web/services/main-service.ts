@@ -1,6 +1,5 @@
 ﻿/// <reference path="../../../Site/Microsoft.Deployment.Site.Web/typings/index.d.ts" />
 
-import { Aurelia } from 'aurelia-framework';
 import { inject } from 'aurelia-framework';
 import { Router } from 'aurelia-router';
 import { HttpClient } from 'aurelia-http-client';
@@ -17,7 +16,6 @@ import { LoggerService } from './logger-service';
 import { NavigationService } from './navigation-service';
 import { TranslateService } from './translate-service';
 import { UtilityService } from './utility-service';
-import { ViewModelBase } from './view-model-base';
 
 @inject(Router, HttpClient)
 export class MainService {
@@ -35,7 +33,7 @@ export class MainService {
     UtilityService: UtilityService;
     templateData: any;
 
-    constructor(router, httpClient) {
+    constructor(router: any, httpClient: HttpClient) {
         this.Router = router;
         (<any>window).MainService = this;
 
@@ -43,7 +41,7 @@ export class MainService {
         this.appName = this.UtilityService.GetQueryParameter(QueryParameter.NAME); 
 
         let experienceTypeString: string = this.UtilityService.GetQueryParameter(QueryParameter.TYPE);
-        this.experienceType = ExperienceType[<string>experienceTypeString];
+        this.experienceType = (<any>ExperienceType)[experienceTypeString];
 
         this.ErrorService = new ErrorService(this);
         this.HttpService = new HttpService(this, httpClient);

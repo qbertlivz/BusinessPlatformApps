@@ -155,7 +155,8 @@ export class DataStore {
     }
 
     public getValue(key: string, dataStoreType: DataStoreType = DataStoreType.Any): string {
-        let val = this.getFirstValueFromDataStore(key, dataStoreType);
+        //let val = this.getFirstValueFromDataStore(key, dataStoreType);
+        let val = this.getLastValueFromDataStore(key, dataStoreType);
         if (val || val === '') {
             return val.toString();
         }
@@ -192,6 +193,26 @@ export class DataStore {
             values = DataStore.getValueAndRoutesFromDataStore(this.PublicDataStore, key, DataStoreType.Private);
             if (values.length > 0) {
                 return values[0].value;
+            }
+        }
+
+        return null;
+    }
+
+    private getLastValueFromDataStore(key: string, dataStoreType: DataStoreType = DataStoreType.Any): any {
+        var values: DataStoreItem[];
+
+        if (dataStoreType === DataStoreType.Private || dataStoreType === DataStoreType.Any) {
+            values = DataStore.getValueAndRoutesFromDataStore(this.PrivateDataStore, key, DataStoreType.Private);
+            if (values.length > 0) {
+                return values[values.length - 1].value;
+            }
+        }
+
+        if (dataStoreType === DataStoreType.Public || dataStoreType === DataStoreType.Any) {
+            values = DataStore.getValueAndRoutesFromDataStore(this.PublicDataStore, key, DataStoreType.Private);
+            if (values.length > 0) {
+                return values[values.length - 1].value;
             }
         }
 

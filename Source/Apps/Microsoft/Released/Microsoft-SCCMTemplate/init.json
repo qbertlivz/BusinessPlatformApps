@@ -75,7 +75,7 @@
           }
         ],
         "showSqlRecoveryModeHint": true,
-        "subtitle": "Set up a connection to your target database so we can transfer your data.",
+        "subtitle": "$translate(INIT_SQL_SUBTITLE)",
         "title": "$translate(INIT_SQL_TITLE)",
         "useImpersonation": true
       },

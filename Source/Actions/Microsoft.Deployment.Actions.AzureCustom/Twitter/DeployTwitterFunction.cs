@@ -29,29 +29,27 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
             var sitename = request.DataStore.GetValue("SiteName");
 
             var param = new AzureArmParameterGenerator();
-            string storageAccountName = "solutiontemplate" + Path.GetRandomFileName().Replace(".", "").Substring(0, 8);
-            request.DataStore.AddToDataStore("StorageAccountName", storageAccountName);
-            param.AddStringParam("storageaccountname", storageAccountName);
+            param.AddStringParam("storageaccountname", "solutiontemplate" + Path.GetRandomFileName().Replace(".", "").Substring(0, 8));
             param.AddStringParam("sitename", sitename);
             param.AddStringParam("AppHostingPlan", functionAppHostingPlan);
             param.AddStringParam("resourcegroup", resourceGroup);
             param.AddStringParam("subscription", subscription);
 
-            var armTemplate = JsonUtility.GetJObjectFromJsonString(System.IO.File.ReadAllText( Path.Combine(request.Info.App.AppFilePath, "Service/AzureArm/function.json")));
+            var armTemplate = JsonUtility.GetJObjectFromJsonString(System.IO.File.ReadAllText(Path.Combine(request.Info.App.AppFilePath, "Service/AzureArm/function.json")));
             var armParamTemplate = JsonUtility.GetJObjectFromObject(param.GetDynamicObject());
             armTemplate.Remove("parameters");
             armTemplate.Add("parameters", armParamTemplate["parameters"]);
-            
+
             SubscriptionCloudCredentials creds = new TokenCloudCredentials(subscription, azureToken);
             Microsoft.Azure.Management.Resources.ResourceManagementClient client = new ResourceManagementClient(creds);
 
- 
+
             var deployment = new Microsoft.Azure.Management.Resources.Models.Deployment()
             {
                 Properties = new DeploymentPropertiesExtended()
                 {
                     Template = armTemplate.ToString(),
-                   Parameters = JsonUtility.GetEmptyJObject().ToString()
+                    Parameters = JsonUtility.GetEmptyJObject().ToString()
                 }
             };
 

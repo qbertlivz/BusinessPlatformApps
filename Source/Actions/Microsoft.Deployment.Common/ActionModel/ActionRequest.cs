@@ -1,5 +1,6 @@
-﻿using Microsoft.Deployment.Common.Controller;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+
+using Microsoft.Deployment.Common.Controller;
 
 namespace Microsoft.Deployment.Common.ActionModel
 {

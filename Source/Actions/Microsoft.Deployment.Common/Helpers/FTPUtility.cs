@@ -138,6 +138,5 @@ namespace Microsoft.Deployment.Common.Helpers
                 //}
             }
         }
-
     }
 }

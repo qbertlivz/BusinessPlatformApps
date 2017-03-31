@@ -99,6 +99,5 @@ namespace Microsoft.Deployment.Common.Helpers
                 return await client.SendAsync(message);
             }
         }
-
     }
 }

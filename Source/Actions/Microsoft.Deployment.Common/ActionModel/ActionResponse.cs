@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Text;
-using Microsoft.Deployment.Common.ErrorCode;
-using Microsoft.Deployment.Common.Helpers;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+
+using Microsoft.Deployment.Common.ErrorCode;
+using Microsoft.Deployment.Common.Helpers;
 
 namespace Microsoft.Deployment.Common.ActionModel
 {

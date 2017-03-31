@@ -130,6 +130,29 @@
         "name": "Microsoft-WaitForArmDeploymentStatus"
       },
       {
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_STORAGE_ACCOUNT)",
+        "DeploymentName": "StorageAccount",
+        "name": "Microsoft-CreateAzureStorageAccount",
+        "StorageAccountEncryptionEnabled": "false",
+        "StorageAccountName": "$save('storage' + this.MS.DataStore.getValue('uniqueId'))",
+        "StorageAccountType": "Standard_LRS"
+      },
+      {
+        "DeploymentName": "StorageAccount",
+        "displayname": "$translate(INIT_ACTION_VALIDATING_STORAGE_ACCOUNT)",
+        "name": "Microsoft-WaitForArmDeploymentStatus"
+      },
+      {
+        "DeploymentName": "StorageAccount",
+        "displayname": "$translate(INIT_ACTION_GETTING_STORAGE_ACCOUNT_KEY)",
+        "name": "Microsoft-GetStorageAccountKey"
+      },
+      {
+        "DeploymentName": "StorageAccount",
+        "displayname": "$translate(INIT_ACTION_VALIDATING_STORAGE_ACCOUNT_KEY)",
+        "name": "Microsoft-WaitForArmDeploymentStatus"
+      },
+      {
         "DeploymentName": "AzureML",
         "displayname": "$translate(INIT_ACTION_DEPLOYING_AZURE_ML)",
         "CommitmentPlan": "commitmentplan",

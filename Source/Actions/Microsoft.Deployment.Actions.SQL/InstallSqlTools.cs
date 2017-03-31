@@ -1,12 +1,13 @@
 ﻿namespace Microsoft.Deployment.Actions.SQL
 {
-    using Common.ActionModel;
-    using Common.Actions;
     using System;
     using System.ComponentModel.Composition;
     using System.Diagnostics;
     using System.IO;
     using System.Threading.Tasks;
+
+    using Common.ActionModel;
+    using Common.Actions;
 
     [Export(typeof(IAction))]
     public class InstallSqlTools : BaseAction

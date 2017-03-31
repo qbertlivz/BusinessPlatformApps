@@ -1,15 +1,17 @@
 ﻿namespace Microsoft.Deployment.Common.Actions.MsCrm
 {
-    using Microsoft.Deployment.Common.ActionModel;
-    using Microsoft.Deployment.Common.Actions;
-    using Microsoft.Deployment.Common.Helpers;
-    using Model;
-    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.Composition;
     using System.Net.Http.Headers;
     using System.Threading.Tasks;
+
+    using Model;
+    using Newtonsoft.Json;
+
+    using Microsoft.Deployment.Common.ActionModel;
+    using Microsoft.Deployment.Common.Actions;
+    using Microsoft.Deployment.Common.Helpers;
 
     [Export(typeof(IAction))]
     public class CrmValidateProfile : BaseAction

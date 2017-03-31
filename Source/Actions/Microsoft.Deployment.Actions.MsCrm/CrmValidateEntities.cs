@@ -4,17 +4,17 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.ServiceModel;
-using System.Text;
 using System.Threading.Tasks;
+
 using Hyak.Common.Internals;
-using Microsoft.Deployment.Common.ActionModel;
-using Microsoft.Deployment.Common.Controller;
-using Microsoft.Deployment.Common.Helpers;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.WebServiceClient;
 using Newtonsoft.Json.Linq;
+
+using Microsoft.Deployment.Common.ActionModel;
+using Microsoft.Deployment.Common.Controller;
+using Microsoft.Deployment.Common.Helpers;
 
 namespace Microsoft.Deployment.Common.Actions.MsCrm
 {

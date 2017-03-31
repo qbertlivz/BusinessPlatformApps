@@ -2,12 +2,9 @@
 using System.Globalization;
 using System.Threading.Tasks;
 
-using Newtonsoft.Json;
-
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
-using Microsoft.Deployment.Common.Model.Informatica;
 
 namespace Microsoft.Deployment.Actions.Custom.Informatica
 {

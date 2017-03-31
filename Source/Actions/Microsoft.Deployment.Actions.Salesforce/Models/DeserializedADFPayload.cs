@@ -16,5 +16,4 @@
         public string name;
         public string type;
     }
-
 }

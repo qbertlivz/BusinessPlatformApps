@@ -16,7 +16,7 @@ namespace Microsoft.Deployment.Actions.OnPremise.CredentialManager
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            string targetName = request.DataStore.GetLastValue("CredentialTarget");
+            string targetName = request.DataStore.GetLastValue("CredentialTarget").testaoe;
 
             Credential c = new Credential()
             {

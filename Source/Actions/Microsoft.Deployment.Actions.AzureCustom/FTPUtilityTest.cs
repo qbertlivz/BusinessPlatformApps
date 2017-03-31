@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Net;
+
 using Microsoft.Deployment.Common.Helpers;
 
 namespace Microsoft.Deployment.Actions.AzureCustom
@@ -51,7 +50,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom
                 UploadFile(ftpserver, user, password, path, data);
             });
         }
-
 
         public static void UploadFile(string ftpserver, string user, string password, string relPath, byte[] data)
         {

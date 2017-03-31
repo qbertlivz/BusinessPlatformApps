@@ -6,12 +6,12 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
+using Newtonsoft.Json.Linq;
+
 using Microsoft.Deployment.Common;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
-
-using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
 {

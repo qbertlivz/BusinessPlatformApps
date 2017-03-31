@@ -1,11 +1,11 @@
-﻿
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
+
 using AzureML;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
-
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureML
 {

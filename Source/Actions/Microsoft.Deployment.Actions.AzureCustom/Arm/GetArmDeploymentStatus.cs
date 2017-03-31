@@ -1,5 +1,5 @@
-﻿
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+
 using Microsoft.Deployment.Common.ActionModel;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.Arm

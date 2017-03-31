@@ -120,7 +120,7 @@
         "filename": "$save('SalesManagementReport.pbix')",
         "showCounts": true,
         "finishedActionName": "$run(this.MS.DataStore.getValue('DataMovement') === 'D365' ? 'Microsoft-CrmGetProfileStatus' : 'Microsoft-GetScribeSolutionStatus')",
-        "asDatabase": "d365",
+        "asDatabase": "SalesManagement",
         "filenameSSAS": "SalesManagementReportAS.pbix",
         "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(10))"
       }
@@ -158,7 +158,7 @@
         "SqlSubGroup": "SSAS"
       },
       {
-        "ASDatabase": "d365",
+        "ASDatabase": "SalesManagement",
         "displayname": "$translate(INIT_ACTION_DEPLOYING_AS_MODEL)",
         "name": "Microsoft-DeployAzureASModel",
         "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",

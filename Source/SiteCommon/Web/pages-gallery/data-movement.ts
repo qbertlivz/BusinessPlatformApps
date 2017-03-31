@@ -21,7 +21,6 @@ export class DataMovement extends ViewModelBase {
 
     OnDataMovementChanged(): void {
         this.Invalidate();
-
         this.isValidated = this.dataMovement === this.dataMovementType.ADF || this.dataMovement === this.dataMovementType.D365;
     }
 

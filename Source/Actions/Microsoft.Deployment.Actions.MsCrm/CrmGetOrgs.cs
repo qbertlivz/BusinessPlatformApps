@@ -1,20 +1,16 @@
-﻿using System.Diagnostics;
-using System.Threading;
-
-namespace Microsoft.Deployment.Common.Actions.MsCrm
+﻿namespace Microsoft.Deployment.Common.Actions.MsCrm
 {
-    using Microsoft.Deployment.Common.ActionModel;
-    using Microsoft.Deployment.Common.Actions;
-    using Microsoft.Deployment.Common.Helpers;
+    using System.ComponentModel.Composition;
+    using System.Net.Http.Headers;
+    using System.Threading.Tasks;
+
     using Model;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-    using System;
-    using System.ComponentModel.Composition;
-    using System.Dynamic;
-    using System.Net;
-    using System.Net.Http.Headers;
-    using System.Threading.Tasks;
+
+    using Microsoft.Deployment.Common.ActionModel;
+    using Microsoft.Deployment.Common.Actions;
+    using Microsoft.Deployment.Common.Helpers;
 
     [Export(typeof(IAction))]
     public class CrmGetOrgs : BaseAction

@@ -1,14 +1,16 @@
-﻿using System.ComponentModel.Composition;
+﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Dynamic;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+
+using Newtonsoft.Json.Linq;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.ErrorCode;
 using Microsoft.Deployment.Common.Helpers;
-using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.Common
 {
@@ -36,7 +38,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
                     appSettings.Add(key);
                 }
             }
-
 
             AzureHttpClient client = new AzureHttpClient(azureToken, subscription, resourceGroup);
 

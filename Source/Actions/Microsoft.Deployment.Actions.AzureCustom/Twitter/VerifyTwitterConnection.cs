@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.Composition;
 using System.Net.Http;
 using System.Threading.Tasks;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.ErrorCode;
@@ -39,4 +40,3 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
         }
     }
 }
-

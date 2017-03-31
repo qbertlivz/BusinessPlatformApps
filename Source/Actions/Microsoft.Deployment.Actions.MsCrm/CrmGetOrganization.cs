@@ -1,16 +1,17 @@
 ﻿namespace Microsoft.Deployment.Common.Actions.MsCrm
 {
-    using Microsoft.Deployment.Common.ActionModel;
-    using Microsoft.Deployment.Common.Actions;
-    using Microsoft.Deployment.Common.Helpers;
-    using Model;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using System;
     using System.ComponentModel.Composition;
     using System.Net;
     using System.Net.Http.Headers;
     using System.Threading.Tasks;
+
+    using Model;
+    using Newtonsoft.Json;
+
+    using Microsoft.Deployment.Common.ActionModel;
+    using Microsoft.Deployment.Common.Actions;
+    using Microsoft.Deployment.Common.Helpers;
 
     [Export(typeof(IAction))]
     public class CrmGetOrganization : BaseAction

@@ -18,7 +18,6 @@
             InitializeConnectionElement(server, catalog, cube);
         }
 
-
         public void InitializeConnectionElement(string server, string catalog, string cube)
         {
             ConnectionString = $"Data Source={server};Initial Catalog=\"{catalog}\";Cube=\"{cube}\"";

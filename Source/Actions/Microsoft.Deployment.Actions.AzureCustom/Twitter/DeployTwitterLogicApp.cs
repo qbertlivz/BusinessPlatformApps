@@ -2,9 +2,11 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Microsoft.Azure;
 using Microsoft.Azure.Management.Resources;
 using Microsoft.Azure.Management.Resources.Models;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.ErrorCode;
@@ -45,7 +47,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
 
             SubscriptionCloudCredentials creds = new TokenCloudCredentials(subscription, azureToken);
             Microsoft.Azure.Management.Resources.ResourceManagementClient client = new ResourceManagementClient(creds);
-
 
             var deployment = new Microsoft.Azure.Management.Resources.Models.Deployment()
             {

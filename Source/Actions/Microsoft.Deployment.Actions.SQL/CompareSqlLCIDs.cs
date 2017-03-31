@@ -1,11 +1,11 @@
-﻿using Microsoft.Deployment.Common.ActionModel;
+﻿using System.ComponentModel.Composition;
+using System.Data;
+using System.Threading.Tasks;
+
+using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Enums;
 using Microsoft.Deployment.Common.Helpers;
-
-using System.ComponentModel.Composition;
-using System.Data;
-using System.Threading.Tasks;
 
 namespace Microsoft.Deployment.Actions.SQL
 {
@@ -27,7 +27,7 @@ namespace Microsoft.Deployment.Actions.SQL
 
             int sourceLCID = (int)dtSrcLCID.Rows[0]["DB_LCID"];
             int destLCID = (int)dtDestLCID.Rows[0]["DB_LCID"];
-            
+
             return sourceLCID==destLCID ? new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject()) :
                                           new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "SQL_TargetCollationDoesntMatch");
         }

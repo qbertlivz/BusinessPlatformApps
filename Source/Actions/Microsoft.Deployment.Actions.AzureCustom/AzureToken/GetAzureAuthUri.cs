@@ -6,13 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 
+using Microsoft.Azure;
+using Microsoft.Azure.Management.Resources;
+using Microsoft.Azure.Management.Resources.Models;
+
 using Microsoft.Deployment.Common;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
-using Microsoft.Azure;
-using Microsoft.Azure.Management.Resources;
-using Microsoft.Azure.Management.Resources.Models;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
 {

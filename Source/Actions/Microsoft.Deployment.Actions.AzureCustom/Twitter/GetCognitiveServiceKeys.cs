@@ -2,10 +2,12 @@
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+
+using Newtonsoft.Json.Linq;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
-using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
 {
@@ -14,9 +16,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-
             var cognitiveServiceKey = request.DataStore.GetAllValues("CognitiveServiceKey").LastOrDefault();
-            
+
             if (!string.IsNullOrEmpty(cognitiveServiceKey))
             {
                 return new ActionResponse(ActionStatus.Success);
@@ -44,4 +45,3 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
         }
     }
 }
-

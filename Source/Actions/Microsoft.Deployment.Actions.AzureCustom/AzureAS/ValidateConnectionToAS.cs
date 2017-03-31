@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+
 using Microsoft.AnalysisServices.Tabular;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
@@ -38,15 +36,13 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
             {
                 Server server = new Server();
                 server.Connect(connectionString);
-                
                 request.DataStore.AddToDataStore("ASConnectionString", connectionString, DataStoreType.Private);
             }
             catch (Exception ex)
             {
               return new ActionResponse(ActionStatus.FailureExpected, null, ex, null);
             }
-           
-          
+
             return new ActionResponse(ActionStatus.Success);
         }
     }

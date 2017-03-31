@@ -31,9 +31,12 @@ export class DeploymentService {
     }
 
     async ExecuteActions(): Promise<boolean> {
-        if (this.isFinished || this.hasError) {
+        if (this.isFinished && !this.hasError) {
             return false;
         }
+
+        this.hasError = false;
+        this.isFinished = false;
 
         if (this.experienceType === ExperienceType.uninstall) {
             this.MS.LoggerService.TrackUninstallStart();

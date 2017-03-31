@@ -1,13 +1,13 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using Microsoft.Deployment.Common.ActionModel;
-using Microsoft.Deployment.Common.Actions;
-using Microsoft.Deployment.Common.Helpers;
+
 using Newtonsoft.Json.Linq;
 using Simple.CredentialManager;
+
+using Microsoft.Deployment.Common.ActionModel;
+using Microsoft.Deployment.Common.Actions;
 
 namespace Microsoft.Deployment.Actions.OnPremise.CredentialManager
 {

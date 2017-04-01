@@ -186,7 +186,7 @@
         "AppSettingKeys": {
           "connStringAS": "$ds(ASConnectionString)",
           "connStringSql": "$dsall(SqlConnectionString)[0]",
-          "databaseAS": "salesforce",
+          "databaseAS": "SalesManagement",
           "functionName": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
           "schema": "[smgt]"
         },

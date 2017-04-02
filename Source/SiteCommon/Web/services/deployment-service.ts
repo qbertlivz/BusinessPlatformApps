@@ -60,7 +60,7 @@ export class DeploymentService {
                 param = this.actions[i].AdditionalParameters;
             }
 
-            InitParser.loadVariables(param, param, this.MS, this);
+            InitParser.loadVariables(this.MS.UtilityService.Clone(param), this.MS.UtilityService.Clone(param), this.MS, this);
 
             // Skip action if requested to do so by variable
             if (param && param.skip && param.skip.toString().toLowerCase() === 'true') {

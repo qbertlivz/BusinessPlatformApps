@@ -57,10 +57,10 @@ export class DeploymentService {
 
             let param: any = {};
             if (lastActionStatus !== ActionStatus.BatchWithState) {
-                param = this.actions[i].AdditionalParameters;
+                param = this.MS.UtilityService.Clone(this.actions[i].AdditionalParameters);
             }
 
-            InitParser.loadVariables(this.MS.UtilityService.Clone(param), this.MS.UtilityService.Clone(param), this.MS, this);
+            InitParser.loadVariables(param, param, this.MS, this);
 
             // Skip action if requested to do so by variable
             if (param && param.skip && param.skip.toString().toLowerCase() === 'true') {

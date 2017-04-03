@@ -17,7 +17,7 @@ export class HttpService {
     isServiceBusy: boolean = false;
     MS: MainService;
 
-    constructor(MainService, HttpClient) {
+    constructor(MainService: MainService, HttpClient: HttpClient) {
         if (window.location.href.startsWith('http://localhost') || window.location.href.startsWith('https://localhost')) {
             this.baseUrl = 'http://localhost:2305/api/';
         } else {
@@ -41,11 +41,11 @@ export class HttpService {
         }
     }
 
-    Close() {
+    Close(): void {
         this.command.close(!this.MS.DeploymentService.hasError && this.MS.DeploymentService.isFinished);
     }
 
-    async getApp(name) {
+    async getApp(name: string): Promise<any> {
         var response = null;
         let uniqueId = this.MS.UtilityService.GetUniqueId(20);
         this.MS.LoggerService.TrackStartRequest('GetApp-name', uniqueId);
@@ -64,7 +64,7 @@ export class HttpService {
         return responseParsed;
     }
 
-    async executeAsync(method, content: any = {}): Promise<ActionResponse> {
+    async executeAsync(method: string, content: any = {}): Promise<ActionResponse> {
         this.isServiceBusy = true;
         var actionResponse: ActionResponse = null;
 
@@ -90,7 +90,7 @@ export class HttpService {
 
             var responseParsed: any = JSON.parse(response);
             actionResponse = responseParsed;
-            actionResponse.Status = ActionStatus[<string>responseParsed.Status];
+            actionResponse.Status = (<any>ActionStatus)[responseParsed.Status];
 
             this.MS.LoggerService.TrackEndRequest(method, uniqueId, !actionResponse.IsSuccess);
             this.MS.DataStore.loadDataStoreFromJson(actionResponse.DataStore);
@@ -115,7 +115,7 @@ export class HttpService {
         return actionResponse;
     }
 
-    async executeAsyncWithImpersonation(method, content): Promise<ActionResponse> {
+    async executeAsyncWithImpersonation(method: string, content: any): Promise<ActionResponse> {
         let body: any = {};
 
         if (content) {
@@ -126,7 +126,7 @@ export class HttpService {
         return this.executeAsync(method, content);
     }
 
-    private getRequestObject(method: string, relativeUrl: string, body: any = {}) {
+    private getRequestObject(method: string, relativeUrl: string, body: any = {}): any {
         let uniqueId = this.MS.UtilityService.GetUniqueId(20);
         var request = this.HttpClient.createRequest(relativeUrl);
         request = request

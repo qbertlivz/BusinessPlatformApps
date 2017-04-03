@@ -3,5 +3,5 @@
 import { bindable } from 'aurelia-framework';
 
 export class NavButtons {
-    @bindable viewmodel = null;
+    @bindable viewmodel: any = null;
 }

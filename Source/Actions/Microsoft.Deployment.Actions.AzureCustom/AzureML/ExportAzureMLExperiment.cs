@@ -1,15 +1,12 @@
-﻿
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
+
 using AzureML;
 using AzureML.Contract;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
-
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureML
 {

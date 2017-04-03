@@ -7,6 +7,9 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+using Newtonsoft.Json;
+
 using Microsoft.Deployment.Actions.Salesforce.Helpers;
 using Microsoft.Deployment.Actions.Salesforce.Models;
 using Microsoft.Deployment.Actions.Salesforce.SalesforceSOAP;
@@ -14,7 +17,6 @@ using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Enums;
 using Microsoft.Deployment.Common.Helpers;
-using Newtonsoft.Json;
 
 namespace Microsoft.Deployment.Actions.Salesforce
 {

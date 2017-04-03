@@ -1,10 +1,12 @@
-﻿using Microsoft.Deployment.Common.ActionModel;
-using Microsoft.Deployment.Common.Actions;
+﻿using System.ComponentModel.Composition;
+using System.Threading.Tasks;
+
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Blob;
-using System.ComponentModel.Composition;
-using System.Threading.Tasks;
+
+using Microsoft.Deployment.Common.ActionModel;
+using Microsoft.Deployment.Common.Actions;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.Common
 {
@@ -37,7 +39,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             BlobContainerPermissions permissions = container.GetPermissions();
             permissions.PublicAccess = BlobContainerPublicAccessType.Container;
             container.SetPermissions(permissions);
-
 
             return new ActionResponse(ActionStatus.Success);
         }

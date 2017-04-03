@@ -1,6 +1,4 @@
 ﻿using System;
-using Microsoft.Deployment.Common.ActionModel;
-using Microsoft.Deployment.Common.Helpers;
 
 namespace Microsoft.Deployment.Common.Exceptions
 {

@@ -1,7 +1,5 @@
 var bundler = require('aurelia-bundler');
-var del = require('del');
 var gulp = require('gulp');
-var runSequence = require('run-sequence');
 
 var config = {
     force: true,

@@ -10,14 +10,15 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Arm
 {
     using System.ComponentModel.Composition;
     using System.Threading;
+
     using Microsoft.Azure;
     using Microsoft.Azure.Management.Resources;
     using Microsoft.Azure.Management.Resources.Models;
+
     using Microsoft.Deployment.Common.ActionModel;
     using Microsoft.Deployment.Common.Actions;
     using Microsoft.Deployment.Common.ErrorCode;
     using Microsoft.Deployment.Common.Helpers;
-
 
     [Export(typeof(IAction))]
     public class DeployArmTemplate : BaseAction

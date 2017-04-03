@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Text.RegularExpressions;
+
 using Microsoft.Deployment.Common.Enums;
 using Microsoft.Deployment.Common.Model;
 

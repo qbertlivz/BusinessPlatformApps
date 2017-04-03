@@ -1,13 +1,13 @@
-﻿using Microsoft.AnalysisServices;
+﻿using System;
+using System.ComponentModel.Composition;
+using System.IO;
+using System.Threading.Tasks;
+
+using Microsoft.AnalysisServices;
 using Microsoft.AnalysisServices.Tabular;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
-
-using System;
-using System.ComponentModel.Composition;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
 {
@@ -21,7 +21,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
             string sqlConnectionString = request.DataStore.GetValue("SqlConnectionString");
             var connectionStringObj = SqlUtility.GetSqlCredentialsFromConnectionString(sqlConnectionString);
             string connectionString = request.DataStore.GetValue("ASConnectionString");
-
 
             string xmlaContents = File.ReadAllText(request.Info.App.AppFilePath + "/" + xmla);
 

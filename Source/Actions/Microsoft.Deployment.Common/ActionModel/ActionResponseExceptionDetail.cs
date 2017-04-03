@@ -1,5 +1,4 @@
-﻿
-namespace Microsoft.Deployment.Common.ActionModel
+﻿namespace Microsoft.Deployment.Common.ActionModel
 {
     using ErrorResources;
     using Helpers;

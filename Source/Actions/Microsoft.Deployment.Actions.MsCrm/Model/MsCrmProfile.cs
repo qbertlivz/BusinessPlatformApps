@@ -1,6 +1,7 @@
 ﻿namespace Microsoft.Deployment.Common.Actions.MsCrm.Model
 {
     using System;
+
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
 

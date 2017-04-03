@@ -7,11 +7,11 @@ export class ErrorService {
     message: string = '';
     showContactUs: boolean = false;
 
-    constructor(MainService) {
+    constructor(MainService: MainService) {
         this.MS = MainService;
     }
 
-    Clear() {
+    Clear(): void {
         this.details = '';
         this.logLocation = '';
         this.message = '';

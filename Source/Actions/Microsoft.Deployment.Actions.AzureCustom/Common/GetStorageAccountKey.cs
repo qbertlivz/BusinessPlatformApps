@@ -1,16 +1,12 @@
 ﻿using System.ComponentModel.Composition;
-using System.IO;
-using System.Threading;
+using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.Azure;
-using Microsoft.Azure.Management.Resources;
-using Microsoft.Azure.Management.Resources.Models;
+
+using Newtonsoft.Json.Linq;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
-using Microsoft.Deployment.Common.ErrorCode;
 using Microsoft.Deployment.Common.Helpers;
-using System.Net.Http;
-using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.Common
 {
@@ -38,7 +34,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
                 return new ActionResponse(ActionStatus.Success, newStorageAccountKey, true);
             }
 
-            
             return new ActionResponse(ActionStatus.Failure);
         }
     }

@@ -1,25 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.IO;
+using System.Data;
+using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading;
+using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.ActionModel;
-using Microsoft.Deployment.Actions.Salesforce.Models;
 using Microsoft.Deployment.Common.Helpers;
-using Microsoft.Azure;
-using Microsoft.Azure.Management.Resources;
-using Microsoft.Azure.Management.Resources.Models;
 using Microsoft.Deployment.Common.ErrorCode;
-using Microsoft.Deployment.Actions.Salesforce.Helpers;
-using System.Globalization;
-using System.Data;
-using System.Net.Http;
 
 namespace Microsoft.Deployment.Actions.Salesforce
 {

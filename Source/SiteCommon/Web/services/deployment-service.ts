@@ -4,8 +4,6 @@ import { ActionStatus } from '../enums/action-status';
 import { DataStoreType } from '../enums/data-store-type';
 import { ExperienceType } from '../enums/experience-type';
 
-import { ActionResponse } from '../models/action-response';
-
 import { MainService } from './main-service';
 
 export class DeploymentService {
@@ -19,11 +17,11 @@ export class DeploymentService {
     message: string = '';
     progressPercentage: number = 0;
 
-    constructor(MainService) {
+    constructor(MainService: MainService) {
         this.MS = MainService;
     }
 
-    init(actionsJson: any) {
+    init(actionsJson: any): void {
         for (let i = 0; i < actionsJson.length; i++) {
             actionsJson[i].DisplayName = InitParser.translateInitValue(actionsJson[i].DisplayName, this.MS);
         }

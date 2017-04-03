@@ -6,8 +6,6 @@ import { InitParser } from '../classes/init-parser';
 
 import { DataStoreType } from '../enums/data-store-type';
 
-import { ActionResponse } from '../models/action-response';
-
 import { MainService } from './main-service';
 
 export class ViewModelBase {
@@ -36,13 +34,13 @@ export class ViewModelBase {
         this.viewmodel = this;
     }
 
-    loadParameters() {
+    loadParameters(): void {
         // Load the parameters from the additionalParameters section
         var parameters = this.MS.NavigationService.getCurrentSelectedPage().Parameters;
         InitParser.loadVariables(this, this.MS.UtilityService.Clone(parameters), this.MS, this);
     }
 
-    async NavigateNext() {
+    async NavigateNext(): Promise<void> {
         if (this.MS.NavigationService.isCurrentlyNavigating) {
             return;
         }
@@ -55,7 +53,7 @@ export class ViewModelBase {
             let isNavigationSuccessful: boolean = await this.NavigatingNext();
             let isExtendedNavigationSuccessful: boolean = false;
             if (isNavigationSuccessful) {
-                isExtendedNavigationSuccessful = await InitParser.executeActions(this.onNext, this, this.MS, this);
+                isExtendedNavigationSuccessful = await InitParser.executeActions(this.onNext, this);
             }
 
             this.navigationMessage = '';
@@ -89,7 +87,7 @@ export class ViewModelBase {
         this.VerifyNavigation();
     }
 
-    NavigateBack() {
+    NavigateBack(): void {
         if (this.MS.NavigationService.isCurrentlyNavigating) {
             return;
         }
@@ -121,7 +119,7 @@ export class ViewModelBase {
         this.VerifyNavigation();
     }
 
-    async activate(params, navigationInstruction) {
+    async activate(): Promise<void> {
         this.isActivated = false;
         this.MS.UtilityService.SaveItem('Current Page', window.location.href);
         let currentRoute = this.MS.NavigationService.getCurrentSelectedPage().RoutePageName.toLowerCase();
@@ -132,7 +130,7 @@ export class ViewModelBase {
         if (viewmodelPreviousSave) {
             let jsonParsed = JSON.parse(viewmodelPreviousSave);
             for (let propertyName in jsonParsed) {
-                this[propertyName] = jsonParsed[propertyName];
+                (<any>this)[propertyName] = jsonParsed[propertyName];
             }
 
             this.viewmodel = this;
@@ -156,11 +154,11 @@ export class ViewModelBase {
         }
     }
 
-    async attached() {
+    async attached(): Promise<void> {
         await this.OnLoaded();
     }
 
-    determineActivationStrategy() {
+    determineActivationStrategy(): any {
         return activationStrategy.replace; //replace the viewmodel with a new instance
     }
 
@@ -169,7 +167,7 @@ export class ViewModelBase {
     ///////////////////////////////////////////////////////////////////////
 
     // Called when object is no longer valid
-    Invalidate() {
+    Invalidate(): void {
         this.isValidated = false;
         this.showValidation = false;
         this.validationText = null;
@@ -187,7 +185,7 @@ export class ViewModelBase {
         this.isValidated = false;
         this.showValidation = false;
         this.MS.ErrorService.Clear();
-        this.isValidated = await InitParser.executeActions(this.onValidate, this, this.MS, this);
+        this.isValidated = await InitParser.executeActions(this.onValidate, this);
         this.showValidation = true;
         return this.isValidated;
     }

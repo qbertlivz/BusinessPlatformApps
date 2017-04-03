@@ -1,9 +1,11 @@
-﻿
-using System.ComponentModel.Composition;
-using System.Data.SqlClient;
+﻿using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Microsoft.Rest;
+using Newtonsoft.Json.Linq;
+
 using Microsoft.Azure.Management.MachineLearning.CommitmentPlans;
 using Microsoft.Azure.Management.MachineLearning.CommitmentPlans.Models;
 using Microsoft.Azure.Management.MachineLearning.WebServices;
@@ -13,10 +15,7 @@ using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
 using Microsoft.Deployment.Common.Model;
-using Microsoft.Rest;
-using Microsoft.WindowsAzure.Storage;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+
 using CommitmentPlan = Microsoft.Azure.Management.MachineLearning.WebServices.Models.CommitmentPlan;
 using WebService = Microsoft.Azure.Management.MachineLearning.WebServices.Models.WebService;
 using System.Net.Http;

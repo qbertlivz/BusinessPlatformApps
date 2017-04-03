@@ -182,7 +182,7 @@
       },
       {
         "AppSettingKeys": {
-          "databaseAS": "d365",
+          "databaseAS": "SalesManagement",
           "connStringAS": "$ds(ASConnectionString)",
           "connStringSql": "$dsall(SqlConnectionString)[0]",
           "functionName": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",

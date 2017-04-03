@@ -4,6 +4,7 @@ using Microsoft.Deployment.Common.Helpers;
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Deployment.Common.Enums;
 
 namespace Microsoft.Deployment.Common.Controller
 {
@@ -204,7 +205,31 @@ namespace Microsoft.Deployment.Common.Controller
             Dictionary<string, string> powerBiLogin = new Dictionary<string, string>();
             powerBiLogin.Add("Tenant ID", tenantId);
             powerBiLogin.Add("Directory Name", directory);
-            this.LogEvent("PoweBi-Login", powerBiLogin);
+            this.LogEvent("PowerBi-Login", powerBiLogin);
+        }
+
+        public void LogResource(
+            string tenantId, 
+            string subscriptionId, 
+            string subscriptionName, 
+            string rgName, 
+            string resourceName,
+            ResourceType type, 
+            string createdBy, 
+            string createdAt, 
+            string resourceId)
+        {
+            Dictionary<string, string> resourceParams = new Dictionary<string, string>();
+            resourceParams.Add("tenantId", tenantId);
+            resourceParams.Add("subscriptionId", subscriptionId);
+            resourceParams.Add("subscriptionName", subscriptionName);
+            resourceParams.Add("resourceGroupName", rgName);
+            resourceParams.Add("resourceName", resourceName);
+            resourceParams.Add("resourceType", type.ToString());
+            resourceParams.Add("createdBy", createdBy);
+            resourceParams.Add("createdAt", createdAt);
+            resourceParams.Add("resourceId", resourceId);
+            this.LogEvent("Resource", resourceParams);
         }
 
         internal void LogRequest(string request, TimeSpan duration, bool sucess, ActionRequest requestBody, ActionResponse responseToReturn)

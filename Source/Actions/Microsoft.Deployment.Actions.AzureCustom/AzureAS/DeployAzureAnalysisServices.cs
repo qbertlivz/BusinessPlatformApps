@@ -3,9 +3,7 @@ using System.ComponentModel.Composition;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
-
 using Newtonsoft.Json.Linq;
-
 using Microsoft.Azure;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;

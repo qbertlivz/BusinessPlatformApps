@@ -150,7 +150,7 @@ namespace Microsoft.Deployment.Common.ActionModel
             IList<string> allValues = this.GetAllValues(key);
             if (allValues.Count > i)
             {
-                result = this.GetAllValues(key)[i];
+                result = allValues[i];
             }
 
             return result;

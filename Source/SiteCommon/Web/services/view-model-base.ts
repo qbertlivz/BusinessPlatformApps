@@ -29,21 +29,15 @@ export class ViewModelBase {
 
     viewmodel: ViewModelBase;
 
-    parametersLoaded: boolean = false;
-
     constructor() {
         this.MS = (<any>window).MainService;
         this.viewmodel = this;
     }
 
     loadParameters(): void {
-        // Load the parameters from the additionalParamters section
-        if (!this.parametersLoaded) {
-            var parameters = this.MS.NavigationService.getCurrentSelectedPage().Parameters;
-            InitParser.loadVariables(this, parameters, this.MS, this);
-        }
-
-        this.parametersLoaded = true;
+        // Load the parameters from the additionalParameters section
+        var parameters = this.MS.NavigationService.getCurrentSelectedPage().Parameters;
+        InitParser.loadVariables(this, this.MS.UtilityService.Clone(parameters), this.MS, this);
     }
 
     async NavigateNext(): Promise<void> {
@@ -59,7 +53,7 @@ export class ViewModelBase {
             let isNavigationSuccessful: boolean = await this.NavigatingNext();
             let isExtendedNavigationSuccessful: boolean = false;
             if (isNavigationSuccessful) {
-                 isExtendedNavigationSuccessful = await InitParser.executeActions(this.onNext, this);
+                isExtendedNavigationSuccessful = await InitParser.executeActions(this.onNext, this);
             }
 
             this.navigationMessage = '';
@@ -132,7 +126,7 @@ export class ViewModelBase {
         this.MS.UtilityService.SaveItem('Current Route', currentRoute);
         let viewmodelPreviousSave = window.sessionStorage.getItem(currentRoute);
 
-        // Restore view model state or load new state
+        // Restore view model state
         if (viewmodelPreviousSave) {
             let jsonParsed = JSON.parse(viewmodelPreviousSave);
             for (let propertyName in jsonParsed) {
@@ -141,9 +135,9 @@ export class ViewModelBase {
 
             this.viewmodel = this;
             this.viewmodel.MS = (<any>window).MainService;
-        } else {
-            this.loadParameters();
         }
+
+        this.loadParameters();
 
         this.MS.NavigationService.currentViewModel = this;
         this.isActivated = true;

@@ -7,6 +7,10 @@ export class UtilityService {
         this.MS = mainservice;
     }
 
+    Clone(obj: any): any {
+        return JSON.parse(JSON.stringify(obj));
+    }
+
     GenerateDailyTriggers(): string[] {
         let dailyTriggers: string[] = [];
         for (let i = 0; i < 24; i++) {

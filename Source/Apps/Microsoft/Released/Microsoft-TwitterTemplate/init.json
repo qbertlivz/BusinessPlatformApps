@@ -257,7 +257,7 @@
           "connStringAS": "$ds(ASConnectionString)",
           "connStringSql": "$dsall(SqlConnectionString)[0]",
           "schema": "[pbist_twitter]",
-          "databaseAS": "twitter",
+          "databaseAS": "Twitter",
           "functionName": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))"
         },
         "DeploymentName": "ASFunction",

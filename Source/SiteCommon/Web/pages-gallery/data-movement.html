@@ -11,13 +11,13 @@
         <option if.bind="showScribe" value.bind="dataMovementType.Scribe">${MS.Translate.DATA_MOVEMENT_SCRIBE}</option>
     </select>
 
-    <div if.bind="dataMovement != dataMovementType.ADF && dataMovement != dataMovementType.D365">
-        <div if.bind="dataMovement == dataMovementType.ADF">
-            <div class="st-float st-text">
-                <p>${MS.Translate.DATA_MOVEMENT_AZURE_DATA_FACTORY_DESCRIPTION}</p>
-            </div>
+    <div if.bind="dataMovement == dataMovementType.ADF">
+        <div class="st-float st-text">
+            <p>${MS.Translate.DATA_MOVEMENT_AZURE_DATA_FACTORY_DESCRIPTION}</p>
         </div>
+    </div>
 
+    <div if.bind="dataMovement != dataMovementType.ADF && dataMovement != dataMovementType.D365">
         <div if.bind="dataMovement == dataMovementType.Informatica">
             <div class="st-float st-text">
                 <p>${MS.Translate.DATA_MOVEMENT_INFORMATICA_DESCRIPTION}</p>

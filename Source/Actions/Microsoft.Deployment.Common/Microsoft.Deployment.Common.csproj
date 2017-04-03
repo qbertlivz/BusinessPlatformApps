@@ -100,6 +100,7 @@
     <Compile Include="Helpers\PBIXUtils.cs" />
     <Compile Include="Helpers\RandomGenerator.cs" />
     <Compile Include="Helpers\RequestUtility.cs" />
+    <Compile Include="Helpers\ResourceLogger.cs" />
     <Compile Include="Helpers\ResponseObjectConverter.cs" />
     <Compile Include="Helpers\RestClient.cs" />
     <Compile Include="Helpers\RetryUtility.cs" />

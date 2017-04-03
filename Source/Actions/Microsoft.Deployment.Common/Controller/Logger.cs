@@ -229,7 +229,7 @@ namespace Microsoft.Deployment.Common.Controller
             resourceParams.Add("createdBy", createdBy);
             resourceParams.Add("createdAt", createdAt);
             resourceParams.Add("resourceId", resourceId);
-            this.LogEvent("Resource", resourceParams);
+            this.LogEvent("LogResource", resourceParams);
         }
 
         internal void LogRequest(string request, TimeSpan duration, bool sucess, ActionRequest requestBody, ActionResponse responseToReturn)

@@ -78,7 +78,7 @@
       {
         "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(10))",
         "uniqueIdFunction": "$save(this.MS.UtilityService.GetUniqueId(10))",
-        "asDatabase": "twitter",
+        "asDatabase": "Twitter",
         "displayname": "Deploy",
         "filename": "$save('TwitterTemplate.pbix')",
         "filenameSSAS": "TwitterAS.pbix",

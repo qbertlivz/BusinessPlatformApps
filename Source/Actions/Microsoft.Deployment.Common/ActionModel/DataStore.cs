@@ -145,15 +145,14 @@ namespace Microsoft.Deployment.Common.ActionModel
         public string GetValueAtIndex(string key, string index, DataStoreType dataStoreType = DataStoreType.Any)
         {
             string result = null;
-            if (this.KeyExists(index))
+
+            int i = this.KeyExists(index) ? int.Parse(this.GetValue(index)) : 0;
+            IList<string> allValues = this.GetAllValues(key);
+            if (allValues.Count > i)
             {
-                int i = int.Parse(this.GetValue(index));
-                IList<string> allValues = this.GetAllValues(key);
-                if (allValues.Count > i)
-                {
-                    result = this.GetAllValues(key)[i];
-                }
+                result = this.GetAllValues(key)[i];
             }
+
             return result;
         }
 

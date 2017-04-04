@@ -1,6 +1,6 @@
 ﻿namespace Microsoft.Deployment.Common.Enums
 {
-    public enum ResourceType
+    public enum DeployedResourceType
     {
         SqlServer,
         SqlDatabase,

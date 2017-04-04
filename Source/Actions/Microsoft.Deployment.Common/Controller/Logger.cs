@@ -209,26 +209,30 @@ namespace Microsoft.Deployment.Common.Controller
         }
 
         public void LogResource(
-            string tenantId, 
-            string subscriptionId, 
-            string subscriptionName, 
-            string rgName, 
+            DataStore ds,
             string resourceName,
-            ResourceType type, 
-            string createdBy, 
+            DeployedResourceType type, 
+            CreatedBy createdBy, 
             string createdAt, 
             string resourceId)
         {
+            string tenantId = ds.GetValue("PowerBITenantId");
+            string subscriptionId = ds.GetJson("SelectedSubscription")["SubscriptionId"].ToString();
+            string subscriptionName = ds.GetJson("SelectedSubscription")["DisplayName"].ToString();
+            string resourceGroupName = ds.GetValue("SelectedResourceGroup");
+
             Dictionary<string, string> resourceParams = new Dictionary<string, string>();
             resourceParams.Add("tenantId", tenantId);
             resourceParams.Add("subscriptionId", subscriptionId);
             resourceParams.Add("subscriptionName", subscriptionName);
-            resourceParams.Add("resourceGroupName", rgName);
+            resourceParams.Add("resourceGroupName", resourceGroupName);
+
             resourceParams.Add("resourceName", resourceName);
             resourceParams.Add("resourceType", type.ToString());
-            resourceParams.Add("createdBy", createdBy);
+            resourceParams.Add("createdBy", createdBy.ToString());
             resourceParams.Add("createdAt", createdAt);
             resourceParams.Add("resourceId", resourceId);
+
             this.LogEvent("LogResource", resourceParams);
         }
 

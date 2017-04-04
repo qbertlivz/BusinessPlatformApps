@@ -10,14 +10,15 @@ go
 * Date values                       *
 *************************************/
 
+SET NOCOUNT ON;
 
 BEGIN TRANSACTION;
 
 declare @startDate as date
 declare @endDate as date
 declare @curDate as date
-declare @dayName as nvarchar(20)
-declare @dayAbbrev as nvarchar(3)
+declare @dayName as nvarchar(50)
+declare @dayAbbrev as nvarchar(10)
 declare @weekDayFlag as char(1)
 
 declare @dateKey as int
@@ -26,8 +27,8 @@ declare @dayOfMonth as int
 declare @weekNoOfYear as int
 declare @weekBeginDate as date
 declare @monthNo as tinyint
-declare @monthName as char(9)
-declare @monthAbbrev as char(3)
+declare @monthName as nvarchar(50)
+declare @monthAbbrev as nvarchar(10)
 declare @quarter as tinyint
 declare @year as smallint
 declare @yearmo as int

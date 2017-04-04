@@ -12,7 +12,6 @@ using OpenQA.Selenium.Remote;
 namespace Microsoft.Deployment.Site.Web.Tests
 {
     [TestClass]
-    [Ignore]
     public class SCCMTemplateTests
     {
         // For the tests to work we need the following on the test box
@@ -22,20 +21,21 @@ namespace Microsoft.Deployment.Site.Web.Tests
         // -A local administrator user TestUser with P@ssw0rd as the password
         // !!!!!! The tests need to be ran as administrator
 
-        private string baseDownloadURL = Constants.Host + "?name=Microsoft-SCCMTemplate";
+        private RemoteWebDriver driver;
+        private string baseDownloadURL = Constants.Slot3 + "?name=Microsoft-SCCMTemplate";
         private string msiPath = @"C:\Program Files\Microsoft Templates\Microsoft-SCCMTemplate\Microsoft.Bpst.App.Msi.exe";
         private string administratorUser = "TestUser";
         private string administratorPassword = "P@ssw0rd";
         private string sourceDatabase = "CM_PBI";
         private string targetDatabase = "CM_PBI_Target";
         private string hostName;
-        private RemoteWebDriver driver;
 
+        [Ignore]
         [TestMethod]
         public void RunSCCMTests()
         {
-            GetHostName();
-            DownloadAndInstallMSI();
+            //GetHostName();
+            //DownloadAndInstallMSI();
             OpenWebBrowser();
             ClickButton("Next");
             Given_AlternativeWindowsCredentials_When_Validate_Then_Success();
@@ -170,7 +170,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
             options.AddArgument("?name=Microsoft-SCCMTemplate");
 
             driver = new ChromeDriver(options);
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(30);
+            driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(30));
         }
 
         public void DownloadAndInstallMSI()
@@ -191,6 +191,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
                 ProcessStartInfo startInfo = new ProcessStartInfo();
                 startInfo.FileName = "SCCM.exe";
                 startInfo.Arguments = "/install /quiet";
+                
 
                 p.StartInfo = startInfo;
 

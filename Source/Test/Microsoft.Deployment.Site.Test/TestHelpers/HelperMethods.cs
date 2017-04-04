@@ -21,7 +21,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
         {
             var url = baseURL + $"#/{page}";
             driver.Manage().Window.Maximize();
-            driver.Manage().Timeouts().ImplicitlyWait(new TimeSpan(0, 0, 30));
+            driver.Manage().Timeouts().ImplicitWait = new TimeSpan(0, 0, 30);
             driver.Navigate().GoToUrl(url);
         }
 
@@ -36,12 +36,6 @@ namespace Microsoft.Deployment.Site.Web.Tests
             IWait<IWebDriver> wait = new OpenQA.Selenium.Support.UI.WebDriverWait(driver, TimeSpan.FromSeconds(30.00));
 
             wait.Until(driver => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
-        }
-
-        public static void ClickNextButton()
-         {
-            var button = driver.FindElementsByTagName("Button").First(e => e.Text == "Next");
-            button.Click();
         }
 
         public static void ClickButton(string buttonText)
@@ -221,12 +215,12 @@ namespace Microsoft.Deployment.Site.Web.Tests
         public static void SelectSqlDatabase(string databaseName)
         {
             var database = driver.FindElementsByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']")
-                            .FirstOrDefault(e => !e.Text.Contains(databaseName));
+                            .FirstOrDefault(e => e.Text.Contains(databaseName));
 
             while (database == null)
             {
                 database = driver.FindElementsByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']")
-                            .FirstOrDefault(e => !e.Text.Contains(databaseName));
+                            .FirstOrDefault(e => e.Text.Contains(databaseName));
             }
 
             database.SendKeys(databaseName);

@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Security.Cryptography.X509Certificates;
 using CefSharp;
 
 namespace Installer
@@ -133,7 +133,7 @@ namespace Installer
             return false;
         }
 
-        void IRequestHandler.OnResourceRedirect(IWebBrowser browserControl, IBrowser browser, IFrame frame, IRequest request, ref string newUrl)
+        void OnResourceRedirect(IWebBrowser browserControl, IBrowser browser, IFrame frame, IRequest request, ref string newUrl)
         {
             request.Url = newUrl;
             browserControl.Load(newUrl);
@@ -157,9 +157,18 @@ namespace Installer
         {
         }
 
-        //public IResponseFilter GetResourceResponseFilter(IWebBrowser browserControl, IBrowser browser, IFrame frame, IRequest request, IResponse response)
-        //{
-        //    return null;
-        //}
+        public bool OnSelectClientCertificate(IWebBrowser browserControl, IBrowser browser, bool isProxy, string host, int port, X509Certificate2Collection certificates, ISelectClientCertificateCallback callback)
+        {
+            return false;
+        }
+
+        public void OnResourceRedirect(IWebBrowser browserControl, IBrowser browser, IFrame frame, IRequest request, IResponse response, ref string newUrl)
+        {
+        }
+
+        public IResponseFilter GetResourceResponseFilter(IWebBrowser browserControl, IBrowser browser, IFrame frame, IRequest request, IResponse response)
+        {
+            return null;
+        }
     }
 }

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading;
+using Microsoft.Deployment.Site.Test.TestHelpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -14,48 +16,35 @@ namespace Microsoft.Deployment.Site.Web.Tests
     [TestClass]
     public class SCCMTemplateTests
     {
-        // For the tests to work we need the following on the test box
-        // -SQL Server 2014/2016 or other flavours we want to test
-        // -SCCM database name CM_PBI (Ramond's backup)
-        // -Empty target database CM_PBI_Target
-        // -A local administrator user TestUser with P@ssw0rd as the password
-        // !!!!!! The tests need to be ran as administrator
-
         private RemoteWebDriver driver;
-        private string baseDownloadURL = Constants.Slot3 + "?name=Microsoft-SCCMTemplate";
+        private string slot = "slot1";
         private string msiPath = @"C:\Program Files\Microsoft Templates\Microsoft-SCCMTemplate\Microsoft.Bpst.App.Msi.exe";
-        private string administratorUser = "TestUser";
-        private string administratorPassword = "P@ssw0rd";
-        private string sourceDatabase = "CM_PBI";
-        private string targetDatabase = "CM_PBI_Target";
-        private string hostName;
-
-        [Ignore]
+        
         [TestMethod]
         public void RunSCCMTests()
         {
-            //GetHostName();
-            //DownloadAndInstallMSI();
+            Credential.Load();
+            DownloadAndInstallMSI();
             OpenWebBrowser();
-            ClickButton("Next");
+            HelperMethods.driver = this.driver;
+            HelperMethods.WaitForPage();
+            var background = driver.FindElementByCssSelector("div[class='st-email-background st-email-wrapper au-target']");
+            background.Click();
+            HelperMethods.ClickButton("Next");
             Given_AlternativeWindowsCredentials_When_Validate_Then_Success();
-            ClickButton("Next");
-            Thread.Sleep(1000);
+            HelperMethods.ClickButton("Next");
+            HelperMethods.WaitForPage();
             Given_CorrectSqlCredentials_When_Validate_Then_Success();
-            SelectSqlDatabase(sourceDatabase);
-            ClickButton("Next");
-            Thread.Sleep(1000);
+            HelperMethods.SelectSqlDatabase(Credential.Instance.SccmSql.Source);
+            HelperMethods.ClickButton("Next");
+            HelperMethods.WaitForPage();
             Given_CorrectSqlCredentials_When_Validate_Then_Success();
-            SelectSqlDatabase(targetDatabase);
-            ClickButton("Next");
-            ClickButton("Validate");
-            ClickButton("Next");
+            HelperMethods.SelectSqlDatabase(Credential.Instance.SccmSql.Target);
+            HelperMethods.ClickButton("Next");
+            HelperMethods.ClickButton("Validate");
+            HelperMethods.ClickButton("Next");
+            HelperMethods.ClickButton("Run");
             Given_AllInformationCorrect_When_DeploymentFinish_Then_SuccessMessageDisplayed();
-        }
-
-        public void GetHostName()
-        {
-            this.hostName = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
         }
 
         public void Given_AllInformationCorrect_When_DeploymentFinish_Then_SuccessMessageDisplayed()
@@ -65,12 +54,12 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
             int i = 0;
 
-            while (progressText == null && i < 5)
+            while (progressText == null && i < 10)
             {
                 progressText = driver.FindElementsByCssSelector("span[class='semiboldFont st-progress-text']")
                                      .FirstOrDefault(e => e.Text == "All done! You can now download your Power BI report and start exploring your data.");
                 i++;
-                Thread.Sleep(new TimeSpan(0, 0, 5));
+                Thread.Sleep(new TimeSpan(0, 0, 20));
             }
 
             Assert.IsTrue(progressText != null);
@@ -105,9 +94,9 @@ namespace Microsoft.Deployment.Site.Web.Tests
                 serverBox = elements.FirstOrDefault(e => e.GetAttribute("value.bind").Contains("sqlServer"));
             }
 
-            serverBox.SendKeys(hostName);
+            serverBox.SendKeys(Credential.Instance.SccmSql.Server);
 
-            ClickButton("Validate");
+            HelperMethods.ClickButton("Validate");
 
             var validated = driver.FindElementByClassName("st-validated");
             Assert.IsTrue(validated.Text == "Successfully validated");
@@ -136,31 +125,18 @@ namespace Microsoft.Deployment.Site.Web.Tests
             {
                 Thread.Sleep(1000);
             }
+
             usernameBox.Clear();
-            usernameBox.SendKeys($@"{hostName}\{administratorUser}");
+            usernameBox.SendKeys($@"{Credential.Instance.ServiceAccount.Domain}\{Credential.Instance.ServiceAccount.Username.Split('@')[0]}");
 
             var passwordBox = elements.First(e => e.GetAttribute("value.bind").Contains("password"));
-            passwordBox.SendKeys(administratorPassword);
+            passwordBox.SendKeys(Credential.Instance.ServiceAccount.Password);
 
-            ClickButton("Validate");
+            HelperMethods.ClickButton("Validate");
 
             var validated = driver.FindElementByClassName("st-validated");
 
             Assert.IsTrue(validated.Text == "Successfully validated");
-        }
-
-        public void ClickButton(string buttonText)
-        {
-            var button = driver.FindElementsByTagName("Button").FirstOrDefault(e => e.Text == buttonText);
-
-            while (button == null || !button.Enabled)
-            {
-                button = driver.FindElementsByTagName("Button").FirstOrDefault(e => e.Text == buttonText);
-                Thread.Sleep(1000);
-            }
-
-            var js = (IJavaScriptExecutor)driver;
-            js.ExecuteScript("arguments[0].click()", button);
         }
 
         public void OpenWebBrowser()
@@ -180,7 +156,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
                 File.Delete("SCCM.exe");
             }
 
-            var downloadUrl = "https://bpstservice.azurewebsites.net/bin//Apps/Microsoft/Released/Microsoft-SCCMTemplate/Microsoft-SCCMTemplate.exe";
+            var downloadUrl = $"https://bpstservice-{slot}.azurewebsites.net/bin//Apps/Microsoft/Released/Microsoft-SCCMTemplate/Microsoft-SCCMTemplate.exe";
             using (var client = new WebClient())
             {
                 client.DownloadFile(downloadUrl, "SCCM.exe");
@@ -191,7 +167,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
                 ProcessStartInfo startInfo = new ProcessStartInfo();
                 startInfo.FileName = "SCCM.exe";
                 startInfo.Arguments = "/install /quiet";
-                
+
 
                 p.StartInfo = startInfo;
 

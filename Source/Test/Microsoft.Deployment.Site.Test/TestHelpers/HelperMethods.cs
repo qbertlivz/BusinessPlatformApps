@@ -38,12 +38,6 @@ namespace Microsoft.Deployment.Site.Web.Tests
             wait.Until(driver => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
         }
 
-        public static void ClickNextButton()
-         {
-            var button = driver.FindElementsByTagName("Button").First(e => e.Text == "Next");
-            button.Click();
-        }
-
         public static void ClickButton(string buttonText)
         {
             var button = driver.FindElementsByTagName("Button").FirstOrDefault(e => e.Enabled && e.Text == buttonText);
@@ -221,12 +215,12 @@ namespace Microsoft.Deployment.Site.Web.Tests
         public static void SelectSqlDatabase(string databaseName)
         {
             var database = driver.FindElementsByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']")
-                            .FirstOrDefault(e => !e.Text.Contains(databaseName));
+                            .FirstOrDefault(e => e.Text.Contains(databaseName));
 
             while (database == null)
             {
                 database = driver.FindElementsByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']")
-                            .FirstOrDefault(e => !e.Text.Contains(databaseName));
+                            .FirstOrDefault(e => e.Text.Contains(databaseName));
             }
 
             database.SendKeys(databaseName);

@@ -46,6 +46,9 @@
             "name": "Microsoft-ValidateAdminPrivileges"
           },
           {
+            "name": "Microsoft-ValidateSecurityOptions"
+          },
+          {
             "name": "Microsoft-ValidatePowerShellVersion"
           }
         ],

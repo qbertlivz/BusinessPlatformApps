@@ -158,6 +158,8 @@
     <Compile Include="Scribe\CreateScribeSolution.cs" />
     <Compile Include="Scribe\DeviceIdManager.cs" />
     <Compile Include="Scribe\GetD365Organizations.cs" />
+    <Compile Include="Scribe\GetScribeAgentInstall.cs" />
+    <Compile Include="Scribe\GetScribeAgents.cs" />
     <Compile Include="Scribe\GetScribeOrganizations.cs" />
     <Compile Include="Scribe\GetScribeSolutionStatus.cs" />
     <Compile Include="Scribe\ProcessScribeSolution.cs" />

@@ -130,6 +130,7 @@
     <Compile Include="Model\QDEFF.cs" />
     <Compile Include="Model\Scribe\D365Organization.cs" />
     <Compile Include="Model\Scribe\ScribeAgent.cs" />
+    <Compile Include="Model\Scribe\ScribeAgentInstall.cs" />
     <Compile Include="Model\Scribe\ScribeConnection.cs" />
     <Compile Include="Model\Scribe\ScribeConnector.cs" />
     <Compile Include="Model\Scribe\ScribeKeyValue.cs" />

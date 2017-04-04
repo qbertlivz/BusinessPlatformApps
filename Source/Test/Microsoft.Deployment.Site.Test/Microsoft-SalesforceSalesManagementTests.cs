@@ -167,9 +167,8 @@ namespace Microsoft.Deployment.Site.Web.Tests
             HelperMethods.baseURL = baseURL + "?name=Microsoft-SalesforceSalesManagement";
             var options = new ChromeOptions();
             options.AddArgument("no-sandbox");
-            var svc = PhantomJSDriverService.CreateDefaultService();
-
-            HelperMethods.driver = new ChromeDriver(options);// new PhantomJSDriver(svc);
+            
+            HelperMethods.driver = new ChromeDriver(options);
             this.driver = HelperMethods.driver;
         }
 

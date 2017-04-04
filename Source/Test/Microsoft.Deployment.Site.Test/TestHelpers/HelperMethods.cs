@@ -21,7 +21,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
         {
             var url = baseURL + $"#/{page}";
             driver.Manage().Window.Maximize();
-            driver.Manage().Timeouts().ImplicitlyWait(new TimeSpan(0, 0, 30));
+            driver.Manage().Timeouts().ImplicitWait = new TimeSpan(0, 0, 30);
             driver.Navigate().GoToUrl(url);
         }
 

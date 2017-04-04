@@ -170,7 +170,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
             options.AddArgument("?name=Microsoft-SCCMTemplate");
 
             driver = new ChromeDriver(options);
-            driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(30));
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(30);
         }
 
         public void DownloadAndInstallMSI()

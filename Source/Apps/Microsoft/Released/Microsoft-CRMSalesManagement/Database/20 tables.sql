@@ -1061,7 +1061,7 @@ CREATE TABLE dbo.territory
 
 /* SMGT specific schemas */
 
-CREATE TABLE smgt.configuration
+CREATE TABLE smgt.[configuration]
 (
   id                     INT IDENTITY(1, 1) NOT NULL,
   configuration_group    VARCHAR(150) NOT NULL,
@@ -1077,14 +1077,14 @@ CREATE TABLE smgt.[date]
    full_date              DATE NOT NULL,
    day_of_week            TINYINT NOT NULL,
    day_num_in_month       TINYINT NOT NULL,
-   day_name               CHAR(9) NOT NULL,
-   day_abbrev             CHAR(3) NOT NULL,
+   day_name               NVARCHAR(50) NOT NULL,
+   day_abbrev             NVARCHAR(10) NOT NULL,
    weekday_flag           CHAR(1) NOT NULL,
    week_num_in_year       TINYINT NOT NULL,
    week_begin_date        DATE NOT NULL,
    [month]                TINYINT NOT NULL,
-   month_name             CHAR(9) NOT NULL,
-   month_abbrev           CHAR(3) NOT NULL,
+   month_name             NVARCHAR(50) NOT NULL,
+   month_abbrev           NVARCHAR(10) NOT NULL,
    [quarter]              TINYINT NOT NULL,
    [year]                 SMALLINT NOT NULL,
    yearmo                 INT NOT NULL,

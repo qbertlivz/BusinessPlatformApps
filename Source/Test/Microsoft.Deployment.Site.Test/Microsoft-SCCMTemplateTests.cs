@@ -19,7 +19,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
         private RemoteWebDriver driver;
         private string slot = "slot1";
         private string msiPath = @"C:\Program Files\Microsoft Templates\Microsoft-SCCMTemplate\Microsoft.Bpst.App.Msi.exe";
-        
+
         [TestMethod]
         public void RunSCCMTests()
         {
@@ -28,8 +28,12 @@ namespace Microsoft.Deployment.Site.Web.Tests
             OpenWebBrowser();
             HelperMethods.driver = this.driver;
             HelperMethods.WaitForPage();
-            var background = driver.FindElementByCssSelector("div[class='st-email-background st-email-wrapper au-target']");
-            background.Click();
+            try
+            {
+                var background = driver.FindElementByCssSelector("div[class='st-email-background st-email-wrapper au-target']");
+                background.Click();
+            }
+            catch { /* If not found means s3 is behind s1, expected behaviour*/}
             HelperMethods.ClickButton("Next");
             Given_AlternativeWindowsCredentials_When_Validate_Then_Success();
             HelperMethods.ClickButton("Next");

@@ -17,10 +17,9 @@ namespace Microsoft.Deployment.Site.Web.Tests
     public class SCCMTemplateTests
     {
         private RemoteWebDriver driver;
-        private string baseDownloadURL = Constants.Slot3 + "?name=Microsoft-SCCMTemplate";
+        private string slot = "slot1";
         private string msiPath = @"C:\Program Files\Microsoft Templates\Microsoft-SCCMTemplate\Microsoft.Bpst.App.Msi.exe";
-        private string hostName;
-
+        
         [TestMethod]
         public void RunSCCMTests()
         {
@@ -157,7 +156,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
                 File.Delete("SCCM.exe");
             }
 
-            var downloadUrl = "https://bpstservice-slot3.azurewebsites.net/bin//Apps/Microsoft/Released/Microsoft-SCCMTemplate/Microsoft-SCCMTemplate.exe";
+            var downloadUrl = $"https://bpstservice-{slot}.azurewebsites.net/bin//Apps/Microsoft/Released/Microsoft-SCCMTemplate/Microsoft-SCCMTemplate.exe";
             using (var client = new WebClient())
             {
                 client.DownloadFile(downloadUrl, "SCCM.exe");

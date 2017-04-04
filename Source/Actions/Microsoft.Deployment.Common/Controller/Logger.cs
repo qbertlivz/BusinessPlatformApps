@@ -214,7 +214,7 @@ namespace Microsoft.Deployment.Common.Controller
             DeployedResourceType type, 
             CreatedBy createdBy, 
             string createdAt, 
-            string resourceId)
+            string resourceId = null)
         {
             string tenantId = ds.GetValue("PowerBITenantId");
             string subscriptionId = ds.GetJson("SelectedSubscription")["SubscriptionId"].ToString();

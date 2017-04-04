@@ -57,7 +57,7 @@
     </Compile>
     <Compile Include="ActionModel\DictionaryIgnoreCase.cs" />
     <Compile Include="Enums\CreatedBy.cs" />
-    <Compile Include="Enums\ResourceType.cs" />
+    <Compile Include="Enums\DeploymentResourceType.cs" />
     <Compile Include="Exceptions\ActionFailedException.cs" />
     <Compile Include="ActionModel\ActionRequest.cs" />
     <Compile Include="ActionModel\ActionResponse.cs" />

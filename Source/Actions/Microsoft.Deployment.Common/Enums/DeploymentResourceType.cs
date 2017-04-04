@@ -6,6 +6,7 @@
         SqlDatabase,
         ResourceGroup,
         AzureAnalysisServices,
+        AzureAnalysisServicesModel,
         LogicApp,
         AppServicePlan,
         Function,

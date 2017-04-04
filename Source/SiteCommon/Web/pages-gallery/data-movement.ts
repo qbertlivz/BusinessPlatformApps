@@ -2,6 +2,7 @@
 
 import { ActionResponse } from '../models/action-response';
 import { DataMovementType } from '../models/data-movement-type';
+import { InformaticaAgent } from '../models/informatica-agent';
 import { ScribeAgent } from '../models/scribe-agent';
 import { ScribeAgentInstall } from '../models/scribe-agent-install';
 import { ScribeOrganization } from '../models/scribe-organization';
@@ -11,6 +12,9 @@ import { ViewModelBase } from '../services/view-model-base';
 export class DataMovement extends ViewModelBase {
     dataMovement: string = '';
     dataMovementType: DataMovementType = new DataMovementType();
+    informaticaAgentId: string = '';
+    informaticaAgentLocation: string = '';
+    informaticaAgents: InformaticaAgent[] = [];
     password: string = '';
     scribeAgentId: string = '';
     scribeAgentInstall: ScribeAgentInstall = new ScribeAgentInstall();
@@ -65,8 +69,27 @@ export class DataMovement extends ViewModelBase {
                 let responseInformatica: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-VerifyInformaticaCredentials');
 
                 if (responseInformatica.IsSuccess) {
-                    this.isValidated = true;
-                    this.showValidation = true;
+                    if (this.MS.HttpService.isOnPremise) {
+                        let responseInformaticaAgents: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetInformaticaAgents');
+                        if (responseInformaticaAgents.IsSuccess) {
+                            this.informaticaAgents = JSON.parse(responseInformaticaAgents.Body.value);
+
+                            if (this.informaticaAgents && this.informaticaAgents.length > 0) {
+                                this.informaticaAgentId = this.informaticaAgents[0].id;
+                                this.isValidated = true;
+                                this.showValidation = true;
+                            } else {
+                                let responseInformaticaAgentLocation: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetInformaticaAgentLocation');
+                                if (responseInformaticaAgentLocation.IsSuccess) {
+                                    this.informaticaAgentLocation = JSON.parse(responseInformaticaAgentLocation.Body.value);
+                                }
+                            }
+                        }
+                    } else {
+                        this.MS.DataStore.addToDataStore('InformaticaAgentName', 'Informatica Cloud Hosted Agent', DataStoreType.Public);
+                        this.isValidated = true;
+                        this.showValidation = true;
+                    }
                 }
 
                 break;
@@ -104,6 +127,10 @@ export class DataMovement extends ViewModelBase {
 
         switch (this.dataMovement) {
             case this.dataMovementType.Informatica:
+                if (this.MS.HttpService.isOnPremise) {
+                    let informaticaAgent: InformaticaAgent = this.informaticaAgents.find(x => x.id === this.informaticaAgentId);
+                    this.MS.DataStore.addToDataStore('InformaticaAgentName', informaticaAgent.name, DataStoreType.Public);
+                }
                 break;
             case this.dataMovementType.Scribe:
                 if (this.MS.HttpService.isOnPremise) {

@@ -43,6 +43,17 @@
 
         <button class="primary st-float" click.trigger="OnValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_LOGIN}</button>
 
+        <div class="st-float" if.bind="informaticaAgents && informaticaAgents.length > 0">
+            <p class="st-text">${MS.Translate.DATA_MOVEMENT_INFORMATICA_AGENT}</p>
+            <select class="btn btn-default dropdown-toggle st-input" disabled.bind="MS.HttpService.isServiceBusy" value.bind="informaticaAgentId">
+                <option repeat.for="informaticaAgent of informaticaAgents" value.bind="informaticaAgent.id">${informaticaAgent.name}</option>
+            </select>
+        </div>
+
+        <div class="st-float" if.bind="informaticaAgentLocation">
+            <bpst-link class="st-float" a-description="${MS.Translate.DATA_MOVEMENT_INFORMATICA_ONPREMISE_AGENT}" a-link="informaticaAgentLocation" a-link-text="${MS.Translate.COMMON_HERE}"></bpst-link>
+        </div>
+
         <div class="st-float" change.delegate="OnScribeOrganizationChanged()" if.bind="scribeOrganizations && scribeOrganizations.length > 0">
             <p class="st-text">${MS.Translate.DATA_MOVEMENT_SCRIBE_ORGANIZATION}</p>
             <select class="btn btn-default dropdown-toggle st-input" disabled.bind="MS.HttpService.isServiceBusy" value.bind="scribeOrganizationId">

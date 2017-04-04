@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Remote;
+using OpenQA.Selenium.Support.UI;
 
 namespace Microsoft.Deployment.Site.Web.Tests
 {
@@ -20,7 +21,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
         {
             var url = baseURL + $"#/{page}";
             driver.Manage().Window.Maximize();
-            driver.Manage().Timeouts().ImplicitWait = new TimeSpan(0, 0, 30);
+            driver.Manage().Timeouts().ImplicitlyWait(new TimeSpan(0, 0, 30));
             driver.Navigate().GoToUrl(url);
         }
 
@@ -28,6 +29,13 @@ namespace Microsoft.Deployment.Site.Web.Tests
         {
             var button = driver.FindElementsByTagName("Button").First(e => e.Text == "Validate");
             button.Click();
+        }
+
+        public static void WaitForPage()
+        {
+            IWait<IWebDriver> wait = new OpenQA.Selenium.Support.UI.WebDriverWait(driver, TimeSpan.FromSeconds(30.00));
+
+            wait.Until(driver => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
         }
 
         public static void ClickNextButton()

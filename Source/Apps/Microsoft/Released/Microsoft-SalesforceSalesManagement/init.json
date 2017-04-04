@@ -106,7 +106,7 @@
         }
       },
       {
-        "asDatabase": "salesforce",
+        "asDatabase": "SalesManagement",
         "displayname": "Progress",
         "filename": "$save('SalesManagementReport.pbix')",
         "filenameSSAS": "SalesManagementReportAS.pbix",
@@ -160,7 +160,7 @@
         "SqlSubGroup": "SSAS"
       },
       {
-        "ASDatabase": "salesforce",
+        "ASDatabase": "SalesManagement",
         "displayname": "$translate(INIT_ACTION_DEPLOYING_AS_MODEL)",
         "name": "Microsoft-DeployAzureASModel",
         "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",

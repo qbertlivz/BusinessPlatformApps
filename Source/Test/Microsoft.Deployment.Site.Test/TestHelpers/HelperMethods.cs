@@ -40,6 +40,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
         public static void ClickButton(string buttonText)
         {
+            WaitForPage();
             var button = driver.FindElementsByTagName("Button").FirstOrDefault(e => e.Enabled && e.Text == buttonText);
 
             while (button == null || !button.Enabled)

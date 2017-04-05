@@ -20,6 +20,12 @@ namespace Microsoft.Deployment.Site.Web.Tests
         private string slot = "slot1";
         private string msiPath = @"C:\Program Files\Microsoft Templates\Microsoft-SCCMTemplate\Microsoft.Bpst.App.Msi.exe";
 
+        [TestCleanup]
+        public void Cleanup()
+        {
+            driver.Quit();
+        }
+
         [TestMethod]
         public void RunSCCMTests()
         {
@@ -169,12 +175,25 @@ namespace Microsoft.Deployment.Site.Web.Tests
                 client.DownloadFile(downloadUrl, "SCCM.exe");
             }
 
+            try
+            {
+                ProcessDownload("uninstall");
+            }
+            catch
+            {
+                // Program was not installed
+            }
+
+            ProcessDownload("install");
+        }
+
+        private void ProcessDownload(string type)
+        {
             using (var p = new Process())
             {
                 ProcessStartInfo startInfo = new ProcessStartInfo();
                 startInfo.FileName = "SCCM.exe";
-                startInfo.Arguments = "/install /quiet";
-
+                startInfo.Arguments = $"/{type} /quiet";
 
                 p.StartInfo = startInfo;
 

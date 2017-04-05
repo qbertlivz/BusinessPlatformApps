@@ -231,9 +231,15 @@ namespace Microsoft.Deployment.Site.Web.Tests
         public static void CheckDeploymentStatus()
         {
             Thread.Sleep(new TimeSpan(0, 0, 5));
-            var popup = driver.FindElementByCssSelector("span[class='glyphicon pbi-glyph-close st-contact-us-close au-target']");
-            popup.Click();
-
+            try
+            {
+                var popup = driver.FindElementByCssSelector("span[class='glyphicon pbi-glyph-close st-contact-us-close au-target']");
+                popup.Click();
+            }
+            catch
+            {
+                //MSI scenario - carry on
+            }
             var progressText = driver.FindElementsByCssSelector("span[class='semiboldFont st-progress-text']")
                                      .FirstOrDefault(e => e.Text == "All done! You can now download your Power BI report and start exploring your data.");
             var error = driver.FindElementsByCssSelector("span[class='st-tab-text st-error']")

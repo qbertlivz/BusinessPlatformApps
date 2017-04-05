@@ -58,25 +58,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
             HelperMethods.ClickButton("Next");
             HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Run");
-            Given_AllInformationCorrect_When_DeploymentFinish_Then_SuccessMessageDisplayed();
-        }
-
-        public void Given_AllInformationCorrect_When_DeploymentFinish_Then_SuccessMessageDisplayed()
-        {
-            var progressText = driver.FindElementsByCssSelector("span[class='semiboldFont st-progress-text']")
-                                     .FirstOrDefault(e => e.Text == "All done! You can now download your Power BI report and start exploring your data.");
-
-            int i = 0;
-
-            while (progressText == null && i < 10)
-            {
-                progressText = driver.FindElementsByCssSelector("span[class='semiboldFont st-progress-text']")
-                                     .FirstOrDefault(e => e.Text == "All done! You can now download your Power BI report and start exploring your data.");
-                i++;
-                Thread.Sleep(new TimeSpan(0, 0, 20));
-            }
-
-            Assert.IsTrue(progressText != null);
+            HelperMethods.CheckDeploymentStatus();
         }
 
         public void SelectSqlDatabase(string databaseName)

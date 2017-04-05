@@ -280,7 +280,7 @@ AS
            [year],
            same_day_year_ago_date,
            week_begin_date  AS [week begin date]
-    FROM   pbist_sccm.date;
+    FROM   pbist_sccm.[date];
 go
 
 CREATE VIEW pbist_sccm.vw_DistributionPointsCompliancebyPackagesStatus

@@ -17,9 +17,8 @@ namespace Microsoft.Deployment.Site.Web.Tests
     public class SCCMTemplateTests
     {
         private RemoteWebDriver driver;
-        private string baseDownloadURL = Constants.Slot3 + "?name=Microsoft-SCCMTemplate";
+        private string slot = "slot1";
         private string msiPath = @"C:\Program Files\Microsoft Templates\Microsoft-SCCMTemplate\Microsoft.Bpst.App.Msi.exe";
-        private string hostName;
 
         [TestMethod]
         public void RunSCCMTests()
@@ -29,9 +28,14 @@ namespace Microsoft.Deployment.Site.Web.Tests
             OpenWebBrowser();
             HelperMethods.driver = this.driver;
             HelperMethods.WaitForPage();
-            var background = driver.FindElementByCssSelector("div[class='st-email-background st-email-wrapper au-target']");
-            background.Click();
+            try
+            {
+                var background = driver.FindElementByCssSelector("div[class='st-email-background st-email-wrapper au-target']");
+                background.Click();
+            }
+            catch { /* If not found means s3 is behind s1, expected behaviour*/}
             HelperMethods.ClickButton("Next");
+            HelperMethods.WaitForPage();
             Given_AlternativeWindowsCredentials_When_Validate_Then_Success();
             HelperMethods.ClickButton("Next");
             HelperMethods.WaitForPage();
@@ -42,8 +46,11 @@ namespace Microsoft.Deployment.Site.Web.Tests
             Given_CorrectSqlCredentials_When_Validate_Then_Success();
             HelperMethods.SelectSqlDatabase(Credential.Instance.SccmSql.Target);
             HelperMethods.ClickButton("Next");
+            HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Validate");
+            HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Next");
+            HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Run");
             Given_AllInformationCorrect_When_DeploymentFinish_Then_SuccessMessageDisplayed();
         }
@@ -142,11 +149,9 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
         public void OpenWebBrowser()
         {
-            msiPath = @"C:\Repos\BusinessPlatformApps\Source\Site\Microsoft.Deployment.Site.Msi\bin\x64\Microsoft.Bpst.App.Msi.exe";
             ChromeOptions options = new ChromeOptions();
             options.BinaryLocation = msiPath;
             options.AddArgument("?name=Microsoft-SCCMTemplate");
-
             driver = new ChromeDriver(options);
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(30);
         }
@@ -158,7 +163,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
                 File.Delete("SCCM.exe");
             }
 
-            var downloadUrl = "https://bpstservice-slot3.azurewebsites.net/bin//Apps/Microsoft/Released/Microsoft-SCCMTemplate/Microsoft-SCCMTemplate.exe";
+            var downloadUrl = $"https://bpstservice-{slot}.azurewebsites.net/bin//Apps/Microsoft/Released/Microsoft-SCCMTemplate/Microsoft-SCCMTemplate.exe";
             using (var client = new WebClient())
             {
                 client.DownloadFile(downloadUrl, "SCCM.exe");

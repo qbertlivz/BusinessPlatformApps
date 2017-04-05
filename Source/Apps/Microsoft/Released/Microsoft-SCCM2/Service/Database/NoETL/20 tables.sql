@@ -463,33 +463,33 @@ CREATE TABLE pbist_sccm.configmgrserverhealthcountcomponentstatusmessagesbysever
      severity      VARCHAR(13) NOT NULL
 );
 
-CREATE TABLE pbist_sccm.configuration
+CREATE TABLE pbist_sccm.[configuration]
 (
      id                     INT IDENTITY(1, 1) NOT NULL,
      configuration_group    VARCHAR(150) NOT NULL,
      configuration_subgroup VARCHAR(150) NOT NULL,
-     NAME                   VARCHAR(150) NOT NULL,
+     [name]                 VARCHAR(150) NOT NULL,
      [value]                VARCHAR(max) NULL,
      visible                BIT NOT NULL DEFAULT ((0))
 );
 
-CREATE TABLE pbist_sccm.date
+CREATE TABLE pbist_sccm.[date]
 (
      date_key               INT NOT NULL,
      full_date              DATE NOT NULL,
      day_of_week            TINYINT NOT NULL,
      day_num_in_month       TINYINT NOT NULL,
-     day_name               CHAR(9) NOT NULL,
-     day_abbrev             CHAR(3) NOT NULL,
+     day_name               NVARCHAR(50) NOT NULL,
+     day_abbrev             NVARCHAR(10) NOT NULL,
      weekday_flag           CHAR(1) NOT NULL,
      week_num_in_year       TINYINT NOT NULL,
      week_begin_date        DATE NOT NULL,
      week_begin_date_key    INT NOT NULL,
-     month                  TINYINT NOT NULL,
-     month_name             CHAR(9) NOT NULL,
-     month_abbrev           CHAR(3) NOT NULL,
-     quarter                TINYINT NOT NULL,
-     year                   SMALLINT NOT NULL,
+     [month]                TINYINT NOT NULL,
+     month_name             NVARCHAR(50) NOT NULL,
+     month_abbrev           NVARCHAR(10) NOT NULL,
+     [quarter]              TINYINT NOT NULL,
+     [year]                 SMALLINT NOT NULL,
      yearmo                 INT NOT NULL,
      fiscal_month           TINYINT NOT NULL,
      fiscal_quarter         TINYINT NOT NULL,
@@ -498,8 +498,8 @@ CREATE TABLE pbist_sccm.date
      same_day_year_ago_date DATE NOT NULL,
      same_day_year_ago_key  INT NOT NULL,
      day_num_in_year AS ( Datepart(dayofyear, full_date) ),
-     quarter_name AS ( Concat('Q', quarter) ),
-     fiscal_quarter_name AS ( Concat('Q', fiscal_quarter) ),
+     quarter_name AS 'Q' + CAST([quarter] AS NCHAR(1)),
+     fiscal_quarter_name AS 'Q' + CAST(fiscal_quarter AS NCHAR(1)),
      fiscalquartercompletename AS ( Concat('FY', Substring(CONVERT(VARCHAR, fiscal_year), ( 3 ), ( 2 )), ' Q', fiscal_quarter) ),
      fiscalyearcompletename AS ( Concat('FY', Substring(CONVERT(VARCHAR, fiscal_year), ( 3 ), ( 2 ))) ),
      fiscalmonthcompletename AS ( Concat(month_abbrev, ' ', Substring(CONVERT(VARCHAR, fiscal_year), ( 3 ), ( 2 ))) )
@@ -526,7 +526,7 @@ CREATE TABLE pbist_sccm.distributionpointscompliancebypackagesstatus
      servername    NVARCHAR(256) NULL,
      sitecode      NVARCHAR(3) NOT NULL,
      packageid     NVARCHAR(8) NOT NULL,
-     NAME          NVARCHAR(256) NULL,
+     [name]        NVARCHAR(256) NULL,
      installstatus NVARCHAR(255) NOT NULL,
      summarydate   DATETIME NOT NULL
 );
@@ -536,7 +536,7 @@ CREATE TABLE pbist_sccm.distributionpointscompliancebypackagesstatus_staging
      servername    NVARCHAR(256) NULL,
      sitecode      NVARCHAR(3) NOT NULL,
      packageid     NVARCHAR(8) NOT NULL,
-     NAME          NVARCHAR(256) NULL,
+     [name]        NVARCHAR(256) NULL,
      installstatus NVARCHAR(255) NOT NULL,
      summarydate   DATETIME NOT NULL
 );

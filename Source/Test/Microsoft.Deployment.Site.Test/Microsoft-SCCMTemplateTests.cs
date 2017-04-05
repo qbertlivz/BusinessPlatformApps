@@ -61,6 +61,136 @@ namespace Microsoft.Deployment.Site.Web.Tests
             HelperMethods.CheckDeploymentStatus();
         }
 
+        [TestMethod]
+        public void RunSCCMTestsWithAs()
+        {
+            Credential.Load();
+            DownloadAndInstallMSI();
+            OpenWebBrowser();
+            HelperMethods.driver = this.driver;
+            HelperMethods.WaitForPage();
+            try
+            {
+                var background = driver.FindElementByCssSelector("div[class='st-email-background st-email-wrapper au-target']");
+                background.Click();
+            }
+            catch { /* If not found means s3 is behind s1, expected behaviour*/}
+            HelperMethods.ClickButton("Next");
+            HelperMethods.WaitForPage();
+            Given_AlternativeWindowsCredentials_When_Validate_Then_Success();
+            HelperMethods.ClickButton("Next");
+            HelperMethods.WaitForPage();
+            Given_CorrectSqlCredentials_When_Validate_Then_Success();
+            HelperMethods.SelectSqlDatabase(Credential.Instance.SccmSql.Source);
+            HelperMethods.ClickButton("Next");
+            HelperMethods.WaitForPage();
+            SelectSqlAzure();
+            HelperMethods.SelectSqlDatabase(Credential.Instance.Sql.SCCMDatabase);
+            //Given_CorrectSqlCredentials_When_Validate_Then_Success();
+            //HelperMethods.SelectSqlDatabase(Credential.Instance.SccmSql.Target);
+            HelperMethods.ClickButton("Next");
+            HelperMethods.WaitForPage();
+            MsiAsSelectionExperience();
+            MsiAzureExperience();
+            MsiAsExperience("sccmas" + HelperMethods.resourceGroupName, Credential.Instance.ServiceAccount.Username, Credential.Instance.ServiceAccount.Password);
+            HelperMethods.ClickButton("Validate");
+            HelperMethods.WaitForPage();
+            HelperMethods.ClickButton("Next");
+            HelperMethods.WaitForPage();
+            HelperMethods.ClickButton("Run");
+            HelperMethods.CheckDeploymentStatus();
+        }
+
+        private void SelectSqlAzure()
+        {
+            Thread.Sleep(new TimeSpan(0, 0, 45));
+            HelperMethods.WaitForPage();
+            var sqlAzure = driver.FindElementsByCssSelector("input[class='au-target']").FirstOrDefault(e => e.GetAttribute("checked.bind") == "isAzureSql");
+
+            var js = (IJavaScriptExecutor)driver;
+            js.ExecuteScript("arguments[0].click()", sqlAzure);
+
+            var elements = driver.FindElementsByCssSelector("input[class='st-input au-target']");
+
+            var serverBox = elements.First(e => e.GetAttribute("value.bind").Contains("sqlServer"));
+            serverBox.SendKeys(Credential.Instance.Sql.Server.Split('.').First());
+
+            var usernameBox = elements.First(e => e.GetAttribute("value.bind").Contains("username"));
+            usernameBox.SendKeys(Credential.Instance.Sql.Username);
+
+            var passwordBox = elements.First(e => e.GetAttribute("value.bind").Contains("password"));
+            passwordBox.SendKeys(Credential.Instance.Sql.Password);
+
+            HelperMethods.ClickButton("Validate");
+        }
+
+        public void MsiAzureExperience()
+        {
+            HelperMethods.AzurePage(
+               Credential.Instance.ServiceAccount.Username,
+               Credential.Instance.ServiceAccount.Password,
+               Credential.Instance.ServiceAccount.SubscriptionName);
+            var validated = driver.FindElementByClassName("st-validated");
+            Assert.IsTrue(validated.Text == "Successfully validated");
+        }
+
+        public void MsiAsSelectionExperience()
+        {
+            var button = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
+
+            while (button.Enabled != true)
+            {
+                Thread.Sleep(new TimeSpan(0, 0, 1));
+                button = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
+            }
+
+            button.SendKeys("Yes");
+
+            HelperMethods.ClickButton("Next");
+        }
+
+        public void MsiAsExperience(string password, string username, string server)
+        {
+            Thread.Sleep(new TimeSpan(0, 0, 2));
+            var newAas = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
+
+            while (newAas.Enabled != true)
+            {
+                Thread.Sleep(new TimeSpan(0, 0, 1));
+                newAas = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
+            }
+
+            newAas.SendKeys("New");
+
+            var elements = driver.FindElementsByCssSelector("input[class='st-input au-target']");
+
+            var serverBox = elements.FirstOrDefault(e => e.GetAttribute("value.bind").Contains("server"));
+            var usernameBox = elements.FirstOrDefault(e => e.GetAttribute("value.bind").Contains("email"));
+            var passwordBox = elements.FirstOrDefault(e => e.GetAttribute("value.bind").Contains("password"));
+
+            while (usernameBox.Enabled != true && passwordBox.Enabled != true && passwordBox.Enabled != true)
+            {
+                Thread.Sleep(new TimeSpan(0, 0, 1));
+            }
+
+            passwordBox.SendKeys(password);
+            usernameBox.Clear();
+            usernameBox.SendKeys(username);
+            serverBox.SendKeys(server);
+
+            var aasSku = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
+
+            while (aasSku.Enabled != true)
+            {
+                Thread.Sleep(new TimeSpan(0, 0, 1));
+                aasSku = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
+            }
+
+            aasSku.SendKeys("Developer");
+
+            HelperMethods.ClickButton("Validate");
+        }
+
         public void SelectSqlDatabase(string databaseName)
         {
             var database = driver.FindElementsByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']")

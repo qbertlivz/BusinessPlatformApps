@@ -35,6 +35,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
             }
             catch { /* If not found means s3 is behind s1, expected behaviour*/}
             HelperMethods.ClickButton("Next");
+            HelperMethods.WaitForPage();
             Given_AlternativeWindowsCredentials_When_Validate_Then_Success();
             HelperMethods.ClickButton("Next");
             HelperMethods.WaitForPage();
@@ -45,8 +46,11 @@ namespace Microsoft.Deployment.Site.Web.Tests
             Given_CorrectSqlCredentials_When_Validate_Then_Success();
             HelperMethods.SelectSqlDatabase(Credential.Instance.SccmSql.Target);
             HelperMethods.ClickButton("Next");
+            HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Validate");
+            HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Next");
+            HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Run");
             Given_AllInformationCorrect_When_DeploymentFinish_Then_SuccessMessageDisplayed();
         }
@@ -148,7 +152,6 @@ namespace Microsoft.Deployment.Site.Web.Tests
             ChromeOptions options = new ChromeOptions();
             options.BinaryLocation = msiPath;
             options.AddArgument("?name=Microsoft-SCCMTemplate");
-
             driver = new ChromeDriver(options);
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(30);
         }

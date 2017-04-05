@@ -264,6 +264,29 @@
         "SqlServerIndex": 0,
         "TargetSchema": "dbo"
       }
-    ]
+    ],
+
+    "Uninstall": {
+      "Pages": [
+        {
+          "displayname": "Uninstall Progress",
+          "HasNavigated": "$save(true)",
+          "isUninstall": true,
+          "name": "$SiteCommon$/pages-gallery/progress.html",
+          "showEmailSubmission": false,
+          "successMessage": "$translate(INIT_UNINSTALL_SUCCESS)"
+        }
+      ],
+      "Actions": [
+        {
+          "displayname": "$translate(INIT_ACTION_REMOVING_FILES)",
+          "name": "Microsoft-RemoveFiles"
+        },
+        {
+          "displayname": "$translate(INIT_ACTION_FINISHING_CLEANUP)",
+          "name": "Microsoft-RemoveFiles",
+          "TargetPath": "C:\\Program Files\\Microsoft Templates\\Microsoft-CRMSalesManagement\\Apps\\Microsoft\\Released\\Microsoft-CRMSalesManagement\\Temp"
+        }
+      ]
+    }
   }
-}

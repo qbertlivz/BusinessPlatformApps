@@ -8,7 +8,6 @@
       {
         "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-CRMSalesManagement/Web/Images/crm-sales-management.png",
         "displayname": "Getting Started",
-        "isDownload": "$(!this.MS.HttpService.isOnPremise)",
         "list1": [
           "$translate(INIT_GETTING_STARTED_D365_DECEMBER)",
           "$translate(INIT_GETTING_STARTED_D365_ADMIN)",

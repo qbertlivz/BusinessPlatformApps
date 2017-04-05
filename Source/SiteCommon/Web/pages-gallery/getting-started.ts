@@ -39,11 +39,6 @@ export class Gettingstarted extends ViewModelBase {
 
     async OnLoaded(): Promise<void> {
         this.isValidated = true;
-        if (this.isDownload) {
-            this.GetDownloadLink();
-        } else {
-            this.registration.text = '';
-        }
 
         if (this.MS.HttpService.isOnPremise) {
             this.selection.label = '';
@@ -53,6 +48,12 @@ export class Gettingstarted extends ViewModelBase {
             if (res.Body === true) {
                 this.upgrade = res.Body;
             }
+        }
+
+        if (this.isDownload) {
+            this.GetDownloadLink();
+        } else {
+            this.registration.text = '';
         }
     }
 
@@ -99,11 +100,16 @@ export class Gettingstarted extends ViewModelBase {
 
     SelectionChanged(): void {
         if (this.selection.choice === this.selection.choiceDownload) {
+            this.isDownload = !this.MS.HttpService.isOnPremise;
             this.selection.list1Previous = this.list1;
             this.selection.list2Previous = this.list2;
             this.list1 = this.selection.list1;
             this.list2 = this.selection.list2;
+            if (this.isDownload && !this.downloadLink) {
+                this.GetDownloadLink();
+            }
         } else {
+            this.isDownload = false;
             this.list1 = this.selection.list1Previous;
             this.list2 = this.selection.list2Previous;
         }

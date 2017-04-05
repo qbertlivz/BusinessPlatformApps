@@ -8,7 +8,6 @@
       {
         "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-SalesforceSalesManagement/Web/Images/salesforceArchitectureDiagram.png",
         "displayname": "Getting Started",
-        "isDownload": "$(!this.MS.HttpService.isOnPremise)",
         "list1": [
           "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",
           "$translate(INIT_GETTING_STARTED_SALESFORCE_SUBSCRIPTION)",

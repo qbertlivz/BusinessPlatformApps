@@ -90,6 +90,8 @@ namespace Microsoft.Deployment.Site.Web.Tests
             var acceptButton = driver.FindElementById("cred_accept_button");
             djs.ExecuteScript("arguments[0].click()", acceptButton);
 
+            WaitForPage();
+
             var azurePage = driver.FindElementsByClassName("st-text").FirstOrDefault(e => e.Text == "Azure Subscription:");
 
             for (int i = 0; i < 10; i++)
@@ -98,7 +100,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
                 if (azurePage != null)
                 {
                     var advanced = driver.FindElementByCssSelector("p[class='st-float st-text au-target']");
-                    advanced.Click();
+                    djs.ExecuteScript("arguments[0].click()", advanced);
 
                     var resourceGroup = driver.FindElementsByCssSelector("input[class='st-input au-target']")
                                         .First(e => e.GetAttribute("value.bind").Contains("selectedResourceGroup"));

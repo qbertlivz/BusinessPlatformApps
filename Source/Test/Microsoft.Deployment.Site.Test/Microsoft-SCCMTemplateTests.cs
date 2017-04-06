@@ -57,6 +57,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
             HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Next");
             HelperMethods.WaitForPage();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
             HelperMethods.ClickButton("Run");
             HelperMethods.CheckDeploymentStatus();
         }
@@ -86,13 +87,15 @@ namespace Microsoft.Deployment.Site.Web.Tests
             HelperMethods.WaitForPage();
             SelectSqlAzure();
             HelperMethods.SelectSqlDatabase(Credential.Instance.Sql.SCCMDatabase);
-            //Given_CorrectSqlCredentials_When_Validate_Then_Success();
-            //HelperMethods.SelectSqlDatabase(Credential.Instance.SccmSql.Target);
             HelperMethods.ClickButton("Next");
             HelperMethods.WaitForPage();
             MsiAsSelectionExperience();
             MsiAzureExperience();
+            HelperMethods.ClickButton("Next");
+            HelperMethods.WaitForPage();
             MsiAsExperience("sccmas" + HelperMethods.resourceGroupName, Credential.Instance.ServiceAccount.Username, Credential.Instance.ServiceAccount.Password);
+            HelperMethods.ClickButton("Next");
+            HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Validate");
             HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Next");
@@ -149,7 +152,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
             HelperMethods.ClickButton("Next");
         }
 
-        public void MsiAsExperience(string password, string username, string server)
+        public void MsiAsExperience(string server, string username, string password)
         {
             Thread.Sleep(new TimeSpan(0, 0, 2));
             var newAas = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
@@ -267,6 +270,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
         public void OpenWebBrowser()
         {
+            msiPath = @"C:\Repos\BusinessPlatformApps\Source\Site\Microsoft.Deployment.Site.Msi\bin\x64\Microsoft.Bpst.App.Msi.exe";
             ChromeOptions options = new ChromeOptions();
             options.BinaryLocation = msiPath;
             options.AddArgument("?name=Microsoft-SCCMTemplate");

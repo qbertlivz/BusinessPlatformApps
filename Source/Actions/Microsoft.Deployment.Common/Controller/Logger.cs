@@ -44,7 +44,6 @@ namespace Microsoft.Deployment.Common.Controller
             this.AddToDictionary(this.globalParams, this.telemetryClient.Context.Properties);
         }
 
-
         public void LogEvent(string eventName, Dictionary<string, string> properties)
         {
             this.telemetryClient.TrackEvent(eventName, properties);
@@ -214,7 +213,8 @@ namespace Microsoft.Deployment.Common.Controller
             DeployedResourceType type, 
             CreatedBy createdBy, 
             string createdAt, 
-            string resourceId = null)
+            string resourceId = null,
+            string tier = null)
         {
             string tenantId = ds.GetValue("PowerBITenantId");
             string subscriptionId = ds.GetJson("SelectedSubscription")["SubscriptionId"].ToString();
@@ -232,6 +232,7 @@ namespace Microsoft.Deployment.Common.Controller
             resourceParams.Add("createdBy", createdBy.ToString());
             resourceParams.Add("createdAt", createdAt);
             resourceParams.Add("resourceId", resourceId);
+            resourceParams.Add("tier", tier);
 
             this.LogEvent("LogResource", resourceParams);
         }

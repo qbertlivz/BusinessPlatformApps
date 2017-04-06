@@ -29,7 +29,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             var param = new ResourceGroup { Location = location };
             var createdResourceGroup = await client.ResourceGroups.CreateOrUpdateAsync(resourceGroup, param, new CancellationToken());
 
-            request.Logger.LogResource(request.DataStore, resourceGroup, DeployedResourceType.ResourceGroup, CreatedBy.BPST, DateTime.UtcNow.ToString(), createdResourceGroup.ResourceGroup.Id);
+            request.Logger.LogResource(request.DataStore, resourceGroup, DeployedResourceType.ResourceGroup, CreatedBy.BPST, DateTime.UtcNow.ToString("o"), createdResourceGroup.ResourceGroup.Id);
 
             return new ActionResponse(ActionStatus.Success, createdResourceGroup);
         }

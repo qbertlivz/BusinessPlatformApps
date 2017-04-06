@@ -225,7 +225,7 @@
     <Compile Include="Common\DeleteResourceGroup.cs" />
     <Compile Include="Common\DeployAzureFunction.cs" />
     <Compile Include="Common\DeployAzureFunctionAssets.cs" />
-    <Compile Include="Common\DeployCognitiveService.cs" />
+    <Compile Include="CognitiveServices\DeployCognitiveService.cs" />
     <Compile Include="Common\DeployStorageAccountContainer.cs" />
     <Compile Include="Common\GetAzureSubscriptions.cs" />
     <Compile Include="Common\GetCognitiveKey.cs" />

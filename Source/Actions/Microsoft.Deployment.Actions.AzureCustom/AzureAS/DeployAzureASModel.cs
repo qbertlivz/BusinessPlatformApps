@@ -56,7 +56,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
                 server.Disconnect(true);
             }
             request.Logger.LogResource(request.DataStore, asDatabase,
-                        DeployedResourceType.AzureAnalysisServicesModel, CreatedBy.BPST, DateTime.UtcNow.ToString());
+                        DeployedResourceType.AzureAnalysisServicesModel, CreatedBy.BPST, DateTime.UtcNow.ToString("o"));
 
             return new ActionResponse(ActionStatus.Success);
         }

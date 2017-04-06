@@ -57,7 +57,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
             request.DataStore.AddToDataStore("ASServerUrl", responseObj["properties"]["serverFullName"], DataStoreType.Public);
 
             request.Logger.LogResource(request.DataStore, responseObj["properties"]["serverFullName"].ToString(), 
-                DeployedResourceType.AzureAnalysisServices, CreatedBy.BPST, DateTime.UtcNow.ToString());
+                DeployedResourceType.AzureAnalysisServices, CreatedBy.BPST, DateTime.UtcNow.ToString("o"), string.Empty, sku);
 
             return new ActionResponse(ActionStatus.Success, responseObj);
         }

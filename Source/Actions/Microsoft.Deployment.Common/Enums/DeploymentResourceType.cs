@@ -15,6 +15,7 @@
         StorageAccount,
         AzureDataFactory,
         KeyVault,
-        CognitiveServices
+        CognitiveServices,
+        CRMExporter
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using Microsoft.Azure.Management.MachineLearning.WebServices.Models;
 using Microsoft.Azure.Management.MachineLearning.WebServices.Util;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
+using Microsoft.Deployment.Common.Enums;
 using Microsoft.Deployment.Common.Helpers;
 using Microsoft.Deployment.Common.Model;
 using Microsoft.Rest;
@@ -58,8 +60,11 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureML
             };
 
             commitmentPlan.Location = "South Central US";
-            var createdsCommitmentPlan = await commitmentClient.CommitmentPlans.CreateOrUpdateAsync(commitmentPlan, resourceGroup, commitmentPlanName);
+            var createdCommitmentPlan = await commitmentClient.CommitmentPlans.CreateOrUpdateAsync(commitmentPlan, resourceGroup, commitmentPlanName);
 
+            request.Logger.LogResource(request.DataStore, createdCommitmentPlan.Name,
+                DeployedResourceType.MlWebServicePlan, CreatedBy.BPST, DateTime.UtcNow.ToString("o"), createdCommitmentPlan.Id, commitmentPlan.Sku.Tier);
+            
             // Get webservicedefinition
             string sqlConnectionString = request.DataStore.GetValueAtIndex("SqlConnectionString", "SqlServerIndex");
             SqlCredentials sqlCredentials;
@@ -81,7 +86,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureML
                 Name = storageAccountName
             };
 
-            webService.Properties.CommitmentPlan = new CommitmentPlan(createdsCommitmentPlan.Id);
+            webService.Properties.CommitmentPlan = new CommitmentPlan(createdCommitmentPlan.Id);
             webService.Name = webserviceName;
 
             WebService result;
@@ -109,6 +114,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureML
             {
                 return new ActionResponse(ActionStatus.Failure, JsonUtility.GetJObjectFromStringValue(e.Message), e, "DefaultError", ((CloudException)e).Response.Content);
             }
+            request.Logger.LogResource(request.DataStore, result.Name,
+                DeployedResourceType.MlWebService, CreatedBy.BPST, DateTime.UtcNow.ToString("o"), result.Id);
 
             return new ActionResponse(ActionStatus.Success);
         }

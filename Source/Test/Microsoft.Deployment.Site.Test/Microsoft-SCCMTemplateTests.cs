@@ -269,8 +269,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
         }
 
         public void OpenWebBrowser()
-        {
-            msiPath = @"C:\Repos\BusinessPlatformApps\Source\Site\Microsoft.Deployment.Site.Msi\bin\x64\Microsoft.Bpst.App.Msi.exe";
+        {            
             ChromeOptions options = new ChromeOptions();
             options.BinaryLocation = msiPath;
             options.AddArgument("?name=Microsoft-SCCMTemplate");

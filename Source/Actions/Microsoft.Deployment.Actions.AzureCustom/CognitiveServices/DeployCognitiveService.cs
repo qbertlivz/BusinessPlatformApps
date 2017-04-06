@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -10,10 +11,11 @@ using Microsoft.Azure.Management.Resources.Models;
 
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
+using Microsoft.Deployment.Common.Enums;
 using Microsoft.Deployment.Common.ErrorCode;
 using Microsoft.Deployment.Common.Helpers;
 
-namespace Microsoft.Deployment.Actions.AzureCustom.Common
+namespace Microsoft.Deployment.Actions.AzureCustom.CognitiveServices
 {
     [Export(typeof(IAction))]
     public class DeployCognitiveService : BaseAction
@@ -22,7 +24,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
         {
             var cognitiveServiceKey = request.DataStore.GetValue("CognitiveServiceKey");
 
-            if (!string.IsNullOrEmpty(cognitiveServiceKey)) 
+            if (!string.IsNullOrEmpty(cognitiveServiceKey))
             {
                 return new ActionResponse(ActionStatus.Success);
             }
@@ -41,7 +43,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             param.AddStringParam("CognitiveServiceName", cognitiveServiceName);
             param.AddStringParam("CognitiveServiceType", cognitiveServiceType);
 
-            if(cognitiveServiceType == "Bing.Search")
+            if (cognitiveServiceType == "Bing.Search")
             {
                 param.AddStringParam("Location", "global");
             }
@@ -92,7 +94,12 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
                 { continue; }
 
                 if (provisioningState == "Succeeded")
-                { return new ActionResponse(ActionStatus.Success, operations); }
+                {
+
+                    request.Logger.LogResource(request.DataStore, cognitiveServiceName,
+                        DeployedResourceType.CognitiveServices, CreatedBy.BPST, DateTime.UtcNow.ToString("o"), cognitiveServiceType, skuName);
+                    return new ActionResponse(ActionStatus.Success, operations);
+                }
 
                 var operation = operations.Operations.First(p => p.Properties.ProvisioningState == ProvisioningState.Failed);
                 var operationFailed = client.DeploymentOperations.GetAsync(resourceGroup, deploymentName, operation.OperationId, new CancellationToken()).Result;

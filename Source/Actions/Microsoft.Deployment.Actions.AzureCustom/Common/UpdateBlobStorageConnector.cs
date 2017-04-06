@@ -24,11 +24,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             var connectorName = request.DataStore.GetValue("ConnectorName");
             var connectorDisplayName = request.DataStore.GetValue("ConnectorDisplayName");
 
-            //if (connectorName == "bingsearch")
-            //{
-            //    location = "brazilsouth";
-            //}
-
             JToken connectorPayload = request.DataStore.GetJson("ConnectorPayload");
 
             LogicAppConnector connector = new LogicAppConnector()

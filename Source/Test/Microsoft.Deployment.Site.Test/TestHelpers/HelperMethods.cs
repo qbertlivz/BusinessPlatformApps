@@ -63,25 +63,34 @@ namespace Microsoft.Deployment.Site.Web.Tests
             var passwordBox = driver.FindElementById("cred_password_inputtext");
             passwordBox.SendKeys(password);
 
-            Thread.Sleep(new TimeSpan(0, 0, 1));
-            var signInButton = driver.FindElementById("cred_sign_in_button");
+            try
+            {
+                Thread.Sleep(new TimeSpan(0, 0, 1));
+                var signInButton = driver.FindElementById("cred_sign_in_button");
 
-            var js = (IJavaScriptExecutor)driver;
-            js.ExecuteScript("arguments[0].click()", signInButton);
-
+                var js = (IJavaScriptExecutor)driver;
+                js.ExecuteScript("arguments[0].click()", signInButton);
+            }
+            catch
+            {
+                //MSI ccase
+            }
+            var djs = (IJavaScriptExecutor)driver;
             var passLink = driver.FindElementsByClassName("normalText").First(e => e.Text == "Sign in with a username and password instead");
-            passLink.Click();
+            djs.ExecuteScript("arguments[0].click()", passLink);
 
             passwordBox = driver.FindElementById("passwordInput");
             passwordBox.SendKeys(password);
 
-            Thread.Sleep(new TimeSpan(0, 0, 1));
-            signInButton = driver.FindElementById("submitButton");
-            js.ExecuteScript("arguments[0].click()", signInButton);
+            Thread.Sleep(new TimeSpan(0, 0, 5));
+            var submitButton = driver.FindElementById("submitButton");
+            djs.ExecuteScript("arguments[0].click()", submitButton);
 
-            Thread.Sleep(new TimeSpan(0, 0, 1));
+            Thread.Sleep(new TimeSpan(0, 0, 5));
             var acceptButton = driver.FindElementById("cred_accept_button");
-            acceptButton.Click();
+            djs.ExecuteScript("arguments[0].click()", acceptButton);
+
+            WaitForPage();
 
             var azurePage = driver.FindElementsByClassName("st-text").FirstOrDefault(e => e.Text == "Azure Subscription:");
 
@@ -91,7 +100,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
                 if (azurePage != null)
                 {
                     var advanced = driver.FindElementByCssSelector("p[class='st-float st-text au-target']");
-                    advanced.Click();
+                    djs.ExecuteScript("arguments[0].click()", advanced);
 
                     var resourceGroup = driver.FindElementsByCssSelector("input[class='st-input au-target']")
                                         .First(e => e.GetAttribute("value.bind").Contains("selectedResourceGroup"));

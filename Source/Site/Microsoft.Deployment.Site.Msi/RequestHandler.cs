@@ -162,13 +162,15 @@ namespace Installer
             return false;
         }
 
-        public void OnResourceRedirect(IWebBrowser browserControl, IBrowser browser, IFrame frame, IRequest request, IResponse response, ref string newUrl)
-        {
-        }
-
         public IResponseFilter GetResourceResponseFilter(IWebBrowser browserControl, IBrowser browser, IFrame frame, IRequest request, IResponse response)
         {
             return null;
+        }
+
+        void IRequestHandler.OnResourceRedirect(IWebBrowser browserControl, IBrowser browser, IFrame frame, IRequest request, IResponse response, ref string newUrl)
+        {
+            request.Url = newUrl;
+            browserControl.Load(newUrl);
         }
     }
 }

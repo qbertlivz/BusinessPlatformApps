@@ -8,7 +8,6 @@
       {
         "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-SalesforceSalesManagement/Web/Images/salesforceArchitectureDiagram.png",
         "displayname": "Getting Started",
-        "isDownload": "$(!this.MS.HttpService.isOnPremise)",
         "list1": [
           "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",
           "$translate(INIT_GETTING_STARTED_SALESFORCE_SUBSCRIPTION)",
@@ -311,6 +310,31 @@
         "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')",
         "SqlServerIndex": 0,
         "TargetSchema": "dbo"
+      }
+    ]
+  },
+
+  "Uninstall": {
+    "Pages": [
+      {
+        "displayname": "Uninstall Progress",
+        "HasNavigated": "$save(true)",
+        "isUninstall": true,
+        "name": "$SiteCommon$/pages-gallery/progress.html",
+        "showEmailSubmission": false,
+        "successMessage": "$translate(INIT_UNINSTALL_SUCCESS)"
+      }
+    ],
+
+    "Actions": [
+      {
+        "displayname": "$translate(INIT_ACTION_REMOVING_FILES)",
+        "name": "Microsoft-RemoveFiles"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_FINISHING_CLEANUP)",
+        "name": "Microsoft-RemoveFiles",
+        "TargetPath": "C:\\Program Files\\Microsoft Templates\\Microsoft-SalesforceSalesManagement\\Apps\\Microsoft\\Released\\Microsoft-SalesforceSalesManagement\\Temp"
       }
     ]
   }

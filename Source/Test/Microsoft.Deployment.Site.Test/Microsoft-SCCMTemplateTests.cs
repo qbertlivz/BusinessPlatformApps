@@ -223,6 +223,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
                 serverBox = elements.FirstOrDefault(e => e.GetAttribute("value.bind").Contains("sqlServer"));
             }
 
+            serverBox.Clear();
             serverBox.SendKeys(Credential.Instance.SccmSql.Server);
 
             HelperMethods.ClickButton("Validate");
@@ -308,7 +309,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
             {
                 ProcessStartInfo startInfo = new ProcessStartInfo();
                 startInfo.FileName = "SCCM.exe";
-                startInfo.Arguments = $"/{type} /quiet";
+                startInfo.Arguments = $"/{type} /quiet /norestart";
 
                 p.StartInfo = startInfo;
 

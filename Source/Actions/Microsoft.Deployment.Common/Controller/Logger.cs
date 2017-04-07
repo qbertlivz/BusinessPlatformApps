@@ -217,8 +217,8 @@ namespace Microsoft.Deployment.Common.Controller
             string tier = null)
         {
             string tenantId = ds.GetValue("PowerBITenantId");
-            string subscriptionId = ds.GetJson("SelectedSubscription")["SubscriptionId"].ToString();
-            string subscriptionName = ds.GetJson("SelectedSubscription")["DisplayName"].ToString();
+            string subscriptionId = ds.GetJson("SelectedSubscription")?["SubscriptionId"]?.ToString();
+            string subscriptionName = ds.GetJson("SelectedSubscription")?["DisplayName"]?.ToString();
             string resourceGroupName = ds.GetValue("SelectedResourceGroup");
 
             Dictionary<string, string> resourceParams = new Dictionary<string, string>();

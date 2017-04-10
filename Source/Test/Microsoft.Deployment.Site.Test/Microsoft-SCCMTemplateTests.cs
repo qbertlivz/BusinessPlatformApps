@@ -23,7 +23,10 @@ namespace Microsoft.Deployment.Site.Web.Tests
         [TestCleanup]
         public void Cleanup()
         {
-            driver.Quit();
+            if (driver != null)
+            {
+                driver.Quit();
+            }
         }
 
         [TestMethod]
@@ -51,13 +54,12 @@ namespace Microsoft.Deployment.Site.Web.Tests
             Thread.Sleep(new TimeSpan(0, 0, 5));
             HelperMethods.ClickButton("Next");
             HelperMethods.WaitForPage();
-            Thread.Sleep(new TimeSpan(0, 0, 5));
+            Thread.Sleep(new TimeSpan(0, 0, 45));
             Given_CorrectSqlCredentials_When_Validate_Then_Success();
-            Thread.Sleep(new TimeSpan(0, 0, 5));
             HelperMethods.SelectSqlDatabase(Credential.Instance.SccmSql.Target);
             HelperMethods.ClickButton("Next");
             HelperMethods.WaitForPage();
-            Thread.Sleep(new TimeSpan(0, 0, 5));
+            Thread.Sleep(new TimeSpan(0, 0, 45));
             HelperMethods.ClickButton("Validate");
             HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Next");
@@ -89,7 +91,6 @@ namespace Microsoft.Deployment.Site.Web.Tests
             Given_CorrectSqlCredentials_When_Validate_Then_Success();
             HelperMethods.SelectSqlDatabase(Credential.Instance.SccmSql.Source);
             HelperMethods.ClickButton("Next");
-            Thread.Sleep(new TimeSpan(0, 0, 5));
             HelperMethods.WaitForPage();
             SelectSqlAzure();
             HelperMethods.SelectSqlDatabase(Credential.Instance.Sql.SCCMDatabase);
@@ -117,6 +118,13 @@ namespace Microsoft.Deployment.Site.Web.Tests
             Thread.Sleep(new TimeSpan(0, 0, 45));
             HelperMethods.WaitForPage();
             var sqlAzure = driver.FindElementsByCssSelector("input[class='au-target']").FirstOrDefault(e => e.GetAttribute("checked.bind") == "isAzureSql");
+
+            while (sqlAzure == null)
+            {
+                sqlAzure = driver.FindElementsByCssSelector("input[class='au-target']").FirstOrDefault(e => e.GetAttribute("checked.bind") == "isAzureSql");
+                Thread.Sleep(new TimeSpan(0, 0, 3));
+            }
+
 
             var js = (IJavaScriptExecutor)driver;
             js.ExecuteScript("arguments[0].click()", sqlAzure);
@@ -147,8 +155,9 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
         public void MsiAsSelectionExperience()
         {
+            Thread.Sleep(new TimeSpan(0, 0, 30));
             var button = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
-
+            
             while (button.Enabled != true)
             {
                 Thread.Sleep(new TimeSpan(0, 0, 1));
@@ -278,7 +287,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
         }
 
         public void OpenWebBrowser()
-        {            
+        {
             ChromeOptions options = new ChromeOptions();
             options.BinaryLocation = msiPath;
             options.AddArgument("?name=Microsoft-SCCMTemplate");

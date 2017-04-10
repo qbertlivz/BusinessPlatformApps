@@ -30,7 +30,7 @@ namespace Microsoft.Deployment.Actions.Custom.Informatica
                 Name = InformaticaUtility.BPST_SOURCE_NAME,
                 OrgId = rc.ID,
                 ConnectionType = "Salesforce",
-                RuntimeEnvironmentId = await InformaticaUtility.GetRuntimeEnvironmentId(rc)
+                RuntimeEnvironmentId = await InformaticaUtility.GetRuntimeEnvironmentId(rc, request.DataStore.GetValue("InformaticaAgentName"))
             };
 
             await rc.Post(URL_CONNECTIONS, JsonConvert.SerializeObject(ic));

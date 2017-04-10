@@ -38,9 +38,13 @@ namespace Microsoft.Deployment.Actions.AzureCustom.CognitiveServices
             var getPermissionsResponse = await client.ExecuteWithSubscriptionAsync(HttpMethod.Get,
                 $"providers/Microsoft.CognitiveServices/locations/{location}/settings/accounts", "2016-02-01-preview",
                 string.Empty);
-
             var getPermissionsBody = JsonUtility.GetJsonObjectFromJsonString(await getPermissionsResponse.Content.ReadAsStringAsync());
 
+            if (!getPermissionsResponse.IsSuccessStatusCode)
+            {
+                return new ActionResponse(ActionStatus.Failure, getPermissionsBody, null, null, getPermissionsBody.ToString());
+            }
+            
             foreach (var permission in getPermissionsBody["settings"])
             {
                 if (cognitiveServicesToCheck.Contains(permission["kind"].ToString()) && permission["allowCreate"].ToString().ToLowerInvariant() == "false")

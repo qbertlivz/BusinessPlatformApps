@@ -9,6 +9,7 @@ using Microsoft.Deployment.Site.Test.TestHelpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.PhantomJS;
 using OpenQA.Selenium.Remote;
 using OpenQA.Selenium.Support.UI;
 
@@ -26,19 +27,21 @@ namespace Microsoft.Deployment.Site.Web.Tests
             Given_CorrectCredentials_When_AzureAuth_Then_Success();
             Thread.Sleep(new TimeSpan(0, 0, 5));
             HelperMethods.ClickButton("Next");
-            Thread.Sleep(new TimeSpan(0, 1, 0)); // Skip over Data Movement page
+            HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Next");
             Given_CorrectSalesforceCredentials_When_Validate_Then_PageValidatesSuccesfully();
-            Thread.Sleep(new TimeSpan(0, 0, 5));
+            HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Next");
             Given_CorrectSqlCredentials_When_ExistingSqlSelected_Then_PageValidatesSuccessfully();
-            Thread.Sleep(new TimeSpan(0, 0, 5));
+            HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Next");
             HelperMethods.NoAnalysisServices();
+            HelperMethods.WaitForPage();
+            HelperMethods.ClickButton("Next");
+            HelperMethods.WaitForPage();
             Thread.Sleep(new TimeSpan(0, 0, 5));
             HelperMethods.ClickButton("Next");
-            Thread.Sleep(new TimeSpan(0, 0, 3));
-            HelperMethods.ClickButton("Next");
+            HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Run");
             HelperMethods.CheckDeploymentStatus();
             HelperMethods.CleanSubscription(
@@ -56,19 +59,20 @@ namespace Microsoft.Deployment.Site.Web.Tests
             Given_CorrectCredentials_When_AzureAuth_Then_Success();
             Thread.Sleep(new TimeSpan(0, 0, 5));
             HelperMethods.ClickButton("Next");
-            Thread.Sleep(new TimeSpan(0, 1, 0)); // Skip over Data Movement page
+            HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Next");
             Given_CorrectSalesforceCredentials_When_Validate_Then_PageValidatesSuccesfully();
-            Thread.Sleep(new TimeSpan(0, 0, 5));
+            HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Next");
             Given_CorrectSqlCredentials_When_ExistingSqlSelected_Then_PageValidatesSuccessfully();
-            Thread.Sleep(new TimeSpan(0, 0, 5));
+            HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Next");
             HelperMethods.NewAnalysisServices("salesforceas" + HelperMethods.resourceGroupName, Credential.Instance.ServiceAccount.Username, Credential.Instance.ServiceAccount.Password);
-            Thread.Sleep(new TimeSpan(0, 0, 3));
+            HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Next");
-            Thread.Sleep(new TimeSpan(0, 0, 3));
+            HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Next");
+            HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Run");
             HelperMethods.CheckDeploymentStatus();
             HelperMethods.CleanSubscription(
@@ -80,9 +84,6 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
         }
 
-
-        [TestMethod]
-        [Ignore]
         public void Given_CorrectCredentials_When_AzureAuth_Then_Success()
         {
             HelperMethods.OpenWebBrowserOnPage("azure");
@@ -97,8 +98,6 @@ namespace Microsoft.Deployment.Site.Web.Tests
             Assert.IsTrue(validated.Text == "Successfully validated");
         }
 
-        [Ignore]
-        [TestMethod]
         public void Given_CorrectSalesforceCredentials_When_Validate_Then_PageValidatesSuccesfully()
         {
             string username = Credential.Instance.Salesforce.Username;
@@ -112,8 +111,6 @@ namespace Microsoft.Deployment.Site.Web.Tests
             Assert.IsTrue(validated.Text == "Successfully validated");
         }
 
-        [Ignore]
-        [TestMethod]
         public void Given_NoSalesforceCredentials_When_Validate_Then_PageFailsWithErrorMessage()
         {
             HelperMethods.OpenWebBrowserOnPage("salesforce");
@@ -125,8 +122,6 @@ namespace Microsoft.Deployment.Site.Web.Tests
             Assert.IsTrue(validated.Text == "INVALID_LOGIN: Invalid username, password, security token; or user locked out.");
         }
 
-        [TestMethod]
-        [Ignore]
         public void Given_CorrectSqlCredentials_When_ExistingSqlSelected_Then_PageValidatesSuccessfully()
         {
             string server = Credential.Instance.Sql.Server;
@@ -145,8 +140,6 @@ namespace Microsoft.Deployment.Site.Web.Tests
             HelperMethods.SelectSqlDatabase(database);
         }
 
-        [Ignore]
-        [TestMethod]
         public void Given_WrongSqlCredentials_When_ExistingSqlSelected_Then_PageFailsWithErrorMessage()
         {
             HelperMethods.OpenWebBrowserOnPage("target");
@@ -174,6 +167,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
             HelperMethods.baseURL = baseURL + "?name=Microsoft-SalesforceSalesManagement";
             var options = new ChromeOptions();
             options.AddArgument("no-sandbox");
+            
             HelperMethods.driver = new ChromeDriver(options);
             this.driver = HelperMethods.driver;
         }

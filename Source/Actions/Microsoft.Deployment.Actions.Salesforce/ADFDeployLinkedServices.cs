@@ -15,6 +15,8 @@ using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.ErrorCode;
 using Microsoft.Deployment.Common.Helpers;
+using Microsoft.Deployment.Common.Enums;
+using System;
 
 namespace Microsoft.Deployment.Actions.Salesforce
 {
@@ -118,6 +120,15 @@ namespace Microsoft.Deployment.Actions.Salesforce
             var deploymentItem = client.Deployments.CreateOrUpdateAsync(resourceGroup, deploymentName, deployment, new CancellationToken()).Result;
 
             var helper = new DeploymentHelper();
+
+            var response = helper.WaitForDeployment(resourceGroup, deploymentName, client);
+
+            if (response.IsSuccess)
+            {
+                //Log data factory
+                request.Logger.LogResource(request.DataStore, dataFactoryName,
+                    DeployedResourceType.AzureDataFactory, CreatedBy.BPST, DateTime.UtcNow.ToString("o"));
+            }
 
             return helper.WaitForDeployment(resourceGroup, deploymentName, client);
         }

@@ -3,8 +3,7 @@ using System.Threading.Tasks;
 
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
-using RefreshType = Microsoft.AnalysisServices.Tabular.RefreshType;
-using Server = Microsoft.AnalysisServices.Tabular.Server;
+using Microsoft.AnalysisServices.Tabular;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
 {
@@ -17,14 +16,17 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
             AzureUtility.GetEmailFromToken(request.DataStore.GetJson("AzureToken"));
             string asDatabase = request.DataStore.GetValue("ASDatabase");
 
-            Server server = new Server();
-            server.Connect(connectionString);
+            using (Server server = new Server())
+            {
+                server.Connect(connectionString);
 
-            // Process
-            var db = server.Databases.Find(asDatabase);
-            db.Model.RequestRefresh(RefreshType.Full);
-            db.Model.SaveChanges();
-            return new ActionResponse(ActionStatus.Success);
+                // Process
+                Database db = server.Databases.FindByName(asDatabase);
+                db.Model.RequestRefresh(RefreshType.Full);
+
+                server.Disconnect(true);
+                return new ActionResponse(ActionStatus.Success);
+            }
         }
     }
 }

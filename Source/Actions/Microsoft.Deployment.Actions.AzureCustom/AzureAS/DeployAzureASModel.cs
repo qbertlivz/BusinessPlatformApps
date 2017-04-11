@@ -2,11 +2,11 @@
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Threading.Tasks;
-
 using Microsoft.AnalysisServices;
 using Microsoft.AnalysisServices.Tabular;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
+using Microsoft.Deployment.Common.Enums;
 using Microsoft.Deployment.Common.Helpers;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
@@ -24,46 +24,41 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
 
             string xmlaContents = File.ReadAllText(request.Info.App.AppFilePath + "/" + xmla);
 
-            Server server = null;
-            try
+            using (Server server = new Server())
             {
-                server = new Server();
-                server.Connect(connectionString);
-
-                // Delete existing
-                Database db = server.Databases.FindByName(asDatabase);
-                db?.Drop();
-
-                // Deploy database definition
-                XmlaResultCollection response = server.Execute(xmlaContents);
-                if (response.ContainsErrors)
+                try
                 {
-                    return new ActionResponse(ActionStatus.Failure, response[0].Value);
+                    server.Connect(connectionString);
+
+                    // Delete existing
+                    Database db = server.Databases.FindByName(asDatabase);
+                    db?.Drop();
+
+                    // Deploy database definition
+                    XmlaResultCollection response = server.Execute(xmlaContents);
+                    if (response.ContainsErrors)
+                    {
+                        return new ActionResponse(ActionStatus.Failure, response[0].Value);
+                    }
+
+                    // Reload metadata and update connection string
+                    server.Refresh(true);
+                    db = server.Databases.FindByName(asDatabase);
+                    ((ProviderDataSource)db.Model.DataSources[0]).ConnectionString = $"Provider=SQLNCLI11;Data Source=tcp:{connectionStringObj.Server};Persist Security Info=True;User ID={connectionStringObj.Username};Password={connectionStringObj.Password};Initial Catalog={connectionStringObj.Database}";
+
+                    db.Update(UpdateOptions.ExpandFull);
+                }
+                catch (Exception e)
+                {
+                    return new ActionResponse(ActionStatus.Failure, string.Empty, e, null, "AS Database was not deployed");
                 }
 
-                // Reload metadata and update connection string
-                server.Refresh(true);
-                db = server.Databases.FindByName(asDatabase);
-                ((ProviderDataSource)db.Model.DataSources[0]).ConnectionString = $"Provider=SQLNCLI11;Data Source=tcp:{connectionStringObj.Server};Persist Security Info=True;User ID={connectionStringObj.Username};Password={connectionStringObj.Password};Initial Catalog={connectionStringObj.Database}";
-                db.Update(UpdateOptions.ExpandFull);
-
-                // Process if there's a tag requesting it
-                if (db.Model.DataSources[0].Annotations.ContainsName("MustProcess"))
-                    db.Model.RequestRefresh(AnalysisServices.Tabular.RefreshType.Full);
-
                 server.Disconnect(true);
+            }
+            request.Logger.LogResource(request.DataStore, asDatabase,
+                        DeployedResourceType.AzureAnalysisServicesModel, CreatedBy.BPST, DateTime.UtcNow.ToString("o"));
 
-                return new ActionResponse(ActionStatus.Success);
-            }
-            catch (Exception e)
-            {
-                return new ActionResponse(ActionStatus.Failure, string.Empty, e, null, "AS Database was not deployed");
-            }
-            finally
-            {
-                server?.Dispose();
-            }
-
+            return new ActionResponse(ActionStatus.Success);
         }
     }
 }

@@ -14,10 +14,6 @@
                             {
                                 "name": "ConnectionEditUISource",
                                 "value": "SqlServer"
-                            },
-                            {
-                                "name": "MustProcess",
-                                "value": "true"
                             }
                         ]
                     }

@@ -46,7 +46,7 @@ feedback on which ones we should prioritize next.
 # Setting up your machine <a name="devbuild"></a>
 Prerequisites
 
-* Visual Studio 2015 Update 3 or later
+* Visual Studio 2017 or later
 * Microsoft .NET Core 1.0.1 or later
 * Git
 * Node.js

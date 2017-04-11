@@ -2,9 +2,11 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Microsoft.Azure;
 using Microsoft.Azure.Management.Resources;
 using Microsoft.Azure.Management.Resources.Models;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.ErrorCode;
@@ -17,19 +19,19 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var azureToken = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
-            var subscription = request.DataStore.GetJson("SelectedSubscription")["SubscriptionId"].ToString();
+            var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
+            var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
 
             var deploymentName = request.DataStore.GetValue("DeploymentName");
             var repoUrl = request.DataStore.GetValue("RepoUrl");
             var name = request.DataStore.GetValue("FunctionName");
 
-            var hostingPlanName = request.DataStore.GetValue("hostingPlanName") == null ? "apphostingplan" : request.DataStore.GetValue("hostingPlanName");
-            var hostingEnvironment = request.DataStore.GetValue("hostingEnvironment") == null ? "": request.DataStore.GetValue("hostingEnvironment");
-            var sku = request.DataStore.GetValue("sku") == null ? "Dynamic" : request.DataStore.GetValue("sku");
-            var skuCode = request.DataStore.GetValue("skuCode") == null ? "S1" : request.DataStore.GetValue("skuCode");
-            var workerSize = request.DataStore.GetValue("workerSize") == null ? "0" : request.DataStore.GetValue("workerSize");
+            var hostingPlanName = request.DataStore.GetValue("hostingPlanName") ?? "apphostingplan";
+            var hostingEnvironment = request.DataStore.GetValue("hostingEnvironment") ?? string.Empty;
+            var sku = request.DataStore.GetValue("sku") ?? "Dynamic";
+            var skuCode = request.DataStore.GetValue("skuCode") ?? "S1";
+            var workerSize = request.DataStore.GetValue("workerSize") ?? "0";
 
             string functionArmDeploymentRelatovePath = sku.ToLower() == "standard"
                 ? "Service/Arm/AzureFunctionsStaticAppPlan.json"

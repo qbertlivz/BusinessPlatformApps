@@ -9,22 +9,18 @@ using System.Threading.Tasks;
 namespace Microsoft.Deployment.Actions.AzureCustom.CDM
 {
     using System.ComponentModel.Composition;
-    using System.Threading;
-    using Microsoft.Azure;
-    using Microsoft.Azure.Management.Resources;
-    using Microsoft.Azure.Management.Resources.Models;
+    using System.Net.Http;
+
     using Microsoft.Deployment.Common.ActionModel;
     using Microsoft.Deployment.Common.Actions;
-    using Microsoft.Deployment.Common.ErrorCode;
     using Microsoft.Deployment.Common.Helpers;
-    using System.Net.Http;
 
     [Export(typeof(IAction))]
     public class CheckCDMEntities : BaseAction
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var azureToken = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
+            var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
             var environId = request.DataStore.GetValue("EnvironmentID").ToString();
             var entityName = request.DataStore.GetValue("EntityName").ToString();
             var namespaceID = environId;

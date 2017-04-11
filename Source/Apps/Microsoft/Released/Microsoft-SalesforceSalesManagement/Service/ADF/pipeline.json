@@ -103,7 +103,8 @@
                 "sqlWriterTableType": "[concat(parameters('targetSqlSchema'),'.',parameters('sqlWritableTypeName'))]",
                 "writeBatchSize": 500,
                 "writeBatchTimeout": "00:00:00"
-              }
+              },
+              "executionLocation":  "West US"
             },
             "inputs": [
               {

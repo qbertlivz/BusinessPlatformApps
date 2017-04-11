@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.IO.Packaging;
-using Microsoft.Deployment.Common.Model;
+
 using Newtonsoft.Json;
+
+using Microsoft.Deployment.Common.Model;
 
 namespace Microsoft.Deployment.Common.Helpers
 {

@@ -1,14 +1,13 @@
-﻿
-using System.ComponentModel.Composition;
-using System.IO;
+﻿using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
+
 using AzureML;
 using AzureML.Contract;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
-
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureML
 {
@@ -17,8 +16,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureML
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var azureToken = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
-            var subscription = request.DataStore.GetJson("SelectedSubscription")["SubscriptionId"].ToString();
+            var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
+            var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var workspaceName = request.DataStore.GetValue("WorkspaceName");
             var experimentName = request.DataStore.GetValue("ExperimentName");
 

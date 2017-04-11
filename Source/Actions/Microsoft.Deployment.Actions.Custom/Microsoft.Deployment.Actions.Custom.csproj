@@ -63,6 +63,9 @@
       <HintPath>..\..\packages\Microsoft.Azure.KeyVault.Core.2.0.4\lib\net45\Microsoft.Azure.KeyVault.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=8.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.CrmSdk.CoreAssemblies.8.2.0.2\lib\net452\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Data.Edm">
       <HintPath>..\..\packages\Microsoft.Data.Edm.5.8.1\lib\net40\Microsoft.Data.Edm.dll</HintPath>
       <Private>True</Private>
@@ -91,13 +94,18 @@
       <HintPath>..\..\packages\WindowsAzure.Storage.8.0.1\lib\net45\Microsoft.WindowsAzure.Storage.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\packages\Newtonsoft.Json.9.0.2-beta1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Microsoft.Xrm.Sdk, Version=8.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.CrmSdk.CoreAssemblies.8.2.0.2\lib\net452\Microsoft.Xrm.Sdk.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http.Extensions">
       <HintPath>..\..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
@@ -108,16 +116,21 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Spatial">
       <HintPath>..\..\packages\System.Spatial.5.8.1\lib\net40\System.Spatial.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\SharedVersion.cs">
@@ -125,12 +138,29 @@
     </Compile>
     <Compile Include="CustomerData\CustomerInfo.cs" />
     <Compile Include="CustomerData\PushToSimplement.cs" />
+    <Compile Include="Informatica\CleanInformaticaEnvironment.cs" />
+    <Compile Include="Informatica\CreateInformaticaConnectionSalesforce.cs" />
+    <Compile Include="Informatica\CreateInformaticaConnectionSql.cs" />
+    <Compile Include="Informatica\CreateInformaticaTask.cs" />
+    <Compile Include="Informatica\GetInformaticaTaskStatus.cs" />
+    <Compile Include="Informatica\StartInformaticaTask.cs" />
+    <Compile Include="Informatica\VerifyInformaticaCredentials.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoveFiles.cs" />
     <Compile Include="SAP\ValidateSAP.cs" />
     <Compile Include="SAP\WriteSAPJson.cs" />
     <Compile Include="SCCM\CheckSCCMVersion.cs" />
     <Compile Include="SCCM\InstallSCCM.cs" />
+    <Compile Include="Scribe\CleanScribeEnvironment.cs" />
+    <Compile Include="Scribe\CreateScribeConnectionD365.cs" />
+    <Compile Include="Scribe\CreateScribeConnectionSalesforce.cs" />
+    <Compile Include="Scribe\CreateScribeConnectionSql.cs" />
+    <Compile Include="Scribe\CreateScribeSolution.cs" />
+    <Compile Include="Scribe\DeviceIdManager.cs" />
+    <Compile Include="Scribe\GetD365Organizations.cs" />
+    <Compile Include="Scribe\GetScribeOrganizations.cs" />
+    <Compile Include="Scribe\GetScribeSolutionStatus.cs" />
+    <Compile Include="Scribe\ProcessScribeSolution.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -142,6 +172,7 @@
       <Name>Microsoft.Deployment.Common</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <PropertyGroup>

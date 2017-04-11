@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Deployment.Common.ActionModel
@@ -130,14 +131,10 @@ namespace Microsoft.Deployment.Common.ActionModel
             return this.GetValueWithRouteAndKey(dataStoreType, route, key)?.ToString();
         }
 
-        public JToken GetJson(string route, string key, DataStoreType dataStoreType = DataStoreType.Any)
-        {
-            return this.GetValueWithRouteAndKey(dataStoreType, route, key);
-        }
-
         public string GetValue(string key, DataStoreType dataStoreType = DataStoreType.Any)
         {
-            return this.GetFirstValueFromDataStore(key, dataStoreType)?.ToString();
+            return this.GetLastValue(key, dataStoreType);
+            //return this.GetFirstValueFromDataStore(key, dataStoreType)?.ToString();
         }
 
         public string GetLastValue(string key, DataStoreType dataStoreType = DataStoreType.Any)
@@ -147,17 +144,36 @@ namespace Microsoft.Deployment.Common.ActionModel
 
         public string GetValueAtIndex(string key, string index, DataStoreType dataStoreType = DataStoreType.Any)
         {
-            int i = 0;
-            if (this.KeyExists(index))
+            string result = null;
+
+            int i = this.KeyExists(index) ? int.Parse(this.GetValue(index)) : 0;
+            IList<string> allValues = this.GetAllValues(key);
+            if (allValues.Count > i)
             {
-                i = int.Parse(this.GetValue(index));
+                result = allValues[i];
             }
-            return this.GetAllValues(key)[i];
+
+            return result;
         }
 
         public JToken GetJson(string key, DataStoreType dataStoreType = DataStoreType.Any)
         {
             return this.GetFirstValueFromDataStore(key, dataStoreType);
+        }
+
+        public string GetJson(string key, string property, DataStoreType dataStoreType = DataStoreType.Any)
+        {
+            string result = null;
+            JToken tokenKey = this.GetFirstValueFromDataStore(key, dataStoreType);
+            if (tokenKey != null)
+            {
+                JToken tokenProperty = tokenKey[property];
+                if (tokenProperty != null)
+                {
+                    result = tokenProperty.ToString();
+                }
+            }
+            return result;
         }
 
         public DataStoreItem GetDataStoreItem(string key, DataStoreType dataStoreType = DataStoreType.Any)
@@ -182,7 +198,7 @@ namespace Microsoft.Deployment.Common.ActionModel
 
         private JToken GetFirstValueFromDataStore(string key, DataStoreType dataStoreType = DataStoreType.Any)
         {
-            List<DataStoreItem> itemsList = null;
+            List<DataStoreItem> itemsList = new List<DataStoreItem>();
             JToken itemToReturn = null;
 
             if (dataStoreType == DataStoreType.Private || dataStoreType == DataStoreType.Any)
@@ -190,7 +206,7 @@ namespace Microsoft.Deployment.Common.ActionModel
                 var values = GetValueAndRoutesFromDataStore(this.PrivateDataStore, key, DataStoreType.Private);
                 if (values.Any())
                 {
-                    itemsList = values;
+                    itemsList.AddRange(values);
                 }
             }
 
@@ -199,11 +215,11 @@ namespace Microsoft.Deployment.Common.ActionModel
                 var values = GetValueAndRoutesFromDataStore(this.PublicDataStore, key, DataStoreType.Private);
                 if (values.Any())
                 {
-                    itemsList = values;
+                    itemsList.AddRange(values);
                 }
             }
 
-            if (itemsList != null)
+            if (itemsList.Count > 0)
             {
                 itemToReturn = itemsList.Any(p => p.Route.ToLowerInvariant() == "requestparameters")
                     ? itemsList.Single(p => p.Route.ToLowerInvariant() == "requestparameters").Value

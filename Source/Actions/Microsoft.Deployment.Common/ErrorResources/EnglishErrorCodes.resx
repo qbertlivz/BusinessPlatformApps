@@ -246,4 +246,7 @@
   <data name="SQL_CompatLevelTooLow" xml:space="preserve">
     <value>Target database's compatibility level should be at least 100</value>
   </data>
+  <data name="Scribe_No_Organizations" xml:space="preserve">
+    <value>No Scribe organizations with an active Replication Services subscription were found for your account</value>
+  </data>
 </root>

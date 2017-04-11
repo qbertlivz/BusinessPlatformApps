@@ -2947,7 +2947,7 @@ INSERT pbist_sccm.[configuration] (configuration_group, configuration_subgroup, 
            (N'SolutionTemplate', N'System Center', N'endpointcompliancetarget', N'0.99', 1),
            (N'SolutionTemplate', N'System Center', N'healthevaluationtarget', N'0.99', 1),
            (N'SolutionTemplate', N'System Center', N'dataretentiondays', N'120', 1),
-		   (N'SolutionTemplate', N'System Center', N'lastLoadTimestamp', '2017-01-01', 1),
+		   (N'SolutionTemplate', N'System Center', N'lastLoadTimestamp', '2017-01-01T01:00:00.000', 1),
            (N'SolutionTemplate', N'System Center', N'versionImage', N'https://bpstservice.azurewebsites.net/api/telemetry/Microsoft-SCCMTemplate', 1);
 go
 

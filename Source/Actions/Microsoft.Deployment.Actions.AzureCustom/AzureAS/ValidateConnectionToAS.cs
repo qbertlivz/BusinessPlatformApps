@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+
 using Microsoft.AnalysisServices.Tabular;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
@@ -31,7 +29,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
             if (!string.IsNullOrEmpty(password))
             {
                 connectionString +=
-                    $"User ID={username};Password={password};Persist Security Info=True; Impersonation Level=Impersonate;";
+                    $"User ID={username};Password={password};Persist Security Info=True; Impersonation Level=Impersonate;UseADALCache=0";
             }
 
             try
@@ -44,8 +42,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
             {
               return new ActionResponse(ActionStatus.FailureExpected, null, ex, null);
             }
-           
-          
+
             return new ActionResponse(ActionStatus.Success);
         }
     }

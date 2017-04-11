@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.ErrorCode;
@@ -22,21 +23,6 @@ namespace Microsoft.Deployment.Actions.Common
                 serverPath.Replace("\\", "/");
                 return new ActionResponse(ActionStatus.Success, JsonUtility.GetJObjectFromStringValue(serverPath));
             }
-
-            //try
-            //{
-            //    string evaluationEmail = request.Message["EvaluationEmail"] == null
-            //        ? string.Empty
-            //        : request.Message["EvaluationEmail"][0].ToString();
-            //    if (!string.IsNullOrEmpty(evaluationEmail))
-            //    {
-            //        request.Logger.LogCustomProperty("Email", evaluationEmail);
-            //    }
-            //}
-            //catch
-            //{
-            //    // Logging email failed
-            //}
 
             return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), null, DefaultErrorCodes.DefaultErrorCode, "Msi count:" + msi.Length);
         }

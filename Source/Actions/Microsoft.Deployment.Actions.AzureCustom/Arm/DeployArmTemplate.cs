@@ -10,14 +10,15 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Arm
 {
     using System.ComponentModel.Composition;
     using System.Threading;
+
     using Microsoft.Azure;
     using Microsoft.Azure.Management.Resources;
     using Microsoft.Azure.Management.Resources.Models;
+
     using Microsoft.Deployment.Common.ActionModel;
     using Microsoft.Deployment.Common.Actions;
     using Microsoft.Deployment.Common.ErrorCode;
     using Microsoft.Deployment.Common.Helpers;
-
 
     [Export(typeof(IAction))]
     public class DeployArmTemplate : BaseAction
@@ -25,8 +26,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Arm
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
 
-            var azureToken = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
-            var subscription = request.DataStore.GetJson("SelectedSubscription")["SubscriptionId"].ToString();
+            var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
+            var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
             var deploymentName = request.DataStore.GetValue("DeploymentName");
 

@@ -8,7 +8,7 @@
         "description": "Data Factory Account name"
       }
     },
-    "sqlServerName": {
+    "sqlServerFullyQualifiedName": {
       "type": "string",
       "metadata": {
         "description": "Existing Azure SQL Database Server name"
@@ -84,7 +84,7 @@
           "properties": {
             "type": "AzureSqlDatabase",
             "typeProperties": {
-              "connectionString": "[concat('Data Source=tcp:',parameters('sqlServerName'),'.database.windows.net,1433;Initial Catalog=',parameters('targetDatabaseName'),';Integrated Security=False;User ID=',parameters('sqlServerUsername'),';Password=',parameters('sqlServerPassword'),';Encrypt=True;Connection Timeout=30')]"
+              "connectionString": "[concat('Data Source=tcp:',parameters('sqlServerFullyQualifiedName'),',1433;Initial Catalog=',parameters('targetDatabaseName'),';Integrated Security=False;User ID=',parameters('sqlServerUsername'),';Password=',parameters('sqlServerPassword'),';Encrypt=True;Connection Timeout=30')]"
             }
           }
         },

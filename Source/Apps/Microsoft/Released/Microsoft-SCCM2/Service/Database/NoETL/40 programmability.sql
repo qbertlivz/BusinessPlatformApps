@@ -10,7 +10,7 @@ CREATE PROCEDURE pbist_sccm.sp_get_last_updatetime AS
 BEGIN
     SET NOCOUNT ON;
 
-    SELECT value AS lastLoadTimestamp FROM pbist_sccm.configuration WHERE name='lastLoadTimestamp' AND configuration_group='SolutionTemplate' AND configuration_subgroup='System Center';
+    SELECT CONVERT(datetime, [value], 126) AS lastLoadTimestamp FROM pbist_sccm.[configuration] WHERE name='lastLoadTimestamp' AND configuration_group='SolutionTemplate' AND configuration_subgroup='System Center';
 END;
 GO
 

@@ -1,11 +1,7 @@
-﻿import { ViewModelBase } from '../../../../../SiteCommon/Web/services/viewmodelbase'
-import { DataStoreType } from '../../../../../SiteCommon/Web/services/datastore'
+﻿import { ViewModelBase } from '../../../../../SiteCommon/Web/services/view-model-base'
 
 export class CognitiveText extends ViewModelBase {
-
-
     isBingChecked: boolean = false;
-
 
     constructor() {
         super();
@@ -15,5 +11,4 @@ export class CognitiveText extends ViewModelBase {
     verifyBing() {
         this.isValidated = this.isBingChecked;
     }
-
 }

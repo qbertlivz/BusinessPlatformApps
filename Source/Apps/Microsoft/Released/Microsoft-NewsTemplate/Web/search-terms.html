@@ -8,7 +8,7 @@
 
     <div class="st-float">
         <p class="st-text">${MS.Translate.SEARCH_TERMS_QUERY}</p>
-        <input class="st-input" type="text" placeholder.bind="MS.Translate.SEARCH_TERMS_QUERY_EXAMPLE" change.delegate="viewmodel.Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.searchQuery" />
+        <input class="st-input" type="text" placeholder="Microsoft OR Azure" change.delegate="viewmodel.Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.searchQuery" />
     </div>
 
     <p class="st-float">

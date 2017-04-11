@@ -3,11 +3,13 @@ using System.ComponentModel.Composition;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+
+using Newtonsoft.Json.Linq;
+
 using Microsoft.Azure;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
-using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
 {
@@ -16,8 +18,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            string azureToken = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
-            string subscription = request.DataStore.GetJson("SelectedSubscription")["SubscriptionId"].ToString();
+            string azureToken = request.DataStore.GetJson("AzureToken", "access_token");
+            string subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             string resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
 
             string serverName = request.DataStore.GetValue("ASServerName") ?? "analysisserver-" + RandomGenerator.GetRandomLowerCaseCharacters(5);
@@ -52,7 +54,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
             }
 
             JObject responseObj = JsonUtility.GetJObjectFromJsonString(responseBody);
-            request.DataStore.AddToDataStore("ASServerUrl", responseObj["properties"]["serverFullName"]);
+            request.DataStore.AddToDataStore("ASServerUrl", responseObj["properties"]["serverFullName"], DataStoreType.Public);
 
             return new ActionResponse(ActionStatus.Success, responseObj);
         }

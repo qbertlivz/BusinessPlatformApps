@@ -1,9 +1,11 @@
-﻿
-using System.ComponentModel.Composition;
-using System.Data.SqlClient;
+﻿using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Microsoft.Rest;
+using Newtonsoft.Json.Linq;
+
 using Microsoft.Azure.Management.MachineLearning.CommitmentPlans;
 using Microsoft.Azure.Management.MachineLearning.CommitmentPlans.Models;
 using Microsoft.Azure.Management.MachineLearning.WebServices;
@@ -13,13 +15,12 @@ using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
 using Microsoft.Deployment.Common.Model;
-using Microsoft.Rest;
-using Microsoft.WindowsAzure.Storage;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+
 using CommitmentPlan = Microsoft.Azure.Management.MachineLearning.WebServices.Models.CommitmentPlan;
 using WebService = Microsoft.Azure.Management.MachineLearning.WebServices.Models.WebService;
 using System.Net.Http;
+using System;
+using Microsoft.Rest.Azure;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureML
 {
@@ -28,14 +29,15 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureML
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var azureToken = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
-            var subscription = request.DataStore.GetJson("SelectedSubscription")["SubscriptionId"].ToString();
+            var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
+            var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
 
             var webserviceFile = request.DataStore.GetValue("WebServiceFile");
             var webserviceName = request.DataStore.GetValue("WebServiceName");
             var commitmentPlanName = request.DataStore.GetValue("CommitmentPlan");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
             var storageAccountName = request.DataStore.GetValue("StorageAccountName");
+            var storageAccountKey = request.DataStore.GetValue("StorageAccountKey");
 
             var responseType = request.DataStore.GetValue("IsRequestResponse");
             bool isRequestResponse = false;
@@ -44,7 +46,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureML
             {
                 isRequestResponse = bool.Parse(responseType);
             }
-            
+
             ServiceClientCredentials creds = new TokenCredentials(azureToken);
             AzureMLWebServicesManagementClient client = new AzureMLWebServicesManagementClient(creds);
             AzureMLCommitmentPlansManagementClient commitmentClient = new AzureMLCommitmentPlansManagementClient(creds);
@@ -63,11 +65,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureML
             commitmentPlan.Location = "South Central US";
             var createdsCommitmentPlan = await commitmentClient.CommitmentPlans.CreateOrUpdateAsync(commitmentPlan, resourceGroup, commitmentPlanName);
 
-            // Get key from storage account
-            var response = await RequestUtility.CallAction(request, "Microsoft-GetStorageAccountKey");
-            var responseObject = JsonUtility.GetJObjectFromObject(response.Body);
-            string key = responseObject["StorageAccountKey"].ToString();
-
             // Get webservicedefinition
             string sqlConnectionString = request.DataStore.GetValueAtIndex("SqlConnectionString", "SqlServerIndex");
             SqlCredentials sqlCredentials;
@@ -85,28 +82,38 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureML
 
             webService.Properties.StorageAccount = new StorageAccount
             {
-                Key = key,
+                Key = storageAccountKey,
                 Name = storageAccountName
             };
 
             webService.Properties.CommitmentPlan = new CommitmentPlan(createdsCommitmentPlan.Id);
             webService.Name = webserviceName;
 
-            var result = await client.WebServices.CreateOrUpdateAsync(resourceGroup, webserviceName, webService);
+            WebService result;
 
-            var keys = await client.WebServices.ListKeysAsync(resourceGroup, webserviceName);
-            var swaggerLocation = result.Properties.SwaggerLocation;
-            string url = swaggerLocation.Replace("swagger.json", "jobs?api-version=2.0");
-
-            if (isRequestResponse)
+            try
             {
-                url = swaggerLocation.Replace("swagger.json", "execute?api-version=2.0&format=swagger");
-            }
-           
-            string serviceKey = keys.Primary;
+                result = client.WebServices.CreateOrUpdate(resourceGroup, webserviceName, webService);
 
-            request.DataStore.AddToDataStore("AzureMLUrl", url);
-            request.DataStore.AddToDataStore("AzureMLKey", serviceKey);
+
+                var keys = client.WebServices.ListKeys(resourceGroup, webserviceName);
+                var swaggerLocation = result.Properties.SwaggerLocation;
+                string url = swaggerLocation.Replace("swagger.json", "jobs?api-version=2.0");
+
+                if (isRequestResponse)
+                {
+                    url = swaggerLocation.Replace("swagger.json", "execute?api-version=2.0&format=swagger");
+                }
+
+                string serviceKey = keys.Primary;
+
+                request.DataStore.AddToDataStore("AzureMLUrl", url);
+                request.DataStore.AddToDataStore("AzureMLKey", serviceKey);
+            }
+            catch (CloudException e)
+            {
+                return new ActionResponse(ActionStatus.Failure, JsonUtility.GetJObjectFromStringValue(e.Message), e, "DefaultError", ((CloudException)e).Response.Content);
+            }
 
             return new ActionResponse(ActionStatus.Success);
         }

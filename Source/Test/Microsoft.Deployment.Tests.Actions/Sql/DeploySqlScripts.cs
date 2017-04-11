@@ -34,5 +34,20 @@ namespace Microsoft.Deployment.Tests.Actions.Sql
             response = await TestManager.ExecuteActionAsync("Microsoft-DeploySQLScripts", dataStore, "Microsoft-NewsTemplate");
             Assert.IsTrue(response.Status == ActionStatus.Success);
         }
+
+        [TestMethod]
+        public async Task DeploySCCM()
+        {
+            // Deploy AS Model based of the following pramaters
+            var dataStore = await TestManager.GetDataStore();
+
+            // Deploy Twitter Database Scripts
+            dataStore.AddToDataStore("SqlConnectionString", SqlCreds.GetSqlPagePayload("modb1"));
+            dataStore.AddToDataStore("SqlServerIndex", "0");
+            dataStore.AddToDataStore("SqlScriptsFolder", "Service/Database/noetl");
+
+            var response = await TestManager.ExecuteActionAsync("Microsoft-DeploySQLScripts", dataStore, "Microsoft-SCCMTemplate");
+            Assert.IsTrue(response.Status == ActionStatus.Success);
+        }
     }
 }

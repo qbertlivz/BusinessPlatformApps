@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Linq;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Principal;
 using System.Threading.Tasks;
+
 using Microsoft.Deployment.Common.ActionModel;
-using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.ErrorCode;
 
 namespace Microsoft.Deployment.Common.Helpers
@@ -103,6 +102,5 @@ namespace Microsoft.Deployment.Common.Helpers
                     CloseHandle(logonToken);
             }
         }
-        
     }
 }

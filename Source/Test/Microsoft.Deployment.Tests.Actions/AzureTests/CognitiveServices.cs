@@ -20,23 +20,9 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
             Assert.IsTrue(subscriptionResult.IsSuccess);
             var subscriptionId = subscriptionResult.Body.GetJObject()["value"].FirstOrDefault(p => p["DisplayName"].ToString().StartsWith("Mohaali"));
             dataStore.AddToDataStore("SelectedSubscription", subscriptionId, DataStoreType.Public);
-            dataStore.AddToDataStore("CognitiveLocation", "westus", DataStoreType.Public);
-            
-            // Deploy Twitter Database Scripts
-            dataStore.AddToDataStore("CognitiveServices", "TextAnalytics");
-            var response = await TestManager.ExecuteActionAsync("Microsoft-ValidateCognitiveServices", dataStore);
+
+            var response = await TestManager.ExecuteActionAsync("Microsoft-RegisterCognitiveServices", dataStore);
             Assert.IsTrue(response.Status == ActionStatus.Success);
-
-
-            
-            dataStore.AddToDataStore("CognitiveLocation", "global", DataStoreType.Public);
-
-            // Deploy Twitter Database Scripts
-            dataStore.AddToDataStore("CognitiveServices", "Bing.Search");
-            response = await TestManager.ExecuteActionAsync("Microsoft-ValidateCognitiveServices", dataStore);
-            Assert.IsTrue(response.Status == ActionStatus.Success);
-
-
         }
     }
 }

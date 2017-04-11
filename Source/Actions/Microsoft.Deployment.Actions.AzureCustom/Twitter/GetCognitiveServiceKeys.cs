@@ -2,10 +2,12 @@
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+
+using Newtonsoft.Json.Linq;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
-using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
 {
@@ -14,18 +16,17 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-
             var cognitiveServiceKey = request.DataStore.GetAllValues("CognitiveServiceKey").LastOrDefault();
-            
+
             if (!string.IsNullOrEmpty(cognitiveServiceKey))
             {
                 return new ActionResponse(ActionStatus.Success);
             }
 
-            var azureToken = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
-            var subscription = request.DataStore.GetJson("SelectedSubscription")["SubscriptionId"].ToString();
+            var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
+            var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
-            var location = request.DataStore.GetJson("SelectedLocation")["Name"].ToString();
+            var location = request.DataStore.GetJson("SelectedLocation", "Name");
             var cognitiveServiceName = request.DataStore.GetValue("CognitiveServiceName");
 
             AzureHttpClient client = new AzureHttpClient(azureToken, subscription, resourceGroup);        
@@ -44,4 +45,3 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
         }
     }
 }
-

@@ -1,12 +1,13 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Threading.Tasks;
+
 using Microsoft.AnalysisServices;
+using Microsoft.AnalysisServices.Tabular;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
-using RefreshType = Microsoft.AnalysisServices.Tabular.RefreshType;
-using Server = Microsoft.AnalysisServices.Tabular.Server;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
 {
@@ -21,37 +22,38 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
             var connectionStringObj = SqlUtility.GetSqlCredentialsFromConnectionString(sqlConnectionString);
             string connectionString = request.DataStore.GetValue("ASConnectionString");
 
-            Server server = new Server();
-            server.Connect(connectionString);
-           
             string xmlaContents = File.ReadAllText(request.Info.App.AppFilePath + "/" + xmla);
 
-            var obj = JsonUtility.GetJsonObjectFromJsonString(xmlaContents);
-            obj["create"]["database"]["name"] = asDatabase;
-            //obj["create"]["database"]["model"]["dataSources"][0]["name"] = "Sql Connection for" + asDatabase;
-            obj["create"]["database"]["model"]["dataSources"][0]["connectionString"] =
-                $"Provider=SQLNCLI11.1;Persist Security Info=False;User ID={connectionStringObj.Username};Password={connectionStringObj.Password};" +
-                $"Initial Catalog={connectionStringObj.Database};Data Source=tcp:{connectionStringObj.Server};Initial File Name=;Server SPN=";
-
-
-            //Delete existing
-            var db = server.Databases.Find(asDatabase);
-            db?.Drop(DropOptions.Default);
-            server.Refresh(true);
-
-            //Deploy 
-            var response = server.Execute(obj.ToString());
-            if (response.ContainsErrors)
+            using (Server server = new Server())
             {
-                return new ActionResponse(ActionStatus.Failure, response[0].Value);
-            }
+                try
+                {
+                    server.Connect(connectionString);
 
-            server = new Server();
-            server.Connect(connectionString);
-            db = server.Databases.Find(asDatabase);
-            if (db == null)
-            {
-                return new ActionResponse(ActionStatus.Failure, string.Empty, null, null,"AS Database was not deployed");
+                    // Delete existing
+                    Database db = server.Databases.FindByName(asDatabase);
+                    db?.Drop();
+
+                    // Deploy database definition
+                    XmlaResultCollection response = server.Execute(xmlaContents);
+                    if (response.ContainsErrors)
+                    {
+                        return new ActionResponse(ActionStatus.Failure, response[0].Value);
+                    }
+
+                    // Reload metadata and update connection string
+                    server.Refresh(true);
+                    db = server.Databases.FindByName(asDatabase);
+                    ((ProviderDataSource)db.Model.DataSources[0]).ConnectionString = $"Provider=SQLNCLI11;Data Source=tcp:{connectionStringObj.Server};Persist Security Info=True;User ID={connectionStringObj.Username};Password={connectionStringObj.Password};Initial Catalog={connectionStringObj.Database}";
+
+                    db.Update(UpdateOptions.ExpandFull);
+                }
+                catch (Exception e)
+                {
+                    return new ActionResponse(ActionStatus.Failure, string.Empty, e, null, "AS Database was not deployed");
+                }
+
+                server.Disconnect(true);
             }
 
             return new ActionResponse(ActionStatus.Success);

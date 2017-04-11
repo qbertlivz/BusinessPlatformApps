@@ -1,15 +1,17 @@
 ﻿namespace Microsoft.Deployment.Common.Actions.MsCrm
 {
-    using Microsoft.Deployment.Common.ActionModel;
-    using Microsoft.Deployment.Common.Actions;
-    using Microsoft.Deployment.Common.Helpers;
-    using Model;
-    using Newtonsoft.Json;
     using System;
     using System.ComponentModel.Composition;
     using System.Net;
     using System.Net.Http.Headers;
     using System.Threading.Tasks;
+
+    using Model;
+    using Newtonsoft.Json;
+
+    using Microsoft.Deployment.Common.ActionModel;
+    using Microsoft.Deployment.Common.Actions;
+    using Microsoft.Deployment.Common.Helpers;
 
     [Export(typeof(IAction))]
     public class CrmDeleteProfile : BaseAction
@@ -17,7 +19,7 @@
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            string token = request.DataStore.GetJson("MsCrmToken")["access_token"].ToString();
+            string token = request.DataStore.GetJson("MsCrmToken", "access_token");
             string orgId = request.DataStore.GetValue("OrganizationId");
             string connectorUrl = request.DataStore.GetValue("ConnectorUrl");
 

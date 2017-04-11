@@ -1,5 +1,5 @@
 ﻿<template>
-    <require from="../../../../../SiteCommon/Web/directives/bpst-link.html"></require>
+    <require from="../../../../../SiteCommon/Web/templates/bpst-link.html"></require>
 
     <!-- Heading -->
     <h1 class="st-title">${MS.Translate.GETTING_STARTED_TITLE} ${templateName}</h1>
@@ -78,4 +78,16 @@
             </a>
         </p>
     </div>
+
+    <!-- Download new version -->
+    <div class="st-email-background" if.bind="upgrade"></div>
+    <div class="st-email-background st-email-wrapper" click.trigger="upgrade = false" if.bind="upgrade">
+        <div class="st-email-submission" click.trigger="$event.stopPropagation()">
+            <span class="glyphicon pbi-glyph-close st-contact-us-close" click.trigger="upgrade = false"></span>
+            <div class="st-email-centered st-email-heading">${MS.Translate.GETTING_STARTED_NEW_VERSION}</div>
+            <div class="st-email-centered st-text">${MS.Translate.GETTING_STARTED_NEW_VERSION_INFO}</div>
+            <button class="primary" click.trigger="OpenNewMSILink()">${MS.Translate.COMMON_DOWNLOAD}</button>
+        </div>
+    </div>
+
 </template>

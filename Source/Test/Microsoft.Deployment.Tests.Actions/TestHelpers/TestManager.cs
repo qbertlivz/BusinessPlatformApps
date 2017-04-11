@@ -16,15 +16,15 @@ namespace Microsoft.Deployment.Tests.Actions.TestHelpers
     public class TestManager
     {
         public static string RandomString = RandomGenerator.GetRandomLowerCaseCharacters(8);
-        public static string ResourceGroup = Environment.MachineName + "test";
+        public static string ResourceGroup = Environment.MachineName.ToLower() + "test";
 
         private static CommonController Controller { get; set; }
         public static string TemplateName = "Microsoft-NewsTemplateTest";
 
-        private static async Task<DataStore> GetDataStoreWithToken()
+        private static async Task<DataStore> GetDataStoreWithToken(bool force = false)
         {
             // Read from file DataStore
-            if (File.Exists("datastore.json"))
+            if (File.Exists("datastore.json") && !force)
             {
                 string filecontents = File.ReadAllText("datastore.json");
                 var jsonObj = JsonConvert.DeserializeObject<DataStore>(filecontents);
@@ -74,11 +74,12 @@ namespace Microsoft.Deployment.Tests.Actions.TestHelpers
             return dataStore;
         }
 
-        public static async Task<DataStore> GetDataStore()
+        public static async Task<DataStore> GetDataStore(bool force = false)
         {
-            var dataStore = await GetDataStoreWithToken();
+            var dataStore = await GetDataStoreWithToken(force);
             return dataStore;
         }
+
 
         [AssemblyInitialize()]
         public static void AssemblyInit(TestContext context)

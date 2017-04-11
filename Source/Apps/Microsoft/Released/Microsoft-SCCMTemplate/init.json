@@ -1,39 +1,34 @@
 ﻿{
-
   "MSI": {
     "Guid": "2F142293-C7B5-4C57-8FFE-75F636688C9B"
   },
 
   "Install": {
     "Pages": [
-      // Getting Started
       {
         "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-SCCMTemplate/Web/Images/SCCMArchitectureDiagram.png",
         "displayname": "Getting Started",
         "isDownload": "$(!this.MS.HttpService.isOnPremise)",
         "list1": [
-          "System Center 2012 Configuration Manager R2 SP1 or later. Read access to System Center Configuration Manager database is required.",
-          "Destination database: Azure SQL database or SQL Server database (SQL Server 2008 R2 SP3 or later).",
-          "For the machine where the installation is run, Microsoft .NET Framework 4.5 or later & PowerShell version 3.0 or later.",
-          "Power BI Desktop (latest version)",
-          "Power BI Pro (to share the template with your organization)"
+          "$translate(INIT_GETTING_STARTED_SCCM)",
+          "$translate(INIT_GETTING_STARTED_DESTINATION)",
+          "$translate(INIT_GETTING_STARTED_NET)",
+          "$translate(INIT_GETTING_STARTED_PBI_DESKTOP)",
+          "$translate(INIT_GETTING_STARTED_PBI_PRO)"
         ],
         "list2": [
-          "Scalable and extensible solution with minimum set up and maintenance considerations",
-          "Data pulled daily from System Center Configuration Manager & stored in a SQL database optimized for reporting",
-          "Import data into powerful Power BI reports"
+          "$translate(INIT_GETTING_STARTED_SCALABLE)",
+          "$translate(INIT_GETTING_STARTED_DATA_PULL_SCCM)",
+          "$translate(INIT_GETTING_STARTED_IMPORT_DATA_PBI)"
         ],
         "name": "getting-started-powerbi-login.html",
         "oauthType": "powerbi",
-        "subtitle": "Welcome to the System Center Configuration Manager solution template.",
-        "templateName": "System Center Configuration Manager"
+        "subtitle": "$translate(INIT_SCCM_SUBTITLE)",
+        "templateName": "$translate(INIT_SCCM_TITLE)"
       },
-
-      // Login
       {
-        "name": "$SiteCommon$/pagesgallery/windows-auth.html",
         "displayname": "Login",
-        "subtitle": "Specify your windows credentials to create a recurring schedule. The credentials you specify will also be used to connect to the SCCM database",
+        "name": "$SiteCommon$/pages-gallery/windows-auth.html",
         "onValidate": [
           {
             "name": "Microsoft-ValidateAdminPrivileges"
@@ -44,15 +39,14 @@
           {
             "name": "Microsoft-ValidatePowerShellVersion"
           }
-        ]
+        ],
+        "subtitle": "$translate(INIT_SCCM_LOGIN)"
       },
-
-      // SCCM
       {
         "credentialTarget": "pbi_sccm",
         "displayname": "Source",
         "hideSqlAuth": true,
-        "name": "$SiteCommon$/pagesgallery/sql-server.html",
+        "name": "$SiteCommon$/pages-gallery/sql-server.html",
         "onNext": [
           {
             "name": "Microsoft-CheckSCCMVersion",
@@ -61,17 +55,15 @@
         ],
         "showAllWriteableDatabases": false,
         "showAzureSql": false,
-        "subtitle": "Set up a connection to your SCCM database so we can bring in your data.",
-        "title": "Connect to your System Center Configuration Manager database",
+        "subtitle": "$translate(INIT_SOURCE_SCCM_SUBTITLE)",
+        "title": "$translate(INIT_SOURCE_SCCM_TITLE)",
         "useImpersonation": true
       },
-
-      // Target
       {
         "checkSqlVersion": true,
         "credentialTarget": "pbi_sccm",
         "displayname": "Target",
-        "name": "$SiteCommon$/pagesgallery/sql-server.html",
+        "name": "$SiteCommon$/pages-gallery/sql-server.html",
         "onNext": [
           {
             "name": "Microsoft-CheckSQLVersion",
@@ -83,89 +75,142 @@
           }
         ],
         "showSqlRecoveryModeHint": true,
-        "subtitle": "Set up a connection to your target database so we can transfer your data.",
-        "title": "Connect to your SQL database",
+        "subtitle": "$translate(INIT_SQL_SUBTITLE)",
+        "title": "$translate(INIT_SQL_TITLE)",
         "useImpersonation": true
       },
-
-      //// Adding azure actions
-      //{
-      //  "name": "$SiteCommon$/pagesgallery/choose-analysis-server.html",
-      //  "displayname": "Use Analysis Services"
-      //},
-
-      //{
-      //  "name": "$SiteCommon$/pagesgallery/azure-login.html",
-      //  "displayname": "Azure Login",
-      //  "skip": "$ds(ssasEnabled)"
-      //},
-
-      //{
-      //  "name": "$SiteCommon$/pagesgallery/ssas.html",
-      //  "displayname": "SSAS",
-      //  "skip": "$ds(ssasEnabled)"
-      //},
-
-      // Customize
       {
-        "name": "customize.html",
-        "displayname": "Customize"
+        "displayname": "AAS",
+        "name": "$SiteCommon$/pages-gallery/choose-analysis-server.html",
+        "showDescription": true,
+        "skip": "$dsall(azureSqlDisabled)[1]"
       },
-
-      // Progress
       {
-        "name": "$SiteCommon$/pagesgallery/progress.html",
+        "displayname": "Azure Login",
+        "name": "$SiteCommon$/pages-gallery/azure-login.html",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
+      },
+      {
+        "displayname": "AAS Login",
+        "name": "$SiteCommon$/pages-gallery/ssas.html",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
+      },
+      {
+        "displayname": "Customize",
+        "name": "customize.html"
+      },
+      {
+        "displayname": "Summary",
+        "name": "$SiteCommon$/pages-gallery/summary.html",
+        "values": {
+          "Source Server": "$(this.MS.DataStore.getValue('Server'))",
+          "Source Database": "$(this.MS.DataStore.getValue('Database'))",
+          "Source Username": "$(this.MS.DataStore.getValue('Username'))"
+        }
+      },
+      {
+        "asDatabase": "Sccm",
         "displayname": "Progress",
-        "finishedActionName": "Microsoft-GetTaskStatus",
-        "targetSchema": "pbist_sccm",
         "filename": "$save('SCCMSolutionTemplate.pbix')",
+        "filenameSSAS": "SCCMSolutionTemplateAS.pbix",
+        "finishedActionName": "Microsoft-GetTaskStatus",
+        "name": "$SiteCommon$/pages-gallery/progress.html",
         "showCounts": true,
+        "showEmailSubmission": false,
         "sqlServerIndex": 1,
-        "showEmailSubmission": false
+        "targetSchema": "pbist_sccm",
+        "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(10))"
       }
     ],
 
-
     "Actions": [
       {
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
         "name": "Microsoft-DeploySQLScripts",
-        "displayname": "Deploy DB scripts",
-        "SqlServerIndex": "1",
         "SqlScriptsFolder": "Service/Database/NoETL",
-        "useImpersonation": true
-      },
-      {
-        "name": "Microsoft-SetConfigValueInSql",
-        "displayname": "Deploy DB Configuration",
         "SqlServerIndex": "1",
-        "SqlConfigTable": "pbist_sccm.[configuration]",
         "useImpersonation": true
       },
       {
-        "name": "Microsoft-InstallSqlTools",
-        "displayname": "Installing SQL Tools"
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+        "name": "Microsoft-SetConfigValueInSql",
+        "SqlConfigTable": "pbist_sccm.[configuration]",
+        "SqlServerIndex": "1",
+        "useImpersonation": true
       },
       {
-        "name": "Microsoft-InstallSCCM",
-        "displayname": "Copy dataload scripts"
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+        "name": "Microsoft-SetConfigValueInSql",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
+        "SqlConfigTable": "pbist_sccm.[configuration]",
+        "SqlEntryName": "FunctionName",
+        "SqlEntryValue": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
+        "SqlGroup": "SolutionTemplate",
+        "SqlServerIndex": "1",
+        "SqlSubGroup": "SSAS",
+        "useImpersonation": true
       },
       {
-        "name": "Microsoft-AddLogonAsBatchPermission",
-        "displayname": "Grant permission for logging as a batch job"
+        "ASDatabase": "Sccm",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_AS_MODEL)",
+        "name": "Microsoft-DeployAzureASModel",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
+        "SqlConnectionString": "$dsall(SqlConnectionString)[1]",
+        "xmlaFilePath": "Service/SSAS/CreateSCCMDB_v2.xmla"
       },
       {
-        "name": "Microsoft-CreateTask",
-        "displayname": "Schedule tasks"
+        "DeploymentName": "ASFunction",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_AS_SCHEDULER)",
+        "FunctionName": "$save('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
+        "name": "Microsoft-DeployAzureFunction",
+        "RepoUrl": "https://github.com/MohaaliMicrosoft/AnalysisServicesRefresh",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
+        "sku": "Standard"
       },
       {
-        "name": "Microsoft-RunTask",
-        "displayname": "Run tasks"
+        "DeploymentName": "ASFunction",
+        "displayname": "$translate(INIT_ACTION_WAITING_AS_SCHEDULER)",
+        "name": "Microsoft-WaitForArmDeploymentStatus",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
       },
       {
-        "name": "Microsoft-GetDataPullStatus",
-        "displayname": "Waiting for data to come in",
+        "AppSettingKeys": {
+          "connStringAS": "$ds(ASConnectionString)",
+          "connStringSql": "$dsall(SqlConnectionString)[1]",
+          "databaseAS": "Sccm",
+          "functionName": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
+          "schema": "[pbist_sccm]"
+        },
+        "DeploymentName": "ASFunction",
+        "displayname": "$translate(INIT_ACTION_SETTING_UP_AS_SCHEDULER)",
+        "name": "Microsoft-DeployAzureFunctionConnectionStrings",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_SQL_TOOLS)",
+        "name": "Microsoft-InstallSqlTools"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_COPYING_DATALOAD_SCRIPTS)",
+        "name": "Microsoft-InstallSCCM"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_BATCH_PERMISSION)",
+        "name": "Microsoft-AddLogonAsBatchPermission"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_SCHEDULING_TASK)",
+        "name": "Microsoft-CreateTask"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_RUNNING_TASK)",
+        "name": "Microsoft-RunTask"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_WAITING_DATA)",
         "FinishedActionName": "Microsoft-GetTaskStatus",
         "IsWaiting": true,
+        "name": "Microsoft-GetDataPullStatus",
         "SqlServerIndex": 1,
         "TargetSchema": "pbist_sccm",
         "useImpersonation": true
@@ -173,42 +218,40 @@
     ]
   },
 
-
   "Uninstall": {
     "Pages": [
       {
-        "name": "$SiteCommon$/pagesgallery/uninstall.html",
-        "displayname": "Uninstall",
         "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-SCCMTemplate/Web/Images/SCCMArchitectureDiagram.png",
-        "templateName": "System Center Configuration Manager",
+        "displayname": "Uninstall",
         "isDownload": "$(!this.MS.HttpService.isOnPremise)",
+        "name": "$SiteCommon$/pages-gallery/uninstall.html",
+        "templateName": "$translate(INIT_SCCM_TITLE)",
         "uninstallList": [
-          "The task used to move data between the SCCM database and the target database",
-          "The scripts used to create the initial tables in the target database"
-        ],
-        "showBack": "$(false)"
+          "$translate(INIT_UNINSTALL_SCCM)",
+          "$translate(INIT_UNINSTALL_SQL)"
+        ]
       },
       {
-        "name": "$SiteCommon$/pagesgallery/progress.html",
         "displayname": "Uninstall Progress",
-        "successMessage": "Uninstall complete",
         "isUninstall": true,
-        "showEmailSubmission": false
+        "name": "$SiteCommon$/pages-gallery/progress.html",
+        "showEmailSubmission": false,
+        "successMessage": "$translate(INIT_UNINSTALL_SUCCESS)"
       }
     ],
     "Actions": [
       {
+        "displayname": "$translate(INIT_ACTION_REMOVING_TASK)",
         "name": "Microsoft-RemoveTask",
-        "displayname": "Remove task",
         "TaskName": "Power BI Solution Template - SCCM"
       },
       {
-        "name": "Microsoft-RemoveFiles",
-        "displayname": "Remove files"
+        "displayname": "$translate(INIT_ACTION_REMOVING_FILES)",
+        "name": "Microsoft-RemoveFiles"
       },
       {
+        "displayname": "$translate(INIT_ACTION_FINISHING_CLEANUP)",
         "name": "Microsoft-RemoveFiles",
-        "displayname": "Finishing cleanup",
         "TargetPath": "C:\\Program Files\\Microsoft Templates\\Microsoft-SCCMTemplate\\Apps\\Microsoft\\Released\\Microsoft-SCCMTemplate\\Temp"
       }
     ]

@@ -4,11 +4,13 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Linq;
+
+using Newtonsoft.Json.Linq;
+
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
 using Microsoft.Deployment.Common.Model;
 using Microsoft.Deployment.Common.Tags;
-using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Deployment.Common.AppLoad
 {
@@ -79,10 +81,10 @@ namespace Microsoft.Deployment.Common.AppLoad
         {
             var catalog = new AggregateCatalog();
             string path = System.AppDomain.CurrentDomain.BaseDirectory;
-            catalog.Catalogs.Add(new DirectoryCatalog(path));
+            catalog.Catalogs.Add(new DirectoryCatalog(path, "Microsoft.Deployment.*"));
             if (Directory.Exists(path + "bin"))
             {
-                catalog.Catalogs.Add(new DirectoryCatalog(path + "bin"));
+                catalog.Catalogs.Add(new DirectoryCatalog(path + "bin", "Microsoft.Deployment.*"));
             }
 
             container = new CompositionContainer(catalog);

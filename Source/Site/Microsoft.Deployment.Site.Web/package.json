@@ -25,6 +25,7 @@
     "gulp": "3.9.1",
     "gulp-babel": "6.1.2",
     "gulp-sourcemaps": "2.4.1",
+    "gulp-strip-comments": "2.4.5",
     "gulp-typescript": "3.1.5",
     "jspm": "0.16.52",
     "object.assign": "4.0.4",

@@ -170,10 +170,11 @@ CREATE TABLE pbist_sccm.[configuration]
   id                     INT IDENTITY(1, 1) NOT NULL,
   configuration_group    VARCHAR(150) NOT NULL,
   configuration_subgroup VARCHAR(150) NOT NULL,
-  name                   VARCHAR(150) NOT NULL,
-  value                  VARCHAR(max) NULL,
+  [name]                 VARCHAR(150) NOT NULL,
+  [value]                VARCHAR(max) NULL,
   visible                BIT NOT NULL DEFAULT 0
 );
+
 
 CREATE TABLE pbist_sccm.[date]
 (
@@ -181,33 +182,21 @@ CREATE TABLE pbist_sccm.[date]
    full_date              DATE NOT NULL,
    day_of_week            TINYINT NOT NULL,
    day_num_in_month       TINYINT NOT NULL,
-   day_name               CHAR(9) NOT NULL,
-   day_abbrev             CHAR(3) NOT NULL,
+   day_name               NVARCHAR(50) NOT NULL,
+   day_abbrev             NVARCHAR(10) NOT NULL,
    weekday_flag           CHAR(1) NOT NULL,
    week_num_in_year       TINYINT NOT NULL,
    week_begin_date        DATE NOT NULL,
-   week_begin_date_key    INT NOT NULL,
    [month]                TINYINT NOT NULL,
-   month_name             CHAR(9) NOT NULL,
-   month_abbrev           CHAR(3) NOT NULL,
+   month_name             NVARCHAR(50) NOT NULL,
+   month_abbrev           NVARCHAR(10) NOT NULL,
    [quarter]              TINYINT NOT NULL,
    [year]                 SMALLINT NOT NULL,
    yearmo                 INT NOT NULL,
-   fiscal_month           TINYINT NOT NULL,
-   fiscal_quarter         TINYINT NOT NULL,
-   fiscal_year            SMALLINT NOT NULL,
-   last_day_in_month_flag CHAR(1) NOT NULL,
-   same_day_year_ago_date DATE NOT NULL,
-   same_day_year_ago_key  INT NOT NULL,
-   day_num_in_year           AS Datepart(dayofyear, full_date),
-   quarter_name              AS 'Q' + CAST([quarter] AS NVARCHAR(10)),
-   fiscal_quarter_name       AS 'Q'+ CAST(fiscal_quarter AS NVARCHAR(10)),
-   fiscalquartercompletename AS 'FY' + Substring(CONVERT(VARCHAR, fiscal_year), 3, 2) + ' Q' + CAST(fiscal_quarter AS NVARCHAR(10)),
-   fiscalyearcompletename    AS 'FY' + Substring(CONVERT(VARCHAR, fiscal_year), 3, 2),
-   fiscalmonthcompletename   AS month_abbrev + ' ' + Substring(CONVERT(VARCHAR, fiscal_year), 3, 2),
+   same_day_year_ago_date DATE NOT NULL
    CONSTRAINT pk_dim_date PRIMARY KEY CLUSTERED (date_key)
 );
-
+GO
 
 CREATE TABLE pbist_sccm.computermalware_staging
 (

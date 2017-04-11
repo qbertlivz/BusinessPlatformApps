@@ -1,10 +1,10 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
-
 
 namespace Microsoft.Deployment.Actions.OnPremise.WinNT
 {
@@ -13,10 +13,10 @@ namespace Microsoft.Deployment.Actions.OnPremise.WinNT
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            string domain = request.DataStore.GetValue("ImpersonationDomain") == null || string.IsNullOrEmpty(request.DataStore.GetValue("ImpersonationDomain"))
+            string domain = string.IsNullOrEmpty(request.DataStore.GetValue("ImpersonationDomain"))
                 ? Environment.GetEnvironmentVariable("USERDOMAIN")
                 : request.DataStore.GetValue("ImpersonationDomain");
-            string user = request.DataStore.GetValue("ImpersonationUsername") == null || string.IsNullOrEmpty(request.DataStore.GetValue("ImpersonationUsername"))
+            string user = string.IsNullOrEmpty(request.DataStore.GetValue("ImpersonationUsername"))
                 ? Environment.GetEnvironmentVariable("USERNAME")
                 : request.DataStore.GetValue("ImpersonationUsername");
 

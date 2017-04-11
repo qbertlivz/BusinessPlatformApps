@@ -16,20 +16,65 @@ namespace Microsoft.Deployment.Site.Web.Tests
     {
         private string baseURL = Constants.Slot3;
         private RemoteWebDriver driver;
-        //private string browser;
 
         [TestMethod]
-        
-        public void Given_CorrectInformation_When_RunTwitter_TheSuccess()
+        public void Given_CorrectInformation_And_AS_When_RunTwitter_ThenSuccess()
         {
             Given_CorrectCredentials_When_AzureAuth_Then_Success();
-            HelperMethods.ClickNextButton();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
+            HelperMethods.ClickButton("Next");
             Given_CorrectSqlCredentials_When_ExistingSqlSelected_Then_PageValidatesSuccessfully();
-            HelperMethods.ClickNextButton();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
+            HelperMethods.ClickButton("Next");
             Given_CorrectTwitterCredentials_When_Authenticating_Then_Success();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
             Given_CorrectSearchTerms_When_Validating_Then_Success();
-            HelperMethods.ClickNextButton();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
+            HelperMethods.ClickButton("Next");
             Given_CorrectHandles_When_Validating_Then_Success();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
+            HelperMethods.ClickButton("Next");
+            HelperMethods.NewAnalysisServices("twitteraas" + HelperMethods.resourceGroupName, Credential.Instance.ServiceAccount.Username, Credential.Instance.ServiceAccount.Password);
+            HelperMethods.ClickButton("Next");
+            HelperMethods.ClickButton("Run");
+            HelperMethods.CheckDeploymentStatus();
+
+            HelperMethods.CleanSubscription(
+                Credential.Instance.ServiceAccount.Username,
+                Credential.Instance.ServiceAccount.Password,
+                Credential.Instance.ServiceAccount.TenantId,
+                Credential.Instance.ServiceAccount.ClientId,
+                Credential.Instance.ServiceAccount.SubscriptionId);
+        }
+
+        [TestMethod]
+        public void Given_CorrectInformation_And_No_AS_When_RunTwitter_ThenSuccess()
+        {
+            Given_CorrectCredentials_When_AzureAuth_Then_Success();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
+            HelperMethods.ClickButton("Next");
+            Given_CorrectSqlCredentials_When_ExistingSqlSelected_Then_PageValidatesSuccessfully();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
+            HelperMethods.ClickButton("Next");
+            Given_CorrectTwitterCredentials_When_Authenticating_Then_Success();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
+            Given_CorrectSearchTerms_When_Validating_Then_Success();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
+            HelperMethods.ClickButton("Next");
+            Given_CorrectHandles_When_Validating_Then_Success();
+            Thread.Sleep(new TimeSpan(0, 0, 5));
+            HelperMethods.ClickButton("Next");
+            HelperMethods.NoAnalysisServices();
+            HelperMethods.ClickButton("Next");
+            HelperMethods.ClickButton("Run");
+            HelperMethods.CheckDeploymentStatus();
+
+            HelperMethods.CleanSubscription(
+                Credential.Instance.ServiceAccount.Username,
+                Credential.Instance.ServiceAccount.Password,
+                Credential.Instance.ServiceAccount.TenantId,
+                Credential.Instance.ServiceAccount.ClientId,
+                Credential.Instance.ServiceAccount.SubscriptionId);
         }
 
         [TestMethod]
@@ -55,7 +100,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
             string server = Credential.Instance.Sql.Server;
             string username = Credential.Instance.Sql.Username;
             string password = Credential.Instance.Sql.Password;
-            string database = Credential.Instance.Sql.Database;
+            string database = Credential.Instance.Sql.TwitterDatabase;
 
             //HelperMethods.OpenWebBrowserOnPage("source");
             HelperMethods.SqlPageExistingDatabase(server, username, password);
@@ -103,7 +148,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
             searchTermsInput.SendKeys(searchTerms);
 
-            HelperMethods.ClickValidateButton();
+            HelperMethods.ClickButton("Validate");
 
             var validated = driver.FindElementByClassName("st-validated");
 
@@ -122,32 +167,11 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
             handlesInput.SendKeys(handles);
 
-            HelperMethods.ClickValidateButton();
+            HelperMethods.ClickButton("Validate");
 
             var validated = driver.FindElementByClassName("st-validated");
 
             Assert.IsTrue(validated.Text == "Successfully validated");
-
-            HelperMethods.ClickButton("Next");
-            HelperMethods.ClickButton("Run");
-
-            HelperMethods.CheckDeploymentStatus();
-        }
-
-        [TestMethod]
-        [Ignore]
-        public void TestAzurePageFlowCredentials()
-        {
-            var url = this.baseURL + "#/azure";
-            driver = new ChromeDriver();
-            driver.Manage().Window.Maximize();
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(30);
-            driver.Navigate().GoToUrl(url);
-            var elements = driver.FindElementByTagName("Button");
-            elements.Click();
-
-            //string username = "";
-            //string password = "";
         }
 
         [TestCleanup()]

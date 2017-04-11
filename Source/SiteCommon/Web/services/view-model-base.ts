@@ -10,23 +10,17 @@ import { MainService } from './main-service';
 
 export class ViewModelBase {
     isActivated: boolean = false;
-    isValidated: boolean = false;
     isAuthenticated: boolean = true;
-
-    showValidation: boolean = false;
-    showValidationDetails: boolean = false;
-    validationText: string;
-
+    isValidated: boolean = false;
     MS: MainService;
-
-    textNext: string = 'Next';
-
+    navigationMessage: string = '';
     onNext: any[] = [];
     onValidate: any[] = [];
-
-    navigationMessage: string = '';
+    showValidation: boolean = false;
+    showValidationDetails: boolean = false;
+    textNext: string = 'Next';
     useDefaultValidateButton: boolean = false;
-
+    validationText: string;
     viewmodel: ViewModelBase;
 
     constructor() {
@@ -35,7 +29,6 @@ export class ViewModelBase {
     }
 
     loadParameters(): void {
-        // Load the parameters from the additionalParameters section
         var parameters = this.MS.NavigationService.getCurrentSelectedPage().Parameters;
         InitParser.loadVariables(this, this.MS.UtilityService.Clone(parameters), this.MS, this);
     }
@@ -82,9 +75,10 @@ export class ViewModelBase {
         } finally {
             this.MS.NavigationService.isCurrentlyNavigating = false;
             this.MS.DataStore.addToDataStore('HasNavigated', true, DataStoreType.Public);
+            if (this.isValidated) {
+                this.VerifyNavigation();
+            }
         }
-
-        this.VerifyNavigation();
     }
 
     NavigateBack(): void {
@@ -149,7 +143,6 @@ export class ViewModelBase {
 
     VerifyNavigation(): void {
         if (this.MS.UtilityService.isEdge()) {
-            //this.MS.NavigationService.NavigateToIndex();
             this.MS.UtilityService.Reload();
         }
     }

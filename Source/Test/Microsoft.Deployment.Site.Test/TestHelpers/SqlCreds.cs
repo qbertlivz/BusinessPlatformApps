@@ -13,5 +13,7 @@
         public string SalesforceDatabase { get; set; }
 
         public string CRMDatabase { get; set; }
+
+        public string SCCMDatabase { get; set; }
     }
 }

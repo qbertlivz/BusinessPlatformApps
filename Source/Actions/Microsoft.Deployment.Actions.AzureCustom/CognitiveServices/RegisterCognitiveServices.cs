@@ -20,16 +20,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.CognitiveServices
             string azureToken = request.DataStore.GetJson("AzureToken", "access_token");
             string subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             string resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
-
-            request.DataStore.AddToDataStore("requestparameters", "AzureProvider", "Microsoft.CognitiveServices");
             var location = request.DataStore.GetValue("CognitiveLocation");
             string permissionsToCheck = request.DataStore.GetValue("CognitiveServices");
-
-            if (!(await RequestUtility.CallAction(request, "Microsoft-RegisterProviderBeta")).IsSuccess)
-            {
-                return new ActionResponse(ActionStatus.Failure, null, null, null, "Unable to register Cognitive Services");
-            }
-
 
             List<string> cognitiveServicesToCheck = permissionsToCheck.Split(',').Select(p => p.Trim()).ToList();
             AzureHttpClient client = new AzureHttpClient(azureToken, subscription, resourceGroup);
@@ -118,6 +110,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.CognitiveServices
              $"providers/Microsoft.CognitiveServices/register", "2016-02-01-preview",
                 JsonUtility.GetEmptyJObject().ToString());
 
+            await Task.Delay(5000);
             var responseBody = JsonUtility.GetJsonObjectFromJsonString(await response.Content.ReadAsStringAsync());
 
 
@@ -134,7 +127,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.CognitiveServices
             if(responseBody == null || responseBody["registrationState"] == null
                 || responseBody["registrationState"].ToString() != "Registered")
             {
-                return new ActionResponse(ActionStatus.Failure, responseBody, null, "Cognitive Services not registered, please try again later");
+                return new ActionResponse(ActionStatus.Failure, responseBody, null,null, "Cognitive Services not registered, please try again later");
             }
 
             return new ActionResponse(ActionStatus.Success);

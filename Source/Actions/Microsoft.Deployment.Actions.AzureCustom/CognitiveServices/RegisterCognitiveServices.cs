@@ -29,9 +29,17 @@ namespace Microsoft.Deployment.Actions.AzureCustom.CognitiveServices
                 return new ActionResponse(ActionStatus.Failure, null, null, null, "Unable to register Cognitive Services");
             }
 
-
             List<string> cognitiveServicesToCheck = permissionsToCheck.Split(',').Select(p => p.Trim()).ToList();
             AzureHttpClient client = new AzureHttpClient(azureToken, subscription, resourceGroup);
+
+
+            // Do this first because of the way Azure works
+            var getOwnerResponse = await client.ExecuteWithSubscriptionAsync(HttpMethod.Post,
+            $"providers/Microsoft.CognitiveServices/locations/{location}/checkAccountOwner", "2016-02-01-preview",
+            JsonUtility.GetEmptyJObject().ToString());
+
+            var getOwnerBody = JsonUtility.GetJsonObjectFromJsonString(await getOwnerResponse.Content.ReadAsStringAsync());
+
 
             bool passPermissionCheck = true;
             // Check if permissions are fine
@@ -69,11 +77,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.CognitiveServices
 
 
             // IF not then check if user can enable
-            var getOwnerResponse = await client.ExecuteWithSubscriptionAsync(HttpMethod.Post,
-                $"providers/Microsoft.CognitiveServices/locations/{location}/checkAccountOwner", "2016-02-01-preview",
-                JsonUtility.GetEmptyJObject().ToString());
-
-            var getOwnerBody = JsonUtility.GetJsonObjectFromJsonString(await getOwnerResponse.Content.ReadAsStringAsync());
 
             if (getOwnerBody["isAccountOwner"].ToString().ToLowerInvariant() == "false")
             {

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
+using Microsoft.Deployment.Actions.AzureCustom.Common;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.CognitiveServices
 {
@@ -27,7 +28,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.CognitiveServices
             AzureHttpClient client = new AzureHttpClient(azureToken, subscription, resourceGroup);
 
             // Register if not registered
-            var registrationResponse = await RegisterCognitiveServicesProvider(client);
+            var registrationResponse = await RegisterProviderBeta.RegisterAzureProvider("Microsoft.CognitiveServices", azureToken, subscription);
             if(!registrationResponse.IsSuccess)
             {
                 return registrationResponse;
@@ -98,36 +99,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.CognitiveServices
             if (!setPermissionsResponse.IsSuccessStatusCode)
             {
                 return new ActionResponse(ActionStatus.Failure, await setPermissionsResponse.Content.ReadAsStringAsync(), null, null, $"Unable to assign permissions for the cogntivie services {permissionsToCheck}. Use the Azure Portal to enable these services. Ensure you have at least contributor privilige to the subscription");
-            }
-
-            return new ActionResponse(ActionStatus.Success);
-        }
-
-        private async Task<ActionResponse> RegisterCognitiveServicesProvider(AzureHttpClient client)
-        {
-            // Register provider
-            var response = await client.ExecuteWithSubscriptionAsync(HttpMethod.Post,
-             $"providers/Microsoft.CognitiveServices/register", "2016-02-01-preview",
-                JsonUtility.GetEmptyJObject().ToString());
-
-            await Task.Delay(5000);
-            var responseBody = JsonUtility.GetJsonObjectFromJsonString(await response.Content.ReadAsStringAsync());
-
-
-            while(responseBody != null && responseBody["registrationState"] != null 
-                && responseBody["registrationState"].ToString() == "Registering")
-            {
-                await Task.Delay(5000);
-                response = await client.ExecuteWithSubscriptionAsync(HttpMethod.Get,
-                $"providers/Microsoft.CognitiveServices/", "2016-02-01-preview",
-                JsonUtility.GetEmptyJObject().ToString());
-                responseBody = JsonUtility.GetJsonObjectFromJsonString(await response.Content.ReadAsStringAsync());
-            }
-
-            if(responseBody == null || responseBody["registrationState"] == null
-                || responseBody["registrationState"].ToString() != "Registered")
-            {
-                return new ActionResponse(ActionStatus.Failure, responseBody, null,null, "Cognitive Services not registered, please try again later");
             }
 
             return new ActionResponse(ActionStatus.Success);

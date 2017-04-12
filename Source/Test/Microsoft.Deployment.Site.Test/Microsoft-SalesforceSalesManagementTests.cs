@@ -18,7 +18,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
     [TestClass]
     public class SalesforceSalesManagementTests
     {
-        private string baseURL = Constants.Slot3;
+        private string baseURL = Constants.Slot1;
         private RemoteWebDriver driver;
 
         [TestMethod]

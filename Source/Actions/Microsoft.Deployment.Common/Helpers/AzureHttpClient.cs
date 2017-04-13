@@ -99,5 +99,11 @@ namespace Microsoft.Deployment.Common.Helpers
                 return await client.SendAsync(message);
             }
         }
+
+        public async Task<string> ExecuteGenericRequestWithHeaderAndReadAsync(HttpMethod method, string url, string body)
+        {
+            HttpResponseMessage response = await this.ExecuteGenericRequestWithHeaderAsync(method, url, body);
+            return await response.Content.ReadAsStringAsync();
+        }
     }
 }

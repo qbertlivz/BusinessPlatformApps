@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using Microsoft.Azure.Management.Resources.Models;
 
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
+using Microsoft.Deployment.Common.Enums;
 using Microsoft.Deployment.Common.ErrorCode;
 using Microsoft.Deployment.Common.Helpers;
 
@@ -29,10 +31,9 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             var accountType = request.DataStore.GetValue("StorageAccountType");
             var encryptionEnabled = request.DataStore.GetValue("StorageAccountEncryptionEnabled");
 
-
+            string storageAccountName = "solutiontemplate" + Path.GetRandomFileName().Replace(".", "").Substring(0, 8);
 
             var param = new AzureArmParameterGenerator();
-            param.AddStringParam("storageaccountname", "solutiontemplate" + Path.GetRandomFileName().Replace(".", "").Substring(0, 8));
             param.AddStringParam("encryptionEnabled", encryptionEnabled);
             param.AddStringParam("accountType", accountType);
             param.AddStringParam("location", location);
@@ -64,6 +65,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             }
 
             var deploymentItem = await client.Deployments.CreateOrUpdateAsync(resourceGroup, deploymentName, deployment, new CancellationToken());
+            request.Logger.LogResource(request.DataStore, name,
+                DeployedResourceType.StorageAccount, CreatedBy.BPST, DateTime.UtcNow.ToString("o"), string.Empty, accountType);
             return new ActionResponse(ActionStatus.Success, deploymentItem);
         }
     }

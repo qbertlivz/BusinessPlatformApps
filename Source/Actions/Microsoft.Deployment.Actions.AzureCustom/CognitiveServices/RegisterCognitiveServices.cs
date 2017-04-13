@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Dynamic;
 using System.Linq;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
+using Microsoft.Deployment.Actions.AzureCustom.Common;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.CognitiveServices
 {
@@ -19,19 +21,18 @@ namespace Microsoft.Deployment.Actions.AzureCustom.CognitiveServices
             string azureToken = request.DataStore.GetJson("AzureToken", "access_token");
             string subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             string resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
-
-            request.DataStore.AddToDataStore("requestparameters", "AzureProvider", "Microsoft.CognitiveServices");
             var location = request.DataStore.GetValue("CognitiveLocation");
             string permissionsToCheck = request.DataStore.GetValue("CognitiveServices");
 
-            if (!(await RequestUtility.CallAction(request, "Microsoft-RegisterProviderBeta")).IsSuccess)
-            {
-                return new ActionResponse(ActionStatus.Failure, null, null, null, "Unable to register Cognitive Services");
-            }
-
-
             List<string> cognitiveServicesToCheck = permissionsToCheck.Split(',').Select(p => p.Trim()).ToList();
             AzureHttpClient client = new AzureHttpClient(azureToken, subscription, resourceGroup);
+
+            // Register if not registered
+            var registrationResponse = await RegisterProviderBeta.RegisterAzureProvider("Microsoft.CognitiveServices", azureToken, subscription);
+            if(!registrationResponse.IsSuccess)
+            {
+                return registrationResponse;
+            }
 
             bool passPermissionCheck = true;
             // Check if permissions are fine
@@ -102,5 +103,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.CognitiveServices
 
             return new ActionResponse(ActionStatus.Success);
         }
+
     }
 }

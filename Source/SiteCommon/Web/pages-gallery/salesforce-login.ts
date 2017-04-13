@@ -11,8 +11,6 @@ export class Salesforce extends ViewModelBase {
 
     constructor() {
         super();
-        this.isValidated = false;
-        this.showValidation = false;
         this.salesforceUrl = 'login.salesforce.com';
     }
 

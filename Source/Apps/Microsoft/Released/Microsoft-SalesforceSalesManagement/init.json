@@ -100,7 +100,7 @@
         "name": "$SiteCommon$/pages-gallery/summary.html",
         "values": {
           "Subscription": "$(this.MS.DataStore.getValue('DataMovement') === 'ADF' ? this.MS.DataStore.getJson('SelectedSubscription').SubscriptionId : '')",
-          "ResourceGroup": "$(this.MS.DataStore.getValue('SelectedResourceGroup')",
+          "ResourceGroup": "$(this.MS.DataStore.getValue('SelectedResourceGroup'))",
           "SqlServer": "$(this.MS.DataStore.getValue('Server'))",
           "Database": "$(this.MS.DataStore.getValue('Database'))",
           "Fiscal Start": "$(this.MS.DataStore.getValue('fiscalMonth'))",

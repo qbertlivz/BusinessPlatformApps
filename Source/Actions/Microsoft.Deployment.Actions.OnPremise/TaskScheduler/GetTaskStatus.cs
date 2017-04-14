@@ -32,6 +32,9 @@ namespace Microsoft.Deployment.Actions.OnPremise.TaskScheduler
                     switch (task.LastTaskResult)
                     {
                         case 0: return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+                        case 267014: return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(),
+                                                                new Exception("The scheduled task was terminated by the user."),
+                                                                "TaskSchedulerRunFailed");
                         case 411:
                             return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(),
                                                       new Exception("PowerShell version too low - please upgrade to latest version https://msdn.microsoft.com/en-us/powershell/wmf/5.0/requirements"),

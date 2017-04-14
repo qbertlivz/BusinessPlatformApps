@@ -5,6 +5,7 @@ using System.IO.Packaging;
 using Newtonsoft.Json;
 
 using Microsoft.Deployment.Common.Model;
+using System.Text.RegularExpressions;
 
 namespace Microsoft.Deployment.Common.Helpers
 {
@@ -48,6 +49,23 @@ namespace Microsoft.Deployment.Common.Helpers
 
         }
 
+        private string GetPerspectiveFromConnectionString(string ssasConnectionString)
+        {
+            string result = string.Empty;
+            // Could start with a ;
+            //     and have few spaces,
+            //     then word Cube and maybe some spaces then =
+            //     then the perspective name possibily surrounded by "
+            //     last a ; or end of string
+            Regex r = new Regex(";?\\s*Cube\\s*=\\\"?([\\w,\\s]*)\\\"?;?", RegexOptions.IgnoreCase);
+            Match m = r.Match(ssasConnectionString);
+            if (m != null && m != Match.Empty && m.Groups.Count >= 2)
+            {
+                result = m.Groups[1].Value.Trim();
+            }
+            return result;
+        }
+
         public void ReplaceSSASConnectionString(string server, string catalog, string cube)
         {
             if (_connections == null) return; // Nothing to do
@@ -69,7 +87,7 @@ namespace Microsoft.Deployment.Common.Helpers
             if (liveConnection.Connections[0] == null)
                 throw new Exception("Unexpected null value for connection element");
 
-            liveConnection.Connections[0].InitializeConnectionElement(server, catalog, cube);
+            liveConnection.Connections[0].InitializeConnectionElement(server, catalog, GetPerspectiveFromConnectionString(liveConnection.Connections[0].ConnectionString));
             connectionJson = JsonConvert.SerializeObject(liveConnection);
 
             byte[] encodedJsonBytes = connectionJson.GetUTF8Bytes();

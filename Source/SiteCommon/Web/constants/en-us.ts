@@ -182,6 +182,7 @@
     INIT_ACTION_DEPLOYING_NEWS: `Deploying News Functions`,
     INIT_ACTION_DEPLOYING_NEWS_ASSETS: `Deploy News Function Assets`,
     INIT_ACTION_DEPLOYING_NEWS_LOGIC_APP: `Deploying News Template Logic App`,
+    INIT_ACTION_DEPLOYING_POWERAPP: `Deploying PowerApp`,
     INIT_ACTION_DEPLOYING_SQL_SCRIPTS: `Deploying database scripts`,
     INIT_ACTION_DEPLOYING_STORAGE_ACCOUNT: `Deploying Storage Account`,
     INIT_ACTION_DEPLOYING_STORAGE_ACCOUNT_CONTAINER: `Deploy Storage Account Container`,

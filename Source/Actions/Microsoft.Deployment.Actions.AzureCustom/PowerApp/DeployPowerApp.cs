@@ -26,7 +26,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
             string objectId = JsonUtility.GetWebToken(azureToken, "oid");
             string sqlConnectionId = request.DataStore.GetValue("PowerAppSqlConnectionId");
 
-            JObject resourceStorage = JsonUtility.GetJsonObjectFromJsonString(await client.ExecuteGenericRequestWithHeaderAndReadAsync(HttpMethod.Post, $"{BASE_POWER_APPS_URL}/objectIds/{objectId}/generateResourceStorage?api-version=2016-11-01", "{}"));
+            JObject resourceStorage = JsonUtility.GetJsonObjectFromJsonString(await client.ExecuteGenericRequestWithHeaderAndReadAsync(HttpMethod.Post, $"{BASE_POWER_APPS_URL}/objectIds/{objectId}/generateResourceStorage?api-version=2016-11-01", $"{{\"environment\":{{\"id\":\"/providers/Microsoft.PowerApps/environments/{environmentId}\",\"name\":\"{environmentId}\"}}}}}}"));
 
             string sharedAccessSignature = JsonUtility.GetJObjectProperty(resourceStorage, "sharedAccessSignature");
 

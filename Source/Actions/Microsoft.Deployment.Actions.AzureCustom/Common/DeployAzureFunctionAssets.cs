@@ -1,14 +1,16 @@
-﻿using System.ComponentModel.Composition;
+﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Dynamic;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+
+using Newtonsoft.Json.Linq;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.ErrorCode;
 using Microsoft.Deployment.Common.Helpers;
-using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.Common
 {
@@ -17,10 +19,10 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var azureToken = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
-            var subscription = request.DataStore.GetJson("SelectedSubscription")["SubscriptionId"].ToString();
+            var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
+            var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
-            var location = request.DataStore.GetJson("SelectedLocation")["Name"].ToString();
+            var location = request.DataStore.GetJson("SelectedLocation", "Name");
             var functionFileName = request.DataStore.GetValue("FunctionFileName");
             var functionName = request.DataStore.GetValue("FunctionName");
 
@@ -29,14 +31,13 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             List<string> appSettings = new List<string>();
 
             if (request.DataStore.GetJson("AppSettingKeys") != null && !string.IsNullOrEmpty(request.DataStore.GetJson("AppSettingKeys")[0].ToString()))
-                {
+            {
                 foreach (var item in request.DataStore.GetJson("AppSettingKeys"))
                 {
                     string key = (string)item;
                     appSettings.Add(key);
                 }
             }
-
 
             AzureHttpClient client = new AzureHttpClient(azureToken, subscription, resourceGroup);
 

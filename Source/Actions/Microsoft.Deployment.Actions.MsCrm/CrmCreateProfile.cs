@@ -1,15 +1,18 @@
 ﻿namespace Microsoft.Deployment.Common.Actions.MsCrm
 {
-    using Microsoft.Deployment.Common.ActionModel;
-    using Microsoft.Deployment.Common.Actions;
-    using Microsoft.Deployment.Common.Helpers;
-    using Model;
-    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.Composition;
     using System.Net.Http.Headers;
     using System.Threading.Tasks;
+
+    using Model;
+    using Newtonsoft.Json;
+
+    using Microsoft.Deployment.Common.ActionModel;
+    using Microsoft.Deployment.Common.Actions;
+    using Microsoft.Deployment.Common.Helpers;
+    using Microsoft.Deployment.Common.Enums;
 
     [Export(typeof(IAction))]
     public class CrmCreateProfile : BaseAction
@@ -42,7 +45,7 @@
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            _token = request.DataStore.GetJson("MsCrmToken")["access_token"].ToString(); ;
+            _token = request.DataStore.GetJson("MsCrmToken", "access_token"); ;
             AuthenticationHeaderValue bearer = new AuthenticationHeaderValue("Bearer", _token);
             _rc = new RestClient(request.DataStore.GetValue("ConnectorUrl"), bearer);
 
@@ -82,7 +85,11 @@
 
                 request.DataStore.AddToDataStore("ProfileName", createdProfile.Name, DataStoreType.Public);
                 request.DataStore.AddToDataStore("ProfileId", createdProfile.Id, DataStoreType.Public);
-                
+
+                //Log exporter creation
+                request.Logger.LogResource(request.DataStore, createdProfile.Name,
+                    DeployedResourceType.CRMExporter, CreatedBy.BPST, DateTime.UtcNow.ToString("o"), createdProfile.Id);
+
                 return new ActionResponse(ActionStatus.Success, createdProfile.Id);
             }
             catch (Exception e)

@@ -55,7 +55,7 @@
             </label>
         </div>
 
-        <button class="primary" click.delegate="Register()" disabled.bind="!registrationAccepted || MS.HttpService.isServiceBusy">${MS.Translate.COMMON_REGISTER}</button>
+        <button class="primary" click.trigger="Register()" disabled.bind="!registrationAccepted || MS.HttpService.isServiceBusy">${MS.Translate.COMMON_REGISTER}</button>
 
         <p class="st-text" if.bind="registrationError">${registrationError}</p>
 

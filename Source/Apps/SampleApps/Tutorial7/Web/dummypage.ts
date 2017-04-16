@@ -1,6 +1,6 @@
-import Viewmodelbase = require("../../../../SiteCommon/Web/services/viewmodelbase");
+import { ViewModelBase } from '../../../../SiteCommon/Web/services/view-model-base';
 
-export class DummyPage extends Viewmodelbase.ViewModelBase {
+export class DummyPage extends ViewModelBase {
     architectureDiagram: string = '';
     downloadLink: string = '';
     isDownload: boolean = false;

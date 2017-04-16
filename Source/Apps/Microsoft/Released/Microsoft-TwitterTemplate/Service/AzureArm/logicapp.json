@@ -101,21 +101,28 @@
               },
               "type": "ApiConnection"
             },
-            "ProcessTweet": {
+            "For_each": {
+              "actions": {
+                "Python": {
+                  "inputs": {
+                    "body": "@item()",
+                    "function": {
+                      "id": "[concat('/subscriptions/', parameters('subscription'), '/resourceGroups/',parameters('resourcegroup'),'/providers/Microsoft.Web/sites/', parameters('sitename'), '/Functions/TweetProcessingFunction')]"
+                    }
+                  },
+                  "runAfter": {},
+                  "type": "Function"
+                }
+              },
+              "foreach": "@body('Search_tweets')",
               "runAfter": {
                 "Search_tweets": [
                   "Succeeded"
                 ]
               },
-              "type": "Function",
-              "inputs": {
-                "body": "@triggerBody()",
-                "function": {
-                  "id": "[concat('/subscriptions/', parameters('subscription'), '/resourceGroups/',parameters('resourcegroup'),'/providers/Microsoft.Web/sites/', parameters('sitename'), '/Functions/TweetProcessingFunction')]"
-                }
-              }
+              "type": "Foreach"
             }
-            },
+          },
             "outputs": {}
           },
         "parameters": {

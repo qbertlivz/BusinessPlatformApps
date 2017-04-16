@@ -1,76 +1,69 @@
-﻿//using System.ComponentModel.Composition;
-//using System.IO;
-//using System.Threading.Tasks;
-//using Microsoft.AnalysisServices;
-//using Microsoft.Deployment.Common.ActionModel;
-//using Microsoft.Deployment.Common.Actions;
-//using Microsoft.Deployment.Common.Helpers;
-//using RefreshType = Microsoft.AnalysisServices.Tabular.RefreshType;
-//using Server = Microsoft.AnalysisServices.Tabular.Server;
+﻿using System;
+using System.ComponentModel.Composition;
+using System.IO;
+using System.Threading.Tasks;
 
-//namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
-//{
-//    [Export(typeof(IAction))]
-//    public class DeployAzureASModel: BaseAction
-//    {
-//        public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
-//        {
-//            string serverName = request.DataStore.GetValue("ASServerUrl");
-//            string username = request.DataStore.GetValue("ASAdmin") ??
-//                AzureUtility.GetEmailFromToken(request.DataStore.GetJson("AzureToken"));
-//            string password = request.DataStore.GetValue("ASAdminPassword");
-//            string xmla = request.DataStore.GetValue("xmlaFilePath");
-//            string asDatabase  = request.DataStore.GetValue("ASDatabase");
-//            string sqlConnectionString = request.DataStore.GetValue("SqlConnectionString");
-//            var connectionStringObj = SqlUtility.GetSqlCredentialsFromConnectionString(sqlConnectionString);
+using Microsoft.AnalysisServices;
+using Microsoft.AnalysisServices.Tabular;
+using Microsoft.Deployment.Common.ActionModel;
+using Microsoft.Deployment.Common.Actions;
+using Microsoft.Deployment.Common.Helpers;
 
-//            string connectionString = string.Empty;
+namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
+{
+    [Export(typeof(IAction))]
+    public class DeployAzureASModel : BaseAction
+    {
+        public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
+        {
+            string xmla = request.DataStore.GetValue("xmlaFilePath");
+            string asDatabase = request.DataStore.GetValue("ASDatabase");
+            string sqlConnectionString = request.DataStore.GetValue("SqlConnectionString");
+            var connectionStringObj = SqlUtility.GetSqlCredentialsFromConnectionString(sqlConnectionString);
+            string connectionString = request.DataStore.GetValue("ASConnectionString");
 
-//            if (serverName.ToLowerInvariant().StartsWith("asazure"))
-//            {
-//                connectionString += "Provider=MSOLAP;";
-//            }
+            string xmlaContents = File.ReadAllText(request.Info.App.AppFilePath + "/" + xmla);
 
-//            connectionString += $"Data Source={serverName};";
+            Server server = null;
+            try
+            {
+                server = new Server();
+                server.Connect(connectionString);
 
-//            if (!string.IsNullOrEmpty(password))
-//            {
-//                connectionString += $"User ID={username};Password={password};Persist Security Info=True; Impersonation Level=Impersonate;";
-//            }
+                // Delete existing
+                Database db = server.Databases.FindByName(asDatabase);
+                db?.Drop();
 
-//            Server server = new Server();
-//            server.Connect(connectionString);
+                // Deploy database definition
+                XmlaResultCollection response = server.Execute(xmlaContents);
+                if (response.ContainsErrors)
+                {
+                    return new ActionResponse(ActionStatus.Failure, response[0].Value);
+                }
 
-//            string xmlaContents = File.ReadAllText(request.Info.App.AppFilePath + "/" +xmla);
+                // Reload metadata and update connection string
+                server.Refresh(true);
+                db = server.Databases.FindByName(asDatabase);
+                ((ProviderDataSource)db.Model.DataSources[0]).ConnectionString = $"Provider=SQLNCLI11;Data Source=tcp:{connectionStringObj.Server};Persist Security Info=True;User ID={connectionStringObj.Username};Password={connectionStringObj.Password};Initial Catalog={connectionStringObj.Database}";
+                db.Update(UpdateOptions.ExpandFull);
 
-//            var obj = JsonUtility.GetJsonObjectFromJsonString(xmlaContents);
-//            obj["create"]["database"]["name"] = asDatabase;
-//            //obj["create"]["database"]["model"]["dataSources"][0]["name"] = "Sql Connection for" + asDatabase;
-//            obj["create"]["database"]["model"]["dataSources"][0]["connectionString"] =
-//                $"Provider=SQLNCLI11.1;Persist Security Info=False;User ID={connectionStringObj.Username};Password={connectionStringObj.Password};" +
-//                $"Initial Catalog={connectionStringObj.Database};Data Source=tcp:{connectionStringObj.Server};Initial File Name=;Server SPN=";
+                // Process if there's a tag requesting it
+                if (db.Model.DataSources[0].Annotations.ContainsName("MustProcess"))
+                    db.Model.RequestRefresh(AnalysisServices.Tabular.RefreshType.Full);
 
-//            //Delete existing
-//            var db = server.Databases.Find(asDatabase);
-//            if (db != null)
-//            {
-//                db.Drop(DropOptions.Default);
-                
-//            }
-//            server.Refresh(true);
+                server.Disconnect(true);
 
+                return new ActionResponse(ActionStatus.Success);
+            }
+            catch (Exception e)
+            {
+                return new ActionResponse(ActionStatus.Failure, string.Empty, e, null, "AS Database was not deployed");
+            }
+            finally
+            {
+                server?.Dispose();
+            }
 
-//            //Deploy and try and process
-//            var response = server.Execute(obj.ToString());
-//            if (response.ContainsErrors)
-//            {
-//                return new ActionResponse(ActionStatus.Failure, response[0].Value);
-//            }
-//            server.Refresh(true);
-//            db = server.Databases.Find(asDatabase);
-//            db.Model.RequestRefresh(RefreshType.Full);
-//            db.Model.SaveChanges();
-//            return new ActionResponse(ActionStatus.Success);
-//        }
-//    }
-//}
+        }
+    }
+}

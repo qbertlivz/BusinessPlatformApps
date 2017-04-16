@@ -1,0 +1,6 @@
+﻿<template bindable="aDescription, aLink, aLinkText, aDescription2, aLink2, aLinkText2, aIsImportant">
+    <span class="${aIsImportant ? 'boldFontFamily' : ''}">${aDescription}</span>
+    <span><a href.bind="aLink" tabindex="-1" target="_blank">${aLinkText}</a><span if.bind="!aDescription2">.</span></span>
+    <span if.bind="aDescription2">${aDescription2}</span>
+    <span if.bind="aLink2"><a href.bind="aLink2" tabindex="-1" target="_blank">${aLinkText2}</a></span>
+</template>

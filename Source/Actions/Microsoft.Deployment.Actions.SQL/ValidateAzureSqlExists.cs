@@ -2,6 +2,7 @@
 using System.Dynamic;
 using System.Net.Http;
 using System.Threading.Tasks;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.ErrorCode;
@@ -14,10 +15,10 @@ namespace Microsoft.Deployment.Actions.SQL
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var azureToken = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
-            var subscription = request.DataStore.GetJson("SelectedSubscription")["SubscriptionId"].ToString();
+            var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
+            var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             
-            string server = request.DataStore.GetJson("SqlCredentials")["Server"].ToString();
+            string server = request.DataStore.GetJson("SqlCredentials", "Server");
 
             AzureHttpClient httpClient = new AzureHttpClient(azureToken, subscription);
             dynamic payload = new ExpandoObject();

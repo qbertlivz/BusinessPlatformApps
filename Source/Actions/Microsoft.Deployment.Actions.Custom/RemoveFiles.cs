@@ -15,11 +15,7 @@ namespace Microsoft.Deployment.Actions.Custom
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            string targetPath = request.DataStore.GetValue("TargetPath") == null
-                            ? FileUtility.GetLocalTemplatePath(request.Info.AppName)
-                            : request.DataStore.GetValue("TargetPath");
-
-            ActionResponse response = new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            string targetPath = request.DataStore.GetValue("TargetPath") ?? FileUtility.GetLocalTemplatePath(request.Info.AppName);
 
             if (Directory.Exists(targetPath))
             {
@@ -33,15 +29,15 @@ namespace Microsoft.Deployment.Actions.Custom
                 }
                 catch (DirectoryNotFoundException)
                 {
-                    //If the directory is not found return success. Either it's been deleted manually or customer installed in a different directory.
+                    // If the directory is not found return success. Either it's been deleted manually or customer installed in a different directory.
                 }
-                catch //(Exception ex)
+                catch
                 {
-                    //response = new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), ex, string.Empty);
+                    // Do nothing
                 }
             }
-            return response;
 
+            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
         }
     }
 }

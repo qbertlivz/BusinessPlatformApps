@@ -4,10 +4,13 @@ using System.IO;
 using System.Security.Principal;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+
+using Microsoft.Win32.TaskScheduler;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
-using Microsoft.Win32.TaskScheduler;
+
 using Task = Microsoft.Win32.TaskScheduler.Task;
 
 namespace Microsoft.Deployment.Actions.OnPremise.TaskScheduler
@@ -24,10 +27,10 @@ namespace Microsoft.Deployment.Actions.OnPremise.TaskScheduler
             var taskProgram = request.DataStore.GetValue("TaskProgram");
             var taskStartTime = request.DataStore.GetValue("TaskStartTime");
 
-            var taskUsername = request.DataStore.GetValue("ImpersonationUsername") == null || string.IsNullOrEmpty(request.DataStore.GetValue("ImpersonationUsername"))
+            var taskUsername = string.IsNullOrEmpty(request.DataStore.GetValue("ImpersonationUsername"))
                 ? WindowsIdentity.GetCurrent().Name
                 : NTHelper.CleanDomain(request.DataStore.GetValue("ImpersonationDomain")) + "\\" + NTHelper.CleanUsername(request.DataStore.GetValue("ImpersonationUsername"));
-            var taskPassword = request.DataStore.GetValue("ImpersonationPassword") == null || string.IsNullOrEmpty(request.DataStore.GetValue("ImpersonationPassword"))
+            var taskPassword = string.IsNullOrEmpty(request.DataStore.GetValue("ImpersonationPassword"))
                 ? null
                 : request.DataStore.GetValue("ImpersonationPassword");
 

@@ -2,10 +2,13 @@
 using System.ComponentModel.Composition;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+
+using Microsoft.Win32.TaskScheduler;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
-using Microsoft.Win32.TaskScheduler;
+
 using Task = Microsoft.Win32.TaskScheduler.Task;
 
 namespace Microsoft.Deployment.Actions.OnPremise.TaskScheduler
@@ -29,6 +32,9 @@ namespace Microsoft.Deployment.Actions.OnPremise.TaskScheduler
                     switch (task.LastTaskResult)
                     {
                         case 0: return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+                        case 267014: return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(),
+                                                                new Exception("The scheduled task was terminated by the user."),
+                                                                "TaskSchedulerRunFailed");
                         case 411:
                             return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(),
                                                       new Exception("PowerShell version too low - please upgrade to latest version https://msdn.microsoft.com/en-us/powershell/wmf/5.0/requirements"),

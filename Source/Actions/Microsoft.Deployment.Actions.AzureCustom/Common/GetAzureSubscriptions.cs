@@ -1,14 +1,16 @@
-﻿using Hyak.Common;
-using Microsoft.Azure;
-using Microsoft.Azure.Subscriptions;
-using Microsoft.Azure.Subscriptions.Models;
-using Microsoft.Deployment.Common.ActionModel;
-using Microsoft.Deployment.Common.Actions;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Hyak.Common;
+using Microsoft.Azure;
+using Microsoft.Azure.Subscriptions;
+using Microsoft.Azure.Subscriptions.Models;
+
+using Microsoft.Deployment.Common.ActionModel;
+using Microsoft.Deployment.Common.Actions;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.Common
 {
@@ -17,7 +19,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var azureToken = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
+            var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
 
             CloudCredentials creds = new TokenCloudCredentials(azureToken);
             dynamic subscriptionWrapper = new ExpandoObject();

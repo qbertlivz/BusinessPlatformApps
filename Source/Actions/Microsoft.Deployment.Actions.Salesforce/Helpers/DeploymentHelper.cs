@@ -1,8 +1,12 @@
 ﻿using System.Linq;
 using System.Threading;
+
 using Microsoft.Azure.Management.Resources;
 using Microsoft.Azure.Management.Resources.Models;
+
 using Microsoft.Deployment.Common.ActionModel;
+using Microsoft.Deployment.Common.ErrorCode;
+using Microsoft.Deployment.Common.Helpers;
 
 namespace Microsoft.Deployment.Actions.Salesforce.Helpers
 {
@@ -29,7 +33,8 @@ namespace Microsoft.Deployment.Actions.Salesforce.Helpers
                 var operation = operations.Operations.First(p => p.Properties.ProvisioningState == ProvisioningState.Failed);
                 var operationFailed = client.DeploymentOperations.GetAsync(resourceGroup, deploymentName, operation.OperationId, new CancellationToken()).Result;
 
-                return new ActionResponse(ActionStatus.Failure, operationFailed);
+                return new ActionResponse(ActionStatus.Failure, JsonUtility.GetJObjectFromObject(operationFailed), null,
+                    DefaultErrorCodes.DefaultErrorCode, $"Azure:{operationFailed.Operation.Properties.StatusMessage} Details:{operationFailed.Operation.Properties.Response.Content}");
             }
         }
     }

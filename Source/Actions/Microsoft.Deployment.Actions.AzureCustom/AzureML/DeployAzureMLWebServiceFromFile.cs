@@ -87,10 +87,9 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureML
             };
 
             webService.Properties.CommitmentPlan = new CommitmentPlan(createdCommitmentPlan.Id);
-            webService.Name = webserviceName;
+            webService = new WebService(webService.Location, webService.Properties, null, webserviceName, webService.Type, webService.Tags);
 
-            WebService result;
-
+            WebService result = null;
             try
             {
                 result = client.WebServices.CreateOrUpdate(resourceGroup, webserviceName, webService);

@@ -127,7 +127,7 @@
       },
       {
         "displayname": "$translate(INIT_ACTION_DEPLOYING_NEWS_ASSETS)",
-        "name": "Microsoft-DeployAzureFunctionAssets",
+        "name": "Microsoft-DeployNewsFunctionAsset",
         "apiKey": "$dsall(CognitiveServiceKey)[1]"
       },
       {

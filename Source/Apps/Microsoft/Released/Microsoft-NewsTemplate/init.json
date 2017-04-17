@@ -188,7 +188,7 @@
         "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_WORKSPACE)",
         "WorkspaceName": "BingNewsWorkspace",
         "name": "Microsoft-DeployAzureMLWorkspace",
-        "StorageAccountName": "$save('storageaccountforaml')"
+        "StorageAccountName": "$run('saml' + this.MS.DataStore.getValue('uniqueId'))"
 
       },
       {
@@ -197,7 +197,7 @@
         "ExperimentJsonPath": "Service/AzureML/Experiments/TopicImagesExperiment.json",
         "ExperimentName": "$run('TopicImagesExperiment' + this.MS.DataStore.getValue('uniqueId'))",
         "name": "Microsoft-DeployAzureMLExperiment",
-        "WorkspaceName": "BingNewsWorkspace"
+        "WorkspaceName": "BingNewsWorkspace + this.MS.DataStore.getValue('uniqueId')"
       },
       {
         "DeploymentName": "AMLExperiments",
@@ -205,7 +205,7 @@
         "ExperimentJsonPath": "Service/AzureML/Experiments/EntityRecognitionExperiment.json",
         "ExperimentName": "$run('EntityRecognitionExperiment' + this.MS.DataStore.getValue('uniqueId'))",
         "name": "Microsoft-DeployAzureMLExperiment",
-        "WorkspaceName": "BingNewsWorkspace"
+        "WorkspaceName": "BingNewsWorkspace + this.MS.DataStore.getValue('uniqueId')"
       },
       {
         "DeploymentName": "AMLExperiments",
@@ -213,7 +213,7 @@
         "ExperimentJsonPath": "Service/AzureML/Experiments/TopicsExperiment.json",
         "ExperimentName": "$run('TopicsExperiment' + this.MS.DataStore.getValue('uniqueId'))",
         "name": "Microsoft-DeployAzureMLExperiment",
-        "WorkspaceName": "BingNewsWorkspace"
+        "WorkspaceName": "BingNewsWorkspace + this.MS.DataStore.getValue('uniqueId')"
       },
       {
         "ConnectorDisplayName": "TextAnalytics",

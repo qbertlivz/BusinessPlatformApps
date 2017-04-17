@@ -187,7 +187,9 @@
         "DeploymentName": "AMLWorkspace",
         "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_WORKSPACE)",
         "WorkspaceName": "BingNewsWorkspace",
-        "name": "Microsoft-DeployAzureMLWorkspace"
+        "name": "Microsoft-DeployAzureMLWorkspace",
+        "StorageAccountName": "$save('storageaccountforaml')"
+
       },
       {
         "DeploymentName": "AMLExperiments",

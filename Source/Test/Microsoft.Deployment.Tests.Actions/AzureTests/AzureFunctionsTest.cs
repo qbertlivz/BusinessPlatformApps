@@ -47,5 +47,21 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
             response = TestManager.ExecuteAction("Microsoft-DeployPrivateAssemblyToFunction", dataStore);
             Assert.IsTrue(response.IsSuccess);
         }
+
+        [TestMethod]
+        public async Task DeployFunctionAssetsNews()
+        {
+            var dataStore = await TestManager.GetDataStore();
+
+            //// Deploy Function
+            dataStore.AddToDataStore("DeploymentName", "FunctionDeploymentTest");
+            dataStore.AddToDataStore("FunctionName", "testfunctionappe");
+            dataStore.AddToDataStore("apiKey", "655c7b05d8a04bf6a88647c54fd042e2");
+
+            var response = TestManager.ExecuteAction("Microsoft-DeployNewsFunctionAsset", dataStore);
+            Assert.IsTrue(response.IsSuccess);
+            response = TestManager.ExecuteAction("Microsoft-WaitForArmDeploymentStatus", dataStore);
+            Assert.IsTrue(response.IsSuccess);
+        }
     }
 }

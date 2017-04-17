@@ -27,16 +27,14 @@ namespace Microsoft.Deployment.Actions.AzureCustom.News
             var location = request.DataStore.GetJson("SelectedLocation", "Name");
 
             var deploymentName = request.DataStore.GetValue("DeploymentName");
-            var logicAppName = request.DataStore.GetValue("LogicAppHistoricalName");
+            var logicAppName = request.DataStore.GetValue("LogicAppNameHistorical");
             var searchQuery = request.DataStore.GetValue("SearchQuery");
-            var imageCacheLogicApp = request.DataStore.GetValue("ImageCacheLogicApp");
             var siteName = request.DataStore.GetValue("FunctionName");
 
             var param = new AzureArmParameterGenerator();
             param.AddStringParam("resourcegroup", resourceGroup);
             param.AddStringParam("subscription", subscription);
             param.AddStringParam("logicappname", logicAppName);
-            param.AddStringParam("imagecachelogicapp", imageCacheLogicApp);
             param.AddStringParam("sitename", siteName);
             param.AddStringParam("searchquery", searchQuery);
 

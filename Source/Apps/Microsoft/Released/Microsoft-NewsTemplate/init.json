@@ -242,6 +242,17 @@
         "DeploymentName": "LogicAppNewsTemplate",
         "displayname": "$translate(INIT_ACTION_VALIDATING_LOGIC_APP)",
         "name": "Microsoft-WaitForArmDeploymentStatus"
+      },
+      {
+        "DeploymentName": "LogicAppNewsHistorical",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_NEWS_LOGIC_APP_HISTORICAL)",
+        "LogicAppNameHistorical": "LogicAppHistoricalNews",
+        "name": "Microsoft-DeployNewsTemplateHistorical"
+      },
+      {
+        "DeploymentName": "LogicAppNewsHistorical",
+        "displayname": "$translate(INIT_ACTION_RUNNING_LOGIC_APP_HISTORICAL)",
+        "name": "Microsoft-RunNewsHistorical"
       }
     ]
   }

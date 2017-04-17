@@ -331,7 +331,7 @@
                   ]
                 },
                 "type": "Foreach"
-			  },
+			  }
             },
 			"foreach": "@body('List_news_by_query')",
             "runAfter": {
@@ -416,4 +416,3 @@
     ],
     "outputs": {}
   }
-

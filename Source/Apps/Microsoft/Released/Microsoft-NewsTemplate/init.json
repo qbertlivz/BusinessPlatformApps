@@ -184,6 +184,33 @@
       //  "WebServiceName": "$run('EntitiesWebService' + this.MS.DataStore.getValue('uniqueId'))"
       //},
       {
+        "DeploymentName": "AMLWorkspace",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_WORKSPACE)",
+        "WorkspaceName": "BingNewsWorkspace",
+        "name": "Microsoft-DeployAzureMLWorkspace"
+      },
+      {
+        "DeploymentName": "AMLExperiments",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_EXPERIMENTS)",
+        "ExperimentJsonPath": "Service/AzureML/Experiments/TopicImagesExperiment.json",
+        "ExperimentName": "$run('TopicImagesExperiment' + this.MS.DataStore.getValue('uniqueId'))",
+        "name": "Microsoft-DeployAzureMLExperiment"
+      },
+      {
+        "DeploymentName": "AMLExperiments",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_EXPERIMENTS)",
+        "ExperimentJsonPath": "Service/AzureML/Experiments/EntityRecognitionExperiment.json",
+        "ExperimentName": "$run('EntityRecognitionExperiment' + this.MS.DataStore.getValue('uniqueId'))",
+        "name": "Microsoft-DeployAzureMLExperiment"
+      },
+      {
+        "DeploymentName": "AMLExperiments",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_EXPERIMENTS)",
+        "ExperimentJsonPath": "Service/AzureML/Experiments/TopicsExperiment.json",
+        "ExperimentName": "$run('TopicsExperiment' + this.MS.DataStore.getValue('uniqueId'))",
+        "name": "Microsoft-DeployAzureMLExperiment"
+      },
+      {
         "ConnectorDisplayName": "TextAnalytics",
         "ConnectorName": "cognitiveservicestextanalytics",
         "ConnectorPayload": {

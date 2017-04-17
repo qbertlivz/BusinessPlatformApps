@@ -52,7 +52,7 @@
                   "method": "get",
                   "path": "/trigger/news/search",
                   "queries": {
-                    "count": "20",
+                    "count": "100",
                     "mkt": "en-US",
                     "offset": "0",
                     "q": "[parameters('searchquery')]",

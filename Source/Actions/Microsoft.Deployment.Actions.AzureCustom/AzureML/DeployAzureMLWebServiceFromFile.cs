@@ -64,7 +64,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureML
 
             request.Logger.LogResource(request.DataStore, createdCommitmentPlan.Name,
                 DeployedResourceType.MlWebServicePlan, CreatedBy.BPST, DateTime.UtcNow.ToString("o"), createdCommitmentPlan.Id, commitmentPlan.Sku.Tier);
-            
+
             // Get webservicedefinition
             string sqlConnectionString = request.DataStore.GetValueAtIndex("SqlConnectionString", "SqlServerIndex");
             SqlCredentials sqlCredentials;

@@ -14,7 +14,7 @@ CREATE TABLE pbist_sccm.clienthealthclientinstalledversiondetails
      [client version] NVARCHAR(256) NULL,
      [creation date]  DATETIME NULL,
      [last ddr]       DATETIME NULL,
-     machineid		  INT NULL
+     machineid        INT NULL
 );
 
 CREATE TABLE pbist_sccm.clienthealthclientinstalledversiondetails_staging
@@ -25,7 +25,7 @@ CREATE TABLE pbist_sccm.clienthealthclientinstalledversiondetails_staging
      [client version] NVARCHAR(256) NULL,
      [creation date]  DATETIME NULL,
      [last ddr]       DATETIME NULL,
-     machineid		  INT NULL
+     machineid        INT NULL
 );
 
 CREATE TABLE pbist_sccm.clienthealthclientsinventorystatisticslast30days
@@ -167,7 +167,7 @@ CREATE TABLE pbist_sccm.clienthealthwuaversionallclients
      [operating system]  NVARCHAR(255) NULL,
      [service pack]      NVARCHAR(255) NULL,
      total               INT NULL,
-     machineid           INT NULL
+	 machineid           INT NULL
 );
 
 CREATE TABLE pbist_sccm.clienthealthwuaversionallclients_staging
@@ -177,7 +177,7 @@ CREATE TABLE pbist_sccm.clienthealthwuaversionallclients_staging
      [operating system]  NVARCHAR(255) NULL,
      [service pack]      NVARCHAR(255) NULL,
      total               INT NULL,
-     machineid           INT NULL
+	 machineid           INT NULL
 );
 
 CREATE TABLE pbist_sccm.collection
@@ -204,7 +204,7 @@ CREATE TABLE pbist_sccm.compliancesettingcompliancebycomputers
      maxnoncompliancecriticality INT NULL,
      lastcompliancemessagetime   DATETIME NULL,
      baseline_uniqueid           NVARCHAR(512) NULL,
-     machineid					 INT NULL
+	 machineid					 INT NULL
 );
 
 CREATE TABLE pbist_sccm.compliancesettingcompliancebycomputers_staging
@@ -219,7 +219,7 @@ CREATE TABLE pbist_sccm.compliancesettingcompliancebycomputers_staging
      maxnoncompliancecriticality INT NULL,
      lastcompliancemessagetime   DATETIME NULL,
      baseline_uniqueid           NVARCHAR(512) NULL,
-     machineid					 INT NULL
+	 machineid					 INT NULL
 );
 
 CREATE TABLE pbist_sccm.compliancesettingcomplianceciforallbaseline

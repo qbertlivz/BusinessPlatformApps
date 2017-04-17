@@ -53,28 +53,8 @@
             }
           },
           "actions": {
-            "Until": {
-              "actions": {
-                "TriggerHistory_2": {
-                  "inputs": {
-                    "body": {},
-                    "function": {
-                      "id": "[concat('/subscriptions/', parameters('subscription'), '/resourceGroups/',parameters('resourcegroup'),'/providers/Microsoft.Web/sites/', parameters('sitename'), '/Functions/TriggerHistory')]"
-                    }
-                  },
-                  "runAfter": {},
-                  "type": "Function"
-                }
-              },
-              "expression": "@equals(body('TriggerHistory_2'), 'true')",
-              "limit": {
-                "count": 60,
-                "timeout": "PT1H"
-              },
-              "runAfter": {},
-              "type": "Until"
-            },
             "For_each": {
+			     "actions": {
               "AbstractExtractor": {
                 "inputs": {
                   "body": {
@@ -351,8 +331,9 @@
                   ]
                 },
                 "type": "Foreach"
-              },
-            "foreach": "@body('List_news_by_query')",
+			  },
+            },
+			"foreach": "@body('List_news_by_query')",
             "runAfter": {
               "List_news_by_query": [
                 "Succeeded"
@@ -382,8 +363,29 @@
               ]
             },
             "type": "ApiConnection"
-          }
         },
+            "Until": {
+              "actions": {
+                "TriggerHistory_2": {
+                  "inputs": {
+                    "body": {},
+                    "function": {
+                      "id": "[concat('/subscriptions/', parameters('subscription'), '/resourceGroups/',parameters('resourcegroup'),'/providers/Microsoft.Web/sites/', parameters('sitename'), '/Functions/TriggerHistory')]"
+                    }
+                  },
+                  "runAfter": {},
+                  "type": "Function"
+                }
+              },
+              "expression": "@equals(body('TriggerHistory_2'), 'true')",
+              "limit": {
+                "count": 60,
+                "timeout": "PT1H"
+              },
+              "runAfter": {},
+              "type": "Until"
+			  }
+            },
         "outputs": {}
 		},
       "parameters": {
@@ -414,3 +416,4 @@
     ],
     "outputs": {}
   }
+

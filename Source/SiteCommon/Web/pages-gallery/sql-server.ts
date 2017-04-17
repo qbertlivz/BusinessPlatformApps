@@ -117,7 +117,6 @@ export class SqlServer extends ViewModelBase {
         let response: ActionResponse = null;
 
         if (this.sqlInstance === 'ExistingSql') {
-            this.MS.HttpService.executeAsync('Microsoft-ExistingSqlServer', body);
             response = await this.MS.HttpService.executeAsync('Microsoft-GetSqlConnectionString', body);
             this.MS.DataStore.addToDataStore('Database', this.database, DataStoreType.Public);
         } else if (this.sqlInstance === 'NewSql') {
@@ -133,6 +132,10 @@ export class SqlServer extends ViewModelBase {
         this.MS.DataStore.addToDataStore('Server', this.getSqlServer(), DataStoreType.Public);
         this.MS.DataStore.addToDataStore('Username', this.username, DataStoreType.Public);
         this.MS.DataStore.addToDataStore('Password', this.password, DataStoreType.Private);
+
+        if (this.sqlInstance === 'ExistingSql') {
+            await this.MS.HttpService.executeAsync('Microsoft-ExistingSqlServer', { isInvisible: true });
+        }
 
         if (this.checkSqlVersion) {
             let responseVersion = await this.MS.HttpService.executeAsync('Microsoft-CheckSQLVersion', body);

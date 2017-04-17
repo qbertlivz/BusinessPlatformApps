@@ -63,5 +63,28 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
             response = TestManager.ExecuteAction("Microsoft-WaitForArmDeploymentStatus", dataStore);
             Assert.IsTrue(response.IsSuccess);
         }
+
+        [TestMethod]
+        public async Task HistoricalLogicAppTest()
+        {
+            var dataStore = await TestManager.GetDataStore();
+
+            //// Deploy Function
+            dataStore.AddToDataStore("DeploymentName", "HistoricalAppTest");
+            dataStore.AddToDataStore("LogicAppNameHistorical", "LogicAppNameHistorical");
+            dataStore.AddToDataStore("SearchQuery", "Microsoft OR Azure");
+            dataStore.AddToDataStore("FunctionName", "function1737e9shqv");
+
+            var response = TestManager.ExecuteAction("Microsoft-DeployNewsTemplateHistorical", dataStore);
+            Assert.IsTrue(response.IsSuccess);
+            response = TestManager.ExecuteAction("Microsoft-WaitForArmDeploymentStatus", dataStore);
+            Assert.IsTrue(response.IsSuccess);
+
+            response = TestManager.ExecuteAction("Microsoft-RunNewsHistorical", dataStore);
+            Assert.IsTrue(response.IsSuccess);
+            response = TestManager.ExecuteAction("Microsoft-WaitForArmDeploymentStatus", dataStore);
+            Assert.IsTrue(response.IsSuccess);
+        }
+
     }
 }

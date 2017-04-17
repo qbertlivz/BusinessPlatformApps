@@ -351,8 +351,7 @@
                   ]
                 },
                 "type": "Foreach"
-              }
-            },
+              },
             "foreach": "@body('List_news_by_query')",
             "runAfter": {
               "List_news_by_query": [
@@ -360,7 +359,7 @@
               ]
             },
             "type": "Foreach"
-          },
+		  },
           "List_news_by_query": {
             "inputs": {
               "host": {
@@ -386,7 +385,7 @@
           }
         },
         "outputs": {}
-      },
+		},
       "parameters": {
         "$connections": {
           "value": {
@@ -407,7 +406,11 @@
             }
           }
         }
+        }
+		},
+        "resources": [],
+        "dependsOn": []
       }
-    }
-  ],
-  "outputs": {} }
+    ],
+    "outputs": {}
+  }

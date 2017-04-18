@@ -968,3 +968,15 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE [pbist_sccm].[sp_populate_SCEPDefinition] AS
+BEGIN
+	SET NOCOUNT ON;
+
+	BEGIN TRANSACTION;
+	TRUNCATE TABLE pbist_sccm.SCEPDefinition;
+	INSERT INTO pbist_sccm.SCEPDefinition SELECT * FROM pbist_sccm.SCEPDefinition_staging;
+	TRUNCATE TABLE pbist_sccm.SCEPDefinition_staging;
+	COMMIT;
+END;
+go
+

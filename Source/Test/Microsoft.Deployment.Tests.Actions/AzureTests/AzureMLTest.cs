@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Deployment.Tests.Actions.TestHelpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Deployment.Common.ActionModel;
 
 namespace Microsoft.Deployment.Tests.Actions.AzureTests
 {
@@ -29,6 +30,38 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
             var response = TestManager.ExecuteAction("Microsoft-DeployAzureMLWebServiceFromFile", dataStore);
             Assert.IsTrue(response.IsSuccess);
             response = TestManager.ExecuteAction("Microsoft-WaitForArmDeploymentStatus", dataStore);
+            Assert.IsTrue(response.IsSuccess);
+        }
+
+
+        [TestMethod]
+        public async Task DeployAmlExperiment()
+        {
+            var dataStore = await TestManager.GetDataStore();
+            ActionResponse response = null;
+            //// Deploy AML WebService
+            dataStore.AddToDataStore("DeploymentName", "test1");
+            dataStore.AddToDataStore("StorageAccountName", "testmostorage123456789");
+            dataStore.AddToDataStore("ExperimentName", "test1");
+            dataStore.AddToDataStore("ExperimentJsonPath", "Service/AzureML/Experiments/TopicImagesExperiment.json");
+            dataStore.AddToDataStore("WorkspaceName", "bingnewsworkspace01");
+
+            response = TestManager.ExecuteAction("Microsoft-DeployAzureMLWorkspace", dataStore);
+            Assert.IsTrue(response.IsSuccess);
+
+            response = await TestManager.ExecuteActionAsync("Microsoft-DeployAzureMLExperiment", dataStore, "Microsoft-NewsTemplate");
+            Assert.IsTrue(response.IsSuccess);
+
+            dataStore.AddToDataStore("ExperimentName", "test2");
+            dataStore.AddToDataStore("ExperimentJsonPath", "Service/AzureML/Experiments/EntityRecognitionExperiment.json");
+
+            response = await TestManager.ExecuteActionAsync("Microsoft-DeployAzureMLExperiment", dataStore, "Microsoft-NewsTemplate");
+            Assert.IsTrue(response.IsSuccess);
+
+            dataStore.AddToDataStore("ExperimentName", "test3");
+            dataStore.AddToDataStore("ExperimentJsonPath", "Service/AzureML/Experiments/TopicsExperiment.json");
+
+            response = await TestManager.ExecuteActionAsync("Microsoft-DeployAzureMLExperiment", dataStore, "Microsoft-NewsTemplate");
             Assert.IsTrue(response.IsSuccess);
         }
 

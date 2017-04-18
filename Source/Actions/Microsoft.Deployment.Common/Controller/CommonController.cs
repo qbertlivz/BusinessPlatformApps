@@ -71,6 +71,11 @@ namespace Microsoft.Deployment.Common.Controller
                 ActionResponse responseToReturn = await RunActionAsync(request, logger, action, loopCount);
                 responseToReturn.DataStore = request.DataStore;
 
+                if(!responseToReturn.IsSuccess)
+                {
+                    // temporary code
+                }
+
                 logger.LogEvent("End-" + info.ActionName, null, request, responseToReturn);
                 logger.LogRequest(action.OperationUniqueName, DateTime.Now - start,
                     responseToReturn.Status.IsSucessfullStatus(), request, responseToReturn);

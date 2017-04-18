@@ -30,6 +30,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
 
             dynamic payload = new ExpandoObject();
             payload.properties = new ExpandoObject();
+            payload.properties.parameterValues = new ExpandoObject();
+            payload.properties.parameterValues.sku = "Enterprise";
             payload.properties.displayName = "twitter";
             payload.properties.api = new ExpandoObject();
             payload.properties.api.id = $"subscriptions/{subscription}/providers/Microsoft.Web/locations/{location}/managedApis/twitter";

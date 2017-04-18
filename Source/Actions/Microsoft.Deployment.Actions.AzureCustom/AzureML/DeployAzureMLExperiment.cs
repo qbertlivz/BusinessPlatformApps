@@ -41,7 +41,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureML
                 WorkspaceId = workspace.Id
             };
 
-            var experiment = azuremlClient.GetExperiments(workspaceSettings).LastOrDefault(p => p.Description.ToLowerInvariant() == experimentName.ToLowerInvariant());
+            var experiments = azuremlClient.GetExperiments(workspaceSettings);
+            var experiment = experiments.LastOrDefault(p => p.Description.ToLowerInvariant() == experimentName.ToLowerInvariant());
 
             if (experiment != null)
             {

@@ -65,5 +65,20 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
             Assert.IsTrue(response.IsSuccess);
         }
 
+        [TestMethod]
+        public async Task DeployAmlWebService()
+        {
+            var dataStore = await TestManager.GetDataStore();
+            ActionResponse response = null;
+            //// Deploy AML WebService
+            dataStore.AddToDataStore("CommitmentPlan", "test1");
+            dataStore.AddToDataStore("WebServiceFile", "Service/AzureML/Experiments/TopicsWebService.json");
+            dataStore.AddToDataStore("WebServiceName", "test1");
+            dataStore.AddToDataStore("storageAccountName", "storagezfx06s8x23");
+            dataStore.AddToDataStore("storageAccountKey", "Q8oXtEVYO4kBT7rTokNFNe3fi9ufo/9C6gxmoHNxNRNGPTSpn/AOY1TFK7vtfAtRKyAqaSWYNqCIop4ry7sS6g==");
+            response = await TestManager.ExecuteActionAsync("Microsoft-DeployAzureMLWebServiceFromFile", dataStore, "Microsoft-NewsTemplate");
+            Assert.IsTrue(response.IsSuccess);
+        }
+
     }
 }

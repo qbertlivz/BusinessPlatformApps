@@ -36,6 +36,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
 
             dynamic payload = new ExpandoObject();
             payload.properties = new ExpandoObject();
+            payload.properties.parameterValues = new ExpandoObject();
+            payload.properties.parameterValues.sku = "Enterprise";
             payload.properties.displayName = connectorName;
             payload.properties.api = new ExpandoObject();
             payload.properties.api.id = $"subscriptions/{subscription}/providers/Microsoft.Web/locations/{location}/managedApis/{connectorName}";

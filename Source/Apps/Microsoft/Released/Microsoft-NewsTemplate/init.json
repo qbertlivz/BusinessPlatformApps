@@ -160,62 +160,62 @@
         "name": "Microsoft-DeployStorageAccountContainer",
         "StorageAccountContainer": "newsimages"
       },
-      //{
-      //  "CommitmentPlan": "commitmentplan",
-      //  "DeploymentName": "AzureML",
-      //  "displayname": "$translate(INIT_ACTION_DEPLOYING_AZURE_ML)",
-      //  "name": "Microsoft-DeployAzureMLWebServiceFromFile",
-      //  "WebServiceFile": "Service/AzureML/Experiments/TopicsWebService.json",
-      //  "WebServiceName": "$run('TopicsWebService' + this.MS.DataStore.getValue('uniqueId'))"
-      //},
-      //{
-      //  "CommitmentPlan": "commitmentplan",
-      //  "DeploymentName": "AzureML",
-      //  "displayname": "$translate(INIT_ACTION_DEPLOYING_AZURE_ML)",
-      //  "name": "Microsoft-DeployAzureMLWebServiceFromFile",
-      //  "WebServiceFile": "Service/AzureML/Experiments/TopicImagesWebService.json",
-      //  "WebServiceName": "$run('TopicsImagesWebService' + this.MS.DataStore.getValue('uniqueId'))"
-      //},
-      //{
-      //  "CommitmentPlan": "commitmentplan",
-      //  "DeploymentName": "AzureML",
-      //  "displayname": "$translate(INIT_ACTION_DEPLOYING_AZURE_ML)",
-      //  "name": "Microsoft-DeployAzureMLWebServiceFromFile",
-      //  "WebServiceFile": "Service/AzureML/Experiments/EntityWebService.json",
-      //  "WebServiceName": "$run('EntitiesWebService' + this.MS.DataStore.getValue('uniqueId'))"
-      //},
-      //{
-      //  "DeploymentName": "AMLWorkspace",
-      //  "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_WORKSPACE)",
-      //  "WorkspaceName": "$run('bingnewsworkspace' + this.MS.DataStore.getValue('uniqueId'))",
-      //  "name": "Microsoft-DeployAzureMLWorkspace",
-      //  "StorageAccountName": "$run('saml' + this.MS.DataStore.getValue('uniqueId'))"
+      {
+        "CommitmentPlan": "commitmentplan",
+        "DeploymentName": "AzureML",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_AZURE_ML)",
+        "name": "Microsoft-DeployAzureMLWebServiceFromFile",
+        "WebServiceFile": "Service/AzureML/Experiments/TopicsWebService.json",
+        "WebServiceName": "$run('TopicsWebService' + this.MS.DataStore.getValue('uniqueId'))"
+      },
+      {
+        "CommitmentPlan": "commitmentplan",
+        "DeploymentName": "AzureML",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_AZURE_ML)",
+        "name": "Microsoft-DeployAzureMLWebServiceFromFile",
+        "WebServiceFile": "Service/AzureML/Experiments/TopicImagesWebService.json",
+        "WebServiceName": "$run('TopicsImagesWebService' + this.MS.DataStore.getValue('uniqueId'))"
+      },
+      {
+        "CommitmentPlan": "commitmentplan",
+        "DeploymentName": "AzureML",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_AZURE_ML)",
+        "name": "Microsoft-DeployAzureMLWebServiceFromFile",
+        "WebServiceFile": "Service/AzureML/Experiments/EntityWebService.json",
+        "WebServiceName": "$run('EntitiesWebService' + this.MS.DataStore.getValue('uniqueId'))"
+      },
+      {
+        "DeploymentName": "AMLWorkspace",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_WORKSPACE)",
+        "WorkspaceName": "$run('bingnewsworkspace' + this.MS.DataStore.getValue('uniqueId'))",
+        "name": "Microsoft-DeployAzureMLWorkspace",
+        "StorageAccountName": "$run('saml' + this.MS.DataStore.getValue('uniqueId'))"
 
-      //},
-      //{
-      //  "DeploymentName": "AMLExperiments",
-      //  "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_EXPERIMENTS)",
-      //  "ExperimentJsonPath": "Service/AzureML/Experiments/TopicImagesExperiment.json",
-      //  "ExperimentName": "$run('TopicImagesExperiment' + this.MS.DataStore.getValue('uniqueId'))",
-      //  "name": "Microsoft-DeployAzureMLExperiment",
-      //  "WorkspaceName": "$run('bingnewsworkspace' + this.MS.DataStore.getValue('uniqueId'))"
-      //},
-      //{
-      //  "DeploymentName": "AMLExperiments",
-      //  "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_EXPERIMENTS)",
-      //  "ExperimentJsonPath": "Service/AzureML/Experiments/EntityRecognitionExperiment.json",
-      //  "ExperimentName": "$run('EntityRecognitionExperiment' + this.MS.DataStore.getValue('uniqueId'))",
-      //  "name": "Microsoft-DeployAzureMLExperiment",
-      //  "WorkspaceName": "$run('bingnewsworkspace' + this.MS.DataStore.getValue('uniqueId'))"
-      //},
-      //{
-      //  "DeploymentName": "AMLExperiments",
-      //  "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_EXPERIMENTS)",
-      //  "ExperimentJsonPath": "Service/AzureML/Experiments/TopicsExperiment.json",
-      //  "ExperimentName": "$run('TopicsExperiment' + this.MS.DataStore.getValue('uniqueId'))",
-      //  "name": "Microsoft-DeployAzureMLExperiment",
-      //  "WorkspaceName": "$run('bingnewsworkspace' + this.MS.DataStore.getValue('uniqueId'))"
-      //},
+      },
+      {
+        "DeploymentName": "AMLExperiments",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_EXPERIMENTS)",
+        "ExperimentJsonPath": "Service/AzureML/Experiments/TopicImagesExperiment.json",
+        "ExperimentName": "$run('TopicImagesExperiment' + this.MS.DataStore.getValue('uniqueId'))",
+        "name": "Microsoft-DeployAzureMLExperiment",
+        "WorkspaceName": "$run('bingnewsworkspace' + this.MS.DataStore.getValue('uniqueId'))"
+      },
+      {
+        "DeploymentName": "AMLExperiments",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_EXPERIMENTS)",
+        "ExperimentJsonPath": "Service/AzureML/Experiments/EntityRecognitionExperiment.json",
+        "ExperimentName": "$run('EntityRecognitionExperiment' + this.MS.DataStore.getValue('uniqueId'))",
+        "name": "Microsoft-DeployAzureMLExperiment",
+        "WorkspaceName": "$run('bingnewsworkspace' + this.MS.DataStore.getValue('uniqueId'))"
+      },
+      {
+        "DeploymentName": "AMLExperiments",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_EXPERIMENTS)",
+        "ExperimentJsonPath": "Service/AzureML/Experiments/TopicsExperiment.json",
+        "ExperimentName": "$run('TopicsExperiment' + this.MS.DataStore.getValue('uniqueId'))",
+        "name": "Microsoft-DeployAzureMLExperiment",
+        "WorkspaceName": "$run('bingnewsworkspace' + this.MS.DataStore.getValue('uniqueId'))"
+      },
       {
         "ConnectorDisplayName": "TextAnalytics",
         "ConnectorName": "cognitiveservicestextanalytics",
@@ -250,25 +250,25 @@
         "displayname": "$translate(INIT_ACTION_UPDATING_COGNITIVE_SERVICE_CONNECTOR)",
         "name": "Microsoft-UpdateBlobStorageConnector"
       },
-      //{
-      //  "ConnectorDisplayName": "azureml",
-      //  "ConnectorName": "azureml",
-      //  "ConnectorPayload": {},
-      //  "DeploymentName": "azureml",
-      //  "displayname": "$translate(INIT_ACTION_UPDATING_COGNITIVE_SERVICE_CONNECTOR)",
-      //  "name": "Microsoft-UpdateBlobStorageConnector"
-      //},
-      //{
-      //  "DeploymentName": "LogicAppScheduler",
-      //  "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_SCHEDULER)",
-      //  "LogicAppName": "LogicAppScheduler",
-      //  "name": "Microsoft-DeployAzureMLSchedulerLogicApp"
-      //},
-      //{
-      //  "DeploymentName": "LogicAppScheduler",
-      //  "displayname": "$translate(INIT_ACTION_VALIDATING_LOGIC_APP)",
-      //  "name": "Microsoft-WaitForArmDeploymentStatus"
-      //},
+      {
+        "ConnectorDisplayName": "azureml",
+        "ConnectorName": "azureml",
+        "ConnectorPayload": {},
+        "DeploymentName": "azureml",
+        "displayname": "$translate(INIT_ACTION_UPDATING_COGNITIVE_SERVICE_CONNECTOR)",
+        "name": "Microsoft-UpdateBlobStorageConnector"
+      },
+      {
+        "DeploymentName": "LogicAppScheduler",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_SCHEDULER)",
+        "LogicAppName": "LogicAppScheduler",
+        "name": "Microsoft-DeployAzureMLSchedulerLogicApp"
+      },
+      {
+        "DeploymentName": "LogicAppScheduler",
+        "displayname": "$translate(INIT_ACTION_VALIDATING_LOGIC_APP)",
+        "name": "Microsoft-WaitForArmDeploymentStatus"
+      },
       {
         "DeploymentName": "LogicAppNewsTemplate",
         "displayname": "$translate(INIT_ACTION_DEPLOYING_NEWS_LOGIC_APP)",

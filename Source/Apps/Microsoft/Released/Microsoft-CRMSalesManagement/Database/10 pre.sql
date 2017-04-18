@@ -107,6 +107,49 @@ IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='dbo' 
     DROP PROCEDURE dbo.UpsertTargetMetadata;
 
 
+IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='StateMetadataList')
+    DROP TYPE dbo.StateMetadataList;
+IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='StatusMetadataList')
+    DROP TYPE dbo.StatusMetadataList;
+IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='OptionSetMetadataList')
+    DROP TYPE dbo.OptionSetMetadataList;
+IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='TargetMetadataList')
+    DROP TYPE dbo.TargetMetadataList;
+IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='AttributeMetadataList')
+    DROP TYPE dbo.AttributeMetadataList;
+IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='systemusermanagermapType')
+    DROP TYPE dbo.systemusermanagermapType;
+IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='systemusermanagermapIdType')
+    DROP TYPE dbo.systemusermanagermapIdType;
+IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='territoryType')
+    DROP TYPE dbo.territoryType;
+IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='territoryIdType')
+    DROP TYPE dbo.territoryIdType;
+IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='productType')
+    DROP TYPE dbo.productType;
+IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='productIdType')
+    DROP TYPE dbo.productIdType;
+IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='opportunityproductType')
+    DROP TYPE dbo.opportunityproductType;
+IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='opportunityproductIdType')
+    DROP TYPE dbo.opportunityproductIdType;
+IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='systemuserType')
+    DROP TYPE dbo.systemuserType;
+IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='systemuserIdType')
+    DROP TYPE dbo.systemuserIdType;
+IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='opportunityType')
+    DROP TYPE dbo.opportunityType;
+IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='opportunityIdType')
+    DROP TYPE dbo.opportunityIdType;
+IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='leadType')
+    DROP TYPE dbo.leadType;
+IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='leadIdType')
+    DROP TYPE dbo.leadIdType;
+IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='accountType')
+    DROP TYPE dbo.accountType;
+IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='accountIdType')
+    DROP TYPE dbo.accountIdType;
+
 IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name='smgt')
 BEGIN
     EXEC ('CREATE SCHEMA smgt AUTHORIZATION dbo'); -- Avoid batch error

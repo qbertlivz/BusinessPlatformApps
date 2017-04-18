@@ -29,7 +29,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.CognitiveServices
 
             // Register if not registered
             var registrationResponse = await RegisterProviderBeta.RegisterAzureProvider("Microsoft.CognitiveServices", azureToken, subscription);
-            if(!registrationResponse.IsSuccess)
+            if (!registrationResponse.IsSuccess)
             {
                 return registrationResponse;
             }
@@ -76,10 +76,16 @@ namespace Microsoft.Deployment.Actions.AzureCustom.CognitiveServices
 
             var getOwnerBody = JsonUtility.GetJsonObjectFromJsonString(await getOwnerResponse.Content.ReadAsStringAsync());
 
+            if (getOwnerBody["error"]?["code"]?.ToString().ToLowerInvariant() == "authorizationfailed")
+            {
+                return new ActionResponse(ActionStatus.Failure, getOwnerBody, null, null, "Your account admin needs to enable cognitive services for this subscription. Ensure the account admin has at least contributor privileges to the Azure subscription." +
+                                                                                          $"The following cognitive service should be enabled in order to proceed - {permissionsToCheck}.");
+            }
+
             if (getOwnerBody["isAccountOwner"].ToString().ToLowerInvariant() == "false")
             {
                 return new ActionResponse(ActionStatus.Failure, getOwnerBody, null, null, $"Your account admin ({getOwnerBody["accountOwnerEmail"].ToString()}) needs to enable cognitive services for this subscription. Ensure the account admin has at least contributor privileges to the Azure subscription. " +
-                                                                                          $"The following cognitive service should be enabled in order to proceed- {permissionsToCheck}");
+                                                                                          $"The following cognitive service should be enabled in order to proceed - {permissionsToCheck}.");
             }
 
             // User does not have permission but we can enable permission for the user as they are the admin

@@ -358,7 +358,7 @@
                 }
               },
               "runAfter": {
-                "Until": [
+                "Until_2": [
                   "Succeeded"
                 ]
               },
@@ -384,6 +384,31 @@
               },
               "runAfter": {},
               "type": "Until"
+            },
+			            "Until_2": {
+                "actions": {
+                    "TriggerHistorySentiment": {
+                        "inputs": {
+                            "body": {},
+                            "function": {
+                      "id": "[concat('/subscriptions/', parameters('subscription'), '/resourceGroups/',parameters('resourcegroup'),'/providers/Microsoft.Web/sites/', parameters('sitename'), '/Functions/TriggerHistorySentiment')]"
+                            }
+                        },
+                        "runAfter": {},
+                        "type": "Function"
+                    }
+                },
+                "expression": "@equals(body('TriggerHistorySentiment'), 'true')",
+                "limit": {
+                    "count": 60,
+                    "timeout": "PT1H"
+                },
+                "runAfter": {
+                    "Until": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Until"
             }
           },
           "outputs": {}

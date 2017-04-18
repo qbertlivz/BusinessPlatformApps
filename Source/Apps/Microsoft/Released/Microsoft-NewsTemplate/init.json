@@ -128,7 +128,8 @@
       {
         "displayname": "$translate(INIT_ACTION_DEPLOYING_NEWS_ASSETS)",
         "name": "Microsoft-DeployNewsFunctionAsset",
-        "apiKey": "$dsall(CognitiveServiceKey)[1]"
+        "apiKey": "$dsall(CognitiveServiceKey)[1]",
+        "subscriptionKey": "$dsall(CognitiveServiceKey)[0]"
       },
       {
         "displayname": "$translate(INIT_ACTION_DEPLOYING_STORAGE_ACCOUNT)",
@@ -183,38 +184,38 @@
       //  "WebServiceFile": "Service/AzureML/Experiments/EntityWebService.json",
       //  "WebServiceName": "$run('EntitiesWebService' + this.MS.DataStore.getValue('uniqueId'))"
       //},
-      {
-        "DeploymentName": "AMLWorkspace",
-        "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_WORKSPACE)",
-        "WorkspaceName": "$run('bingnewsworkspace' + this.MS.DataStore.getValue('uniqueId'))",
-        "name": "Microsoft-DeployAzureMLWorkspace",
-        "StorageAccountName": "$run('saml' + this.MS.DataStore.getValue('uniqueId'))"
+      //{
+      //  "DeploymentName": "AMLWorkspace",
+      //  "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_WORKSPACE)",
+      //  "WorkspaceName": "$run('bingnewsworkspace' + this.MS.DataStore.getValue('uniqueId'))",
+      //  "name": "Microsoft-DeployAzureMLWorkspace",
+      //  "StorageAccountName": "$run('saml' + this.MS.DataStore.getValue('uniqueId'))"
 
-      },
-      {
-        "DeploymentName": "AMLExperiments",
-        "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_EXPERIMENTS)",
-        "ExperimentJsonPath": "Service/AzureML/Experiments/TopicImagesExperiment.json",
-        "ExperimentName": "$run('TopicImagesExperiment' + this.MS.DataStore.getValue('uniqueId'))",
-        "name": "Microsoft-DeployAzureMLExperiment",
-        "WorkspaceName": "$run('bingnewsworkspace' + this.MS.DataStore.getValue('uniqueId'))"
-      },
-      {
-        "DeploymentName": "AMLExperiments",
-        "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_EXPERIMENTS)",
-        "ExperimentJsonPath": "Service/AzureML/Experiments/EntityRecognitionExperiment.json",
-        "ExperimentName": "$run('EntityRecognitionExperiment' + this.MS.DataStore.getValue('uniqueId'))",
-        "name": "Microsoft-DeployAzureMLExperiment",
-        "WorkspaceName": "$run('bingnewsworkspace' + this.MS.DataStore.getValue('uniqueId'))"
-      },
-      {
-        "DeploymentName": "AMLExperiments",
-        "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_EXPERIMENTS)",
-        "ExperimentJsonPath": "Service/AzureML/Experiments/TopicsExperiment.json",
-        "ExperimentName": "$run('TopicsExperiment' + this.MS.DataStore.getValue('uniqueId'))",
-        "name": "Microsoft-DeployAzureMLExperiment",
-        "WorkspaceName": "$run('bingnewsworkspace' + this.MS.DataStore.getValue('uniqueId'))"
-      },
+      //},
+      //{
+      //  "DeploymentName": "AMLExperiments",
+      //  "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_EXPERIMENTS)",
+      //  "ExperimentJsonPath": "Service/AzureML/Experiments/TopicImagesExperiment.json",
+      //  "ExperimentName": "$run('TopicImagesExperiment' + this.MS.DataStore.getValue('uniqueId'))",
+      //  "name": "Microsoft-DeployAzureMLExperiment",
+      //  "WorkspaceName": "$run('bingnewsworkspace' + this.MS.DataStore.getValue('uniqueId'))"
+      //},
+      //{
+      //  "DeploymentName": "AMLExperiments",
+      //  "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_EXPERIMENTS)",
+      //  "ExperimentJsonPath": "Service/AzureML/Experiments/EntityRecognitionExperiment.json",
+      //  "ExperimentName": "$run('EntityRecognitionExperiment' + this.MS.DataStore.getValue('uniqueId'))",
+      //  "name": "Microsoft-DeployAzureMLExperiment",
+      //  "WorkspaceName": "$run('bingnewsworkspace' + this.MS.DataStore.getValue('uniqueId'))"
+      //},
+      //{
+      //  "DeploymentName": "AMLExperiments",
+      //  "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_EXPERIMENTS)",
+      //  "ExperimentJsonPath": "Service/AzureML/Experiments/TopicsExperiment.json",
+      //  "ExperimentName": "$run('TopicsExperiment' + this.MS.DataStore.getValue('uniqueId'))",
+      //  "name": "Microsoft-DeployAzureMLExperiment",
+      //  "WorkspaceName": "$run('bingnewsworkspace' + this.MS.DataStore.getValue('uniqueId'))"
+      //},
       {
         "ConnectorDisplayName": "TextAnalytics",
         "ConnectorName": "cognitiveservicestextanalytics",
@@ -288,8 +289,14 @@
       },
       {
         "DeploymentName": "LogicAppNewsHistorical",
+        "displayname": "$translate(INIT_ACTION_VALIDATING_LOGIC_APP)",
+        "name": "Microsoft-WaitForArmDeploymentStatus"
+      },
+      {
+        "DeploymentName": "LogicAppNewsHistorical",
         "displayname": "$translate(INIT_ACTION_RUNNING_LOGIC_APP_HISTORICAL)",
-        "name": "Microsoft-RunNewsHistorical"
+        "name": "Microsoft-RunNewsHistorical",
+        "LogicAppNameHistorical": "LogicAppHistoricalNews"
       }
     ]
   }

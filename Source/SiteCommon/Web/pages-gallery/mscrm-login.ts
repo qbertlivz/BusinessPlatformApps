@@ -14,6 +14,7 @@ export class MsCrmLogin extends AzureLogin {
     d365Password: string = '';
     d365Username: string = '';
     entities: string = '';
+    isScribe: boolean = false;
     msCrmOrganizationId: string = '';
     msCrmOrganizations: MsCrmOrganization[] = [];
     showAzureTrial: boolean = false;
@@ -28,7 +29,7 @@ export class MsCrmLogin extends AzureLogin {
         this.showAzureTrial = false;
         this.showValidation = false;
 
-        if (!this.MS.HttpService.isOnPremise) {
+        if (!this.isScribe) {
             if (this.subscriptionsList.length > 0 && this.msCrmOrganizations.length > 0) {
                 this.isValidated = true;
                 this.showValidation = true;
@@ -111,7 +112,9 @@ export class MsCrmLogin extends AzureLogin {
     }
 
     public async NavigatingNext(): Promise<boolean> {
-        if (this.MS.HttpService.isOnPremise) {
+        this.MS.DataStore.addToDataStore('Entities', this.entities, DataStoreType.Public);
+
+        if (this.isScribe) {
             let d365Organization: D365Organization = this.d365Organizations.find(x => x.Id === this.d365OrganizationId);
             this.MS.DataStore.addToDataStore('ConnectorUrl', d365Organization.ConnectorUrl, DataStoreType.Private);
             this.MS.DataStore.addToDataStore('OrganizationName', d365Organization.Name, DataStoreType.Private);
@@ -120,7 +123,6 @@ export class MsCrmLogin extends AzureLogin {
             let msCrmOrganization: MsCrmOrganization = this.msCrmOrganizations.find(o => o.OrganizationId === this.msCrmOrganizationId);
 
             if (msCrmOrganization) {
-                this.MS.DataStore.addToDataStore('Entities', this.entities, DataStoreType.Public);
                 this.MS.DataStore.addToDataStore('OrganizationId', msCrmOrganization.OrganizationId, DataStoreType.Public);
                 this.MS.DataStore.addToDataStore('OrganizationName', msCrmOrganization.OrganizationName, DataStoreType.Public);
                 this.MS.DataStore.addToDataStore('OrganizationUrl', msCrmOrganization.OrganizationUrl, DataStoreType.Public);

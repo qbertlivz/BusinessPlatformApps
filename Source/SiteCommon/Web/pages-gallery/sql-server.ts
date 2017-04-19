@@ -30,6 +30,7 @@ export class SqlServer extends ViewModelBase {
     showAzureSql: boolean = true;
     showGovAzure: boolean = false;
 
+    showCredsWhenWindowsAuth: boolean = false;
     showDatabases: boolean = false;
     showNewSqlOption: boolean = false;
     showSkuS1: boolean = true;

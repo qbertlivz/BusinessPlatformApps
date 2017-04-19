@@ -29,7 +29,7 @@ export class Customize extends ViewModelBase {
             this.isValidated = true;
         }
 
-        if (this.sourceApplication === 'Salesforce' && this.emails != '') {
+        if (this.sourceApplication === 'Salesforce' && this.showEmails && this.emails != '') {
             this.isValidated = false;
             this.showValidation = false;
         }

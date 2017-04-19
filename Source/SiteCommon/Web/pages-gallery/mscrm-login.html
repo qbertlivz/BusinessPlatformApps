@@ -1,10 +1,10 @@
 ﻿<template>
     <require from="../templates/bpst-link.html"></require>
 
-    <h1 class="st-title">${MS.HttpService.isOnPremise ? MS.Translate.D365_LOGIN_TITLE : MS.Translate.MSCRM_LOGIN_TITLE}</h1>
-    <p class="st-subtitle">${MS.HttpService.isOnPremise ? MS.Translate.D365_LOGIN_SUBTITLE : MS.Translate.MSCRM_LOGIN_SUBTITLE}</p>
+    <h1 class="st-title">${isScribe ? MS.Translate.D365_LOGIN_TITLE : MS.Translate.MSCRM_LOGIN_TITLE}</h1>
+    <p class="st-subtitle">${isScribe ? MS.Translate.D365_LOGIN_SUBTITLE : MS.Translate.MSCRM_LOGIN_SUBTITLE}</p>
 
-    <div if.bind="MS.HttpService.isOnPremise">
+    <div if.bind="isScribe">
         <div class="st-float">
             <p class="st-text">${MS.Translate.D365_LOGIN_USERNAME}</p>
             <input class="st-input" type="text" change.delegate="Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="d365Username" />
@@ -23,7 +23,7 @@
         </div>
     </div>
 
-    <div if.bind="!MS.HttpService.isOnPremise">
+    <div if.bind="!isScribe">
         <div class="st-float" if.bind="!msCrmOrganizations || msCrmOrganizations.length == 0 || !subscriptionsList || subscriptionsList.length == 0">
             <p class="st-text" if.bind="showAzureTrial">
                 <bpst-link a-description="${MS.Translate.AZURE_LOGIN_GET_STARTED}" a-link="${MS.Translate.AZURE_LOGIN_LINK}" a-link-text="${MS.Translate.AZURE_LOGIN_LINK_DESCRIPTION}"></bpst-link>

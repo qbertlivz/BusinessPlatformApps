@@ -57,6 +57,7 @@
       {
         "displayname": "Dynamics 365 Login",
         "entities": "account,lead,opportunity,opportunityproduct,product,systemuser,systemusermanagermap,territory",
+        "isScribe": "$run(this.MS.DataStore.getValue('DataMovement') === 'Scribe')",
         "name": "$SiteCommon$/pages-gallery/mscrm-login.html",
         "oauthType": "mscrm",
         "pricingCalculatorUrl": "$translate(INIT_D365_CALCULATOR)",

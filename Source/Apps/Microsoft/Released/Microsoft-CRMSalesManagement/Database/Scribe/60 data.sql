@@ -69,9 +69,6 @@ Begin
 END
 go
 
--- In case fiscal calendar matches
-UPDATE smgt.[date] SET fiscal_year=[year], fiscal_quarter=[quarter], fiscal_month=[month];
-go
 
 /************************************
 * Configuration values              *

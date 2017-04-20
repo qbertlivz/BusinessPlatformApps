@@ -27,10 +27,7 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
             "https://disco.crm6.dynamics.com",
             "https://disco.crm7.dynamics.com",
             "https://disco.crm8.dynamics.com",
-            "https://disco.crm9.dynamics.com",
-            "https://dev.crm.dynamics.com",
-            "https://dev.crm4.dynamics.com",
-            "https://dev.crm5.dynamics.com"
+            "https://disco.crm9.dynamics.com"
         };
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)

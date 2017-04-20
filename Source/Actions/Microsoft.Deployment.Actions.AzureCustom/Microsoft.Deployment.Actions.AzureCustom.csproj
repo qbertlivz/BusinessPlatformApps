@@ -220,6 +220,7 @@
     <Compile Include="Common\GetLocations.cs" />
     <Compile Include="AzureAS\DeployAzureAnalysisServices.cs" />
     <Compile Include="Common\GetStorageAccountKey.cs" />
+    <Compile Include="CreateSqlConnector.cs" />
     <Compile Include="FTPUtilityTest.cs" />
     <Compile Include="LogicApp\LogicAppConnector.cs" />
     <Compile Include="News\DeployAzureMLSchedulerLogicApp.cs" />

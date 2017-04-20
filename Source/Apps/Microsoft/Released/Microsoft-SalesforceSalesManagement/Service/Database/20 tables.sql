@@ -132,3 +132,12 @@ CREATE TABLE dbo.opportunitystage
 	sortorder			INT NULL,
 	masterlabel			NVARCHAR(255) NULL
 );
+
+CREATE TABLE [dbo].[notifier](
+	[DeploymentId] [nvarchar](200) NULL,
+	[NotifierUrl] [nvarchar](200) NULL,
+	[Emails] [nvarchar](200) NULL,
+	[SprocName] [nvarchar](200) NULL,
+	[TemplateName] [nvarchar](200) NULL,
+	[InitialPullComplete] [int] NULL
+);

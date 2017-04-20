@@ -20,5 +20,15 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
             var response = TestManager.ExecuteAction("Microsoft-CreateTwitterConnectionToLogicApp", dataStore);
             Assert.IsTrue(response.IsSuccess);
         }
+
+        [TestMethod]
+        public async Task CreateSqlConnector()
+        {
+            var dataStore = await TestManager.GetDataStore();
+
+            var response = TestManager.ExecuteAction("Microsoft-CreateSqlConnector", dataStore);
+            Assert.IsTrue(response.IsSuccess);
+        }
+
     }
 }

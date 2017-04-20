@@ -131,7 +131,6 @@ export class DataMovement extends ViewModelBase {
                     let informaticaAgent: InformaticaAgent = this.informaticaAgents.find(x => x.id === this.informaticaAgentId);
                     this.MS.DataStore.addToDataStore('InformaticaAgentName', informaticaAgent.name, DataStoreType.Public);
                 }
-                this.MS.DataStore.addToDataStoreWithCustomRoute('ssas', 'ssasDisabled', 'true', DataStoreType.Public);
                 break;
             case this.dataMovementType.Scribe:
                 if (this.MS.HttpService.isOnPremise) {
@@ -141,11 +140,8 @@ export class DataMovement extends ViewModelBase {
                 let scribeOrganization: ScribeOrganization = this.scribeOrganizations.find(x => x.id === this.scribeOrganizationId);
                 this.MS.DataStore.addToDataStore('ScribeApiToken', scribeOrganization.apiToken, DataStoreType.Private);
                 this.MS.DataStore.addToDataStore('ScribeOrganizationId', scribeOrganization.id, DataStoreType.Private);
-                this.MS.DataStore.addToDataStoreWithCustomRoute('ssas', 'ssasDisabled', 'true', DataStoreType.Public);
                 break;
         }
-
-        this.MS.DataStore.addToDataStoreWithCustomRoute('ssas', 'ssasDisabled', 'false', DataStoreType.Public);
 
         return true;
     }

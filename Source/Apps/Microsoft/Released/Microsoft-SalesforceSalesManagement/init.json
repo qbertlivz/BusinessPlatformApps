@@ -124,12 +124,13 @@
     ],
 
     "Actions": [
-      {
-        "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
-        "name": "Microsoft-DeploySQLScripts",
-        "SqlScriptsFolder": "Service/Database",
-        "SqlServerIndex": "0"
-      },
+        {
+            "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
+            "name": "Microsoft-DeploySQLScripts",
+            "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')",
+            "SqlScriptsFolder": "Service/Database",
+            "SqlServerIndex": "0"
+        },
       {
         "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
         "name": "Microsoft-DeploySQLScripts",

@@ -57,6 +57,7 @@
       {
         "displayname": "Dynamics 365 Login",
         "entities": "account,lead,opportunity,opportunityproduct,product,systemuser,systemusermanagermap,territory",
+        "isScribe": "$run(this.MS.DataStore.getValue('DataMovement') === 'Scribe')",
         "name": "$SiteCommon$/pages-gallery/mscrm-login.html",
         "oauthType": "mscrm",
         "pricingCalculatorUrl": "$translate(INIT_D365_CALCULATOR)",
@@ -75,9 +76,10 @@
         "isAzureSql": "$run(!this.MS.HttpService.isOnPremise)",
         "newSqlDatabase": "$(this.MS.UtilityService.GetUniqueId(10))",
         "showAzureSql": false,
-        "showNewSqlOption": "$run(!this.MS.HttpService.isOnPremise)",
+        "showCredsWhenWindowsAuth": "$run(this.MS.HttpService.isOnPremise)",
+        "showNewSqlOption": "$run(this.MS.DataStore.getValue('DataMovement') === 'D365')",
         "showSkuS1": false,
-        "sqlInstance": "$run(this.MS.HttpService.isOnPremise ? 'ExistingSql' : 'NewSql')",
+        "sqlInstance": "$run(this.MS.DataStore.getValue('DataMovement') === 'Scribe' ? 'ExistingSql' : 'NewSql')",
         "sqlSku": "S2",
         "subtitle": "$translate(INIT_SQL_SUBTITLE_D365)",
         "title": "$translate(INIT_SQL_TITLE)"
@@ -91,7 +93,7 @@
       {
         "name": "$SiteCommon$/pages-gallery/ssas.html",
         "displayname": "AAS Login",
-        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true' : 'false')"
       },
       {
         "displayname": "Customize",
@@ -127,6 +129,7 @@
       {
         "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
         "name": "Microsoft-DeploySQLScripts",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'D365')",
         "SqlServerIndex": "0",
         "SqlScriptsFolder": "Database"
       },

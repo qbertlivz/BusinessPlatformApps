@@ -123,7 +123,7 @@
     DATA_MOVEMENT_PASSWORD: `Password:`,
     DATA_MOVEMENT_SCRIBE: `Scribe`,
     DATA_MOVEMENT_SCRIBE_AGENT: `Scribe Agent:`,
-    DATA_MOVEMENT_SCRIBE_DESCRIPTION: `Scribe is a third party service that enables you to pull data from Salesforce. When we run the setup, Scribe will copy all of your Salesforce data into your database. Once all your data is copied, Scribe will only update new and changed records making future data pulls extremely fast.`,
+    DATA_MOVEMENT_SCRIBE_DESCRIPTION: `Scribe is a third party service that enables you to pull data from the source application. When we run the setup, Scribe will copy all of your source application data into your database. Once all your data is copied, Scribe will only update new and changed records making future data pulls extremely fast.`,
     DATA_MOVEMENT_SCRIBE_DESCRIPTION_LINK: `You will need to perform a few extra steps before you get started. Follow the guide `,
     DATA_MOVEMENT_SCRIBE_NEW_ACCOUNT: `Create a new Scribe account `,
     DATA_MOVEMENT_SCRIBE_ONPREMISE_AGENT: `To finish off setting up this Scribe organization you will need to install a Scribe Agent. You can download the Scribe Agent installer `,

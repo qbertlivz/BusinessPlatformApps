@@ -43,11 +43,11 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
 
             if (!connection.IsSuccessStatusCode)
             {
-                return new ActionResponse(ActionStatus.Failure, JsonUtility.GetJObjectFromJsonString(await connection.Content.ReadAsStringAsync()), 
+                return new ActionResponse(ActionStatus.Failure, JsonUtility.GetJObjectFromJsonString(await connection.Content.ReadAsStringAsync()),
                     null, DefaultErrorCodes.DefaultErrorCode, "Failed to create connection");
             }
 
-            
+
             // Get Consent links for auth
             payload = new ExpandoObject();
             payload.parameters = new ExpandoObject[1];

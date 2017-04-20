@@ -93,7 +93,7 @@
       {
         "name": "$SiteCommon$/pages-gallery/ssas.html",
         "displayname": "AAS Login",
-        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true' : 'false')"
       },
       {
         "displayname": "Customize",

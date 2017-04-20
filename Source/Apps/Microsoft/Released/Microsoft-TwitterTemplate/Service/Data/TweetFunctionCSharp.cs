@@ -24,6 +24,7 @@ public static async Task<object> Run(HttpRequestMessage req, TraceWriter log)
     TweetHandler tweetHandler = new TweetHandler(connectionString, log);
     string jsonContent = await req.Content.ReadAsStringAsync();
     var tweets = JsonConvert.DeserializeObject(jsonContent);
+    int i = 0;
     if (tweets is JArray)
     {
         foreach (var item in (JArray)tweets)
@@ -31,13 +32,15 @@ public static async Task<object> Run(HttpRequestMessage req, TraceWriter log)
             var individualtweet = item.ToString();
             //log.Info("********************Run**************************" + individualtweet.ToString());
 
-            await tweetHandler.ParseTweet(individualtweet, log);
+            await tweetHandler.ParseTweet(individualtweet, log, i);
+            i = i + 1;
         }
     }
     else
     {
         //log.Info("********************Run**************************" + jsonContent.ToString());
-        await tweetHandler.ParseTweet(jsonContent, log);
+        await tweetHandler.ParseTweet(jsonContent, log, i);
+        i = i + 1;
     }
 
     // log.Info($"{data}");
@@ -123,7 +126,7 @@ public class TweetHandler
             {"mentionColor", "#374649"},
         };
 
-    public async Task<bool> ParseTweet(string entireTweet, TraceWriter log)
+    public async Task<bool> ParseTweet(string entireTweet, TraceWriter log, int i)
     {
         // Convert JSON to dynamic C# object
         tweetObj = JObject.Parse(entireTweet);
@@ -135,7 +138,10 @@ public class TweetHandler
         string twitterHandleId =
             ExecuteSqlQuery("select value FROM pbist_twitter.configuration where name = \'twitterHandleId\'",
                 "value");
-        ExecuteSqlNonQuery($"UPDATE pbist_twitter.twitter_query SET TweetId='{tweet["TweetId"]}' WHERE Id = 1");
+        if (i == 0)
+        {
+            ExecuteSqlNonQuery($"UPDATE pbist_twitter.twitter_query SET TweetId='{tweet["TweetId"]}' WHERE Id = 1");
+        }
 
         // Split out all the handles & create dictionary
         String[] handle = null;

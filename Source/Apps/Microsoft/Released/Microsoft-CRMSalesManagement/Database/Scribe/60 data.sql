@@ -78,4 +78,3 @@ INSERT smgt.[configuration] (configuration_group, configuration_subgroup, [name]
 INSERT smgt.[configuration] (configuration_group, configuration_subgroup, [name], [value], [visible]) VALUES (N'SolutionTemplate', N'SalesManagement', N'version', N'1.0', 0);
 INSERT smgt.[configuration] (configuration_group, configuration_subgroup, [name], [value], [visible]) VALUES (N'SolutionTemplate', N'SalesManagement', N'versionImage', N'', 0);
 go
-

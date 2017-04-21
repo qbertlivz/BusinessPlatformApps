@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Deployment.Common.ActionModel;
 using System.Dynamic;
 using Microsoft.Deployment.Common.Helpers;
+using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Deployment.Tests.Actions.AzureTests
 {
@@ -33,12 +34,13 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
             dataStore.AddToDataStore("AzureArmFile", "Service/Notifier/notifierLogicApp.json");
 
             dynamic AzureArmParameters = new ExpandoObject();
+            
             AzureArmParameters.notifierLogicApp = "notifierLogicApp";
             AzureArmParameters.sqlConnection = dataStore.GetValue("sqlConnectionName");
             AzureArmParameters.resourcegroup = dataStore.GetValue("SelectedResourceGroup");
             AzureArmParameters.subscription = dataStore.GetJson("SelectedSubscription")["SubscriptionId"];
 
-            dataStore.AddToDataStore("AzureArmParameters", JsonUtility.GetJsonStringFromObject(AzureArmParameters));
+            dataStore.AddToDataStore("AzureArmParameters", JsonUtility.GetJObjectFromObject(AzureArmParameters));
 
             response = TestManager.ExecuteAction("Microsoft-DeployAzureArmTemplate", dataStore);
 

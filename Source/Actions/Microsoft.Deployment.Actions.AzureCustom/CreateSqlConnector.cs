@@ -25,7 +25,9 @@ namespace Microsoft.Deployment.Actions.AzureCustom
             var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
             var location = request.DataStore.GetJson("SelectedLocation", "Name");
+
             var connectionName = request.DataStore.GetValue("ApiConnectionName") == null ? "sql" : request.DataStore.GetValue("ApiConnectionName");
+
             var connectionString = request.DataStore.GetValue("SqlConnectionString");
             var conn = SqlUtility.GetSqlCredentialsFromConnectionString(connectionString);
 
@@ -58,6 +60,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom
                     null, DefaultErrorCodes.DefaultErrorCode, "Failed to create connection");
             }
 
+            request.DataStore.AddToDataStore("sqlConnectionName", connectionName);
             return new ActionResponse(ActionStatus.Success);
         }
     }

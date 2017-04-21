@@ -233,6 +233,24 @@
         "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
       },
       {
+        "DeploymentName": "SqlConnectionDeployment",
+        "displayname": "Creating database connection",
+        "name": "Microsoft-CreateSqlConnector",
+        "ApiConnectionName": "$save('sql')"
+      },
+      {
+        "DeploymentName": "NotifierLogicApp",
+        "displayname": "Creating notifier",
+        "name": "Microsoft-DeployAzureArmTemplate",
+        "AzureArmFile": "Service/Notifier/notifierLogicApp.json",
+        "AzureArmParameters": {
+          "notifierLogicApp": "notifierLogicApp",
+          "sqlConnection": "$(this.MS.DataStore.getValue('sqlConnectionName'))",
+          "resourcegroup": "$(this.MS.DataStore.getValue('SelectedResourceGroup'))",
+          "subscription": "$(this.MS.DataStore.getJson('SelectedSubscription').SubscriptionId)"
+        }
+      },
+      {
         "displayname": "$translate(INIT_ACTION_CHECKING_DATA)",
         "FinishedActionName": "Microsoft-ADFSliceStatus",
         "IsWaiting": true,
@@ -318,7 +336,7 @@
     "Pages": [
       {
         "displayname": "Uninstall Progress",
-        "HasNavigated": "$save(true)",
+        "HasNavigated": "`(true)",
         "isUninstall": true,
         "name": "$SiteCommon$/pages-gallery/progress.html",
         "showEmailSubmission": false,

@@ -36,10 +36,10 @@ BEGIN
     GROUP BY ta.name
 	
 	IF EXISTS(
-	SELECT t.Entityname AS EntityName, t.Count - i.InitialCount AS Difference FROM #table t
-	INNER JOIN dbo.EntityInitialCount i ON i.EntityName = t.EntityName
-	WHERE i.InitialCount < t.Count
-	)	INSERT INTO dbo.notifier(InitialPullComplete) VALUES (1)
+	SELECT t.Entityname AS EntityName, t.Count - i.initialcount AS Difference FROM #table t
+	INNER JOIN dbo.entityinitialcount i ON i.entityname = t.EntityName
+	WHERE i.initialcount < t.Count
+	)	INSERT INTO dbo.notifier(initialpullcomplete) VALUES (1)
 
 END;
 

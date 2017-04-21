@@ -134,10 +134,15 @@ CREATE TABLE dbo.opportunitystage
 );
 
 CREATE TABLE [dbo].[notifier](
-	[DeploymentId] [nvarchar](200) NULL,
-	[NotifierUrl] [nvarchar](200) NULL,
-	[Emails] [nvarchar](200) NULL,
-	[SprocName] [nvarchar](200) NULL,
-	[TemplateName] [nvarchar](200) NULL,
-	[InitialPullComplete] [int] NULL
+	[deploymentid] [varchar](40) NULL,
+	[notifierurl] [nvarchar](400) NULL,
+	[emails] [nvarchar](max) NULL,
+	[sprocname] [varchar](40) NULL,
+	[templatename] [varchar](40) NULL,
+	[initialpullcomplete] [int] NULL
+);
+
+CREATE TABLE [dbo].[entityinitialcount](
+	[entityname] [nvarchar](40) NULL,
+	[initialcount] INT NULL
 );

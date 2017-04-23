@@ -35,14 +35,14 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
 
             dynamic AzureArmParameters = new ExpandoObject();
             
-            AzureArmParameters.notifierLogicApp = "notifierLogicApp";
+            AzureArmParameters.logicAppName = "notifierLogicApp";
             AzureArmParameters.sqlConnection = dataStore.GetValue("sqlConnectionName");
             AzureArmParameters.resourcegroup = dataStore.GetValue("SelectedResourceGroup");
             AzureArmParameters.subscription = dataStore.GetJson("SelectedSubscription")["SubscriptionId"];
 
             dataStore.AddToDataStore("AzureArmParameters", JsonUtility.GetJObjectFromObject(AzureArmParameters));
 
-            response = TestManager.ExecuteAction("Microsoft-DeployAzureArmTemplate", dataStore);
+            response = TestManager.ExecuteAction("Microsoft-DeployNotifierLogicApp", dataStore);
 
             Assert.IsTrue(response.IsSuccess);
         }

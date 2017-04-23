@@ -2,9 +2,12 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "notifierLogicApp": {
+    "logicAppName": {
       "defaultValue": "newLA",
       "type": "String"
+    },
+    "notifierUrl": {
+      "defaultValue": "triggerurl"
     },
     "sqlConnection": {
       "defaultValue": "connection",
@@ -24,7 +27,7 @@
     {
       "comments": "Generalized from resource: '/subscriptions/20ea4e8d-d3d9-4f1d-947c-441675acd4f7/resourceGroups/localNotifier/providers/Microsoft.Logic/workflows/newLA'.",
       "type": "Microsoft.Logic/workflows",
-      "name": "[parameters('notifierLogicApp')]",
+      "name": "[parameters('logicAppName')]",
       "apiVersion": "2016-06-01",
       "location": "[resourceGroup().location]",
       "properties": {
@@ -39,12 +42,14 @@
             }
           },
           "triggers": {
-            "Recurrence": {
-              "recurrence": {
-                "frequency": "Minute",
-                "interval": 3
+            "manual": {
+              "inputs": {
+                "schema": {
+                  "value": "run"
+                }
               },
-              "type": "Recurrence"
+              "kind": "Http",
+              "type": "Request"
             }
           },
           "actions": {
@@ -92,13 +97,10 @@
               "type": "Foreach"
             },
             "For_each_3": {
-              "foreach": "@body('Get_rows_2')?['value']",
               "actions": {
                 "Condition": {
                   "actions": {
                     "HTTP": {
-                      "runAfter": {},
-                      "type": "Http",
                       "inputs": {
                         "body": {
                           "deploymentId": "@{item()?['deploymentid']}",
@@ -110,14 +112,35 @@
                         },
                         "method": "POST",
                         "uri": "@{item()?['notifierurl']}"
+                      },
+                      "runAfter": {},
+                      "type": "Http"
+                    }
+                  },
+                  "else": {
+                    "actions": {
+                      "HTTP_2": {
+                        "inputs": {
+                          "body": {
+                            "value": "run"
+                          },
+                          "headers": {
+                            "Content-Type": "Application/json"
+                          },
+                          "method": "POST",
+                          "uri": "[parameters('notifierUrl')]"
+                        },
+                        "runAfter": {},
+                        "type": "Http"
                       }
                     }
                   },
-                  "runAfter": {},
                   "expression": "@greater(item()?['initialpullcomplete'], 0)",
+                  "runAfter": {},
                   "type": "If"
                 }
               },
+              "foreach": "@body('Get_rows_2')?['value']",
               "runAfter": {
                 "Get_rows_2": [
                   "Succeeded"

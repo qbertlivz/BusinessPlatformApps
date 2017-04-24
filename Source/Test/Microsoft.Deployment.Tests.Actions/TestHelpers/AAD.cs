@@ -19,7 +19,7 @@ namespace Microsoft.Deployment.Tests.Actions.TestHelpers
         {
 #if DEBUG
             AuthenticationContext context = new AuthenticationContext("https://login.windows.net/" + Credential.Instance.AAD.TenantId);
-            var url = context.GetAuthorizationRequestUrlAsync(Constants.AzureManagementCoreApi, Constants.MicrosoftClientId, new Uri("https://unittest/redirect.html"), UserIdentifier.AnyUser, "").Result;
+            var url = context.GetAuthorizationRequestUrlAsync(Constants.AzureManagementCoreApi, Constants.MicrosoftClientId, new Uri("https://unittest/redirect.html"), UserIdentifier.AnyUser, "prompt=consent").Result;
             WindowsFormsWebAuthenticationDialog form = new WindowsFormsWebAuthenticationDialog(null);
             form.WebBrowser.Navigated += delegate (object sender, WebBrowserNavigatedEventArgs args)
             {

@@ -136,6 +136,13 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                     break;
             }
 
+            StringBuilder builder = GetRawAzureAuthUri(request, authBase, clientId, resource);
+
+            return new ActionResponse(ActionStatus.Success, JsonUtility.GetJObjectFromStringValue(builder.ToString()));
+        }
+
+        public static StringBuilder GetRawAzureAuthUri(ActionRequest request, string authBase, string clientId, string resource)
+        {
             Dictionary<string, string> message = new Dictionary<string, string>
             {
                 { "client_id", clientId },
@@ -153,7 +160,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                 builder.Append("&");
             }
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetJObjectFromStringValue(builder.ToString()));
+            return builder;
         }
     }
 }

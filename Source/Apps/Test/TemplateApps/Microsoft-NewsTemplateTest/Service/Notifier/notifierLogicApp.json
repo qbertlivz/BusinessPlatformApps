@@ -6,8 +6,9 @@
       "defaultValue": "newLA",
       "type": "String"
     },
-    "notifierUrl": {
-      "defaultValue": "triggerurl"
+    "logicAppTrigger": {
+      "defaultValue": "triggerurl",
+      "type": "String"
     },
     "sqlConnection": {
       "defaultValue": "connection",
@@ -128,7 +129,7 @@
                             "Content-Type": "Application/json"
                           },
                           "method": "POST",
-                          "uri": "[parameters('notifierUrl')]"
+                          "uri": "[parameters('logicAppTrigger')]"
                         },
                         "runAfter": {},
                         "type": "Http"

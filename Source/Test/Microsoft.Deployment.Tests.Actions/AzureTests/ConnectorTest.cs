@@ -34,7 +34,7 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
             dataStore.AddToDataStore("AzureArmFile", "Service/Notifier/notifierLogicApp.json");
 
             dynamic AzureArmParameters = new ExpandoObject();
-            
+            AzureArmParameters.logicAppTrigger = "triggerUrl";
             AzureArmParameters.logicAppName = "notifierLogicApp";
             AzureArmParameters.sqlConnection = dataStore.GetValue("sqlConnectionName");
             AzureArmParameters.resourcegroup = dataStore.GetValue("SelectedResourceGroup");

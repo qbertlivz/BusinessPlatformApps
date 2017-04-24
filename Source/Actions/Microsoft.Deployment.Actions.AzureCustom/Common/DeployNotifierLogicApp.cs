@@ -50,7 +50,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
 
                 param.AddStringParam(key, value);
 
-                if(key == "logicAppName")
+                if (key == "logicAppName")
                 {
                     logicAppName = value;
                 }
@@ -101,17 +101,17 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
 
             var postUrl = JsonUtility.GetJObjectFromJsonString(await response.Content.ReadAsStringAsync());
 
-            //response = await azureClient.ExecuteGenericRequestNoHeaderAsync(HttpMethod.Post, postUrl["value"].ToString(), string.Empty);
+            var newParam = new AzureArmParameterGenerator();
 
-            dynamic newParam = new ExpandoObject();
-            newParam.notifierUrl = postUrl["value"];
-            newParam.logicAppName = logicAppName;
-            newParam.sqlConnection = request.DataStore.GetValue("sqlConnectionName");
-            newParam.resourcegroup = resourceGroup;
-            newParam.subscription = subscription;
-            armParamTemplate = JsonUtility.GetJObjectFromObject(newParam);
+            newParam.AddStringParam("logicAppTrigger", postUrl["value"].ToString());
+            newParam.AddStringParam("logicAppName", logicAppName);
+            newParam.AddStringParam("sqlConnection", request.DataStore.GetValue("sqlConnectionName"));
+            newParam.AddStringParam("resourceGroup", resourceGroup);
+            newParam.AddStringParam("subscription", subscription);
+
+            armParamTemplate = JsonUtility.GetJObjectFromObject(newParam.GetDynamicObject());
             armTemplate.Remove("parameters");
-            armTemplate.Add("parameters", armParamTemplate);
+            armTemplate.Add("parameters", armParamTemplate["parameters"]);
 
             deployment = new Microsoft.Azure.Management.Resources.Models.Deployment()
             {
@@ -132,6 +132,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
                     $"Azure:{validate.Error.Message} Details:{validate.Error.Details}");
 
             deploymentItem = await client.Deployments.CreateOrUpdateAsync(resourceGroup, deploymentName, deployment, new CancellationToken());
+
+            //response = await azureClient.ExecuteGenericRequestNoHeaderAsync(HttpMethod.Post, postUrl["value"].ToString(), string.Empty);
 
             return await WaitForAction(client, resourceGroup, deploymentName);
         }

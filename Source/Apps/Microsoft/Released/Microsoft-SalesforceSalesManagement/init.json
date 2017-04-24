@@ -236,13 +236,20 @@
         "DeploymentName": "SqlConnectionDeployment",
         "displayname": "Creating database connection",
         "name": "Microsoft-CreateSqlConnector",
-        "ApiConnectionName": "$save('sql')"
+        "ApiConnectionName": "$save('sqlNotifierConnection')"
       },
       {
         "DeploymentName": "NotifierLogicApp",
         "displayname": "Creating notifier",
         "name": "Microsoft-DeployNotifierLogicApp",
         "logicAppName": "notifierLogicApp"
+      },
+      {
+        "displayname": "Configuring notifier",
+        "name": "Microsoft-ConfigureNotifier",
+        "notificationEmails": "$save('catdor@microsoft.com')",
+        "notificationTable": "dbo.notifier",
+        "sprocName": "dbo.sp_get_pull_status"
       },
       {
         "displayname": "$translate(INIT_ACTION_CHECKING_DATA)",

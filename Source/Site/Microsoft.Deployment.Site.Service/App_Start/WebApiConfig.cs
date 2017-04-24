@@ -1,6 +1,7 @@
-﻿using System.Linq;
+﻿using System.Configuration;
+using System.Linq;
 using System.Web.Http;
-
+using Microsoft.Deployment.Common;
 using Microsoft.Deployment.Common.AppLoad;
 using Microsoft.Deployment.Common.Controller;
 
@@ -34,6 +35,9 @@ namespace Microsoft.Deployment.Site.Service
                 ServiceRootFilePath = appFactory.SiteCommonPath + "../",
                 Source = "API",
             };
+
+            Constants.BpstDeploymentIdDatabase = ConfigurationManager.ConnectionStrings["BpstDeploymentIdDatabase"].ToString();
+            Constants.BpstNotifierUrl = ConfigurationManager.ConnectionStrings["BpstNotifierUrl"].ToString();
 
             var appXmlType = config.Formatters.XmlFormatter.SupportedMediaTypes.FirstOrDefault(t => t.MediaType == "application/xml");
             config.Formatters.XmlFormatter.SupportedMediaTypes.Remove(appXmlType);

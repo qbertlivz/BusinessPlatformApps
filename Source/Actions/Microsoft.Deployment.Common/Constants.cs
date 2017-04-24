@@ -31,5 +31,8 @@
         public const string MsCrmClientId  = "fb430120-4027-46b2-8499-95e0e8a3e646";
         public const string MsCrmResource  = "b861dbcc-a7ef-4219-a005-0e4de4ea7dcf";
         public const string MsCrmToken     = "https://login.windows.net/common/oauth2/token";
+
+        public static string BpstDeploymentIdDatabase = string.Empty;
+        public static string BpstNotifierUrl = string.Empty;
     }
 }

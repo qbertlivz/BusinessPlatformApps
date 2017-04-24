@@ -92,7 +92,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
                 return deploymentResponse;
             }
 
-            response = await azureClient.ExecuteGenericRequestNoHeaderAsync(HttpMethod.Post, postUrl["value"].ToString(), string.Empty);
+            //response = await azureClient.ExecuteGenericRequestNoHeaderAsync(HttpMethod.Post, postUrl["value"].ToString(), string.Empty);
+            request.DataStore.AddToDataStore("NotifierTriggerUrl", postUrl["value"].ToString());
 
             return new ActionResponse(ActionStatus.Success);
         }

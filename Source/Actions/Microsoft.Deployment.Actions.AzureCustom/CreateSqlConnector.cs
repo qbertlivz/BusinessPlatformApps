@@ -39,7 +39,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom
             payload.properties = new ExpandoObject();
             payload.properties.parameterValues = new ExpandoObject();
             payload.properties.parameterValues.sku = "Enterprise";
-            payload.properties.displayName = "sql";
+            payload.properties.displayName = connectionName;
             payload.properties.parameterValues = new ExpandoObject();
             payload.properties.parameterValues.server = conn.Server;
             payload.properties.parameterValues.database = conn.Database;

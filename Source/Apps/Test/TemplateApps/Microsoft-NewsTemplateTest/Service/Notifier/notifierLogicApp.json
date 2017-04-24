@@ -10,7 +10,7 @@
       "defaultValue": "triggerurl",
       "type": "String"
     },
-    "sqlConnection": {
+    "sqlConnectionName": {
       "defaultValue": "connection",
       "type": "String"
     },
@@ -120,6 +120,16 @@
                   },
                   "else": {
                     "actions": {
+                      "Delay": {
+                        "inputs": {
+                          "interval": {
+                            "count": 5,
+                            "unit": "Minute"
+                          }
+                        },
+                        "runAfter": {},
+                        "type": "Wait"
+                      },
                       "HTTP_2": {
                         "inputs": {
                           "body": {
@@ -195,8 +205,8 @@
           "$connections": {
             "value": {
               "sql": {
-                "connectionId": "[concat('/subscriptions/', parameters('subscription'), '/resourceGroups/',parameters('resourcegroup'),'/providers/Microsoft.Web/connections/sql')]",
-                "connectionName": "sql",
+                "connectionId": "[concat('/subscriptions/', parameters('subscription'), '/resourceGroups/',parameters('resourcegroup'),'/providers/Microsoft.Web/connections/',parameters('sqlConnectionName'))]",
+                "connectionName": "[parameters('sqlConnectionName')]",
                 "id": "[concat('/subscriptions/', parameters('subscription'), '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/sql')]"
               }
             }

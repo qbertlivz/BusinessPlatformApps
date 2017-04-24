@@ -242,13 +242,7 @@
         "DeploymentName": "NotifierLogicApp",
         "displayname": "Creating notifier",
         "name": "Microsoft-DeployNotifierLogicApp",
-        "AzureArmParameters": {
-          "notifierUrl": "notifierUrl",
-          "logicAppName": "notifierLogicApp",
-          "sqlConnection": "$(this.MS.DataStore.getValue('sqlConnectionName'))",
-          "resourcegroup": "$(this.MS.DataStore.getValue('SelectedResourceGroup'))",
-          "subscription": "$(this.MS.DataStore.getJson('SelectedSubscription').SubscriptionId)"
-        }
+        "logicAppName": "notifierLogicApp"
       },
       {
         "displayname": "$translate(INIT_ACTION_CHECKING_DATA)",

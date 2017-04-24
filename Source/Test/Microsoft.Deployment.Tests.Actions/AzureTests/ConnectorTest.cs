@@ -23,29 +23,5 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
             var response = TestManager.ExecuteAction("Microsoft-CreateTwitterConnectionToLogicApp", dataStore);
             Assert.IsTrue(response.IsSuccess);
         }
-
-        [TestMethod]
-        public async Task CreateSqlConnector()
-        {
-            var dataStore = await TestManager.GetDataStore();
-
-            var response = TestManager.ExecuteAction("Microsoft-CreateSqlConnector", dataStore);
-
-            dataStore.AddToDataStore("AzureArmFile", "Service/Notifier/notifierLogicApp.json");
-
-            dynamic AzureArmParameters = new ExpandoObject();
-            AzureArmParameters.logicAppTrigger = "triggerUrl";
-            AzureArmParameters.logicAppName = "notifierLogicApp";
-            AzureArmParameters.sqlConnection = dataStore.GetValue("sqlConnectionName");
-            AzureArmParameters.resourcegroup = dataStore.GetValue("SelectedResourceGroup");
-            AzureArmParameters.subscription = dataStore.GetJson("SelectedSubscription")["SubscriptionId"];
-
-            dataStore.AddToDataStore("AzureArmParameters", JsonUtility.GetJObjectFromObject(AzureArmParameters));
-
-            response = TestManager.ExecuteAction("Microsoft-DeployNotifierLogicApp", dataStore);
-
-            Assert.IsTrue(response.IsSuccess);
-        }
-
     }
 }

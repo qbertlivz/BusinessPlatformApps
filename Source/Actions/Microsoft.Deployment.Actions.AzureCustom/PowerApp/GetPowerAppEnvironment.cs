@@ -31,7 +31,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
                 if (skipPowerApp == null)
                 {
                     request.DataStore.AddToDataStore("SkipPowerApp", "true", DataStoreType.Public);
-                    //return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "PowerAppNoEnvironment");
                 }
                 return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
             }

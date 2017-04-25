@@ -37,56 +37,6 @@ AS
 go
 
 
--- ActualSalesView
-CREATE VIEW smgt.actualsalesview
-AS
-  SELECT invoiceid                              AS [Invoice Id],
-         actualsales                            AS [Actual Sales],
-         CONVERT(DATE, invoicedate)             AS [Invoice Date],
-         CONVERT(UNIQUEIDENTIFIER, [accountid]) AS [Account Id],
-         CONVERT(UNIQUEIDENTIFIER, [productid]) AS [Product Id]
-  FROM   smgt.actualsales
-  WHERE  EXISTS (SELECT *
-                 FROM   smgt.[configuration]
-                 WHERE  configuration_group = 'DATA' AND configuration_subgroup = 'actual_sales' AND [name] = 'enabled' AND value = '1')
-  UNION ALL
-  -- This gets the Opportunity's OpportunityProducts that can be prorated.
-  SELECT CONVERT(VARCHAR(50), op.opportunityproductid)                        AS [Invoice Id],
-         CASE
-             WHEN o.totallineitemamount_base = 0 THEN NULL
-             ELSE op.baseamount_base * o.actualvalue_base / o.totallineitemamount_base
-         END                                                                  AS [Actual Sales],   -- Allocate line items based on ratio to actual total
-         CONVERT(DATE, o.actualclosedate)                                     AS [Invoice Date],
-         CONVERT(UNIQUEIDENTIFIER, o.parentaccountid)                         AS [Account ID],
-         CONVERT(UNIQUEIDENTIFIER, op.productid)                              AS [Product ID]
-  FROM   dbo.opportunity AS o INNER JOIN dbo.opportunityproduct AS op ON o.opportunityid = op.opportunityid
-  WHERE  o.statuscode_displayname = 'Won' AND
-         o.SCRIBE_DELETEDON IS NULL AND
-         op.baseamount_base > 0 AND
-         op.baseamount_base IS NOT NULL AND
-         op.SCRIBE_DELETEDON IS NULL AND
-         NOT EXISTS (SELECT *
-                     FROM   smgt.[configuration]
-                     WHERE  configuration_group = 'DATA' AND configuration_subgroup = 'actual_sales' AND [name] = 'enabled' AND [value] = '1')
-  UNION ALL
-  -- This gets the Opportunities for which there are no OpportunityProducts that can be used
-  SELECT CONVERT(VARCHAR(50), o.opportunityid)        AS [Invoice Id],
-         o.actualvalue_base                           AS [Actual Sales],
-         CONVERT(DATE, o.actualclosedate)             AS [Invoice Date],
-         CONVERT(UNIQUEIDENTIFIER, o.parentaccountid) AS [Account ID],
-         NULL                                         AS [Product ID]
-  FROM   dbo.opportunity AS o
-  WHERE  o.statuscode_displayname = 'Won' AND
-         o.SCRIBE_DELETEDON IS NULL AND
-         NOT EXISTS (SELECT *
-                     FROM   opportunityproduct op
-                     WHERE  op.opportunityid = o.opportunityid AND op.baseamount_base > 0) AND
-         NOT EXISTS (SELECT *
-                     FROM   smgt.[configuration]
-                     WHERE  configuration_group = 'DATA' AND configuration_subgroup = 'actual_sales' AND [name] = 'enabled' AND [value] = '1');
-go
-
-
 -- BusinessUnitView
 CREATE VIEW smgt.businessunitview
 AS
@@ -171,14 +121,19 @@ AS
            leadid                        AS [Lead Id],
            estimatedamount_base          AS [Estimated Amount Base],
            ownerid                       AS [Owner Id],
-           statecode_displayname         AS [State Code],
+           statecode_displayname         AS [State],
            campaignid                    AS [Campaign Id],
            estimatedclosedate            AS [Estimated Close Date],
            leadsourcecode_displayname    AS [Lead Source Name],
            industrycode_displayname      AS [Industry Name],
            purchasetimeframe_displayname AS [Purchase Time Frame],
            createdon                     AS [Created On],
-           companyname                   AS [Company Name]
+           companyname                   AS [Company Name],
+           lastname                      AS [Last Name],
+           firstname                     AS [First Name],
+           emailaddress1                 AS [Email],
+           address1_city                 AS [City],
+           address1_country              AS [Country]
   FROM     dbo.lead
   WHERE ( SCRIBE_DELETEDON IS NULL );
 go
@@ -208,6 +163,7 @@ AS
     SELECT  o.opportunityid                     AS [Opportunity Id],
             o.name                              AS [Opportunity Name],
             o.ownerid                           AS [Owner Id],
+            CONVERT(DATE, o.createdon)          AS [Created Date],
             CONVERT(DATE, o.actualclosedate)    AS [Actual Close Date],
             CONVERT(DATE, o.estimatedclosedate) AS [Estimated Close Date],
             o.closeprobability                  AS [Close Probability],
@@ -217,6 +173,8 @@ AS
             END                                 AS [Account Id],
             o.actualvalue                       AS [Actual Value],
             o.estimatedvalue                    AS [Estimated Value],
+            o.estimatedvalue * o.closeprobability/100.0
+	                                        AS [Expected Value],
             o.statuscode_displayname            AS [Status],
             CASE
                 WHEN stepname IS NULL OR Charindex('-', o.stepname) = 0 THEN NULL
@@ -239,7 +197,7 @@ AS
         SELECT parentproductid,
                parentproductidname,
                productid,
-               name,
+               [name],
                0                               AS [level],
                Cast(productid AS VARCHAR(max)) AS pth
         FROM   dbo.product
@@ -251,7 +209,7 @@ AS
                 a.name,
                 t.[level] + 1                             AS [Level],
                 t.pth + Cast(a.productid AS VARCHAR(max)) AS pth
-        FROM   tree AS t INNER JOIN dbo.product AS a WITH (INDEX (idx_parentproduct)) ON a.parentproductid = t.productid AND a.SCRIBE_DELETEDON IS NULL AND a.parentproductid is NOT NULL
+        FROM   tree AS t INNER JOIN dbo.product AS a ON a.parentproductid = t.productid AND a.SCRIBE_DELETEDON IS NULL AND a.parentproductid is NOT NULL
     )
     SELECT hierarchy.productid     AS [Product Id],
            hierarchy.name          AS [Product Name],

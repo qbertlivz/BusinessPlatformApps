@@ -11,16 +11,16 @@ go
 *************************************/
 
 -- Scribe needs to recreate these tables, however the fields we needed in the views will still be present
-DROP TABLE dbo.account;
-DROP TABLE dbo.businessunit;
-DROP TABLE dbo.lead;
-DROP TABLE dbo.opportunity;
-DROP TABLE dbo.opportunityproduct;
-DROP TABLE dbo.systemuser;
-DROP TABLE dbo.systemusermanagermap;
-DROP TABLE dbo.territory;
-DROP TABLE dbo.scribe_replicationstatus;
-DROP TABLE dbo.product;
+DROP TABLE dbo.Account;
+DROP TABLE dbo.Lead;
+DROP TABLE dbo.Opportunity;
+DROP TABLE dbo.OpportunityLineItem;
+DROP TABLE dbo.OpportunityStage;
+DROP TABLE dbo.Product2;
+DROP TABLE dbo.[User];
+DROP TABLE dbo.[UserRole];
+DROP TABLE dbo.Scribe_ReplicationStatus;
+
 /************************************
 * Tables to truncate                *
 *************************************/

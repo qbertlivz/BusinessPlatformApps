@@ -60,7 +60,10 @@ Setting up the template requires the following:
 -	Power BI Pro (to share the template with others)
 -	Dynamics 365 for Sales 2015 or later, on-premises or Online.
 
-**You must have administrative permissions on your Dynamics 365 for Sales instance**.
+**You must have administrative permissions on your Dynamics 365 for Sales instance**. You can check whether you are a system administrator
+ [here](https://www.microsoft.com/en-us/dynamics/crm-customer-center/find-your-dynamics-365-administrator-or-support-person.aspx). 
+
+
 
 # How to Install
 Installing the Sales Management solution template for Dynamics 365 configures the following:
@@ -86,8 +89,15 @@ If Dynamics 365 Online is chosen, jump to Step 2a:Connect to Dynamics 365 Online
 
 Next, connect to your Dynamics 365 instance to give permission to the provisioning application to set up data export service to populate the Azure SQL DB destiniation.
 
-**Note: You must have an Azure subscription in the same tenant as Dynamics 365.** If a subscription does not exist, this step will fail. You can create
-a new subscription here: <https://account.windowsazure.com/subscriptions/>. 
+**Note: You must have an Azure subscription in the same tenant as Dynamics 365.** 
+
+An Azure subscription grants you access to Windows Azure services and is the means by which resource usage is reported and services are billed.
+A tenant is a representation of an organization in Azure. It is also called a dedicated instance of Azure Active Directory. You may have an Azure subscription already, but it must be in the same tenant as your Sales for Dynamics 365 instance to be used for the solution template. To see if you have an Azure subscription in the same tenant:
+
+-	connect to the Azure portal (https://portal.azure.com) using the same credentials you connect to Sales for Dynamics 365.
+-	On the left panel, click the “Subscriptions” item.
+If you see a subscription on the right panel, you satisfy this requirement. If no subscription exists, it is simple, fast and free to create one.
+by following the instructions here: <https://account.windowsazure.com/subscriptions/>. 
 
 ![Get Started](Resources/Images/Dynamics365AzSub.png)
 
@@ -118,6 +128,8 @@ If you do not, you will not be able to read data from Azure SQL DB to populate t
 
 Click “Next” to continue.
 
+## Step 6a: Tailor your Sales Management solution template for Dynamics 365
+Provide the starting month of your fiscal calendar. This is required for fiscal year calculations in the Power BI file. 
 
 ## Step 6a: Azure Analysis Services Election
 Choose whether Azure Analysis Services is to be used in the solution.c
@@ -155,6 +167,9 @@ Once data starts moving, A Power BI file can be downloaded that is bound to the 
 ![Track Prog](Resources/Images/TrackProgress2.png)
 
 The Power BI report file (or pbix file) is pre-bound to the data destination (either Azure SQL Server or Azure Analysis Services). Follow the instructions on the first page in the report to show your data.
+
+
+
 
 
 

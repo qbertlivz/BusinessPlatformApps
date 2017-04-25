@@ -105,6 +105,7 @@
                       "inputs": {
                         "body": {
                           "deploymentId": "@{item()?['deploymentid']}",
+                          "statuscode": "@{item()?['initialpullcomplete']}",
                           "templateName": "@{item()?['templatename']}",
                           "to": "@{item()?['emails']}"
                         },

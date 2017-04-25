@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Globalization;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
@@ -23,7 +24,7 @@ namespace Microsoft.Deployment.Actions.Salesforce
             string sfPassword = request.DataStore.GetValue("SalesforcePassword");
             string sfToken = request.DataStore.GetValue("SalesforceToken");
             string sfTestUrl = request.DataStore.GetValue("SalesforceUrl");
-            
+
             List<string> sfObjects = objects.Split(',').ToList();
             Dictionary<string, int> initialCounts = new Dictionary<string, int>();
 
@@ -73,7 +74,11 @@ namespace Microsoft.Deployment.Actions.Salesforce
             foreach (var obj in sfObjects)
             {
                 QueryResult result;
-                binding.query(sheader, null, null, null, null, $"SELECT COUNT() FROM {obj}", out result);
+                binding.query(sheader, null, null, null, null,
+                    $"SELECT COUNT() FROM {obj} " +
+                    $"WHERE LastModifiedDate > {DateTime.UtcNow.AddYears(-3).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture)} " +
+                    $"AND LastModifiedDate <= {DateTime.UtcNow.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture)}",
+                    out result);
                 initialCounts.Add(obj, result.size);
             }
 

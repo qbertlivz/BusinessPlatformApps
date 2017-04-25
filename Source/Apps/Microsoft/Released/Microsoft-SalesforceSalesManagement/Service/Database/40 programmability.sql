@@ -27,9 +27,9 @@ AS
 BEGIN
 	
 	--InitialPullComplete statuses
-	-- 1 -> Data pull is complete
-	-- 0 -> Data is present but not complete
-	-- -1 -> No data is present
+	-- 1 -> Data is present but not complete
+	-- 2 -> Data pull is complete
+	-- 3 -> No data is present
 
 	SET NOCOUNT ON;
     SELECT UPPER(LEFT(ta.name, 1)) + LOWER(SUBSTRING(ta.name, 2, 100)) AS EntityName, SUM(pa.rows) AS [Count], '' As [Status] INTO #counts
@@ -40,47 +40,55 @@ BEGIN
 	    ta.name IN ('Account', 'Lead', 'Opportunity', 'OpportunityLineItem', 'OpportunityStage', 'UserRole', 'User', 'Product2')
     GROUP BY ta.name
 
-	SELECT (100.0 * nullif(c.Count, 0) / i.initialCount) AS [Percentage], c.EntityName as EntityName INTO #percentages
-	FROM #counts c
+	SELECT (CASE WHEN c.Count = 0 AND i.initialcount = 0 
+			THEN 100 
+			ELSE (
+				  CASE WHEN (100.0 * c.Count / nullif(i.initialCount,0)) IS NULL 
+				  THEN 0 
+				  ELSE 100.0 * c.Count/i.initialCount 
+				  END) 
+			END) AS [Percentage], 
+		    c.EntityName as EntityName INTO #percentages
+	FROM #counts c 
 	INNER JOIN dbo.entityinitialcount i ON i.entityname = c.entityname
+
 
 	DECLARE @RowsWithSomeData int;
 	SET @RowsWithSomeData = (SELECT COUNT(*) FROM #counts
 						            WHERE [Count] > 0 )
 
 	IF EXISTS (SELECT * FROM notifier n
-			   WHERE DATEDIFF(MINUTE, n.deploymenttimestamp, CURRENT_TIMESTAMP) > 24 AND @RowsWithSomeData > 0)
+			   WHERE DATEDIFF(HOUR, n.deploymenttimestamp, CURRENT_TIMESTAMP) > 24 AND @RowsWithSomeData > 0)
 	UPDATE n
-	SET n.initialpullcomplete = 0 --Data pull is complete
+	SET n.initialpullcomplete = 1 --Data pull is partially complete
 	FROM notifier n
 
 	IF NOT EXISTS(SELECT p.[Percentage], p.[EntityName], i.lasttimestamp,  DATEDIFF(MINUTE, i.lasttimestamp, CURRENT_TIMESTAMP) AS [TimeDifference] FROM #percentages p
 			  INNER JOIN dbo.entityinitialcount i ON i.entityName = p.EntityName
-			  WHERE p.[Percentage] <= 80 AND DATEDIFF(MINUTE, i.lasttimestamp, CURRENT_TIMESTAMP) > 5
-			  OR p.[Percentage] <= 80)
+			  WHERE (p.[Percentage] <= 80 OR p.[Percentage] IS NULL) AND DATEDIFF(MINUTE, i.lasttimestamp, CURRENT_TIMESTAMP) > 5
+			  OR (p.[Percentage] <= 80  OR p.[Percentage] IS NULL))
 	UPDATE n
-	SET n.initialpullcomplete = 1 --Data pull is complete
+	SET n.initialpullcomplete = 2 --Data pull is complete
 	FROM notifier n
 	
-	MERGE entityinitialcount AS TARGET
-	USING #counts AS SOURCE
-	ON (TARGET.entityname = SOURCE.entityname)
-	WHEN MATCHED
-	THEN UPDATE SET 
-	TARGET.lastcount = SOURCE.[Count],
-	TARGET.lasttimestamp = CURRENT_TIMESTAMP;
 	
 	DECLARE @RowsWithoutData int;
 	SET @RowsWithoutData = (SELECT COUNT(*) FROM #counts
 						            WHERE [Count] = 0 )
 
 	IF EXISTS (SELECT * FROM notifier n
-			   WHERE DATEDIFF(MINUTE, n.deploymenttimestamp, CURRENT_TIMESTAMP) > 24 AND @RowsWithoutData > 0)
+			   WHERE DATEDIFF(HOUR, n.deploymenttimestamp, CURRENT_TIMESTAMP) > 24 AND @RowsWithoutData > 0)
 	UPDATE n
-	SET n.initialpullcomplete = -1 --Data pull is complete
+	SET n.initialpullcomplete = 3 --No data is present
 	FROM notifier n			   
 
-
+	MERGE entityinitialcount AS TARGET
+	USING #counts AS SOURCE
+	ON (TARGET.entityname = SOURCE.entityname)
+	WHEN MATCHED AND SOURCE.[Count] > TARGET.lastcount
+	THEN UPDATE SET 
+	TARGET.lastcount = SOURCE.[Count],
+	TARGET.lasttimestamp = CURRENT_TIMESTAMP;
 END;
 
 GO

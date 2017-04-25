@@ -30,10 +30,10 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             string deploymentId = Guid.NewGuid().ToString();
             string sprocName = request.DataStore.GetValue("sprocName");
             string templateName = request.Info.AppName;
-            string initialPullComplete = "0";
+            string initialPullComplete = "-1";
 
 
-            string cmd = $"INSERT INTO {table} VALUES('{deploymentId}','{notifierUrl}','{emails}','{sprocName}','{templateName}','{initialPullComplete}')";
+            string cmd = $"INSERT INTO {table} VALUES('{deploymentId}','{notifierUrl}','{emails}','{sprocName}','{templateName}','{initialPullComplete}','{DateTime.UtcNow.ToString("o")}')";
             SqlUtility.InvokeSqlCommand(connectionString, cmd, new Dictionary<string, string>());
 
             cmd = $"INSERT INTO deploymentids VALUES('{deploymentId}','{DateTime.UtcNow.ToString("o")}')";

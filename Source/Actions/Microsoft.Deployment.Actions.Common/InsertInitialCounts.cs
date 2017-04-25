@@ -24,7 +24,7 @@ namespace Microsoft.Deployment.Actions.Common
 
             foreach (var entry in countsObj)
             {
-                string cmd = $"INSERT INTO [dbo].[entityinitialcount] VALUES ('{entry.Key}','{entry.Value}','{DateTime.UtcNow.ToString("o")},'NULL')";
+                string cmd = $"INSERT INTO [dbo].[entityinitialcount] VALUES ('{entry.Key}','{entry.Value}','0','{DateTime.UtcNow.ToString("o")}')";
                 SqlUtility.InvokeSqlCommand(connectionString, cmd, new Dictionary<string, string>());
             }
 

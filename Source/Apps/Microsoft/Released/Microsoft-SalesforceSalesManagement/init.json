@@ -233,6 +233,14 @@
         "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
       },
       {
+        "displayname": "Get initial counts",
+        "name": "Microsoft-SalesforceGetEntityInitialCounts"
+      },
+      {
+        "displayname": "Insert counts",
+        "name": "Microsoft-InsertInitialCounts"
+      },
+      {
         "DeploymentName": "SqlConnectionDeployment",
         "displayname": "Creating database connection",
         "name": "Microsoft-CreateSqlConnector",

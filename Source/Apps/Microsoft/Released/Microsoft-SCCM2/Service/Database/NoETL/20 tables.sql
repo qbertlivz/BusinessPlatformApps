@@ -1062,3 +1062,25 @@ CREATE TABLE pbist_sccm.usercomputer_staging
      username    NVARCHAR(256) NULL,
      [full name] NVARCHAR(255) NULL
 );
+
+CREATE TABLE  pbist_sccm.SCEPDefinition (
+	machinedid INT NULL,
+	[name] NVARCHAR(256) null,
+	signatureupto1dayold INT NULL,
+	signatureupto3daysold INT NULL,
+	signatureupto7daysold INT NULL,
+	signatureolderthan7days INT NULL,
+	nosignature INT NULL,
+	epinstalled INT NULL
+);
+
+CREATE TABLE  pbist_sccm.SCEPDefinition_staging (
+	machinedid INT NULL,
+	[name] NVARCHAR(256) null,
+	signatureupto1dayold INT NULL,
+	signatureupto3daysold INT NULL,
+	signatureupto7daysold INT NULL,
+	signatureolderthan7days INT NULL,
+	nosignature INT NULL,
+	epinstalled INT NULL
+);

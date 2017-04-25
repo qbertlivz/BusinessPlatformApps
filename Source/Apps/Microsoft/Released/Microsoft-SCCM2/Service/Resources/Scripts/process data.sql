@@ -21,6 +21,7 @@ EXEC pbist_sccm.sp_populate_OverallComplianceBaseline;
 EXEC pbist_sccm.sp_populate_ReplicationStatus;
 EXEC pbist_sccm.sp_populate_SoftwareDistribution;
 EXEC pbist_sccm.sp_populate_TaskSequenceDeployment;
+EXEC pbist_sccm.sp_populate_SCEPDefinition;
 EXEC pbist_sccm.sp_populate_ClientHealthClientInstalledVersionDetails;
 EXEC pbist_sccm.sp_populate_ClientHealthClientsinventorystatisticslast30days;
 EXEC pbist_sccm.sp_populate_ClientHealthCountAssignedClientsBySite;

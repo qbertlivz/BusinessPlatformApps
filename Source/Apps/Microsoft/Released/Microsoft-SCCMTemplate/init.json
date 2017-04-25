@@ -50,6 +50,7 @@
         "onNext": [
           {
             "name": "Microsoft-CheckSCCMVersion",
+            "SqlServerIndex": "0",
             "useImpersonation": true
           }
         ],
@@ -103,9 +104,9 @@
         "displayname": "Summary",
         "name": "$SiteCommon$/pages-gallery/summary.html",
         "values": {
-          "Source Server": "$(this.MS.DataStore.getValue('Server'))",
-          "Source Database": "$(this.MS.DataStore.getValue('Database'))",
-          "Source Username": "$(this.MS.DataStore.getValue('Username'))"
+          "Target Server": "$(this.MS.DataStore.getValue('Server'))",
+          "Target Database": "$(this.MS.DataStore.getValue('Database'))",
+          "Target Username": "$(this.MS.DataStore.getValue('Username'))"
         }
       },
       {

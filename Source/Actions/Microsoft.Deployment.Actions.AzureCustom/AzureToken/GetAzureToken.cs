@@ -120,7 +120,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             }
         }
 
-        private static StringBuilder GetTokenUri(string code, string uri, string rootUrl, string clientId)
+        public static StringBuilder GetTokenUri(string code, string uri, string rootUrl, string clientId)
         {
             Dictionary<string, string> message = new Dictionary<string, string>
             {
@@ -141,7 +141,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             return builder;
         }
 
-        private static string GetTokenUri2(string code, string uri, string rootUrl, string clientId)
+        public static string GetTokenUri2(string code, string uri, string rootUrl, string clientId)
         {
             return $"refresh_token={code}&" +
                    $"client_id={clientId}&" +

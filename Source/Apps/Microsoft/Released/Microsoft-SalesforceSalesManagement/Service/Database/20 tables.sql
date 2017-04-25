@@ -139,10 +139,13 @@ CREATE TABLE [dbo].[notifier](
 	[emails] [nvarchar](max) NULL,
 	[sprocname] [varchar](40) NULL,
 	[templatename] [varchar](40) NULL,
-	[initialpullcomplete] [int] NULL
+	[initialpullcomplete] [int] NULL,
+	[deploymenttimestamp] [datetime2] NULL
 );
 
 CREATE TABLE [dbo].[entityinitialcount](
 	[entityname] [nvarchar](40) NULL,
-	[initialcount] INT NULL
+	[initialcount] INT NULL,
+	[lastcount] INT NULL,
+	[lasttimestamp] DATETIME2 NULL
 );

@@ -108,16 +108,22 @@
       },
       {
         "displayname": "$translate(INIT_ACTION_DEPLOYING_LOGIC_APP_DATABASE)",
-        "name": "Microsoft-ConfigurePowerAppTables",
-        "SqlServerIndex": "0"
+        "name": "Microsoft-ConfigurePowerAppTables"
       },
       {
         "displayname": "$translate(INIT_ACTION_RETRIEVING_POWERAPP_ENVIRONMENT)",
-        "name": "Microsoft-GetPowerAppEnvironment"
+        "name": "Microsoft-GetPowerAppEnvironment",
+        "skip": "$run(this.MS.DataStore.getValue('SkipPowerApp') === 'true')"
       },
       {
         "displayname": "$translate(INIT_ACTION_CREATING_POWERAPP_SQL_CONNECTION)",
-        "name": "Microsoft-CreatePowerAppSqlConnection"
+        "name": "Microsoft-CreatePowerAppSqlConnection",
+        "skip": "$run(this.MS.DataStore.getValue('SkipPowerApp') === 'true')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_POWERAPP)",
+        "name": "Microsoft-DeployPowerApp",
+        "skip": "$run(this.MS.DataStore.getValue('SkipPowerApp') === 'true')"
       },
       {
         "DeploymentName": "Function",

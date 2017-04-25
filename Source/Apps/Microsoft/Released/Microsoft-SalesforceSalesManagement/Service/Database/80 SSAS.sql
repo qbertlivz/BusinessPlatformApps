@@ -33,14 +33,12 @@ IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='smgt'
 	
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='smgt' AND ROUTINE_NAME='sp_reset_job' AND ROUTINE_TYPE='PROCEDURE')
     DROP PROCEDURE [smgt].sp_reset_job;
-
-GO
+go
 	
 -- =============================================
 -- Pre Setup - Insert Configuration Values
 -- =============================================
-DELETE 
-FROM smgt.[configuration]
+DELETE FROM smgt.[configuration]
 WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS'
 GO
 

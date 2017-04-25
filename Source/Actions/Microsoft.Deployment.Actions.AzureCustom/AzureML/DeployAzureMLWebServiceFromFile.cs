@@ -1,11 +1,8 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-
-using Microsoft.Rest;
-using Newtonsoft.Json.Linq;
-
 using Microsoft.Azure.Management.MachineLearning.CommitmentPlans;
 using Microsoft.Azure.Management.MachineLearning.CommitmentPlans.Models;
 using Microsoft.Azure.Management.MachineLearning.WebServices;
@@ -13,14 +10,14 @@ using Microsoft.Azure.Management.MachineLearning.WebServices.Models;
 using Microsoft.Azure.Management.MachineLearning.WebServices.Util;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
+using Microsoft.Deployment.Common.Enums;
 using Microsoft.Deployment.Common.Helpers;
 using Microsoft.Deployment.Common.Model;
-
+using Microsoft.Rest;
+using Microsoft.Rest.Azure;
+using Newtonsoft.Json.Linq;
 using CommitmentPlan = Microsoft.Azure.Management.MachineLearning.WebServices.Models.CommitmentPlan;
 using WebService = Microsoft.Azure.Management.MachineLearning.WebServices.Models.WebService;
-using System.Net.Http;
-using System;
-using Microsoft.Rest.Azure;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureML
 {
@@ -29,17 +26,17 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureML
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
-            var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
+            string azureToken = request.DataStore.GetJson("AzureToken", "access_token");
+            string subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
 
-            var webserviceFile = request.DataStore.GetValue("WebServiceFile");
-            var webserviceName = request.DataStore.GetValue("WebServiceName");
-            var commitmentPlanName = request.DataStore.GetValue("CommitmentPlan");
-            var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
-            var storageAccountName = request.DataStore.GetValue("StorageAccountName");
-            var storageAccountKey = request.DataStore.GetValue("StorageAccountKey");
+            string webserviceFile = request.DataStore.GetValue("WebServiceFile");
+            string webserviceName = request.DataStore.GetValue("WebServiceName");
+            string commitmentPlanName = request.DataStore.GetValue("CommitmentPlan");
+            string resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
+            string storageAccountName = request.DataStore.GetValue("StorageAccountName");
+            string storageAccountKey = request.DataStore.GetValue("StorageAccountKey");
 
-            var responseType = request.DataStore.GetValue("IsRequestResponse");
+            string responseType = request.DataStore.GetValue("IsRequestResponse");
             bool isRequestResponse = false;
 
             if (responseType != null)
@@ -63,7 +60,10 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureML
             };
 
             commitmentPlan.Location = "South Central US";
-            var createdsCommitmentPlan = await commitmentClient.CommitmentPlans.CreateOrUpdateAsync(commitmentPlan, resourceGroup, commitmentPlanName);
+            var createdCommitmentPlan = await commitmentClient.CommitmentPlans.CreateOrUpdateAsync(commitmentPlan, resourceGroup, commitmentPlanName);
+
+            request.Logger.LogResource(request.DataStore, createdCommitmentPlan.Name,
+                DeployedResourceType.MlWebServicePlan, CreatedBy.BPST, DateTime.UtcNow.ToString("o"), createdCommitmentPlan.Id, commitmentPlan.Sku.Tier);
 
             // Get webservicedefinition
             string sqlConnectionString = request.DataStore.GetValueAtIndex("SqlConnectionString", "SqlServerIndex");
@@ -86,11 +86,11 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureML
                 Name = storageAccountName
             };
 
-            webService.Properties.CommitmentPlan = new CommitmentPlan(createdsCommitmentPlan.Id);
-            webService.Name = webserviceName;
+            webService.Properties.CommitmentPlan = new CommitmentPlan(createdCommitmentPlan.Id);
+            // A little bit of juggling to change the name
+            webService = new WebService(webService.Location, webService.Properties, null, webserviceName, webService.Type, webService.Tags);
 
-            WebService result;
-
+            WebService result = null;
             try
             {
                 result = client.WebServices.CreateOrUpdate(resourceGroup, webserviceName, webService);
@@ -114,6 +114,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureML
             {
                 return new ActionResponse(ActionStatus.Failure, JsonUtility.GetJObjectFromStringValue(e.Message), e, "DefaultError", ((CloudException)e).Response.Content);
             }
+            request.Logger.LogResource(request.DataStore, result.Name,
+                DeployedResourceType.MlWebService, CreatedBy.BPST, DateTime.UtcNow.ToString("o"), result.Id);
 
             return new ActionResponse(ActionStatus.Success);
         }

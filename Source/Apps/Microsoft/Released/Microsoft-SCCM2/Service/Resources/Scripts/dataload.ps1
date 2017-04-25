@@ -9,9 +9,8 @@ $sql_uid=""
 $sql_pwd=""
 
 # Make sure we execute the newest (or at least the ones installed by us)
-$bcp = ".\bcp.exe"
-$sqlcmd = ".\sqlcmd.exe"
-
+$bcp = "E:\App\Microsoft SQL Server\Client SDK\ODBC\130\Tools\Binn\bcp.exe"
+$sqlcmd = "E:\App\Microsoft SQL Server\Client SDK\ODBC\130\Tools\Binn\sqlcmd.exe"
 
 #region Win32 credential manager
 # This region reuses code published at https://gist.github.com/toburger/2947424, under:
@@ -193,6 +192,7 @@ $file2table = [ordered]@{
 							"MAIN_Replication_Status.sql"												= "pbist_sccm.ReplicationStatus_staging";
 							"MAIN_Software_Distribution.sql"											= "pbist_sccm.SoftwareDistribution_staging";
 							"MAIN_Task_Sequence_Deployment.sql"											= "pbist_sccm.TaskSequenceDeployment_staging";
+							"Main_SCEP_Definition.sql"													= "pbist_sccm.SCEPDefinition_staging";
 							"ClientHealth_client_installed_version_details.sql"							= "pbist_sccm.ClientHealthClientInstalledVersionDetails_staging";
 							"ClientHealth_clients_inventory_statistics_last_30days.sql"					= "pbist_sccm.ClientHealthClientsinventorystatisticslast30days_staging";
 							"ClientHealth_count_assigned_clients_by_site.sql"							= "pbist_sccm.ClientHealthCountAssignedClientsBySite_staging";
@@ -237,8 +237,8 @@ foreach ($k in $file2table.Keys)
 
 if ( [string]::IsNullOrEmpty($sql_uid) )
 {
-    & $sqlcmd -I -S $DestinationServer -d $DestinationDatabase -E -i "process data.sql"
+    & $sqlcmd -I -a 32767 -S $DestinationServer -d $DestinationDatabase -E -i "process data.sql"
 } else
 {
-    & $sqlcmd -I -S $DestinationServer -d $DestinationDatabase -U $sql_uid -P $sql_pwd -i "process data.sql"
+    & $sqlcmd -I -a 32767 -S $DestinationServer -d $DestinationDatabase -U $sql_uid -P $sql_pwd -i "process data.sql"
 }

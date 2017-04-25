@@ -30,6 +30,7 @@ export class SqlServer extends ViewModelBase {
     showAzureSql: boolean = true;
     showGovAzure: boolean = false;
 
+    showCredsWhenWindowsAuth: boolean = false;
     showDatabases: boolean = false;
     showNewSqlOption: boolean = false;
     showSkuS1: boolean = true;
@@ -132,6 +133,10 @@ export class SqlServer extends ViewModelBase {
         this.MS.DataStore.addToDataStore('Server', this.getSqlServer(), DataStoreType.Public);
         this.MS.DataStore.addToDataStore('Username', this.username, DataStoreType.Public);
         this.MS.DataStore.addToDataStore('Password', this.password, DataStoreType.Private);
+
+        if (this.sqlInstance === 'ExistingSql') {
+            await this.MS.HttpService.executeAsync('Microsoft-ExistingSqlServer', { isInvisible: true });
+        }
 
         if (this.checkSqlVersion) {
             let responseVersion = await this.MS.HttpService.executeAsync('Microsoft-CheckSQLVersion', body);

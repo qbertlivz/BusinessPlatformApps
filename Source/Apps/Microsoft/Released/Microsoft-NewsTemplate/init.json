@@ -78,6 +78,38 @@
         "SqlServerIndex": "0"
       },
       {
+        "CognitiveServiceName": "TextCognitiveService",
+        "CognitiveServiceType": "TextAnalytics",
+        "CognitiveSkuName": "S1",
+        "DeploymentName": "CognitiveText",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_COGNITIVE_SERVICE)",
+        "name": "Microsoft-DeployCognitiveService"
+      },
+      {
+        "CognitiveServiceName": "TextCognitiveService",
+        "CognitiveServiceType": "TextAnalytics",
+        "DeploymentName": "CognitiveText",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_COGNITIVE_SERVICE_KEY)",
+        "name": "Microsoft-GetCognitiveKey"
+      },
+      {
+        "CognitiveServiceKey": "",
+        "CognitiveServiceName": "BingCognitiveService",
+        "CognitiveServiceType": "Bing.Search",
+        "CognitiveSkuName": "S2",
+        "DeploymentName": "CognitiveBing",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_COGNITIVE_SERVICE)",
+        "KeyNumber": "1",
+        "name": "Microsoft-DeployCognitiveService"
+      },
+      {
+        "CognitiveServiceName": "BingCognitiveService",
+        "DeploymentName": "CognitiveBing",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_COGNITIVE_SERVICE_KEY)",
+        "KeyNumber": "1",
+        "name": "Microsoft-GetCognitiveKey"
+      },
+      {
         "DeploymentName": "Function",
         "displayname": "$translate(INIT_ACTION_DEPLOYING_NEWS)",
         "FunctionName": "$save('function' + this.MS.DataStore.getValue('uniqueId'))",
@@ -92,6 +124,12 @@
       {
         "displayname": "$translate(INIT_ACTION_DEPLOYING_NEWS_ASSETS)",
         "name": "Microsoft-DeployPrivateAssemblyToFunction"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_NEWS_ASSETS)",
+        "name": "Microsoft-DeployNewsFunctionAsset",
+        "apiKey": "$dsall(CognitiveServiceKey)[1]",
+        "subscriptionKey": "$dsall(CognitiveServiceKey)[0]"
       },
       {
         "displayname": "$translate(INIT_ACTION_DEPLOYING_STORAGE_ACCOUNT)",
@@ -146,21 +184,38 @@
         "WebServiceFile": "Service/AzureML/Experiments/EntityWebService.json",
         "WebServiceName": "$run('EntitiesWebService' + this.MS.DataStore.getValue('uniqueId'))"
       },
-      {
-        "CognitiveServiceName": "TextCognitiveService",
-        "CognitiveServiceType": "TextAnalytics",
-        "CognitiveSkuName": "S1",
-        "DeploymentName": "CognitiveText",
-        "displayname": "$translate(INIT_ACTION_DEPLOYING_COGNITIVE_SERVICE)",
-        "name": "Microsoft-DeployCognitiveService"
-      },
-      {
-        "CognitiveServiceName": "TextCognitiveService",
-        "CognitiveServiceType": "TextAnalytics",
-        "DeploymentName": "CognitiveText",
-        "displayname": "$translate(INIT_ACTION_DEPLOYING_COGNITIVE_SERVICE_KEY)",
-        "name": "Microsoft-GetCognitiveKey"
-      },
+      //{
+      //  "DeploymentName": "AMLWorkspace",
+      //  "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_WORKSPACE)",
+      //  "WorkspaceName": "$run('bingnewsworkspace' + this.MS.DataStore.getValue('uniqueId'))",
+      //  "name": "Microsoft-DeployAzureMLWorkspace",
+      //  "StorageAccountName": "$run('saml' + this.MS.DataStore.getValue('uniqueId'))"
+
+      //},
+      //{
+      //  "DeploymentName": "AMLExperiments",
+      //  "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_EXPERIMENTS)",
+      //  "ExperimentJsonPath": "Service/AzureML/Experiments/TopicImagesExperiment.json",
+      //  "ExperimentName": "$run('TopicImagesExperiment' + this.MS.DataStore.getValue('uniqueId'))",
+      //  "name": "Microsoft-DeployAzureMLExperiment",
+      //  "WorkspaceName": "$run('bingnewsworkspace' + this.MS.DataStore.getValue('uniqueId'))"
+      //},
+      //{
+      //  "DeploymentName": "AMLExperiments",
+      //  "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_EXPERIMENTS)",
+      //  "ExperimentJsonPath": "Service/AzureML/Experiments/EntityRecognitionExperiment.json",
+      //  "ExperimentName": "$run('EntityRecognitionExperiment' + this.MS.DataStore.getValue('uniqueId'))",
+      //  "name": "Microsoft-DeployAzureMLExperiment",
+      //  "WorkspaceName": "$run('bingnewsworkspace' + this.MS.DataStore.getValue('uniqueId'))"
+      //},
+      //{
+      //  "DeploymentName": "AMLExperiments",
+      //  "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_EXPERIMENTS)",
+      //  "ExperimentJsonPath": "Service/AzureML/Experiments/TopicsExperiment.json",
+      //  "ExperimentName": "$run('TopicsExperiment' + this.MS.DataStore.getValue('uniqueId'))",
+      //  "name": "Microsoft-DeployAzureMLExperiment",
+      //  "WorkspaceName": "$run('bingnewsworkspace' + this.MS.DataStore.getValue('uniqueId'))"
+      //},
       {
         "ConnectorDisplayName": "TextAnalytics",
         "ConnectorName": "cognitiveservicestextanalytics",
@@ -170,23 +225,6 @@
         "DeploymentName": "CognitiveText",
         "displayname": "$translate(INIT_ACTION_UPDATING_COGNITIVE_SERVICE_CONNECTOR)",
         "name": "Microsoft-UpdateBlobStorageConnector"
-      },
-      {
-        "CognitiveServiceKey": "",
-        "CognitiveServiceName": "BingCognitiveService",
-        "CognitiveServiceType": "Bing.Search",
-        "CognitiveSkuName": "S2",
-        "DeploymentName": "CognitiveBing",
-        "displayname": "$translate(INIT_ACTION_DEPLOYING_COGNITIVE_SERVICE)",
-        "KeyNumber": "1",
-        "name": "Microsoft-DeployCognitiveService"
-      },
-      {
-        "CognitiveServiceName": "BingCognitiveService",
-        "DeploymentName": "CognitiveBing",
-        "displayname": "$translate(INIT_ACTION_DEPLOYING_COGNITIVE_SERVICE_KEY)",
-        "KeyNumber": "1",
-        "name": "Microsoft-GetCognitiveKey"
       },
       {
         "ConnectorDisplayName": "bingsearch",
@@ -242,6 +280,23 @@
         "DeploymentName": "LogicAppNewsTemplate",
         "displayname": "$translate(INIT_ACTION_VALIDATING_LOGIC_APP)",
         "name": "Microsoft-WaitForArmDeploymentStatus"
+      },
+      {
+        "DeploymentName": "LogicAppNewsHistorical",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_NEWS_LOGIC_APP_HISTORICAL)",
+        "LogicAppNameHistorical": "LogicAppHistoricalNews",
+        "name": "Microsoft-DeployNewsTemplateHistorical"
+      },
+      {
+        "DeploymentName": "LogicAppNewsHistorical",
+        "displayname": "$translate(INIT_ACTION_VALIDATING_LOGIC_APP)",
+        "name": "Microsoft-WaitForArmDeploymentStatus"
+      },
+      {
+        "DeploymentName": "LogicAppNewsHistorical",
+        "displayname": "$translate(INIT_ACTION_RUNNING_LOGIC_APP_HISTORICAL)",
+        "name": "Microsoft-RunNewsHistorical",
+        "LogicAppNameHistorical": "LogicAppHistoricalNews"
       }
     ]
   }

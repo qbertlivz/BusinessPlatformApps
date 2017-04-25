@@ -411,3 +411,8 @@ AS
          [full name] 
   FROM   pbist_sccm.usercomputer;
 go
+
+CREATE VIEW [pbist_sccm].[vw_SCEPDefinition]
+AS
+    SELECT * FROM pbist_sccm.SCEPDefinition;
+go

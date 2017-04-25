@@ -1,144 +1,342 @@
 ﻿{
+  "MSI": {
+    "Guid": "2F142293-C7B5-4C57-8FFE-75F636688C9D"
+  },
+
   "Install": {
     "Pages": [
       {
-        "name": "$SiteCommon$/pagesgallery/getting-started.html",
-        "templateName": "Salesforce Sales Management",
-        "subtitle": "Welcome to the Salesforce Sales Management solution template.",
-        "displayname": "Getting Started",
         "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-SalesforceSalesManagement/Web/Images/salesforceArchitectureDiagram.png",
+        "displayname": "Getting Started",
         "list1": [
-          "Azure Subscription",
-          "Salesforce Subscription",
-          "Azure SQL Database",
-          "Power BI Desktop (latest version)",
-          "Power BI Pro (to share the template with your organization)"
+          "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",
+          "$translate(INIT_GETTING_STARTED_SALESFORCE_SUBSCRIPTION)",
+          "$translate(INIT_GETTING_STARTED_AZURE_SQL)",
+          "$translate(INIT_GETTING_STARTED_PBI_DESKTOP)",
+          "$translate(INIT_GETTING_STARTED_PBI_PRO)"
         ],
         "list2": [
-          "Full cloud solution with minimum set up and maintenance considerations",
-          "Data pulled from Salesforce into an Azure SQL Database using Azure Data Factory",
-          "Connect to Azure SQL and import data into Power BI"
+          "$translate(INIT_GETTING_STARTED_CLOUD_SOLUTION)",
+          "$translate(INIT_GETTING_STARTED_DATA_PULL_SALESFORCE)",
+          "$translate(INIT_GETTING_STARTED_CONNECT_AS_PBI)"
         ],
-        "showBack": "$(false)"
+        "name": "$SiteCommon$/pages-gallery/getting-started.html",
+        "selection": {
+          "choice": "$translate(INIT_GETTING_STARTED_AZURE_SQL)",
+          "choiceDownload": "$translate(INIT_GETTING_STARTED_SQL_ONPREMISE)",
+          "label": "$translate(INIT_GETTING_STARTED_WHERE)",
+          "list1": [
+            "$translate(INIT_GETTING_STARTED_SQL_SERVER)",
+            "$translate(INIT_GETTING_STARTED_AZURE_VM)",
+            "$translate(INIT_GETTING_STARTED_PBI_DESKTOP)",
+            "$translate(INIT_GETTING_STARTED_PBI_PRO)"
+          ],
+          "list2": [
+            "$translate(INIT_GETTING_STARTED_DEDICATED_SSAS)",
+            "$translate(INIT_GETTING_STARTED_PULL_DATA)",
+            "$translate(INIT_GETTING_STARTED_DATA_MODEL)",
+            "$translate(INIT_GETTING_STARTED_DATA_MODEL_EXCEED)",
+            "$translate(INIT_GETTING_STARTED_ENTERPRISE_GATEWAY)"
+          ],
+          "options": [
+            "$translate(INIT_GETTING_STARTED_AZURE_SQL)",
+            "$translate(INIT_GETTING_STARTED_SQL_ONPREMISE)"
+          ]
+        },
+        "subtitle": "$translate(INIT_SALESFORCE_SUBTITLE)",
+        "templateName": "$translate(INIT_SALESFORCE_TITLE)"
       },
       {
-        "name": "$SiteCommon$/pagesgallery/azure-login.html",
         "displayname": "Azure",
-        "pricingUrl": "https://github.com/Microsoft/BusinessPlatformApps/tree/master/Source/Apps/Microsoft/Released/Microsoft-SalesforceSalesManagement#azure-data-factory-pricing",
-        "pricingCost": "$('By deploying the template you authorize the creation of Azure resources on your subscription. The base cost of these services is approximately $1.50 a day. The cost will vary with the amount of data that will be moved.')"
+        "name": "$SiteCommon$/pages-gallery/azure-login.html",
+        "pricingCalculatorUrl": "$translate(INIT_SALESFORCE_PRICING_CALCULATOR_URL)",
+        "pricingCost": "$translate(INIT_SALESFORCE_PRICING_COST)",
+        "pricingUrl": "$translate(INIT_SALESFORCE_PRICING_URL)",
+        "skip": "$(this.MS.HttpService.isOnPremise)"
       },
       {
-        "name": "$SiteCommon$/pagesgallery/salesforce-login.html",
+        "dataMovement": "$run(this.MS.HttpService.isOnPremise ? 'Informatica' : 'ADF')",
+        "displayname": "Data Movement",
+        "name": "$SiteCommon$/pages-gallery/data-movement.html",
+        "showAdf": "$run(!this.MS.HttpService.isOnPremise)"
+      },
+      {
         "displayname": "Salesforce",
+        "name": "$SiteCommon$/pages-gallery/salesforce-login.html",
         "salesforceObjects": "Opportunity,Account,Lead,Product2,OpportunityLineItem,OpportunityStage,User,UserRole"
       },
       {
-        "name": "$SiteCommon$/pagesgallery/sql-server.html",
-        "displayname": "SQL Target",
-        "isAzureSql": true,
+        "displayname": "Target",
+        "isAzureSql": "$run(!this.MS.HttpService.isOnPremise)",
+        "name": "$SiteCommon$/pages-gallery/sql-server.html",
+        "newSqlDatabase": "SalesforceDB",
         "showAzureSql": false,
-        "showNewSqlOption": true,
-        "subtitle": "Set up a connection to SQL so we can bring in your Salesforce data.",
-        "title": "Connect to your SQL Database",
-        "newSqlDatabase": "SalesforceDB"
+        "showGovAzure": "$run(!this.MS.HttpService.isOnPremise)",
+        "showNewSqlOption": "$run(!this.MS.HttpService.isOnPremise)",
+        "sqlInstance": "$run(this.MS.HttpService.isOnPremise ? 'ExistingSql' : 'NewSql')",
+        "subtitle": "$translate(INIT_TARGET_SALESFORCE)",
+        "title": "$translate(INIT_SQL_TITLE)"
       },
       {
-        "name": "customize.html",
-        "displayname": "Customize"
+        "displayname": "AAS",
+        "name": "$SiteCommon$/pages-gallery/choose-analysis-server.html",
+        "showDescription": true,
+        "skip": "$dsall(azureSqlDisabled)[0]"
       },
       {
-        "name": "$SiteCommon$/pagesgallery/summary.html",
+        "displayname": "AAS Login",
+        "name": "$SiteCommon$/pages-gallery/ssas.html",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
+      },
+      {
+        "displayname": "Customize",
+        "name": "$SiteCommon$/pages-gallery/customize.html",
+        "showEmails": "$run(this.MS.DataStore.getValue('DataMovement') === 'ADF')",
+        "showRecurrenceOptions": "$run(this.MS.DataStore.getValue('DataMovement') === 'ADF')",
+        "sourceApplication": "Salesforce"
+      },
+      {
         "displayname": "Summary",
+        "name": "$SiteCommon$/pages-gallery/summary.html",
         "values": {
-          "Subscription": "$(this.MS.DataStore.getJson(\"SelectedSubscription\").SubscriptionId)",
-          "ResourceGroup": "$(this.MS.DataStore.getValue(\"SelectedResourceGroup\"))",
-          "SqlServer": "$(this.MS.DataStore.getJson(\"SqlCredentials\").Server)",
-          "Database": "$(this.MS.DataStore.getJson(\"SqlCredentials\").Database)",
-          "FiscalStart": "$(this.MS.DataStore.getValue(\"fiscalMonth\"))",
-          "Emails": "$(this.MS.DataStore.getValue(\"EmailAddresses\"))",
-          "Actuals": "$(this.MS.DataStore.getValue(\"actuals\"))",
-          "PipelineFrequency": "$(this.MS.DataStore.getValue(\"postDeploymentPipelineFrequency\"))",
-          "PipelineInterval": "$(this.MS.DataStore.getValue(\"postDeploymentPipelineInterval\"))"
+          "Subscription": "$(this.MS.DataStore.getValue('DataMovement') === 'ADF' ? this.MS.DataStore.getJson('SelectedSubscription').SubscriptionId : '')",
+          "ResourceGroup": "$(this.MS.DataStore.getValue('SelectedResourceGroup'))",
+          "SqlServer": "$(this.MS.DataStore.getValue('Server'))",
+          "Database": "$(this.MS.DataStore.getValue('Database'))",
+          "Fiscal Start": "$(this.MS.DataStore.getValue('fiscalMonth'))",
+          "Emails": "$(this.MS.DataStore.getValue('EmailAddresses'))",
+          "Actuals": "$(this.MS.DataStore.getValue('actuals'))",
+          "Future data load frequency": "$(this.MS.DataStore.getValue('DataMovement') === 'ADF' ? this.MS.DataStore.getValue('postDeploymentPipelineFrequency') : '')",
+          "Future data load interval": "$(this.MS.DataStore.getValue('DataMovement') === 'ADF' ? this.MS.DataStore.getValue('postDeploymentPipelineInterval') : '')"
         }
       },
       {
-        "name": "$SiteCommon$/pagesgallery/progress.html",
+        "asDatabase": "SalesManagement",
         "displayname": "Progress",
-        "finishedActionName": "Microsoft-ADFSliceStatus",
+        "filename": "$save('SalesManagementReport.pbix')",
+        "filenameSSAS": "SalesManagementReportAS.pbix",
+        "finishedActionName": "$run(this.MS.DataStore.getValue('DataMovement') === 'ADF' ? 'Microsoft-ADFSliceStatus' : this.MS.DataStore.getValue('DataMovement') === 'Scribe' ? 'Microsoft-GetScribeSolutionStatus' : 'Microsoft-GetInformaticaTaskStatus')",
+        "name": "$SiteCommon$/pages-gallery/progress.html",
+        "showCounts": true,
         "targetSchema": "dbo",
-        "filename": "$('SalesManagementReport.pbix', isSaved=true)",
-        "showCounts": true
+        "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(10))"
       }
     ],
+
     "Actions": [
+        {
+            "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
+            "name": "Microsoft-DeploySQLScripts",
+            "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')",
+            "SqlScriptsFolder": "Service/Database",
+            "SqlServerIndex": "0"
+        },
       {
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
         "name": "Microsoft-DeploySQLScripts",
-        "displayname": "Deploy DB Scripts",
-        "SqlServerIndex": "0",
-        "SqlScriptsFolder": "Service/Database/Cleanup"
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')",
+        "SqlScriptsFolder": "Service/Database/Scribe",
+        "SqlServerIndex": "0"
       },
       {
+        "displayname": "$translate(INIT_ACTION_RETRIEVING_SALESFORCE_METADATA)",
         "name": "Microsoft-SalesforceGetObjectMetadata",
-        "displayname": "Retrieve metadata from Salesforce"
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
       },
       {
+        "displayname": "$translate(INIT_ACTION_CREATING_SALESFORCE_TABLES)",
         "name": "Microsoft-SalesforceSqlArtefacts",
-        "displayname": "Create objects in SQL"
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
       },
       {
-        "name": "Microsoft-DeploySQLScripts",
-        "displayname": "Create DB relations",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+        "name": "Microsoft-SetConfigValueInSql",
+        "SqlConfigTable": "[smgt].[configuration]",
+        "SqlServerIndex": "0"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+        "name": "Microsoft-SetConfigValueInSql",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
+        "SqlConfigTable": "[smgt].[configuration]",
+        "SqlEntryName": "FunctionName",
+        "SqlEntryValue": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
+        "SqlGroup": "SolutionTemplate",
         "SqlServerIndex": "0",
-        "SqlScriptsFolder": "Service/Database/ADF"
+        "SqlSubGroup": "SSAS"
       },
       {
-        "name": "Microsoft-ADFDeployLinkedServicesAndSqlCustomizations",
-        "displayname": "Creating linked services",
-        "DeploymentName": "ADFDeployment"
+        "ASDatabase": "SalesManagement",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_AS_MODEL)",
+        "name": "Microsoft-DeployAzureASModel",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
+        "SqlConnectionString": "$dsall(SqlConnectionString)[0]",
+        "xmlaFilePath": "Service/AzureAS/SalesManagement.xmla"
       },
       {
+        "DeploymentName": "ASFunction",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_AS_SCHEDULER)",
+        "FunctionName": "$save('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
+        "name": "Microsoft-DeployAzureFunction",
+        "RepoUrl": "https://github.com/MohaaliMicrosoft/AnalysisServicesRefresh",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
+        "sku": "Standard"
+      },
+      {
+        "DeploymentName": "ASFunction",
+        "displayname": "$translate(INIT_ACTION_WAITING_AS_SCHEDULER)",
+        "name": "Microsoft-WaitForArmDeploymentStatus",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
+      },
+      {
+        "AppSettingKeys": {
+          "connStringAS": "$ds(ASConnectionString)",
+          "connStringSql": "$dsall(SqlConnectionString)[0]",
+          "databaseAS": "SalesManagement",
+          "functionName": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
+          "schema": "[smgt]"
+        },
+        "DeploymentName": "ASFunction",
+        "displayname": "$translate(INIT_ACTION_SETTING_UP_AS_SCHEDULER)",
+        "name": "Microsoft-DeployAzureFunctionConnectionStrings",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
+      },
+      {
+        "DeploymentName": "ADFDeployment",
+        "displayname": "$translate(INIT_ACTION_CREATING_DATA_CONNECTIONS)",
+        "name": "Microsoft-ADFDeployLinkedServices",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
+      },
+      {
+        "DeploymentName": "ADFPreDeploymentDatasets",
+        "displayname": "$translate(INIT_ACTION_CREATING_MAPPINGS)",
         "name": "Microsoft-ADFDeployDatasets",
-        "displayname": "Creating historical datasets",
-        "DeploymentName": "ADFPreDeploymentDatasets"
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
       },
       {
+        "DeploymentName": "ADFPreDeploymentPipeline",
+        "displayname": "$translate(INIT_ACTION_SCHEDULING_HISTORICAL)",
         "name": "Microsoft-ADFDeployPipelines",
-        "displayname": "Creating historical pipelines",
-        "DeploymentName": "ADFPreDeploymentPipeline"
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
       },
       {
-        "name": "Microsoft-ADFDeployDatasets",
-        "displayname": "Creating current datasets",
         "DeploymentName": "ADFPostDeploymentDatasets",
-        "postDeploymentPipelineType": "PostDeployment"
+        "displayname": "$translate(INIT_ACTION_CREATING_MAPPINGS_FUTURE)",
+        "name": "Microsoft-ADFDeployDatasets",
+        "postDeploymentPipelineType": "PostDeployment",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
       },
       {
-        "name": "Microsoft-ADFDeployPipelines",
-        "displayname": "Creating current pipelines",
         "DeploymentName": "ADFPostDeploymentPipeline",
-        "postDeploymentPipelineType": "PostDeployment"
+        "displayname": "$translate(INIT_ACTION_SCHEDULING_DATA_LOADS)",
+        "name": "Microsoft-ADFDeployPipelines",
+        "postDeploymentPipelineType": "PostDeployment",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
       },
       {
-        "name": "Microsoft-GetDataPullStatus",
-        "displayname": "Checking data exists in target",
-        "SqlServerIndex": 0,
-        "TargetSchema": "dbo",
+        "displayname": "$translate(INIT_ACTION_CHECKING_DATA)",
+        "FinishedActionName": "Microsoft-ADFSliceStatus",
         "IsWaiting": true,
-        "FinishedActionName": "Microsoft-ADFSliceStatus"
+        "name": "Microsoft-GetDataPullStatus",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')",
+        "SqlServerIndex": 0,
+        "TargetSchema": "dbo"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CLEANING_INFORMATICA_ENVIRONMENT)",
+        "name": "Microsoft-CleanInformaticaEnvironment",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Informatica')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CREATING_INFORMATICA_CONNECTION_SALESFORCE)",
+        "name": "Microsoft-CreateInformaticaConnectionSalesforce",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Informatica')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CREATING_INFORMATICA_CONNECTION_SQL)",
+        "name": "Microsoft-CreateInformaticaConnectionSql",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Informatica')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CREATING_INFORMATICA_TASK)",
+        "Entities": "Account,Lead,Opportunity,OpportunityLineItem,OpportunityStage,UserRole,User,Product2",
+        "name": "Microsoft-CreateInformaticaTask",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Informatica')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_STARTING_INFORMATICA_TASK)",
+        "name": "Microsoft-StartInformaticaTask",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Informatica')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CHECKING_DATA)",
+        "FinishedActionName": "Microsoft-GetInformaticaTaskStatus",
+        "IsWaiting": true,
+        "name": "Microsoft-GetDataPullStatus",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Informatica')",
+        "SqlServerIndex": 0,
+        "TargetSchema": "dbo"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CLEANING_SCRIBE_ENVIRONMENT)",
+        "name": "Microsoft-CleanScribeEnvironment",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CREATING_SCRIBE_CONNECTION_SALESFORCE)",
+        "name": "Microsoft-CreateScribeConnectionSalesforce",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CREATING_SCRIBE_CONNECTION_SQL)",
+        "name": "Microsoft-CreateScribeConnectionSql",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CREATING_SCRIBE_SOLUTION)",
+        "Entities": "Account,Lead,Opportunity,OpportunityLineItem,OpportunityStage,UserRole,User,Product2",
+        "name": "Microsoft-CreateScribeSolution",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_PROCESS_SCRIBE_SOLUTION)",
+        "name": "Microsoft-ProcessScribeSolution",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CHECKING_DATA)",
+        "FinishedActionName": "Microsoft-GetScribeSolutionStatus",
+        "IsWaiting": true,
+        "name": "Microsoft-GetDataPullStatus",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')",
+        "SqlServerIndex": 0,
+        "TargetSchema": "dbo"
       }
     ]
   },
+
   "Uninstall": {
     "Pages": [
       {
-        "name": "$SiteCommon$/pagesgallery/getting-started.html",
-        "displayname": "Uninstall Start"
-      },
-      {
-        "name": "$SiteCommon$/pagesgallery/azure-login.html",
-        "displayname": " Uninstall Login"
+        "displayname": "Uninstall Progress",
+        "HasNavigated": "$save(true)",
+        "isUninstall": true,
+        "name": "$SiteCommon$/pages-gallery/progress.html",
+        "showEmailSubmission": false,
+        "successMessage": "$translate(INIT_UNINSTALL_SUCCESS)"
       }
     ],
-    "Actions": []
+
+    "Actions": [
+      {
+        "displayname": "$translate(INIT_ACTION_REMOVING_FILES)",
+        "name": "Microsoft-RemoveFiles"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_FINISHING_CLEANUP)",
+        "name": "Microsoft-RemoveFiles",
+        "TargetPath": "C:\\Program Files\\Microsoft Templates\\Microsoft-SalesforceSalesManagement\\Apps\\Microsoft\\Released\\Microsoft-SalesforceSalesManagement\\Temp"
+      }
+    ]
   }
 }

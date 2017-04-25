@@ -12,5 +12,4 @@
         public const string URL_PROFILES_VALIDATE = "/crm/exporter/profiles/validate";
         public const string URL_ENTITIES = "/crm/exporter/metadata/entities";
     }
-
 }

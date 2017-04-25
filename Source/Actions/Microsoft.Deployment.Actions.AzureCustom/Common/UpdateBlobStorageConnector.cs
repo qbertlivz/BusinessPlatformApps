@@ -1,15 +1,14 @@
 ﻿using System.ComponentModel.Composition;
-using System.Dynamic;
 using System.Net.Http;
 using System.Threading.Tasks;
+
+using Newtonsoft.Json.Linq;
+
+using Microsoft.Deployment.Actions.AzureCustom.LogicApp;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.ErrorCode;
 using Microsoft.Deployment.Common.Helpers;
-using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using Microsoft.Deployment.Actions.AzureCustom.LogicApp;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.Common
 {
@@ -18,17 +17,12 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var azureToken = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
-            var subscription = request.DataStore.GetJson("SelectedSubscription")["SubscriptionId"].ToString();
+            var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
+            var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
-            var location = request.DataStore.GetJson("SelectedLocation")["Name"].ToString();
+            var location = request.DataStore.GetJson("SelectedLocation", "Name");
             var connectorName = request.DataStore.GetValue("ConnectorName");
             var connectorDisplayName = request.DataStore.GetValue("ConnectorDisplayName");
-
-            if (connectorName == "bingsearch")
-            {
-                location = "brazilsouth";
-            }
 
             JToken connectorPayload = request.DataStore.GetJson("ConnectorPayload");
 

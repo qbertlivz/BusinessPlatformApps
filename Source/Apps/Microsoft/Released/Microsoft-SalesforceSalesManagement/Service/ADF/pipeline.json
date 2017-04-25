@@ -8,30 +8,6 @@
         "description": "Data Factory Account name"
       }
     },
-    "sqlServerName": {
-      "type": "string",
-      "metadata": {
-        "description": "Existing Azure SQL Database Server name"
-      }
-    },
-    "sqlServerUsername": {
-      "type": "string",
-      "metadata": {
-        "description": "Existing Azure SQL Database Server user name"
-      }
-    },
-    "sqlServerPassword": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Existing Azure SQL Database Server password"
-      }
-    },
-    "targetDatabaseName": {
-      "type": "string",
-      "metadata": {
-        "description": "Existing taget Azure SQL Database name"
-      }
-    },
     "targetSqlSchema": {
       "type": "string",
       "metadata": {
@@ -42,24 +18,6 @@
       "type": "string",
       "metadata": {
         "description": "Existing target table in Azure SQL Database"
-      }
-    },
-    "salesforceUsername": {
-      "type": "string",
-      "metadata": {
-        "description": "Salesforce login username"
-      }
-    },
-    "salesforcePassword": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Salesforce login password"
-      }
-    },
-    "salesforceSecurityToken": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Salesforce secure token"
       }
     },
     "targetSalesforceTable": {
@@ -145,7 +103,8 @@
                 "sqlWriterTableType": "[concat(parameters('targetSqlSchema'),'.',parameters('sqlWritableTypeName'))]",
                 "writeBatchSize": 500,
                 "writeBatchTimeout": "00:00:00"
-              }
+              },
+              "executionLocation":  "West US"
             },
             "inputs": [
               {

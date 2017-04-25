@@ -101,21 +101,21 @@
               },
               "type": "ApiConnection"
             },
-            "ProcessTweet": {
+            "TweetProcessingFunction": {
+              "inputs": {
+                "body": "@body('Search_tweets')",
+                "function": {
+                  "id": "[concat('/subscriptions/', parameters('subscription'), '/resourceGroups/',parameters('resourcegroup'),'/providers/Microsoft.Web/sites/', parameters('sitename'), '/Functions/TweetProcessingFunction')]"
+                }
+              },
               "runAfter": {
                 "Search_tweets": [
                   "Succeeded"
                 ]
               },
-              "type": "Function",
-              "inputs": {
-                "body": "@triggerBody()",
-                "function": {
-                  "id": "[concat('/subscriptions/', parameters('subscription'), '/resourceGroups/',parameters('resourcegroup'),'/providers/Microsoft.Web/sites/', parameters('sitename'), '/Functions/TweetProcessingFunction')]"
-                }
-              }
+              "type": "Function"
             }
-            },
+          },
             "outputs": {}
           },
         "parameters": {

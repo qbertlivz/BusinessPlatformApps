@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Web.Http;
+
 using Microsoft.Deployment.Common.AppLoad;
 using Microsoft.Deployment.Common.Controller;
 
@@ -23,7 +24,7 @@ namespace Microsoft.Deployment.Site.Service
                 defaults: new { id = RouteParameter.Optional }
                 );
 
-            AppFactory appFactory = new AppFactory();
+            AppFactory appFactory = new AppFactory(true);
 
             CommonControllerModel = new CommonControllerModel()
             {

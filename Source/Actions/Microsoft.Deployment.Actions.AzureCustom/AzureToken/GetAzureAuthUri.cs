@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+
+using Microsoft.Azure;
+using Microsoft.Azure.Management.Resources;
+using Microsoft.Azure.Management.Resources.Models;
 
 using Microsoft.Deployment.Common;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
-using Microsoft.Azure;
-using Microsoft.Azure.Management.Resources;
-using Microsoft.Azure.Management.Resources.Models;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
 {
@@ -54,14 +55,19 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             string oauthType = (request.DataStore.GetLastValue("oauthType") ?? string.Empty).ToLowerInvariant();
             switch (oauthType)
             {
+                case "powerbi":
+                    authBase = string.Format(Constants.AzureAuthUri, aadTenant);
+                    clientId = Constants.MicrosoftClientIdPowerBI;
+                    resource = Constants.PowerBIService;
+                    break;
                 case "mscrm":
                     authBase = string.Format(Constants.AzureAuthUri, aadTenant);
                     clientId = Constants.MsCrmClientId;
                     resource = Constants.AzureManagementApi;
                     break;
                 case "keyvault":
-                    string azureToken = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
-                    string subscriptionId = request.DataStore.GetJson("SelectedSubscription")["SubscriptionId"].ToString();
+                    string azureToken = request.DataStore.GetJson("AzureToken", "access_token");
+                    string subscriptionId = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
                     string resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
 
 
@@ -86,13 +92,13 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                         if (!kvExists)
                         {
                             operationResponse = managementClient.Providers.Register("Microsoft.KeyVault");
-                            if (operationResponse.StatusCode != System.Net.HttpStatusCode.OK || operationResponse.StatusCode != System.Net.HttpStatusCode.Accepted )
+                            if (operationResponse.StatusCode != System.Net.HttpStatusCode.OK || operationResponse.StatusCode != System.Net.HttpStatusCode.Accepted)
                                 return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "MsCrm_ErrorRegisterKv");
 
                             Thread.Sleep(10000); // Wait for it to register
                         }
-                        
-                        string oid ;
+
+                        string oid;
                         string tenantID;
                         ExtractUserandTenant(azureToken, out oid, out tenantID);
 
@@ -130,6 +136,13 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                     break;
             }
 
+            StringBuilder builder = GetRawAzureAuthUri(request, authBase, clientId, resource);
+
+            return new ActionResponse(ActionStatus.Success, JsonUtility.GetJObjectFromStringValue(builder.ToString()));
+        }
+
+        public static StringBuilder GetRawAzureAuthUri(ActionRequest request, string authBase, string clientId, string resource)
+        {
             Dictionary<string, string> message = new Dictionary<string, string>
             {
                 { "client_id", clientId },
@@ -147,7 +160,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                 builder.Append("&");
             }
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetJObjectFromStringValue(builder.ToString()));
+            return builder;
         }
     }
 }

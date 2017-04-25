@@ -7,7 +7,7 @@ SET QUOTED_IDENTIFIER       ON;
 go
 
 -- AccountView
-CREATE VIEW smgt.AccountView
+CREATE VIEW smgt.accountview
 AS
   SELECT id             AS [Account Id],
          NAME           AS [Account Name],
@@ -39,7 +39,7 @@ go
 
 
 -- ActualSalesView
-CREATE VIEW smgt.ActualSalesView
+CREATE VIEW smgt.actualsalesview
 AS
   SELECT invoiceid   AS [Invoice Id],
          actualsales AS [Actual Sales],
@@ -83,7 +83,7 @@ go
 
 
 -- BusinessUnitView
-CREATE VIEW smgt.BusinessUnitView
+CREATE VIEW smgt.businessunitview
 AS
   WITH tree
        AS (SELECT [id],
@@ -114,7 +114,7 @@ go
 
 
 -- ConfigurationView
-CREATE VIEW smgt.ConfigurationView
+CREATE VIEW smgt.configurationview
 AS
     SELECT [id],
             configuration_group    AS [Configuration Group],
@@ -126,7 +126,7 @@ AS
 go
 
 -- DateView
-CREATE VIEW smgt.DateView
+CREATE VIEW smgt.dateview
 AS
     SELECT date_key,
            full_date        AS [Date],
@@ -146,7 +146,7 @@ AS
 go
 
 -- LeadView
-CREATE VIEW smgt.LeadView
+CREATE VIEW smgt.leadview
 AS
     SELECT NULL          AS [Estimated Amount],
            [status]      AS [Status],
@@ -169,14 +169,14 @@ go
 
 
 -- MeasuresView
-CREATE VIEW smgt.MeasuresView
+CREATE VIEW smgt.measuresview
 AS
     SELECT TOP 0 1 AS MeasureValues;
 go
 
 
 -- OpportunityProductView
-CREATE VIEW smgt.OpportunityProductView
+CREATE VIEW smgt.opportunityproductview
 AS
     SELECT product2id    AS [Product Id],
            opportunityid AS [Opportunity Id],
@@ -186,7 +186,7 @@ go
 
 
 -- OpportunityView
-CREATE VIEW smgt.OpportunityView
+CREATE VIEW smgt.opportunityview
 AS
     SELECT o.id                    AS [Opportunity Id],
             o.NAME                 AS [Opportunity Name],
@@ -227,7 +227,7 @@ AS
 go
 
 -- ProductView
-CREATE VIEW smgt.ProductView
+CREATE VIEW smgt.productview
 AS
     SELECT id      AS [Product Id],
             NAME   AS [Product Name],
@@ -241,7 +241,7 @@ go
 
 
 -- QuotaView
-CREATE VIEW smgt.QuotaView
+CREATE VIEW smgt.quotaview
 AS
     SELECT amount                     AS Amount,
             CONVERT(DATE, [date], 101) AS [Date],
@@ -251,7 +251,7 @@ AS
 go
 
 -- TargetView
-CREATE VIEW smgt.TargetView
+CREATE VIEW smgt.targetview
 AS
   SELECT CONVERT(UNIQUEIDENTIFIER, productid)      AS [Product Id],
          CONVERT(UNIQUEIDENTIFIER, businessunitid) AS [Business Unit Id],
@@ -262,13 +262,13 @@ AS
 go
 
 -- TerritoryView
-CREATE VIEW smgt.TerritoryView
+CREATE VIEW smgt.territoryview
 AS
   SELECT  NULL AS [Territory Name], NULL AS [territory Id];
 go
 
 -- UserAscendantsView
-CREATE VIEW smgt.UserAscendantsView
+CREATE VIEW smgt.userascendantsview
 AS
     WITH mycte(roleid, ascendantroleid, rolelevel) AS
     (
@@ -323,7 +323,7 @@ go
 
 
 -- UserView
-CREATE VIEW smgt.UserView
+CREATE VIEW smgt.userview
 AS
     SELECT a.NAME      AS [Full Name],
            a.id        AS [User Id],

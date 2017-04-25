@@ -1,0 +1,13 @@
+{
+  "Install": {
+    "Pages": [
+      {
+        "name": "$SiteCommon$/pages-gallery/nested/gettingstartedtemplate.html",
+        "displayname": "Azure"
+      }
+    ],
+
+    "Actions": [
+    ]
+  }
+}

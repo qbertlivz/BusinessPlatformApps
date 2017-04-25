@@ -37,6 +37,12 @@ CREATE TABLE bpst_news.documents
     CONSTRAINT pk_documents PRIMARY KEY CLUSTERED (id)
 );
 
+CREATE TABLE bpst_news.documentsearchterms
+(
+	[documentId]		NCHAR(64),
+    [searchterms]		NVARCHAR(130)
+	CONSTRAINT pk_documentsearchterms PRIMARY KEY CLUSTERED (searchterms)
+);
 
 CREATE TABLE bpst_news.documentpublishedtimes
 (
@@ -78,7 +84,7 @@ CREATE TABLE bpst_news.documentkeyphrases
     documentid	NCHAR(64) NOT NULL,
     phrase		NVARCHAR(max) NOT NULL
 );
-
+CREATE NONCLUSTERED INDEX idx_documentkeyphrases_documentid ON [bpst_news].[documentkeyphrases] ([documentid]) INCLUDE ([phrase]) WITH (ONLINE = ON);
 
 CREATE TABLE bpst_news.documenttopics
 (
@@ -98,7 +104,6 @@ CREATE TABLE bpst_news.topickeyphrases
     KeyPhrase		NVARCHAR(2000) NOT NULL
 );
 
-
 CREATE TABLE bpst_news.documenttopicimages
 (
     topicId		NCHAR(36) NOT NULL,
@@ -108,7 +113,6 @@ CREATE TABLE bpst_news.documenttopicimages
     imageUrl4	NVARCHAR(MAX),
     CONSTRAINT pk_documenttopicimages PRIMARY KEY CLUSTERED (topicId)
 );
-
 
 
 CREATE TABLE bpst_news.entities
@@ -122,15 +126,32 @@ CREATE TABLE bpst_news.entities
     [length]					INT NOT NULL
 );
 
-
-CREATE TABLE bpst_news.documentcompressedentities
+-- Bring Your Own Entity Tables
+CREATE TABLE bpst_news.userdefinedentities
 (
-    documentId				NCHAR(64) NOT NULL,
-    compressedEntitiesJson	NVARCHAR(max),
-    CONSTRAINT pk_documentcompressedentities PRIMARY KEY CLUSTERED (documentId)
+	id							BIGINT NOT NULL IDENTITY (1, 1),
+    documentId					NCHAR(64) NOT NULL,
+    entityType					NVARCHAR(30) NOT NULL,
+    entityValue					NVARCHAR(MAX) NULL,
+    offset						INT NOT NULL,
+    offsetDocumentPercentage	FLOAT NOT NULL,
+    [length]					INT NOT NULL
 );
-CREATE NONCLUSTERED INDEX idx_documentcompressedentities_documentId ON bpst_news.entities (documentId);
 
+CREATE TABLE bpst_news.userdefinedentitydefinitions
+(
+    regex			NVARCHAR(200) NOT NULL,
+    entityType		NVARCHAR(30) NOT NULL,
+    entityValue		NVARCHAR(MAX) NULL
+);
+
+CREATE TABLE bpst_news.typedisplayinformation
+(
+   entityType		NVARCHAR(30) NOT NULL,
+   icon				NVARCHAR(30) NOT NULL,
+   color			NVARCHAR(7) NOT NULL
+);
+CREATE INDEX idx_typedisplayinformation_entityType ON bpst_news.typedisplayinformation (entityType);
 
 -- Staging tables
 
@@ -166,8 +187,3 @@ CREATE TABLE bpst_news.stg_entities
 );
 
 
-CREATE TABLE bpst_news.stg_documentcompressedentities
-(
-    documentId				NCHAR(64) NOT NULL,
-    compressedEntitiesJson	NVARCHAR(max)
-);

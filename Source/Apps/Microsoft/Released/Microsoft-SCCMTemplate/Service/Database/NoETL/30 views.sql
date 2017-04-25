@@ -1,143 +1,65 @@
+SET ANSI_NULLS              ON;
+SET ANSI_PADDING            ON;
+SET ANSI_WARNINGS           ON;
+SET ANSI_NULL_DFLT_ON       ON;
+SET CONCAT_NULL_YIELDS_NULL ON;
+SET QUOTED_IDENTIFIER       ON;
+go
 
-CREATE VIEW [pbist_sccm].[vw_DistributionPointsCompliancebyDPStatus]
-AS SELECT * FROM pbist_sccm.DistributionPointsCompliancebyDPStatus;
-GO
 
-
-CREATE VIEW [pbist_sccm].[vw_DistributionPointsAllDPs]
+-- Computer malware
+CREATE VIEW pbist_sccm.vw_computermalware
 AS
-SELECT DISTINCT t.[DistributionPoint] 
-FROM
-(SELECT DISTINCT [DistributionPoint]FROM [pbist_sccm].[vw_DistributionPointsCompliancebyDPStatus]) AS t
+    SELECT threatid,
+           machineid,
+           10000*Year([detection date]) + 100*Month([detection date]) + Day([detection date]) date_key,
+           [observer product name],
+           [observer product version],
+           [observer detection],
+           [remediation type],
+           [remediation result],
+           [remediation error code],
+           [remediation pending action],
+           [is active malware]
+    FROM   pbist_sccm.computermalware
+    WHERE DateDiff(day, [detection date], GetDate()) <=365;
+go
 
 
-GO
-
-CREATE VIEW [pbist_sccm].[vw_TasksequenceOverallTaskSequenceByComputerDeployment]
-AS SELECT * FROM pbist_sccm.TasksequenceOverallTaskSequenceByComputerDeployment;
-GO
-
-CREATE VIEW [pbist_sccm].[vw_TasksequenceOverallTaskSequencebyTaskSequenceDeployment]
-AS SELECT * FROM pbist_sccm.TasksequenceOverallTaskSequencebyTaskSequenceDeployment;
-GO
-
-
-CREATE VIEW [pbist_sccm].[vw_TaskSequenceAllTaskSequenceIDs]
-AS
-SELECT DISTINCT t.[TaskSequenceID], t.[Name]
-FROM
-(SELECT DISTINCT [TaskSequenceID], [name] FROM [pbist_sccm].[vw_TasksequenceOverallTaskSequenceByComputerDeployment]
-UNION
-SELECT DISTINCT [TSID], [TaskSequenceName] FROM [pbist_sccm].[vw_TasksequenceOverallTaskSequencebyTaskSequenceDeployment]) AS t
-
-GO
-
-CREATE VIEW [pbist_sccm].[vw_SoftwareDistributionOverallApplicationDeployment]
-AS SELECT * FROM pbist_sccm.SoftwareDistributionOverallApplicationDeployment;
-GO
-
-CREATE VIEW [pbist_sccm].[vw_SoftwareDistributionOverallPackageDeployment]
-AS SELECT * FROM pbist_sccm.SoftwareDistributionOverallPackageDeployment;
-GO
-
-
-CREATE VIEW [pbist_sccm].[vw_SoftwareDistributionAllPackageIDs]
-AS
-SELECT DISTINCT t.[SoftwareName] AS [Package Name], t.[packageid] AS PackageID, t.[Type]
-FROM
-(
-SELECT DISTINCT [SoftwareName], [packageid], 'Applications' AS Type FROM [pbist_sccm].[vw_SoftwareDistributionOverallApplicationDeployment]
-UNION
-SELECT DISTINCT [SoftwareName], [packageid], 'Package' AS Type FROM [pbist_sccm].[vw_SoftwareDistributionOverallPackageDeployment]
-) AS t
-
-GO
-
-CREATE VIEW [pbist_sccm].[vw_ComplianceSettingComplianceByComputers]
-AS SELECT * FROM pbist_sccm.ComplianceSettingComplianceByComputers;
-GO
-
-CREATE VIEW [pbist_sccm].[vw_ComplianceSettingComplianceCIForAllBaseline]
-AS SELECT * FROM pbist_sccm.ComplianceSettingComplianceCIForAllBaseline;
-GO
-
-
-CREATE VIEW [pbist_sccm].[vw_ComplianceSettingsAllBaselineNames]
-AS
-SELECT DISTINCT t.[Baseline Name] 
-FROM
-(
-SELECT DISTINCT [BaselineName] AS [Baseline Name]FROM [pbist_sccm].[vw_ComplianceSettingComplianceByComputers]
-UNION
-SELECT DISTINCT [ParentBaselineDisplayName] FROM [pbist_sccm].[vw_ComplianceSettingComplianceCIForAllBaseline]
-) AS t
-
-GO
-
-CREATE VIEW [pbist_sccm].[vw_ClientHealthClientInstalledVersionDetails]
-AS SELECT * FROM pbist_sccm.ClientHealthClientInstalledVersionDetails;
-GO
-
-CREATE VIEW [pbist_sccm].[vw_ClientHealthClientsinventorystatisticslast30days]
-AS SELECT * FROM pbist_sccm.ClientHealthClientsinventorystatisticslast30days;
-GO
-
-CREATE VIEW [pbist_sccm].[vw_ClientHealthCountAssignedClientsBySite]
-AS SELECT * FROM pbist_sccm.ClientHealthCountAssignedClientsBySite;
-GO
-
-CREATE VIEW [pbist_sccm].[vw_ClientHealthCountClientsInstalledVersion]
-AS SELECT * FROM pbist_sccm.ClientHealthCountClientsInstalledVersion;
-GO
-
-CREATE VIEW [pbist_sccm].[vw_ClientHealthCountClientsInstalledVersionPerSite]
-AS SELECT * FROM pbist_sccm.ClientHealthCountClientsInstalledVersionPerSite;
-GO
-
-CREATE VIEW [pbist_sccm].[vw_ClientHealthEvaluationCount]
-AS SELECT * FROM pbist_sccm.ClientHealthEvaluationCount;
-GO
-
-CREATE VIEW [pbist_sccm].[vw_ClientHealthSummary]
-AS
-SELECT        Status, NClients, PCT
-FROM            pbist_sccm.ClientHealthSummary
-
-GO
-
-CREATE VIEW [pbist_sccm].[vw_ClientHealthWUAVersionAllClients]
-AS SELECT * FROM pbist_sccm.ClientHealthWUAVersionAllClients;
-GO
-
-CREATE VIEW [pbist_sccm].[vw_collection]
+-- Computer program
+CREATE VIEW pbist_sccm.vw_computerprogram
 AS 
-  SELECT collectionid, 
-         [collection name] 
-  FROM   pbist_sccm.[collection];
-GO
+  SELECT machineid, 
+         [program name],
+         publisher,
+         [version]
+  FROM   pbist_sccm.computerprogram;
+go
 
-CREATE VIEW [pbist_sccm].[vw_ComponentStatus]
-AS
-SELECT        NbCompStatus, Status
-FROM            pbist_sccm.ComponentStatus
+-- Computer update
+CREATE VIEW pbist_sccm.vw_computerupdate
+AS 
+  SELECT machineid, 
+         ci_id, 
+         laststatuschangetime [last status change time], 
+         laststatuschecktime  [last status check time], 
+         [status]
+  FROM   pbist_sccm.computerupdate;
+go
 
-GO
-
-
-
-CREATE VIEW [pbist_sccm].[vw_computer]
+CREATE VIEW pbist_sccm.vw_computer
 AS 
 SELECT [machineid]
       ,[sitecode]
       ,[name]
-      ,case [Client Type] when 1 then 'Computer' when 3 then 'Mobile' else 'tbd' end [client type]
+      ,case [client type] when 1 then 'Computer' when 3 then 'Mobile' else 'tbd' end [client type]
       ,CASE
             when [operating system] like 'iOS%' then 'iOS'
             when [operating system] like 'Android%' then 'Android'
             when [operating system] like 'OS X%' then 'OS X'
             when [operating system]='Microsoft Windows NT Advanced Server 6.3' OR [operating system]='Microsoft Windows NT Advanced Server 6.4' OR [operating system]='Windows Technical Preview for Enterprise 6.4'
                 then 'Window Server 2012 R2'
-            when [operating System]='Microsoft Windows NT Workstation 5.0' then 'Windows 2000 Professional'
+            when [operating system]='Microsoft Windows NT Workstation 5.0' then 'Windows 2000 Professional'
             when [operating system] like '%Windows%Workstation 6.1%' then 'Windows 7'
             when [operating system] like '%Windows%Workstation 6.2%' then 'Windows 8'
             when [operating system] like '%Windows%Workstation 6.3%' OR [operating system] like '%Windows%Workstation 6.4%' OR [operating system] like 'Windows 8.1%' then 'Windows 8.1'
@@ -171,155 +93,10 @@ SELECT [machineid]
       ,[platform]
       ,[physical memory]
   FROM pbist_sccm.computer c WHERE c.[deleted date] IS NULL
+go
 
 
-GO
-
-CREATE VIEW [pbist_sccm].[vw_computercollection]
-AS
-  SELECT collectionid,
-         resourceid
-  FROM   pbist_sccm.computercollection;
-GO
-
--- Computer malware
-CREATE VIEW [pbist_sccm].[vw_computermalware]
-AS
-    SELECT threatid,
-           machineid,
-           10000*Year([detection date]) + 100*Month([detection date]) + Day([detection date]) date_key,
-           [observer product name],
-           [observer product version],
-           [observer detection],
-           [remediation type],
-           [remediation result],
-           [remediation error code],
-           [remediation pending action],
-           [is active malware]
-    FROM   pbist_sccm.computermalware
-    WHERE DateDiff(day, [Detection Date], GetDate()) <=365;
-GO
-
--- Computer program
-CREATE VIEW [pbist_sccm].[vw_computerprogram]
-AS 
-  SELECT machineid, 
-         [program name],
-         publisher,
-         [version]
-  FROM   pbist_sccm.computerprogram;
-GO
-
--- Computer update
-CREATE VIEW [pbist_sccm].[vw_computerupdate]
-AS 
-  SELECT machineid, 
-         ci_id, 
-         laststatuschangetime [last status change time], 
-         laststatuschecktime  [last status check time], 
-         [status]
-  FROM   pbist_sccm.computerupdate;
-GO
-
-CREATE VIEW [pbist_sccm].[vw_ConfigMgrServerHealthBackupStatus]
-AS SELECT * FROM pbist_sccm.ConfigMgrServerHealthBackupStatus;
-GO
-
-CREATE VIEW [pbist_sccm].[vw_ConfigMgrServerHealthComponentStatusDetails]
-AS SELECT * FROM pbist_sccm.ConfigMgrServerHealthComponentStatusDetails;
-GO
-
-CREATE VIEW [pbist_sccm].[vw_ConfigMgrServerHealthCountComponentStatusMessagesBySeverity]
-AS SELECT * FROM pbist_sccm.ConfigMgrServerHealthCountComponentStatusMessagesBySeverity;
-GO
-
--- ConfigurationView
-CREATE VIEW [pbist_sccm].[vw_configuration]
-AS
-    SELECT [id],
-            configuration_group    AS [configuration group],
-            configuration_subgroup AS [configuration subgroup],
-            [name]                 AS [name],
-            [value]                AS [value]
-    FROM   pbist_sccm.[configuration]
-    WHERE  visible = 1;
-GO
-
--- DateView
-CREATE VIEW [pbist_sccm].[vw_date]
-AS
-    SELECT date_key,
-           full_date        AS [date],
-           day_of_week      AS [day of the week],
-           day_num_in_month AS [day number of the month],
-           day_name         AS [day name],
-           day_abbrev       AS [day abbreviated],
-           weekday_flag     AS [weekday flag],
-           [month],
-           month_name       AS [month name],
-           month_abbrev,
-           [quarter],
-           [year],
-           same_day_year_ago_date,
-           week_begin_date  AS [week begin date]
-    FROM   pbist_sccm.[date];
-GO
-
-
-
-CREATE VIEW [pbist_sccm].[vw_DistributionPoints]
-AS 
-  SELECT failed, inprogress, success
-  FROM   pbist_sccm.DistributionPoints;
-
-
-GO
-
-CREATE VIEW [pbist_sccm].[vw_DistributionPointsCompliancebyPackagesStatus]
-AS SELECT * FROM pbist_sccm.DistributionPointsCompliancebyPackagesStatus;
-GO
-
-CREATE VIEW [pbist_sccm].[vw_DistributionPointsConfigurationStatus]
-AS SELECT * FROM pbist_sccm.DistributionPointsConfigurationStatus;
-GO
-
-CREATE VIEW [pbist_sccm].[vw_DistributionPointsStatus]
-AS SELECT * FROM pbist_sccm.DistributionPointsStatus;
-GO
-
-CREATE VIEW [pbist_sccm].[vw_OverallComplianceBaseline]
-AS SELECT * FROM pbist_sccm.OverallComplianceBaseline;
-GO
-
--- Program View
-CREATE VIEW [pbist_sccm].[vw_program]
-AS 
-  SELECT [program name],
-         publisher,
-         [version] 
-  FROM   pbist_sccm.[program]
-  WHERE  [program name] IS NOT NULL AND
-		 publisher IS NOT NULL AND
-		 [version] IS NOT NULL AND	  
-		 UNICODE([program name]) <> 127 AND
-		 UNICODE(RIGHT([version],1)) > 31;
-GO
-
-CREATE VIEW [pbist_sccm].[vw_ReplicationStatus]
-AS SELECT * FROM pbist_sccm.ReplicationStatus;
-GO
-
-
-CREATE VIEW [pbist_sccm].[vw_ReplicationStatusDetails]
-AS SELECT * FROM pbist_sccm.ReplicationStatusDetails;
-
-GO
-
-CREATE VIEW [pbist_sccm].[vw_ReplicationStatusReplicationGroup]
-AS SELECT * FROM pbist_sccm.ReplicationStatusReplicationGroup;
-GO
-
-CREATE VIEW [pbist_sccm].[vw_scanhistory]
+CREATE VIEW pbist_sccm.vw_scanhistory
 AS
   SELECT machineid,
          date_key,
@@ -344,26 +121,9 @@ AS
          [client state]              -- 1: Active/Pass, 2: Active/Fail, 3; Active/Unknown, 4: Inactive/Pass, 5: Inactive/Fail, 6; Inactive/Unknown,
 
   FROM   pbist_sccm.scanhistory;
-GO
+go
 
-CREATE VIEW [pbist_sccm].[vw_SoftwareDistribution]
-AS SELECT * FROM pbist_sccm.SoftwareDistribution;
-GO
-
-CREATE VIEW [pbist_sccm].[vw_SoftwareDistributionOverallPckAPPDPdistribution]
-AS SELECT * FROM pbist_sccm.SoftwareDistributionOverallPckAPPDPdistribution;
-GO
-
-CREATE VIEW [pbist_sccm].[vw_TaskSequenceDeployment]
-AS SELECT * FROM pbist_sccm.TaskSequenceDeployment;
-GO
-
-CREATE VIEW [pbist_sccm].[vw_TasksequenceDPContentStatusReferencedPackagesTaskSequence]
-AS SELECT * FROM pbist_sccm.TasksequenceDPContentStatusReferencedPackagesTaskSequence;
-
-GO
-
-CREATE VIEW [pbist_sccm].[vw_update]
+CREATE VIEW pbist_sccm.vw_update
 AS
   SELECT ci_id,
          articleid,
@@ -376,19 +136,84 @@ AS
          title,
          infoURL
   FROM   pbist_sccm.[update];
-GO
+go
 
-CREATE VIEW [pbist_sccm].[vw_user]
-AS 
-  SELECT username, 
-         [full name] 
-  FROM   pbist_sccm.[user];
-GO
-
-CREATE VIEW [pbist_sccm].[vw_usercomputer]
+CREATE VIEW pbist_sccm.vw_usercomputer
 AS
   SELECT machineid,
          username, 
          [full name] 
   FROM   pbist_sccm.usercomputer;
-GO
+go
+
+
+CREATE VIEW pbist_sccm.vw_user
+AS 
+  SELECT username, 
+         [full name] 
+  FROM   pbist_sccm.[user];
+go
+
+-- ConfigurationView
+CREATE VIEW pbist_sccm.vw_configuration
+AS
+    SELECT [id],
+            configuration_group    AS [configuration group],
+            configuration_subgroup AS [configuration subgroup],
+            [name],
+            [value],
+			CASE
+			   WHEN [name]='lastLoadTimestamp' AND configuration_subgroup='System Center' THEN CONVERT(datetime, [value], 126) -- We need this because Power BI / DAX cannot convert from ISO8601 date
+			   ELSE NULL
+			END AS value_as_datetime
+    FROM   pbist_sccm.[configuration]
+    WHERE  visible = 1;
+go
+
+-- DateView
+CREATE VIEW pbist_sccm.vw_date
+AS
+    SELECT date_key,
+           full_date        AS [date],
+           day_of_week      AS [day of the week],
+           day_num_in_month AS [day number of the month],
+           day_name         AS [day name],
+           day_abbrev       AS [day abbreviated],
+           weekday_flag     AS [weekday flag],
+           [month],
+           month_name       AS [month name],
+           month_abbrev,
+           [quarter],
+           [year],
+           same_day_year_ago_date,
+           week_begin_date  AS [week begin date]
+    FROM   pbist_sccm.[date];
+go
+
+-- Program View
+CREATE VIEW pbist_sccm.vw_program
+AS 
+  SELECT [program name],
+         publisher,
+         [version] 
+  FROM   pbist_sccm.[program]
+  WHERE  [program name] IS NOT NULL AND
+		 publisher IS NOT NULL AND
+		 [version] IS NOT NULL AND	  
+		 UNICODE([program name]) <> 127 AND
+		 UNICODE(RIGHT([version],1)) > 31;
+go
+
+CREATE VIEW pbist_sccm.vw_collection
+AS 
+  SELECT collectionid, 
+         [collection name] 
+  FROM   pbist_sccm.[collection];
+go
+
+CREATE VIEW pbist_sccm.vw_computercollection
+AS
+  SELECT collectionid,
+         resourceid
+  FROM   pbist_sccm.computercollection;
+go

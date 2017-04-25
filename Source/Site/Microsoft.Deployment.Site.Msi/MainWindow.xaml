@@ -1,0 +1,18 @@
+﻿<Window x:Class="Installer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:cefSharp="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
+        xmlns:local="clr-namespace:Installer"
+        mc:Ignorable="d" Background="Transparent"
+        Title="Solution Template Installer" Height="600" Width="900" ResizeMode="NoResize"  Visibility="Collapsed"
+        WindowStyle ="None" Margin="0" Padding="0" BorderThickness="0" WindowStartupLocation="CenterScreen" >
+    <Grid>
+        <Grid.Background>
+            <SolidColorBrush Color="#EAEAEA" />
+        </Grid.Background>
+        <cefSharp:ChromiumWebBrowser Background="Transparent"  Name="BrowserSetup"></cefSharp:ChromiumWebBrowser>
+        <Rectangle Fill="Transparent" MouseDown="Rectangle_MouseDown" VerticalAlignment="Top" Width="820" HorizontalAlignment="Stretch" Height="50"></Rectangle>
+    </Grid>
+</Window>

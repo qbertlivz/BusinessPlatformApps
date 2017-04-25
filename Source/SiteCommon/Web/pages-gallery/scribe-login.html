@@ -1,0 +1,22 @@
+﻿<template>
+    <p class="st-title">${MS.Translate.SCRIBE_LOGIN_TITLE}</p>
+    <p class="st-subtitle">${MS.Translate.SCRIBE_LOGIN_SUBTITLE}</p>
+
+    <div class="st-float">
+        <p class="st-text">${MS.Translate.SCRIBE_LOGIN_USERNAME}</p>
+        <input class="st-input" type="text" change.delegate="Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="scribeUsername">
+        <p class="st-text">${MS.Translate.SCRIBE_LOGIN_PASSWORD}</p>
+        <input class="st-input" type="password" change.delegate="Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="scribePassword">
+    </div>
+
+    <div class="st-float">
+        <button class="primary" click.trigger="OnValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_VALIDATE}</button>
+    </div>
+
+    <div class="st-float" if.bind="scribeOrganizations.length > 0">
+        <p class="st-text">${MS.Translate.SCRIBE_LOGIN_ORGANIZATION}</p>
+        <select class="btn btn-default dropdown-toggle st-input" disabled.bind="MS.HttpService.isServiceBusy" value.bind="scribeOrganizationId">
+            <option repeat.for="scribeOrganization of scribeOrganizations" value.bind="scribeOrganization.id">${scribeOrganization.name}</option>
+        </select>
+    </div>
+</template>

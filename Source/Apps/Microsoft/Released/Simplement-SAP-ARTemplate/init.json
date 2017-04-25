@@ -1,154 +1,170 @@
 ﻿{
-    "MSI": {
-        "Guid": "2F142293-C7B5-4C57-8FFE-75F636688C9C"
-    },
+  "MSI": {
+    "Guid": "2F142293-C7B5-4C57-8FFE-75F636688C9C"
+  },
 
-    "Install": {
-        "Actions": [
-            {
-                "name": "Microsoft-DeploySQLScripts",
-                "displayname": "Deploy DB scripts",
-                "SqlServerIndex": "0",
-                "SqlScriptsFolder": "Service/Database/NoETL",
-                "useImpersonation": true
-            },
-            {
-                "name": "Microsoft-AddLogonAsBatchPermission",
-                "displayname": "Grant permission for logging as a batch job"
-            },
-            {
-                "name": "Microsoft-CreateTask",
-                "displayname": "Schedule tasks"
-            },
-            {
-                "name": "Microsoft-RunTask",
-                "displayname": "Run tasks"
-            },
-            {
-                "name": "Microsoft-GetDataPullStatus",
-                "displayname": "Waiting for data to come in",
-                "FinishedActionName": "Microsoft-GetTaskStatus",
-                "IsWaiting": true,
-                "SqlServerIndex": 0,
-                "TargetSchema": "sap",
-                "useImpersonation": true
-            }
+  "Install": {
+    "Pages": [
+      {
+        "architectureDiagram": "dist/Apps/Microsoft/Released/Simplement-SAP-ARTemplate/Web/Images/sap-accounts-receivable.png",
+        "displayname": "Getting Started",
+        "isDownload": "$(!this.MS.HttpService.isOnPremise)",
+        "list1": [
+          "$translate(INIT_GETTING_STARTED_SAP_READ_ACCESS)",
+          "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",
+          "$translate(INIT_GETTING_STARTED_PBI_PRO)",
+          "$translate(INIT_GETTING_STARTED_PBI_DESKTOP)",
+          "$translate(INIT_GETTING_STARTED_SIMPLEMENT_TRIAL)"
         ],
-        "Pages": [
-            {
-                "architectureDiagram": "dist/Apps/Microsoft/Released/Simplement-SAP-ARTemplate/Web/Images/sap-accounts-receivable.png",
-                "displayname": "Getting Started",
-                "isDownload": "$(!this.MS.HttpService.isOnPremise)",
-                "list1": [
-                    "Read access to the SAP Database",
-                    "Azure Subscription (to use Azure SQL)",
-                    "Power BI Pro (to share the template with your organization)",
-                    "Power BI Desktop (latest version)",
-                    "A Simplement Trial Account"
-                ],
-                "list2": [
-                    "Scalable and extensible solution with minimum set up and maintenance considerations",
-                    "Data pulled daily from SAP & stored in a database optimized for reporting",
-                    "Import data into powerful Power BI reports"
-                ],
-                "name": "$SiteCommon$/pagesgallery/getting-started.html",
-                "registration": "To use this solution template you need a trial account with Simplement. Enter your information below to register with Simplement for 30 days. To extend the trial account with Simplement or arrange a proof of concept in your environment, ",
-                "registrationAction": "Microsoft-PushToSimplement",
-                "registrationContactLink": "https://www.simplement.us/",
-                "registrationContactLinkText": " contact Simplement.",
-                "registrationEmailsToBlock": "gmail.com,.me,yahoo.com,hotmail.com,msn.com,.ba,.bf,.cd,.cq,.iq,.ir,.kr",
-                "registrationEulaLink": "https://www.simplement.us/eula",
-                "registrationEulaLinkText": "Terms of Use",
-                "registrationLink": "https://www.simplement.us/privacy",
-                "registrationPrivacy": "By using this Simplement trial account, you agree to the",
-                "registrationPrivacyTitle": "Simplement Privacy Statement",
-                "registrationValidation": "Yes, I want to hear from Simplement on how I can extend this trial account or new offers",
-                "subtitle": "Welcome to the Accounts Receivable Reporting for SAP solution template.",
-                "templateName": "Accounts Receivable Reporting for SAP"
-            },
-            {
-                "name": "$SiteCommon$/pagesgallery/windows-auth.html",
-                "displayname": "Login",
-                "subtitle": "Specify your windows credentials to create a recurring schedule that will pull data from SAP.",
-                "onValidate": [
-                    {
-                        "name": "Microsoft-ValidateAdminPrivileges"
-                    },
-                    {
-                        "name": "Microsoft-ValidatePowerShellVersion"
-                    }
-                ]
-            },
-            {
-                "displayname": "SAP",
-                "name": "$SiteCommon$/pagesgallery/sap.html",
-                "useImpersonation": true
-            },
-            {
-                "credentialTarget": "Simplement.SolutionTemplate.AR.SQL",
-                "displayname": "Target",
-                "name": "$SiteCommon$/pagesgallery/sql-server.html",
-                "onNext": [
-                    {
-                        "name": "Microsoft-WriteSAPJson"
-                    }
-                ],
-                "subtitle": "Set up a connection to your target database so we can transfer your data.",
-                "title": "Connect to your SQL database",
-                "useImpersonation": true
-            },
-            {
-                "displayname": "Customize",
-                "name": "customize.html"
-            },
-            {
-                "name": "$SiteCommon$/pagesgallery/progress.html",
-                "displayname": "Progress",
-                "finishedActionName": "Microsoft-GetTaskStatus",
-                "targetSchema": "sap",
-                "filename": "$('SAPSolutionTemplate.pbix', isSaved=true)",
-                "showEmailSubmission": false
-            }
-        ]
-    },
-    "Uninstall": {
-        "Pages": [
-            {
-                "name": "$SiteCommon$/pagesgallery/uninstall.html",
-                "displayname": "Uninstall",
-                "architectureDiagram": "dist/Apps/Microsoft/Released/Simplement-SAP-ARTemplate/Web/Images/sap-accounts-receivable.png",
-                "templateName": "Accounts Receivable Reporting for SAP",
-                "isDownload": "$(!this.MS.HttpService.isOnPremise)",
-                "uninstallList": [
-                    "The task used to move data between the SAP application server and the target database",
-                    "The scripts used to create the initial tables in the target database"
-                ],
-                "showBack": "$(false)"
-            },
-            {
-                "name": "$SiteCommon$/pagesgallery/progress.html",
-                "displayname": "Uninstall Progress",
-                "successMessage": "Uninstall complete",
-                "isUninstall": true,
-                "showEmailSubmission": false
-            }
+        "list2": [
+          "$translate(INIT_GETTING_STARTED_SCALABLE)",
+          "$translate(INIT_GETTING_STARTED_DATA_PULL_SAP)",
+          "$translate(INIT_GETTING_STARTED_IMPORT_DATA_PBI)"
         ],
-        "Actions": [
-            {
-                "name": "Microsoft-RemoveTask",
-                "displayname": "Remove task",
-                "TaskName": "Power BI Solution Template - Simplement SAP AR"
-            },
-            {
-                "name": "Microsoft-RemoveFiles",
-                "displayname": "Remove files",
-                "TargetPath": "C:\\ProgramData\\Simplement, Inc"
-            },
-            {
-                "name": "Microsoft-RemoveFiles",
-                "displayname": "Finishing cleanup",
-                "TargetPath": "C:\\Program Files\\Microsoft Templates\\Simplement-SAP-ARTemplate\\Apps\\Microsoft\\Released\\Microsoft-SapAccountsReceivable\\Temp"
-            }
+        "name": "$SiteCommon$/pages-gallery/getting-started.html",
+        "registration": {
+          "action": "Microsoft-PushToSimplement",
+          "contactLink": "https://www.simplement.us/",
+          "contactLinkText": "$translate(INIT_SIMPLEMENT_CONTACT)",
+          "emailsToBlock": "gmail.com,.me,yahoo.com,hotmail.com,msn.com,.ba,.bf,.cd,.cq,.iq,.ir,.kr",
+          "eulaLink": "https://www.simplement.us/eula",
+          "eulaLinkText": "$translate(COMMON_TERMS_OF_USE)",
+          "link": "https://www.simplement.us/privacy",
+          "privacy": "$translate(INIT_SIMPLEMENT_PRIVACY)",
+          "privacyTitle": "$translate(INIT_SIMPLEMENT_PRIVACY_TITLE)",
+          "text": "$translate(INIT_SIMPLEMENT_TRIAL)",
+          "validation": "$translate(INIT_SIMPLEMENT_YES)"
+        },
+        "subtitle": "$translate(INIT_SAP_SUBTITLE)",
+        "templateName": "$translate(INIT_SAP_TITLE)"
+      },
+      {
+        "displayname": "Login",
+        "name": "$SiteCommon$/pages-gallery/windows-auth.html",
+        "onValidate": [
+          {
+            "name": "Microsoft-ValidateAdminPrivileges"
+          },
+          {
+            "name": "Microsoft-ValidateSecurityOptions"
+          },
+          {
+            "name": "Microsoft-ValidatePowerShellVersion"
+          }
+        ],
+        "subtitle": "$translate(INIT_SAP_LOGIN)"
+      },
+      {
+        "displayname": "SAP",
+        "name": "$SiteCommon$/pages-gallery/sap.html",
+        "useImpersonation": true
+      },
+      {
+        "credentialTarget": "Simplement.SolutionTemplate.AR.SQL",
+        "displayname": "Target",
+        "name": "$SiteCommon$/pages-gallery/sql-server.html",
+        "onNext": [
+          {
+            "name": "Microsoft-WriteSAPJson"
+          }
+        ],
+        "subtitle": "$translate(INIT_SQL_SUBTITLE)",
+        "title": "$translate(INIT_SQL_TITLE)",
+        "useImpersonation": true
+      },
+      {
+        "displayname": "Customize",
+        "name": "customize.html"
+      },
+      {
+        "displayname": "Summary",
+        "name": "$SiteCommon$/pages-gallery/summary.html",
+        "values": {
+          "Target Server": "$(this.MS.DataStore.getValue('Server'))",
+          "Target Database": "$(this.MS.DataStore.getValue('Database'))",
+          "Target Username": "$(this.MS.DataStore.getValue('Username'))"
+        }
+      },
+      {
+        "displayname": "Progress",
+        "filename": "$save('SAPSolutionTemplate.pbix')",
+        "finishedActionName": "Microsoft-GetTaskStatus",
+        "name": "$SiteCommon$/pages-gallery/progress.html",
+        "showEmailSubmission": false,
+        "targetSchema": "sap"
+      }
+    ],
+
+    "Actions": [
+      {
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
+        "name": "Microsoft-DeploySQLScripts",
+        "SqlScriptsFolder": "Service/Database/NoETL",
+        "SqlServerIndex": "0",
+        "useImpersonation": true
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_BATCH_PERMISSION)",
+        "name": "Microsoft-AddLogonAsBatchPermission"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_SCHEDULING_TASK)",
+        "name": "Microsoft-CreateTask"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_RUNNING_TASK)",
+        "name": "Microsoft-RunTask"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_WAITING_DATA)",
+        "FinishedActionName": "Microsoft-GetTaskStatus",
+        "IsWaiting": true,
+        "name": "Microsoft-GetDataPullStatus",
+        "SqlServerIndex": 0,
+        "TargetSchema": "sap",
+        "useImpersonation": true
+      }
+    ]
+  },
+
+  "Uninstall": {
+    "Pages": [
+      {
+        "architectureDiagram": "dist/Apps/Microsoft/Released/Simplement-SAP-ARTemplate/Web/Images/sap-accounts-receivable.png",
+        "displayname": "Uninstall",
+        "isDownload": "$(!this.MS.HttpService.isOnPremise)",
+        "name": "$SiteCommon$/pages-gallery/uninstall.html",
+        "templateName": "$translate(INIT_SAP_TITLE)",
+        "uninstallList": [
+          "$translate(INIT_UNINSTALL_SAP)",
+          "$translate(INIT_UNINSTALL_SQL)"
         ]
-    }
+      },
+      {
+        "displayname": "Uninstall Progress",
+        "isUninstall": true,
+        "name": "$SiteCommon$/pages-gallery/progress.html",
+        "showEmailSubmission": false,
+        "successMessage": "$translate(INIT_UNINSTALL_SUCCESS)"
+      }
+    ],
+
+    "Actions": [
+      {
+        "displayname": "$translate(INIT_ACTION_REMOVING_TASK)",
+        "name": "Microsoft-RemoveTask",
+        "TaskName": "Power BI Solution Template - Simplement SAP AR"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_REMOVING_FILES)",
+        "name": "Microsoft-RemoveFiles",
+        "TargetPath": "C:\\ProgramData\\Simplement, Inc"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_FINISHING_CLEANUP)",
+        "name": "Microsoft-RemoveFiles",
+        "TargetPath": "C:\\Program Files\\Microsoft Templates\\Simplement-SAP-ARTemplate\\Apps\\Microsoft\\Released\\Microsoft-SapAccountsReceivable\\Temp"
+      }
+    ]
+  }
 }

@@ -2,8 +2,10 @@
 using System.Dynamic;
 using System.Net.Http;
 using System.Threading.Tasks;
+
 using Microsoft.Azure;
 using Microsoft.Azure.Management.Resources;
+
 using Microsoft.Deployment.Common;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
@@ -17,10 +19,10 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var azureToken = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
-            var subscription = request.DataStore.GetJson("SelectedSubscription")["SubscriptionId"].ToString();
+            var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
+            var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
-            var location = request.DataStore.GetJson("SelectedLocation")["Name"].ToString();
+            var location = request.DataStore.GetJson("SelectedLocation", "Name");
 
 
             SubscriptionCloudCredentials creds = new TokenCloudCredentials(subscription, azureToken);
@@ -29,6 +31,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
 
             dynamic payload = new ExpandoObject();
             payload.properties = new ExpandoObject();
+            payload.properties.parameterValues = new ExpandoObject();
+            payload.properties.parameterValues.sku = "Enterprise";
             payload.properties.displayName = "twitter";
             payload.properties.api = new ExpandoObject();
             payload.properties.api.id = $"subscriptions/{subscription}/providers/Microsoft.Web/locations/{location}/managedApis/twitter";
@@ -39,11 +43,11 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
 
             if (!connection.IsSuccessStatusCode)
             {
-                return new ActionResponse(ActionStatus.Failure, JsonUtility.GetJObjectFromJsonString(await connection.Content.ReadAsStringAsync()), 
+                return new ActionResponse(ActionStatus.Failure, JsonUtility.GetJObjectFromJsonString(await connection.Content.ReadAsStringAsync()),
                     null, DefaultErrorCodes.DefaultErrorCode, "Failed to create connection");
             }
 
-            
+
             // Get Consent links for auth
             payload = new ExpandoObject();
             payload.parameters = new ExpandoObject[1];

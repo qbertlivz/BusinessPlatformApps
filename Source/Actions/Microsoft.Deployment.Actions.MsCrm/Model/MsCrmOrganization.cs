@@ -1,7 +1,8 @@
 ﻿namespace Microsoft.Deployment.Common.Actions.MsCrm.Model
 {
-    using Newtonsoft.Json;
     using System.ComponentModel;
+
+    using Newtonsoft.Json;
 
 #pragma warning disable 0649
     public class MsCrmOrganization

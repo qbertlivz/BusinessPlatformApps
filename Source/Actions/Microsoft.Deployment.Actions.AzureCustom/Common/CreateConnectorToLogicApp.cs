@@ -2,9 +2,10 @@
 using System.Dynamic;
 using System.Net.Http;
 using System.Threading.Tasks;
+
 using Microsoft.Azure;
 using Microsoft.Azure.Management.Resources;
-using Microsoft.Deployment.Common;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.ErrorCode;
@@ -17,10 +18,10 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var azureToken = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
-            var subscription = request.DataStore.GetJson("SelectedSubscription")["SubscriptionId"].ToString();
+            var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
+            var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
-            var location = request.DataStore.GetJson("SelectedLocation")["Name"].ToString();
+            var location = request.DataStore.GetJson("SelectedLocation", "Name");
             var connectorName = request.DataStore.GetValue("ConnectorName");
 
             //Needs to be changed once Logic Apps makes it available
@@ -35,6 +36,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
 
             dynamic payload = new ExpandoObject();
             payload.properties = new ExpandoObject();
+            payload.properties.parameterValues = new ExpandoObject();
+            payload.properties.parameterValues.sku = "Enterprise";
             payload.properties.displayName = connectorName;
             payload.properties.api = new ExpandoObject();
             payload.properties.api.id = $"subscriptions/{subscription}/providers/Microsoft.Web/locations/{location}/managedApis/{connectorName}";

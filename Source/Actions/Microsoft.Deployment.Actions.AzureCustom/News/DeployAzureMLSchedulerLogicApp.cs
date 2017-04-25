@@ -1,12 +1,16 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Microsoft.Azure;
 using Microsoft.Azure.Management.Resources;
 using Microsoft.Azure.Management.Resources.Models;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
+using Microsoft.Deployment.Common.Enums;
 using Microsoft.Deployment.Common.ErrorCode;
 using Microsoft.Deployment.Common.Helpers;
 
@@ -17,13 +21,12 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Newws
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var azureToken = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
-            var subscription = request.DataStore.GetJson("SelectedSubscription")["SubscriptionId"].ToString();
+            var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
+            var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
-            var location = request.DataStore.GetJson("SelectedLocation")["Name"].ToString();
+            var location = request.DataStore.GetJson("SelectedLocation", "Name");
 
             var deploymentName = request.DataStore.GetValue("DeploymentName");
-            var storageAccountName = request.DataStore.GetValue("StorageAccountName");
             var logicAppName = request.DataStore.GetValue("LogicAppName");
 
             var apiKeyTopics = request.DataStore.GetAllValues("AzureMLKey")[0];
@@ -37,7 +40,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Newws
             var param = new AzureArmParameterGenerator();
             param.AddStringParam("resourcegroup", resourceGroup);
             param.AddStringParam("subscription", subscription);
-            //param.AddStringParam("storageaccountname", storageAccountName);
             param.AddStringParam("logicappname", logicAppName);
             param.AddStringParam("apikeytopics", apiKeyTopics);
             param.AddStringParam("apikeyimages", apiKeyImages);
@@ -72,6 +74,11 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Newws
             }
 
             var deploymentItem = await client.Deployments.CreateOrUpdateAsync(resourceGroup, deploymentName, deployment, new CancellationToken());
+
+            // Log logic app
+            request.Logger.LogResource(request.DataStore, logicAppName,
+                DeployedResourceType.LogicApp, CreatedBy.BPST, DateTime.UtcNow.ToString("o"));
+
             return new ActionResponse(ActionStatus.Success, deploymentItem);
         }
     }

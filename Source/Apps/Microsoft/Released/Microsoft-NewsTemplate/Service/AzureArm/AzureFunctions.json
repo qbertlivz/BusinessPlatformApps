@@ -12,8 +12,8 @@
       "type": "string"
     },
 
-    "AppHostingPlan": {
-      "defaultValue": "STHostingPlan",
+    "repoUrl": {
+      "defaultValue": "",
       "type": "string"
     },
 

@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+
+using Microsoft.Rest;
+using Newtonsoft.Json.Linq;
+
 using Microsoft.Deployment.Common;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.ErrorCode;
 using Microsoft.Deployment.Common.Helpers;
-using Newtonsoft.Json.Linq;
-using Microsoft.Rest;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
 {
@@ -102,7 +104,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             return new ActionResponse(ActionStatus.Success, obj, true);
         }
 
-        private JObject RetrieveCrmToken(string refreshToken, string websiteRootUrl, DataStore dataStore)
+        public static JObject RetrieveCrmToken(string refreshToken, string websiteRootUrl, DataStore dataStore)
         {
             string tokenUrl = string.Format(Constants.AzureTokenUri, dataStore.GetValue("AADTenant"));
 
@@ -118,7 +120,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             }
         }
 
-        private static StringBuilder GetTokenUri(string code, string uri, string rootUrl, string clientId)
+        public static StringBuilder GetTokenUri(string code, string uri, string rootUrl, string clientId)
         {
             Dictionary<string, string> message = new Dictionary<string, string>
             {
@@ -139,7 +141,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             return builder;
         }
 
-        private string GetTokenUri2(string code, string uri, string rootUrl, string clientId)
+        public static string GetTokenUri2(string code, string uri, string rootUrl, string clientId)
         {
             return $"refresh_token={code}&" +
                    $"client_id={clientId}&" +

@@ -76,7 +76,7 @@ AS
 go
 
 
-CREATE VIEW [pbist_twitter].[vw_tweets_processed]
+CREATE VIEW pbist_twitter.vw_tweets_processed
 AS
     SELECT tweetid					AS [Tweet Id],
            dateorig					AS [Original Date],
@@ -100,8 +100,7 @@ AS
     FROM   pbist_twitter.tweets_processed;
 GO
 
-create view [pbist_twitter].[vw_minimum_tweets] as
-select [MinimumTweets] as [Minimum Tweets] from [pbist_twitter].[minimum_tweets]
+CREATE VIEW pbist_twitter.vw_minimum_tweets
+AS
+    SELECT MinimumTweets AS [Minimum Tweets] FROM pbist_twitter.minimum_tweets
 go
-
-

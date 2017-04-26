@@ -55,17 +55,17 @@
         "displayname": "Twitter Handles",
         "name": "$SiteCommon$/pages-gallery/twitter-handles.html"
       },
-      {
-        "displayname": "AAS",
-        "name": "$SiteCommon$/pages-gallery/choose-analysis-server.html",
-        "showDescription": true,
-        "skip": "$ds(azureSqlDisabled)"
-      },
-      {
-        "displayname": "AAS Login",
-        "name": "$SiteCommon$/pages-gallery/ssas.html",
-        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
-      },
+      //{
+      //  "displayname": "AAS",
+      //  "name": "$SiteCommon$/pages-gallery/choose-analysis-server.html",
+      //  "showDescription": true,
+      //  "skip": "$ds(azureSqlDisabled)"
+      //},
+      //{
+      //  "displayname": "AAS Login",
+      //  "name": "$SiteCommon$/pages-gallery/ssas.html",
+      //  "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
+      //},
       {
         "displayname": "Summary",
         "name": "$SiteCommon$/pages-gallery/summary.html",
@@ -223,54 +223,55 @@
         "DeploymentName": "LogicApp",
         "displayname": "$translate(INIT_ACTION_VALIDATING_LOGIC_APP)",
         "name": "Microsoft-WaitForArmDeploymentStatus"
-      },
-      {
-        "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
-        "name": "Microsoft-SetConfigValueInSql",
-        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
-        "SqlConfigTable": "[pbist_twitter].[configuration]",
-        "SqlEntryName": "FunctionName",
-        "SqlEntryValue": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
-        "SqlGroup": "SolutionTemplate",
-        "SqlServerIndex": "0",
-        "SqlSubGroup": "SSAS"
-      },
-      {
-        "ASDatabase": "Twitter",
-        "displayname": "$translate(INIT_ACTION_DEPLOYING_AS_MODEL)",
-        "name": "Microsoft-DeployAzureASModel",
-        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
-        "SqlConnectionString": "$dsall(SqlConnectionString)[0]",
-        "xmlaFilePath": "Service/SSAS/twitter.xmla"
-      },
-      {
-        "DeploymentName": "ASFunction",
-        "displayname": "$translate(INIT_ACTION_DEPLOYING_AS_SCHEDULER)",
-        "FunctionName": "$save('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
-        "name": "Microsoft-DeployAzureFunction",
-        "RepoUrl": "https://github.com/MohaaliMicrosoft/AnalysisServicesRefresh",
-        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
-        "sku": "Standard"
-      },
-      {
-        "DeploymentName": "ASFunction",
-        "displayname": "$translate(INIT_ACTION_WAITING_AS_SCHEDULER)",
-        "name": "Microsoft-WaitForArmDeploymentStatus",
-        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
-      },
-      {
-        "AppSettingKeys": {
-          "connStringAS": "$ds(ASConnectionString)",
-          "connStringSql": "$dsall(SqlConnectionString)[0]",
-          "schema": "[pbist_twitter]",
-          "databaseAS": "Twitter",
-          "functionName": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))"
-        },
-        "DeploymentName": "ASFunction",
-        "displayname": "$translate(INIT_ACTION_SETTING_UP_AS_SCHEDULER)",
-        "name": "Microsoft-DeployAzureFunctionConnectionStrings",
-        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
       }
+      //},
+      //{
+      //  "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+      //  "name": "Microsoft-SetConfigValueInSql",
+      //  "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
+      //  "SqlConfigTable": "[pbist_twitter].[configuration]",
+      //  "SqlEntryName": "FunctionName",
+      //  "SqlEntryValue": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
+      //  "SqlGroup": "SolutionTemplate",
+      //  "SqlServerIndex": "0",
+      //  "SqlSubGroup": "SSAS"
+      //},
+      //{
+      //  "ASDatabase": "Twitter",
+      //  "displayname": "$translate(INIT_ACTION_DEPLOYING_AS_MODEL)",
+      //  "name": "Microsoft-DeployAzureASModel",
+      //  "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
+      //  "SqlConnectionString": "$dsall(SqlConnectionString)[0]",
+      //  "xmlaFilePath": "Service/SSAS/twitter.xmla"
+      //},
+      //{
+      //  "DeploymentName": "ASFunction",
+      //  "displayname": "$translate(INIT_ACTION_DEPLOYING_AS_SCHEDULER)",
+      //  "FunctionName": "$save('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
+      //  "name": "Microsoft-DeployAzureFunction",
+      //  "RepoUrl": "https://github.com/MohaaliMicrosoft/AnalysisServicesRefresh",
+      //  "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
+      //  "sku": "Standard"
+      //},
+      //{
+      //  "DeploymentName": "ASFunction",
+      //  "displayname": "$translate(INIT_ACTION_WAITING_AS_SCHEDULER)",
+      //  "name": "Microsoft-WaitForArmDeploymentStatus",
+      //  "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
+      //},
+      //{
+      //  "AppSettingKeys": {
+      //    "connStringAS": "$ds(ASConnectionString)",
+      //    "connStringSql": "$dsall(SqlConnectionString)[0]",
+      //    "schema": "[pbist_twitter]",
+      //    "databaseAS": "Twitter",
+      //    "functionName": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))"
+      //  },
+      //  "DeploymentName": "ASFunction",
+      //  "displayname": "$translate(INIT_ACTION_SETTING_UP_AS_SCHEDULER)",
+      //  "name": "Microsoft-DeployAzureFunctionConnectionStrings",
+      //  "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
+      //}
     ]
   }
 }

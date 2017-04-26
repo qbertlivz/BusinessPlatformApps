@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Dynamic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -24,19 +25,45 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             string connectionString = request.DataStore.GetValue("SqlConnectionString");
             string deploymentIdsConnection = Constants.BpstDeploymentIdDatabase;
 
-            string notifierUrl = Constants.BpstNotifierUrl;
-            string emails = request.DataStore.GetValue("notificationEmails");
-            string table = request.DataStore.GetValue("notificationTable");
             string deploymentId = Guid.NewGuid().ToString();
-            string sprocName = request.DataStore.GetValue("sprocName");
-            string templateName = request.Info.AppName;
-            string initialPullComplete = "-1";
 
+            Dictionary<string, string> configValues = new Dictionary<string, string>()
+            {
+                {"NotifierUrl", Constants.BpstNotifierUrl },
+                {"NotificationEmails", request.DataStore.GetValue("notificationEmails") },
+                {"NotificationTable", request.DataStore.GetValue("notificationTable")},
+                {"DeploymentId", deploymentId },
+                {"TemplateName", request.Info.AppName },
+                {"DeploymentTimestamp", DateTime.UtcNow.ToString("o") },
+                {"DataPullStatus", "-1" }
+            };
 
-            string cmd = $"INSERT INTO {table} VALUES('{deploymentId}','{notifierUrl}','{emails}','{sprocName}','{templateName}','{initialPullComplete}','{DateTime.UtcNow.ToString("o")}')";
-            SqlUtility.InvokeSqlCommand(connectionString, cmd, new Dictionary<string, string>());
+            for (int i = 0; i < configValues.Count; i++)
+            {
 
-            cmd = $"INSERT INTO deploymentids VALUES('{deploymentId}','{DateTime.UtcNow.ToString("o")}')";
+                dynamic payload = new ExpandoObject();
+
+                payload.SqlGroup = "SolutionTemplate";
+                payload.SqlSubGroup = "Notifier";
+                payload.SqlEntryName = configValues.ElementAt(i).Key;
+                payload.SqlEntryValue = configValues.ElementAt(i).Value;
+
+                request.DataStore.AddToDataStore("NotifierValues" + i, "SqlGroup", "SolutionTemplate");
+                request.DataStore.AddToDataStore("NotifierValues" + i, "SqlSubGroup", "Notifier");
+                request.DataStore.AddToDataStore("NotifierValues" + i, "SqlEntryName", configValues.ElementAt(i).Key);
+                request.DataStore.AddToDataStore("NotifierValues" + i, "SqlEntryValue", configValues.ElementAt(i).Value);
+            }
+
+            request.DataStore.AddToDataStore("SqlConfigTable", "smgt.configuration");
+
+            var configResponse = await RequestUtility.CallAction(request, "Microsoft-SetConfigValueInSql");
+            
+            if(!configResponse.IsSuccess)
+            {
+                return configResponse;
+            }
+
+            var cmd = $"INSERT INTO deploymentids VALUES('{deploymentId}','{DateTime.UtcNow.ToString("o")}')";
             SqlUtility.InvokeSqlCommand(deploymentIdsConnection, cmd, new Dictionary<string, string>());
 
             AzureHttpClient azureClient = new AzureHttpClient(azureToken, subscription, resourceGroup);

@@ -133,16 +133,6 @@ CREATE TABLE dbo.opportunitystage
 	masterlabel			NVARCHAR(255) NULL
 );
 
-CREATE TABLE [dbo].[notifier](
-	[deploymentid] [varchar](40) NULL,
-	[notifierurl] [nvarchar](400) NULL,
-	[emails] [nvarchar](max) NULL,
-	[sprocname] [varchar](40) NULL,
-	[templatename] [varchar](40) NULL,
-	[initialpullcomplete] [int] NULL,
-	[deploymenttimestamp] [datetime2] NULL
-);
-
 CREATE TABLE [dbo].[entityinitialcount](
 	[entityname] [nvarchar](40) NULL,
 	[initialcount] INT NULL,

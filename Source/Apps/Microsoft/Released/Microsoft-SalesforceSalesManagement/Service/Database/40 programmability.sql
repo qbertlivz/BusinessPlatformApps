@@ -25,7 +25,7 @@ GO
 CREATE PROCEDURE dbo.sp_get_pull_status
 AS
 BEGIN
-	
+		
 	--InitialPullComplete statuses
 	-- 1 -> Data is present but not complete
 	-- 2 -> Data pull is complete
@@ -55,32 +55,37 @@ BEGIN
 
 	DECLARE @RowsWithSomeData int;
 	SET @RowsWithSomeData = (SELECT COUNT(*) FROM #counts
-						            WHERE [Count] > 0 )
+						     WHERE [Count] > 0 )
 
-	IF EXISTS (SELECT * FROM notifier n
-			   WHERE DATEDIFF(HOUR, n.deploymenttimestamp, CURRENT_TIMESTAMP) > 24 AND @RowsWithSomeData > 0)
-	UPDATE n
-	SET n.initialpullcomplete = 1 --Data pull is partially complete
-	FROM notifier n
+
+	DECLARE @DeploymentTimestamp datetime2;
+	SET @DeploymentTimestamp = CAST((SELECT [value] from smgt.[configuration] config
+								WHERE config.configuration_group = 'SolutionTemplate' AND config.configuration_subgroup = 'Notifier' AND config.[name] = 'DeploymentTimestamp') AS datetime2)
+
+	IF EXISTS (SELECT COUNT(*) 
+			   FROM #counts
+			   WHERE [Count] > 0 AND DATEDIFF(HOUR, @DeploymentTimestamp, CURRENT_TIMESTAMP) > 24)
+	UPDATE smgt.[configuration] 
+	SET [configuration].[value] = 1 --Data pull is partially complete
+	WHERE [configuration].configuration_group = 'SolutionTemplate' AND [configuration].configuration_subgroup = 'Notifier' AND [configuration].[name] = 'DataPullStatus'
+	
 
 	IF NOT EXISTS(SELECT p.[Percentage], p.[EntityName], i.lasttimestamp,  DATEDIFF(MINUTE, i.lasttimestamp, CURRENT_TIMESTAMP) AS [TimeDifference] FROM #percentages p
 			  INNER JOIN dbo.entityinitialcount i ON i.entityName = p.EntityName
 			  WHERE (p.[Percentage] <= 80 OR p.[Percentage] IS NULL) AND DATEDIFF(MINUTE, i.lasttimestamp, CURRENT_TIMESTAMP) > 5
 			  OR (p.[Percentage] <= 80  OR p.[Percentage] IS NULL))
-	UPDATE n
-	SET n.initialpullcomplete = 2 --Data pull is complete
-	FROM notifier n
-	
-	
-	DECLARE @RowsWithoutData int;
-	SET @RowsWithoutData = (SELECT COUNT(*) FROM #counts
-						            WHERE [Count] = 0 )
+	UPDATE smgt.[configuration] 
+	SET [configuration].[value] = 2 --Data pull is complete
+	WHERE [configuration].configuration_group = 'SolutionTemplate' AND [configuration].configuration_subgroup = 'Notifier' AND [configuration].[name] = 'DataPullStatus'
 
-	IF EXISTS (SELECT * FROM notifier n
-			   WHERE DATEDIFF(HOUR, n.deploymenttimestamp, CURRENT_TIMESTAMP) > 24 AND @RowsWithoutData > 0)
-	UPDATE n
-	SET n.initialpullcomplete = 3 --No data is present
-	FROM notifier n			   
+	IF NOT EXISTS (SELECT COUNT(*) 
+			       FROM #counts
+			       WHERE [Count] > 0 AND DATEDIFF(HOUR, @DeploymentTimestamp, CURRENT_TIMESTAMP) > 24)
+	UPDATE smgt.[configuration] 
+	SET [configuration].[value] = 3 --No data is present
+	WHERE [configuration].configuration_group = 'SolutionTemplate' AND [configuration].configuration_subgroup = 'Notifier' AND [configuration].[name] = 'DataPullStatus'
+	
+ 
 
 	MERGE entityinitialcount AS TARGET
 	USING #counts AS SOURCE

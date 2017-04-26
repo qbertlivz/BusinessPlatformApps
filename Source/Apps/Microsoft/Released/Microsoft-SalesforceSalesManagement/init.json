@@ -130,108 +130,108 @@
         "SqlScriptsFolder": "Service/Database",
         "SqlServerIndex": "0"
       },
-      //{
-      //  "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
-      //  "name": "Microsoft-DeploySQLScripts",
-      //  "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')",
-      //  "SqlScriptsFolder": "Service/Database/Scribe",
-      //  "SqlServerIndex": "0"
-      //},
-      //{
-      //  "displayname": "$translate(INIT_ACTION_RETRIEVING_SALESFORCE_METADATA)",
-      //  "name": "Microsoft-SalesforceGetObjectMetadata",
-      //  "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
-      //},
-      //{
-      //  "displayname": "$translate(INIT_ACTION_CREATING_SALESFORCE_TABLES)",
-      //  "name": "Microsoft-SalesforceSqlArtefacts",
-      //  "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
-      //},
-      //{
-      //  "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
-      //  "name": "Microsoft-SetConfigValueInSql",
-      //  "SqlConfigTable": "[smgt].[configuration]",
-      //  "SqlServerIndex": "0"
-      //},
-      //{
-      //  "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
-      //  "name": "Microsoft-SetConfigValueInSql",
-      //  "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
-      //  "SqlConfigTable": "[smgt].[configuration]",
-      //  "SqlEntryName": "FunctionName",
-      //  "SqlEntryValue": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
-      //  "SqlGroup": "SolutionTemplate",
-      //  "SqlServerIndex": "0",
-      //  "SqlSubGroup": "SSAS"
-      //},
-      //{
-      //  "ASDatabase": "SalesManagement",
-      //  "displayname": "$translate(INIT_ACTION_DEPLOYING_AS_MODEL)",
-      //  "name": "Microsoft-DeployAzureASModel",
-      //  "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
-      //  "SqlConnectionString": "$dsall(SqlConnectionString)[0]",
-      //  "xmlaFilePath": "Service/AzureAS/SalesManagement.xmla"
-      //},
-      //{
-      //  "DeploymentName": "ASFunction",
-      //  "displayname": "$translate(INIT_ACTION_DEPLOYING_AS_SCHEDULER)",
-      //  "FunctionName": "$save('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
-      //  "name": "Microsoft-DeployAzureFunction",
-      //  "RepoUrl": "https://github.com/MohaaliMicrosoft/AnalysisServicesRefresh",
-      //  "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
-      //  "sku": "Standard"
-      //},
-      //{
-      //  "DeploymentName": "ASFunction",
-      //  "displayname": "$translate(INIT_ACTION_WAITING_AS_SCHEDULER)",
-      //  "name": "Microsoft-WaitForArmDeploymentStatus",
-      //  "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
-      //},
-      //{
-      //  "AppSettingKeys": {
-      //    "connStringAS": "$ds(ASConnectionString)",
-      //    "connStringSql": "$dsall(SqlConnectionString)[0]",
-      //    "databaseAS": "SalesManagement",
-      //    "functionName": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
-      //    "schema": "[smgt]"
-      //  },
-      //  "DeploymentName": "ASFunction",
-      //  "displayname": "$translate(INIT_ACTION_SETTING_UP_AS_SCHEDULER)",
-      //  "name": "Microsoft-DeployAzureFunctionConnectionStrings",
-      //  "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
-      //},
-      //{
-      //  "DeploymentName": "ADFDeployment",
-      //  "displayname": "$translate(INIT_ACTION_CREATING_DATA_CONNECTIONS)",
-      //  "name": "Microsoft-ADFDeployLinkedServices",
-      //  "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
-      //},
-      //{
-      //  "DeploymentName": "ADFPreDeploymentDatasets",
-      //  "displayname": "$translate(INIT_ACTION_CREATING_MAPPINGS)",
-      //  "name": "Microsoft-ADFDeployDatasets",
-      //  "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
-      //},
-      //{
-      //  "DeploymentName": "ADFPreDeploymentPipeline",
-      //  "displayname": "$translate(INIT_ACTION_SCHEDULING_HISTORICAL)",
-      //  "name": "Microsoft-ADFDeployPipelines",
-      //  "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
-      //},
-      //{
-      //  "DeploymentName": "ADFPostDeploymentDatasets",
-      //  "displayname": "$translate(INIT_ACTION_CREATING_MAPPINGS_FUTURE)",
-      //  "name": "Microsoft-ADFDeployDatasets",
-      //  "postDeploymentPipelineType": "PostDeployment",
-      //  "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
-      //},
-      //{
-      //  "DeploymentName": "ADFPostDeploymentPipeline",
-      //  "displayname": "$translate(INIT_ACTION_SCHEDULING_DATA_LOADS)",
-      //  "name": "Microsoft-ADFDeployPipelines",
-      //  "postDeploymentPipelineType": "PostDeployment",
-      //  "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
-      //},
+      {
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
+        "name": "Microsoft-DeploySQLScripts",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')",
+        "SqlScriptsFolder": "Service/Database/Scribe",
+        "SqlServerIndex": "0"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_RETRIEVING_SALESFORCE_METADATA)",
+        "name": "Microsoft-SalesforceGetObjectMetadata",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CREATING_SALESFORCE_TABLES)",
+        "name": "Microsoft-SalesforceSqlArtefacts",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+        "name": "Microsoft-SetConfigValueInSql",
+        "SqlConfigTable": "[smgt].[configuration]",
+        "SqlServerIndex": "0"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+        "name": "Microsoft-SetConfigValueInSql",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
+        "SqlConfigTable": "[smgt].[configuration]",
+        "SqlEntryName": "FunctionName",
+        "SqlEntryValue": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
+        "SqlGroup": "SolutionTemplate",
+        "SqlServerIndex": "0",
+        "SqlSubGroup": "SSAS"
+      },
+      {
+        "ASDatabase": "SalesManagement",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_AS_MODEL)",
+        "name": "Microsoft-DeployAzureASModel",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
+        "SqlConnectionString": "$dsall(SqlConnectionString)[0]",
+        "xmlaFilePath": "Service/AzureAS/SalesManagement.xmla"
+      },
+      {
+        "DeploymentName": "ASFunction",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_AS_SCHEDULER)",
+        "FunctionName": "$save('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
+        "name": "Microsoft-DeployAzureFunction",
+        "RepoUrl": "https://github.com/MohaaliMicrosoft/AnalysisServicesRefresh",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
+        "sku": "Standard"
+      },
+      {
+        "DeploymentName": "ASFunction",
+        "displayname": "$translate(INIT_ACTION_WAITING_AS_SCHEDULER)",
+        "name": "Microsoft-WaitForArmDeploymentStatus",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
+      },
+      {
+        "AppSettingKeys": {
+          "connStringAS": "$ds(ASConnectionString)",
+          "connStringSql": "$dsall(SqlConnectionString)[0]",
+          "databaseAS": "SalesManagement",
+          "functionName": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
+          "schema": "[smgt]"
+        },
+        "DeploymentName": "ASFunction",
+        "displayname": "$translate(INIT_ACTION_SETTING_UP_AS_SCHEDULER)",
+        "name": "Microsoft-DeployAzureFunctionConnectionStrings",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
+      },
+      {
+        "DeploymentName": "ADFDeployment",
+        "displayname": "$translate(INIT_ACTION_CREATING_DATA_CONNECTIONS)",
+        "name": "Microsoft-ADFDeployLinkedServices",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
+      },
+      {
+        "DeploymentName": "ADFPreDeploymentDatasets",
+        "displayname": "$translate(INIT_ACTION_CREATING_MAPPINGS)",
+        "name": "Microsoft-ADFDeployDatasets",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
+      },
+      {
+        "DeploymentName": "ADFPreDeploymentPipeline",
+        "displayname": "$translate(INIT_ACTION_SCHEDULING_HISTORICAL)",
+        "name": "Microsoft-ADFDeployPipelines",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
+      },
+      {
+        "DeploymentName": "ADFPostDeploymentDatasets",
+        "displayname": "$translate(INIT_ACTION_CREATING_MAPPINGS_FUTURE)",
+        "name": "Microsoft-ADFDeployDatasets",
+        "postDeploymentPipelineType": "PostDeployment",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
+      },
+      {
+        "DeploymentName": "ADFPostDeploymentPipeline",
+        "displayname": "$translate(INIT_ACTION_SCHEDULING_DATA_LOADS)",
+        "name": "Microsoft-ADFDeployPipelines",
+        "postDeploymentPipelineType": "PostDeployment",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
+      },
       {
         "displayname": "Get initial counts",
         "name": "Microsoft-SalesforceGetEntityInitialCounts"

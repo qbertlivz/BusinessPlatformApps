@@ -184,7 +184,7 @@
                   }
                 }
               },
-              "expression": "@not(equals(body('DataPullStatus')?['value']?[0]?['value'], -1))",
+              "expression": "@not(equals(body('DataPullStatus')?['value']?[0]?['value'], '-1'))",
               "runAfter": {
                 "DataPullStatus": [
                   "Succeeded"

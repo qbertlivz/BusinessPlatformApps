@@ -22,7 +22,7 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE dbo.sp_get_pull_status
+CREATE PROCEDURE [dbo].[sp_get_pull_status]
 AS
 BEGIN
 		
@@ -32,7 +32,7 @@ BEGIN
 	-- 3 -> No data is present
 
 	SET NOCOUNT ON;
-    SELECT UPPER(LEFT(ta.name, 1)) + LOWER(SUBSTRING(ta.name, 2, 100)) AS EntityName, SUM(pa.rows) AS [Count], '' As [Status] INTO #counts
+    SELECT UPPER(LEFT(ta.name, 1)) + LOWER(SUBSTRING(ta.name, 2, 100)) AS EntityName, SUM(pa.rows) AS [Count], '' As [Status] into #counts
     FROM sys.tables ta INNER JOIN sys.partitions pa ON pa.OBJECT_ID = ta.OBJECT_ID
 				       INNER JOIN sys.schemas sc ON ta.schema_id = sc.schema_id
     WHERE
@@ -53,16 +53,11 @@ BEGIN
 	INNER JOIN dbo.entityinitialcount i ON i.entityname = c.entityname
 
 
-	DECLARE @RowsWithSomeData int;
-	SET @RowsWithSomeData = (SELECT COUNT(*) FROM #counts
-						     WHERE [Count] > 0 )
-
-
 	DECLARE @DeploymentTimestamp datetime2;
 	SET @DeploymentTimestamp = CAST((SELECT [value] from smgt.[configuration] config
 								WHERE config.configuration_group = 'SolutionTemplate' AND config.configuration_subgroup = 'Notifier' AND config.[name] = 'DeploymentTimestamp') AS datetime2)
 
-	IF EXISTS (SELECT COUNT(*) 
+	IF EXISTS (SELECT *
 			   FROM #counts
 			   WHERE [Count] > 0 AND DATEDIFF(HOUR, @DeploymentTimestamp, CURRENT_TIMESTAMP) > 24)
 	UPDATE smgt.[configuration] 
@@ -78,14 +73,14 @@ BEGIN
 	SET [configuration].[value] = 2 --Data pull is complete
 	WHERE [configuration].configuration_group = 'SolutionTemplate' AND [configuration].configuration_subgroup = 'Notifier' AND [configuration].[name] = 'DataPullStatus'
 
-	IF NOT EXISTS (SELECT COUNT(*) 
-			       FROM #counts
-			       WHERE [Count] > 0 AND DATEDIFF(HOUR, @DeploymentTimestamp, CURRENT_TIMESTAMP) > 24)
+	DECLARE @EntitiesWithNoData int;
+	SET @EntitiesWithNoData = (SELECT COUNT(*) FROM #counts WHERE [Count] = 0)	
+
+	IF (@EntitiesWithNoData = (SELECT COUNT(*) FROM #counts) AND DATEDIFF(HOUR, @DeploymentTimestamp, CURRENT_TIMESTAMP) > 24)
 	UPDATE smgt.[configuration] 
 	SET [configuration].[value] = 3 --No data is present
 	WHERE [configuration].configuration_group = 'SolutionTemplate' AND [configuration].configuration_subgroup = 'Notifier' AND [configuration].[name] = 'DataPullStatus'
-	
- 
+	 
 
 	MERGE entityinitialcount AS TARGET
 	USING #counts AS SOURCE
@@ -95,9 +90,7 @@ BEGIN
 	TARGET.lastcount = SOURCE.[Count],
 	TARGET.lasttimestamp = CURRENT_TIMESTAMP;
 END;
-
 GO
-
 
 
 CREATE PROCEDURE dbo.sp_get_prior_content

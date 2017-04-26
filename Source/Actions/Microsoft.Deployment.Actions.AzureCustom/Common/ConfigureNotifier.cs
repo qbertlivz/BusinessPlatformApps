@@ -26,15 +26,17 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             string deploymentIdsConnection = Constants.BpstDeploymentIdDatabase;
 
             string deploymentId = Guid.NewGuid().ToString();
+            string dataPullCompleteThreshold = "80";
 
             Dictionary<string, string> configValues = new Dictionary<string, string>()
             {
                 {"NotifierUrl", Constants.BpstNotifierUrl },
                 {"NotificationEmails", request.DataStore.GetValue("notificationEmails") },
-                {"NotificationTable", request.DataStore.GetValue("notificationTable")},
                 {"DeploymentId", deploymentId },
                 {"TemplateName", request.Info.AppName },
                 {"DeploymentTimestamp", DateTime.UtcNow.ToString("o") },
+                {"ASDeployment", (!Convert.ToBoolean(request.DataStore.GetValue("ssasDisabled"))).ToString() },
+                {"DataPullCompleteThreshold", dataPullCompleteThreshold},
                 {"DataPullStatus", "-1" }
             };
 

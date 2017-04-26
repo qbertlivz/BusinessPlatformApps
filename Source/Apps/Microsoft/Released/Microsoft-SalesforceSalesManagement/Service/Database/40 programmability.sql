@@ -27,9 +27,13 @@ AS
 BEGIN
 		
 	--InitialPullComplete statuses
+	-- -1 -> Initial State
 	-- 1 -> Data is present but not complete
 	-- 2 -> Data pull is complete
 	-- 3 -> No data is present
+
+	DECLARE @StatusCode int;
+	SET @StatusCode = -1;
 
 	SET NOCOUNT ON;
     SELECT UPPER(LEFT(ta.name, 1)) + LOWER(SUBSTRING(ta.name, 2, 100)) AS EntityName, SUM(pa.rows) AS [Count], '' As [Status] into #counts
@@ -60,27 +64,41 @@ BEGIN
 	IF EXISTS (SELECT *
 			   FROM #counts
 			   WHERE [Count] > 0 AND DATEDIFF(HOUR, @DeploymentTimestamp, CURRENT_TIMESTAMP) > 24)
-	UPDATE smgt.[configuration] 
-	SET [configuration].[value] = 1 --Data pull is partially complete
-	WHERE [configuration].configuration_group = 'SolutionTemplate' AND [configuration].configuration_subgroup = 'Notifier' AND [configuration].[name] = 'DataPullStatus'
+	SET @StatusCode = 1 --Data pull is partially complete
+		
 	
+	DECLARE @CompletePercentage decimal;
+	SET @CompletePercentage = CAST((SELECT [value] from smgt.[configuration] config
+								WHERE config.configuration_group = 'SolutionTemplate' AND config.configuration_subgroup = 'Notifier' AND config.[name] = 'DataPullCompleteThreshold') AS decimal)
 
 	IF NOT EXISTS(SELECT p.[Percentage], p.[EntityName], i.lasttimestamp,  DATEDIFF(MINUTE, i.lasttimestamp, CURRENT_TIMESTAMP) AS [TimeDifference] FROM #percentages p
 			  INNER JOIN dbo.entityinitialcount i ON i.entityName = p.EntityName
-			  WHERE (p.[Percentage] <= 80 OR p.[Percentage] IS NULL) AND DATEDIFF(MINUTE, i.lasttimestamp, CURRENT_TIMESTAMP) > 5
-			  OR (p.[Percentage] <= 80  OR p.[Percentage] IS NULL))
-	UPDATE smgt.[configuration] 
-	SET [configuration].[value] = 2 --Data pull is complete
-	WHERE [configuration].configuration_group = 'SolutionTemplate' AND [configuration].configuration_subgroup = 'Notifier' AND [configuration].[name] = 'DataPullStatus'
+			  WHERE (p.[Percentage] <= @CompletePercentage OR p.[Percentage] IS NULL) AND DATEDIFF(MINUTE, i.lasttimestamp, CURRENT_TIMESTAMP) > 5
+			  OR (p.[Percentage] <= @CompletePercentage  OR p.[Percentage] IS NULL))
+	SET @StatusCode = 2 --Data pull complete
 
 	DECLARE @EntitiesWithNoData int;
 	SET @EntitiesWithNoData = (SELECT COUNT(*) FROM #counts WHERE [Count] = 0)	
 
 	IF (@EntitiesWithNoData = (SELECT COUNT(*) FROM #counts) AND DATEDIFF(HOUR, @DeploymentTimestamp, CURRENT_TIMESTAMP) > 24)
+	SET @StatusCode = 3 --No data is present
+	
+	DECLARE @ASDeployment bit;	 
+	SET @ASDeployment = 0;
+
+	IF EXISTS (SELECT * FROM smgt.[configuration] 
+			   WHERE [configuration].configuration_group = 'SolutionTemplate' AND 
+					 [configuration].configuration_subgroup = 'Notifier' AND 
+					 [configuration].[name] = 'ASDeployment' AND
+					 [configuration].[value] ='true')
+	SET @ASDeployment = 1;
+
+	IF NOT EXISTS (SELECT * FROM smgt.ssas_jobs WHERE [statusMessage] = 'Success') AND @ASDeployment = 1 AND DATEDIFF(HOUR, @DeploymentTimestamp, CURRENT_TIMESTAMP) < 24
+	SET @StatusCode = -1;
+
 	UPDATE smgt.[configuration] 
-	SET [configuration].[value] = 3 --No data is present
+	SET [configuration].[value] = @StatusCode
 	WHERE [configuration].configuration_group = 'SolutionTemplate' AND [configuration].configuration_subgroup = 'Notifier' AND [configuration].[name] = 'DataPullStatus'
-	 
 
 	MERGE entityinitialcount AS TARGET
 	USING #counts AS SOURCE

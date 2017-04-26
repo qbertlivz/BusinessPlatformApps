@@ -35,7 +35,206 @@
         "state": "Enabled",
         "definition": {
           "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+          "actions": {
+            "Condition": {
+              "actions": {
+                "DeploymentId": {
+                  "inputs": {
+                    "host": {
+                      "api": {
+                        "runtimeUrl": "https://logic-apis-westus.azure-apim.net/apim/sql"
+                      },
+                      "connection": {
+                        "name": "@parameters('$connections')['sql']['connectionId']"
+                      }
+                    },
+                    "method": "get",
+                    "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('[smgt].[configuration]'))}/items",
+                    "queries": {
+                      "$filter": "configuration_subgroup eq 'Notifier' and name eq 'DeploymentId'",
+                      "$select": "name,value"
+                    }
+                  },
+                  "runAfter": {
+                    "NotificationEmails": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "ApiConnection"
+                },
+                "HTTP": {
+                  "inputs": {
+                    "body": {
+                      "deploymentId": "@body('DeploymentId')?['value']?[0]?['value']",
+                      "statuscode": "@body('DataPullStatus')?['value']?[0]?['value']",
+                      "templateName": "@body('TemplateName')?['value']?[0]?['value']",
+                      "to": "@body('NotificationEmails')?['value']?[0]?['value']"
+                    },
+                    "headers": {
+                      "Content-Type": "application/json"
+                    },
+                    "method": "POST",
+                    "uri": "@{body('NotifierUrl')?['value']?[0]?['value']}"
+                  },
+                  "runAfter": {
+                    "TemplateName": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Http"
+                },
+                "NotificationEmails": {
+                  "inputs": {
+                    "host": {
+                      "api": {
+                        "runtimeUrl": "https://logic-apis-westus.azure-apim.net/apim/sql"
+                      },
+                      "connection": {
+                        "name": "@parameters('$connections')['sql']['connectionId']"
+                      }
+                    },
+                    "method": "get",
+                    "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('[smgt].[configuration]'))}/items",
+                    "queries": {
+                      "$filter": "configuration_subgroup eq 'Notifier' and name eq 'NotificationEmails'",
+                      "$select": "name,value"
+                    }
+                  },
+                  "runAfter": {
+                    "NotifierUrl": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "ApiConnection"
+                },
+                "NotifierUrl": {
+                  "inputs": {
+                    "host": {
+                      "api": {
+                        "runtimeUrl": "https://logic-apis-westus.azure-apim.net/apim/sql"
+                      },
+                      "connection": {
+                        "name": "@parameters('$connections')['sql']['connectionId']"
+                      }
+                    },
+                    "method": "get",
+                    "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('[smgt].[configuration]'))}/items",
+                    "queries": {
+                      "$filter": "configuration_subgroup eq 'Notifier' and name eq 'NotifierUrl'",
+                      "$select": "name, value"
+                    }
+                  },
+                  "runAfter": {},
+                  "type": "ApiConnection"
+                },
+                "TemplateName": {
+                  "inputs": {
+                    "host": {
+                      "api": {
+                        "runtimeUrl": "https://logic-apis-westus.azure-apim.net/apim/sql"
+                      },
+                      "connection": {
+                        "name": "@parameters('$connections')['sql']['connectionId']"
+                      }
+                    },
+                    "method": "get",
+                    "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('[smgt].[configuration]'))}/items",
+                    "queries": {
+                      "$filter": "configuration_subgroup eq 'Notifier' and name eq 'TemplateName'",
+                      "$select": "name,value"
+                    }
+                  },
+                  "runAfter": {
+                    "DeploymentId": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "ApiConnection"
+                }
+              },
+              "else": {
+                "actions": {
+                  "Delay": {
+                    "inputs": {
+                      "interval": {
+                        "count": 5,
+                        "unit": "Minute"
+                      }
+                    },
+                    "runAfter": {},
+                    "type": "Wait"
+                  },
+                  "HTTP_2": {
+                    "inputs": {
+                      "body": {
+                        "value": "run"
+                      },
+                      "headers": {
+                        "Content-Type": "Application/json"
+                      },
+                      "method": "POST",
+                      "uri": "[parameters('logicAppTrigger')]"
+                    },
+                    "runAfter": {
+                      "Delay": [
+                        "Succeeded"
+                      ]
+                    },
+                    "type": "Http"
+                  }
+                }
+              },
+              "expression": "@not(equals(body('DataPullStatus')?['value']?[0]?['value'], -1))",
+              "runAfter": {
+                "DataPullStatus": [
+                  "Succeeded"
+                ]
+              },
+              "type": "If"
+            },
+            "DataPullStatus": {
+              "inputs": {
+                "host": {
+                  "api": {
+                    "runtimeUrl": "https://logic-apis-westus.azure-apim.net/apim/sql"
+                  },
+                  "connection": {
+                    "name": "@parameters('$connections')['sql']['connectionId']"
+                  }
+                },
+                "method": "get",
+                "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('[smgt].[configuration]'))}/items",
+                "queries": {
+                  "$filter": "configuration_subgroup eq 'Notifier' and name eq 'DataPullStatus'",
+                  "$select": "name,value"
+                }
+              },
+              "runAfter": {
+                "Execute_stored_procedure": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ApiConnection"
+            },
+            "Execute_stored_procedure": {
+              "inputs": {
+                "host": {
+                  "api": {
+                    "runtimeUrl": "https://logic-apis-westus.azure-apim.net/apim/sql"
+                  },
+                  "connection": {
+                    "name": "@parameters('$connections')['sql']['connectionId']"
+                  }
+                },
+                "method": "post",
+                "path": "/datasets/default/procedures/@{encodeURIComponent(encodeURIComponent('[dbo].[sp_get_pull_status]'))}"
+              },
+              "runAfter": {},
+              "type": "ApiConnection"
+            }
+          },
           "contentVersion": "1.0.0.0",
+          "outputs": {},
           "parameters": {
             "$connections": {
               "defaultValue": {},
@@ -52,159 +251,7 @@
               "kind": "Http",
               "type": "Request"
             }
-          },
-          "actions": {
-            "For_each": {
-              "foreach": "@body('Get_rows')?['value']",
-              "actions": {
-                "Compose": {
-                  "runAfter": {},
-                  "type": "Compose",
-                  "inputs": "@item()?['sprocname']"
-                }
-              },
-              "runAfter": {
-                "Get_rows": [
-                  "Succeeded"
-                ]
-              },
-              "type": "Foreach"
-            },
-            "For_each_2": {
-              "foreach": "@body('Get_rows')?['value']",
-              "actions": {
-                "Execute_stored_procedure": {
-                  "runAfter": {},
-                  "type": "ApiConnection",
-                  "inputs": {
-                    "host": {
-                      "api": {
-                        "runtimeUrl": "https://logic-apis-westus.azure-apim.net/apim/sql"
-                      },
-                      "connection": {
-                        "name": "@parameters('$connections')['sql']['connectionId']"
-                      }
-                    },
-                    "method": "post",
-                    "path": "/datasets/default/procedures/@{encodeURIComponent(encodeURIComponent(item()?['sprocname']))}"
-                  }
-                }
-              },
-              "runAfter": {
-                "For_each": [
-                  "Succeeded"
-                ]
-              },
-              "type": "Foreach"
-            },
-            "For_each_3": {
-              "actions": {
-                "Condition": {
-                  "actions": {
-                    "HTTP": {
-                      "inputs": {
-                        "body": {
-                          "deploymentId": "@{item()?['deploymentid']}",
-                          "statuscode": "@{item()?['initialpullcomplete']}",
-                          "templateName": "@{item()?['templatename']}",
-                          "to": "@{item()?['emails']}"
-                        },
-                        "headers": {
-                          "Content-Type": "application/json"
-                        },
-                        "method": "POST",
-                        "uri": "@{item()?['notifierurl']}"
-                      },
-                      "runAfter": {},
-                      "type": "Http"
-                    }
-                  },
-                  "else": {
-                    "actions": {
-                      "Delay": {
-                        "inputs": {
-                          "interval": {
-                            "count": 5,
-                            "unit": "Minute"
-                          }
-                        },
-                        "runAfter": {},
-                        "type": "Wait"
-                      },
-                      "HTTP_2": {
-                        "inputs": {
-                          "body": {
-                            "value": "run"
-                          },
-                          "headers": {
-                            "Content-Type": "Application/json"
-                          },
-                          "method": "POST",
-                          "uri": "[parameters('logicAppTrigger')]"
-                        },
-                        "runAfter": {
-                          "Delay": [
-                            "Succeeded"
-                          ]
-                        },
-                        "type": "Http"
-                      }
-                    }
-                  },
-                  "expression": "@greater(item()?['initialpullcomplete'], 0)",
-                  "runAfter": {},
-                  "type": "If"
-                }
-              },
-              "foreach": "@body('Get_rows_2')?['value']",
-              "runAfter": {
-                "Get_rows_2": [
-                  "Succeeded"
-                ]
-              },
-              "type": "Foreach"
-            },
-            "Get_rows": {
-              "runAfter": {},
-              "type": "ApiConnection",
-              "inputs": {
-                "host": {
-                  "api": {
-                    "runtimeUrl": "https://logic-apis-westus.azure-apim.net/apim/sql"
-                  },
-                  "connection": {
-                    "name": "@parameters('$connections')['sql']['connectionId']"
-                  }
-                },
-                "method": "get",
-                "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('notifier'))}/items",
-                "queries": {
-                  "$top": 1
-                }
-              }
-            },
-            "Get_rows_2": {
-              "runAfter": {
-                "For_each_2": [
-                  "Succeeded"
-                ]
-              },
-              "type": "ApiConnection",
-              "inputs": {
-                "host": {
-                  "api": {
-                    "runtimeUrl": "https://logic-apis-westus.azure-apim.net/apim/sql"
-                  },
-                  "connection": {
-                    "name": "@parameters('$connections')['sql']['connectionId']"
-                  }
-                },
-                "method": "get",
-                "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('notifier'))}/items"
-              }
-            }
-          },
-          "outputs": {}
+          }
         },
         "parameters": {
           "$connections": {

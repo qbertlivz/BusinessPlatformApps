@@ -31,7 +31,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             Dictionary<string, string> configValues = new Dictionary<string, string>()
             {
                 {"NotifierUrl", Constants.BpstNotifierUrl },
-                {"NotificationEmails", request.DataStore.GetValue("notificationEmails") },
+                {"NotificationEmails", request.DataStore.GetValue("EmailAddress") },
                 {"DeploymentId", deploymentId },
                 {"TemplateName", request.Info.AppName },
                 {"DeploymentTimestamp", DateTime.UtcNow.ToString("o") },

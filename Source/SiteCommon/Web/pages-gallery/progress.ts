@@ -39,6 +39,8 @@ export class ProgressViewModel extends ViewModelBase {
             return;
         }
 
+        this.showCompletionNotificationConsent = this.MS.DataStore.getJson("showCompletionNotificationConsent");
+
         this.hasPowerApp = this.hasPowerApp && this.MS.DataStore.getValue('SkipPowerApp') == null;
 
         // Run all actions

@@ -10,6 +10,7 @@ using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Helpers;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Sdk.WebServiceClient;
+using Newtonsoft.Json;
 
 namespace Microsoft.Deployment.Common.Actions.MsCrm
 {
@@ -21,16 +22,13 @@ namespace Microsoft.Deployment.Common.Actions.MsCrm
             string refreshToken = request.DataStore.GetJson("MsCrmToken")["refresh_token"].ToString();
             string organizationUrl = request.DataStore.GetValue("OrganizationUrl");
             string[] entities = request.DataStore.GetValue("Entities").Split(new[] { ',', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-
+            bool showCompletionNotificationConsent = true;
             var crmToken = CrmTokenUtility.RetrieveCrmOnlineToken(refreshToken, request.Info.WebsiteRootUrl, request.DataStore, organizationUrl);
 
-            Dictionary<string, int> cutouts = new Dictionary<string, int>()
-            {
-                {"account",1000 },
-                {"leads",1000 },
-                {"opportunities",1000 }
-            };
-            //"account,lead,opportunity,opportunityproduct,product,systemuser,systemusermanagermap,territory",
+            var thresholds = request.DataStore.GetAllJson("NotificationThresholds")?[0];
+
+            var cutouts = JsonConvert.DeserializeObject<Dictionary<string, int>>(thresholds.ToString());
+
             Dictionary<string, int> initialCounts = new Dictionary<string, int>();
 
             var proxy = new OrganizationWebProxyClient(new Uri($"{organizationUrl}XRMServices/2011/Organization.svc/web"), true)
@@ -55,9 +53,21 @@ namespace Microsoft.Deployment.Common.Actions.MsCrm
 
                 var count = xdoc.Descendants().First(e => e.Name == $"{entry}_count").Value;
 
-                initialCounts.Add(entry, Convert.ToInt16(count));
+                initialCounts.Add(entry.ToLowerInvariant(), Convert.ToInt16(count));
             }
 
+            foreach (var entry in cutouts)
+            {
+                int count;
+                initialCounts.TryGetValue(entry.Key.ToLowerInvariant(), out count);
+                if (count < entry.Value)
+                {
+                    showCompletionNotificationConsent = false;
+                    break;
+                }
+            }
+
+            request.DataStore.AddToDataStore("showCompletionNotificationConsent", showCompletionNotificationConsent);
             request.DataStore.AddToDataStore("InitialCounts", JsonUtility.GetJObjectFromObject(initialCounts));
             return new ActionResponse(ActionStatus.Success);
         }

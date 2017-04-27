@@ -11,6 +11,7 @@ using Microsoft.Deployment.Actions.Salesforce.SalesforceSOAP;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
+using Newtonsoft.Json;
 
 namespace Microsoft.Deployment.Actions.Salesforce
 {
@@ -24,6 +25,12 @@ namespace Microsoft.Deployment.Actions.Salesforce
             string sfPassword = request.DataStore.GetValue("SalesforcePassword");
             string sfToken = request.DataStore.GetValue("SalesforceToken");
             string sfTestUrl = request.DataStore.GetValue("SalesforceUrl");
+
+            var thresholds = request.DataStore.GetAllJson("NotificationThresholds")?[0];
+
+            var cutouts = JsonConvert.DeserializeObject<Dictionary<string, int>>(thresholds.ToString());
+
+            bool showCompletionNotificationConsent = true;
 
             List<string> sfObjects = objects.Split(',').ToList();
             Dictionary<string, int> initialCounts = new Dictionary<string, int>();
@@ -79,11 +86,22 @@ namespace Microsoft.Deployment.Actions.Salesforce
                     $"WHERE LastModifiedDate > {DateTime.UtcNow.AddYears(-3).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture)} " +
                     $"AND LastModifiedDate <= {DateTime.UtcNow.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture)}",
                     out result);
-                initialCounts.Add(obj, result.size);
+                initialCounts.Add(obj.ToLower(), result.size);
+            }
+            
+            foreach (var entry in cutouts)
+            {
+                int count;
+                initialCounts.TryGetValue(entry.Key.ToLowerInvariant(), out count);
+                if (count < entry.Value)
+                {
+                    showCompletionNotificationConsent = false;
+                    break;
+                }
             }
 
+            request.DataStore.AddToDataStore("showCompletionNotificationConsent", showCompletionNotificationConsent);
             request.DataStore.AddToDataStore("InitialCounts", JsonUtility.GetJObjectFromObject(initialCounts));
-
             return new ActionResponse(ActionStatus.Success);
         }
     }

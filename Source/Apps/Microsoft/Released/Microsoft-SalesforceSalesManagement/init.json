@@ -108,7 +108,17 @@
           "Actuals": "$(this.MS.DataStore.getValue('actuals'))",
           "Future data load frequency": "$(this.MS.DataStore.getValue('DataMovement') === 'ADF' ? this.MS.DataStore.getValue('postDeploymentPipelineFrequency') : '')",
           "Future data load interval": "$(this.MS.DataStore.getValue('DataMovement') === 'ADF' ? this.MS.DataStore.getValue('postDeploymentPipelineInterval') : '')"
-        }
+        },
+        "onNext": [
+          {
+            "name": "Microsoft-SalesforceGetEntityInitialCounts",
+            "NotificationThresholds": {
+              "account": -1,
+              "opportunity": -1,
+              "leads": -1
+            }
+          }
+        ]
       },
       {
         "asDatabase": "SalesManagement",
@@ -233,31 +243,28 @@
         "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
       },
       {
-        "displayname": "Get initial counts",
-        "name": "Microsoft-SalesforceGetEntityInitialCounts"
-      },
-      {
-        "displayname": "Insert counts",
-        "name": "Microsoft-InsertInitialCounts"
+        "displayname": "Inserting initial counts",
+        "name": "Microsoft-InsertInitialCounts",
+        "skip": "$run(this.MS.DataStore.getValue('showCompletionNotificationConsent') == false)"
       },
       {
         "DeploymentName": "SqlConnectionDeployment",
         "displayname": "Creating database connection",
         "name": "Microsoft-CreateSqlConnector",
-        "ApiConnectionName": "$save('sqlNotifierConnection')"
+        "ApiConnectionName": "$save('sqlNotifierConnection')",
+        "skip": "$run(this.MS.DataStore.getValue('showCompletionNotificationConsent') == false)"
       },
       {
         "DeploymentName": "NotifierLogicApp",
         "displayname": "Creating notifier",
         "name": "Microsoft-DeployNotifierLogicApp",
-        "logicAppName": "notifierLogicApp"
+        "logicAppName": "notifierLogicApp",
+        "skip": "$run(this.MS.DataStore.getValue('showCompletionNotificationConsent') == false)"
       },
       {
         "displayname": "Configuring notifier",
         "name": "Microsoft-ConfigureNotifier",
-        "notificationEmails": "$save('catdor@microsoft.com')",
-        "notificationTable": "dbo.notifier",
-        "sprocName": "dbo.sp_get_pull_status"
+        "skip": "$run(this.MS.DataStore.getValue('showCompletionNotificationConsent') == false)"
       },
       {
         "displayname": "$translate(INIT_ACTION_CHECKING_DATA)",

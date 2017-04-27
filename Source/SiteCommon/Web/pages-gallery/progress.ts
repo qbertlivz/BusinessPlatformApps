@@ -120,7 +120,6 @@ export class ProgressViewModel extends ViewModelBase {
 
     SubmitEmailAddress(): void {
         if (this.emailAddress && this.emailAddress.length > 0 && this.emailAddress.indexOf('@') !== -1) {
-            this.DismissEmailSubmission();
             try {
                 this.MS.DataStore.addToDataStore('EmailAddress', this.emailAddress, DataStoreType.Public);
                 this.MS.DataStore.addToDataStore('NameFirst', this.nameFirst, DataStoreType.Public);
@@ -131,6 +130,7 @@ export class ProgressViewModel extends ViewModelBase {
             } catch (emailSubscriptionException) {
                 // Email subscription failed
             }
+            this.DismissEmailSubmission();
         }
     }
 

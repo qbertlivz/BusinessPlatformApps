@@ -84,17 +84,23 @@
             <div class="st-email-centered st-email-heading">${MS.Translate.PROGRESS_OKAY}</div>
             <div class="st-email-centered st-text">${MS.Translate.PROGRESS_SIGN_UP}</div>
             <div class="st-email-fields">
-                <input class="st-input" placeholder="First Name" type="text" value.bind="viewmodel.nameFirst" />
-                <input class="st-input" placeholder="Last Name" type="text" value.bind="viewmodel.nameLast" />
-                <input class="st-input" placeholder="Email" type="text" value.bind="viewmodel.emailAddress" />
+                <input class="st-input" placeholder="First Name" type="text" value.bind="nameFirst" />
+                <input class="st-input" placeholder="Last Name" type="text" value.bind="nameLast" />
+                <input class="st-input" placeholder="Email" type="text" value.bind="emailAddress" />
             </div>
             <div class="st-email-centered st-text">
                 <span>${MS.Translate.PROGRESS_UNSUBSCRIBE}</span>
                 <span>${MS.Translate.COMMON_SEE}</span>
-                <span class="st-email-link" click.trigger="viewmodel.SubmitEmailLink()">${MS.Translate.COMMON_MS_PRIVACY_POLICY}</span>
+                <span class="st-email-link" click.trigger="SubmitEmailLink()">${MS.Translate.COMMON_MS_PRIVACY_POLICY}</span>
                 <span>${MS.Translate.COMMON_FOR_DETAILS}</span>
             </div>
-            <button class="primary" click.trigger="viewmodel.SubmitEmailAddress()">${MS.Translate.COMMON_SUBSCRIBE}</button>
+            <div class="st-email-centered st-label-wrapper" if.bind="showCompletionNotificationConsent">
+                <label class="st-label">
+                    <input type="checkbox" tabindex="-1" checked.bind="sendCompletionNotification">
+                    <span class="smallFontSize">${MS.Translate.PROGRESS_NOTIFICATION}</span>
+                </label>
+            </div>
+            <button class="primary" click.trigger="SubmitEmailAddress()">${MS.Translate.COMMON_SUBSCRIBE}</button>
         </div>
     </div>
 </template>

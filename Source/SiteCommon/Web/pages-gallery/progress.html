@@ -94,9 +94,9 @@
                 <span class="st-email-link" click.trigger="SubmitEmailLink()">${MS.Translate.COMMON_MS_PRIVACY_POLICY}</span>
                 <span>${MS.Translate.COMMON_FOR_DETAILS}</span>
             </div>
-            <div class="st-email-centered st-label-wrapper" if.bind="showCompletionNotificationConsent">
-                <label class="st-label" click.trigger="sendCompletionNotification = !sendCompletionNotification">
-                    <input type="checkbox" tabindex="-1" checked.bind="sendCompletionNotification">
+            <div class="st-email-centered st-label-wrapper" click.trigger="sendCompletionNotification = !sendCompletionNotification" if.bind="showCompletionNotificationConsent">
+                <label class="st-label">
+                    <input type="checkbox" tabindex="-1" checked.bind="sendCompletionNotification" click.trigger="$event.preventDefault()">
                     <span class="smallFontSize">${MS.Translate.PROGRESS_NOTIFICATION}</span>
                 </label>
             </div>

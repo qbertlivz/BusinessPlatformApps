@@ -335,6 +335,7 @@
     PROGRESS_GETTING_READY: `Getting your Power BI file ready...`,
     PROGRESS_GETTING_READY_POWERAPP: `Getting your PowerApp file ready...`,
     PROGRESS_OKAY: `Okay, let's get your deployment started!`,
+    PROGRESS_NOTIFICATION: `Let us send you a notification when everything is ready.`,
     PROGRESS_SIGN_UP: `Sign up to stay connected with the solution template engineering team with information about new templates, enhancements, tips and tricks.`,
     PROGRESS_SUBTITLE: `This might take a while. We'll show you progress while you wait. Please don't close the browser until all the steps are completed. The setup could take 10-15 minutes.`,
     PROGRESS_TITLE: `Track your progress`,

@@ -20,6 +20,8 @@ export class ProgressViewModel extends ViewModelBase {
     powerAppDownloadLink: string = '';
     powerAppFileName: string = '';
     recordCounts: any[] = [];
+    sendCompletionNotification: boolean = false;
+    showCompletionNotificationConsent: boolean = false;
     showCounts: boolean = false;
     showEmailSubmission: boolean = true;
     sliceStatus: any[] = [];

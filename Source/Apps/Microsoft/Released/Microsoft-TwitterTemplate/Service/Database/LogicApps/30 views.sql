@@ -100,6 +100,15 @@ AS
     FROM   pbist_twitter.tweets_processed;
 GO
 
+CREATE VIEW pbist_twitter.vw_search_terms
+AS
+    SELECT tweetid					AS [Tweet Id],
+           searchterm				AS [Search Term],
+		   accountid				AS [Account Id],
+		   direction				AS [Tweet Direction]
+    FROM   pbist_twitter.search_terms;
+go
+
 CREATE VIEW pbist_twitter.vw_minimum_tweets
 AS
     SELECT MinimumTweets AS [Minimum Tweets] FROM pbist_twitter.minimum_tweets

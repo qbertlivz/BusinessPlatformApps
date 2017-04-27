@@ -39,8 +39,21 @@ export class ProgressViewModel extends ViewModelBase {
             return;
         }
 
-        this.showCompletionNotificationConsent = this.MS.DataStore.getJson("showCompletionNotificationConsent");
+        this.showCompletionNotificationConsent = this.MS.DataStore.getValue('showCompletionNotificationConsent') === 'true';
 
+        if (!this.showCompletionNotificationConsent) {
+            this.ExecuteActions();
+        }
+    }
+
+    DismissEmailSubmission(): void {
+        this.showEmailSubmission = false;
+        if (this.showCompletionNotificationConsent) {
+            this.ExecuteActions();
+        }
+    }
+
+    async ExecuteActions(): Promise<void> {
         this.hasPowerApp = this.hasPowerApp && this.MS.DataStore.getValue('SkipPowerApp') == null;
 
         // Run all actions
@@ -107,7 +120,7 @@ export class ProgressViewModel extends ViewModelBase {
 
     SubmitEmailAddress(): void {
         if (this.emailAddress && this.emailAddress.length > 0 && this.emailAddress.indexOf('@') !== -1) {
-            this.showEmailSubmission = false;
+            this.DismissEmailSubmission();
             try {
                 this.MS.DataStore.addToDataStore('EmailAddress', this.emailAddress, DataStoreType.Public);
                 this.MS.DataStore.addToDataStore('NameFirst', this.nameFirst, DataStoreType.Public);

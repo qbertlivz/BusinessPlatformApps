@@ -78,9 +78,9 @@
 
     <!-- Emails -->
     <div class="st-email-background if.bind="showEmailSubmission"></div>
-    <div class="st-email-background st-email-wrapper" click.trigger="showEmailSubmission = false" if.bind="showEmailSubmission">
+    <div class="st-email-background st-email-wrapper" click.trigger="DismissEmailSubmission()" if.bind="showEmailSubmission">
         <div class="st-email-submission" click.trigger="$event.stopPropagation()">
-            <span class="glyphicon pbi-glyph-close st-contact-us-close" click.trigger="showEmailSubmission = false"></span>
+            <span class="glyphicon pbi-glyph-close st-contact-us-close" click.trigger="DismissEmailSubmission()"></span>
             <div class="st-email-centered st-email-heading">${MS.Translate.PROGRESS_OKAY}</div>
             <div class="st-email-centered st-text">${MS.Translate.PROGRESS_SIGN_UP}</div>
             <div class="st-email-fields">
@@ -95,7 +95,7 @@
                 <span>${MS.Translate.COMMON_FOR_DETAILS}</span>
             </div>
             <div class="st-email-centered st-label-wrapper" if.bind="showCompletionNotificationConsent">
-                <label class="st-label">
+                <label class="st-label" click.trigger="sendCompletionNotification = !sendCompletionNotification">
                     <input type="checkbox" tabindex="-1" checked.bind="sendCompletionNotification">
                     <span class="smallFontSize">${MS.Translate.PROGRESS_NOTIFICATION}</span>
                 </label>

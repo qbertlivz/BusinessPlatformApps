@@ -4,7 +4,10 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Deployment.Common.ActionModel;
+using Microsoft.Deployment.Common.Helpers;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Sdk.WebServiceClient;
 
@@ -28,7 +31,7 @@ namespace Microsoft.Deployment.Common.Actions.MsCrm
                 HeaderToken = crmToken["access_token"].ToString()
             };
 
-            foreach(var entry in entities)
+            foreach (var entry in entities)
             {
                 var xml = $@"
                         <fetch distinct='false' mapping='logical' aggregate='true'> 
@@ -37,15 +40,18 @@ namespace Microsoft.Deployment.Common.Actions.MsCrm
                             </entity> 
                         </fetch>";
 
+                var fetchRequest = new ExecuteFetchRequest() { FetchXml = xml };
 
-                var resultEntity = proxy.RetrieveMultiple(
-                new FetchExpression(xml)).Entities.First();
-                var count = resultEntity
-                  .GetAttributeValue<Microsoft.Xrm.Sdk.AliasedValue>($"{entry}_count").Value;
+                var result = (ExecuteFetchResponse)proxy.Execute(fetchRequest);
+
+                var xdoc = XDocument.Parse(result.FetchXmlResult);
+
+                var count = xdoc.Descendants().First(e => e.Name == $"{entry}_count").Value;
 
                 initialCounts.Add(entry, Convert.ToInt16(count));
             }
 
+            request.DataStore.AddToDataStore("InitialCounts", JsonUtility.GetJObjectFromObject(initialCounts));
             return new ActionResponse(ActionStatus.Success);
         }
     }

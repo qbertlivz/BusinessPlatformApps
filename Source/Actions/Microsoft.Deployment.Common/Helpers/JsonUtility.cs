@@ -133,12 +133,15 @@ namespace Microsoft.Deployment.Common.Helpers
         {
             string webToken = null;
 
-            foreach(Claim c in new JwtSecurityToken(token).Claims)
+            if (token != null)
             {
-                if (c.Type.ToLowerInvariant().EqualsIgnoreCase(property))
+                foreach (Claim c in new JwtSecurityToken(token).Claims)
                 {
-                    webToken = c.Value;
-                    break;
+                    if (c.Type.ToLowerInvariant().EqualsIgnoreCase(property))
+                    {
+                        webToken = c.Value;
+                        break;
+                    }
                 }
             }
 

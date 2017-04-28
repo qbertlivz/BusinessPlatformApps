@@ -117,7 +117,6 @@
         "finishedActionName": "Microsoft-GetTaskStatus",
         "name": "$SiteCommon$/pages-gallery/progress.html",
         "showCounts": true,
-        "showEmailSubmission": false,
         "sqlServerIndex": 1,
         "targetSchema": "pbist_sccm",
         "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(10))"
@@ -226,7 +225,6 @@
         "HasNavigated": "$save(true)",
         "isUninstall": true,
         "name": "$SiteCommon$/pages-gallery/progress.html",
-        "showEmailSubmission": false,
         "successMessage": "$translate(INIT_UNINSTALL_SUCCESS)"
       }
     ],

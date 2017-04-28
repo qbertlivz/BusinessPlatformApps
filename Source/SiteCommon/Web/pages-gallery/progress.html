@@ -75,32 +75,4 @@
             <span>${MS.Translate.PROGRESS_GETTING_READY_POWERAPP}</span>
         </div>
     </div>
-
-    <!-- Emails -->
-    <div class="st-email-background if.bind="showEmailSubmission"></div>
-    <div class="st-email-background st-email-wrapper" click.trigger="DismissEmailSubmission()" if.bind="showEmailSubmission">
-        <div class="st-email-submission" click.trigger="$event.stopPropagation()">
-            <span class="glyphicon pbi-glyph-close st-contact-us-close" click.trigger="DismissEmailSubmission()"></span>
-            <div class="st-email-centered st-email-heading">${MS.Translate.PROGRESS_OKAY}</div>
-            <div class="st-email-centered st-text">${MS.Translate.PROGRESS_SIGN_UP}</div>
-            <div class="st-email-fields">
-                <input class="st-input" placeholder="First Name" type="text" value.bind="nameFirst" />
-                <input class="st-input" placeholder="Last Name" type="text" value.bind="nameLast" />
-                <input class="st-input" placeholder="Email" type="text" value.bind="emailAddress" />
-            </div>
-            <div class="st-email-centered st-text">
-                <span>${MS.Translate.PROGRESS_UNSUBSCRIBE}</span>
-                <span>${MS.Translate.COMMON_SEE}</span>
-                <span class="st-email-link" click.trigger="SubmitEmailLink()">${MS.Translate.COMMON_MS_PRIVACY_POLICY}</span>
-                <span>${MS.Translate.COMMON_FOR_DETAILS}</span>
-            </div>
-            <div class="st-email-centered st-label-wrapper" click.trigger="sendCompletionNotification = !sendCompletionNotification" if.bind="showCompletionNotificationConsent">
-                <label class="st-label">
-                    <input type="checkbox" tabindex="-1" checked.bind="sendCompletionNotification" click.trigger="$event.preventDefault()">
-                    <span class="smallFontSize">${MS.Translate.PROGRESS_NOTIFICATION}</span>
-                </label>
-            </div>
-            <button class="primary" click.trigger="SubmitEmailAddress()">${MS.Translate.COMMON_SUBSCRIBE}</button>
-        </div>
-    </div>
 </template>

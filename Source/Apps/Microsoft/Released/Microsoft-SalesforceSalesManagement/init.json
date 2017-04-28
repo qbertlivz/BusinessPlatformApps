@@ -246,26 +246,26 @@
       {
         "displayname": "Inserting initial counts",
         "name": "Microsoft-InsertInitialCounts",
-        "skip": "$run(this.MS.DataStore.getValue('showCompletionNotificationConsent') == false)"
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
       },
       {
         "DeploymentName": "SqlConnectionDeployment",
         "displayname": "Creating database connection",
         "name": "Microsoft-CreateSqlConnector",
         "ApiConnectionName": "$save('sqlNotifierConnection')",
-        "skip": "$run(this.MS.DataStore.getValue('showCompletionNotificationConsent') == false)"
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
       },
       {
         "DeploymentName": "NotifierLogicApp",
         "displayname": "Creating notifier",
         "name": "Microsoft-DeployNotifierLogicApp",
         "logicAppName": "notifierLogicApp",
-        "skip": "$run(this.MS.DataStore.getValue('showCompletionNotificationConsent') == false)"
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
       },
       {
         "displayname": "Configuring notifier",
         "name": "Microsoft-ConfigureNotifier",
-        "skip": "$run(this.MS.DataStore.getValue('showCompletionNotificationConsent') == false)"
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
       },
       {
         "displayname": "$translate(INIT_ACTION_CHECKING_DATA)",
@@ -356,7 +356,6 @@
         "HasNavigated": "`(true)",
         "isUninstall": true,
         "name": "$SiteCommon$/pages-gallery/progress.html",
-        "showEmailSubmission": false,
         "successMessage": "$translate(INIT_UNINSTALL_SUCCESS)"
       }
     ],

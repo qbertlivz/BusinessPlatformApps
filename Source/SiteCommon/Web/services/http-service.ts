@@ -65,10 +65,10 @@ export class HttpService {
     }
 
     async executeAsync(method: string, content: any = {}): Promise<ActionResponse> {
-        this.isServiceBusy = true;
         var actionResponse: ActionResponse = null;
 
         if (!content.isInvisible) {
+            this.isServiceBusy = true;
             this.MS.ErrorService.Clear();
         }
 
@@ -98,21 +98,25 @@ export class HttpService {
                 this.MS.DataStore.loadDataStoreFromJson(actionResponse.DataStore);
             }
 
-            // Handle any errors here
-            if (actionResponse.Status === ActionStatus.Failure || actionResponse.Status === ActionStatus.FailureExpected) {
-                this.MS.ErrorService.details = `${actionResponse.ExceptionDetail.AdditionalDetailsErrorMessage} --- Action Failed ${method} --- Error ID:(${this.MS.LoggerService.UserGenId})`;
-                this.MS.ErrorService.logLocation = actionResponse.ExceptionDetail.LogLocation;
-                this.MS.ErrorService.message = actionResponse.ExceptionDetail.FriendlyErrorMessage;
-                this.MS.ErrorService.showContactUs = actionResponse.Status === ActionStatus.Failure;
-            } else if (actionResponse.Status !== ActionStatus.Invisible) {
-                this.MS.ErrorService.Clear();
+            if (!content.isInvisible) {
+                // Handle any errors here
+                if (actionResponse.Status === ActionStatus.Failure || actionResponse.Status === ActionStatus.FailureExpected) {
+                    this.MS.ErrorService.details = `${actionResponse.ExceptionDetail.AdditionalDetailsErrorMessage} --- Action Failed ${method} --- Error ID:(${this.MS.LoggerService.UserGenId})`;
+                    this.MS.ErrorService.logLocation = actionResponse.ExceptionDetail.LogLocation;
+                    this.MS.ErrorService.message = actionResponse.ExceptionDetail.FriendlyErrorMessage;
+                    this.MS.ErrorService.showContactUs = actionResponse.Status === ActionStatus.Failure;
+                } else if (actionResponse.Status !== ActionStatus.Invisible) {
+                    this.MS.ErrorService.Clear();
+                }
             }
         } catch (e) {
             this.MS.ErrorService.message = this.MS.Translate.COMMON_UNKNOWN_ERROR;
             this.MS.ErrorService.showContactUs = true;
             throw e;
         } finally {
-            this.isServiceBusy = false;
+            if (!content.isInvisible) {
+                this.isServiceBusy = false;
+            }
         }
 
         return actionResponse;

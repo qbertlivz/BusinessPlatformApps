@@ -119,14 +119,3 @@ BEGIN
     WHERE configuration_group='SolutionTemplate' AND configuration_subgroup='SSAS' AND [name]='CurrentStatus';
 END;
 GO
-
-CREATE PROCEDURE pbist_twitter.sp_get_accounts
-AS
-BEGIN
-
-SELECT DISTINCT 
-       [accountname]
-      ,[accountid]
-  FROM [pbist_twitter].[accounts]
-  END;
-  GO

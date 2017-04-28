@@ -186,6 +186,7 @@
     <Compile Include="AzureML\ExportAzureMLExperiment.cs" />
     <Compile Include="AzureML\DeployAzureMLWebServiceFromFile.cs" />
     <Compile Include="AzureSql\CreateAzureSql.cs" />
+    <Compile Include="AzureToken\CreateSpn.cs" />
     <Compile Include="AzureToken\GetAzureAuthUri.cs" />
     <Compile Include="AzureToken\GetAzureToken.cs" />
     <Compile Include="AzureToken\RefreshAzureToken.cs" />
@@ -232,6 +233,7 @@
     <Compile Include="News\RunNewsHistorical.cs" />
     <Compile Include="PowerApp\CreatePowerAppSqlConnection.cs" />
     <Compile Include="PowerApp\ConfigurePowerAppTables.cs" />
+    <Compile Include="PowerApp\DeployPowerApp.cs" />
     <Compile Include="PowerApp\GetPowerAppEnvironment.cs" />
     <Compile Include="PowerApp\WranglePowerApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -8,10 +8,11 @@ namespace Microsoft.Deployment.Common.Helpers
 {
     public class AzureHttpClient
     {
-        public string Token { get; set; }
-        public string Subscription { get; }
-        public string ResourceGroup { get; }
+        public Dictionary<string, string> Headers { get; set; }
         public Task Providers { get; set; }
+        public string ResourceGroup { get; }
+        public string Subscription { get; }
+        public string Token { get; set; }
 
         public AzureHttpClient(string token)
         {
@@ -29,6 +30,12 @@ namespace Microsoft.Deployment.Common.Helpers
             this.Token = token;
             this.Subscription = subscription;
             this.ResourceGroup = resourceGroup;
+        }
+
+        public AzureHttpClient(string token, Dictionary<string, string> headers)
+        {
+            this.Headers = headers;
+            this.Token = token;
         }
 
         public async Task<HttpResponseMessage> ExecuteWithSubscriptionAndResourceGroupAsync(HttpMethod method, string relativeUrl, string apiVersion, string body, Dictionary<string, string> queryParameters)
@@ -80,6 +87,14 @@ namespace Microsoft.Deployment.Common.Helpers
 
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.Token);
 
+                if (this.Headers != null)
+                {
+                    foreach(KeyValuePair<string, string> header in this.Headers)
+                    {
+                        client.DefaultRequestHeaders.Add(header.Key, header.Value);
+                    }
+                }
+
                 return await client.SendAsync(message);
             }
         }
@@ -98,6 +113,12 @@ namespace Microsoft.Deployment.Common.Helpers
 
                 return await client.SendAsync(message);
             }
+        }
+
+        public async Task<string> ExecuteGenericRequestWithHeaderAndReadAsync(HttpMethod method, string url, string body)
+        {
+            HttpResponseMessage response = await this.ExecuteGenericRequestWithHeaderAsync(method, url, body);
+            return await response.Content.ReadAsStringAsync();
         }
     }
 }

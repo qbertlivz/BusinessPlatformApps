@@ -27,16 +27,13 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
             "https://disco.crm6.dynamics.com",
             "https://disco.crm7.dynamics.com",
             "https://disco.crm8.dynamics.com",
-            "https://disco.crm9.dynamics.com",
-            "https://dev.crm.dynamics.com",
-            "https://dev.crm4.dynamics.com",
-            "https://dev.crm5.dynamics.com"
+            "https://disco.crm9.dynamics.com"
         };
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             List<D365Organization> d365Organizations = this.SearchForOrganizations(request.DataStore.GetValue("D365Username"), request.DataStore.GetValue("D365Password"));
-            return d365Organizations.Count == 0
+            return d365Organizations == null || d365Organizations.Count == 0
                 ? new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), null, "MsCrm_No_Organizations")
                 : new ActionResponse(ActionStatus.Success, JsonUtility.GetJObjectFromStringValue(JsonConvert.SerializeObject(d365Organizations)));
         }
@@ -181,7 +178,6 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
             if (discoveryUrl != null)
             {
                 result = RetrieveOrganizations(userName, password, domain, discoveryUrl);
-
             }
             else
             {

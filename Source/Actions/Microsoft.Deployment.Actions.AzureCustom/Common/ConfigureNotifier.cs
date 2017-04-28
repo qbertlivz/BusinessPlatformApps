@@ -27,6 +27,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
 
             string deploymentId = Guid.NewGuid().ToString();
             string dataPullCompleteThreshold = "80";
+            var asDisabled = request.DataStore.GetValue("ssasDisabled");
 
             Dictionary<string, string> configValues = new Dictionary<string, string>()
             {
@@ -35,8 +36,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
                 {"DeploymentId", deploymentId },
                 {"TemplateName", request.Info.AppName },
                 {"DeploymentTimestamp", DateTime.UtcNow.ToString("o") },
-                {"ASDeployment", (!Convert.ToBoolean(request.DataStore.GetValue("ssasDisabled"))).ToString() },
-                {"DataPullCompleteThreshold", dataPullCompleteThreshold},
+                {"ASDeployment", string.IsNullOrEmpty(asDisabled) ? "False" : (!Convert.ToBoolean(asDisabled)).ToString()},
+                {"DataPullCompleteThreshold", dataPullCompleteThreshold },
                 {"DataPullStatus", "-1" }
             };
 
@@ -59,8 +60,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             request.DataStore.AddToDataStore("SqlConfigTable", "smgt.configuration");
 
             var configResponse = await RequestUtility.CallAction(request, "Microsoft-SetConfigValueInSql");
-            
-            if(!configResponse.IsSuccess)
+
+            if (!configResponse.IsSuccess)
             {
                 return configResponse;
             }

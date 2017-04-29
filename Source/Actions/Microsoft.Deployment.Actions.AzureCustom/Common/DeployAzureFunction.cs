@@ -34,6 +34,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             var sku = request.DataStore.GetValue("sku") ?? "Dynamic";
             var skuCode = request.DataStore.GetValue("skuCode") ?? "S1";
             var workerSize = request.DataStore.GetValue("workerSize") ?? "0";
+            var branch = request.DataStore.GetValue("branch") ?? "master";
+
 
             string functionArmDeploymentRelativePath = sku.ToLower() == "standard"
                 ? "Service/Arm/AzureFunctionsStaticAppPlan.json"

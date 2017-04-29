@@ -240,6 +240,7 @@
     <Compile Include="Twitter\DeployTwitterFunction.cs" />
     <Compile Include="Twitter\DeployTwitterHistoricalLogicApp.cs" />
     <Compile Include="Twitter\DeployTwitterLogicApp.cs" />
+    <Compile Include="Twitter\DeployUserLogicApp.cs" />
     <Compile Include="Twitter\GetTwitterConnection.cs" />
     <Compile Include="Twitter\RunLogicAppHistorical.cs" />
     <Compile Include="Twitter\ValidateCognitiveKey.cs" />

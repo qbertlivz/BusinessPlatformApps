@@ -51,10 +51,6 @@
         "displayname": "Search Terms",
         "name": "$SiteCommon$/pages-gallery/search-terms.html"
       },
-      {
-        "displayname": "Twitter Handles",
-        "name": "$SiteCommon$/pages-gallery/twitter-handles.html"
-      },
       //{
       //  "displayname": "AAS",
       //  "name": "$SiteCommon$/pages-gallery/choose-analysis-server.html",
@@ -87,6 +83,7 @@
         "LogicAppHostingPlan": "$save(this.uniqueId)",
         "LogicAppName": "$save(this.uniqueId)",
         "LogicAppNameHistorical": "$save(this.uniqueId)",
+        "LogicAppNameUsers": "save(this.uniqueId)",
         "name": "$SiteCommon$/pages-gallery/progress.html",
         "powerAppFileName": "TwitterTemplate.msapp",
         "SiteName": "$save(this.uniqueIdFunction)"
@@ -128,7 +125,10 @@
       {
         "DeploymentName": "Function",
         "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_FUNCTION)",
-        "name": "Microsoft-DeployTwitterFunction"
+        "FunctionName": "$save('function' + this.MS.DataStore.getValue('uniqueId'))",
+        "name": "Microsoft-DeployAzureFunction",
+        "branch": "testtwitter",
+        "RepoUrl": "https://github.com/juluczni/AzureFunctionsNewsTemplate"
       },
       {
         "DeploymentName": "Function",
@@ -218,6 +218,16 @@
         "DeploymentName": "LogicApp",
         "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_LOGIC_APP)",
         "name": "Microsoft-DeployTwitterLogicApp"
+      },
+      {
+        "DeploymentName": "LogicApp",
+        "displayname": "$translate(INIT_ACTION_VALIDATING_LOGIC_APP)",
+        "name": "Microsoft-WaitForArmDeploymentStatus"
+      },
+      {
+        "DeploymentName": "LogicApp",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_LOGIC_APP)",
+        "name": "Microsoft-DeployUserLogicApp"
       },
       {
         "DeploymentName": "LogicApp",

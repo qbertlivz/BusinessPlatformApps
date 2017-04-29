@@ -111,12 +111,7 @@
         },
         "onNext": [
           {
-            "name": "Microsoft-SalesforceGetEntityInitialCounts",
-            "NotificationThresholds": {
-              "account": -1,
-              "opportunity": -1,
-              "leads": -1
-            }
+            "name": "Microsoft-SalesforceGetEntityInitialCounts"
           }
         ]
       },

@@ -38,6 +38,7 @@ export class SummaryViewModel extends ViewModelBase {
     async OnLoaded(): Promise<void> {
         this.loadSummaryObjectIntoRows();
         this.isValidated = true;
+        this.emailAddress = this.MS.DataStore.getValue("EmailAddress");
     }
 
     async NavigatingNext(): Promise<boolean> {

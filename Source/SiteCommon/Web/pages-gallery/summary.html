@@ -14,7 +14,7 @@
     <div class="st-float st-text">
         <span if.bind="showCompletionNotification">${MS.Translate.SUMMARY_NOTIFICATION}</span>
         <p>${MS.Translate.SUMMARY_EMAIL_ADDRESS}</p>
-        <input class="st-input" type="password" disabled.bind="MS.HttpService.isServiceBusy" value.bind="emailAddress">
+        <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="emailAddress">
         <div class="st-label-wrapper" if.bind="showCompletionNotification">
             <label class="st-label">
                 <input type="checkbox" tabindex="-1" checked.bind="sendCompletionNotification" disabled.bind="MS.HttpService.isServiceBusy">

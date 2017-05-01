@@ -19,12 +19,12 @@ namespace Microsoft.Deployment.Actions.Common
         {
             var connectionString = request.DataStore.GetValue("SqlConnectionString");
             var counts = request.DataStore.GetValue("InitialCounts");
-
+            var schema = request.DataStore.GetValue("SqlSchema");
             var countsObj = JsonConvert.DeserializeObject<Dictionary<string, int>>(counts);
 
             foreach (var entry in countsObj)
             {
-                string cmd = $"INSERT INTO [dbo].[entityinitialcount] VALUES ('{entry.Key}','{entry.Value}','0','{DateTime.UtcNow.ToString("o")}')";
+                string cmd = $"INSERT INTO [{schema}].[entityinitialcount] VALUES ('{entry.Key}','{entry.Value}','0','{DateTime.UtcNow.ToString("o")}')";
                 SqlUtility.InvokeSqlCommand(connectionString, cmd, new Dictionary<string, string>());
             }
 

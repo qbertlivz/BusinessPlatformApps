@@ -2529,6 +2529,14 @@ CREATE TABLE psa.[date]
 );
 
 
+CREATE TABLE [psa].[entityinitialcount](
+	[entityname] [nvarchar](40) NULL,
+	[initialcount] INT NULL,
+	[lastcount] INT NULL,
+	[lasttimestamp] DATETIME2 NULL
+);
+
+
 /*
   At the moment there is no way to extract resource capacity from CRM, so we have to do some approximation.
   This table defines the expected maximum schedulable capacity of a resource per week day.

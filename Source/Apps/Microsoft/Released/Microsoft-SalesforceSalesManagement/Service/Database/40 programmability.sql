@@ -54,7 +54,7 @@ BEGIN
 			END) AS [Percentage], 
 		    c.EntityName as EntityName INTO #percentages
 	FROM #counts c 
-	INNER JOIN dbo.entityinitialcount i ON i.entityname = c.entityname
+	INNER JOIN smgt.entityinitialcount i ON i.entityname = c.entityname
 
 
 	DECLARE @DeploymentTimestamp datetime2;
@@ -72,7 +72,7 @@ BEGIN
 								WHERE config.configuration_group = 'SolutionTemplate' AND config.configuration_subgroup = 'Notifier' AND config.[name] = 'DataPullCompleteThreshold') AS decimal)
 
 	IF NOT EXISTS(SELECT p.[Percentage], p.[EntityName], i.lasttimestamp,  DATEDIFF(MINUTE, i.lasttimestamp, CURRENT_TIMESTAMP) AS [TimeDifference] FROM #percentages p
-			  INNER JOIN dbo.entityinitialcount i ON i.entityName = p.EntityName
+			  INNER JOIN smgt.entityinitialcount i ON i.entityName = p.EntityName
 			  WHERE (p.[Percentage] <= @CompletePercentage OR p.[Percentage] IS NULL) AND DATEDIFF(MINUTE, i.lasttimestamp, CURRENT_TIMESTAMP) > 5
 			  OR (p.[Percentage] <= @CompletePercentage  OR p.[Percentage] IS NULL))
 	SET @StatusCode = 2 --Data pull complete
@@ -98,14 +98,14 @@ BEGIN
 	SET @StatusCode = -1;
 
 	-- Delayed Processing Flow
-	IF ((SELECT COUNT(*) FROM #counts) != (SELECT COUNT(*) from entityinitialcount))
+	IF ((SELECT COUNT(*) FROM #counts) != (SELECT COUNT(*) from smgt.entityinitialcount))
 	SET @StatusCode = -1
 
 	UPDATE smgt.[configuration] 
 	SET [configuration].[value] = @StatusCode
 	WHERE [configuration].configuration_group = 'SolutionTemplate' AND [configuration].configuration_subgroup = 'Notifier' AND [configuration].[name] = 'DataPullStatus'
 
-	MERGE entityinitialcount AS TARGET
+	MERGE smgt.entityinitialcount AS TARGET
 	USING #counts AS SOURCE
 	ON (TARGET.entityname = SOURCE.entityname)
 	WHEN MATCHED AND SOURCE.[Count] > TARGET.lastcount

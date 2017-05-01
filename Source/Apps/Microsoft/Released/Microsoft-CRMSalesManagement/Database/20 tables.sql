@@ -1057,6 +1057,12 @@ CREATE TABLE dbo.territory
   entityimage_url            NVARCHAR(4000) NULL
 );
 
+CREATE TABLE [dbo].[entityinitialcount](
+	[entityname] [nvarchar](40) NULL,
+	[initialcount] INT NULL,
+	[lastcount] INT NULL,
+	[lasttimestamp] DATETIME2 NULL
+);
 
 
 /* SMGT specific schemas */

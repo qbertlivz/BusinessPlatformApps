@@ -93,8 +93,13 @@ BEGIN
 					 [configuration].[value] ='true')
 	SET @ASDeployment = 1;
 
+	-- AS Flow
 	IF NOT EXISTS (SELECT * FROM smgt.ssas_jobs WHERE [statusMessage] = 'Success') AND @ASDeployment = 1 AND DATEDIFF(HOUR, @DeploymentTimestamp, CURRENT_TIMESTAMP) < 24
 	SET @StatusCode = -1;
+
+	-- Delayed Processing Flow
+	IF ((SELECT COUNT(*) FROM #counts) != (SELECT COUNT(*) from entityinitialcount))
+	SET @StatusCode = -1
 
 	UPDATE smgt.[configuration] 
 	SET [configuration].[value] = @StatusCode

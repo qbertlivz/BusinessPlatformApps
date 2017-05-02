@@ -114,6 +114,7 @@
     <Compile Include="CredentialManager\CredentialManagerWrite.cs" />
     <Compile Include="GetDataPullStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SccmGetEntityInitialCounts.cs" />
     <Compile Include="TaskScheduler\CreateTask.cs" />
     <Compile Include="TaskScheduler\GetTaskStatus.cs" />
     <Compile Include="TaskScheduler\RemoveTask.cs" />

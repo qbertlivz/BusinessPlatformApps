@@ -19,6 +19,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             string azureToken = request.DataStore.GetJson("AzureToken", "access_token");
+            string refreshToken = request.DataStore.GetJson("AzureToken", "refresh_token");
             string subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             string resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
             string triggerUrl = request.DataStore.GetValue("NotifierTriggerUrl");
@@ -64,6 +65,11 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
                 return configResponse;
             }
 
+            if (request.Info.WebsiteRootUrl.Contains("http://localhost"))
+            {
+                PostDeploymentId(deploymentId, azureToken, refreshToken);
+            }
+
             var cmd = $"INSERT INTO deploymentids VALUES('{deploymentId}','{DateTime.UtcNow.ToString("o")}')";
             SqlUtility.InvokeSqlCommand(deploymentIdsConnection, cmd, new Dictionary<string, string>());
 
@@ -71,6 +77,21 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             var response = await azureClient.ExecuteGenericRequestNoHeaderAsync(HttpMethod.Post, triggerUrl, string.Empty);
 
             return new ActionResponse(ActionStatus.Success);
+        }
+
+        private void PostDeploymentId(string deploymentId, string accessToken, string refreshToken)
+        {
+            HttpClient client = new HttpClient();
+            //client.BaseAddress = new Uri(Constants.ServiceUrl);
+            client.BaseAddress = new Uri("http://localhost:2305");
+
+            dynamic payload = new ExpandoObject();
+            payload.tokens = new ExpandoObject();
+            payload.tokens.access = accessToken;
+            payload.tokens.refresh = refreshToken;
+            payload.deploymentId = deploymentId;
+
+            var x = client.PostAsync("/api/notifier", new StringContent(JsonUtility.GetJObjectFromObject(payload).ToString(), Encoding.UTF8, "application/json")).Result;
         }
     }
 }

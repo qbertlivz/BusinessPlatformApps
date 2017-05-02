@@ -24,7 +24,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
             var location = request.DataStore.GetJson("SelectedLocation", "Name");
 
-
             SubscriptionCloudCredentials creds = new TokenCloudCredentials(subscription, azureToken);
             Microsoft.Azure.Management.Resources.ResourceManagementClient client = new ResourceManagementClient(creds);
             var registeration = await client.Providers.RegisterAsync("Microsoft.Web");
@@ -46,7 +45,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
                 return new ActionResponse(ActionStatus.Failure, JsonUtility.GetJObjectFromJsonString(await connection.Content.ReadAsStringAsync()),
                     null, DefaultErrorCodes.DefaultErrorCode, "Failed to create connection");
             }
-
 
             // Get Consent links for auth
             payload = new ExpandoObject();

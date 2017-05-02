@@ -232,6 +232,7 @@
     <Compile Include="News\RunNewsHistorical.cs" />
     <Compile Include="PowerApp\CreatePowerAppSqlConnection.cs" />
     <Compile Include="PowerApp\ConfigurePowerAppTables.cs" />
+    <Compile Include="PowerApp\DeployPowerApp.cs" />
     <Compile Include="PowerApp\GetPowerAppEnvironment.cs" />
     <Compile Include="PowerApp\WranglePowerApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

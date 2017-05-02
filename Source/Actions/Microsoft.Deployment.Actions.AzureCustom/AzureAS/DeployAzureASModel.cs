@@ -16,11 +16,14 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
+            var azureToken = request.DataStore.GetJson("AzureToken");
+            string serverUrl = request.DataStore.GetValue("ASServerUrl");
+
             string xmla = request.DataStore.GetValue("xmlaFilePath");
             string asDatabase = request.DataStore.GetValue("ASDatabase");
             string sqlConnectionString = request.DataStore.GetValue("SqlConnectionString");
             var connectionStringObj = SqlUtility.GetSqlCredentialsFromConnectionString(sqlConnectionString);
-            string connectionString = request.DataStore.GetValue("ASConnectionString");
+            string connectionString = ValidateConnectionToAS.GetASConnectionString(request, azureToken, serverUrl);
 
             string xmlaContents = File.ReadAllText(request.Info.App.AppFilePath + "/" + xmla);
 
@@ -35,7 +38,10 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
                 db?.Drop();
 
                 // Deploy database definition
-                XmlaResultCollection response = server.Execute(xmlaContents);
+                var obj = JsonUtility.GetJsonObjectFromJsonString(xmlaContents);
+                obj["create"]["database"]["name"] = asDatabase;
+                XmlaResultCollection response = server.Execute(obj.ToString());
+
                 if (response.ContainsErrors)
                 {
                     return new ActionResponse(ActionStatus.Failure, response[0].Value);

@@ -38,7 +38,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
                     Name = "ProcessOnlyRole"
                 };
 
-                role.ModelPermission = ModelPermission.Refresh;
+                role.ModelPermission = ModelPermission.Administrator;
                 ExternalModelRoleMember member = new ExternalModelRoleMember();
                 member.IdentityProvider = "AzureAD";
                 member.MemberName = user;

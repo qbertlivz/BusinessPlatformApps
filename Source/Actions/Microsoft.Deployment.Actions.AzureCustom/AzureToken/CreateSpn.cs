@@ -57,7 +57,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
 
                 responseBodyObj.Add("SPNAppId", appId);
                 responseBodyObj.Add("SPNKey", key);
-                responseBodyObj.Add("SPNUser", appId + "@" + tenantId);
+                responseBodyObj.Add("SPNUser", "app:" + appId + "@" + tenantId);
                 responseBodyObj.Add("SPNTenantId", tenantId);
 
                 // Delete the SPN if required 
@@ -65,7 +65,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                 //string graphApiWithApp = string.Format(graphUriBaseWithApplication, tenantId, obbId);
                 //response = await client.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Delete, graphApiWithApp + "?api-version=1.6", body);
 
-                return new ActionResponse(ActionStatus.Success, responseBody, true);
+                return new ActionResponse(ActionStatus.Success, responseBodyObj, true);
             }
 
             return new ActionResponse(ActionStatus.Failure, responseBody, null, null, "Unable to create a Service Principal");

@@ -27,7 +27,7 @@ BEGIN
 END;
 go
 
-CREATE PROCEDURE [dbo].[sp_get_pull_status]
+CREATE PROCEDURE pbist_sccm.[sp_get_pull_status]
 AS
 BEGIN
 		

@@ -124,6 +124,7 @@
       {
         "displayname": "$translate(NOTIFIER_CONFIGURE_NOTIFIER_APP)",
         "name": "Microsoft-ConfigureNotifier",
+        "SqlConfigTable": "[psa].[configuration]",
         "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
       },
       {

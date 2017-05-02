@@ -86,11 +86,11 @@
       //  "showDescription": true,
       //  "skip": "$dsall(azureSqlDisabled)[1]"
       //},
-      //{
-      //  "displayname": "Azure Login",
-      //  "name": "$SiteCommon$/pages-gallery/azure-login.html",
-      //  "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
-      //},
+      {
+        "displayname": "Azure Login",
+        "name": "$SiteCommon$/pages-gallery/azure-login.html",
+        "skip": "$run(this.MS.UtilityService.HasInternetAccess() === false || this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true')"
+      },
       //{
       //  "displayname": "AAS Login",
       //  "name": "$SiteCommon$/pages-gallery/ssas.html",
@@ -234,6 +234,8 @@
       {
         "displayname": "$translate(NOTIFIER_CONFIGURE_NOTIFIER_APP)",
         "name": "Microsoft-ConfigureNotifier",
+        "SqlConfigTable": "$save('[pbist_sccm].[configuration]')",
+        "SqlServerIndex": 1,
         "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
       },
       {

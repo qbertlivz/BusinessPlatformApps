@@ -57,8 +57,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
                 request.DataStore.AddToDataStore("NotifierValues" + i, "SqlEntryValue", configValues.ElementAt(i).Value);
             }
 
-            request.DataStore.AddToDataStore("SqlConfigTable", "smgt.configuration");
-
             var configResponse = await RequestUtility.CallAction(request, "Microsoft-SetConfigValueInSql");
 
             if (!configResponse.IsSuccess)

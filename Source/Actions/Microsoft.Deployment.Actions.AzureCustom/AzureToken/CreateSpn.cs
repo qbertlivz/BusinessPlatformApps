@@ -23,36 +23,17 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
-            var refreshToken = request.DataStore.GetJson("AzureToken", "refresh_token");
+            var azureToken = request.DataStore.GetJson("AzureToken");
             var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
 
-            JObject graphToken;
-            using (HttpClient httpClient = new HttpClient())
-            {
-                string tokenUrl = string.Format(Constants.AzureTokenUri, "common");
-                // ms crm token
-                string token = GetAzureToken.GetTokenUri2(refreshToken, "https://graph.windows.net", request.Info.WebsiteRootUrl, Constants.MicrosoftClientId);
-                StringContent content = new StringContent(token);
-                content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
-                string response2 = httpClient.PostAsync(new Uri(tokenUrl), content).Result.Content.AsString();
-                graphToken =   JsonUtility.GetJsonObjectFromJsonString(response2);
-            }
+            JObject graphToken = AzureTokenUtility.GetTokenForResource(request, azureToken, "https://graph.windows.net");
 
-
-            var tenantId = new JwtSecurityToken(request.DataStore.GetJson("AzureToken")["id_token"].ToString())
-                                                    .Claims.First(e => e.Type.ToLowerInvariant() == "tid")
-                                                    .Value;
-
+            var tenantId = AzureUtility.GetTenantFromToken(request.DataStore.GetJson("AzureToken"));
 
             // Generate new key for ClientSecret
-            RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
-            byte[] buffer = new byte[44];
-            rng.GetBytes(buffer);
-
-            // Return a Base64 string representation of the random number.
-            var key = Convert.ToBase64String(buffer);
+            string key = GetNewKey();
             string graphUriBase = "https://graph.windows.net/{0}/applications";
+            
             string graphApi = string.Format(graphUriBase, tenantId);
 
             AzureHttpClient client = new AzureHttpClient(graphToken["access_token"].ToString(), subscription);
@@ -79,12 +60,33 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             if (response.IsSuccessStatusCode)
             {
                 string appId = responseBodyObj["appId"].ToString();
-                return new ActionResponse(ActionStatus.Success, responseBody);
+                string obbId = responseBodyObj["objectId"].ToString();
+
+                responseBodyObj.Add("SPNAppId", appId);
+                responseBodyObj.Add("SPNKey", key);
+                responseBodyObj.Add("SPNUser", appId + "@" + tenantId);
+                responseBodyObj.Add("SPNTenantId", tenantId);
+
+                // Delete the SPN if required 
+                //string graphUriBaseWithApplication = "https://graph.windows.net/{0}/applications/{1}";
+                //string graphApiWithApp = string.Format(graphUriBaseWithApplication, tenantId, obbId);
+                //response = await client.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Delete, graphApiWithApp + "?api-version=1.6", body);
+
+                return new ActionResponse(ActionStatus.Success, responseBody, true);
             }
 
-            // Try to login with Service Principal
+            return new ActionResponse(ActionStatus.Failure, responseBody, null, null, "Unable to create a Service Principal");
+        }
 
-            return new ActionResponse(ActionStatus.Failure, responseBody);
+        private static string GetNewKey()
+        {
+            RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
+            byte[] buffer = new byte[44];
+            rng.GetBytes(buffer);
+
+            // Return a Base64 string representation of the random number.
+            var key = Convert.ToBase64String(buffer);
+            return key;
         }
     }
 }

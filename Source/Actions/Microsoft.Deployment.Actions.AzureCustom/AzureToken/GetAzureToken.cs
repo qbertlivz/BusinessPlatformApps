@@ -145,7 +145,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
         {
             return $"refresh_token={code}&" +
                    $"client_id={clientId}&" +
-                   $"client_secret={Uri.EscapeDataString(Constants.MicrosoftClientSecret)}&" +
+                   //$"client_secret={Uri.EscapeDataString(Constants.MicrosoftClientSecret)}&" +
                    $"resource={Uri.EscapeDataString(uri)}&" +
                    $"redirect_uri={Uri.EscapeDataString(rootUrl + Constants.WebsiteRedirectPath)}&" +
                    "grant_type=refresh_token";

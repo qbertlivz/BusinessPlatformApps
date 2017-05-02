@@ -17,7 +17,7 @@ using Microsoft.Deployment.Common.Helpers;
 namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
 {
     [Export(typeof(IAction))]
-    public class DeplpoyUserLogicApp : BaseAction
+    public class DeployUserLogicApp : BaseAction
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {

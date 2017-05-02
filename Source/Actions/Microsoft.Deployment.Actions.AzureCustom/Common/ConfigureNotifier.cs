@@ -65,13 +65,21 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
                 return configResponse;
             }
 
-            if (request.Info.WebsiteRootUrl.Contains("http://localhost"))
+            //OnPrem scenario
+            if (request.Info.WebsiteRootUrl.Contains("https://msi"))
             {
-                PostDeploymentId(deploymentId, azureToken, refreshToken);
+                var post = PostDeploymentId(deploymentId, azureToken, refreshToken);
+                if (!post)
+                {
+                    request.Logger.LogEvent("ConfigureNotifier failed for on prem scenario - couldn't reach service.", new Dictionary<string, string>());
+                }
             }
-
-            var cmd = $"INSERT INTO deploymentids VALUES('{deploymentId}','{DateTime.UtcNow.ToString("o")}')";
-            SqlUtility.InvokeSqlCommand(deploymentIdsConnection, cmd, new Dictionary<string, string>());
+            else
+            {
+                //Website scenario
+                var cmd = $"INSERT INTO deploymentids VALUES('{deploymentId}','{DateTime.UtcNow.ToString("o")}')";
+                SqlUtility.InvokeSqlCommand(deploymentIdsConnection, cmd, new Dictionary<string, string>());
+            }
 
             AzureHttpClient azureClient = new AzureHttpClient(azureToken, subscription, resourceGroup);
             var response = await azureClient.ExecuteGenericRequestNoHeaderAsync(HttpMethod.Post, triggerUrl, string.Empty);
@@ -79,11 +87,10 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             return new ActionResponse(ActionStatus.Success);
         }
 
-        private void PostDeploymentId(string deploymentId, string accessToken, string refreshToken)
+        private bool PostDeploymentId(string deploymentId, string accessToken, string refreshToken)
         {
             HttpClient client = new HttpClient();
-            //client.BaseAddress = new Uri(Constants.ServiceUrl);
-            client.BaseAddress = new Uri("http://localhost:2305");
+            client.BaseAddress = new Uri("https://bpstservice-slot1.azurewebsites.net/");
 
             dynamic payload = new ExpandoObject();
             payload.tokens = new ExpandoObject();
@@ -91,7 +98,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             payload.tokens.refresh = refreshToken;
             payload.deploymentId = deploymentId;
 
-            var x = client.PostAsync("/api/notifier", new StringContent(JsonUtility.GetJObjectFromObject(payload).ToString(), Encoding.UTF8, "application/json")).Result;
+            var resp = client.PostAsync("/api/notifier", new StringContent(JsonUtility.GetJObjectFromObject(payload).ToString(), Encoding.UTF8, "application/json")).Result;
+            return resp.IsSuccessStatusCode;
         }
     }
 }

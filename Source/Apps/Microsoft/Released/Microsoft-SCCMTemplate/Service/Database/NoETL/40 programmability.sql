@@ -45,7 +45,7 @@ BEGIN
     FROM sys.tables ta INNER JOIN sys.partitions pa ON pa.OBJECT_ID = ta.OBJECT_ID
 				       INNER JOIN sys.schemas sc ON ta.schema_id = sc.schema_id
     WHERE
-	    sc.name='dbo' AND ta.is_ms_shipped = 0 AND pa.index_id IN (0,1) AND
+	    sc.name='pbist_sccm' AND ta.is_ms_shipped = 0 AND pa.index_id IN (0,1) AND
 	     ta.name IN ('computer', 'user', 'usercomputer', 'computerprogram', 'program', 'collection', 'computercollection', 'malware', 'computermalware', 'update', 'computerupdate', 'scanhistory' )
     GROUP BY ta.name
 
@@ -63,7 +63,7 @@ BEGIN
 
 
 	DECLARE @DeploymentTimestamp datetime2;
-	SET @DeploymentTimestamp = CAST((SELECT [value] from smgt.[configuration] config
+	SET @DeploymentTimestamp = CAST((SELECT [value] from pbist_sccm.[configuration] config
 								WHERE config.configuration_group = 'SolutionTemplate' AND config.configuration_subgroup = 'Notifier' AND config.[name] = 'DeploymentTimestamp') AS datetime2)
 
 	IF EXISTS (SELECT *
@@ -73,7 +73,7 @@ BEGIN
 		
 	
 	DECLARE @CompletePercentage decimal;
-	SET @CompletePercentage = CAST((SELECT [value] from smgt.[configuration] config
+	SET @CompletePercentage = CAST((SELECT [value] from pbist_sccm.[configuration] config
 								WHERE config.configuration_group = 'SolutionTemplate' AND config.configuration_subgroup = 'Notifier' AND config.[name] = 'DataPullCompleteThreshold') AS decimal)
 
 	IF NOT EXISTS(SELECT p.[Percentage], p.[EntityName], i.lasttimestamp,  DATEDIFF(MINUTE, i.lasttimestamp, CURRENT_TIMESTAMP) AS [TimeDifference] FROM #percentages p
@@ -91,7 +91,7 @@ BEGIN
 	DECLARE @ASDeployment bit;	 
 	SET @ASDeployment = 0;
 
-	IF EXISTS (SELECT * FROM smgt.[configuration] 
+	IF EXISTS (SELECT * FROM pbist_sccm.[configuration] 
 			   WHERE [configuration].configuration_group = 'SolutionTemplate' AND 
 					 [configuration].configuration_subgroup = 'Notifier' AND 
 					 [configuration].[name] = 'ASDeployment' AND
@@ -99,14 +99,14 @@ BEGIN
 	SET @ASDeployment = 1;
 
 	-- AS Flow
-	IF NOT EXISTS (SELECT * FROM smgt.ssas_jobs WHERE [statusMessage] = 'Success') AND @ASDeployment = 1 AND DATEDIFF(HOUR, @DeploymentTimestamp, CURRENT_TIMESTAMP) < 24
+	IF NOT EXISTS (SELECT * FROM pbist_sccm.ssas_jobs WHERE [statusMessage] = 'Success') AND @ASDeployment = 1 AND DATEDIFF(HOUR, @DeploymentTimestamp, CURRENT_TIMESTAMP) < 24
 	SET @StatusCode = -1;
 
 	-- Delayed Processing Flow
 	IF ((SELECT COUNT(*) FROM #counts) != (SELECT COUNT(*) from pbist_sccm.entityinitialcount))
 	SET @StatusCode = -1
 
-	UPDATE smgt.[configuration] 
+	UPDATE pbist_sccm.[configuration] 
 	SET [configuration].[value] = @StatusCode
 	WHERE [configuration].configuration_group = 'SolutionTemplate' AND [configuration].configuration_subgroup = 'Notifier' AND [configuration].[name] = 'DataPullStatus'
 

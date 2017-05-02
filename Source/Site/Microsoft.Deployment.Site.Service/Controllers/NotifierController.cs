@@ -34,9 +34,9 @@ namespace Microsoft.Deployment.Site.Service.Controllers
                 }
 
                 var content = JsonUtility.GetJsonObjectFromJsonString(body);
-                string refreshToken = content["payload"]?["tokens"]?["refresh"].ToString();
-                string accessToken = content["payload"]?["tokens"]?["access"].ToString();
-                string deploymentId = content["payload"]?["deploymentId"].ToString();
+                string refreshToken = content["tokens"]?["refresh"].ToString();
+                string accessToken = content["tokens"]?["access"].ToString();
+                string deploymentId = content["deploymentId"].ToString();
                 var originalClaim = new JwtSecurityToken(accessToken).Claims.First(e => e.Type == "_claim_sources").Value;
 
                 string tokenUrl = string.Format(Constants.AzureTokenUri, "common");

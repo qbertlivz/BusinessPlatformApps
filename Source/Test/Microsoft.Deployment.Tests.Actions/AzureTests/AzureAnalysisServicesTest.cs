@@ -12,20 +12,6 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
     [TestClass]
     public class AzureAnalysisServicesTest
     {
-        //[TestMethod]
-        //public async Task OlapTest()
-        //{
-        //    // Deploy AS Model based of the following pramaters
-        //    var dataStore = await TestHelpers.TestManager.GetDataStore(true);
-
-        //    dataStore.AddToDataStore("ASServerUrl", "asazure://westus.asazure.windows.net/motestdbsdasd");
-        //    dataStore.AddToDataStore("ASAdmin", "mohaali@microsoft.com");
-        //    dataStore.AddToDataStore("ASAdminPassword", "3213");
-
-        //    var response = await TestManager.ExecuteActionAsync("Microsoft-ValidateConnectionToAS", dataStore, "Microsoft-TwitterTemplate");
-        //    Assert.IsTrue(response.IsSuccess);
-        //}
-
         [TestMethod]
         public async Task ErrorMessageValidation()
         {
@@ -55,7 +41,6 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
             dataStore.AddToDataStore("ASLocation", "westcentralus");
             dataStore.AddToDataStore("ASSku", "D1");
 
-            dataStore.AddToDataStore("ASAdminPassword", "");
             dataStore.AddToDataStore("xmlaFilePath", "Service/AzureAS/SalesManagement.xmla");
             dataStore.AddToDataStore("ASDatabase", "testdb");
 
@@ -65,9 +50,46 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
             response = await TestManager.ExecuteActionAsync("Microsoft-ValidateConnectionToAS", dataStore, "Microsoft-CRMSalesManagement");
             Assert.IsTrue(response.IsSuccess);
 
+            //response = await TestManager.ExecuteActionAsync("Microsoft-DeployAzureASModel", dataStore, "Microsoft-CRMSalesManagement");
+            //Assert.IsTrue(response.IsSuccess);
+        }
+
+        [TestMethod]
+        public async Task CheckASConnection()
+        {
+            // Deploy AS Model based of the following pramaters
+            var dataStore = await TestManager.GetDataStore();
+            dataStore.AddToDataStore("ASServerUrl", "asazure://westus.asazure.windows.net/test");
+
+            var response = await TestManager.ExecuteActionAsync("Microsoft-ValidateConnectionToAS", dataStore);
+            Assert.IsTrue(response.IsSuccess);
+        }
+
+        [TestMethod]
+        public async Task CheckPermissionCreation()
+        {
+            // Deploy AS Model based of the following pramaters
+            var dataStore = await TestManager.GetDataStore();
+            dataStore.AddToDataStore("ASServerUrl", "asazure://westus.asazure.windows.net/testmo");
+
+            dataStore.AddToDataStore("SqlConnectionString", SqlCreds.GetSqlPagePayload("modb1"));
+            dataStore.AddToDataStore("SqlServerIndex", "0");
+            dataStore.AddToDataStore("SqlScriptsFolder", "Database/");
+            dataStore.AddToDataStore("ASServerName", "testmo");
+            dataStore.AddToDataStore("ASLocation", "westcentralus");
+            dataStore.AddToDataStore("ASSku", "D1");
+            dataStore.AddToDataStore("xmlaFilePath", "Service/AzureAS/SalesManagement.xmla");
+            dataStore.AddToDataStore("ASDatabase", "testdb");
+            dataStore.AddToDataStore("UserToAdd", "mohaali@microsoft.com");
+
+            var response = await TestManager.ExecuteActionAsync("Microsoft-ValidateConnectionToAS", dataStore);
+            Assert.IsTrue(response.IsSuccess);
+
             response = await TestManager.ExecuteActionAsync("Microsoft-DeployAzureASModel", dataStore, "Microsoft-CRMSalesManagement");
             Assert.IsTrue(response.IsSuccess);
 
+            response = await TestManager.ExecuteActionAsync("Microsoft-AssignPermissionsForUser", dataStore, "Microsoft-CRMSalesManagement");
+            Assert.IsTrue(response.IsSuccess);
         }
     }
 }

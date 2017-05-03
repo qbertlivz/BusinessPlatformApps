@@ -108,6 +108,7 @@
     <Compile Include="Models\ADFField.cs" />
     <Compile Include="Models\DeserializedADFPayload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SalesforceGetEntityInitialCounts.cs" />
     <Compile Include="SalesforceGetObjectMetadata.cs" />
     <Compile Include="SalesforceSqlArtefacts.cs" />
     <Compile Include="Service References\SalesforceSOAP\Reference.cs">

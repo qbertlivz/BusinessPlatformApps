@@ -18,7 +18,7 @@ namespace Microsoft.Deployment.Tests.Actions.TestHelpers
         public static async Task<DataStore> GetUserTokenFromPopup()
         {
 #if DEBUG
-            AuthenticationContext context = new AuthenticationContext("https://login.windows.net/" + Credential.Instance.AAD.TenantId);
+            AuthenticationContext context = new AuthenticationContext("https://login.windows.net/" +"common");
             var url = context.GetAuthorizationRequestUrlAsync(Constants.AzureManagementCoreApi, Constants.MicrosoftClientId, new Uri("https://unittest/redirect.html"), UserIdentifier.AnyUser, "prompt=consent").Result;
             WindowsFormsWebAuthenticationDialog form = new WindowsFormsWebAuthenticationDialog(null);
             form.WebBrowser.Navigated += delegate (object sender, WebBrowserNavigatedEventArgs args)

@@ -38,7 +38,7 @@ namespace Microsoft.Deployment.Actions.Salesforce
             string connString = request.DataStore.GetValue("SqlConnectionString");
             string emails = request.DataStore.GetValue("EmailAddresses");
 
-            string dataFactoryName = resourceGroup + "SalesforceCopyFactory";
+            string dataFactoryName = resourceGroup.Replace("_", string.Empty) + "SalesforceCopyFactory";
             var param = new AzureArmParameterGenerator();
             var sqlCreds = SqlUtility.GetSqlCredentialsFromConnectionString(connString);
             param.AddStringParam("dataFactoryName", dataFactoryName);

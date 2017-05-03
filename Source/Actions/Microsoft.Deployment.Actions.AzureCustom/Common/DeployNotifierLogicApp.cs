@@ -16,6 +16,7 @@ using Microsoft.Deployment.Common.ErrorCode;
 using System.Net.Http;
 using System.Dynamic;
 using Newtonsoft.Json.Linq;
+using Microsoft.Deployment.Common.Enums;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.Common
 {
@@ -91,9 +92,12 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             {
                 return deploymentResponse;
             }
-
-            //response = await azureClient.ExecuteGenericRequestNoHeaderAsync(HttpMethod.Post, postUrl["value"].ToString(), string.Empty);
+            
             request.DataStore.AddToDataStore("NotifierTriggerUrl", postUrl["value"].ToString());
+
+            //Log logic app
+            request.Logger.LogResource(request.DataStore, logicAppName,
+                DeployedResourceType.LogicApp, CreatedBy.BPST, DateTime.UtcNow.ToString("o"));
 
             return new ActionResponse(ActionStatus.Success);
         }

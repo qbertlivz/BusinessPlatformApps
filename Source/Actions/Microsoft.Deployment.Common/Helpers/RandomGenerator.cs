@@ -5,6 +5,13 @@ namespace Microsoft.Deployment.Common.Helpers
 {
     public static class RandomGenerator
     {
+        public static string GetDateStamp()
+        {
+            DateTime d = DateTime.Now;
+            return FormatDate(d.Year) + FormatDate(d.Month) + FormatDate(d.Day) +
+                FormatDate(d.Hour) + FormatDate(d.Minute) + FormatDate(d.Second);
+        }
+
         public static string GetRandomCharacters()
         {
             var path = Path.GetRandomFileName() + Path.GetRandomFileName();
@@ -22,6 +29,12 @@ namespace Microsoft.Deployment.Common.Helpers
                 rasndomString += let;
             }
             return rasndomString;
+        }
+
+        private static string FormatDate(int d)
+        {
+            string date = d.ToString();
+            return date.Length < 2 ? "0" + date : date;
         }
     }
 }

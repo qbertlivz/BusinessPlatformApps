@@ -3,17 +3,17 @@ SET NOCOUNT ON;
 SET nocount ON;
 
 DECLARE @allassignments TABLE
-  (
-     assignmentid   INT,
-     collectionid   NVARCHAR(512),
-     collectionname NVARCHAR(512),
-     ci_id          INT,
-     displayname    NVARCHAR(512),
-     cidescription  NVARCHAR (512),
-     citype_id      INT,
-     ci_uniqueid    NVARCHAR(512),
-     civersion      INT
-  );
+(
+    assignmentid   INT,
+    collectionid   NVARCHAR(512),
+    collectionname NVARCHAR(512),
+    ci_id          INT,
+    displayname    NVARCHAR(512),
+    cidescription  NVARCHAR (512),
+    citype_id      INT,
+    ci_uniqueid    NVARCHAR(512),
+    civersion      INT
+);
 
 INSERT INTO @allassignments
             (assignmentid,
@@ -149,7 +149,8 @@ SELECT r.netbios_name0    AS MachineName,
        TargetCompliance.compliancestate,
        TargetCompliance.maxnoncompliancecriticality,
        assstatus.lastcompliancemessagetime,
-       assign.ci_uniqueid AS Baseline_UniqueID
+       assign.ci_uniqueid AS Baseline_UniqueID,
+       r.ResourceId       AS MachineId
 FROM   (SELECT DISTINCT displayname,
                         ci_id,
                         civersion,

@@ -1,5 +1,4 @@
-﻿
-namespace Microsoft.Deployment.Common.ErrorCode
+﻿namespace Microsoft.Deployment.Common.ErrorCode
 {
     public static class DefaultErrorCodes
     {

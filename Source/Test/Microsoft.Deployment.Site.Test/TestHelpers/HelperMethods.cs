@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Remote;
+using OpenQA.Selenium.Support.UI;
 
 namespace Microsoft.Deployment.Site.Web.Tests
 {
@@ -30,14 +31,16 @@ namespace Microsoft.Deployment.Site.Web.Tests
             button.Click();
         }
 
-        public static void ClickNextButton()
-         {
-            var button = driver.FindElementsByTagName("Button").First(e => e.Text == "Next");
-            button.Click();
+        public static void WaitForPage()
+        {
+            IWait<IWebDriver> wait = new OpenQA.Selenium.Support.UI.WebDriverWait(driver, TimeSpan.FromSeconds(30.00));
+
+            wait.Until(driver => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
         }
 
         public static void ClickButton(string buttonText)
         {
+            WaitForPage();
             var button = driver.FindElementsByTagName("Button").FirstOrDefault(e => e.Enabled && e.Text == buttonText);
 
             while (button == null || !button.Enabled)
@@ -60,25 +63,34 @@ namespace Microsoft.Deployment.Site.Web.Tests
             var passwordBox = driver.FindElementById("cred_password_inputtext");
             passwordBox.SendKeys(password);
 
-            Thread.Sleep(new TimeSpan(0, 0, 1));
-            var signInButton = driver.FindElementById("cred_sign_in_button");
+            try
+            {
+                Thread.Sleep(new TimeSpan(0, 0, 1));
+                var signInButton = driver.FindElementById("cred_sign_in_button");
 
-            var js = (IJavaScriptExecutor)driver;
-            js.ExecuteScript("arguments[0].click()", signInButton);
-
+                var js = (IJavaScriptExecutor)driver;
+                js.ExecuteScript("arguments[0].click()", signInButton);
+            }
+            catch
+            {
+                //MSI ccase
+            }
+            var djs = (IJavaScriptExecutor)driver;
             var passLink = driver.FindElementsByClassName("normalText").First(e => e.Text == "Sign in with a username and password instead");
-            passLink.Click();
+            djs.ExecuteScript("arguments[0].click()", passLink);
 
             passwordBox = driver.FindElementById("passwordInput");
             passwordBox.SendKeys(password);
 
-            Thread.Sleep(new TimeSpan(0, 0, 1));
-            signInButton = driver.FindElementById("submitButton");
-            js.ExecuteScript("arguments[0].click()", signInButton);
+            Thread.Sleep(new TimeSpan(0, 0, 5));
+            var submitButton = driver.FindElementById("submitButton");
+            djs.ExecuteScript("arguments[0].click()", submitButton);
 
-            Thread.Sleep(new TimeSpan(0, 0, 1));
+            Thread.Sleep(new TimeSpan(0, 0, 5));
             var acceptButton = driver.FindElementById("cred_accept_button");
-            acceptButton.Click();
+            djs.ExecuteScript("arguments[0].click()", acceptButton);
+
+            WaitForPage();
 
             var azurePage = driver.FindElementsByClassName("st-text").FirstOrDefault(e => e.Text == "Azure Subscription:");
 
@@ -88,7 +100,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
                 if (azurePage != null)
                 {
                     var advanced = driver.FindElementByCssSelector("p[class='st-float st-text au-target']");
-                    advanced.Click();
+                    djs.ExecuteScript("arguments[0].click()", advanced);
 
                     var resourceGroup = driver.FindElementsByCssSelector("input[class='st-input au-target']")
                                         .First(e => e.GetAttribute("value.bind").Contains("selectedResourceGroup"));
@@ -213,12 +225,12 @@ namespace Microsoft.Deployment.Site.Web.Tests
         public static void SelectSqlDatabase(string databaseName)
         {
             var database = driver.FindElementsByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']")
-                            .FirstOrDefault(e => !e.Text.Contains(databaseName));
+                            .FirstOrDefault(e => e.Text.Contains(databaseName));
 
             while (database == null)
             {
                 database = driver.FindElementsByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']")
-                            .FirstOrDefault(e => !e.Text.Contains(databaseName));
+                            .FirstOrDefault(e => e.Text.Contains(databaseName));
             }
 
             database.SendKeys(databaseName);
@@ -228,9 +240,15 @@ namespace Microsoft.Deployment.Site.Web.Tests
         public static void CheckDeploymentStatus()
         {
             Thread.Sleep(new TimeSpan(0, 0, 5));
-            var popup = driver.FindElementByCssSelector("span[class='glyphicon pbi-glyph-close st-contact-us-close au-target']");
-            popup.Click();
-
+            try
+            {
+                var popup = driver.FindElementByCssSelector("span[class='glyphicon pbi-glyph-close st-contact-us-close au-target']");
+                popup.Click();
+            }
+            catch
+            {
+                //MSI scenario - carry on
+            }
             var progressText = driver.FindElementsByCssSelector("span[class='semiboldFont st-progress-text']")
                                      .FirstOrDefault(e => e.Text == "All done! You can now download your Power BI report and start exploring your data.");
             var error = driver.FindElementsByCssSelector("span[class='st-tab-text st-error']")

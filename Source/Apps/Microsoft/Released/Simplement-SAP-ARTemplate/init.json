@@ -46,6 +46,9 @@
             "name": "Microsoft-ValidateAdminPrivileges"
           },
           {
+            "name": "Microsoft-ValidateSecurityOptions"
+          },
+          {
             "name": "Microsoft-ValidatePowerShellVersion"
           }
         ],
@@ -87,7 +90,6 @@
         "filename": "$save('SAPSolutionTemplate.pbix')",
         "finishedActionName": "Microsoft-GetTaskStatus",
         "name": "$SiteCommon$/pages-gallery/progress.html",
-        "showEmailSubmission": false,
         "targetSchema": "sap"
       }
     ],
@@ -141,7 +143,6 @@
         "displayname": "Uninstall Progress",
         "isUninstall": true,
         "name": "$SiteCommon$/pages-gallery/progress.html",
-        "showEmailSubmission": false,
         "successMessage": "$translate(INIT_UNINSTALL_SUCCESS)"
       }
     ],

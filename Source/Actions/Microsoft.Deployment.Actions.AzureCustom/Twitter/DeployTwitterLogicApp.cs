@@ -1,12 +1,16 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Microsoft.Azure;
 using Microsoft.Azure.Management.Resources;
 using Microsoft.Azure.Management.Resources.Models;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
+using Microsoft.Deployment.Common.Enums;
 using Microsoft.Deployment.Common.ErrorCode;
 using Microsoft.Deployment.Common.Helpers;
 
@@ -46,7 +50,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
             SubscriptionCloudCredentials creds = new TokenCloudCredentials(subscription, azureToken);
             Microsoft.Azure.Management.Resources.ResourceManagementClient client = new ResourceManagementClient(creds);
 
-
             var deployment = new Microsoft.Azure.Management.Resources.Models.Deployment()
             {
                 Properties = new DeploymentPropertiesExtended()
@@ -64,6 +67,11 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
             }
 
             var deploymentItem = await client.Deployments.CreateOrUpdateAsync(resourceGroup, deploymentName, deployment, new CancellationToken());
+
+            //Log logic app
+            request.Logger.LogResource(request.DataStore, logicAppName,
+                DeployedResourceType.LogicApp, CreatedBy.BPST, DateTime.UtcNow.ToString("o"));
+
             return new ActionResponse(ActionStatus.Success, deploymentItem);
         }
     }

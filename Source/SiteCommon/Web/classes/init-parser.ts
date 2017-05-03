@@ -4,14 +4,12 @@ import { VariableType } from '../enums/variable-type';
 import { ActionResponse } from '../models/action-response';
 import { Variable } from '../models/variable';
 
-import { DataStore } from '../services/data-store';
-import { HttpService } from '../services/http-service';
 import { MainService } from '../services/main-service';
 
 export class InitParser {
     public static MS: MainService;
 
-    public static async executeActions(actions: any[], obj: any, MS: MainService, self: any): Promise<boolean> {
+    public static async executeActions(actions: any[], self: any): Promise<boolean> {
         for (let index in actions) {
             let actionToExecute: any = actions[index];
             let name: string = actionToExecute.name;
@@ -31,20 +29,20 @@ export class InitParser {
         return true;
     }
 
-    public static loadVariables(objToChange: any, obj: any, MS: MainService, self: any) {
+    public static loadVariables(objToChange: any, obj: any, MS: MainService, self: any): void {
         this.MS = MS;
         for (let propertyName in obj) {
             let val: any = obj[propertyName];
             this.parseVariable(propertyName, val, objToChange, this.MS, self);
 
             if (val && typeof (val) === 'object' && propertyName !== 'onNext' && propertyName !== 'onValidate') {
-                this.loadVariables(objToChange[propertyName], val, this.MS, self);
+                this.loadVariables(objToChange[propertyName], this.MS.UtilityService.Clone(val), this.MS, self);
             }
         }
     }
 
     // The code to go ahead and parse the Variable
-    public static parseVariable(key: string, value: any, obj: any, MS: MainService, self: any) {
+    public static parseVariable(key: string, value: any, obj: any, MS: MainService, self: any): void {
         let variable: Variable = this.getVariableType(value);
         let result: string = '';
         let command: string = '';
@@ -78,7 +76,7 @@ export class InitParser {
                 break;
         }
 
-        if (command) {
+        if (command && self) {
             result = eval(command);
         }
 
@@ -88,7 +86,7 @@ export class InitParser {
         }
     }
 
-    public static translateInitValue(value: string, MS: MainService = null) {
+    public static translateInitValue(value: string, MS: MainService = null): any {
         if (MS !== null) {
             this.MS = MS;
         }

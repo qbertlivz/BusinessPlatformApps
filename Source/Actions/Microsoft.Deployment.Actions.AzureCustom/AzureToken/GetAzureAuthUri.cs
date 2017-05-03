@@ -6,13 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 
+using Microsoft.Azure;
+using Microsoft.Azure.Management.Resources;
+using Microsoft.Azure.Management.Resources.Models;
+
 using Microsoft.Deployment.Common;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
-using Microsoft.Azure;
-using Microsoft.Azure.Management.Resources;
-using Microsoft.Azure.Management.Resources.Models;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
 {
@@ -135,6 +136,13 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                     break;
             }
 
+            StringBuilder builder = GetRawAzureAuthUri(request, authBase, clientId, resource);
+
+            return new ActionResponse(ActionStatus.Success, JsonUtility.GetJObjectFromStringValue(builder.ToString()));
+        }
+
+        public static StringBuilder GetRawAzureAuthUri(ActionRequest request, string authBase, string clientId, string resource)
+        {
             Dictionary<string, string> message = new Dictionary<string, string>
             {
                 { "client_id", clientId },
@@ -152,7 +160,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                 builder.Append("&");
             }
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetJObjectFromStringValue(builder.ToString()));
+            return builder;
         }
     }
 }

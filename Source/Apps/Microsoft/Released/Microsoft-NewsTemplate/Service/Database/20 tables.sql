@@ -136,6 +136,12 @@ CREATE TABLE bpst_news.documentcompressedentities
 );
 CREATE NONCLUSTERED INDEX idx_documentcompressedentities_documentId ON bpst_news.entities (documentId);
 
+CREATE TABLE bpst_news.[entityinitialcount](
+	[entityname] [nvarchar](40) NULL,
+	[initialcount] INT NULL,
+	[lastcount] INT NULL,
+	[lasttimestamp] DATETIME2 NULL
+);
 
 -- Staging tables
 

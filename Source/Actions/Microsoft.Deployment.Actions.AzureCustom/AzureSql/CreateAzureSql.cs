@@ -1,11 +1,14 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Microsoft.Azure;
 using Microsoft.Azure.Management.Resources;
 using Microsoft.Azure.Management.Resources.Models;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Enums;
@@ -102,6 +105,13 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureSql
                 Authentication = SqlAuthentication.SQL,
                 Database = database
             };
+
+            request.Logger.LogResource(request.DataStore, server,
+                DeployedResourceType.SqlServer, CreatedBy.BPST, DateTime.UtcNow.ToString("o"));
+
+
+            request.Logger.LogResource(request.DataStore, database,
+                DeployedResourceType.SqlServer, CreatedBy.BPST, DateTime.UtcNow.ToString("o"), string.Empty, databaseTier);
 
             var connectionStringResponse = SqlUtility.GetConnectionString(credentials);
             return new ActionResponse(ActionStatus.Success, JsonUtility.CreateJObjectWithValueFromObject(connectionStringResponse), true);

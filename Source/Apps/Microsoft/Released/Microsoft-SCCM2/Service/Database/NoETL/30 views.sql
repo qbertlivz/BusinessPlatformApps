@@ -250,11 +250,15 @@ go
 -- ConfigurationView
 CREATE VIEW pbist_sccm.vw_configuration
 AS
-    SELECT id,
+    SELECT [id],
             configuration_group    AS [configuration group],
             configuration_subgroup AS [configuration subgroup],
-            name                   AS name,
-            [value]                AS value
+            [name],
+            [value],
+			CASE
+			   WHEN [name]='lastLoadTimestamp' AND configuration_subgroup='System Center' THEN CONVERT(datetime, [value], 126) -- We need this because Power BI / DAX cannot convert from ISO8601 date
+			   ELSE NULL
+			END AS value_as_datetime
     FROM   pbist_sccm.[configuration]
     WHERE  visible = 1;
 go
@@ -276,7 +280,7 @@ AS
            [year],
            same_day_year_ago_date,
            week_begin_date  AS [week begin date]
-    FROM   pbist_sccm.date;
+    FROM   pbist_sccm.[date];
 go
 
 CREATE VIEW pbist_sccm.vw_DistributionPointsCompliancebyPackagesStatus
@@ -406,4 +410,9 @@ AS
          username, 
          [full name] 
   FROM   pbist_sccm.usercomputer;
+go
+
+CREATE VIEW [pbist_sccm].[vw_SCEPDefinition]
+AS
+    SELECT * FROM pbist_sccm.SCEPDefinition;
 go

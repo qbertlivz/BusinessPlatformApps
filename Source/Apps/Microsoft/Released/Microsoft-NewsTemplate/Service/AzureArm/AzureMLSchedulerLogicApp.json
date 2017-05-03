@@ -13,10 +13,6 @@
     "subscription": {
       "defaultValue": "idrequired",
       "type": "string"
-    },
-    "storageaccountname": {
-      "defaultValue": "ststorage",
-      "type": "string"
     }
   },
   "variables": {},

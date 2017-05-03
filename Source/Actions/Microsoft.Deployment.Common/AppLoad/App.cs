@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Deployment.Common.Actions;
+
 using Newtonsoft.Json;
+
+using Microsoft.Deployment.Common.Actions;
 
 namespace Microsoft.Deployment.Common.AppLoad
 {

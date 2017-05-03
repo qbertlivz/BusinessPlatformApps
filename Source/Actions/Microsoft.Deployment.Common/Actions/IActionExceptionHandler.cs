@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+
 using Microsoft.Deployment.Common.ActionModel;
 
 namespace Microsoft.Deployment.Common.Actions

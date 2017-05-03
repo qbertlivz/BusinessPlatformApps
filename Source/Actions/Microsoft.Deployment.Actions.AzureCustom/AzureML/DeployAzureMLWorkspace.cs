@@ -8,9 +8,11 @@ using System.ComponentModel.Composition;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Microsoft.Azure;
 using Microsoft.Azure.Management.Resources;
 using Microsoft.Azure.Management.Resources.Models;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.ErrorCode;
@@ -31,7 +33,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureML
             var workspaceName = request.DataStore.GetValue("WorkspaceName");
             var storageAccountName = request.DataStore.GetValue("StorageAccountName");
             var planName = request.DataStore.GetValue("PlanName") ?? "azuremlplan";
-            var skuName = request.DataStore.GetValue("SkuName")?? "S1";
+            var skuName = request.DataStore.GetValue("SkuName") ?? "S1";
             var skuTier = request.DataStore.GetValue("SkuTier") ?? "Standard";
             var skuCapacity = request.DataStore.GetValue("SkuCapacity") ?? "1";
 
@@ -80,4 +82,3 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureML
         }
     }
 }
-

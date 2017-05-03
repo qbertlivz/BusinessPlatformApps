@@ -1,17 +1,16 @@
-﻿
-using System.IdentityModel.Tokens.Jwt;
-using System.IO;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Microsoft.Azure;
 using Microsoft.Azure.Management.Resources;
 using Microsoft.Azure.Management.Resources.Models;
+using Newtonsoft.Json.Linq;
+
 using Microsoft.Deployment.Common.ActionModel;
-using Microsoft.Deployment.Common.ErrorCode;
 using Microsoft.Deployment.Common.Exceptions;
 using Microsoft.Deployment.Common.Helpers;
-using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Deployment.Actions.AzureCustom
 {
@@ -97,5 +96,25 @@ namespace Microsoft.Deployment.Actions.AzureCustom
             return token.Claims.SingleOrDefault(p => p.Type == "unique_name").Value;
         }
 
+
+        public static string GetTenantFromToken(JToken azureToken)
+        {
+            var tenantId = new JwtSecurityToken(azureToken["id_token"].ToString())
+                                        .Claims.First(e => e.Type.ToLowerInvariant() == "tid")
+                                        .Value;
+            return tenantId;
+        }
+
+        public static string GetRefreshToken(JToken azureToken)
+        {
+            var token = azureToken["refresh_token"]?.ToString();
+            return token;
+        }
+
+        public static string GetAccessToken(JToken azureToken)
+        {
+            var token = azureToken["access_token"]?.ToString();
+            return token;
+        }
     }
 }

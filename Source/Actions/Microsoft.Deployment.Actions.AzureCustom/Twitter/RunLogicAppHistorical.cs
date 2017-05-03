@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.Composition;
 using System.Net.Http;
 using System.Threading.Tasks;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
@@ -26,12 +27,10 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
             }
 
             var postUrl = JsonUtility.GetJObjectFromJsonString(await response.Content.ReadAsStringAsync());
-            
+
             response = await client.ExecuteGenericRequestNoHeaderAsync(HttpMethod.Post, postUrl["value"].ToString(), string.Empty);
 
             return new ActionResponse(ActionStatus.Success);
-
         }
     }
 }
-

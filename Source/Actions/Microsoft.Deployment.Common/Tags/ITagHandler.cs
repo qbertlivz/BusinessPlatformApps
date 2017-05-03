@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+
+using Newtonsoft.Json.Linq;
+
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.AppLoad;
 using Microsoft.Deployment.Common.Model;
-using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Deployment.Common.Tags
 {

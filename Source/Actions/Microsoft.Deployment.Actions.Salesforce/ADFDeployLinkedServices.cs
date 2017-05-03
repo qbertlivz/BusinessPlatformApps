@@ -1,23 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Microsoft.Deployment.Common.Actions;
-using Microsoft.Deployment.Common.ActionModel;
-using Microsoft.Deployment.Actions.Salesforce.Models;
-using Microsoft.Deployment.Common.Helpers;
+
 using Microsoft.Azure;
 using Microsoft.Azure.Management.Resources;
 using Microsoft.Azure.Management.Resources.Models;
-using Microsoft.Deployment.Common.ErrorCode;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
 using Microsoft.Deployment.Actions.Salesforce.Helpers;
-using System.Globalization;
+using Microsoft.Deployment.Common.Actions;
+using Microsoft.Deployment.Common.ActionModel;
+using Microsoft.Deployment.Common.ErrorCode;
+using Microsoft.Deployment.Common.Helpers;
+using Microsoft.Deployment.Common.Enums;
+using System;
 
 namespace Microsoft.Deployment.Actions.Salesforce
 {
@@ -39,7 +38,7 @@ namespace Microsoft.Deployment.Actions.Salesforce
             string connString = request.DataStore.GetValue("SqlConnectionString");
             string emails = request.DataStore.GetValue("EmailAddresses");
 
-            string dataFactoryName = resourceGroup + "SalesforceCopyFactory";
+            string dataFactoryName = resourceGroup.Replace("_", string.Empty) + "SalesforceCopyFactory";
             var param = new AzureArmParameterGenerator();
             var sqlCreds = SqlUtility.GetSqlCredentialsFromConnectionString(connString);
             param.AddStringParam("dataFactoryName", dataFactoryName);
@@ -121,6 +120,15 @@ namespace Microsoft.Deployment.Actions.Salesforce
             var deploymentItem = client.Deployments.CreateOrUpdateAsync(resourceGroup, deploymentName, deployment, new CancellationToken()).Result;
 
             var helper = new DeploymentHelper();
+
+            var response = helper.WaitForDeployment(resourceGroup, deploymentName, client);
+
+            if (response.IsSuccess)
+            {
+                //Log data factory
+                request.Logger.LogResource(request.DataStore, dataFactoryName,
+                    DeployedResourceType.AzureDataFactory, CreatedBy.BPST, DateTime.UtcNow.ToString("o"));
+            }
 
             return helper.WaitForDeployment(resourceGroup, deploymentName, client);
         }

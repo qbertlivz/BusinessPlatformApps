@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AnalysisServices.Tabular;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
+using Microsoft.Deployment.Actions.AzureCustom.AzureToken;
+using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
 {
@@ -14,40 +13,40 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
     public class ValidateConnectionToAS : BaseAction
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
-        { string serverName = request.DataStore.GetValue("ASServerUrl");
-            string username = request.DataStore.GetValue("ASAdmin") ??
-                              AzureUtility.GetEmailFromToken(request.DataStore.GetJson("AzureToken"));
-            string password = request.DataStore.GetValue("ASAdminPassword");
+        {
+            string serverUrl = request.DataStore.GetValue("ASServerUrl");
+            var azureToken = request.DataStore.GetJson("AzureToken");
+            string connectionString = GetASConnectionString(request, azureToken, serverUrl);
 
-            string connectionString = string.Empty;
+            return new ActionResponse(ActionStatus.Success);
+        }
 
-            if (serverName.ToLowerInvariant().StartsWith("asazure"))
-            {
-                connectionString += "Provider=MSOLAP;";
-            }
+        public static string GetASConnectionString(ActionRequest request, JToken azureToken, string serverUrl)
+        {
+            string connectionString = $"Provider=MSOLAP;Data Source={serverUrl}";
+            Uri uri = new Uri(serverUrl);
+            string resource = "https://" + uri.Host;
 
-            connectionString += $"Data Source={serverName};";
+            var asToken = AzureTokenUtility.GetTokenForResource(request, azureToken, resource);
+            string asAccessToken = AzureUtility.GetAccessToken(asToken);
 
-            if (!string.IsNullOrEmpty(password))
+            if (!string.IsNullOrEmpty(asAccessToken))
             {
                 connectionString +=
-                    $"User ID={username};Password={password};Persist Security Info=True; Impersonation Level=Impersonate;UseADALCache=0";
+                    $";Password={asAccessToken};UseADALCache=0";
             }
 
             try
             {
                 Server server = new Server();
                 server.Connect(connectionString);
-                
                 request.DataStore.AddToDataStore("ASConnectionString", connectionString, DataStoreType.Private);
+                return connectionString;
             }
             catch (Exception ex)
             {
-              return new ActionResponse(ActionStatus.FailureExpected, null, ex, null);
+                throw ex;
             }
-           
-          
-            return new ActionResponse(ActionStatus.Success);
         }
     }
 }

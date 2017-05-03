@@ -2,7 +2,10 @@
 using System.Data;
 using System.Dynamic;
 using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
+using System.Security.Claims;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
@@ -44,7 +47,7 @@ namespace Microsoft.Deployment.Common.Helpers
 
         public static string GetJsonStringFromObject(object json)
         {
-            if(json == null)
+            if (json == null)
             {
                 return JsonUtility.GetEmptyJObject().ToString();
             }
@@ -68,7 +71,7 @@ namespace Microsoft.Deployment.Common.Helpers
                 json = GetEmptyJObject().ToString();
             }
 
-            templatefileContent = (JObject) JToken.Parse(json);
+            templatefileContent = (JObject)JToken.Parse(json);
             return templatefileContent;
         }
 
@@ -81,13 +84,12 @@ namespace Microsoft.Deployment.Common.Helpers
 
         public static bool IsNullOrEmpty(this JToken token)
         {
-            return token == null 
-                ||token.Type == JTokenType.Array && !token.HasValues
-                ||token.Type == JTokenType.Object && !token.HasValues 
-                ||token.Type == JTokenType.String && token.ToString() == String.Empty 
+            return token == null
+                || token.Type == JTokenType.Array && !token.HasValues
+                || token.Type == JTokenType.Object && !token.HasValues
+                || token.Type == JTokenType.String && token.ToString() == String.Empty
                 || token.Type == JTokenType.Null;
         }
-
 
         public static string Serialize(DataTable table)
         {
@@ -122,5 +124,28 @@ namespace Microsoft.Deployment.Common.Helpers
             return result;
         }
 
+        public static string GetJObjectProperty(JObject obj, string property)
+        {
+            return obj[property] == null ? null : obj[property].ToString();
+        }
+
+        public static string GetWebToken(string token, string property)
+        {
+            string webToken = null;
+
+            if (token != null)
+            {
+                foreach (Claim c in new JwtSecurityToken(token).Claims)
+                {
+                    if (c.Type.ToLowerInvariant().EqualsIgnoreCase(property))
+                    {
+                        webToken = c.Value;
+                        break;
+                    }
+                }
+            }
+
+            return webToken;
+        }
     }
 }

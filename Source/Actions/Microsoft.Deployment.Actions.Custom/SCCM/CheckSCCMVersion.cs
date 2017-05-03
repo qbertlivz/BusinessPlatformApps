@@ -2,6 +2,7 @@
 using System.ComponentModel.Composition;
 using System.Data;
 using System.Threading.Tasks;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Enums;
@@ -16,7 +17,7 @@ namespace Microsoft.Deployment.Actions.Custom.SCCM
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            string connectionString = request.DataStore.GetValue("SqlConnectionString");
+            string connectionString = request.DataStore.GetValueAtIndex("SqlConnectionString", "SqlServerIndex");
 
             // Check if the Sites table exists. If not this isn't a SCCM database
             DataTable result = SqlUtility.RunCommand(connectionString, "SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME='Sites' AND TABLE_TYPE='BASE TABLE' AND TABLE_SCHEMA='dbo'", SqlCommandType.ExecuteWithData);

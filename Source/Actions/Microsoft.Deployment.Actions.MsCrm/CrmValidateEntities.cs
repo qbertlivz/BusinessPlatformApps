@@ -4,17 +4,17 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.ServiceModel;
-using System.Text;
 using System.Threading.Tasks;
+
 using Hyak.Common.Internals;
-using Microsoft.Deployment.Common.ActionModel;
-using Microsoft.Deployment.Common.Controller;
-using Microsoft.Deployment.Common.Helpers;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.WebServiceClient;
 using Newtonsoft.Json.Linq;
+
+using Microsoft.Deployment.Common.ActionModel;
+using Microsoft.Deployment.Common.Controller;
+using Microsoft.Deployment.Common.Helpers;
 
 namespace Microsoft.Deployment.Common.Actions.MsCrm
 {
@@ -29,7 +29,7 @@ namespace Microsoft.Deployment.Common.Actions.MsCrm
             string organizationUrl = request.DataStore.GetValue("OrganizationUrl");
             string[] entities = request.DataStore.GetValue("Entities").Split(new[] { ',', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
 
-            var crmToken = RetrieveCrmOnlineToken(refreshToken, request.Info.WebsiteRootUrl, request.DataStore, organizationUrl);
+            var crmToken = CrmTokenUtility.RetrieveCrmOnlineToken(refreshToken, request.Info.WebsiteRootUrl, request.DataStore, organizationUrl);
 
             var proxy = new OrganizationWebProxyClient(new Uri($"{organizationUrl}XRMServices/2011/Organization.svc/web"), true)
             {
@@ -114,32 +114,6 @@ namespace Microsoft.Deployment.Common.Actions.MsCrm
             }
 
             return false;
-        }
-
-        private JObject RetrieveCrmOnlineToken(string refreshToken, string websiteRootUrl, DataStore dataStore, string resourceUri)
-        {
-            string tokenUrl = string.Format(Constants.AzureTokenUri, dataStore.GetValue("AADTenant"));
-
-            using (HttpClient httpClient = new HttpClient())
-            {
-                // CRM Online token
-                string token = GetDynamicsResourceUri(refreshToken, resourceUri, websiteRootUrl, Constants.MsCrmClientId);
-                StringContent content = new StringContent(token);
-                content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
-                string response = httpClient.PostAsync(new Uri(tokenUrl), content).Result.Content.AsString();
-
-                return JsonUtility.GetJsonObjectFromJsonString(response);
-            }
-        }
-
-        private string GetDynamicsResourceUri(string code, string uri, string rootUrl, string clientId)
-        {
-            return $"refresh_token={code}&" +
-                   $"client_id={clientId}&" +
-                   $"client_secret={Uri.EscapeDataString(Constants.MicrosoftClientSecret)}&" +
-                   $"resource={Uri.EscapeDataString(uri)}&" +
-                   $"redirect_uri={Uri.EscapeDataString(rootUrl + Constants.WebsiteRedirectPath)}&" +
-                   "grant_type=refresh_token";
         }
     }
 }

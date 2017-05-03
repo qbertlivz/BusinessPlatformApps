@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.AppLoad;
 using Microsoft.Deployment.Common.ErrorCode;
 using Microsoft.Deployment.Common.Exceptions;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Deployment.Common.Controller
 {
@@ -71,6 +70,11 @@ namespace Microsoft.Deployment.Common.Controller
 
                 ActionResponse responseToReturn = await RunActionAsync(request, logger, action, loopCount);
                 responseToReturn.DataStore = request.DataStore;
+
+                if(!responseToReturn.IsSuccess)
+                {
+                    // temporary code
+                }
 
                 logger.LogEvent("End-" + info.ActionName, null, request, responseToReturn);
                 logger.LogRequest(action.OperationUniqueName, DateTime.Now - start,

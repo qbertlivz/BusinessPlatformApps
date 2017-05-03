@@ -99,6 +99,12 @@ For Azure installation, continue to step 2a. For on-premise installation, jump t
 Connect to Azure to grant the provisioning application th permissions to create resources in your subscription on your behalf.
 ![AzureConnect](Resources/Images/ConnectAzure.png)
 
+Once authenticated, select the azure subscription where any resources will be created:
+![AzureConnect2](Resources/Images/ConnectAzure2.png)
+
+The advanced option allows the name of the resource group to be changed from its default value. 
+
+
 #### Step 2 Connect to Salesforce
 Provide your Salesforce credentials to gain access to Salesforce. The security token will have been sent to you when your credentials were first created and with each password change. If you do not know this token, connect directly to Salesforce and generate a new token.
 The Salesforce login URL normally does not need to be changed from the default <https://login.salesforce.com>. Change this to <https://test.salesforce.com> if you are testing against a sandbox (a copy of your production environment used for testing and development).
@@ -121,7 +127,10 @@ Connect to an existing SQL Server or provide details which the application will 
 ![ConnectSQL](Resources/Images/ConnectAzureSQL.png)
 
 
-Important note: If you use an existing Azure SQL DB, you **_must_** safelist your client IP address shown on this page in the Azure portal before you continue.
+Expand the advanced option to change the Azure SQL Database service tier or data center location.
+
+
+_Important note_: If you use an existing Azure SQL DB, you **_must_** safelist your client IP address shown on this page in the Azure portal before you continue.
 If you do not, you will not be able to read data from Azure SQL DB to populate the Power BI file. To safe-list the IP addresses, follow the instructions [here](https://azure.microsoft.com/en-us/documentation/articles/sql-database-configure-firewall-settings/).
 
 Click “Next” to continue.

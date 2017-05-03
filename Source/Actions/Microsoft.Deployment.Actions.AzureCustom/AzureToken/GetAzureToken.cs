@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+
+using Microsoft.Rest;
+using Newtonsoft.Json.Linq;
+
 using Microsoft.Deployment.Common;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.ErrorCode;
 using Microsoft.Deployment.Common.Helpers;
-using Newtonsoft.Json.Linq;
-using Microsoft.Rest;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
 {
@@ -76,6 +78,12 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                 }
             }
 
+            var emailAddress = AzureUtility.GetEmailFromToken(primaryResponse);
+            if(emailAddress.Contains('#'))
+            {
+                emailAddress = emailAddress.Split('#')?[1];
+            }
+            request.DataStore.AddToDataStore("EmailAddress", emailAddress);
 
             switch (oauthType)
             {
@@ -89,12 +97,13 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                     break;
                 default:
                     request.DataStore.AddToDataStore("AzureToken", primaryResponse);
+
                     var tenantId = new JwtSecurityToken(primaryResponse["id_token"].ToString())
                                                       .Claims.First(e => e.Type.ToLowerInvariant() == "tid")
                                                       .Value;
-                    var directoryName = new JwtSecurityToken(primaryResponse["id_token"].ToString())
-                                                       .Claims.First(e => e.Type.ToLowerInvariant() == "unique_name")
-                                                       .Value.Split('@').Last();
+                    
+                    var directoryName = emailAddress.Split('@').Last();
+
                     request.DataStore.AddToDataStore("DirectoryName", directoryName);
                     request.DataStore.AddToDataStore("PowerBITenantId", tenantId);
                     break;
@@ -118,7 +127,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             }
         }
 
-        private static StringBuilder GetTokenUri(string code, string uri, string rootUrl, string clientId)
+        public static StringBuilder GetTokenUri(string code, string uri, string rootUrl, string clientId)
         {
             Dictionary<string, string> message = new Dictionary<string, string>
             {
@@ -139,11 +148,11 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             return builder;
         }
 
-        private static string GetTokenUri2(string code, string uri, string rootUrl, string clientId)
+        public static string GetTokenUri2(string code, string uri, string rootUrl, string clientId)
         {
             return $"refresh_token={code}&" +
                    $"client_id={clientId}&" +
-                   $"client_secret={Uri.EscapeDataString(Constants.MicrosoftClientSecret)}&" +
+                   //$"client_secret={Uri.EscapeDataString(Constants.MicrosoftClientSecret)}&" +
                    $"resource={Uri.EscapeDataString(uri)}&" +
                    $"redirect_uri={Uri.EscapeDataString(rootUrl + Constants.WebsiteRedirectPath)}&" +
                    "grant_type=refresh_token";

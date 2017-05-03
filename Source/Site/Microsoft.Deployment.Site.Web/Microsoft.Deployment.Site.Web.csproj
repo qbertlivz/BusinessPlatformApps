@@ -15,20 +15,22 @@
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
     <PreBuildEvent>call gulp.cmd pre-build
-call gulp.cmd strip-typescript-reference-paths</PreBuildEvent>
+call gulp.cmd strip-typescript-reference-paths
+</PreBuildEvent>
     <PostBuildEvent>call gulp.cmd build-typescript
 call gulp.cmd post-build</PostBuildEvent>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="node_modules" />
+    <Compile Remove="typings" />
     <None Update="wwwroot\**\*">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="1.0.2" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="1.0.0">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>

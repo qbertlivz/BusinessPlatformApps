@@ -1,11 +1,13 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.Security.Principal;
 using System.Threading.Tasks;
+
+using Microsoft.Win32;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
-using Microsoft.Win32;
-using System;
 
 namespace Microsoft.Deployment.Actions.OnPremise.WinNT
 {

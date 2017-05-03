@@ -9,15 +9,12 @@ export class Customize extends ViewModelBase {
     password: string = '';
     sku: string = 'S0';
 
-    Invalidate() {
+    Invalidate(): void {
         super.Invalidate();
     }
 
     async OnLoaded(): Promise<void> {
         this.isValidated = false;
-
-        let response = await this.MS.HttpService.executeAsync('Microsoft-GetEmail', {});
-        this.email = response.Body.value;
     }
 
     async OnValidate(): Promise<boolean> {
@@ -41,8 +38,6 @@ export class Customize extends ViewModelBase {
         } else {
             let body: any = {};
             body.ASServerUrl = this.server;
-            body.ASAdmin = this.email;
-            body.ASAdminPassword = this.password;
 
             let response = await this.MS.HttpService.executeAsync('Microsoft-ValidateConnectionToAS', body);
             if (response.IsSuccess) {
@@ -60,8 +55,6 @@ export class Customize extends ViewModelBase {
         if (this.ssasType == "New") {
             let body: any = {};
             body.ASServerName = this.server;
-            body.ASAdmin = this.email;
-            body.ASAdminPassword = this.password;
             body.ASSku = this.sku;
 
             let response = await this.MS.HttpService.executeAsync('Microsoft-DeployAzureAnalysisServices', body);
@@ -72,12 +65,8 @@ export class Customize extends ViewModelBase {
             this.server = this.MS.DataStore.getValue("ASServerUrl");
             this.ssasType = "Existing";
 
-            // validate creds
-            let body2: any = {};
-            body2.ASAdmin = this.email;
-            body2.ASAdminPassword = this.password;
 
-            let response2 = await this.MS.HttpService.executeAsync('Microsoft-ValidateConnectionToAS', body2);
+            let response2 = await this.MS.HttpService.executeAsync('Microsoft-ValidateConnectionToAS');
             if (!response2.IsSuccess) {
                 return false;
             }

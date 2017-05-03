@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 
 using Microsoft.Azure;
 using Microsoft.Azure.Management.Resources;
-using Microsoft.Azure.Management.Resources.Models;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
@@ -21,6 +20,11 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             string azureToken = request.DataStore.GetJson("AzureToken", "access_token");
             string subscriptionId = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
 
+            return await RegisterAzureProvider(azureProvider, azureToken, subscriptionId);
+        }
+
+        public static async Task<ActionResponse> RegisterAzureProvider(string azureProvider, string azureToken, string subscriptionId)
+        {
             SubscriptionCloudCredentials creds = new TokenCloudCredentials(subscriptionId, azureToken);
 
             using (ResourceManagementClient managementClient = new ResourceManagementClient(creds))

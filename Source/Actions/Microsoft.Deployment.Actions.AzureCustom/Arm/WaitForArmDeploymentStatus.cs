@@ -1,18 +1,15 @@
-﻿
-
-
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.Deployment.Common.ActionModel;
+using System.ComponentModel.Composition;
+using System.Linq;
+using System.Threading;
+using Microsoft.Azure;
+using Microsoft.Azure.Management.Resources.Models;
+using Microsoft.Deployment.Common.Actions;
+using ResourceManagementClient = Microsoft.Azure.Management.Resources.ResourceManagementClient;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.Arm
 {
-    using System.ComponentModel.Composition;
-    using System.Linq;
-    using System.Threading;
-    using Microsoft.Azure;
-    using Microsoft.Azure.Management.Resources.Models;
-    using ResourceManagementClient = Azure.Management.Resources.ResourceManagementClient;
-    using Microsoft.Deployment.Common.Actions;
 
     [Export(typeof(IAction))]
     public class WaitForArmDeploymentStatus : BaseAction

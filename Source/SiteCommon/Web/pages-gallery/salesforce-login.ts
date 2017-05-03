@@ -1,7 +1,5 @@
 ﻿import { DataStoreType } from '../enums/data-store-type';
 
-import { ActionResponse } from '../models/action-response';
-
 import { ViewModelBase } from '../services/view-model-base';
 
 export class Salesforce extends ViewModelBase {
@@ -13,8 +11,6 @@ export class Salesforce extends ViewModelBase {
 
     constructor() {
         super();
-        this.isValidated = false;
-        this.showValidation = false;
         this.salesforceUrl = 'login.salesforce.com';
     }
 

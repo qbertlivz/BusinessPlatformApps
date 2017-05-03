@@ -1,12 +1,16 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Microsoft.Azure;
 using Microsoft.Azure.Management.Resources;
 using Microsoft.Azure.Management.Resources.Models;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
+using Microsoft.Deployment.Common.Enums;
 using Microsoft.Deployment.Common.ErrorCode;
 using Microsoft.Deployment.Common.Helpers;
 
@@ -31,12 +35,14 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             var skuCode = request.DataStore.GetValue("skuCode") ?? "S1";
             var workerSize = request.DataStore.GetValue("workerSize") ?? "0";
 
-            string functionArmDeploymentRelatovePath = sku.ToLower() == "standard"
+            string functionArmDeploymentRelativePath = sku.ToLower() == "standard"
                 ? "Service/Arm/AzureFunctionsStaticAppPlan.json"
                 : "Service/Arm/AzureFunctions.json";
 
+            string storageAccountName = "solutiontemplate" + Path.GetRandomFileName().Replace(".", "").Substring(0, 8);
+
             var param = new AzureArmParameterGenerator();
-            param.AddStringParam("storageaccountname", "solutiontemplate" + Path.GetRandomFileName().Replace(".", "").Substring(0, 8));
+            param.AddStringParam("storageaccountname", storageAccountName);
             param.AddStringParam("name", name);
             param.AddStringParam("repoUrl", repoUrl);
             param.AddStringParam("resourcegroup", resourceGroup);
@@ -47,7 +53,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             param.AddStringParam("skuCode", skuCode);
             param.AddStringParam("workerSize", workerSize);
 
-            var armTemplate = JsonUtility.GetJObjectFromJsonString(System.IO.File.ReadAllText(Path.Combine(request.ControllerModel.SiteCommonFilePath, functionArmDeploymentRelatovePath)));
+            var armTemplate = JsonUtility.GetJObjectFromJsonString(System.IO.File.ReadAllText(Path.Combine(request.ControllerModel.SiteCommonFilePath, functionArmDeploymentRelativePath)));
             var armParamTemplate = JsonUtility.GetJObjectFromObject(param.GetDynamicObject());
             armTemplate.Remove("parameters");
             armTemplate.Add("parameters", armParamTemplate["parameters"]);
@@ -73,6 +79,19 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             }
 
             var deploymentItem = await client.Deployments.CreateOrUpdateAsync(resourceGroup, deploymentName, deployment, new CancellationToken());
+
+            //Log app hosting plan
+            request.Logger.LogResource(request.DataStore, hostingPlanName,
+                DeployedResourceType.AppServicePlan, CreatedBy.BPST, DateTime.UtcNow.ToString("o"), string.Empty, sku + "" + skuCode + "" + workerSize);
+
+            //Log function
+            request.Logger.LogResource(request.DataStore, name,
+                DeployedResourceType.Function, CreatedBy.BPST, DateTime.UtcNow.ToString("o"), string.Empty, sku + "" + skuCode + "" + workerSize);
+
+            //Log storage account
+            request.Logger.LogResource(request.DataStore, storageAccountName,
+                DeployedResourceType.StorageAccount, CreatedBy.BPST, DateTime.UtcNow.ToString("o"));
+
             return new ActionResponse(ActionStatus.Success, deploymentItem);
         }
     }

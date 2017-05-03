@@ -12,18 +12,17 @@ export class CognitiveService extends ViewModelBase {
         this.isValidated = true;
     }
 
-    onKeyTypeChange() {
+    onKeyTypeChange(): void {
         this.Invalidate();
         if (this.cognitiveSelectedType === 'ExistingKey') {
             this.isValidated = false;
-        }
-        else if (this.cognitiveSelectedType === 'NewKey') {
+        } else if (this.cognitiveSelectedType === 'NewKey') {
             this.cognitiveServiceKey = '';
             this.isValidated = true;
         }
     }
 
-    Invalidate() {
+    Invalidate(): void {
         super.Invalidate();
     }
 
@@ -40,10 +39,11 @@ export class CognitiveService extends ViewModelBase {
                 this.isValidated = true;
                 this.showValidation = true;
             }
-        }
-        else if (this.cognitiveSelectedType === 'NewKey') {
+        } else if (this.cognitiveSelectedType === 'NewKey') {
             this.isValidated = true;
         }
+
+        return this.isValidated;
     }
 
     async NavigatingNext(): Promise<boolean> {

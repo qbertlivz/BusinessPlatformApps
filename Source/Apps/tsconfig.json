@@ -1,14 +1,16 @@
 ﻿{
   "compileOnSave": false,
   "compilerOptions": {
-    "declaration": false,
+    "alwaysStrict": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "module": "commonjs",
-    "noImplicitAny": false,
-    "noResolve": false,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "removeComments": true,
-    "sourceMap": false,
     "target": "es6"
   },
   "exclude": [

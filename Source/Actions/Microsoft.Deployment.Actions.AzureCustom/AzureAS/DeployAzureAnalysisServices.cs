@@ -3,11 +3,13 @@ using System.ComponentModel.Composition;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using Microsoft.Azure;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
-using Newtonsoft.Json.Linq;
+using Microsoft.Deployment.Common.Enums;
+using System;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
 {
@@ -23,8 +25,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
             string serverName = request.DataStore.GetValue("ASServerName") ?? "analysisserver-" + RandomGenerator.GetRandomLowerCaseCharacters(5);
             string location = request.DataStore.GetValue("ASLocation") ?? "westus";
             string sku = request.DataStore.GetValue("ASSku") ?? "D1";
-            string admin = request.DataStore.GetValue("ASAdmin") ??
-                AzureUtility.GetEmailFromToken(request.DataStore.GetJson("AzureToken"));
+            string admin = AzureUtility.GetEmailFromToken(request.DataStore.GetJson("AzureToken"));
 
             SubscriptionCloudCredentials creds = new TokenCloudCredentials(subscription, azureToken);
             AzureArmParameterGenerator param = new AzureArmParameterGenerator();
@@ -53,6 +54,9 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
 
             JObject responseObj = JsonUtility.GetJObjectFromJsonString(responseBody);
             request.DataStore.AddToDataStore("ASServerUrl", responseObj["properties"]["serverFullName"], DataStoreType.Public);
+
+            request.Logger.LogResource(request.DataStore, responseObj["properties"]["serverFullName"].ToString(), 
+                DeployedResourceType.AzureAnalysisServices, CreatedBy.BPST, DateTime.UtcNow.ToString("o"), string.Empty, sku);
 
             return new ActionResponse(ActionStatus.Success, responseObj);
         }

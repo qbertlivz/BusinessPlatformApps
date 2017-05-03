@@ -17,7 +17,7 @@ export class HttpService {
     isServiceBusy: boolean = false;
     MS: MainService;
 
-    constructor(MainService, HttpClient) {
+    constructor(MainService: MainService, HttpClient: HttpClient) {
         if (window.location.href.startsWith('http://localhost') || window.location.href.startsWith('https://localhost')) {
             this.baseUrl = 'http://localhost:2305/api/';
         } else {
@@ -41,11 +41,11 @@ export class HttpService {
         }
     }
 
-    Close() {
+    Close(): void {
         this.command.close(!this.MS.DeploymentService.hasError && this.MS.DeploymentService.isFinished);
     }
 
-    async getApp(name) {
+    async getApp(name: string): Promise<any> {
         var response = null;
         let uniqueId = this.MS.UtilityService.GetUniqueId(20);
         this.MS.LoggerService.TrackStartRequest('GetApp-name', uniqueId);
@@ -64,11 +64,11 @@ export class HttpService {
         return responseParsed;
     }
 
-    async executeAsync(method, content: any = {}): Promise<ActionResponse> {
-        this.isServiceBusy = true;
+    async executeAsync(method: string, content: any = {}): Promise<ActionResponse> {
         var actionResponse: ActionResponse = null;
 
         if (!content.isInvisible) {
+            this.isServiceBusy = true;
             this.MS.ErrorService.Clear();
         }
 
@@ -90,32 +90,39 @@ export class HttpService {
 
             var responseParsed: any = JSON.parse(response);
             actionResponse = responseParsed;
-            actionResponse.Status = ActionStatus[<string>responseParsed.Status];
+            actionResponse.Status = (<any>ActionStatus)[responseParsed.Status];
 
             this.MS.LoggerService.TrackEndRequest(method, uniqueId, !actionResponse.IsSuccess);
-            this.MS.DataStore.loadDataStoreFromJson(actionResponse.DataStore);
 
-            // Handle any errors here
-            if (actionResponse.Status === ActionStatus.Failure || actionResponse.Status === ActionStatus.FailureExpected) {
-                this.MS.ErrorService.details = `${actionResponse.ExceptionDetail.AdditionalDetailsErrorMessage} --- Action Failed ${method} --- Error ID:(${this.MS.LoggerService.UserGenId})`;
-                this.MS.ErrorService.logLocation = actionResponse.ExceptionDetail.LogLocation;
-                this.MS.ErrorService.message = actionResponse.ExceptionDetail.FriendlyErrorMessage;
-                this.MS.ErrorService.showContactUs = actionResponse.Status === ActionStatus.Failure;
-            } else if (actionResponse.Status !== ActionStatus.Invisible) {
-                this.MS.ErrorService.Clear();
+            if (actionResponse.Status !== ActionStatus.Invisible) {
+                this.MS.DataStore.loadDataStoreFromJson(actionResponse.DataStore);
+            }
+
+            if (!content.isInvisible) {
+                // Handle any errors here
+                if (actionResponse.Status === ActionStatus.Failure || actionResponse.Status === ActionStatus.FailureExpected) {
+                    this.MS.ErrorService.details = `${actionResponse.ExceptionDetail.AdditionalDetailsErrorMessage} --- Action Failed ${method} --- Error ID:(${this.MS.LoggerService.UserGenId})`;
+                    this.MS.ErrorService.logLocation = actionResponse.ExceptionDetail.LogLocation;
+                    this.MS.ErrorService.message = actionResponse.ExceptionDetail.FriendlyErrorMessage;
+                    this.MS.ErrorService.showContactUs = actionResponse.Status === ActionStatus.Failure;
+                } else if (actionResponse.Status !== ActionStatus.Invisible) {
+                    this.MS.ErrorService.Clear();
+                }
             }
         } catch (e) {
             this.MS.ErrorService.message = this.MS.Translate.COMMON_UNKNOWN_ERROR;
             this.MS.ErrorService.showContactUs = true;
             throw e;
         } finally {
-            this.isServiceBusy = false;
+            if (!content.isInvisible) {
+                this.isServiceBusy = false;
+            }
         }
 
         return actionResponse;
     }
 
-    async executeAsyncWithImpersonation(method, content): Promise<ActionResponse> {
+    async executeAsyncWithImpersonation(method: string, content: any): Promise<ActionResponse> {
         let body: any = {};
 
         if (content) {
@@ -126,7 +133,7 @@ export class HttpService {
         return this.executeAsync(method, content);
     }
 
-    private getRequestObject(method: string, relativeUrl: string, body: any = {}) {
+    private getRequestObject(method: string, relativeUrl: string, body: any = {}): any {
         let uniqueId = this.MS.UtilityService.GetUniqueId(20);
         var request = this.HttpClient.createRequest(relativeUrl);
         request = request

@@ -80,22 +80,22 @@
         "title": "$translate(INIT_SQL_TITLE)",
         "useImpersonation": true
       },
-      {
-        "displayname": "AAS",
-        "name": "$SiteCommon$/pages-gallery/choose-analysis-server.html",
-        "showDescription": true,
-        "skip": "$dsall(azureSqlDisabled)[1]"
-      },
+      //{
+      //  "displayname": "AAS",
+      //  "name": "$SiteCommon$/pages-gallery/choose-analysis-server.html",
+      //  "showDescription": true,
+      //  "skip": "$dsall(azureSqlDisabled)[1]"
+      //},
       {
         "displayname": "Azure Login",
         "name": "$SiteCommon$/pages-gallery/azure-login.html",
-        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
+        "skip": "$run(this.MS.UtilityService.HasInternetAccess() === false || this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true')"
       },
-      {
-        "displayname": "AAS Login",
-        "name": "$SiteCommon$/pages-gallery/ssas.html",
-        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
-      },
+      //{
+      //  "displayname": "AAS Login",
+      //  "name": "$SiteCommon$/pages-gallery/ssas.html",
+      //  "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
+      //},
       {
         "displayname": "Customize",
         "name": "customize.html"
@@ -107,7 +107,12 @@
           "Target Server": "$(this.MS.DataStore.getValue('Server'))",
           "Target Database": "$(this.MS.DataStore.getValue('Database'))",
           "Target Username": "$(this.MS.DataStore.getValue('Username'))"
-        }
+        },
+        "onNext": [
+          {
+            "name": "Microsoft-SccmGetEntityInitialCounts"
+          }
+        ]
       },
       {
         "asDatabase": "Sccm",
@@ -117,7 +122,6 @@
         "finishedActionName": "Microsoft-GetTaskStatus",
         "name": "$SiteCommon$/pages-gallery/progress.html",
         "showCounts": true,
-        "showEmailSubmission": false,
         "sqlServerIndex": 1,
         "targetSchema": "pbist_sccm",
         "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(10))"
@@ -226,6 +230,33 @@
         "name": "Microsoft-RunTask"
       },
       {
+        "displayname": "$translate(NOTIFIER_INSERTING_INITIAL_COUNTS)",
+        "name": "Microsoft-InsertInitialCounts",
+        "SqlSchema": "$save('pbist_sccm')",
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+      },
+      {
+        "DeploymentName": "SqlConnectionDeployment",
+        "displayname": "$translate(NOTIFIER_CREATING_DATABASE_CONNECTION)",
+        "name": "Microsoft-CreateSqlConnector",
+        "ApiConnectionName": "$save('sqlNotifierConnection')",
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+      },
+      {
+        "DeploymentName": "NotifierLogicApp",
+        "displayname": "$translate(NOTIFIER_CREATING_NOTIFIER_APP)",
+        "name": "Microsoft-DeployNotifierLogicApp",
+        "logicAppName": "notifierLogicApp",
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+      },
+      {
+        "displayname": "$translate(NOTIFIER_CONFIGURE_NOTIFIER_APP)",
+        "name": "Microsoft-ConfigureNotifier",
+        "SqlConfigTable": "$save('[pbist_sccm].[configuration]')",
+        "SqlServerIndex": 1,
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+      },
+      {
         "displayname": "$translate(INIT_ACTION_WAITING_DATA)",
         "FinishedActionName": "Microsoft-GetTaskStatus",
         "IsWaiting": true,
@@ -244,7 +275,6 @@
         "HasNavigated": "$save(true)",
         "isUninstall": true,
         "name": "$SiteCommon$/pages-gallery/progress.html",
-        "showEmailSubmission": false,
         "successMessage": "$translate(INIT_UNINSTALL_SUCCESS)"
       }
     ],

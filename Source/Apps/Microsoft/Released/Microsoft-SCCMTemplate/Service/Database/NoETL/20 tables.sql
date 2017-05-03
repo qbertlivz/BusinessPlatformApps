@@ -349,3 +349,11 @@ CREATE  TABLE  pbist_sccm.computercollection_staging
     collectionid   NVARCHAR(8) NOT NULL,
     resourceid     INT NOT NULL
 );
+
+
+CREATE TABLE pbist_sccm.[entityinitialcount](
+	[entityname] [nvarchar](40) NULL,
+	[initialcount] INT NULL,
+	[lastcount] INT NULL,
+	[lasttimestamp] DATETIME2 NULL
+);

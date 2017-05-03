@@ -108,7 +108,12 @@
           "Actuals": "$(this.MS.DataStore.getValue('actuals'))",
           "Future data load frequency": "$(this.MS.DataStore.getValue('DataMovement') === 'ADF' ? this.MS.DataStore.getValue('postDeploymentPipelineFrequency') : '')",
           "Future data load interval": "$(this.MS.DataStore.getValue('DataMovement') === 'ADF' ? this.MS.DataStore.getValue('postDeploymentPipelineInterval') : '')"
-        }
+        },
+        "onNext": [
+          {
+            "name": "Microsoft-SalesforceGetEntityInitialCounts"
+          }
+        ]
       },
       {
         "asDatabase": "SalesManagement",
@@ -252,6 +257,32 @@
         "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
       },
       {
+        "displayname": "$translate(NOTIFIER_INSERTING_INITIAL_COUNTS)",
+        "name": "Microsoft-InsertInitialCounts",
+        "SqlSchema":"$save('smgt')",
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+      },
+      {
+        "DeploymentName": "SqlConnectionDeployment",
+        "displayname": "$translate(NOTIFIER_CREATING_DATABASE_CONNECTION)",
+        "name": "Microsoft-CreateSqlConnector",
+        "ApiConnectionName": "$save('sqlNotifierConnection')",
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+      },
+      {
+        "DeploymentName": "NotifierLogicApp",
+        "displayname": "$translate(NOTIFIER_CREATING_NOTIFIER_APP)",
+        "name": "Microsoft-DeployNotifierLogicApp",
+        "logicAppName": "notifierLogicApp",
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+      },
+      {
+        "displayname": "$translate(NOTIFIER_CONFIGURE_NOTIFIER_APP)",
+        "name": "Microsoft-ConfigureNotifier",
+        "SqlConfigTable": "[smgt].[configuration]",
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+      },
+      {
         "displayname": "$translate(INIT_ACTION_CHECKING_DATA)",
         "FinishedActionName": "Microsoft-ADFSliceStatus",
         "IsWaiting": true,
@@ -337,10 +368,9 @@
     "Pages": [
       {
         "displayname": "Uninstall Progress",
-        "HasNavigated": "$save(true)",
+        "HasNavigated": "`(true)",
         "isUninstall": true,
         "name": "$SiteCommon$/pages-gallery/progress.html",
-        "showEmailSubmission": false,
         "successMessage": "$translate(INIT_UNINSTALL_SUCCESS)"
       }
     ],

@@ -1,10 +1,16 @@
-﻿import { Entry } from '../models/entry';
+﻿import { DataStoreType } from '../enums/data-store-type';
+
+import { Entry } from '../models/entry';
 import { EntryRow } from '../models/entry-row';
 
 import { ViewModelBase } from '../services/view-model-base';
 
 export class SummaryViewModel extends ViewModelBase {
-    summaryRows:EntryRow[];
+    emailAddress: string = '';
+    sendCompletionNotification: boolean = true;
+    sendMarketingMail: boolean = false;
+    showCompletionNotification: boolean = true;
+    summaryRows: EntryRow[];
     values: any = {};
 
     constructor() {
@@ -32,5 +38,17 @@ export class SummaryViewModel extends ViewModelBase {
     async OnLoaded(): Promise<void> {
         this.loadSummaryObjectIntoRows();
         this.isValidated = true;
+        this.emailAddress = this.MS.DataStore.getValue("EmailAddress");
+    }
+
+    async NavigatingNext(): Promise<boolean> {
+        this.MS.DataStore.addToDataStore('EmailAddress', this.emailAddress, DataStoreType.Public);
+        if (this.sendMarketingMail) {
+            this.MS.HttpService.executeAsync('Microsoft-EmailSubscription', {
+                isInvisible: true
+            });
+        }
+        this.MS.DataStore.addToDataStore('SendCompletionNotification', this.sendCompletionNotification, DataStoreType.Public);
+        return true;
     }
 }

@@ -111,7 +111,12 @@
           "Target Server": "$(this.MS.DataStore.getValue('Server'))",
           "Target Database": "$(this.MS.DataStore.getValue('Database'))",
           "Target Username": "$(this.MS.DataStore.getValue('Username'))"
-        }
+        },
+        "onNext": [
+          {
+            "name": "Microsoft-CrmGetEntityInitialCounts"
+          }
+        ]
       },
       {
         "displayname": "Progress",
@@ -242,6 +247,32 @@
         "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'D365')"
       },
       {
+        "displayname": "$translate(NOTIFIER_INSERTING_INITIAL_COUNTS)",
+        "name": "Microsoft-InsertInitialCounts",
+        "SqlSchema": "$save('smgt')",
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+      },
+      {
+        "DeploymentName": "SqlConnectionDeployment",
+        "displayname": "$translate(NOTIFIER_CREATING_DATABASE_CONNECTION)",
+        "name": "Microsoft-CreateSqlConnector",
+        "ApiConnectionName": "$save('sqlNotifierConnection')",
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+      },
+      {
+        "DeploymentName": "NotifierLogicApp",
+        "displayname": "$translate(NOTIFIER_CREATING_NOTIFIER_APP)",
+        "name": "Microsoft-DeployNotifierLogicApp",
+        "logicAppName": "notifierLogicApp",
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+      },
+      {
+        "displayname": "$translate(NOTIFIER_CONFIGURE_NOTIFIER_APP)",
+        "name": "Microsoft-ConfigureNotifier",
+        "SqlConfigTable": "[smgt].[configuration]",
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+      },
+      {
         "displayname": "$translate(INIT_ACTION_WAITING_DATA)",
         "FinishedActionName": "Microsoft-CrmGetProfileStatus",
         "IsWaiting": true,
@@ -295,7 +326,6 @@
         "HasNavigated": "$save(true)",
         "isUninstall": true,
         "name": "$SiteCommon$/pages-gallery/progress.html",
-        "showEmailSubmission": false,
         "successMessage": "$translate(INIT_UNINSTALL_SUCCESS)"
       }
     ],

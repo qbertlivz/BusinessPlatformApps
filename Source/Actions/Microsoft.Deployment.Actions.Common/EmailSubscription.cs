@@ -12,11 +12,11 @@ namespace Microsoft.Deployment.Actions.Common
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            string emailAddress = request.DataStore.GetValue("EmailAddress");
-            string nameFirst = request.DataStore.GetValue("NameFirst");
-            string nameLast = request.DataStore.GetValue("NameLast");
+            string azureToken = request.DataStore.GetJson("AzureToken", "access_token");
 
-            request.Logger.LogEmailSubscription(emailAddress, nameFirst, nameLast);
+            request.Logger.LogEmailSubscription(request.DataStore.GetValue("EmailAddress"),
+                JsonUtility.GetWebToken(azureToken, "given_name"),
+                JsonUtility.GetWebToken(azureToken, "family_name"));
 
             return new ActionResponse(ActionStatus.Invisible, JsonUtility.GetEmptyJObject());
         }

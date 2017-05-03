@@ -47,6 +47,14 @@ CREATE TABLE smgt.usermapping
     domainuser VARCHAR(50) NULL
 );
 
+
+CREATE TABLE [smgt].[entityinitialcount](
+	[entityname] [nvarchar](40) NULL,
+	[initialcount] INT NULL,
+	[lastcount] INT NULL,
+	[lasttimestamp] DATETIME2 NULL
+);
+
 CREATE TABLE dbo.account
 (
 	id					NVARCHAR(18) NOT NULL,

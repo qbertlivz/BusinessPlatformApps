@@ -48,95 +48,96 @@ CREATE TABLE smgt.usermapping
 );
 
 
-CREATE TABLE [smgt].[entityinitialcount](
-	[entityname] [nvarchar](40) NULL,
-	[initialcount] INT NULL,
-	[lastcount] INT NULL,
-	[lasttimestamp] DATETIME2 NULL
+CREATE TABLE smgt.entityinitialcount
+(
+    entityname    NVARCHAR(40) NOT NULL,
+    initialcount  INT NULL,
+    lastcount     INT NULL,
+    lasttimestamp DATETIME2 NULL
 );
 
 CREATE TABLE dbo.account
 (
-	id					NVARCHAR(18) NOT NULL,
-	name				NVARCHAR(255) NULL,
-	ownerid				NVARCHAR(18) NULL,
-	industry			NVARCHAR(40) NULL,
-	billingcity			NVARCHAR(40) NULL,
-	billingstate		NVARCHAR(80) NULL,
-	billingcountry		NVARCHAR(80) NULL,
-	isdeleted			INT NULL
+    id                  NVARCHAR(18) NOT NULL,
+    name                NVARCHAR(255) NULL,
+    ownerid             NVARCHAR(18) NULL,
+    industry            NVARCHAR(40) NULL,
+    billingcity         NVARCHAR(40) NULL,
+    billingstate        NVARCHAR(80) NULL,
+    billingcountry      NVARCHAR(80) NULL,
+    isdeleted           INT NULL
 );
 
 CREATE TABLE dbo.opportunity
 (
-	id					NVARCHAR(18) NOT NULL,
-	name				NVARCHAR(120) NULL,
-	ownerid				NVARCHAR(18) NULL,
-	createddate			DATETIME NULL,
-	isclosed			INT NULL,
-	iswon				INT NULL,
-	probability			FLOAT NULL,
-	accountid			NVARCHAR(18) NULL,
-	amount				FLOAT NULL,
-	expectedrevenue		FLOAT NULL,
-	forecastcategoryname	NVARCHAR(40) NULL,
-	stagename			NVARCHAR(40) NULL,
-	leadsource			NVARCHAR(40) NULL,
-	isdeleted			INT NULL,
-	closedate			DATETIME NULL
+    id                  NVARCHAR(18) NOT NULL,
+    name                NVARCHAR(120) NULL,
+    ownerid             NVARCHAR(18) NULL,
+    createddate         DATETIME NULL,
+    isclosed            INT NULL,
+    iswon               INT NULL,
+    probability         FLOAT NULL,
+    accountid           NVARCHAR(18) NULL,
+    amount              FLOAT NULL,
+    expectedrevenue     FLOAT NULL,
+    forecastcategoryname    NVARCHAR(40) NULL,
+    stagename           NVARCHAR(40) NULL,
+    leadsource          NVARCHAR(40) NULL,
+    isdeleted           INT NULL,
+    closedate           DATETIME NULL
 );
 
 CREATE TABLE dbo.userrole
 (
-	id					NVARCHAR(18) NOT NULL,
-	name				NVARCHAR(80) NULL,
-	parentroleid		NVARCHAR(18) NULL
+    id                  NVARCHAR(18) NOT NULL,
+    name                NVARCHAR(80) NULL,
+    parentroleid        NVARCHAR(18) NULL
 );
 
 CREATE TABLE dbo.lead
 (
-	id					NVARCHAR(18) NOT NULL,
-	title				NVARCHAR(128) NULL,
-	[status]			NVARCHAR(40) NULL,
-	ownerid				NVARCHAR(18) NULL,
-	leadsource			NVARCHAR(40) NULL,
-	industry			NVARCHAR(40) NULL,
-	createddate			DATETIME NULL,
-	company				NVARCHAR(255) NULL,
-	lastname			NVARCHAR(80) NULL,
-	firstname			NVARCHAR(40) NULL,
-	email				NVARCHAR(80) NULL,
-	city				NVARCHAR(40) NULL,
-	country				NVARCHAR(80) NULL
+    id                  NVARCHAR(18) NOT NULL,
+    title               NVARCHAR(128) NULL,
+    [status]            NVARCHAR(40) NULL,
+    ownerid             NVARCHAR(18) NULL,
+    leadsource          NVARCHAR(40) NULL,
+    industry            NVARCHAR(40) NULL,
+    createddate         DATETIME NULL,
+    company             NVARCHAR(255) NULL,
+    lastname            NVARCHAR(80) NULL,
+    firstname           NVARCHAR(40) NULL,
+    email               NVARCHAR(80) NULL,
+    city                NVARCHAR(40) NULL,
+    country             NVARCHAR(80) NULL
 );
 
 CREATE TABLE dbo.opportunitylineitem
 (
-	product2id			NVARCHAR(18) NULL,
-	opportunityid		NVARCHAR(18) NULL,
-	totalprice			FLOAT NULL
+    product2id          NVARCHAR(18) NULL,
+    opportunityid       NVARCHAR(18) NULL,
+    totalprice          FLOAT NULL
 );
 
 CREATE TABLE dbo.product2
 (
-	id					NVARCHAR(18) NOT NULL,
-	name				NVARCHAR(255) NULL,
-	family				NVARCHAR(40) NULL,
-	isactive			INT	NULL
+    id                  NVARCHAR(18)  NOT NULL,
+    [name]              NVARCHAR(255) NULL,
+    family              NVARCHAR(40)  NULL,
+    isactive            INT NULL
 );
 
 CREATE TABLE dbo.[user]
 (
-	id					NVARCHAR(18) NOT NULL,
-	name				NVARCHAR(121) NULL,
-	managerid			NVARCHAR(18) NULL,
-	isactive			INT NULL,
-	userroleid			NVARCHAR(18) NULL,
-	email				NVARCHAR(128) NULL
+    id                  NVARCHAR(18) NOT NULL,
+    [name]              NVARCHAR(121) NULL,
+    managerid           NVARCHAR(18) NULL,
+    isactive            INT NULL,
+    userroleid          NVARCHAR(18) NULL,
+    email               NVARCHAR(128) NULL
 );
 
 CREATE TABLE dbo.opportunitystage
 (
-	sortorder			INT NULL,
-	masterlabel			NVARCHAR(255) NULL
+    sortorder           INT NULL,
+    masterlabel         NVARCHAR(255) NULL
 );

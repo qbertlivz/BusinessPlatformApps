@@ -54,6 +54,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             param.AddStringParam("sku", sku);
             param.AddStringParam("skuCode", skuCode);
             param.AddStringParam("workerSize", workerSize);
+            param.AddStringParam("branch", branch);
 
             var armTemplate = JsonUtility.GetJObjectFromJsonString(System.IO.File.ReadAllText(Path.Combine(request.ControllerModel.SiteCommonFilePath, functionArmDeploymentRelativePath)));
             var armParamTemplate = JsonUtility.GetJObjectFromObject(param.GetDynamicObject());

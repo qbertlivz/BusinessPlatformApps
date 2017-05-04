@@ -115,7 +115,8 @@
         "showCompletionNotification": "$run(this.MS.DataStore.getValue('DataMovement') === 'Scribe' ? false : true)",
         "onNext": [
           {
-            "name": "Microsoft-CrmGetEntityInitialCounts"
+            "name": "Microsoft-CrmGetEntityInitialCounts",
+            "skip": "$run(this.MS.DataStore.getValue('DataMovement') === 'Scribe' ? false : true)"
           }
         ]
       },

@@ -373,26 +373,16 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
         public static void CreateDatabase(string server, string username, string password, string database)
         {
-            //string sqlConnectionString = "Data Source=pbisttest.database.windows.net;Initial Catalog=master;Integrated Security=False;" +
-            //                            "User ID=pbiadmin;Password=P@ss.w07d;Connect Timeout=75;Encrypt=True;TrustServerCertificate=False";
             string sqlConnectionString = getSqlConnectionString(server, username, password, "master");
-            string script = "CREATE DATABASE " + database;
-            //SqlUtility.InvokeSqlCommand(sqlConnectionString, script, new Dictionary<string, string>());
-            //SqlUtility.RunCommand(sqlConnectionString, script, Common.Enums.SqlCommandType.ExecuteWithoutData);
+            string script = "CREATE DATABASE " + database +
+                            " COLLATE Latin1_General_100_CI_AS ( EDITION = 'Standard', SERVICE_OBJECTIVE = 'S1' )";
 
-            SqlConnection connection = new SqlConnection(sqlConnectionString);
-            SqlCommand command = new SqlCommand(script, connection);
-            try
+            using (SqlConnection connection = new SqlConnection(sqlConnectionString))
             {
-                connection.Open();
-                command.ExecuteNonQuery();
-            }
-            catch { }
-            finally
-            {
-                if(connection.State == ConnectionState.Open)
+                using (SqlCommand command = new SqlCommand(script, connection))
                 {
-                    connection.Close();
+                    connection.Open();
+                    command.ExecuteNonQuery();
                 }
             }
         }
@@ -400,25 +390,17 @@ namespace Microsoft.Deployment.Site.Web.Tests
         public static void DeleteDatabase(string server, string username, string password, string database)
         {
             string sqlConnectionString = getSqlConnectionString(server, username, password, "master");
-            string script = "DROP DATABASE [psaSelenium]";
+            string script = "DROP DATABASE " + database;
 
-            SqlConnection connection = new SqlConnection(sqlConnectionString);
-            SqlCommand command = new SqlCommand(script, connection);
-            try
+            using (SqlConnection connection = new SqlConnection(sqlConnectionString))
             {
-                connection.Open();
-                command.ExecuteNonQuery();
-            }
-            catch { }
-            finally
-            {
-                if (connection.State == ConnectionState.Open)
+                using (SqlCommand command = new SqlCommand(script, connection))
                 {
-                    connection.Close();
+                    connection.Open();
+                    command.ExecuteNonQuery();
                 }
             }
         }
-   
 
         public static int rowsInAllTables(string server, string username, string password, string database)
         {
@@ -429,35 +411,25 @@ namespace Microsoft.Deployment.Site.Web.Tests
                             "JOIN sys.dm_db_partition_stats s " +
                             "ON t.object_id = s.object_id";
 
-            SqlConnection connection = new SqlConnection(sqlConnectionString);
-            SqlCommand command = new SqlCommand(script, connection);
-            try
+            using (SqlConnection connection = new SqlConnection(sqlConnectionString))
             {
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                reader.Read();
-                // Call Read before accessing data.
-                result = 0;
-                while (reader.Read())
+                using (SqlCommand command = new SqlCommand(script, connection))
                 {
-                    string table = (string) reader.GetSqlString(0);
-                    int numRows = (int) reader.GetInt64(1);
-
-                    if (!string.IsNullOrEmpty(table))
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    reader.Read();
+                    result = 0;
+                    while (reader.Read())
                     {
-                        result += numRows;
-                    }
-                }
+                        string table = (string)reader.GetSqlString(0);
+                        int numRows = (int)reader.GetInt64(1);
 
-                // Call Close when done reading.
-                reader.Close();
-            }
-            catch { }
-            finally
-            {
-                if (connection.State == ConnectionState.Open)
-                {
-                    connection.Close();
+                        if (!string.IsNullOrEmpty(table))
+                        {
+                            result += numRows;
+                        }
+                    }
+                    reader.Close();
                 }
             }
 
@@ -466,8 +438,8 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
         public static string getSqlConnectionString(string server, string username, string password, string database)
         {
-            string result = "Data Source=" + server + ";Initial Catalog=" + database + ";Integrated Security=False;" +
-                    "User ID=" + username + ";Password=" + password+ ";Connect Timeout=75;Encrypt=True;TrustServerCertificate=False";
+            string result = $"Data Source={server};Initial Catalog={database};Integrated Security=False;User ID={username};Password={password};" +
+                            "Connect Timeout=75;Encrypt=True;TrustServerCertificate=False";
             return result;
         }
 

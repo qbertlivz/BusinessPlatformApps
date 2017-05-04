@@ -110,42 +110,6 @@ namespace Microsoft.Deployment.Site.Web.Tests
             Assert.IsTrue(validated.Text == "Successfully validated");
         }
 
-        public void Given_CorrectSearchTerms_When_Validating_Then_Success()
-        {
-            HelperMethods.OpenWebBrowserOnPage("searchterms");
-            string searchTerms = "@MSPowerBI OR Azure";
-
-            var searchTermsInput = driver.FindElementByCssSelector("input[class='st-input au-target']");
-
-            while (!searchTermsInput.Enabled)
-            {
-                Thread.Sleep(new TimeSpan(0, 0, 2));
-            }
-
-            searchTermsInput.SendKeys(searchTerms);
-
-            HelperMethods.ClickButton("Validate");
-
-            var validated = driver.FindElementByClassName("st-validated");
-
-            Assert.IsTrue(validated.Text == "Successfully validated");
-        }
-
-        public void Given_CorrectHandles_When_Validating_Then_Success()
-        {
-            Thread.Sleep(new TimeSpan(0, 0, 10));
-            string handles = "@MSPowerBI @Azure @Microsoft";
-
-            var handlesInput = driver.FindElementByCssSelector("input[class='st-input au-target']");
-
-            handlesInput.SendKeys(handles);
-
-            HelperMethods.ClickButton("Validate");
-
-            var validated = driver.FindElementByClassName("st-validated");
-
-            Assert.IsTrue(validated.Text == "Successfully validated");
-        }
 
         [TestCleanup()]
         public void MyTestCleanup()

@@ -65,8 +65,8 @@ namespace Microsoft.Deployment.Site.Web.Tests
             Given_CorrectHandles_When_Validating_Then_Success();
             HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Next");
-            //HelperMethods.NoAnalysisServices();
-            //HelperMethods.ClickButton("Next");
+            HelperMethods.NoAnalysisServices();
+            HelperMethods.ClickButton("Next");
             HelperMethods.ClickButton("Run");
             HelperMethods.CheckDeploymentStatus();
 
@@ -203,9 +203,13 @@ namespace Microsoft.Deployment.Site.Web.Tests
             options.AddArgument("no-sandbox");
             HelperMethods.driver = new ChromeDriver(options);
             this.driver = HelperMethods.driver;
-            HelperMethods.DeleteDatabase(Credential.Instance.Sql.Server,
-                                            Credential.Instance.Sql.Username, Credential.Instance.Sql.Password,
-                                            Credential.Instance.Sql.TwitterDatabase);
+            try
+            {
+                HelperMethods.CreateDatabase(Credential.Instance.Sql.Server,
+                                                Credential.Instance.Sql.Username, Credential.Instance.Sql.Password,
+                                                Credential.Instance.Sql.TwitterDatabase);
+            }
+            catch { }
         }
     }
 }

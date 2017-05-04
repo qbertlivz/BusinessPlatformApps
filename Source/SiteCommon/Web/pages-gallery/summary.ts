@@ -8,6 +8,7 @@ import { ViewModelBase } from '../services/view-model-base';
 export class SummaryViewModel extends ViewModelBase {
     emailAddress: string = '';
     sendCompletionNotification: boolean = true;
+    displayCompletionNotification: boolean = true;
     sendMarketingMail: boolean = false;
     summaryRows: EntryRow[];
     values: any = {};

@@ -112,10 +112,11 @@
           "Target Database": "$(this.MS.DataStore.getValue('Database'))",
           "Target Username": "$(this.MS.DataStore.getValue('Username'))"
         },
-        "showCompletionNotification": "$run(this.MS.DataStore.getValue('DataMovement') === 'Scribe' ? false : true)",
+        "displayCompletionNotification": "$run(this.MS.DataStore.getValue('DataMovement') === 'Scribe' ? false : true)",
         "onNext": [
           {
-            "name": "Microsoft-CrmGetEntityInitialCounts"
+            "name": "Microsoft-CrmGetEntityInitialCounts",
+            "skip": "$run(this.MS.DataStore.getValue('DataMovement') === 'Scribe' ? false : true)"
           }
         ]
       },

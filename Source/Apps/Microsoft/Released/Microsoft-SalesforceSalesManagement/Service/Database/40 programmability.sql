@@ -39,7 +39,7 @@ BEGIN
     FROM sys.tables ta INNER JOIN sys.partitions pa ON pa.OBJECT_ID = ta.OBJECT_ID
                        INNER JOIN sys.schemas sc ON ta.schema_id = sc.schema_id
     WHERE
-        sc.name='dbo' AND ta.is_ms_shipped = 0 AND pa.index_id IN (0,1) AND
+            sc.name='dbo' AND ta.is_ms_shipped = 0 AND pa.index_id IN (0,1) AND
         ta.name IN ('Account', 'Lead', 'Opportunity', 'OpportunityLineItem', 'OpportunityStage', 'UserRole', 'User', 'Product2')
     GROUP BY ta.[name];
 
@@ -53,7 +53,7 @@ BEGIN
                      ) 
             END AS [Percentage], 
             c.EntityName as EntityName INTO #percentages
-    FROM #counts c INNER JOIN smgt.entityinitialcount i ON i.entityname = c.entityname
+	        FROM #counts c INNER JOIN smgt.entityinitialcount i ON i.entityname = c.entityname
 
 
     DECLARE @DeploymentTimestamp DATETIME2;
@@ -63,7 +63,7 @@ BEGIN
     IF EXISTS (SELECT *
                FROM #counts
                WHERE [Count] > 0 AND DATEDIFF(HOUR, @DeploymentTimestamp, Sysdatetime()) > 24)
-    SET @StatusCode = 1 --Data pull is partially complete
+	       SET @StatusCode = 1 --Data pull is partially complete
         
     
     DECLARE @CompletePercentage FLOAT;
@@ -96,7 +96,7 @@ BEGIN
     SELECT @c1 = COUNT(*) FROM #counts;
     SELECT @c2 = COUNT(*) from smgt.entityinitialcount;
     IF @c1<>@c2 
-        SET @StatusCode = -1;
+    SET @StatusCode = -1;
 
     UPDATE smgt.[configuration] 
     SET [configuration].[value] = @StatusCode

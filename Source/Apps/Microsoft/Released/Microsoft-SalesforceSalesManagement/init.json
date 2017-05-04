@@ -98,6 +98,7 @@
       {
         "displayname": "Summary",
         "name": "$SiteCommon$/pages-gallery/summary.html",
+        "sendCompletionNotification": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Informatica')",
         "values": {
           "Subscription": "$(this.MS.DataStore.getValue('DataMovement') === 'ADF' ? this.MS.DataStore.getJson('SelectedSubscription').SubscriptionId : '')",
           "ResourceGroup": "$(this.MS.DataStore.getValue('SelectedResourceGroup'))",
@@ -129,6 +130,13 @@
     ],
 
     "Actions": [
+      {
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
+        "name": "Microsoft-DeploySQLScripts",
+        "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Informatica')",
+        "SqlScriptsFolder": "Service/Database/Informatica",
+        "SqlServerIndex": "0"
+      },
       {
         "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
         "name": "Microsoft-DeploySQLScripts",
@@ -259,28 +267,28 @@
       {
         "displayname": "$translate(NOTIFIER_INSERTING_INITIAL_COUNTS)",
         "name": "Microsoft-InsertInitialCounts",
-        "SqlSchema":"$save('smgt')",
-        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+        "SqlSchema": "$save('smgt')",
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification') && this.MS.DataStore.getValue('DataMovement') !== 'Informatica')"
       },
       {
         "DeploymentName": "SqlConnectionDeployment",
         "displayname": "$translate(NOTIFIER_CREATING_DATABASE_CONNECTION)",
         "name": "Microsoft-CreateSqlConnector",
         "ApiConnectionName": "$save('sqlNotifierConnection')",
-        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification') && this.MS.DataStore.getValue('DataMovement') !== 'Informatica')"
       },
       {
         "DeploymentName": "NotifierLogicApp",
         "displayname": "$translate(NOTIFIER_CREATING_NOTIFIER_APP)",
         "name": "Microsoft-DeployNotifierLogicApp",
         "logicAppName": "notifierLogicApp",
-        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification') && this.MS.DataStore.getValue('DataMovement') !== 'Informatica')"
       },
       {
         "displayname": "$translate(NOTIFIER_CONFIGURE_NOTIFIER_APP)",
         "name": "Microsoft-ConfigureNotifier",
         "SqlConfigTable": "[smgt].[configuration]",
-        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification') && this.MS.DataStore.getValue('DataMovement') !== 'Informatica')"
       },
       {
         "displayname": "$translate(INIT_ACTION_CHECKING_DATA)",

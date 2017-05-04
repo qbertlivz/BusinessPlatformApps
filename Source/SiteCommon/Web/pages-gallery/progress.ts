@@ -1,10 +1,7 @@
-﻿import { DataStoreType } from '../enums/data-store-type';
-
-import { ViewModelBase } from '../services/view-model-base';
+﻿import { ViewModelBase } from '../services/view-model-base';
 
 export class ProgressViewModel extends ViewModelBase {
     downloadPbiText: string = this.MS.Translate.PROGRESS_DOWNLOAD_PBIX_INFO;
-    emailAddress: string = '';
     filename: string = 'report.pbix';
     filenameSSAS: string = 'reportSSAS.pbix';
     asDatabase: string = 'Sccm';
@@ -14,14 +11,11 @@ export class ProgressViewModel extends ViewModelBase {
     isPbixReady: boolean = false;
     isPowerAppReady: boolean = false;
     isUninstall: boolean = false;
-    nameFirst: string = '';
-    nameLast: string = '';
     pbixDownloadLink: string = '';
     powerAppDownloadLink: string = '';
     powerAppFileName: string = '';
     recordCounts: any[] = [];
     showCounts: boolean = false;
-    showEmailSubmission: boolean = true;
     sliceStatus: any[] = [];
     sqlServerIndex: number = 0;
     successMessage: string = this.MS.Translate.PROGRESS_ALL_DONE;
@@ -99,25 +93,5 @@ export class ProgressViewModel extends ViewModelBase {
                 this.MS.DeploymentService.hasError = true;
             }
         }
-    }
-
-    SubmitEmailAddress(): void {
-        if (this.emailAddress && this.emailAddress.length > 0 && this.emailAddress.indexOf('@') !== -1) {
-            this.showEmailSubmission = false;
-            try {
-                this.MS.DataStore.addToDataStore('EmailAddress', this.emailAddress, DataStoreType.Public);
-                this.MS.DataStore.addToDataStore('NameFirst', this.nameFirst, DataStoreType.Public);
-                this.MS.DataStore.addToDataStore('NameLast', this.nameLast, DataStoreType.Public);
-                this.MS.HttpService.executeAsync('Microsoft-EmailSubscription', {
-                    isInvisible: true
-                });
-            } catch (emailSubscriptionException) {
-                // Email subscription failed
-            }
-        }
-    }
-
-    SubmitEmailLink(): void {
-        window.open('https://www.microsoft.com/en-us/privacystatement/OnlineServices/Default.aspx', '_blank');
     }
 }

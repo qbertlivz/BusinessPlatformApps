@@ -178,6 +178,7 @@
     </Compile>
     <Compile Include="Arm\DeployAzureArmTemplate.cs" />
     <Compile Include="Arm\WaitForArmDeploymentStatus.cs" />
+    <Compile Include="AzureAS\AssignPermissionsForUser.cs" />
     <Compile Include="AzureAS\DeployAzureASModel.cs" />
     <Compile Include="AzureAS\CheckASServerNameAvailability.cs" />
     <Compile Include="AzureAS\ValidateConnectionToAS.cs" />
@@ -186,6 +187,7 @@
     <Compile Include="AzureML\ExportAzureMLExperiment.cs" />
     <Compile Include="AzureML\DeployAzureMLWebServiceFromFile.cs" />
     <Compile Include="AzureSql\CreateAzureSql.cs" />
+    <Compile Include="AzureToken\AzureTokenUtility.cs" />
     <Compile Include="AzureToken\CreateSpn.cs" />
     <Compile Include="AzureToken\GetAzureAuthUri.cs" />
     <Compile Include="AzureToken\GetAzureToken.cs" />
@@ -201,6 +203,8 @@
     <Compile Include="CDM\GetObjID.cs" />
     <Compile Include="CDM\ProvisionCDM.cs" />
     <Compile Include="CognitiveServices\RegisterCognitiveServices.cs" />
+    <Compile Include="Common\ConfigureNotifier.cs" />
+    <Compile Include="Common\DeployNotifierLogicApp.cs" />
     <Compile Include="Common\GetEmail.cs" />
     <Compile Include="Common\DeployAzureFunctionConnectionStrings.cs" />
     <Compile Include="Common\DeployPrivateAssemblyToFunction.cs" />
@@ -221,6 +225,7 @@
     <Compile Include="Common\GetLocations.cs" />
     <Compile Include="AzureAS\DeployAzureAnalysisServices.cs" />
     <Compile Include="Common\GetStorageAccountKey.cs" />
+    <Compile Include="CreateSqlConnector.cs" />
     <Compile Include="FTPUtilityTest.cs" />
     <Compile Include="LogicApp\LogicAppConnector.cs" />
     <Compile Include="News\DeployAzureMLSchedulerLogicApp.cs" />

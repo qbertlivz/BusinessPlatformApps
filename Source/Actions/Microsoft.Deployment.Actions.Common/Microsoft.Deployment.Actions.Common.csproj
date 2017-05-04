@@ -102,6 +102,7 @@
     <Compile Include="EmailSubscription.cs" />
     <Compile Include="ExistingSqlServer.cs" />
     <Compile Include="GetMsiDownloadLink.cs" />
+    <Compile Include="InsertInitialCounts.cs" />
     <Compile Include="PBI\WranglePBISSAS.cs" />
     <Compile Include="PBI\WranglePBI.cs" />
     <Compile Include="PowerBiLogin.cs" />

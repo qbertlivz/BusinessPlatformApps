@@ -96,5 +96,25 @@ namespace Microsoft.Deployment.Actions.AzureCustom
             return token.Claims.SingleOrDefault(p => p.Type == "unique_name").Value;
         }
 
+
+        public static string GetTenantFromToken(JToken azureToken)
+        {
+            var tenantId = new JwtSecurityToken(azureToken["id_token"].ToString())
+                                        .Claims.First(e => e.Type.ToLowerInvariant() == "tid")
+                                        .Value;
+            return tenantId;
+        }
+
+        public static string GetRefreshToken(JToken azureToken)
+        {
+            var token = azureToken["refresh_token"]?.ToString();
+            return token;
+        }
+
+        public static string GetAccessToken(JToken azureToken)
+        {
+            var token = azureToken["access_token"]?.ToString();
+            return token;
+        }
     }
 }

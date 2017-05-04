@@ -297,6 +297,26 @@
         "displayname": "$translate(INIT_ACTION_RUNNING_LOGIC_APP_HISTORICAL)",
         "name": "Microsoft-RunNewsHistorical",
         "LogicAppNameHistorical": "LogicAppHistoricalNews"
+      },
+      {
+        "DeploymentName": "SqlConnectionDeployment",
+        "displayname": "$translate(NOTIFIER_CREATING_DATABASE_CONNECTION)",
+        "name": "Microsoft-CreateSqlConnector",
+        "ApiConnectionName": "$save('sqlNotifierConnection')",
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+      },
+      {
+        "DeploymentName": "NotifierLogicApp",
+        "displayname": "$translate(NOTIFIER_CREATING_NOTIFIER_APP)",
+        "name": "Microsoft-DeployNotifierLogicApp",
+        "logicAppName": "notifierLogicApp",
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+      },
+      {
+        "displayname": "$translate(NOTIFIER_CONFIGURE_NOTIFIER_APP)",
+        "name": "Microsoft-ConfigureNotifier",
+        "SqlConfigTable": "[bpst_news].[configuration]",
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
       }
     ]
   }

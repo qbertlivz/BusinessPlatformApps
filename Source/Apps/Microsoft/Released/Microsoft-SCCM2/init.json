@@ -97,7 +97,6 @@
         "finishedActionName": "Microsoft-GetTaskStatus",
         "name": "$SiteCommon$/pages-gallery/progress.html",
         "showCounts": true,
-        "showEmailSubmission": false,
         "sqlServerIndex": 1,
         "targetSchema": "pbist_sccm"
       }
@@ -157,7 +156,6 @@
         "HasNavigated": "$save(true)",
         "isUninstall": true,
         "name": "$SiteCommon$/pages-gallery/progress.html",
-        "showEmailSubmission": false,
         "successMessage": "$translate(INIT_UNINSTALL_SUCCESS)"
       }
     ],

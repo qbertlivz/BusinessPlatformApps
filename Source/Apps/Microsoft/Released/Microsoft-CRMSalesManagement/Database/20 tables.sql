@@ -1056,9 +1056,6 @@ CREATE TABLE dbo.territory
   overriddencreatedon        DATETIME NULL,
   entityimage_url            NVARCHAR(4000) NULL
 );
-
-
-
 /* SMGT specific schemas */
 
 CREATE TABLE smgt.[configuration]
@@ -1070,6 +1067,14 @@ CREATE TABLE smgt.[configuration]
   value                  VARCHAR(max) NULL,
   visible                BIT NOT NULL DEFAULT 0
 );
+
+CREATE TABLE [smgt].[entityinitialcount](
+	[entityname] [nvarchar](40) NULL,
+	[initialcount] INT NULL,
+	[lastcount] INT NULL,
+	[lasttimestamp] DATETIME2 NULL
+);
+
 
 CREATE TABLE smgt.[date]
 (

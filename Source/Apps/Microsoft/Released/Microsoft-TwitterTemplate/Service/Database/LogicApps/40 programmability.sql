@@ -25,6 +25,57 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE [pbist_twitter].[sp_get_pull_status]
+AS
+BEGIN
+		
+	--InitialPullComplete statuses
+	-- -1 -> Initial State
+	-- 1 -> Data is present but not complete (Not applicable for twitter - declare success when we see one tweet)
+	-- 2 -> Data pull is complete
+	-- 3 -> No data is present
+
+	DECLARE @StatusCode int;
+	SET @StatusCode = -1;
+
+	SET NOCOUNT ON;
+
+	DECLARE @DeploymentTimestamp datetime2;
+	SET @DeploymentTimestamp = CAST((SELECT [value] from [pbist_twitter].[configuration] config
+								WHERE config.configuration_group = 'SolutionTemplate' AND config.configuration_subgroup = 'Notifier' AND config.[name] = 'DeploymentTimestamp') AS datetime2)
+
+
+	DECLARE @NumberOfTweets int;
+	SET @NumberOfTweets = (SELECT COUNT(*) AS [Count]
+				   FROM [pbist_twitter].[tweets_processed])
+			
+	IF (@NumberOfTweets > 0 )
+		SET @StatusCode = 2 --Data pull is complete
+	
+	
+	IF (@NumberOfTweets = 0  AND DATEDIFF(HOUR, @DeploymentTimestamp, CURRENT_TIMESTAMP) > 24)
+	SET @StatusCode = 3 --No data is present
+	
+	DECLARE @ASDeployment bit;	 
+	SET @ASDeployment = 0;
+
+	IF EXISTS (SELECT * FROM [pbist_twitter].[configuration] 
+			   WHERE [configuration].configuration_group = 'SolutionTemplate' AND 
+					 [configuration].configuration_subgroup = 'Notifier' AND 
+					 [configuration].[name] = 'ASDeployment' AND
+					 [configuration].[value] ='true')
+	SET @ASDeployment = 1;
+
+	-- AS Flow
+	IF NOT EXISTS (SELECT * FROM [pbist_twitter].ssas_jobs WHERE [statusMessage] = 'Success') AND @ASDeployment = 1 AND DATEDIFF(HOUR, @DeploymentTimestamp, CURRENT_TIMESTAMP) < 24
+	SET @StatusCode = -1;
+
+	UPDATE [pbist_twitter].[configuration] 
+	SET [configuration].[value] = @StatusCode
+	WHERE [configuration].configuration_group = 'SolutionTemplate' AND [configuration].configuration_subgroup = 'Notifier' AND [configuration].[name] = 'DataPullStatus'
+
+END;
+GO
 
 CREATE PROCEDURE pbist_twitter.sp_get_prior_content AS
 BEGIN

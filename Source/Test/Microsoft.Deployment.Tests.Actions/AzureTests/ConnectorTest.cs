@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.Deployment.Tests.Actions.TestHelpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Deployment.Common.ActionModel;
+using System.Dynamic;
+using Microsoft.Deployment.Common.Helpers;
+using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Deployment.Tests.Actions.AzureTests
 {

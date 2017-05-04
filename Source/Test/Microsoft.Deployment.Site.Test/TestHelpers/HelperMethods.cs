@@ -10,8 +10,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Remote;
 using OpenQA.Selenium.Support.UI;
-using Microsoft.Deployment.Common.Helpers;
-using Microsoft.Deployment.Common.Model;
 using System.Collections.Generic;
 
 namespace Microsoft.Deployment.Site.Web.Tests

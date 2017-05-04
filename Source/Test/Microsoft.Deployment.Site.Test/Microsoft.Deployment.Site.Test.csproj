@@ -149,12 +149,6 @@
     </Content>
     <Content Include="Readme.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Actions\Microsoft.Deployment.Common\Microsoft.Deployment.Common.csproj">
-      <Project>{38282763-A8DE-485E-A5EB-E5E969F4385B}</Project>
-      <Name>Microsoft.Deployment.Common</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

@@ -9,7 +9,6 @@ export class SummaryViewModel extends ViewModelBase {
     emailAddress: string = '';
     sendCompletionNotification: boolean = true;
     sendMarketingMail: boolean = false;
-    showCompletionNotification: boolean = true;
     summaryRows: EntryRow[];
     values: any = {};
 

@@ -71,6 +71,7 @@ namespace Microsoft.Deployment.Common.Helpers
                     string tableName = "PBI" + Guid.NewGuid().ToString("N");
                     using (SqlCommand cmd = new SqlCommand(string.Format(CultureInfo.InvariantCulture, SqlUtility.writeableDatabaseQuery, tableName), cn))
                     {
+                        cmd.CommandTimeout = 0;
                         cmd.ExecuteNonQuery();
                         result = true; // Won't reach this point if we don't have write permissions
                     }
@@ -179,6 +180,7 @@ namespace Microsoft.Deployment.Common.Helpers
                         command.Transaction = transaction;
                         command.CommandText = rawScript;
                         command.CommandType = CommandType.Text;
+                        command.CommandTimeout = 0;
 
                         switch (commandType)
                         {

@@ -63,7 +63,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
             }
             catch (Exception e)
             {
-                return new ActionResponse(ActionStatus.Failure, string.Empty, e, null, "AS Database was not deployed");
+                return new ActionResponse(ActionStatus.Failure, string.Empty, e, null);
             }
             finally
             {

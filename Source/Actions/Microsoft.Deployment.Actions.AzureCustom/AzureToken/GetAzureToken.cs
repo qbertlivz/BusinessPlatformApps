@@ -79,7 +79,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             }
 
             var emailAddress = AzureUtility.GetEmailFromToken(primaryResponse);
-            if(emailAddress.Contains('#'))
+            if (emailAddress.Contains('#'))
             {
                 emailAddress = emailAddress.Split('#')?[1];
             }
@@ -101,7 +101,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                     var tenantId = new JwtSecurityToken(primaryResponse["id_token"].ToString())
                                                       .Claims.First(e => e.Type.ToLowerInvariant() == "tid")
                                                       .Value;
-                    
+
                     var directoryName = emailAddress.Split('@').Last();
 
                     request.DataStore.AddToDataStore("DirectoryName", directoryName);
@@ -156,6 +156,23 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                    $"resource={Uri.EscapeDataString(uri)}&" +
                    $"redirect_uri={Uri.EscapeDataString(rootUrl + Constants.WebsiteRedirectPath)}&" +
                    "grant_type=refresh_token";
+        }
+
+        public static string GetClientIdFromRequest(ActionRequest request)
+        {
+            string oauthType = (request.DataStore.GetLastValue("oauthType") ?? string.Empty).ToLowerInvariant();
+
+            switch (oauthType)
+            {
+                case "powerbi":
+                    return Constants.PowerBIService;
+                case "mscrm":
+                    return Constants.MsCrmClientId;
+                case "keyvault":
+                    return Constants.MicrosoftClientIdCrm;
+                default:
+                    return Constants.MicrosoftClientId;
+            }
         }
     }
 }

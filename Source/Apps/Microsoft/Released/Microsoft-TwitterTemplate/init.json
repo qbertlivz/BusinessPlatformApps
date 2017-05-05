@@ -52,21 +52,6 @@
         "name": "$SiteCommon$/pages-gallery/search-terms.html"
       },
       {
-        "displayname": "Twitter Handles",
-        "name": "$SiteCommon$/pages-gallery/twitter-handles.html"
-      },
-      //{
-      //  "displayname": "AAS",
-      //  "name": "$SiteCommon$/pages-gallery/choose-analysis-server.html",
-      //  "showDescription": true,
-      //  "skip": "$ds(azureSqlDisabled)"
-      //},
-      //{
-      //  "displayname": "AAS Login",
-      //  "name": "$SiteCommon$/pages-gallery/ssas.html",
-      //  "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
-      //},
-      {
         "displayname": "AAS",
         "name": "$SiteCommon$/pages-gallery/choose-analysis-server.html",
         "showDescription": true,
@@ -101,7 +86,7 @@
         "LogicAppNameUsers": "save(this.uniqueId)",
         "name": "$SiteCommon$/pages-gallery/progress.html",
         "powerAppFileName": "TwitterTemplate.msapp",
-        "SiteName": "$save(this.uniqueIdFunction)"
+        "SiteName": "$save('TweetProcessingFunction')"
       }
     ],
 
@@ -140,7 +125,7 @@
       {
         "DeploymentName": "Function",
         "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_FUNCTION)",
-        "FunctionName": "$save('function' + this.MS.DataStore.getValue('uniqueId'))",
+        "FunctionName": "$save('TweetProcessingFunction')",
         "name": "Microsoft-DeployAzureFunction",
         "branch": "testtwitter",
         "RepoUrl": "https://github.com/juluczni/AzureFunctionsNewsTemplate"

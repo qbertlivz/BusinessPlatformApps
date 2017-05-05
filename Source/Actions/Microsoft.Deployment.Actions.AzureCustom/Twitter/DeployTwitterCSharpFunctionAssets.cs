@@ -31,7 +31,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
 
             AzureHttpClient client = new AzureHttpClient(azureToken, subscription, resourceGroup);
 
-            var functionCSharp = System.IO.File.ReadAllText(Path.Combine(request.Info.App.AppFilePath, "Service/Data/TweetFunctionCSharp.cs"));
+/*          var functionCSharp = System.IO.File.ReadAllText(Path.Combine(request.Info.App.AppFilePath, "Service/Data/TweetFunctionCSharp.cs"));
             var jsonBody =
                 "{\"files\":{\"run.csx\":\"test\"},\"config\":" +
                 "{\"" +
@@ -58,7 +58,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
             {
                 return new ActionResponse(ActionStatus.Failure, JsonUtility.GetJObjectFromJsonString(response),
                     null, DefaultErrorCodes.DefaultErrorCode, "Error creating function");
-            }
+            }*/
             
             dynamic obj = new ExpandoObject();
             obj.subscriptionId = subscription;
@@ -82,7 +82,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
 
             var appSettingCreated = await client.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Post, @"https://web1.appsvcux.ext.azure.com/websites/api/Websites/UpdateConfigConnectionStrings",
             JsonUtility.GetJsonStringFromObject(obj));
-            response = await appSettingCreated.Content.ReadAsStringAsync();
+            string response = await appSettingCreated.Content.ReadAsStringAsync();
             if (!appSettingCreated.IsSuccessStatusCode)
             {
                 return new ActionResponse(ActionStatus.Failure, JsonUtility.GetJObjectFromJsonString(response),

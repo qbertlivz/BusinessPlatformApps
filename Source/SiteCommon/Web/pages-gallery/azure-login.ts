@@ -93,6 +93,7 @@ export class AzureLogin extends ViewModelBase {
 
     async connect(): Promise<void> {
         this.MS.DataStore.addToDataStore('oauthType', this.oauthType, DataStoreType.Public);
+        this.MS.DataStore.addToDataStore('AzureOAuth', this.oauthType, DataStoreType.Public);
 
         if (this.connectionType.toString() === AzureConnection.Microsoft.toString()) {
             this.MS.DataStore.addToDataStore('AADTenant', this.azureDirectory, DataStoreType.Public);

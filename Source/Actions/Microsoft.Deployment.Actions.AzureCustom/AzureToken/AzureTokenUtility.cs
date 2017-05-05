@@ -24,7 +24,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                 string refreshToken = AzureUtility.GetRefreshToken(azureToken);
                 string tokenUrl = string.Format(Constants.AzureTokenUri, tenantId);
 
-                string token = GetAzureToken.GetTokenUri2(refreshToken, resource, request.Info.WebsiteRootUrl, Constants.MicrosoftClientId);
+                string clientId = GetAzureToken.GetClientIdFromRequest(request);
+                string token = GetAzureToken.GetTokenUri2(refreshToken, resource, request.Info.WebsiteRootUrl, clientId);
                 StringContent content = new StringContent(token);
                 content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
                 string response2 = httpClient.PostAsync(new Uri(tokenUrl), content).Result.Content.AsString();

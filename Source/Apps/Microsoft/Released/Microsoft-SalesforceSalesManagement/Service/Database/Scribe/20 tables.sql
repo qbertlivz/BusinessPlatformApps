@@ -453,11 +453,12 @@ CREATE TABLE smgt.actualsales
   productid   VARCHAR(50) NULL
 );
 
-CREATE TABLE [smgt].[entityinitialcount](
-	[entityname] [nvarchar](40) NULL,
-	[initialcount] INT NULL,
-	[lastcount] INT NULL,
-	[lasttimestamp] DATETIME2 NULL
+CREATE TABLE smgt.entityinitialcount
+(
+    entityname    NVARCHAR(40) NOT NULL,
+    initialcount  INT NULL,
+    lastcount     INT NULL,
+    lasttimestamp DATETIME2 NULL
 );
 
 CREATE TABLE smgt.configuration

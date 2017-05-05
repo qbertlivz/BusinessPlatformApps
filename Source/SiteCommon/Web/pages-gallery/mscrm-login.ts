@@ -106,6 +106,8 @@ export class MsCrmLogin extends AzureLogin {
 
     async connect(): Promise<void> {
         this.MS.DataStore.addToDataStore('oauthType', this.oauthType, DataStoreType.Public);
+        this.MS.DataStore.addToDataStore('AzureOAuth', this.oauthType, DataStoreType.Public);
+
         this.MS.DataStore.addToDataStore('AADTenant', 'common', DataStoreType.Public);
         let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureAuthUri', {});
         window.location.href = response.Body.value;

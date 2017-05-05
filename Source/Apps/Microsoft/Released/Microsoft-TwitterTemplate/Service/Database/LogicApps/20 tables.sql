@@ -18,6 +18,21 @@ CREATE TABLE pbist_twitter.[configuration]
 );
 
 
+CREATE TABLE pbist_twitter.tweets_normalized
+(
+    masterid        NCHAR(25) NOT NULL PRIMARY KEY,-- foreign key references tweets_processed(masterid),
+    mentions        INT,
+    hashtags        INT,
+    tweet           NCHAR(200),
+    twitterhandle   NCHAR(100),
+    usernumber      NCHAR(100),
+    sentiment       FLOAT,
+    sentimentbin    FLOAT,
+    sentimentposneg NCHAR(10),
+    lang            NCHAR(4),
+    accounttag      NCHAR(25)
+);
+
 CREATE TABLE pbist_twitter.tweets_processed
 (
     tweetid          NCHAR(20) NOT NULL PRIMARY KEY,
@@ -38,22 +53,6 @@ CREATE TABLE pbist_twitter.tweets_processed
     user_friends     INT,
     user_favorites   INT,
     user_totaltweets INT
-);
-
-
-CREATE TABLE pbist_twitter.tweets_normalized
-(
-    masterid        NCHAR(25) NOT NULL PRIMARY KEY,-- foreign key references tweets_processed(masterid),
-    mentions        INT,
-    hashtags        INT,
-    tweet           NCHAR(200),
-    twitterhandle   NCHAR(100),
-    usernumber      NCHAR(100),
-    sentiment       FLOAT,
-    sentimentbin    FLOAT,
-    sentimentposneg NCHAR(10),
-    lang            NCHAR(4),
-    accounttag      NCHAR(25)
 );
 ALTER TABLE pbist_twitter.tweets_processed ADD CONSTRAINT ck_masteridconst FOREIGN KEY (masterid) REFERENCES pbist_twitter.tweets_normalized(masterid);
 

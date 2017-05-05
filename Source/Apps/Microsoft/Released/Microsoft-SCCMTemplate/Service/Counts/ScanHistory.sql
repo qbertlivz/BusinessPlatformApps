@@ -6,12 +6,11 @@ WITH machines AS
     FROM   dbo.vsms_r_system computer
     WHERE  computer.Decommissioned0=0 AND computer.Obsolete0=0
 ),
-
 healthsummary AS
 (
     SELECT cs.resourceid                 AS MachineID
     FROM  dbo.[v_ch_clientsummary] cs
 )
-SELECT
-   count(*)
-FROM   machines c   INNER JOIN healthsummary hs ON hs.machineid = c.machineid
+SELECT Count(*)
+FROM 
+    machines c INNER JOIN healthsummary hs ON hs.machineid = c.machineid;

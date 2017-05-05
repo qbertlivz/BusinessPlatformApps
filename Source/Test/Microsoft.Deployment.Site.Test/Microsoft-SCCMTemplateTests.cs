@@ -23,10 +23,32 @@ namespace Microsoft.Deployment.Site.Web.Tests
         [TestCleanup]
         public void Cleanup()
         {
-            if (driver != null)
+            try
             {
-                driver.Quit();
+                HelperMethods.CleanSubscription(
+                    Credential.Instance.ServiceAccount.Username,
+                    Credential.Instance.ServiceAccount.Password,
+                    Credential.Instance.ServiceAccount.TenantId,
+                    Credential.Instance.ServiceAccount.ClientId,
+                    Credential.Instance.ServiceAccount.SubscriptionId);
             }
+            catch
+            {
+                //if the clean subscription fails, then test probably failed before creation
+            }
+
+            try
+            {
+                HelperMethods.DeleteDatabase(Credential.Instance.Sql.Server,
+                                            Credential.Instance.Sql.Username, Credential.Instance.Sql.Password,
+                                            Credential.Instance.Sql.SCCMDatabase);
+            }
+            catch
+            {
+                //if the delete DB fails, then the test probably failed to create
+            }
+
+            HelperMethods.driver.Quit();
         }
 
         [TestMethod]
@@ -37,6 +59,9 @@ namespace Microsoft.Deployment.Site.Web.Tests
             OpenWebBrowser();
             HelperMethods.driver = this.driver;
             HelperMethods.WaitForPage();
+            HelperMethods.CreateDatabase(Credential.Instance.Sql.Server,
+                                            Credential.Instance.Sql.Username, Credential.Instance.Sql.Password,
+                                            Credential.Instance.Sql.SCCMDatabase);
             try
             {
                 var background = driver.FindElementByCssSelector("div[class='st-email-background st-email-wrapper au-target']");
@@ -67,6 +92,14 @@ namespace Microsoft.Deployment.Site.Web.Tests
             Thread.Sleep(new TimeSpan(0, 0, 5));
             HelperMethods.ClickButton("Run");
             HelperMethods.CheckDeploymentStatus();
+
+            int totalNumRows = HelperMethods.rowsInAllTables(Credential.Instance.Sql.Server,
+                            Credential.Instance.Sql.Username, Credential.Instance.Sql.Password,
+                            Credential.Instance.Sql.SCCMDatabase);
+            if (totalNumRows <= 0)
+            {
+                Assert.Fail();
+            }
         }
 
         [TestMethod]
@@ -77,6 +110,9 @@ namespace Microsoft.Deployment.Site.Web.Tests
             OpenWebBrowser();
             HelperMethods.driver = this.driver;
             HelperMethods.WaitForPage();
+            HelperMethods.CreateDatabase(Credential.Instance.Sql.Server,
+                                            Credential.Instance.Sql.Username, Credential.Instance.Sql.Password,
+                                            Credential.Instance.Sql.SCCMDatabase);
             try
             {
                 var background = driver.FindElementByCssSelector("div[class='st-email-background st-email-wrapper au-target']");
@@ -111,6 +147,14 @@ namespace Microsoft.Deployment.Site.Web.Tests
             HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Run");
             HelperMethods.CheckDeploymentStatus();
+
+            int totalNumRows = HelperMethods.rowsInAllTables(Credential.Instance.Sql.Server,
+                            Credential.Instance.Sql.Username, Credential.Instance.Sql.Password,
+                            Credential.Instance.Sql.SCCMDatabase);
+            if (totalNumRows <= 0)
+            {
+                Assert.Fail();
+            }
         }
 
         private void SelectSqlAzure()

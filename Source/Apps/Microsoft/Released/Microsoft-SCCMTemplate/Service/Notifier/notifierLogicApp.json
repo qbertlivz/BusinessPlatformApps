@@ -157,7 +157,7 @@
                   "Delay": {
                     "inputs": {
                       "interval": {
-                        "count": 5,
+                        "count": 1,
                         "unit": "Minute"
                       }
                     },

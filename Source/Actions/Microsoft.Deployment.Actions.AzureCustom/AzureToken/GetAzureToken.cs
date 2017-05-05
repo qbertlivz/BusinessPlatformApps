@@ -160,8 +160,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
 
         public static string GetClientIdFromRequest(ActionRequest request)
         {
-            string oauthType = (request.DataStore.GetLastValue("oauthType") ?? string.Empty).ToLowerInvariant();
-
+            string oauthType = (request.DataStore.GetLastValue("AzureOAuth") ?? string.Empty).ToLowerInvariant();
             switch (oauthType)
             {
                 case "powerbi":

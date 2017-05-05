@@ -159,10 +159,6 @@ BEGIN
 					 [configuration].[value] ='true')
 	SET @ASDeployment = 1;
 
-	-- AS Flow
-	IF NOT EXISTS (SELECT * FROM bpst_news.ssas_jobs WHERE [statusMessage] = 'Success') AND @ASDeployment = 1 AND DATEDIFF(HOUR, @DeploymentTimestamp, CURRENT_TIMESTAMP) < 24
-	SET @StatusCode = -1;
-
 	UPDATE bpst_news.[configuration] 
 	SET [configuration].[value] = @StatusCode
 	WHERE [configuration].configuration_group = 'SolutionTemplate' AND [configuration].configuration_subgroup = 'Notifier' AND [configuration].[name] = 'DataPullStatus'

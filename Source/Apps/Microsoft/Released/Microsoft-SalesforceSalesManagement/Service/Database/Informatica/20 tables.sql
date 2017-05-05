@@ -8,7 +8,7 @@ go
 
 
 -- Account
-CREATE TABLE dbo.Account
+CREATE TABLE dbo.account
 (
     id                           NVARCHAR(18) NULL,
     isdeleted                    TINYINT NULL,
@@ -72,16 +72,12 @@ CREATE TABLE dbo.Account
     slaserialnumber__c           NVARCHAR(10) NULL,
     slaexpirationdate__c         DATETIME NULL,
     import2_id__c                NVARCHAR(255) NULL,
-    account_parent_import2_id__c NVARCHAR(255) NULL,
-    scribe_id                    BIGINT IDENTITY(1, 1) NOT NULL,
-    scribe_createdon             DATETIME NOT NULL,
-    scribe_modifiedon            DATETIME NOT NULL,
-    scribe_deletedon             DATETIME NULL
+    account_parent_import2_id__c NVARCHAR(255) NULL
 );
 
 
 -- Lead
- CREATE TABLE dbo.Lead
+ CREATE TABLE dbo.lead
 (
     id                     NVARCHAR(18) NULL,
     isdeleted              TINYINT NULL,
@@ -138,15 +134,11 @@ CREATE TABLE dbo.Account
     productinterest__c     NVARCHAR(255) NULL,
     primary__c             NVARCHAR(255) NULL,
     currentgenerators__c   NVARCHAR(100) NULL,
-    numberoflocations__c   FLOAT NULL,
-    scribe_id              BIGINT IDENTITY(1, 1) NOT NULL,
-    scribe_createdon       DATETIME NOT NULL,
-    scribe_modifiedon      DATETIME NOT NULL,
-    scribe_deletedon       DATETIME NULL
+    numberoflocations__c   FLOAT NULL
 );
 
 -- Opportunity
-CREATE TABLE dbo.Opportunity
+CREATE TABLE dbo.opportunity
 (
     id                            NVARCHAR(18) NULL,
     isdeleted                     TINYINT NULL,
@@ -188,15 +180,11 @@ CREATE TABLE dbo.Opportunity
     currentgenerators__c          NVARCHAR(100) NULL,
     maincompetitors__c            NVARCHAR(100) NULL,
     import2_id__c                 NVARCHAR(255) NULL,
-    account_account_import2_id__c NVARCHAR(255) NULL,
-    scribe_id                     BIGINT IDENTITY(1, 1) NOT NULL,
-    scribe_createdon              DATETIME NOT NULL,
-    scribe_modifiedon             DATETIME NOT NULL,
-    scribe_deletedon              DATETIME NULL
+    account_account_import2_id__c NVARCHAR(255) NULL
 );
 
 -- OpportunityLineItem
-CREATE TABLE [dbo].[OpportunityLineItem]
+CREATE TABLE [dbo].[opportunitylineitem]
 (
     id                                    NVARCHAR(18) NULL,
     opportunityid                         NVARCHAR(18) NULL,
@@ -204,7 +192,7 @@ CREATE TABLE [dbo].[OpportunityLineItem]
     pricebookentryid                      NVARCHAR(18) NULL,
     product2id                            NVARCHAR(18) NULL,
     productcode                           NVARCHAR(255) NULL,
-    [name]                                NVARCHAR(376) NULL,
+    name                                  NVARCHAR(376) NULL,
     quantity                              FLOAT NULL,
     totalprice                            FLOAT NULL,
     unitprice                             FLOAT NULL,
@@ -217,29 +205,21 @@ CREATE TABLE [dbo].[OpportunityLineItem]
     lastmodifiedbyid                      NVARCHAR(18) NULL,
     systemmodstamp                        DATETIME NULL,
     isdeleted                             TINYINT NULL,
-    opportunity_opportunity_import2_id__c NVARCHAR(255) NULL,
-    scribe_id                             BIGINT IDENTITY(1, 1) NOT NULL,
-    scribe_createdon                      DATETIME NOT NULL,
-    scribe_modifiedon                     DATETIME NOT NULL,
-    scribe_deletedon                      DATETIME NULL
+    opportunity_opportunity_import2_id__c NVARCHAR(255) NULL
 )  
 
 -- OpportunityStage
-CREATE TABLE dbo.OpportunityStage
+CREATE TABLE dbo.opportunitystage
 (
     id                 NVARCHAR(18) NOT NULL,
     masterlabel        NVARCHAR(255) NULL,
     sortorder          INT NULL,
-    defaultprobability FLOAT NULL,
-    scribe_id          BIGINT IDENTITY(1, 1) NOT NULL,
-    scribe_createdon   DATETIME NOT NULL,
-    scribe_modifiedon  DATETIME NOT NULL,
-    scribe_deletedon   DATETIME NULL
+    defaultprobability FLOAT NULL
 );
 
 
 -- Product2
-CREATE TABLE dbo.Product2
+CREATE TABLE dbo.product2
 (
     id                 NVARCHAR(18) NULL,
     name               NVARCHAR(255) NULL,
@@ -254,16 +234,12 @@ CREATE TABLE dbo.Product2
     family             NVARCHAR(40) NULL,
     isdeleted          TINYINT NULL,
     lastvieweddate     DATETIME NULL,
-    lastreferenceddate DATETIME NULL,
-    scribe_id          BIGINT IDENTITY(1, 1) NOT NULL,
-    scribe_createdon   DATETIME NOT NULL,
-    scribe_modifiedon  DATETIME NOT NULL,
-    scribe_deletedon   DATETIME NULL
+    lastreferenceddate DATETIME NULL
 );
 
 
 -- User
-CREATE TABLE dbo.[User]
+CREATE TABLE dbo.[user]
 (
     id                                                 NVARCHAR(18) NULL,
     username                                           NVARCHAR(80) NULL,
@@ -395,16 +371,12 @@ CREATE TABLE dbo.[User]
     defaultgroupnotificationfrequency                  NVARCHAR(40) NULL,
     jigsawimportlimitoverride                          INT NULL,
     lastvieweddate                                     DATETIME NULL,
-    lastreferenceddate                                 DATETIME NULL,
-    scribe_id                                          BIGINT IDENTITY(1, 1) NOT NULL,
-    scribe_createdon                                   DATETIME NOT NULL,
-    scribe_modifiedon                                  DATETIME NOT NULL,
-    scribe_deletedon                                   DATETIME NULL
+    lastreferenceddate                                 DATETIME NULL
 );
 
 
 -- UserRole
-CREATE TABLE dbo.UserRole
+CREATE TABLE dbo.userrole
 (
     id                                    NVARCHAR(18) NULL,
     name                                  NVARCHAR(80) NULL,
@@ -422,25 +394,11 @@ CREATE TABLE dbo.UserRole
     portalaccountid                       NVARCHAR(18) NULL,
     portaltype                            NVARCHAR(40) NULL,
     portalaccountownerid                  NVARCHAR(18) NULL,
-    account_portalaccountid_import2_id__c NVARCHAR(255) NULL,
-    scribe_id                             BIGINT IDENTITY(1, 1) NOT NULL,
-    scribe_createdon                      DATETIME NOT NULL,
-    scribe_modifiedon                     DATETIME NOT NULL,
-    scribe_deletedon                      DATETIME NULL
+    account_portalaccountid_import2_id__c NVARCHAR(255) NULL
 );
 
 
-CREATE TABLE dbo.Scribe_ReplicationStatus
-(
-    EntityName        NVARCHAR(1024) NULL,
-    StartDate         DATETIME NULL,
-    EndDate           DATETIME NULL,
-    FatalLastAttempt  TINYINT NULL,
-    SCRIBE_ID         BIGINT IDENTITY (1, 1) NOT NULL,
-    SCRIBE_CREATEDON  DATETIME NOT NULL,
-    SCRIBE_MODIFIEDON DATETIME NOT NULL,
-    SCRIBE_DELETEDON  DATETIME NULL
-);
+
 
 
 /* SMGT specific schemas */

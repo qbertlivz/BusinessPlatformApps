@@ -54,7 +54,12 @@
           "Target Server": "$(this.MS.DataStore.getValue('Server'))",
           "Target Database": "$(this.MS.DataStore.getValue('Database'))",
           "Target Username": "$(this.MS.DataStore.getValue('Username'))"
-        }
+        },
+        "onNext": [
+          {
+            "name": "Microsoft-CrmGetEntityInitialCounts"
+          }
+        ]
       },
       {
         "displayname": "Progress",
@@ -95,6 +100,32 @@
       {
         "displayname": "$translate(INIT_ACTION_STARTING_D365_PROFILE)",
         "name": "Microsoft-CrmStartProfile"
+      },
+      {
+        "displayname": "$translate(NOTIFIER_INSERTING_INITIAL_COUNTS)",
+        "name": "Microsoft-InsertInitialCounts",
+        "SqlSchema": "$save('psa')",
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+      },
+      {
+        "DeploymentName": "SqlConnectionDeployment",
+        "displayname": "$translate(NOTIFIER_CREATING_DATABASE_CONNECTION)",
+        "name": "Microsoft-CreateSqlConnector",
+        "ApiConnectionName": "$save('sqlNotifierConnection')",
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+      },
+      {
+        "DeploymentName": "NotifierLogicApp",
+        "displayname": "$translate(NOTIFIER_CREATING_NOTIFIER_APP)",
+        "name": "Microsoft-DeployNotifierLogicApp",
+        "logicAppName": "notifierLogicApp",
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+      },
+      {
+        "displayname": "$translate(NOTIFIER_CONFIGURE_NOTIFIER_APP)",
+        "name": "Microsoft-ConfigureNotifier",
+        "SqlConfigTable": "[psa].[configuration]",
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
       },
       {
         "displayname": "$translate(INIT_ACTION_WAITING_DATA)",

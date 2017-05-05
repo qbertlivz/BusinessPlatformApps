@@ -126,4 +126,11 @@ CREATE TABLE pbist_twitter.twitter_query_details
     Operator   NVARCHAR(MAX) NOT NULL,
     Operand    NVARCHAR(MAX) NOT NULL
 );
-go
+
+CREATE TABLE [pbist_twitter].[entityinitialcount](
+	[entityname] [nvarchar](40) NULL,
+	[initialcount] INT NULL,
+	[lastcount] INT NULL,
+	[lasttimestamp] DATETIME2 NULL
+);
+GO

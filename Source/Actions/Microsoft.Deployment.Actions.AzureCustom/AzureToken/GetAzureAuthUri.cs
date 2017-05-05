@@ -92,7 +92,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                         if (!kvExists)
                         {
                             operationResponse = managementClient.Providers.Register("Microsoft.KeyVault");
-                            if (operationResponse.StatusCode != System.Net.HttpStatusCode.OK || operationResponse.StatusCode != System.Net.HttpStatusCode.Accepted)
+                            if (operationResponse.StatusCode != System.Net.HttpStatusCode.OK && operationResponse.StatusCode != System.Net.HttpStatusCode.Accepted)
                                 return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "MsCrm_ErrorRegisterKv");
 
                             Thread.Sleep(10000); // Wait for it to register

@@ -78,6 +78,12 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                 }
             }
 
+            var emailAddress = AzureUtility.GetEmailFromToken(primaryResponse);
+            if(emailAddress.Contains('#'))
+            {
+                emailAddress = emailAddress.Split('#')?[1];
+            }
+            request.DataStore.AddToDataStore("EmailAddress", emailAddress);
 
             switch (oauthType)
             {
@@ -91,12 +97,13 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                     break;
                 default:
                     request.DataStore.AddToDataStore("AzureToken", primaryResponse);
+
                     var tenantId = new JwtSecurityToken(primaryResponse["id_token"].ToString())
                                                       .Claims.First(e => e.Type.ToLowerInvariant() == "tid")
                                                       .Value;
-                    var directoryName = new JwtSecurityToken(primaryResponse["id_token"].ToString())
-                                                       .Claims.First(e => e.Type.ToLowerInvariant() == "unique_name")
-                                                       .Value.Split('@').Last();
+                    
+                    var directoryName = emailAddress.Split('@').Last();
+
                     request.DataStore.AddToDataStore("DirectoryName", directoryName);
                     request.DataStore.AddToDataStore("PowerBITenantId", tenantId);
                     break;
@@ -145,7 +152,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
         {
             return $"refresh_token={code}&" +
                    $"client_id={clientId}&" +
-                   $"client_secret={Uri.EscapeDataString(Constants.MicrosoftClientSecret)}&" +
+                   //$"client_secret={Uri.EscapeDataString(Constants.MicrosoftClientSecret)}&" +
                    $"resource={Uri.EscapeDataString(uri)}&" +
                    $"redirect_uri={Uri.EscapeDataString(rootUrl + Constants.WebsiteRedirectPath)}&" +
                    "grant_type=refresh_token";

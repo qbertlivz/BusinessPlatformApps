@@ -35,19 +35,4 @@
             <option>${MS.Translate.RECURRENT_DAILY}</option>
         </select>
     </div>
-
-    <!-- ADF Email alerts -->
-    <div class="st-float-clear" if.bind="showEmails">
-        <p class="st-text">
-            ${MS.Translate.ADF_EMAILS} ${MS.Translate.COMMON_OPTIONAL}
-            <span class="glyphicon pbi-glyph-info glyph-mini st-tooltip" title="${MS.Translate.ADF_EMAILS_TITLE}"></span>
-        </p>
-        <input class="st-input" type="text" placeholder="dave@contoso.com,jenny@contoso.com" change.delegate="InvalidateEmails()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="emails" />
-        
-        <div class="st-float-clear">
-            <p class="st-float-clear">
-                <button class="primary" click.trigger="OnValidate()" disabled.bind="emails === ''" if.bind="!MS.HttpService.isServiceBusy">Validate</button>
-            </p>
-        </div>
-    </div>
 </template>

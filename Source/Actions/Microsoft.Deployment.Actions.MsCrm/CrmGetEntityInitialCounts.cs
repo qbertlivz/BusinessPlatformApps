@@ -19,6 +19,13 @@ namespace Microsoft.Deployment.Common.Actions.MsCrm
     {
         public async override Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
+
+            var dataMovement = request.DataStore.GetValue("DataMovement");
+            if(dataMovement == "Scribe")
+            {
+                return new ActionResponse(ActionStatus.Success);
+            }
+
             string refreshToken = request.DataStore.GetJson("MsCrmToken")["refresh_token"].ToString();
             string organizationUrl = request.DataStore.GetValue("OrganizationUrl");
             string[] entities = request.DataStore.GetValue("Entities").Split(new[] { ',', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);

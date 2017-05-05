@@ -86,7 +86,8 @@
         "LogicAppNameUsers": "save(this.uniqueId)",
         "name": "$SiteCommon$/pages-gallery/progress.html",
         "powerAppFileName": "TwitterTemplate.msapp",
-        "SiteName": "$save('TweetProcessingFunction')"
+        "SiteName": "$save(this.uniqueIdFunction)"
+
       }
     ],
 

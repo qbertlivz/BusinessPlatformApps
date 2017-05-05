@@ -1,7 +1,8 @@
 ﻿SET NOCOUNT ON;
 
-SELECT count( DISTINCT user_name0 +
-                unique_user_name0)     
-FROM   v_r_user
-WHERE  user_name0 IS NOT NULL AND 
-       full_user_name0 NOT LIKE '%$%';
+SELECT COUNT(*)
+FROM   dbo.v_r_system
+WHERE  user_domain0 IS NOT NULL AND
+       user_name0 IS NOT NULL AND
+       decommissioned0=0 AND 
+       obsolete0=0;

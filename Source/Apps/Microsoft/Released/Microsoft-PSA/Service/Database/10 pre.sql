@@ -148,7 +148,7 @@ WHILE @@FETCH_STATUS = 0
 BEGIN 
     SET @stmt = 'DROP TYPE dbo.' + QuoteName(@p1);
     EXEC (@stmt);
-    FETCH NEXT FROM @cr INTO @stmt;
+    FETCH NEXT FROM @cr INTO @p1;
 END;
 CLOSE @cr;
 DEALLOCATE @cr;

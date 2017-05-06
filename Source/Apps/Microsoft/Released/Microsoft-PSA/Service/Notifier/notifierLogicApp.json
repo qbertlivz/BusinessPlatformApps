@@ -227,7 +227,7 @@
                   }
                 },
                 "method": "post",
-                "path": "/datasets/default/procedures/@{encodeURIComponent(encodeURIComponent('[dbo].[sp_get_pull_status]'))}"
+                "path": "/datasets/default/procedures/@{encodeURIComponent(encodeURIComponent('[psa].[sp_get_pull_status]'))}"
               },
               "runAfter": {},
               "type": "ApiConnection"

@@ -35,7 +35,7 @@ DEALLOCATE @cr;
 --- DROP PSA TABLES---
 SET @cr = CURSOR FAST_FORWARD FOR
               SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES
-              WHERE TABLE_TYPE='BASE TABLE' AND TABLE_SCHEMA='psa' AND TABLE_NAME IN ('WeekDayCapacity', 'Date', 'configuration');
+              WHERE TABLE_TYPE='BASE TABLE' AND TABLE_SCHEMA='psa' AND TABLE_NAME IN ('WeekDayCapacity', 'Date', 'configuration', 'entityinitialcount');
 OPEN @cr;
 FETCH NEXT FROM @cr INTO @p1;
 WHILE @@FETCH_STATUS = 0  
@@ -94,7 +94,7 @@ SET @cr = CURSOR FAST_FORWARD FOR
               SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES
               WHERE TABLE_TYPE='BASE TABLE' AND 
                     TABLE_SCHEMA='dbo' AND 
-                    TABLE_NAME IN ('systemuser', 'StatusMetadata', 'StateMetadata', 'salesorderdetail', 'salesorder', 'quotedetail', 'quote', 'OptionSetMetadata', 'opportunity', 'msdyn_transactioncategory',
+                    TABLE_NAME IN ('systemuser', 'StatusMetadata','AttributeMetadata', 'TargetMetadata','StateMetadata', 'salesorderdetail', 'salesorder', 'quotedetail', 'quote', 'OptionSetMetadata', 'opportunity', 'msdyn_transactioncategory',
                                    'msdyn_timeentry', 'msdyn_resourcerequirementdetail', 'msdyn_resourcerequirement', 'msdyn_resourcerequest', 'msdyn_project', 'msdyn_organizationalunit', 'msdyn_orderlineresourcecategory',
                                    'msdyn_estimateline', 'msdyn_actual', 'GlobalOptionSetMetadata', 'bookingstatus', 'bookableresourcecategoryassn', 'bookableresourcecategory', 'bookableresourcebooking', 'bookableresource',
                                    'account');
@@ -114,7 +114,7 @@ DEALLOCATE @cr;
 SET @cr = CURSOR FAST_FORWARD FOR
               SELECT ROUTINE_SCHEMA, ROUTINE_NAME FROM INFORMATION_SCHEMA.ROUTINES
               WHERE ROUTINE_TYPE='PROCEDURE' AND 
-                    ( (ROUTINE_SCHEMA='psa' AND ROUTINE_NAME IN ('sp_get_replication_counts', 'sp_get_prior_content', 'sp_get_last_updatetime')) OR
+                    ( (ROUTINE_SCHEMA='psa' AND ROUTINE_NAME IN ('sp_get_replication_counts', 'sp_get_prior_content', 'sp_get_last_updatetime','sp_get_pull_status')) OR
                       (ROUTINE_SCHEMA='dbo' AND ROUTINE_NAME IN ('UpsertAttributeMetadata', 'UpsertGlobalOptionSetMetadata', 'UpsertOptionSetMetadata', 'UpsertStateMetadata', 'UpsertStatusMetadata', 'UpsertTargetMetadata'))
                     );
 OPEN @cr;

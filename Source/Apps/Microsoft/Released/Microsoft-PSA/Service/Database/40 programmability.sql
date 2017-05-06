@@ -31,7 +31,7 @@ go
 
 
 
-CREATE PROCEDURE [dbo].[sp_get_pull_status]
+CREATE PROCEDURE psa.sp_get_pull_status
 AS
 BEGIN
 		
@@ -66,7 +66,7 @@ SELECT CASE
                      ) 
             END AS [Percentage], 
             c.EntityName as EntityName INTO #percentages
-		FROM #counts c INNER JOIN smgt.entityinitialcount i ON i.entityname = c.entityname
+		FROM #counts c INNER JOIN psa.entityinitialcount i ON i.entityname = c.entityname
 
 
 

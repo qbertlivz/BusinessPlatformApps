@@ -83,7 +83,7 @@
         "LogicAppHostingPlan": "$save(this.uniqueId)",
         "LogicAppName": "$save(this.uniqueId)",
         "LogicAppNameHistorical": "$save(this.uniqueId)",
-        "LogicAppNameUsers": "save(this.uniqueId)",
+        "LogicAppNameUsers": "$save('user' + this.uniqueId)",
         "name": "$SiteCommon$/pages-gallery/progress.html",
         "powerAppFileName": "TwitterTemplate.msapp",
         "SiteName": "$save(this.uniqueIdFunction)"
@@ -126,7 +126,7 @@
       {
         "DeploymentName": "Function",
         "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_FUNCTION)",
-        "FunctionName": "$save('TweetProcessingFunction')",
+        "FunctionName": "$save(this.MS.DataStore.getValue('uniqueIdFunction'))",
         "name": "Microsoft-DeployAzureFunction",
         "branch": "testtwitter",
         "RepoUrl": "https://github.com/juluczni/AzureFunctionsNewsTemplate"

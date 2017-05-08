@@ -130,86 +130,86 @@
       }
     ],
 
-    "Actions": [
-      {
-        "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
-        "name": "Microsoft-DeploySQLScripts",
-        "SqlScriptsFolder": "Service/Database/NoETL",
-        "SqlServerIndex": "1",
-        "useImpersonation": true
-      },
-      {
-        "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
-        "name": "Microsoft-SetConfigValueInSql",
-        "SqlConfigTable": "pbist_sccm.[configuration]",
-        "SqlServerIndex": "1",
-        "useImpersonation": true
-      },
-      {
-        "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
-        "name": "Microsoft-SetConfigValueInSql",
-        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true')",
-        "SqlConfigTable": "pbist_sccm.[configuration]",
-        "SqlEntryName": "FunctionName",
-        "SqlEntryValue": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
-        "SqlGroup": "SolutionTemplate",
-        "SqlServerIndex": "1",
-        "SqlSubGroup": "SSAS",
-        "useImpersonation": true
-      },
-      {
-        "ASDatabase": "Sccm",
-        "displayname": "$translate(INIT_ACTION_DEPLOYING_AS_MODEL)",
-        "name": "Microsoft-DeployAzureASModel",
-        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true')",
-        "SqlConnectionString": "$dsall(SqlConnectionString)[1]",
-        "xmlaFilePath": "Service/SSAS/CreateSCCMDB_v2.xmla"
-      },
-      {
-        "DeploymentName": "ASFunction",
-        "displayname": "$translate(INIT_ACTION_DEPLOYING_AS_SCHEDULER)",
-        "FunctionName": "$save('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
-        "name": "Microsoft-DeployAzureFunction",
-        "RepoUrl": "https://github.com/MohaaliMicrosoft/AnalysisServicesRefresh",
-        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true')",
-        "sku": "Standard"
-      },
-      {
-        "DeploymentName": "ASFunction",
-        "displayname": "$translate(INIT_ACTION_WAITING_AS_SCHEDULER)",
-        "name": "Microsoft-WaitForArmDeploymentStatus",
-        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true')"
-      },
-      {
-        "displayname": "Create Service Principal",
-        "name": "Microsoft-CreateSpn",
-        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true')"
-      },
-      {
-        "displayname": "Assign Service Principal Permission",
-        "name": "Microsoft-AssignPermissionsForUser",
-        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true')",
-        "UserToAdd": "$ds(SPNUser)",
-        "ASDatabase": "Sccm"
-      },
-      {
-        "AppSettingKeys": {
-          "appId": "$ds(SPNAppId)",
-          "appKey": "$ds(SPNKey)",
-          "username": "$ds(SPNUser)",
-          "tenantId": "$ds(SPNTenantId)",
-          "asServer": "$ds(ASServerUrl)",
+        "Actions": [
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
+                "name": "Microsoft-DeploySQLScripts",
+                "SqlScriptsFolder": "Service/Database/NoETL",
+                "SqlServerIndex": "1",
+                "useImpersonation": true
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+                "name": "Microsoft-SetConfigValueInSql",
+                "SqlConfigTable": "pbist_sccm.[configuration]",
+                "SqlServerIndex": "1",
+                "useImpersonation": true
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+                "name": "Microsoft-SetConfigValueInSql",
+                "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true')",
+                "SqlConfigTable": "pbist_sccm.[configuration]",
+                "SqlEntryName": "FunctionName",
+                "SqlEntryValue": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
+                "SqlGroup": "SolutionTemplate",
+                "SqlServerIndex": "1",
+                "SqlSubGroup": "SSAS",
+                "useImpersonation": true
+            },
+            {
+                "ASDatabase": "Sccm",
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_AS_MODEL)",
+                "name": "Microsoft-DeployAzureASModel",
+                "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true')",
+                "SqlConnectionString": "$dsall(SqlConnectionString)[1]",
+                "xmlaFilePath": "Service/SSAS/CreateSCCMDB_v2.xmla"
+            },
+            {
+                "DeploymentName": "ASFunction",
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_AS_SCHEDULER)",
+                "FunctionName": "$save('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
+                "name": "Microsoft-DeployAzureFunction",
+                "RepoUrl": "https://github.com/MohaaliMicrosoft/AnalysisServicesRefresh",
+                "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true')",
+                "sku": "Standard"
+            },
+            {
+                "DeploymentName": "ASFunction",
+                "displayname": "$translate(INIT_ACTION_WAITING_AS_SCHEDULER)",
+                "name": "Microsoft-WaitForArmDeploymentStatus",
+                "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true')"
+            },
+            {
+                "displayname": "Create Service Principal",
+                "name": "Microsoft-CreateSpn",
+                "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true')"
+            },
+            {
+                "displayname": "Assign Service Principal Permission",
+                "name": "Microsoft-AssignPermissionsForUser",
+                "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true')",
+                "UserToAdd": "$ds(SPNUser)",
+                "ASDatabase": "Sccm"
+            },
+            {
+                "AppSettingKeys": {
+                    "appId": "$ds(SPNAppId)",
+                    "appKey": "$ds(SPNKey)",
+                    "username": "$ds(SPNUser)",
+                    "tenantId": "$ds(SPNTenantId)",
+                    "asServer": "$ds(ASServerUrl)",
 
-          "connStringSql": "$dsall(SqlConnectionString)[0]",
-          "schema": "[pbist_sccm]",
-          "databaseAS": "Sccm",
-          "functionName": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))"
-        },
+                    "connStringSql": "$dsall(SqlConnectionString)[1]",
+                    "schema": "[pbist_sccm]",
+                    "databaseAS": "Sccm",
+                    "functionName": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))"
+                },
 
         "DeploymentName": "ASFunction",
         "displayname": "$translate(INIT_ACTION_SETTING_UP_AS_SCHEDULER)",
         "name": "Microsoft-DeployAzureFunctionConnectionStrings",
-        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
       },
       {
         "displayname": "$translate(INIT_ACTION_SQL_TOOLS)",
@@ -235,28 +235,28 @@
         "displayname": "$translate(NOTIFIER_INSERTING_INITIAL_COUNTS)",
         "name": "Microsoft-InsertInitialCounts",
         "SqlSchema": "$save('pbist_sccm')",
-        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification') && this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true')"
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification') && this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true')"
       },
       {
         "DeploymentName": "SqlConnectionDeployment",
         "displayname": "$translate(NOTIFIER_CREATING_DATABASE_CONNECTION)",
         "name": "Microsoft-CreateSqlConnector",
         "ApiConnectionName": "$save('sqlNotifierConnection')",
-        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification') && this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true')"
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification') && this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true')"
       },
       {
         "DeploymentName": "NotifierLogicApp",
         "displayname": "$translate(NOTIFIER_CREATING_NOTIFIER_APP)",
         "name": "Microsoft-DeployNotifierLogicApp",
         "logicAppName": "notifierLogicApp",
-        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification') && this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true')"
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification') && this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true')"
       },
       {
         "displayname": "$translate(NOTIFIER_CONFIGURE_NOTIFIER_APP)",
         "name": "Microsoft-ConfigureNotifier",
         "SqlConfigTable": "$save('[pbist_sccm].[configuration]')",
         "SqlServerIndex": 1,
-        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification') && this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true')"
+        "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification') && this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true')"
       },
       {
         "displayname": "$translate(INIT_ACTION_WAITING_DATA)",

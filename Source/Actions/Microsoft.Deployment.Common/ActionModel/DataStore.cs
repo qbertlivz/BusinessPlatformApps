@@ -142,6 +142,11 @@ namespace Microsoft.Deployment.Common.ActionModel
             return this.GetLastValueFromDataStore(key, dataStoreType)?.ToString();
         }
 
+        public string GetFirstValue(string key, DataStoreType dataStoreType = DataStoreType.Any)
+        {
+            return this.GetFirstValueFromDataStore(key, dataStoreType)?.ToString();
+        }
+
         public string GetValueAtIndex(string key, string index, DataStoreType dataStoreType = DataStoreType.Any)
         {
             string result = null;

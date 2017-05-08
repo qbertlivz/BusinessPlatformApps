@@ -44,13 +44,14 @@ namespace Microsoft.Deployment.Site.Web.Tests
             HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Run");
             HelperMethods.CheckDeploymentStatus();
-            HelperMethods.CleanSubscription(
-                          Credential.Instance.ServiceAccount.Username,
-                          Credential.Instance.ServiceAccount.Password,
-                          Credential.Instance.ServiceAccount.TenantId,
-                          Credential.Instance.ServiceAccount.ClientId,
-                          Credential.Instance.ServiceAccount.SubscriptionId);
 
+            int totalNumRows = HelperMethods.rowsInAllTables(Credential.Instance.Sql.Server,
+                            Credential.Instance.Sql.Username, Credential.Instance.Sql.Password,
+                            Credential.Instance.Sql.SalesforceDatabase);
+            if (totalNumRows <= 0)
+            {
+                Assert.Fail();
+            }
         }
 
         [TestMethod]
@@ -75,13 +76,14 @@ namespace Microsoft.Deployment.Site.Web.Tests
             HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Run");
             HelperMethods.CheckDeploymentStatus();
-            HelperMethods.CleanSubscription(
-                          Credential.Instance.ServiceAccount.Username,
-                          Credential.Instance.ServiceAccount.Password,
-                          Credential.Instance.ServiceAccount.TenantId,
-                          Credential.Instance.ServiceAccount.ClientId,
-                          Credential.Instance.ServiceAccount.SubscriptionId);
 
+            int totalNumRows = HelperMethods.rowsInAllTables(Credential.Instance.Sql.Server,
+                            Credential.Instance.Sql.Username, Credential.Instance.Sql.Password,
+                            Credential.Instance.Sql.SalesforceDatabase);
+            if (totalNumRows <= 0)
+            {
+                Assert.Fail();
+            }
         }
 
         public void Given_CorrectCredentials_When_AzureAuth_Then_Success()
@@ -157,6 +159,31 @@ namespace Microsoft.Deployment.Site.Web.Tests
         [TestCleanup()]
         public void MyTestCleanup()
         {
+            try
+            {
+                HelperMethods.CleanSubscription(
+                    Credential.Instance.ServiceAccount.Username,
+                    Credential.Instance.ServiceAccount.Password,
+                    Credential.Instance.ServiceAccount.TenantId,
+                    Credential.Instance.ServiceAccount.ClientId,
+                    Credential.Instance.ServiceAccount.SubscriptionId);
+            }
+            catch
+            {
+                //if the clean subscription fails, then test probably failed before creation
+            }
+
+            try
+            {
+                HelperMethods.DeleteDatabase(Credential.Instance.Sql.Server,
+                                            Credential.Instance.Sql.Username, Credential.Instance.Sql.Password,
+                                            Credential.Instance.Sql.SalesforceDatabase);
+            }
+            catch
+            {
+                //if the delete DB fails, then the test probably failed to create
+            }
+
             HelperMethods.driver.Quit();
         }
 
@@ -167,7 +194,10 @@ namespace Microsoft.Deployment.Site.Web.Tests
             HelperMethods.baseURL = baseURL + "?name=Microsoft-SalesforceSalesManagement";
             var options = new ChromeOptions();
             options.AddArgument("no-sandbox");
-            
+            HelperMethods.CreateDatabase(Credential.Instance.Sql.Server,
+                                            Credential.Instance.Sql.Username, Credential.Instance.Sql.Password,
+                                            Credential.Instance.Sql.SalesforceDatabase);
+
             HelperMethods.driver = new ChromeDriver(options);
             this.driver = HelperMethods.driver;
         }

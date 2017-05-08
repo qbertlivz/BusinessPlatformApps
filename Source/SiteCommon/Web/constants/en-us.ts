@@ -332,7 +332,7 @@
     POWER_BI_SIGN_IN: 'Sign In',
     POWER_BI_SIGN_UP: 'Sign up free',
     POWER_BI_LEARN_MORE: 'Learn more',
-    PROGRESS_ALL_DONE: `All done! You can now download your Power BI report and start exploring your data.`,
+    PROGRESS_ALL_DONE: `The deployment has been successfully completed! You can now download your Power BI report and close this page. If you requested a notification mail, we will let you know when your data is ready.`,
     PROGRESS_DOWNLOAD_PBIX: `Download Report`,
     PROGRESS_DOWNLOAD_PBIX_INFO: 'Open the Power BI report (.pbix file) to explore your data. Publish the report for others to see in your Power BI workspace. You will need Power BI Desktop to open this file - download it ',
     PROGRESS_DOWNLOAD_POWERAPP: `Download the PowerApp`,

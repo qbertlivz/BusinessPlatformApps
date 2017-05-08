@@ -182,12 +182,12 @@
             {
                 "displayname": "Create Service Principal",
                 "name": "Microsoft-CreateSpn",
-                "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true')"
+                "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true')"
             },
             {
                 "displayname": "Assign Service Principal Permission",
                 "name": "Microsoft-AssignPermissionsForUser",
-                "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true')",
+                "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true')",
                 "UserToAdd": "$ds(SPNUser)",
                 "ASDatabase": "Sccm"
             },
@@ -199,7 +199,7 @@
                     "tenantId": "$ds(SPNTenantId)",
                     "asServer": "$ds(ASServerUrl)",
 
-                    "connStringSql": "$dsall(SqlConnectionString)[0]",
+                    "connStringSql": "$dsall(SqlConnectionString)[1]",
                     "schema": "[pbist_sccm]",
                     "databaseAS": "Sccm",
                     "functionName": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))"
@@ -208,7 +208,7 @@
                 "DeploymentName": "ASFunction",
                 "displayname": "$translate(INIT_ACTION_SETTING_UP_AS_SCHEDULER)",
                 "name": "Microsoft-DeployAzureFunctionConnectionStrings",
-                "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
+                "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
             },
             {
                 "displayname": "$translate(INIT_ACTION_SQL_TOOLS)",

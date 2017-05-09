@@ -204,6 +204,12 @@ namespace Microsoft.Deployment.Site.Web.Tests
             catch
             {
                 //probably the old DB is still there from last time
+                HelperMethods.DeleteDatabase(Credential.Instance.Sql.Server,
+                                            Credential.Instance.Sql.Username, Credential.Instance.Sql.Password,
+                                            Credential.Instance.Sql.SalesforceDatabase);
+                HelperMethods.CreateDatabase(Credential.Instance.Sql.Server,
+                                                Credential.Instance.Sql.Username, Credential.Instance.Sql.Password,
+                                                Credential.Instance.Sql.SalesforceDatabase);
             }
             HelperMethods.driver = new ChromeDriver(options);
             this.driver = HelperMethods.driver;

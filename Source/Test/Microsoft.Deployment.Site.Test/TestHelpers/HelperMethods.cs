@@ -383,6 +383,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
                     connection.Open();
                     command.ExecuteNonQuery();
                 }
+                connection.Close();
             }
         }
 
@@ -398,6 +399,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
                     connection.Open();
                     command.ExecuteNonQuery();
                 }
+                connection.Close();
             }
         }
 
@@ -430,6 +432,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
                     }
                     reader.Close();
                 }
+                connection.Close();
             }
 
             return result;

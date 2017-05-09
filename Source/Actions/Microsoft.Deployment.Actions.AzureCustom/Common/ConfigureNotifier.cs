@@ -90,7 +90,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
         private bool PostDeploymentId(string deploymentId, string accessToken, string refreshToken)
         {
             HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("https://bpstservice-slot1.azurewebsites.net/");
+            client.BaseAddress = new Uri(Constants.ServiceUrl);
 
             dynamic payload = new ExpandoObject();
             payload.tokens = new ExpandoObject();

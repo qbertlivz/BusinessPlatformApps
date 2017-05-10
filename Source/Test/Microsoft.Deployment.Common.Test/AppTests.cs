@@ -88,7 +88,7 @@ namespace Microsoft.Deployment.Common.Test
             UserInfo info = new UserInfo();
             info.ActionName = "Microsoft-MockAction";
             info.AppName = "TestApp";
-            var result = commonController.ExecuteAction(info, new ActionRequest() {DataStore = new DataStore()}).Result;
+            var result = commonController.ExecuteAction(info, new ActionRequest() { DataStore = new DataStore() }).Result;
             Assert.IsTrue(result.Status == ActionStatus.Success);
         }
 
@@ -148,7 +148,7 @@ namespace Microsoft.Deployment.Common.Test
             }
 
             Assert.Fail();
-           
+
         }
 
         [TestMethod]
@@ -158,6 +158,24 @@ namespace Microsoft.Deployment.Common.Test
             {
                 pu.ReplaceSSASConnectionString("s1", "c1", "cc1");
             }
+
+        }
+
+        [TestMethod]
+        public void RemoveEntryTest()
+        {
+            var ds = new DataStore();
+
+            ds.AddToDataStore("Key1", "Value1");
+            ds.UpdateValue(DataStoreType.Any, "", "Key1", "Value2");
+
+            var entries = ds.GetAllValues("Key1");
+
+            Assert.IsTrue(entries.Count == 2);
+
+            ds.RemoveFirst("Key1");
+
+            Assert.IsTrue(ds.GetAllValues("Key1").Count() == 1 && ds.GetValue("Key1") == "Value2");
 
         }
     }

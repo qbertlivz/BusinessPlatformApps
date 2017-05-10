@@ -58,6 +58,7 @@ namespace Microsoft.Deployment.Actions.Salesforce
             bind.MaxBufferSize = 2147483647;
             bind.CloseTimeout = new TimeSpan(0, 0, 5, 0);
             bind.OpenTimeout = new TimeSpan(0, 0, 5, 0);
+            bind.SendTimeout = new TimeSpan(0, 0, 5, 0);
             bind.ReaderQuotas.MaxArrayLength = 2147483647;
             bind.ReaderQuotas.MaxDepth = 2147483647;
             bind.ReaderQuotas.MaxNameTableCharCount = 2147483647;

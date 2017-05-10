@@ -46,7 +46,7 @@ namespace Microsoft.Deployment.Actions.Salesforce
             dynamic resp = new ExpandoObject();
             resp.ADFPipelineJsonData = new ExpandoObject();
             resp.ADFPipelineJsonData.fields = adfFields;
-
+            request.DataStore.RemoveFirst("Objects");
             return new ActionResponse(ActionStatus.Success, JsonUtility.GetJObjectFromObject(resp));
         }
 

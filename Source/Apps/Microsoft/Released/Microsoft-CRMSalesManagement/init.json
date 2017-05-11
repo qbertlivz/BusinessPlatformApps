@@ -83,12 +83,7 @@
                 "sqlSku": "S2",
                 "subtitle": "$translate(INIT_SQL_SUBTITLE_D365)",
                 "title": "$translate(INIT_SQL_TITLE)",
-                "checkSqlVersion": true,
-                "onNext": [
-                    {
-                        "name": "Microsoft-CheckSQLVersion"
-                    }
-                ]
+                "checkSqlVersion": true
             },
             {
                 "name": "$SiteCommon$/pages-gallery/choose-analysis-server.html",

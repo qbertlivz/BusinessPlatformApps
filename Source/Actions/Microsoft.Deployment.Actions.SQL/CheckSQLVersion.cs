@@ -16,7 +16,12 @@ namespace Microsoft.Deployment.Actions.SQL
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             // TODO fix hardcoded string as action here
-            string connectionString = request.DataStore.GetAllValues("SqlConnectionString")[1];
+            var allConnectionStrings = request.DataStore.GetAllValues("SqlConnectionString");
+
+            if (allConnectionStrings == null || allConnectionStrings.Count == 0)
+                return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "SQL_NoConnectionsInDatastore");
+
+            string connectionString = allConnectionStrings[allConnectionStrings.Count - 1]; // This is always for destination which will be the last entry
 
             DataTable result = SqlUtility.RunCommand(connectionString, "SELECT @@version AS FullVersion, SERVERPROPERTY('ProductVersion') AS SqlVersion, SERVERPROPERTY('IsLocalDB') AS IsLocalDB, SERVERPROPERTY('Edition') AS SqlEdition", SqlCommandType.ExecuteWithData);
             string version = (string)result.Rows[0]["FullVersion"];

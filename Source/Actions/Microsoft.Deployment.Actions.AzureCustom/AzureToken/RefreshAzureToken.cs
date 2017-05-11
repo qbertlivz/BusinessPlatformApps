@@ -35,7 +35,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             }
 
             var tokenMsCrm = request.DataStore.GetJson("MsCrmToken");
-            if (tokenMsCrm != null)
+            if (token != null && tokenMsCrm != null)
             {
                 crmToken = GetAzureToken.RetrieveCrmToken(azureToken["refresh_token"].ToString(), request.Info.WebsiteRootUrl, request.DataStore);
             }

@@ -249,4 +249,7 @@
   <data name="Scribe_No_Organizations" xml:space="preserve">
     <value>No Scribe organizations with an active Replication Services subscription were found for your account</value>
   </data>
+  <data name="SQL_NoConnectionsInDatastore" xml:space="preserve">
+    <value>The datastore does not contain any connection strings</value>
+  </data>
 </root>

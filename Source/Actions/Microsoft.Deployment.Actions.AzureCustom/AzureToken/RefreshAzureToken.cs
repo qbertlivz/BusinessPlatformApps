@@ -21,33 +21,35 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var token = request.DataStore.GetJson("AzureToken");
-            string refreshToken = request.DataStore.GetJson("AzureToken", "refresh_token");
-            string aadTenant = request.DataStore.GetValue("AADTenant");
+            string tokenUrl = string.Format(Constants.AzureTokenUri, request.DataStore.GetValue("AADTenant"));
 
-            string tokenUrl = string.Format(Constants.AzureTokenUri, aadTenant);
-            var primaryResponse = await GetToken(refreshToken, tokenUrl, Constants.MicrosoftClientId);
-            primaryResponse.Add("id_token", token["id_token"]);
-
+            JObject azureToken = new JObject();
             JObject crmToken = new JObject();
             JObject keyvaultToken = new JObject();
 
-            if (request.DataStore.GetValue("MsCrmToken") != null)
+            var token = request.DataStore.GetJson("AzureToken");
+            if (token != null)
             {
-                crmToken = GetAzureToken.RetrieveCrmToken(primaryResponse["refresh_token"].ToString(), request.Info.WebsiteRootUrl, request.DataStore);
+                azureToken = await GetToken(request.DataStore.GetJson("AzureToken", "refresh_token"), tokenUrl, Constants.MicrosoftClientId);
+                azureToken.Add("id_token", token["id_token"]);
             }
 
-            if (request.DataStore.GetValue("AzureTokenKV") != null)
+            var tokenMsCrm = request.DataStore.GetJson("MsCrmToken");
+            if (tokenMsCrm != null)
             {
-                keyvaultToken = await GetToken(refreshToken, tokenUrl, Constants.MicrosoftClientIdCrm);
-                keyvaultToken.Add("id_token", token["id_token"]);
+                crmToken = GetAzureToken.RetrieveCrmToken(azureToken["refresh_token"].ToString(), request.Info.WebsiteRootUrl, request.DataStore);
             }
 
-            var obj = new JObject(new JProperty("AzureToken", primaryResponse),
-                new JProperty("MsCrmToken", crmToken),
-                new JProperty("AzureTokenKV", keyvaultToken));
+            var tokenKV = request.DataStore.GetJson("AzureTokenKV");
+            if (tokenKV != null)
+            {
+                keyvaultToken = await GetToken(request.DataStore.GetJson("AzureTokenKV", "refresh_token"), tokenUrl, Constants.MicrosoftClientIdCrm);
+                keyvaultToken.Add("id_token", tokenKV["id_token"]);
+            }
 
-            return new ActionResponse(ActionStatus.Success, obj, true);
+            return new ActionResponse(ActionStatus.Success,
+                new JObject(new JProperty("AzureToken", azureToken), new JProperty("MsCrmToken", crmToken), new JProperty("AzureTokenKV", keyvaultToken)),
+                true);
         }
 
         private static async Task<JObject> GetToken(string refreshToken, string tokenUrl, string clientId)
@@ -126,27 +128,27 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             var tokenRefreshResponse = await this.ExecuteActionAsync(request);
             if (tokenRefreshResponse.Status == ActionStatus.Success)
             {
-                var datastoreItem = request.DataStore.GetDataStoreItem("AzureToken");
-                request.DataStore.UpdateValue(datastoreItem.DataStoreType, datastoreItem.Route, datastoreItem.Key, JObject.FromObject(tokenRefreshResponse.Body)["AzureToken"]);
-
-                
-                if (request.DataStore.GetJson("AzureTokenKV") != null)
+                if (request.DataStore.GetJson("AzureToken") != null)
                 {
-                    var datastoreItemCrm = request.DataStore.GetDataStoreItem("AzureTokenKV");
-                    request.DataStore.UpdateValue(datastoreItemCrm.DataStoreType, datastoreItemCrm.Route, datastoreItemCrm.Key, JObject.FromObject(tokenRefreshResponse.Body)["AzureTokenKV"]);
+                    var dsAzureToken = request.DataStore.GetDataStoreItem("AzureToken");
+                    request.DataStore.UpdateValue(dsAzureToken.DataStoreType, dsAzureToken.Route, dsAzureToken.Key, JObject.FromObject(tokenRefreshResponse.Body)["AzureToken"]);
                 }
 
-                
                 if (request.DataStore.GetJson("MsCrmToken") != null)
                 {
-                    var datastoreItemKeyVault = request.DataStore.GetDataStoreItem("MsCrmToken");
-                    request.DataStore.UpdateValue(datastoreItemKeyVault.DataStoreType, datastoreItemKeyVault.Route, datastoreItemKeyVault.Key, JObject.FromObject(tokenRefreshResponse.Body)["MsCrmToken"]);
+                    var dsMsCrmToken = request.DataStore.GetDataStoreItem("MsCrmToken");
+                    request.DataStore.UpdateValue(dsMsCrmToken.DataStoreType, dsMsCrmToken.Route, dsMsCrmToken.Key, JObject.FromObject(tokenRefreshResponse.Body)["MsCrmToken"]);
+                }
+
+                if (request.DataStore.GetJson("AzureTokenKV") != null)
+                {
+                    var dsAzureTokenKV = request.DataStore.GetDataStoreItem("AzureTokenKV");
+                    request.DataStore.UpdateValue(dsAzureTokenKV.DataStoreType, dsAzureTokenKV.Route, dsAzureTokenKV.Key, JObject.FromObject(tokenRefreshResponse.Body)["AzureTokenKV"]);
                 }
             }
 
             return tokenRefreshResponse;
         }
-
 
         public static DateTime UnixTimeStampToDateTime(string unixTimeStamp)
         {

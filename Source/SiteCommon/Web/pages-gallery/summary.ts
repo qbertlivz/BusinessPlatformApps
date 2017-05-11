@@ -6,9 +6,10 @@ import { EntryRow } from '../models/entry-row';
 import { ViewModelBase } from '../services/view-model-base';
 
 export class SummaryViewModel extends ViewModelBase {
+    datastoreEntriesToValidate: string[] = [];
+    displayCompletionNotification: boolean = true;
     emailAddress: string = '';
     sendCompletionNotification: boolean = true;
-    displayCompletionNotification: boolean = true;
     sendMarketingMail: boolean = false;
     summaryRows: EntryRow[];
     values: any = {};
@@ -42,13 +43,22 @@ export class SummaryViewModel extends ViewModelBase {
     }
 
     async NavigatingNext(): Promise<boolean> {
+        for (let i = 0; i < this.datastoreEntriesToValidate.length; i++) {
+            if (this.MS.DataStore.getValue(this.datastoreEntriesToValidate[i]) === null) {
+                this.MS.NavigationService.NavigateHome();
+                return false;
+            }
+        }
+
         this.MS.DataStore.addToDataStore('EmailAddress', this.emailAddress, DataStoreType.Public);
         if (this.sendMarketingMail) {
             this.MS.HttpService.executeAsync('Microsoft-EmailSubscription', {
                 isInvisible: true
             });
         }
+
         this.MS.DataStore.addToDataStore('SendCompletionNotification', this.sendCompletionNotification, DataStoreType.Public);
+
         return true;
     }
 }

@@ -97,9 +97,12 @@
                 "sourceApplication": "Salesforce"
             },
             {
+                "datastoreEntriesToValidate": [
+                    "SqlConnectionString"
+                ],
+                "displayCompletionNotification": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Informatica')",
                 "displayname": "Summary",
                 "name": "$SiteCommon$/pages-gallery/summary.html",
-                "displayCompletionNotification": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Informatica')",
                 "values": {
                     "Subscription": "$(this.MS.DataStore.getValue('DataMovement') === 'ADF' ? this.MS.DataStore.getJson('SelectedSubscription').SubscriptionId : '')",
                     "ResourceGroup": "$(this.MS.DataStore.getValue('SelectedResourceGroup'))",

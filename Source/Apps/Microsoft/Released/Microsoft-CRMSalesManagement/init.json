@@ -98,28 +98,31 @@
             },
             {
                 "displayname": "Customize",
+                "isValidated": true,
                 "name": "$SiteCommon$/pages-gallery/customize.html",
                 "showCrmUrl": true,
-                "isValidated": true,
                 "showValidation": false,
-                "sourceApplication": "DynamicsCRM",
+                "sourceApplication": "DynamicsCRM"
             },
             {
+                "datastoreEntriesToValidate": [
+                    "SqlConnectionString"
+                ],
+                "displayCompletionNotification": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')",
                 "displayname": "Summary",
                 "name": "$SiteCommon$/pages-gallery/summary.html",
-                "values": {
-                    "Organization URL": "$(this.MS.DataStore.getValue('OrganizationUrl'))",
-                    "Target Server": "$(this.MS.DataStore.getValue('Server'))",
-                    "Target Database": "$(this.MS.DataStore.getValue('Database'))",
-                    "Target Username": "$(this.MS.DataStore.getValue('Username'))"
-                },
-                "displayCompletionNotification": "$run(this.MS.DataStore.getValue('DataMovement') === 'Scribe' ? false : true)",
                 "onNext": [
                     {
                         "name": "Microsoft-CrmGetEntityInitialCounts",
                         "skip": "$run(this.MS.DataStore.getValue('DataMovement') === 'Scribe' ? false : true)"
                     }
-                ]
+                ],
+                "values": {
+                    "Organization URL": "$(this.MS.DataStore.getValue('OrganizationUrl'))",
+                    "Target Server": "$(this.MS.DataStore.getValue('Server'))",
+                    "Target Database": "$(this.MS.DataStore.getValue('Database'))",
+                    "Target Username": "$(this.MS.DataStore.getValue('Username'))"
+                }
             },
             {
                 "displayname": "Progress",

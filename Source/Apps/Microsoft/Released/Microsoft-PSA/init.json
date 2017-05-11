@@ -48,6 +48,10 @@
                 "checkSqlVersion": true
             },
             {
+                "datastoreEntriesToValidate": [
+                    "AzureToken",
+                    "SqlConnectionString"
+                ],
                 "displayname": "Summary",
                 "name": "$SiteCommon$/pages-gallery/summary.html",
                 "values": {

@@ -252,4 +252,10 @@
   <data name="SQL_NoConnectionsInDatastore" xml:space="preserve">
     <value>The datastore does not contain any connection strings</value>
   </data>
+  <data name="SQL_MalformedConfigValues" xml:space="preserve">
+    <value>Unexpected error - the SQL configuration values are inconsistent</value>
+  </data>
+  <data name="SQL_MissingConfigValues" xml:space="preserve">
+    <value>Unexpected error - not all SQL configuration values were specified</value>
+  </data>
 </root>

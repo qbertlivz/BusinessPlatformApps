@@ -487,7 +487,7 @@ public class TweetHandler
         };
 
         //Request headers
-        string subscriptionKey = System.Configuration.ConfigurationManager.ConnectionStrings["subscriptionKey"].ConnectionString;
+        string subscriptionKey = System.Configuration.ConfigurationManager.ConnectionStrings["apiKey"].ConnectionString;
         client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
         var uri = "https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/sentiment";
         //Request body

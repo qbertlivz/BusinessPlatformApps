@@ -64,7 +64,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
             obj.siteId = new ExpandoObject();
             obj.siteId.Name = sitename;
             obj.siteId.ResourceGroup = resourceGroup;
-            obj.connectionStrings = new ExpandoObject[3];
+            obj.connectionStrings = new ExpandoObject[2];
             obj.connectionStrings[0] = new ExpandoObject();
             obj.connectionStrings[0].ConnectionString = sqlConnectionString;
             obj.connectionStrings[0].Name = "connectionString";

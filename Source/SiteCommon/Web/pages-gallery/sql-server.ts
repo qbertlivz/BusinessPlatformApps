@@ -135,7 +135,7 @@ export class SqlServer extends ViewModelBase {
         this.MS.DataStore.addToDataStore('Password', this.password, DataStoreType.Private);
 
         if (this.sqlInstance === 'ExistingSql') {
-            await this.MS.HttpService.executeAsync('Microsoft-ExistingSqlServer', { isInvisible: true });
+            this.MS.HttpService.executeAsync('Microsoft-ExistingSqlServer', { isInvisible: true });
         }
 
         if (this.checkSqlVersion) {

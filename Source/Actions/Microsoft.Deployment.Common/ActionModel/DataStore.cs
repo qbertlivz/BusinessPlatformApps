@@ -361,6 +361,56 @@ namespace Microsoft.Deployment.Common.ActionModel
 
             return itemsMatching;
         }
+        public void RemoveFirst(string key, DataStoreType dataStoreType = DataStoreType.Any)
+        {
+            RemoveAt(key, 0, dataStoreType);
+        }
+
+        public void RemoveLast(string key, DataStoreType dataStoreType = DataStoreType.Any)
+        {
+            IList<DataStoreItem> entry;
+
+            if (dataStoreType == DataStoreType.Public || dataStoreType == DataStoreType.Any)
+            {
+                entry = this.GetValueAndRoutesFromDataStore(DataStoreType.Public, key);
+                if (entry.Count > 0)
+                {
+                    this.PublicDataStore[entry.Last().Route].Remove(entry.First().Key);
+                }
+            }
+
+            if (dataStoreType == DataStoreType.Private || dataStoreType == DataStoreType.Any)
+            {
+                entry = this.GetValueAndRoutesFromDataStore(DataStoreType.Private, key);
+                if (entry.Count > 0)
+                {
+                    this.PrivateDataStore[entry.Last().Route].Remove(entry.First().Key);
+                }
+            }
+        }
+
+        public void RemoveAt(string key, int index, DataStoreType dataStoreType = DataStoreType.Any)
+        {
+            IList<DataStoreItem> entry;
+
+            if (dataStoreType == DataStoreType.Public || dataStoreType == DataStoreType.Any)
+            {
+                entry = this.GetValueAndRoutesFromDataStore(DataStoreType.Public, key);
+                if (entry.Count > 0 && entry.Count >= index)
+                {
+                    this.PublicDataStore[entry[index].Route].Remove(entry.First().Key);
+                }
+            }
+
+            if (dataStoreType == DataStoreType.Private || dataStoreType == DataStoreType.Any)
+            {
+                entry = this.GetValueAndRoutesFromDataStore(DataStoreType.Private, key);
+                if (entry.Count > 0 && entry.Count >= index)
+                {
+                    this.PrivateDataStore[entry[index].Route].Remove(entry.First().Key);
+                }
+            }
+        }
 
         private static bool UpdateItemIntoDataStore(DictionaryIgnoreCase<DictionaryIgnoreCase<JToken>> store,
             string route, string key, JToken value)

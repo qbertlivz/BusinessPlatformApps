@@ -114,6 +114,8 @@ export class ViewModelBase {
     }
 
     async activate(): Promise<void> {
+        this.MS.NavigationService.Activate();
+
         this.isActivated = false;
         this.MS.UtilityService.SaveItem('Current Page', window.location.href);
         let currentRoute = this.MS.NavigationService.getCurrentSelectedPage().RoutePageName.toLowerCase();

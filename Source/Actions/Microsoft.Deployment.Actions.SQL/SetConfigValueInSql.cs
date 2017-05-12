@@ -26,21 +26,22 @@ namespace Microsoft.Deployment.Actions.SQL
             var listConfigEntryName = request.DataStore.GetAllJson("SqlEntryName");
             var listConfigEntryValue = request.DataStore.GetAllJson("SqlEntryValue");
 
+            // This action should not be called with incomplete entries - most likely an init.json error
             if (listGroup == null || listSubgroup == null || listConfigEntryName == null || listConfigEntryValue == null)
-            {
-                return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject(), null, DefaultErrorCodes.DefaultErrorCode,
-                    "Configuration value properties not found");
-            }
+                return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "SQL_MissingConfigValues");
 
-            for (int i = 0; i < listGroup.Count(); i++)
-            {
-                string group = request.DataStore.GetAllJson("SqlGroup")[i].ToString();
-                string subgroup = request.DataStore.GetAllJson("SqlSubGroup")[i].ToString();
-                string configEntryName = request.DataStore.GetAllJson("SqlEntryName")[i].ToString();
-                string configEntryValue = request.DataStore.GetAllJson("SqlEntryValue")[i].ToString();
+            // Counts must be consistent
+            if (!(listGroup.Count == listSubgroup.Count && listSubgroup.Count == listConfigEntryName.Count && listConfigEntryName.Count == listConfigEntryValue.Count))
+                return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "SQL_MalformedConfigValues");
 
-                string query = string.Format(queryTemplate, configTable, group, subgroup, configEntryName,
-                    configEntryValue);
+            for (int i = 0; i < listGroup.Count; i++)
+            {
+                string group = listGroup[i].ToString();
+                string subgroup = listSubgroup[i].ToString();
+                string configEntryName = listConfigEntryName[i].ToString();
+                string configEntryValue = listConfigEntryValue[i].ToString();
+
+                string query = string.Format(queryTemplate, configTable, group, subgroup, configEntryName, configEntryValue);
 
                 SqlUtility.InvokeSqlCommand(connectionString, query, null);
             }

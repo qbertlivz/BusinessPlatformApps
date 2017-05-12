@@ -16,8 +16,7 @@ namespace Microsoft.Deployment.Actions.OnPremise.WinNT
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-
-            request.Logger.LogCustomProperty("OS version", Environment.OSVersion.Version.ToString());
+            request.Logger.LogEvent("OSVersion", new System.Collections.Generic.Dictionary<string, string> { { "osVersion", NTHelper.OsVersion } });
 
             RegistryKey key = null;
             try
@@ -26,7 +25,7 @@ namespace Microsoft.Deployment.Actions.OnPremise.WinNT
                 if (key == null)
                     return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
 
-                object v = key.GetValue("disabledomaincreds"); // If exists, this is a DWORD. Unfortunately, GetValue ignores that in C we have "typedef unsigned long DWORD"
+                object v = key.GetValue("disabledomaincreds");
                 if (v != null && (int)v != 0)
                 {
                     request.Logger.LogCustomProperty("DISABLEDOMAINCREDS", v.ToString());

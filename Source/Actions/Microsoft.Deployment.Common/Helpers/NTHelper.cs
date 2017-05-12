@@ -37,22 +37,51 @@ namespace Microsoft.Deployment.Common.Helpers
         public static bool IsCredentialGuardEnabled()
         {
             bool isCredentialGuardEnabled = false;
+            int[] osVersion = NTHelper.OsVersionArray;
 
-            try
+            if (osVersion[0] == 10 && osVersion[1] == 0 && osVersion[2] < 15011)
             {
-                using (RegistryKey rk = Registry.LocalMachine.OpenSubKey("SYSTEM\\CurrentControlSet\\Control\\Lsa"))
+                try
                 {
-                    object o = rk.GetValue("LsaCfgFlags");
-                    int rv = (int)o;
-                    isCredentialGuardEnabled = rv == 1 || rv == 2;
+                    using (RegistryKey rk = Registry.LocalMachine.OpenSubKey("SYSTEM\\CurrentControlSet\\Control\\Lsa"))
+                    {
+                        object o = rk.GetValue("LsaCfgFlags");
+                        int rv = (int)o;
+                        isCredentialGuardEnabled = (rv == 1 || rv == 2);
+                    }
+
+                }
+                catch
+                {
+                    // Checking credential guard failed
                 }
             }
-            catch
-            {
-                // Checking credential guard failed
-            }
-
             return isCredentialGuardEnabled;
+        }
+
+        public static int[] OsVersionArray
+        {
+            get
+            {
+                int[] result = new int[3];
+
+                using (RegistryKey k = Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows NT\\CurrentVersion"))
+                {
+                    result[0] = Convert.ToInt32(k.GetValue("CurrentMajorVersionNumber"));
+                    result[1] = Convert.ToInt32(k.GetValue("CurrentMinorVersionNumber"));
+                    result[2] = Convert.ToInt32(k.GetValue("CurrentBuildNumber") ?? k.GetValue("CurrentBuild"));
+                }
+
+                return result;
+            }
+        }
+
+        public static string OsVersion
+        {
+            get
+            {
+                return string.Join(".", NTHelper.OsVersionArray);
+            }
         }
     }
 }

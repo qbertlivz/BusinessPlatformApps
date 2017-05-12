@@ -1,6 +1,7 @@
 ﻿import { ViewModelBase } from '../services/view-model-base';
 
 export class ProgressViewModel extends ViewModelBase {
+    datastoreEntriesToValidate: string[] = [];
     downloadPbiText: string = this.MS.Translate.PROGRESS_DOWNLOAD_PBIX_INFO;
     filename: string = 'report.pbix';
     filenameSSAS: string = 'reportSSAS.pbix';
@@ -29,6 +30,13 @@ export class ProgressViewModel extends ViewModelBase {
         if (this.MS.DataStore.getValue('HasNavigated') == null) {
             this.MS.NavigationService.NavigateHome();
             return;
+        }
+
+        for (let i = 0; i < this.datastoreEntriesToValidate.length; i++) {
+            if (this.MS.DataStore.getValue(this.datastoreEntriesToValidate[i]) === null) {
+                this.MS.NavigationService.NavigateHome();
+                return;
+            }
         }
 
         this.hasPowerApp = this.hasPowerApp && this.MS.DataStore.getValue('SkipPowerApp') == null;

@@ -25,7 +25,7 @@ namespace Microsoft.Deployment.Actions.Salesforce
             var token = request.DataStore.GetJson("AzureToken", "access_token");
             var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
-            var dataFactory = resourceGroup + "SalesforceCopyFactory";
+            var dataFactory = resourceGroup.Replace("_", string.Empty) + "SalesforceCopyFactory";
 
             var url = string.Format(getDatasetRelativeUrl, dataFactory);
 

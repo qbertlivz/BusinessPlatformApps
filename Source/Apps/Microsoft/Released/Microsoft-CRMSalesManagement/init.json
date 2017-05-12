@@ -105,9 +105,6 @@
                 "sourceApplication": "DynamicsCRM"
             },
             {
-                "datastoreEntriesToValidate": [
-                    "SqlConnectionString"
-                ],
                 "displayCompletionNotification": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')",
                 "displayname": "Summary",
                 "name": "$SiteCommon$/pages-gallery/summary.html",

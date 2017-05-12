@@ -130,6 +130,21 @@
                 "skip": "$run(this.MS.DataStore.getValue('SkipPowerApp') === 'true')"
             },
             {
+                "CognitiveServiceName": "TextCognitiveService",
+                "CognitiveServiceType": "TextAnalytics",
+                "CognitiveSkuName": "S1",
+                "DeploymentName": "CognitiveText",
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_COGNITIVE_SERVICE)",
+                "name": "Microsoft-DeployCognitiveService"
+            },
+            {
+                "CognitiveServiceName": "TextCognitiveService",
+                "CognitiveServiceType": "TextAnalytics",
+                "DeploymentName": "CognitiveText",
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_COGNITIVE_SERVICE_KEY)",
+                "name": "Microsoft-GetCognitiveKey"
+            },
+            {
                 "DeploymentName": "Function",
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_FUNCTION)",
                 "name": "Microsoft-DeployTwitterFunction"
@@ -163,17 +178,9 @@
                 "name": "Microsoft-WaitForArmDeploymentStatus"
             },
             {
-                "DeploymentName": "AzureML",
-                "displayname": "$translate(INIT_ACTION_DEPLOYING_AZURE_ML)",
-                "CommitmentPlan": "commitmentplan",
-                "IsRequestResponse": true,
-                "name": "Microsoft-DeployAzureMLWebServiceFromFile",
-                "WebServiceFile": "Service/AzureArm/SentimentAnalysisWebServiceNew.json",
-                "WebServiceName": "$run('SentimentService' + this.MS.DataStore.getValue('uniqueId'))"
-            },
-            {
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_ASSETS)",
-                "name": "Microsoft-DeployTwitterCSharpFunctionAssets"
+                "name": "Microsoft-DeployTwitterCSharpFunctionAssets",
+                "subscriptionKey": "$dsall(CognitiveServiceKey)[0]"
             },
             {
                 "DeploymentName": "LogicApp",

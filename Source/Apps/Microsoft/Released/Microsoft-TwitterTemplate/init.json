@@ -20,9 +20,6 @@
         "templateName": "$translate(INIT_TWITTER_TEMPLATE_NAME)"
       },
       {
-        "azureProviders": [
-          "Microsoft.MachineLearning"
-        ],
         "bapiServices": [
           "Microsoft.PowerApps"
         ],
@@ -31,6 +28,10 @@
         "pricingCalculatorUrl": "$translate(INIT_TWITTER_PRICING_CALCULATOR_URL)",
         "pricingCost": "$translate(INIT_TWITTER_PRICING_COST)",
         "pricingUrl": "$translate(INIT_TWITTER_PRICING_URL)"
+      },
+      {
+        "displayname": "Cognitive API",
+        "name": "cognitive-text.html"
       },
       {
         "displayname": "Source",

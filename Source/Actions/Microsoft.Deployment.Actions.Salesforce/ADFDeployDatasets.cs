@@ -45,7 +45,7 @@ namespace Microsoft.Deployment.Actions.Salesforce
 
             string adfJsonData = request.DataStore.GetValue("ADFPipelineJsonData");
             var sqlCreds = SqlUtility.GetSqlCredentialsFromConnectionString(connString);
-
+            string dataFactoryName = resourceGroup.Replace("_", string.Empty) + "SalesforceCopyFactory";
             var obj = JsonConvert.DeserializeObject(adfJsonData, typeof(DeserializedADFPayload)) as DeserializedADFPayload;
 
             foreach (var o in obj.fields)
@@ -53,7 +53,7 @@ namespace Microsoft.Deployment.Actions.Salesforce
                 var deploymentName = string.Concat("ADFDataset", pipelineType, o.Item1);
 
                 dynamic datasetParam = new AzureArmParameterGenerator();
-                datasetParam.AddStringParam("dataFactoryName", resourceGroup + "SalesforceCopyFactory");
+                datasetParam.AddStringParam("dataFactoryName", dataFactoryName);
                 datasetParam.AddStringParam("targetSqlTable", o.Item1);
                 datasetParam.AddStringParam("targetSalesforceTable", o.Item1);
                 datasetParam.AddStringParam("sliceFrequency", pipelineFrequency);

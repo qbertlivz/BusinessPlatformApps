@@ -17,39 +17,14 @@ namespace Microsoft.Deployment.Actions.OnPremise.WinNT
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            string osVersion = null;
+            string osVersion = NTHelper.OsVersion;
             string productName = null;
             string installationType = null;
 
-            try
+            using (RegistryKey k = Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows NT\\CurrentVersion"))
             {
-                osVersion = Environment.OSVersion.Version.ToString();
-
-                using (RegistryKey k = Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows NT\\CurrentVersion"))
-                {
-                    object v = k.GetValue("CurrentMajorVersionNumber");
-                    if (v != null)
-                    {
-                        osVersion = Convert.ToString(v);
-                        v = k.GetValue("CurrentMinorVersionNumber");
-                        if (v != null)
-                        {
-                            osVersion += '.' + Convert.ToString(v);
-                            v = k.GetValue("CurrentBuildNumber") ?? k.GetValue("CurrentBuild");
-                            if (v != null)
-                            {
-                                osVersion += '.' + Convert.ToString(v);
-                            }
-                        }
-                    }
-
-                    productName = (string)k.GetValue("ProductName");
-                    installationType = (string)k.GetValue("InstallationType");
-                }
-            }
-            catch 
-            {
-                // Do nothing, I could not read the OS version and will rely on what .Net says
+                productName = (string)k.GetValue("ProductName");
+                installationType = (string)k.GetValue("InstallationType");
             }
 
             request.Logger.LogEvent("OSVersion", new System.Collections.Generic.Dictionary<string, string> { { nameof(osVersion), osVersion },

@@ -155,7 +155,6 @@ export class DataStore {
     }
 
     public getValue(key: string, dataStoreType: DataStoreType = DataStoreType.Any): string {
-        //let val = this.getFirstValueFromDataStore(key, dataStoreType);
         let val = this.getLastValueFromDataStore(key, dataStoreType);
         if (val || val === '') {
             return val.toString();

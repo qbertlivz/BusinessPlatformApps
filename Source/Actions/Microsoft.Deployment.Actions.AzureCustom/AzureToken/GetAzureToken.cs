@@ -43,7 +43,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                     clientId = Constants.MsCrmClientId;
                     tokenUrl = string.Format(Constants.AzureTokenUri, aadTenant);
                     break;
-
                 case "keyvault":
                     api = Constants.AzureManagementCoreApi;
                     clientId = Constants.MicrosoftClientIdCrm;

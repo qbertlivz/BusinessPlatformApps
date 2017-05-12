@@ -44,7 +44,7 @@ namespace Microsoft.Deployment.Actions.Salesforce
 
             bool historicalOnly = Convert.ToBoolean(request.DataStore.GetValue("historicalOnly"));
 
-            string dataFactoryName = resourceGroup + "SalesforceCopyFactory";
+            string dataFactoryName = resourceGroup.Replace("_", string.Empty) + "SalesforceCopyFactory";
 
             if (!string.IsNullOrWhiteSpace(postDeploymentPipelineType))
             {

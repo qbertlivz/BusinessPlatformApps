@@ -119,6 +119,9 @@
             },
             {
                 "asDatabase": "SalesManagement",
+                "datastoreEntriesToValidate": [
+                    "SqlConnectionString"
+                ],
                 "displayname": "Progress",
                 "filename": "$save('SalesManagementReport.pbix')",
                 "filenameSSAS": "SalesManagementReportAS.pbix",

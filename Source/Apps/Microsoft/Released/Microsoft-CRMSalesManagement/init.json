@@ -122,6 +122,9 @@
                 ]
             },
             {
+                "datastoreEntriesToValidate": [
+                    "SqlConnectionString"
+                ],
                 "displayname": "Progress",
                 "name": "$SiteCommon$/pages-gallery/progress.html",
                 "filename": "$save('SalesManagementReport.pbix')",

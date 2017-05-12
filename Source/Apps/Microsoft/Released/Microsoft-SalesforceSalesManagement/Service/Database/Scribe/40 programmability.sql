@@ -90,15 +90,24 @@ BEGIN
     SELECT @CompletePercentage = Convert(float, [value])
     FROM smgt.[configuration] WHERE configuration_group = 'SolutionTemplate' AND configuration_subgroup = 'Notifier' AND [name] = 'DataPullCompleteThreshold';
 
-    IF NOT EXISTS(SELECT p.[Percentage], p.[EntityName], i.lasttimestamp,  DATEDIFF(MINUTE, i.lasttimestamp, Sysdatetime()) AS [TimeDifference] FROM #percentages p
+    DECLARE @CountsRows INT, @CountRowsComplete INT;
+	SELECT @CountsRows = COUNT(*) FROM #counts;
+	
+	SELECT p.[Percentage], p.[EntityName], i.lasttimestamp,  DATEDIFF(MINUTE, i.lasttimestamp, Sysdatetime()) AS [TimeDifference] INTO #entitiesComplete
+    FROM #percentages p
               INNER JOIN smgt.entityinitialcount i ON i.entityName = p.EntityName
-              WHERE (p.[Percentage] <= @CompletePercentage OR p.[Percentage] IS NULL) AND DATEDIFF(MINUTE, i.lasttimestamp, Sysdatetime()) > 5
-              OR (p.[Percentage] <= @CompletePercentage  OR p.[Percentage] IS NULL))
-        SET @StatusCode = 2; --Data pull complete
+              WHERE 
+			  ((p.[Percentage] >= @CompletePercentage) AND DATEDIFF(MINUTE, i.lasttimestamp, Sysdatetime()) > 5) OR
+			  (p.[Percentage] >= 100) OR
+			  ((p.[Percentage] >= 100) AND DATEDIFF(MINUTE, i.lasttimestamp, Sysdatetime()) > 5)
 
-    DECLARE @EntitiesWithNoData INT, @CountsRows INT;
+	SELECT @CountRowsComplete = COUNT(*) FROM #entitiesComplete;
+			  
+    IF (@CountRowsComplete = @CountsRows)
+        SET @StatusCode = 2 --Data pull complete
+
+    DECLARE @EntitiesWithNoData INT;
     SELECT @EntitiesWithNoData = COUNT(*) FROM #counts WHERE [Count] = 0;
-    SELECT @CountsRows = COUNT(*) FROM #counts;
     IF @EntitiesWithNoData = @CountsRows AND DATEDIFF(HOUR, @DeploymentTimestamp, Sysdatetime()) > 24
         SET @StatusCode = 3; --No data is present
     

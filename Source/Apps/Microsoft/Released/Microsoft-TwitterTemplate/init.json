@@ -130,21 +130,6 @@
                 "skip": "$run(this.MS.DataStore.getValue('SkipPowerApp') === 'true')"
             },
             {
-                "CognitiveServiceName": "TextCognitiveService",
-                "CognitiveServiceType": "TextAnalytics",
-                "CognitiveSkuName": "S1",
-                "DeploymentName": "CognitiveText",
-                "displayname": "$translate(INIT_ACTION_DEPLOYING_COGNITIVE_SERVICE)",
-                "name": "Microsoft-DeployCognitiveService"
-            },
-            {
-                "CognitiveServiceName": "TextCognitiveService",
-                "CognitiveServiceType": "TextAnalytics",
-                "DeploymentName": "CognitiveText",
-                "displayname": "$translate(INIT_ACTION_DEPLOYING_COGNITIVE_SERVICE_KEY)",
-                "name": "Microsoft-GetCognitiveKey"
-            },
-            {
                 "DeploymentName": "Function",
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_FUNCTION)",
                 "name": "Microsoft-DeployTwitterFunction"

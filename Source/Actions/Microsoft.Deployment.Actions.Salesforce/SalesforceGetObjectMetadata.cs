@@ -52,9 +52,9 @@ namespace Microsoft.Deployment.Actions.Salesforce
             SessionHeader sheader = new SessionHeader();
             BasicHttpBinding bind = new BasicHttpBinding();
             bind = (BasicHttpBinding)binding.Endpoint.Binding;
-            bind.MaxReceivedMessageSize = 2147483647;
-            bind.MaxBufferPoolSize = 2147483647;
-            bind.MaxBufferSize = 2147483647;
+            bind.MaxReceivedMessageSize = int.MaxValue;
+            bind.MaxBufferPoolSize = int.MaxValue;
+            bind.MaxBufferSize = int.MaxValue;
             bind.CloseTimeout = new TimeSpan(0, 0, 5, 0);
             bind.OpenTimeout = new TimeSpan(0, 0, 5, 0);
             bind.SendTimeout = new TimeSpan(0, 0, 5, 0);

@@ -67,6 +67,10 @@
                 ]
             },
             {
+                "datastoreEntriesToValidate": [
+                    "AzureToken",
+                    "SqlConnectionString"
+                ],
                 "displayname": "Progress",
                 "name": "$SiteCommon$/pages-gallery/progress.html",
                 "filename": "$save('PSA_AccountManager.pbix|PSA_PracticeManager.pbix|PSA_ResourceManager.pbix')",

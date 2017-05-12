@@ -44,7 +44,8 @@ export class MsCrmLogin extends AzureLogin {
                         return;
                     }
                     var tokenObj = {
-                        code: token
+                        code: token,
+                        oauthType: this.oauthType
                     };
                     this.authToken = await this.MS.HttpService.executeAsync('Microsoft-GetAzureToken', tokenObj);
                     if (this.authToken.IsSuccess) {
@@ -105,14 +106,12 @@ export class MsCrmLogin extends AzureLogin {
     }
 
     async connect(): Promise<void> {
-        this.MS.DataStore.addToDataStore('oauthType', this.oauthType, DataStoreType.Public);
-        this.MS.DataStore.addToDataStore('AzureOAuth', this.oauthType, DataStoreType.Public);
-
+        var tokenObj: any = { oauthType: this.oauthType };
         this.MS.DataStore.addToDataStore('AADTenant', 'common', DataStoreType.Public);
-        let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureAuthUri', {});
+        let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureAuthUri', tokenObj);
         window.location.href = response.Body.value;
     }
-
+     
     public async NavigatingNext(): Promise<boolean> {
         this.MS.DataStore.addToDataStore('Entities', this.entities, DataStoreType.Public);
 
@@ -145,6 +144,14 @@ export class MsCrmLogin extends AzureLogin {
                 }
 
                 let response = await this.MS.HttpService.executeAsync('Microsoft-CreateResourceGroup', {});
+
+                for (let i = 0; i < this.azureProviders.length; i++) {
+                    this.MS.DataStore.addToDataStore('AzureProvider', this.azureProviders[i], DataStoreType.Public);
+                    let responseRegister = await this.MS.HttpService.executeAsync('Microsoft-RegisterProvider', {});
+                    if (!responseRegister.IsSuccess) {
+                        return false;
+                    }
+                }
 
                 if (!response.IsSuccess) {
                     return false;

@@ -187,6 +187,7 @@
     <Compile Include="AzureML\ExportAzureMLExperiment.cs" />
     <Compile Include="AzureML\DeployAzureMLWebServiceFromFile.cs" />
     <Compile Include="AzureSql\CreateAzureSql.cs" />
+    <Compile Include="AzureToken\AzureTokenRequestMeta.cs" />
     <Compile Include="AzureToken\AzureTokenUtility.cs" />
     <Compile Include="AzureToken\CreateSpn.cs" />
     <Compile Include="AzureToken\GetAzureAuthUri.cs" />

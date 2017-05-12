@@ -21,7 +21,8 @@
       },
       {
         "azureProviders": [
-          "Microsoft.MachineLearning"
+          "Microsoft.MachineLearning",
+          "Microsoft.AnalysisServices"
         ],
         "bapiServices": [
           "Microsoft.PowerApps"
@@ -60,6 +61,12 @@
         "name": "$SiteCommon$/pages-gallery/choose-analysis-server.html",
         "showDescription": true,
         "skip": "$ds(azureSqlDisabled)"
+      },
+      {
+        "displayname": "Login to Analysis Services",
+        "name": "$SiteCommon$/pages-gallery/as-login.html",
+        "oauthType": "as",
+        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true' : 'false')"
       },
       {
         "displayname": "AAS Login",

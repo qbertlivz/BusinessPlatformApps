@@ -6,11 +6,13 @@ import { ActionResponse } from '../models/action-response';
 
 import { AzureLogin } from './azure-login';
 
-export class KeyVaultLogin extends AzureLogin {
+export class ASLogin extends AzureLogin {
     hasToken: boolean = false;
+    
 
     constructor() {
         super();
+        this.oauthType = "as"
     }
 
     async OnLoaded(): Promise<void> {

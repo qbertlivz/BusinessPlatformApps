@@ -58,12 +58,12 @@ namespace Microsoft.Deployment.Actions.Salesforce
             bind.CloseTimeout = new TimeSpan(0, 0, 5, 0);
             bind.OpenTimeout = new TimeSpan(0, 0, 5, 0);
             bind.SendTimeout = new TimeSpan(0, 0, 5, 0);
-            bind.ReaderQuotas.MaxArrayLength = 2147483647;
-            bind.ReaderQuotas.MaxDepth = 2147483647;
-            bind.ReaderQuotas.MaxNameTableCharCount = 2147483647;
-            bind.ReaderQuotas.MaxStringContentLength = 2147483647;
-            bind.ReaderQuotas.MaxBytesPerRead = 2147483647;
-            bind.ReaderQuotas.MaxNameTableCharCount = 2147483647;
+            bind.ReaderQuotas.MaxArrayLength = int.MaxValue;
+            bind.ReaderQuotas.MaxDepth = int.MaxValue;
+            bind.ReaderQuotas.MaxNameTableCharCount = int.MaxValue;
+            bind.ReaderQuotas.MaxStringContentLength = int.MaxValue;
+            bind.ReaderQuotas.MaxBytesPerRead = int.MaxValue;
+            bind.ReaderQuotas.MaxNameTableCharCount = int.MaxValue;
 
             binding.Endpoint.Binding = bind;
             binding.Endpoint.Address = new EndpointAddress(lr.serverUrl);

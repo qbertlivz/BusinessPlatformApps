@@ -69,14 +69,19 @@ BEGIN
 			   FROM #counts
 			   WHERE [Count] > 0 AND DATEDIFF(HOUR, @DeploymentTimestamp, Sysdatetime()) > 24)
 	SET @StatusCode = 1 --Data pull is partially complete
-		
 	
-    	DECLARE @CountsRows INT, @CountRowsComplete INT;
+	
+	DECLARE @CompletePercentage FLOAT;
+    SELECT @CompletePercentage = Convert(float, [value])
+    FROM pbist_sccm.[configuration] WHERE configuration_group = 'SolutionTemplate' AND configuration_subgroup = 'Notifier' AND [name] = 'DataPullCompleteThreshold';
+			
+	
+    DECLARE @CountsRows INT, @CountRowsComplete INT;
 	SELECT @CountsRows = COUNT(*) FROM #counts;
 	
 	SELECT p.[Percentage], p.[EntityName], i.lasttimestamp,  DATEDIFF(MINUTE, i.lasttimestamp, Sysdatetime()) AS [TimeDifference] INTO #entitiesComplete
     FROM #percentages p
-              INNER JOIN smgt.entityinitialcount i ON i.entityName = p.EntityName
+              INNER JOIN pbist_sccm.entityinitialcount i ON i.entityName = p.EntityName
               WHERE 
 			  ((p.[Percentage] >= @CompletePercentage) AND DATEDIFF(MINUTE, i.lasttimestamp, Sysdatetime()) > 5) OR
 			  (p.[Percentage] >= 100) OR

@@ -97,9 +97,6 @@
                 "sourceApplication": "Salesforce"
             },
             {
-                "datastoreEntriesToValidate": [
-                    "SqlConnectionString"
-                ],
                 "displayCompletionNotification": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Informatica')",
                 "displayname": "Summary",
                 "name": "$SiteCommon$/pages-gallery/summary.html",

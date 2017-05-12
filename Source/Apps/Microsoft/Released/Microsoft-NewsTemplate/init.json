@@ -52,10 +52,6 @@
                 "name": "search-terms.html"
             },
             {
-                "datastoreEntriesToValidate": [
-                    "AzureToken",
-                    "SqlConnectionString"
-                ],
                 "displayname": "Summary",
                 "name": "$SiteCommon$/pages-gallery/summary.html",
                 "values": {

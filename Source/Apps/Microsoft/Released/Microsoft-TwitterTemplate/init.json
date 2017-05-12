@@ -67,10 +67,6 @@
                 "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
             },
             {
-                "datastoreEntriesToValidate": [
-                    "AzureToken",
-                    "SqlConnectionString"
-                ],
                 "displayname": "Summary",
                 "name": "$SiteCommon$/pages-gallery/summary.html",
                 "values": {

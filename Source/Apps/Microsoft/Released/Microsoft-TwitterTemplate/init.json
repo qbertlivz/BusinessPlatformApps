@@ -163,9 +163,17 @@
                 "name": "Microsoft-WaitForArmDeploymentStatus"
             },
             {
+                "DeploymentName": "AzureML",
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_AZURE_ML)",
+                "CommitmentPlan": "commitmentplan",
+                "IsRequestResponse": true,
+                "name": "Microsoft-DeployAzureMLWebServiceFromFile",
+                "WebServiceFile": "Service/AzureArm/SentimentAnalysisWebServiceNew.json",
+                "WebServiceName": "$run('SentimentService' + this.MS.DataStore.getValue('uniqueId'))"
+            },
+            {
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_ASSETS)",
-                "name": "Microsoft-DeployTwitterCSharpFunctionAssets",
-                "subscriptionKey": "$dsall(CognitiveServiceKey)[0]"
+                "name": "Microsoft-DeployTwitterCSharpFunctionAssets"
             },
             {
                 "DeploymentName": "LogicApp",

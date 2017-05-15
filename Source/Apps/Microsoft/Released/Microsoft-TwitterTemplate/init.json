@@ -131,11 +131,11 @@
                 "name": "Microsoft-CreatePowerAppSqlConnection",
                 "skip": "$run(this.MS.DataStore.getValue('SkipPowerApp') === 'true')"
             },
-            {
-                "displayname": "$translate(INIT_ACTION_DEPLOYING_POWERAPP)",
-                "name": "Microsoft-DeployPowerApp",
-                "skip": "$run(this.MS.DataStore.getValue('SkipPowerApp') === 'true')"
-            },
+            //{
+            //    "displayname": "$translate(INIT_ACTION_DEPLOYING_POWERAPP)",
+            //    "name": "Microsoft-DeployPowerApp",
+            //    "skip": "$run(this.MS.DataStore.getValue('SkipPowerApp') === 'true')"
+            //},
             {
                 "CognitiveServiceName": "TextCognitiveService",
                 "CognitiveServiceType": "TextAnalytics",

@@ -52,6 +52,9 @@
                 "pricingCalculatorUrl": "$translate(INIT_SALESFORCE_PRICING_CALCULATOR_URL)",
                 "pricingCost": "$translate(INIT_SALESFORCE_PRICING_COST)",
                 "pricingUrl": "$translate(INIT_SALESFORCE_PRICING_URL)",
+                "azureProviders": [
+                    "Microsoft.AnalysisServices"
+                ],
                 "skip": "$(this.MS.HttpService.isOnPremise)"
             },
             {
@@ -83,6 +86,12 @@
                 "name": "$SiteCommon$/pages-gallery/choose-analysis-server.html",
                 "showDescription": true,
                 "skip": "$dsall(azureSqlDisabled)[0]"
+            },
+            {
+                "displayname": "Login to Analysis Services",
+                "name": "$SiteCommon$/pages-gallery/as-login.html",
+                "oauthType": "as",
+                "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true' : 'false')"
             },
             {
                 "displayname": "AAS Login",

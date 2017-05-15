@@ -1,14 +1,11 @@
-﻿using Microsoft.Deployment.Common.ActionModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.Net.Http;
+using System.Threading.Tasks;
+
+using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.CDM
 {
@@ -17,7 +14,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.CDM
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var azureToken = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
+            var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
 
             AzureHttpClient client = new AzureHttpClient(azureToken);
 
@@ -30,14 +27,13 @@ namespace Microsoft.Deployment.Actions.AzureCustom.CDM
             var responseParsed = JsonUtility.GetJsonObjectFromJsonString(responseString);
 
             var objectToSerialize = new RootObject();
-            objectToSerialize.environments = new List<Environment>
-            { };
+            objectToSerialize.environments = new List<Environment>{};
 
             foreach (var env in responseParsed["value"])
             {
                 if (env["properties"]["permissions"]["CreateDatabase"] != null)
                 {
-                    foreach(var obj in responseParsedWithNames["value"])
+                    foreach (var obj in responseParsedWithNames["value"])
                     {
                         if (obj["name"].ToString() == env["name"].ToString())
                         {
@@ -47,11 +43,9 @@ namespace Microsoft.Deployment.Actions.AzureCustom.CDM
                 };
             }
 
-            var responseToReturn =JsonUtility.GetJsonStringFromObject(objectToSerialize);
+            var responseToReturn = JsonUtility.GetJsonStringFromObject(objectToSerialize);
 
             return new ActionResponse(ActionStatus.Success, responseToReturn);
-
-
         }
     }
 

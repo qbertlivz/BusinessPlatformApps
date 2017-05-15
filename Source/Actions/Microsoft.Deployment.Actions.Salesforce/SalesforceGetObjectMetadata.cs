@@ -5,6 +5,7 @@ using System.Dynamic;
 using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
+
 using Microsoft.Deployment.Actions.Salesforce.Helpers;
 using Microsoft.Deployment.Actions.Salesforce.SalesforceSOAP;
 using Microsoft.Deployment.Common.ActionModel;
@@ -51,17 +52,18 @@ namespace Microsoft.Deployment.Actions.Salesforce
             SessionHeader sheader = new SessionHeader();
             BasicHttpBinding bind = new BasicHttpBinding();
             bind = (BasicHttpBinding)binding.Endpoint.Binding;
-            bind.MaxReceivedMessageSize = 2147483647;
-            bind.MaxBufferPoolSize = 2147483647;
-            bind.MaxBufferSize = 2147483647;
+            bind.MaxReceivedMessageSize = int.MaxValue;
+            bind.MaxBufferPoolSize = int.MaxValue;
+            bind.MaxBufferSize = int.MaxValue;
             bind.CloseTimeout = new TimeSpan(0, 0, 5, 0);
             bind.OpenTimeout = new TimeSpan(0, 0, 5, 0);
-            bind.ReaderQuotas.MaxArrayLength = 2147483647;
-            bind.ReaderQuotas.MaxDepth = 2147483647;
-            bind.ReaderQuotas.MaxNameTableCharCount = 2147483647;
-            bind.ReaderQuotas.MaxStringContentLength = 2147483647;
-            bind.ReaderQuotas.MaxBytesPerRead = 2147483647;
-            bind.ReaderQuotas.MaxNameTableCharCount = 2147483647;
+            bind.SendTimeout = new TimeSpan(0, 0, 5, 0);
+            bind.ReaderQuotas.MaxArrayLength = int.MaxValue;
+            bind.ReaderQuotas.MaxDepth = int.MaxValue;
+            bind.ReaderQuotas.MaxNameTableCharCount = int.MaxValue;
+            bind.ReaderQuotas.MaxStringContentLength = int.MaxValue;
+            bind.ReaderQuotas.MaxBytesPerRead = int.MaxValue;
+            bind.ReaderQuotas.MaxNameTableCharCount = int.MaxValue;
 
             binding.Endpoint.Binding = bind;
             binding.Endpoint.Address = new EndpointAddress(lr.serverUrl);

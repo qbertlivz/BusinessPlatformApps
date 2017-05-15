@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+
+using Microsoft.Rest;
+using Newtonsoft.Json.Linq;
+
 using Microsoft.Deployment.Common;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.ErrorCode;
 using Microsoft.Deployment.Common.Helpers;
-using Newtonsoft.Json.Linq;
-using Microsoft.Rest;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
 {
@@ -22,19 +26,23 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
         {
             string code = request.DataStore.GetValue("code");
             string aadTenant = request.DataStore.GetValue("AADTenant");
-            string oauthType = (request.DataStore.GetValue("oauthType") ?? string.Empty).ToLowerInvariant();
+            string oauthType = (request.DataStore.GetLastValue("oauthType") ?? string.Empty).ToLowerInvariant();
             string api;
             string clientId;
             string tokenUrl;
 
             switch (oauthType)
             {
+                case "powerbi":
+                    tokenUrl = string.Format(Constants.AzureTokenUri, aadTenant);
+                    clientId = Constants.MicrosoftClientIdPowerBI;
+                    api = Constants.PowerBIService;
+                    break;
                 case "mscrm":
                     api = Constants.AzureManagementCoreApi;
                     clientId = Constants.MsCrmClientId;
                     tokenUrl = string.Format(Constants.AzureTokenUri, aadTenant);
                     break;
-
                 case "keyvault":
                     api = Constants.AzureManagementCoreApi;
                     clientId = Constants.MicrosoftClientIdCrm;
@@ -69,11 +77,15 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                 }
             }
 
-
+            var emailAddress = AzureUtility.GetEmailFromToken(primaryResponse);
+            if (emailAddress.Contains('#'))
+            {
+                emailAddress = emailAddress.Split('#')?[1];
+            }
+            request.DataStore.AddToDataStore("EmailAddress", emailAddress);
 
             switch (oauthType)
             {
-
                 case "keyvault":
                     request.DataStore.AddToDataStore("AzureTokenKV", primaryResponse);
                     break;
@@ -84,16 +96,21 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                     break;
                 default:
                     request.DataStore.AddToDataStore("AzureToken", primaryResponse);
+
+                    var tenantId = new JwtSecurityToken(primaryResponse["id_token"].ToString())
+                                                      .Claims.First(e => e.Type.ToLowerInvariant() == "tid")
+                                                      .Value;
+
+                    var directoryName = emailAddress.Split('@').Last();
+
+                    request.DataStore.AddToDataStore("DirectoryName", directoryName);
+                    request.DataStore.AddToDataStore("PowerBITenantId", tenantId);
                     break;
             }
-            
-
-
             return new ActionResponse(ActionStatus.Success, obj, true);
-
         }
 
-        private JObject RetrieveCrmToken(string refreshToken, string websiteRootUrl, DataStore dataStore)
+        public static JObject RetrieveCrmToken(string refreshToken, string websiteRootUrl, DataStore dataStore)
         {
             string tokenUrl = string.Format(Constants.AzureTokenUri, dataStore.GetValue("AADTenant"));
 
@@ -109,7 +126,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             }
         }
 
-        private static StringBuilder GetTokenUri(string code, string uri, string rootUrl, string clientId)
+        public static StringBuilder GetTokenUri(string code, string uri, string rootUrl, string clientId)
         {
             Dictionary<string, string> message = new Dictionary<string, string>
             {
@@ -130,14 +147,30 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             return builder;
         }
 
-        private string GetTokenUri2(string code, string uri, string rootUrl, string clientId)
+        public static string GetTokenUri2(string code, string uri, string rootUrl, string clientId)
         {
             return $"refresh_token={code}&" +
                    $"client_id={clientId}&" +
-                   $"client_secret={Uri.EscapeDataString(Constants.MicrosoftClientSecret)}&" +
+                   //$"client_secret={Uri.EscapeDataString(Constants.MicrosoftClientSecret)}&" +
                    $"resource={Uri.EscapeDataString(uri)}&" +
-                   $"redirect_uri={Uri.EscapeDataString(rootUrl +Constants.WebsiteRedirectPath)}&" +
+                   $"redirect_uri={Uri.EscapeDataString(rootUrl + Constants.WebsiteRedirectPath)}&" +
                    "grant_type=refresh_token";
+        }
+
+        public static string GetClientIdFromRequest(ActionRequest request)
+        {
+            string oauthType = (request.DataStore.GetLastValue("AzureOAuth") ?? string.Empty).ToLowerInvariant();
+            switch (oauthType)
+            {
+                case "powerbi":
+                    return Constants.PowerBIService;
+                case "mscrm":
+                    return Constants.MsCrmClientId;
+                case "keyvault":
+                    return Constants.MicrosoftClientIdCrm;
+                default:
+                    return Constants.MicrosoftClientId;
+            }
         }
     }
 }

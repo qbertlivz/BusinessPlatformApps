@@ -1,0 +1,185 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "notifierLogicApp": {
+            "defaultValue": "newLA",
+            "type": "String"
+        },
+        "sqlConnection": {
+            "defaultValue": "connection",
+            "type": "String"
+        }
+		"resourcegroup": {
+			"defaultValue": "stresourcegroup",
+			"type": "string"
+		},
+		"subscription": {
+			"defaultValue": "idrequired",
+			"type": "string"
+		}
+    },
+    "variables": {},
+    "resources": [
+        {
+            "comments": "Generalized from resource: '/subscriptions/20ea4e8d-d3d9-4f1d-947c-441675acd4f7/resourceGroups/localNotifier/providers/Microsoft.Logic/workflows/newLA'.",
+            "type": "Microsoft.Logic/workflows",
+            "name": "[parameters('notifierLogicApp')]",
+            "apiVersion": "2016-06-01",
+			"location": "[resourceGroup().location]",
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
+                    "triggers": {
+                        "Recurrence": {
+                            "recurrence": {
+                                "frequency": "Minute",
+                                "interval": 3
+                            },
+                            "type": "Recurrence"
+                        }
+                    },
+                    "actions": {
+                        "For_each": {
+                            "foreach": "@body('Get_rows')?['value']",
+                            "actions": {
+                                "Compose": {
+                                    "runAfter": {},
+                                    "type": "Compose",
+                                    "inputs": "@item()?['sprocname']"
+                                }
+                            },
+                            "runAfter": {
+                                "Get_rows": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Foreach"
+                        },
+                        "For_each_2": {
+                            "foreach": "@body('Get_rows')?['value']",
+                            "actions": {
+                                "Execute_stored_procedure": {
+                                    "runAfter": {},
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "host": {
+                                            "api": {
+                                                "runtimeUrl": "https://logic-apis-westus.azure-apim.net/apim/sql"
+                                            },
+                                            "connection": {
+                                                "name": "@parameters('$connections')['sql']['connectionId']"
+                                            }
+                                        },
+                                        "method": "post",
+                                        "path": "/datasets/default/procedures/@{encodeURIComponent(encodeURIComponent(item()?['sprocname']))}"
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "For_each": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Foreach"
+                        },
+                        "For_each_3": {
+                            "foreach": "@body('Get_rows_2')?['value']",
+                            "actions": {
+                                "Condition": {
+                                    "actions": {
+                                        "HTTP": {
+                                            "runAfter": {},
+                                            "type": "Http",
+                                            "inputs": {
+                                                "body": {
+                                                    "deploymentId": "@{item()?['deploymentid']}",
+                                                    "templateName": "@{item()?['templatename']}",
+                                                    "to": "@{item()?['emails']}"
+                                                },
+                                                "headers": {
+                                                    "Content-Type": "application/json"
+                                                },
+                                                "method": "POST",
+                                                "uri": "@{item()?['notifierurl']}"
+                                            }
+                                        }
+                                    },
+                                    "runAfter": {},
+                                    "expression": "@greater(item()?['initialpullcomplete'], 0)",
+                                    "type": "If"
+                                }
+                            },
+                            "runAfter": {
+                                "Get_rows_2": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Foreach"
+                        },
+                        "Get_rows": {
+                            "runAfter": {},
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "api": {
+                                        "runtimeUrl": "https://logic-apis-westus.azure-apim.net/apim/sql"
+                                    },
+                                    "connection": {
+                                        "name": "@parameters('$connections')['sql']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('notifier'))}/items",
+                                "queries": {
+                                    "$top": 1
+                                }
+                            }
+                        },
+                        "Get_rows_2": {
+                            "runAfter": {
+                                "For_each_2": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "api": {
+                                        "runtimeUrl": "https://logic-apis-westus.azure-apim.net/apim/sql"
+                                    },
+                                    "connection": {
+                                        "name": "@parameters('$connections')['sql']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('notifier'))}/items"
+                            }
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {
+                            "sql": {
+                                "connectionId": "[parameters('sqlConnection')]",
+                                "connectionName": "sql",
+                                "id": "[concat('/subscriptions/' , parameters('subscription'), '/providers/Microsoft.Web/locations/',resourceGroup().location , '/managedApis/sql')]"
+                            }
+                        }
+                    }
+                }
+            },
+            "dependsOn": []
+        }
+    ]
+}

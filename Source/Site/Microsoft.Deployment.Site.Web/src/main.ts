@@ -1,11 +1,9 @@
-﻿import { Aurelia } from 'aurelia-framework';
+﻿/// <reference path="../typings/index.d.ts" />
+
+import { Aurelia } from 'aurelia-framework';
 
 export function configure(aurelia: Aurelia) {
-    aurelia.use
-        .standardConfiguration()
-        //.developmentLogging();
-        //aurelia.use.plugin('aurelia-animator-css');
-        //aurelia.use.plugin('aurelia-html-import-template-loader')
-
+    aurelia.use.standardConfiguration();
+    //aurelia.use.standardConfiguration().developmentLogging();
     aurelia.start().then(() => aurelia.setRoot());
 }

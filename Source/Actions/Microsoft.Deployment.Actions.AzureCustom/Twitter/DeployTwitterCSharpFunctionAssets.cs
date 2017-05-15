@@ -3,11 +3,13 @@ using System.Dynamic;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+
+using Newtonsoft.Json.Linq;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.ErrorCode;
 using Microsoft.Deployment.Common.Helpers;
-using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
 {
@@ -16,14 +18,15 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var azureToken = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
-            var subscription = request.DataStore.GetJson("SelectedSubscription")["SubscriptionId"].ToString();
+            var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
+            var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
-            var location = request.DataStore.GetJson("SelectedLocation")["Name"].ToString();
+            var location = request.DataStore.GetJson("SelectedLocation", "Name");
 
             var sitename = request.DataStore.GetValue("SiteName");
             var sqlConnectionString = request.DataStore.GetValue("SqlConnectionString");
-            var cognitiveServiceKey = request.DataStore.GetValue("CognitiveServiceKey");
+
+            var apiKey = request.DataStore.GetValue("subscriptionKey");
 
             AzureHttpClient client = new AzureHttpClient(azureToken, subscription, resourceGroup);
 
@@ -67,8 +70,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
             obj.connectionStrings[0].Name = "connectionString";
             obj.connectionStrings[0].Type = 2;
             obj.connectionStrings[1] = new ExpandoObject();
-            obj.connectionStrings[1].ConnectionString = cognitiveServiceKey;
-            obj.connectionStrings[1].Name = "subscriptionKey";
+            obj.connectionStrings[1].ConnectionString = apiKey;
+            obj.connectionStrings[1].Name = "apiKey";
             obj.connectionStrings[1].Type = 2;
             obj.location = location;
 

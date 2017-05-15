@@ -2,10 +2,12 @@
 using System.ComponentModel.Composition;
 using System.Data;
 using System.Threading.Tasks;
+
+using Newtonsoft.Json.Linq;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
-using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Deployment.Actions.OnPremise
 {
@@ -20,9 +22,7 @@ namespace Microsoft.Deployment.Actions.OnPremise
                 ? false
                 : bool.Parse(request.DataStore.GetValue("IsWaiting"));
 
-            int sqlIndex = int.Parse(request.DataStore.GetValue("SqlServerIndex"));
-
-            string connectionString = request.DataStore.GetAllValues("SqlConnectionString")[sqlIndex]; // Must specify Initial Catalog
+            string connectionString = request.DataStore.GetValueAtIndex("SqlConnectionString", "SqlServerIndex"); // Must specify Initial Catalog
             string finishedActionName = request.DataStore.GetValue("FinishedActionName");
             string targetSchema = request.DataStore.GetValue("TargetSchema"); // Specifies the schema used by the template
 
@@ -104,7 +104,7 @@ namespace Microsoft.Deployment.Actions.OnPremise
                      "\",status:" + JsonUtility.Serialize(recordCounts) +
                     ", slices:" + JObject.FromObject(finishedResponse.Body)["value"]?.ToString() + "}"));
                 }
-                else 
+                else
                 {
                     resp = new ActionResponse(ActionStatus.Success,
                         JsonUtility.GetJsonObjectFromJsonString(

@@ -21,20 +21,26 @@ using System.Web;
 public static async Task<object> Run(HttpRequestMessage req, TraceWriter log)
 {
     string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["connectionString"].ConnectionString;
-    TweetHandler tweetHandler = new TweetHandler(connectionString);
+    TweetHandler tweetHandler = new TweetHandler(connectionString, log);
     string jsonContent = await req.Content.ReadAsStringAsync();
     var tweets = JsonConvert.DeserializeObject(jsonContent);
+    int i = 0;
     if (tweets is JArray)
     {
         foreach (var item in (JArray)tweets)
         {
             var individualtweet = item.ToString();
-            tweetHandler.ParseTweet(individualtweet);
+            //log.Info("********************Run**************************" + individualtweet.ToString());
+
+            await tweetHandler.ParseTweet(individualtweet, log, i);
+            i = i + 1;
         }
     }
     else
     {
-        tweetHandler.ParseTweet(jsonContent);
+        //log.Info("********************Run**************************" + jsonContent.ToString());
+        await tweetHandler.ParseTweet(jsonContent, log, i);
+        i = i + 1;
     }
 
     // log.Info($"{data}");
@@ -43,18 +49,20 @@ public static async Task<object> Run(HttpRequestMessage req, TraceWriter log)
 
 public class TweetHandler
 {
-    public TweetHandler(string connection)
+    public TweetHandler(string connection, TraceWriter log)
     {
         if (string.IsNullOrEmpty(connection))
         {
             throw new ArgumentNullException("connection", "Connection string is null or empty.");
         }
         this.connectionString = connection;
+        this.log = log;
     }
 
     private dynamic tweet = string.Empty;
     private JObject tweetObj = new JObject();
     private string connectionString;
+    private TraceWriter log = null;
 
     //Create dictionaries for SQL tables
     private Dictionary<string, string> originalTweets = new Dictionary<string, string>()
@@ -118,7 +126,7 @@ public class TweetHandler
             {"mentionColor", "#374649"},
         };
 
-    public async Task<bool> ParseTweet(string entireTweet)
+    public async Task<bool> ParseTweet(string entireTweet, TraceWriter log, int i)
     {
         // Convert JSON to dynamic C# object
         tweetObj = JObject.Parse(entireTweet);
@@ -130,6 +138,10 @@ public class TweetHandler
         string twitterHandleId =
             ExecuteSqlQuery("select value FROM pbist_twitter.configuration where name = \'twitterHandleId\'",
                 "value");
+        if (i == 0)
+        {
+            ExecuteSqlNonQuery($"UPDATE pbist_twitter.twitter_query SET TweetId='{tweet["TweetId"]}' WHERE Id = 1");
+        }
 
         // Split out all the handles & create dictionary
         String[] handle = null;
@@ -146,36 +158,45 @@ public class TweetHandler
             }
         }
 
+        //log.Info("********************ParseTweet************************** TweetText: " + tweet.TweetText.ToString());
+        //log.Info("********************ParseTweet************************** Handles: " + twitterHandles);
+        //log.Info("********************ParseTweet************************** Handle IDs: " + twitterHandleId);
+        //log.Info("********************ParseTweet************************** Tweet Language: " + tweet.TweetLanguageCode.ToString());
         // Check if language of tweet is supported for sentiment analysis
-        originalTweets["lang"] = tweet.TweetLanguageCode.ToString();
-        if (originalTweets["lang"] == "en" || originalTweets["lang"] == "fr" || originalTweets["lang"] == "es" || originalTweets["lang"] == "pt")
-        {
-            //Sentiment analysis - Cognitive APIs 
-            string sentiment = await MakeSentimentRequest(tweet);
-            sentiment = (double.Parse(sentiment) * 2 - 1).ToString(CultureInfo.InvariantCulture);
-            string sentimentBin = (Math.Floor(double.Parse(sentiment) * 10) / 10).ToString(CultureInfo.InvariantCulture);
-            string sentimentPosNeg = String.Empty;
-            if (double.Parse(sentimentBin) > 0)
-            {
-                sentimentPosNeg = "Positive";
-            }
-            else if (double.Parse(sentimentBin) < 0)
-            {
-                sentimentPosNeg = "Negative";
-            }
-            else
-            {
-                sentimentPosNeg = "Neutral";
-            }
+        string[] languagesSupported = { "en", "fr", "es", "pt", "da", "de", "el", "fi", "it", "nl", "no", "pl", "ru", "sv", "tr" };
 
-            //Save sentiment and language metadata into dictionary
-            originalTweets["sentiment"] = sentiment;
-            originalTweets["sentimentBin"] = sentimentBin;
-            originalTweets["sentimentPosNeg"] = sentimentPosNeg;
-        }
-        else
+        originalTweets["lang"] = tweet.TweetLanguageCode.ToString();
+        originalTweets["sentimentPosNeg"] = "Undefined";
+        foreach (string language in languagesSupported)
         {
-            originalTweets["sentimentPosNeg"] = "Undefined";
+            if(language == originalTweets["lang"])
+            {
+                {
+                    //log.Info("********************ParseTweet**************************" + tweet.TweetId.ToString());
+                    string sentiment = await MakeSentimentRequest(tweet);
+                    //log.Info("********************ParseTweet************************** Sentiment: " + sentiment);
+                    sentiment = (double.Parse(sentiment) * 2 - 1).ToString(CultureInfo.InvariantCulture);
+                    string sentimentBin = (Math.Floor(double.Parse(sentiment) * 10) / 10).ToString(CultureInfo.InvariantCulture);
+                    string sentimentPosNeg = String.Empty;
+                    if (double.Parse(sentimentBin) > 0.1)
+                    {
+                        sentimentPosNeg = "Positive";
+                    }
+                    else if (double.Parse(sentimentBin) < -0.1)
+                    {
+                        sentimentPosNeg = "Negative";
+                    }
+                    else
+                    {
+                        sentimentPosNeg = "Neutral";
+                    }
+
+                    //Save sentiment and language metadata into dictionary
+                    originalTweets["sentiment"] = sentiment;
+                    originalTweets["sentimentBin"] = sentimentBin;
+                    originalTweets["sentimentPosNeg"] = sentimentPosNeg;
+                }
+            }
         }
 
         // Work out account and tweet direction for retweets
@@ -219,7 +240,7 @@ public class TweetHandler
         processedTweets["dateorig"] = DateTime.Parse(ts.Year.ToString() + " " + ts.Month.ToString() + " " + ts.Day.ToString() + " " + ts.Hour.ToString() + ":" + ts.Minute.ToString() + ":" + ts.Second.ToString()).ToString(CultureInfo.InvariantCulture);
         processedTweets["minuteofdate"] = DateTime.Parse(ts.Year.ToString() + " " + ts.Month.ToString() + " " + ts.Day.ToString() + " " + ts.Hour.ToString() + ":" + ts.Minute.ToString() + ":00").ToString(CultureInfo.InvariantCulture);
         processedTweets["hourofdate"] = DateTime.Parse(ts.Year.ToString() + " " + ts.Month.ToString() + " " + ts.Day.ToString() + " " + ts.Hour.ToString() + ":00:00").ToString(CultureInfo.InvariantCulture);
-        
+
 
         //Save media and follower metadata about processed tweets
         processedTweets["authorimage_url"] = tweet.UserDetails.ProfileImageUrl;
@@ -304,6 +325,7 @@ public class TweetHandler
         {
             connection.Open();
             var command = new SqlCommand(sqlQuery, connection);
+            //log.Info("*********************************ExecuteSqlNonQuery************************** Query: " + sqlQuery);
             command.ExecuteNonQuery();
         }
     }
@@ -314,6 +336,7 @@ public class TweetHandler
         using (SqlConnection connection = new SqlConnection(connectionString.ToString()))
         {
             connection.Open();
+            //log.Info("*********************************ExecuteSqlScalar************************** Query: " + sqlQuery);
             var command = new SqlCommand(sqlQuery, connection);
             return (int)command.ExecuteScalar();
         }
@@ -354,7 +377,10 @@ public class TweetHandler
             {
                 ExecuteSqlNonQuery(generateSQLQuery("pbist_twitter.tweets_normalized", originalTweets));
             }
-            catch (Exception e) { }
+            catch (Exception e)
+            {
+                //log.Info("******************Exception******************** Message:" + e);
+            }
         }
     }
 
@@ -363,11 +389,12 @@ public class TweetHandler
     {
         string sqlQueryGenerator = $"insert into " + tableName + "(" +
                                    String.Join(", ", dictionary.Select(x => x.Key)) + ")" + " VALUES " + "('" +
-                                   String.Join("','", dictionary.Select(x => {
+                                   String.Join("',N'", dictionary.Select(x => {
                                        if (string.IsNullOrEmpty(x.Value))
                                        {
                                            return x.Value;
                                        }
+                                       //log.Info("********************generateSQLQuery************************** Text: " + x.Value);
                                        return x.Value.Replace("'", "''");
                                    })) + "')";
         return sqlQueryGenerator;
@@ -460,7 +487,7 @@ public class TweetHandler
         };
 
         //Request headers
-        string subscriptionKey = System.Configuration.ConfigurationManager.ConnectionStrings["subscriptionKey"].ConnectionString;
+        string subscriptionKey = System.Configuration.ConfigurationManager.ConnectionStrings["apiKey"].ConnectionString;
         client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
         var uri = "https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/sentiment";
         //Request body
@@ -501,4 +528,3 @@ public class Sentiment
     [JsonProperty(PropertyName = "documents")]
     public List<Document> documents { get; set; }
 }
-

@@ -20,103 +20,161 @@ Please contact <PBISolnTemplates@microsoft.com> for any questions or issues with
 
 # Architecture
 There are two architectures supporting the solution template:
--	Import data into Power BI
--	Live connection from Analysis Services
+-   Azure
+-	On-premise
 
-In both architectures, new and changed records are pulled from Salesforce to populate a SQL database (how data is pulled and SQL database are described in later sections) after which the approach differs.
+For Azure installations, all that is required is an Azure subscription (athough an existing Azure SQL DB can be used if available.)
+This has all the advantages of Software as a Service where you pay as you go. All the patching and upkeep is handled for you. You can also later publish your reports to PowerBi.com.
+
+The on-premise option encompasses on-premises SQL Server and SQL Server running on an Azure virtual machine. You are responsible for providing the hardware and SQL Server to host the extracted Sales for Dynamics 365 data. 
+as well as all patching and upkeep. Publishing reports to PowerBI.com will require a separate installation of a gateway.
+
+In both architectures, new and changed records are pulled from Dynamics 365 to populate a destination database (how data is pulled and SQL database are described in later sections) after which the approach differs.
+
+For Azure installations, there are two options for how Power BI accesses the Sales for Dynamics 365 data:
+-	Import data into Power BI
+-	Live connection from Azure Analysis Services (not available for on-premise deployments)
 
 The Import data into Power BI option (henceforth termed the import option) is where the data is pulled out of the SQL database to populate the model in Power BI. On every refresh, all the data is pulled out of the SQL database to refresh the Power BI model. When the model is published to Power BI, the data will be resident in the Power BI service:
 
+
 ![ImportDataOption](Resources/Images/ImportDataOption.png)
 
-The Live Connection from Analysis Services (henceforth termed the AS option) is where the data is pulled from the SQL database to populate an Analysis Services tabular model. The Power BI reports are bound to the Analysis Services tabular model instead of directly to the SQL Database.
+The Live Connection from Azure Analysis Services (henceforth termed the AAS option) is where the data is pulled from the SQL database to populate an Analysis Services tabular model. The Power BI reports are bound to the Analysis Services tabular model instead of directly to the SQL Database. 
 
 ![SSASOption](Resources/Images/SSASOption.png)
 
 When the model is published to Power BI, the data stays in Analysis Services and does not move with it to the Power BI service. Viewing published reports results in queries sent to Analysis Services from the Power BI service:
 The Import option is recommended when:
--	The amount of data in Power BI is less than the 1 GB limit (remember, this is a compressed size representing a data volume roughly 10x this size, or 10GB of Salesforce data.
+-	The amount of data in Power BI is less than the 1 GB limit (remember, this is a compressed size representing a data volume roughly 10x this size, or 10GB of Dynamics 365 data.
 
 The AS option is recommended when:
 -	The amount of data in Power BI is greater than 1 GB or might be greater than 1 GB in the future.
--	You want your data to stay in your control and not move to Azure when the Power BI reports are published.
--	You want the data available for reporting with other tools in addition to Power BI that can take advantage of Analysis Service's capabilities.
-
-If you're in doubt, choose the Import option. It's simpler.
+-   You need the extra performance available with Azure Analysis Services service tiers
+-	You want the data available for reporting with other tools in addition to Power BI that can take advantage of Analysis Service’s capabilities.
 
 # System Requirements
 Setting up the template requires the following:
--	SQL Server Database 2008 R2 or later, or an Azure Subscription with an Azure SQL Database
+-	Azure Subscription
 -	Power BI Desktop (latest version)
 -	Power BI Pro (to share the template with others)
 -	A Salesforce account
--	SQL Server Analysis Services 2008 R2 (only required for the AS option). Note that in SQL Server 2016, the Standard edition can be used for the solution template. For earlier versions, Enterprise edition is required. More details on SSAS tabular model features available in SQL Server 2016 can be found [here](https://msdn.microsoft.com/en-us/library/cc645993.aspx).
 
 # How to Install
 Installing the Sales Management solution template for Salesforce configures the following:
--	Data extraction (Informatica, Scribe or Azure Data Factory)
--	SQL Server database or Azure SQL Database
--	SQL Server Analysis Services (optional)
--	Power BI Desktop file (SalesManagement.pbix)
+-	Data extraction (Azure Data Factory, Informatica, or Scribe)
+-	SQL Server database or Azure SQL Database (an existing Azure SQL DB can be used or a new instance can be created during provisioning)
+-	Azure Analysis Services (optional)
+-	Power BI report
+
 The detailed description of each component of the architecture is below. To get started, navigate to the Power BI solution templates from the Solutions menu on powerbi.com:
 
 ![Solutions Menu](Resources/Images/SolutionsMenu.png)
 From there, select the Sales Management for Salesforce solution template and click the "Install now" button.
 
-There are three distinct flows for the installation:
+There are two distinct flows for the installation:
 
-**Azure SQL DB installation**: This has all the advantages of Software as a Service where you pay as you go. All the patching and upkeep is handled for you. You can also later publish your reports to PowerBi.com without having to install a gateway (more on this later).
+**Azure installation**: This has all the advantages of Software as a Service where you pay as you go. All the patching and upkeep is handled for you. You can also later publish your reports to PowerBi.com without having to install a gateway (more on this later).
 
 **On-premises installation**: This encompasses the option for on-premises SQL Server and SQL Server running on an Azure virtual machine. In the first case data will be moved to an instance of an on-premises SQL Server (i.e. SQL Server on hardware you own and that you maintain). The second option consists of SQL Server running on an Azure virtual machine. In this architecture, you are responsible for all patching and upkeep.
 
-**Analysis Services installation**: This option is the same as the on-premises installation with the addition of a dedicated tabular model.
+## Architecture Choices
 
-## Step 1: Architecture Choices
-There are three choices for moving the data - Informatica, Scribe or Azure Data Factory. For Informatica and Scribe one can either create a new account or use an existing one, on a later page. Both partners provide a free evaluation period of three months.
 
 _Note: Azure Data Factory is currently only supported for Azure SQL Database._
 
 ![Solutions Menu](Resources/Images/ArchChoices.png)
-Once the ETL provider is chosen, the architecture option is selected - the default choice is Azure SQL.
 
-_Note: SQL Server Analysis Services is not yet supported with Azure SQL Database_
+The on-premise architecture requires the configuration of an on-premises SQL Server or SQL Server on an Azure virtual machine and a windows installer is required for this change.
+A "Download" button appears. Click this to download an installer for the solution template.
 
-If the selected architecture requires the configuration of an on-premises SQL Server or SQL Server on an Azure virtual machine, a "Download" button appears. Click this to download an installer for the solution template.
+For Azure installation, continue to step 2a. For on-premise installation, jump to step 2b,
 
-If a dedicated Analysis Services model is preferred, please select "Live Query from Analysis Services" for question 2. Click the "Download" button at the bottom of the page to download the installer for the solution template.
-![Solutions Men222u](Resources/Images/ArchChoices.png)
 
+
+### Azure Installation Instructions
+
+#### Step 1 Connect to Azure
+
+Connect to Azure to grant the provisioning application th permissions to create resources in your subscription on your behalf.
+![AzureConnect](Resources/Images/ConnectAzure.png)
+
+Once authenticated, select the azure subscription where any resources will be created:
+![AzureConnect2](Resources/Images/ConnectAzure2.png)
+
+The advanced option allows the name of the resource group to be changed from its default value. 
+
+
+#### Step 2 Connect to Salesforce
+Provide your Salesforce credentials to gain access to Salesforce. The security token will have been sent to you when your credentials were first created and with each password change. If you do not know this token, connect directly to Salesforce and generate a new token.
+The Salesforce login URL normally does not need to be changed from the default <https://login.salesforce.com>. Change this to <https://test.salesforce.com> if you are testing against a sandbox (a copy of your production environment used for testing and development).
+
+![Connect to Salesforce](Resources/Images/ConnectSalesforce.png)
+
+#### Step 3 Select how to Move Data
+Decide how you want to move data. The options are :
+- Azure Data Factory (default)
+- Scribe 
+- Informatica
+
+![Connect to Salesforce](Resources/Images/MoveData.png)
+
+If Scribe or Informatica are selected, your account information will be required.
+
+#### Step 4 Configure Azure SQL DB Target
+
+Connect to an existing SQL Server or provide details which the application will use to spin up an Azure SQL on your behalf. Only Azure SQL is supported for this template. If a user chooses to spin up a new Azure SQL, this will get deployed in their Azure subscription inside the newly created resource group.
+![ConnectSQL](Resources/Images/ConnectAzureSQL.png)
+
+
+Expand the advanced option to change the Azure SQL Database service tier or data center location.
+
+
+_Important note_: If you use an existing Azure SQL DB, you **_must_** safelist your client IP address shown on this page in the Azure portal before you continue.
+If you do not, you will not be able to read data from Azure SQL DB to populate the Power BI file. To safe-list the IP addresses, follow the instructions [here](https://azure.microsoft.com/en-us/documentation/articles/sql-database-configure-firewall-settings/).
+
+Click “Next” to continue.
+
+
+#### Step 5 Azure Analysis Services Election
+
+Choose whether Azure Analysis Services is to be used in the solution.c
+
+![ChooseAAS](Resources/Images/AzureASOption.png)
+
+
+#### Step 6 Configure Azure Analysis Services (optional)
+If Azure Analysis Services was chosen, create a new instance of Analysis Services or use an existing one.
+
+![ConnectAAS](Resources/Images/AzureASConnect.png)
+
+For new instances, select the Azure Analysis Services service tier. Learn more about Azure Analysis Services service
+ tiers [here](https://azure.microsoft.com/en-us/pricing/details/analysis-services/)
+
+ The credentials provided are used as the system administrator for the Azure Analysis Services instance. When connecting to this instance, these credentials must be used (unless other users have been provided access separately).
+
+
+#### Step 6 Tailor your Sales Management solution template for Salesforce
+Provide the starting month of your fiscal calendar. This is required for fiscal year calculations in the Power BI file.
+
+![Customize](Resources/Images/Customize.png)
+
+The refresh option is not provided for Azure Data factory was selected as changes replicated in real-time with this option.
+
+When Azure Data factory is selected as the ETL provider, an additional field will be made available for emails. This is optional, and configures an alert system to notify the user if slices have failed.
+
+
+## Step 9a: Track Progress
+The next several steps actually provision the soluution template. 
+![Track Prog](Resources/Images/TrackProgress.png)
+
+
+Once data starts moving, a Power BI file can be downloaded that is bound to the Azure SQL database or Analysus Services instance specified earlier.  The Power BI report file (or pbix file) is pre-bound to the data destination (either Azure SQL Server or Azure Analysis Services). Follow the instructions on the first page in the report to show your data.
+
+### On-premise Installation Instructions
 
 
 ## Step 2: Connect to ETL Account
-### Step 2a: Connect to ETL provider for Azure SQL Destination
-_Complete this step when an Azure SQL DB is used to host the Salesforce data; otherwise use step 2b._
-
-No software need be installed when the data is moved to a SQL Azure DB. There are three providers available for Azure SQL Destination:
-- Microsoft Azure Data Factory or ADF - a cloud-based data integration service that automates the movement and transformation of data.
-- Informatica - Leverages the Informatica Cloud Integration Platform to move data from Salesforce to Azure SQL
-- Scribe -  Uses Scribe’s cloud-based platform for Salesforce connectivity
-
-For ADF, simply connect to Azure and the necessary services are automatically created and configured for you:
-![AzureConnect](Resources/Images/ConnectAzure.png)
-
-For Informatica and Scribe, a cloud agent is automatically set up and used to move the data. This makes for a simpler installation and administration in the future.
-
-![Get Started](Resources/Images/ConnectInformatica.png)
-
-The screenshot above shows the page for creating a new Informatica account. The experience for creating a new Scribe account is the same.
-
-For new accounts, enter the required information. Learn more about Informatica accounts [here](https://www.informatica.com/informaticaforpowerbi) and new Scribe accounts [here](http://www.scribesoft.com/solutions/analyticsbusiness-intelligence/microsoft-power-bi/). Select "Create Account". For existing accounts, enter your credentials and click "Validate".
-
-Select the Organization in the dropdown. Then select the "Informatica Cloud Hosted Agent" for Informatica:
-![Choose Org and Agent](Resources/Images/InfaOrg.png)
-
-For Scribe, the agent is automatically selected for you behind the scenes and is not shown.
-
-Click "Next" to continue.
-
-## Step 2b: Connect to ETL provider for SQL Server destination/SQL Server with SSAS
-_Complete this step when an SQL Server either on-premises or in an Azure VM is used to host the Salesforce data; otherwise use step 2a._
 
 All ETL providers require an agent to be installed to move data from Salesforce to the on-premises SQL Server or to SQL Server on an Azure VM. The agent can be installed on any machine with access to the destination but it is recommended to install the agent on the same machine.
 
@@ -156,31 +214,8 @@ The Salesforce login URL normally does not need to be changed from the default <
 ![Connect to Salesforce](Resources/Images/ConnectSalesforce.png)
 
  Validate your credentials and click "Next".
-## Step 4: Connect to SQL
-### Step 4a: Connect to Azure SQL
-_Follow this step for an Azure SQL database destination; otherwise, follow step 4B._
 
-Provide your Azure SQL Database credentials to gain access to the destination Azure SQL Database.
-
-![ConnectAzureSQL](Resources/Images/ConnectAzureSQL.png)
-
-Important note: You **_must_** safelist the IP addresses shown on this page in the Azure portal before you continue. Do not use the values from the screenshot above, but the values in the actual page. If you do not, the process will fail.
-The IP addresses must be safe-listed inside Azure SQL for the following reasons:
--	To allow the solution template web application to create the database structures in the Azure SQL DB required by the solution template.
--	To allow the ETL provider to insert data into the Azure SQL DB pulled from Salesforce
--	To allow your Power BI on your client machine to read data from Azure SQL DB
-
-If you are planning to use Power BI Desktop from a different machine than the current machine, you must discover the IP address that machine exposes to Azure and safe-list this as well.
-
-_Special note: Your machine may not expose the same IP address to Azure that you discover via the ipconfig command._
-
-To safe-list the IP addresses, follow the instructions [here](https://azure.microsoft.com/en-us/documentation/articles/sql-database-configure-firewall-settings/).
-
-Enter the credentials for your Azure SQL DB, click validate, then choose the database to be used by the solution template and click "Next".
-
-### Step 4b: Connect to SQL Server Database/SQL Server Database with Analysis Services
-_Follow this step for an SQL Server database destination with or without SQL Server Analysis Services; otherwise, follow step 4a._
-
+### Step 4: Connect to SQL Server Database
 Provide your Azure SQL Database credentials to gain access to the destination SQL Server database. Click validate check your credentials.
 
 If SQL Server Analysis Services (SSAS) is used, enter an existing SSAS server name and the name of a new Analysis Services database. This SSAS database will be created on your behalf.
@@ -194,14 +229,8 @@ Provide the starting month of your fiscal calendar. This is required for fiscal 
 
 Define how often the data is refreshed from Salesforce. Note that the initial extraction can take some time - even up to a day. Once that is complete, subsequent extractions pull new and changed records only and complete very quickly.
 
-There are two options for how actual revenue is handled by the solution template:
--	Pulled from closed opportunities. When an opportunity is closed in Salesforce, the revenue for the actual sale can be provided. This is the default source for actual revenue
--	Keep blank. If actual revenue is to be pulled from a separate source such Dynamics CRM, SAP or some other application, choose this option. After you install the solution template, you can create a separate mechanism to populate these values (refer to the separate section on the data schema for where this data is to be populated).
-
-If you provide the base Salesforce URL, hyperlinks are created for each opportunity, lead and account to enable linking from Power BI reports directly into the related Salesforce object; e.g.
+Hyperlinks are created for each opportunity, lead and account to enable linking from Power BI reports directly into the related Salesforce object; e.g.
 <https://na30.salesforce.com>.
-
-When ADF is selected as the ETL provider, an additional field will be made available for emails. This is optional, and configures an alert system to notify the user if slices have failed.
 
 Click "Next" to continue.
 

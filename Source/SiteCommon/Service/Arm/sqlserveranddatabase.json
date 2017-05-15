@@ -15,6 +15,14 @@
       "defaultValue": "user",
       "type": "String"
     },
+    "Sku": {
+      "defaultValue": "user",
+      "type": "String"
+    },
+    "SqlLocation": {
+      "defaultValue": "user",
+      "type": "String"
+    },
     "Password": {
       "defaultValue": "password",
       "type": "String"
@@ -28,28 +36,28 @@
       "kind": "v12.0",
       "name": "[parameters('SqlServerName')]",
       "apiVersion": "2014-04-01-preview",
-      "location": "[resourceGroup().location]",
+      "location": "[parameters('SqlLocation')]",
       "properties": {
         "administratorLogin": "[parameters('Username')]",
         "administratorLoginPassword": "[parameters('Password')]",
         "version": "12.0"
       },
-      "resources": [ ],
-      "dependsOn": [ ]
+      "resources": [],
+      "dependsOn": []
     },
     {
       "type": "Microsoft.Sql/servers/databases",
       "kind": "v12.0,system",
       "name": "[concat( parameters('SqlServerName'), '/master')]",
       "apiVersion": "2014-04-01-preview",
-      "location": "[resourceGroup().location]",
+      "location": "[parameters('SqlLocation')]",
       "properties": {
         "edition": "System",
         "status": "Online",
         "collation": "SQL_Latin1_General_CP1_CI_AS",
         "containmentState": 2
       },
-      "resources": [ ],
+      "resources": [],
       "dependsOn": [
         "[resourceId('Microsoft.Sql/servers', parameters('SqlServerName'))]"
       ]
@@ -59,16 +67,17 @@
       "kind": "v12.0,user",
       "name": "[concat( parameters('SqlServerName'), '/' ,  parameters('SqlDatabaseName'))]",
       "apiVersion": "2014-04-01-preview",
-      "location": "[resourceGroup().location]",
+      "location": "[parameters('SqlLocation')]",
       "properties": {
-        "edition": "Standard",
+        //"edition": "Standard",
         "status": "Online",
-        "serviceLevelObjective": "S1",
+        "serviceLevelObjective": "[parameters('Sku')]",
         "collation": "SQL_Latin1_General_CP1_CI_AS",
+        "requestedServiceObjectiveName": "[parameters('Sku')]",
         "elasticPoolName": null,
         "containmentState": 2
       },
-      "resources": [ ],
+      "resources": [],
       "dependsOn": [
         "[resourceId('Microsoft.Sql/servers', parameters('SqlServerName'))]"
       ]
@@ -78,12 +87,12 @@
       "kind": "v12.0",
       "name": "[concat( parameters('SqlServerName'), '/AllowAzureServices')]",
       "apiVersion": "2014-04-01-preview",
-      "location": "[resourceGroup().location]",
+      "location": "[parameters('SqlLocation')]",
       "properties": {
         "startIpAddress": "0.0.0.0",
         "endIpAddress": "0.0.0.0"
       },
-      "resources": [ ],
+      "resources": [],
       "dependsOn": [
         "[resourceId('Microsoft.Sql/servers', parameters('SqlServerName'))]"
       ]
@@ -93,12 +102,12 @@
       "kind": "v12.0",
       "name": "[concat( parameters('SqlServerName'), '/pleasechangeme')]",
       "apiVersion": "2014-04-01-preview",
-      "location": "[resourceGroup().location]",
+      "location": "[parameters('SqlLocation')]",
       "properties": {
         "startIpAddress": "0.0.0.0",
         "endIpAddress": "255.255.255.255"
       },
-      "resources": [ ],
+      "resources": [],
       "dependsOn": [
         "[resourceId('Microsoft.Sql/servers', parameters('SqlServerName'))]"
       ]

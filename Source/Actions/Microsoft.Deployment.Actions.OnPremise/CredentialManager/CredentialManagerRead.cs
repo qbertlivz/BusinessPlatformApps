@@ -2,10 +2,12 @@
 using System.ComponentModel.Composition;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using Microsoft.Deployment.Common.ActionModel;
-using Microsoft.Deployment.Common.Actions;
+
 using Newtonsoft.Json.Linq;
 using Simple.CredentialManager;
+
+using Microsoft.Deployment.Common.ActionModel;
+using Microsoft.Deployment.Common.Actions;
 
 namespace Microsoft.Deployment.Actions.OnPremise.CredentialManager
 {

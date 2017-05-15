@@ -1,8 +1,10 @@
 ﻿using System.Web.Http;
+
 using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.Deployment.Common;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+
+using Microsoft.Deployment.Common;
 
 namespace Microsoft.Deployment.Site.Service
 {

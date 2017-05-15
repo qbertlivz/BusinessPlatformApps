@@ -14,12 +14,11 @@ namespace Microsoft.Deployment.Actions.Custom.CustomerData
             PartitionKey = "Simplement.SolutionTemplate.AR";
         }
 
-        public string FirstName;
-        public string LastName;
-        public string City;
-        public string State;
-        public string CompanyName;
-        public string DepartmentName;
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string CompanyName { get; set; }
+        public string DepartmentName { get; set; }
     }
-
 }

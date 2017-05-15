@@ -1,25 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.IO;
+using System.Data;
+using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading;
+using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.ActionModel;
-using Microsoft.Deployment.Actions.Salesforce.Models;
 using Microsoft.Deployment.Common.Helpers;
-using Microsoft.Azure;
-using Microsoft.Azure.Management.Resources;
-using Microsoft.Azure.Management.Resources.Models;
 using Microsoft.Deployment.Common.ErrorCode;
-using Microsoft.Deployment.Actions.Salesforce.Helpers;
-using System.Globalization;
-using System.Data;
-using System.Net.Http;
 
 namespace Microsoft.Deployment.Actions.Salesforce
 {
@@ -31,10 +22,10 @@ namespace Microsoft.Deployment.Actions.Salesforce
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var token = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
-            var subscription = request.DataStore.GetJson("SelectedSubscription")["SubscriptionId"].ToString();
+            var token = request.DataStore.GetJson("AzureToken", "access_token");
+            var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
-            var dataFactory = resourceGroup + "SalesforceCopyFactory";
+            var dataFactory = resourceGroup.Replace("_", string.Empty) + "SalesforceCopyFactory";
 
             var url = string.Format(getDatasetRelativeUrl, dataFactory);
 
@@ -52,9 +43,10 @@ namespace Microsoft.Deployment.Actions.Salesforce
 
             if (!connection.IsSuccessStatusCode)
             {
+                var result = connection.Content.ReadAsStringAsync().Result;
                 return new ActionResponse(ActionStatus.FailureExpected,
-                    JsonUtility.GetJObjectFromJsonString(connection.Content.ReadAsStringAsync().Result), null, DefaultErrorCodes.DefaultErrorCode,
-                    "Failed to get consent");
+                    JsonUtility.GetJObjectFromJsonString(result), null, DefaultErrorCodes.DefaultErrorCode,
+                    result);
             }
 
             var connectionData = JsonUtility.GetJObjectFromJsonString(connection.Content.ReadAsStringAsync().Result);
@@ -80,9 +72,10 @@ namespace Microsoft.Deployment.Actions.Salesforce
 
                         if (!sliceConnection.IsSuccessStatusCode)
                         {
+                            var result = connection.Content.ReadAsStringAsync().Result;
                             return new ActionResponse(ActionStatus.FailureExpected,
-                                JsonUtility.GetJObjectFromJsonString(connection.Content.ReadAsStringAsync().Result), null, DefaultErrorCodes.DefaultErrorCode,
-                                "Failed to get consent");
+                                JsonUtility.GetJObjectFromJsonString(result), null, DefaultErrorCodes.DefaultErrorCode,
+                                result);
                         }
 
                         var data = JsonUtility.GetJObjectFromJsonString(sliceConnection.Content.ReadAsStringAsync().Result);

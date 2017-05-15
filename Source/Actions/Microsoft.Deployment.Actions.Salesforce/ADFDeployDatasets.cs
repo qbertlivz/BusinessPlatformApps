@@ -1,21 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Microsoft.Deployment.Common.Actions;
-using Microsoft.Deployment.Common.ActionModel;
-using Microsoft.Deployment.Actions.Salesforce.Models;
-using Microsoft.Deployment.Common.Helpers;
+
 using Microsoft.Azure;
 using Microsoft.Azure.Management.Resources;
 using Microsoft.Azure.Management.Resources.Models;
-using Microsoft.Deployment.Common.ErrorCode;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
 using Microsoft.Deployment.Actions.Salesforce.Helpers;
+using Microsoft.Deployment.Actions.Salesforce.Models;
+using Microsoft.Deployment.Common.Actions;
+using Microsoft.Deployment.Common.ActionModel;
+using Microsoft.Deployment.Common.ErrorCode;
+using Microsoft.Deployment.Common.Helpers;
 
 namespace Microsoft.Deployment.Actions.Salesforce
 {
@@ -25,22 +26,15 @@ namespace Microsoft.Deployment.Actions.Salesforce
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             List<Task<ActionResponse>> task = new List<Task<ActionResponse>>();
-            var token = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
-            var subscription = request.DataStore.GetJson("SelectedSubscription")["SubscriptionId"].ToString();
+            var token = request.DataStore.GetJson("AzureToken", "access_token");
+            var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
-            string schema = "dbo";
 
             string postDeploymentPipelineType = request.DataStore.GetValue("postDeploymentPipelineType");
             string pipelineFrequency = request.DataStore.GetValue("pipelineFrequency");
             string pipelineInterval = request.DataStore.GetValue("pipelineInterval");
             string pipelineType = request.DataStore.GetValue("pipelineType");
-            string pipelineStart = request.DataStore.GetValue("pipelineStart");
-            string pipelineEnd = request.DataStore.GetValue("pipelineEnd");
             string connString = request.DataStore.GetValue("SqlConnectionString");
-
-            string sfUsername = request.DataStore.GetValue("SalesforceUser");
-            string sfPassword = request.DataStore.GetValue("SalesforcePassword");
-            string sfToken = request.DataStore.GetValue("SalesforceToken");
 
             if (!string.IsNullOrWhiteSpace(postDeploymentPipelineType))
             {
@@ -51,7 +45,7 @@ namespace Microsoft.Deployment.Actions.Salesforce
 
             string adfJsonData = request.DataStore.GetValue("ADFPipelineJsonData");
             var sqlCreds = SqlUtility.GetSqlCredentialsFromConnectionString(connString);
-
+            string dataFactoryName = resourceGroup.Replace("_", string.Empty) + "SalesforceCopyFactory";
             var obj = JsonConvert.DeserializeObject(adfJsonData, typeof(DeserializedADFPayload)) as DeserializedADFPayload;
 
             foreach (var o in obj.fields)
@@ -59,25 +53,12 @@ namespace Microsoft.Deployment.Actions.Salesforce
                 var deploymentName = string.Concat("ADFDataset", pipelineType, o.Item1);
 
                 dynamic datasetParam = new AzureArmParameterGenerator();
-                datasetParam.AddStringParam("dataFactoryName", resourceGroup + "SalesforceCopyFactory");
-                datasetParam.AddStringParam("sqlServerName", sqlCreds.Server.Split('.')[0]);
-                datasetParam.AddStringParam("sqlServerUsername", sqlCreds.Username);
-                datasetParam.AddStringParam("targetDatabaseName", sqlCreds.Database);
-                datasetParam.AddStringParam("targetSqlSchema", schema);
+                datasetParam.AddStringParam("dataFactoryName", dataFactoryName);
                 datasetParam.AddStringParam("targetSqlTable", o.Item1);
-                datasetParam.AddStringParam("salesforceUsername", sfUsername);
                 datasetParam.AddStringParam("targetSalesforceTable", o.Item1);
-                datasetParam.AddStringParam("pipelineName", o.Item1 + "CopyPipeline");
-                datasetParam.AddStringParam("sqlWritableTypeName", o.Item1 + "Type");
-                datasetParam.AddStringParam("sqlWriterStoredProcedureName", "spMerge" + o.Item1);
-                datasetParam.AddStringParam("pipelineStartDate", pipelineStart);
-                datasetParam.AddStringParam("pipelineEndDate", pipelineEnd);
                 datasetParam.AddStringParam("sliceFrequency", pipelineFrequency);
                 datasetParam.AddStringParam("sliceInterval", pipelineInterval);
                 datasetParam.AddStringParam("pipelineType", pipelineType);
-                datasetParam.AddParameter("salesforcePassword", "securestring", sfPassword);
-                datasetParam.AddParameter("sqlServerPassword", "securestring", sqlCreds.Password);
-                datasetParam.AddParameter("salesforceSecurityToken", "securestring", sfToken);
 
                 var armTemplate = JsonUtility.GetJsonObjectFromJsonString(System.IO.File.ReadAllText(Path.Combine(request.Info.App.AppFilePath, "Service/ADF/datasets.json")));
                 var armParamTemplate = JsonUtility.GetJObjectFromObject(datasetParam.GetDynamicObject());

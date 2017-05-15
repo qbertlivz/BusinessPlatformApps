@@ -2,11 +2,13 @@
 using System.ComponentModel.Composition;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+
+using Newtonsoft.Json.Linq;
+using Simple.CredentialManager;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
-using Newtonsoft.Json.Linq;
-using Simple.CredentialManager;
 
 namespace Microsoft.Deployment.Actions.OnPremise.CredentialManager
 {
@@ -15,9 +17,9 @@ namespace Microsoft.Deployment.Actions.OnPremise.CredentialManager
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            string targetName = request.DataStore.GetValue("CredentialTarget2") ?? request.DataStore.GetValue("CredentialTarget");
-            string userName = request.DataStore.GetValue("CredentialUsername2") ?? request.DataStore.GetValue("CredentialUsername");
-            string password = request.DataStore.GetValue("CredentialPassword2") ?? request.DataStore.GetValue("CredentialPassword");
+            string targetName = request.DataStore.GetLastValue("CredentialTarget");
+            string userName = request.DataStore.GetLastValue("CredentialUsername");
+            string password = request.DataStore.GetLastValue("CredentialPassword");
 
             ActionResponse response = await RequestUtility.CallAction(request, "Microsoft-CredentialManagerDelete");
             if (response.Status == ActionStatus.Failure)

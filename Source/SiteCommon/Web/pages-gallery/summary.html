@@ -1,0 +1,31 @@
+﻿<template bindable="viewmodel">
+    <h1 class="st-title">${MS.Translate.SUMMARY_TITLE}</h1>
+    <p class="st-subtitle">${MS.Translate.SUMMARY_SUBTITLE}</p>
+
+    <div class="st-float st-text">
+        <div class="st-verify" repeat.for="row of summaryRows">
+            <div class="st-verify-content" repeat.for="entry of row.entries">
+                <div class="semiboldFont st-verify-text">${entry.text}:</div>
+                <div class="smallFontSize st-verify-text">${entry.value}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="st-float st-text">
+        <span if.bind="displayCompletionNotification">${MS.Translate.SUMMARY_NOTIFICATION}</span>
+        <p>${MS.Translate.SUMMARY_EMAIL_ADDRESS}</p>
+        <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="emailAddress">
+        <div class="st-label-wrapper" if.bind="displayCompletionNotification">
+            <label class="st-label">
+                <input type="checkbox" tabindex="-1" checked.bind="sendCompletionNotification" disabled.bind="MS.HttpService.isServiceBusy">
+                <span class="smallFontSize">${MS.Translate.SUMMARY_SEND_COMPLETION_NOTIFICATION}</span>
+            </label>
+        </div>
+        <div class="st-label-wrapper">
+            <label class="st-label">
+                <input type="checkbox" tabindex="-1" checked.bind="sendMarketingMail" disabled.bind="MS.HttpService.isServiceBusy">
+                <span class="smallFontSize">${MS.Translate.SUMMARY_SEND_MARKETING_MAIL}</span>
+            </label>
+        </div>
+    </div>
+</template>

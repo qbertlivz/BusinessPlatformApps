@@ -1,11 +1,14 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Microsoft.Azure;
 using Microsoft.Azure.Management.Resources;
 using Microsoft.Azure.Management.Resources.Models;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Enums;
@@ -20,9 +23,12 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureSql
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var azureToken = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
-            var subscription = request.DataStore.GetJson("SelectedSubscription")["SubscriptionId"].ToString();
+            var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
+            var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
+
+            var location = request.DataStore.GetLastValue("SqlLocation") ?? "westus";
+            var databaseTier = request.DataStore.GetLastValue("SqlSku") ?? "S1";
 
             string server = request.DataStore.GetJson("SqlCredentials").SelectToken("Server")?.ToString();
             string user = request.DataStore.GetJson("SqlCredentials").SelectToken("User")?.ToString();
@@ -35,7 +41,9 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureSql
             param.AddStringParam("SqlServerName", serverWithoutExtension);
             param.AddStringParam("SqlDatabaseName", database);
             param.AddStringParam("Username", user);
-            param.AddParameter("Password", "securestring", password);            
+            param.AddParameter("Password", "securestring", password);
+            param.AddStringParam("Sku", databaseTier);
+            param.AddStringParam("SqlLocation", location);
 
             var armTemplate = JsonUtility.GetJObjectFromJsonString(System.IO.File.ReadAllText(Path.Combine(request.ControllerModel.SiteCommonFilePath, "Service/Arm/sqlserveranddatabase.json")));
             var armParamTemplate = JsonUtility.GetJObjectFromObject(param.GetDynamicObject());
@@ -98,8 +106,15 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureSql
                 Database = database
             };
 
+            request.Logger.LogResource(request.DataStore, server,
+                DeployedResourceType.SqlServer, CreatedBy.BPST, DateTime.UtcNow.ToString("o"));
+
+
+            request.Logger.LogResource(request.DataStore, database,
+                DeployedResourceType.SqlServer, CreatedBy.BPST, DateTime.UtcNow.ToString("o"), string.Empty, databaseTier);
+
             var connectionStringResponse = SqlUtility.GetConnectionString(credentials);
-            return new ActionResponse(ActionStatus.Success, JsonUtility.CreateJObjectWithValueFromObject(connectionStringResponse));
+            return new ActionResponse(ActionStatus.Success, JsonUtility.CreateJObjectWithValueFromObject(connectionStringResponse), true);
         }
     }
 }

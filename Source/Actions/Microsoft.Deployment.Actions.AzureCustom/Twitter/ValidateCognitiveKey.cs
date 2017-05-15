@@ -3,6 +3,7 @@ using System.ComponentModel.Composition;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
@@ -15,7 +16,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             //Request headers
-            var subscriptionKey = request.DataStore.GetValue("subscriptionKey");
+            var subscriptionKey = request.DataStore.GetValue("CognitiveServiceKey");
             Dictionary<string, string> customHeader = new Dictionary<string, string>();
             customHeader.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
 
@@ -38,7 +39,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
             }
 
             return new ActionResponse(ActionStatus.Failure);
-
         }
     }
 }

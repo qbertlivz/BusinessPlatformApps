@@ -18,6 +18,21 @@ CREATE TABLE pbist_twitter.[configuration]
 );
 
 
+CREATE TABLE pbist_twitter.tweets_normalized
+(
+    masterid        NCHAR(25) NOT NULL PRIMARY KEY,-- foreign key references tweets_processed(masterid),
+    mentions        INT,
+    hashtags        INT,
+    tweet           NCHAR(200),
+    twitterhandle   NCHAR(100),
+    usernumber      NCHAR(100),
+    sentiment       FLOAT,
+    sentimentbin    FLOAT,
+    sentimentposneg NCHAR(10),
+    lang            NCHAR(4),
+    accounttag      NCHAR(25)
+);
+
 CREATE TABLE pbist_twitter.tweets_processed
 (
     tweetid          NCHAR(20) NOT NULL PRIMARY KEY,
@@ -38,22 +53,6 @@ CREATE TABLE pbist_twitter.tweets_processed
     user_friends     INT,
     user_favorites   INT,
     user_totaltweets INT
-);
-
-
-CREATE TABLE pbist_twitter.tweets_normalized
-(
-    masterid        NCHAR(25) NOT NULL PRIMARY KEY,-- foreign key references tweets_processed(masterid),
-    mentions        INT,
-    hashtags        INT,
-    tweet           NCHAR(200),
-    twitterhandle   NCHAR(100),
-    usernumber      NCHAR(100),
-    sentiment       FLOAT,
-    sentimentbin    FLOAT,
-    sentimentposneg NCHAR(10),
-    lang            NCHAR(4),
-    accounttag      NCHAR(25)
 );
 ALTER TABLE pbist_twitter.tweets_processed ADD CONSTRAINT ck_masteridconst FOREIGN KEY (masterid) REFERENCES pbist_twitter.tweets_normalized(masterid);
 
@@ -94,3 +93,43 @@ CREATE TABLE pbist_twitter.authormention_graph
 );
 ALTER TABLE pbist_twitter.authormention_graph ADD CONSTRAINT ck_tweetmentiongraph FOREIGN KEY(tweetid) REFERENCES pbist_twitter.tweets_processed(tweetid);
 
+
+CREATE TABLE pbist_twitter.minimum_tweets
+(
+    MinimumTweets SMALLINT NOT NULL
+);
+
+
+CREATE TABLE pbist_twitter.twitter_query
+(
+    Id            INT NOT NULL PRIMARY KEY,
+    IsAdvanced    NCHAR(20) NOT NULL,
+    QueryString   NVARCHAR(MAX) NOT NULL,
+    TweetId       NCHAR(20) NULL
+);
+
+
+CREATE TABLE pbist_twitter.twitter_query_readable
+(
+    Id            INT NOT NULL PRIMARY KEY,
+    QueryId       INT NOT NULL,
+    QueryReadable NVARCHAR(MAX) NOT NULL,
+    Query         NVARCHAR(MAX) NOT NULL
+);
+
+
+CREATE TABLE pbist_twitter.twitter_query_details
+(
+    Id         INT NOT NULL PRIMARY KEY,
+    ReadableId INT NOT NULL,
+    Operator   NVARCHAR(MAX) NOT NULL,
+    Operand    NVARCHAR(MAX) NOT NULL
+);
+
+CREATE TABLE [pbist_twitter].[entityinitialcount](
+	[entityname] [nvarchar](40) NULL,
+	[initialcount] INT NULL,
+	[lastcount] INT NULL,
+	[lasttimestamp] DATETIME2 NULL
+);
+GO

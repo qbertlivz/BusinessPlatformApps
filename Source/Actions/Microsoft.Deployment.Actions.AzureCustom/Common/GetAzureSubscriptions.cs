@@ -1,11 +1,14 @@
-﻿using System.ComponentModel.Composition;
+﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Dynamic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
+
 using Hyak.Common;
 using Microsoft.Azure;
 using Microsoft.Azure.Subscriptions;
+using Microsoft.Azure.Subscriptions.Models;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 
@@ -16,13 +19,29 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var azureToken = request.DataStore.GetJson("AzureToken")["access_token"].ToString();
+            var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
 
             CloudCredentials creds = new TokenCloudCredentials(azureToken);
-            Microsoft.Azure.Subscriptions.SubscriptionClient client = new SubscriptionClient(creds);
-            var subscriptionList = (await client.Subscriptions.ListAsync(new CancellationToken())).Subscriptions.ToList();
             dynamic subscriptionWrapper = new ExpandoObject();
-            subscriptionWrapper.value = subscriptionList;
+
+            List<Subscription> validSubscriptions = new List<Subscription>();
+
+            using (SubscriptionClient client = new SubscriptionClient(creds))
+            {
+                SubscriptionListResult subscriptionList = await client.Subscriptions.ListAsync();
+
+                foreach (Subscription s in subscriptionList.Subscriptions)
+                {
+                    if (s.State.Equals("Disabled", System.StringComparison.OrdinalIgnoreCase) || s.State.Equals("Deleted", System.StringComparison.OrdinalIgnoreCase))
+                        continue;
+
+                    validSubscriptions.Add(s);
+                }
+                
+                subscriptionWrapper.value = validSubscriptions;
+            }
+
+            request.Logger.LogEvent("GetAzureSubscriptions-result", new Dictionary<string, string>() {  { "Subscriptions", string.Join(",", validSubscriptions.Select(p => p.SubscriptionId)) }  });
             return new ActionResponse(ActionStatus.Success, subscriptionWrapper);
         }
     }

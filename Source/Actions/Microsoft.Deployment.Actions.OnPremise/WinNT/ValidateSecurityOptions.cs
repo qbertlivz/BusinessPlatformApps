@@ -1,9 +1,12 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.Threading.Tasks;
+
+using Microsoft.Win32;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
-using Microsoft.Win32;
 
 namespace Microsoft.Deployment.Actions.OnPremise.WinNT
 {
@@ -13,18 +16,35 @@ namespace Microsoft.Deployment.Actions.OnPremise.WinNT
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            using (RegistryKey key = Registry.LocalMachine.OpenSubKey("SYSTEM\\CurrentControlSet\\Control\\Lsa"))
+            request.Logger.LogEvent("OSVersion", new System.Collections.Generic.Dictionary<string, string> { { "osVersion", NTHelper.OsVersion } });
+
+            RegistryKey key = null;
+            try
             {
+                key = Registry.LocalMachine.OpenSubKey("SYSTEM\\CurrentControlSet\\Control\\Lsa");
                 if (key == null)
                     return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
 
                 object v = key.GetValue("disabledomaincreds");
-
-                if (v != null && (int)v == 1)
+                if (v != null && (int)v != 0)
+                {
+                    request.Logger.LogCustomProperty("DISABLEDOMAINCREDS", v.ToString());
                     return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "DisabledDomainCredsEnabled");
+                }
+                return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
             }
-
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            catch (Exception e)
+            {
+                return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), e, null);
+            }
+            finally
+            {
+                if (key != null)
+                {
+                    // The key was opened read only
+                    key.Dispose();
+                }
+            }
         }
     }
 }

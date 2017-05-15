@@ -3,19 +3,15 @@
 export class CognitiveText extends ViewModelBase {
     isBingChecked: boolean = false;
 
-    constructor() {
-        super();
-        this.isValidated = false;
-    }
-
     verifyBing() {
         this.isValidated = this.isBingChecked;
     }
 
+    async OnLoaded(): Promise<void> {
+        this.isValidated = this.isBingChecked;
+    }
+
     async NavigatingNext(): Promise<boolean> {
-        if (!super.NavigatingNext()) {
-            return false;
-        }
         let body: any = {};
         body.CognitiveServices = "TextAnalytics";
         body.CognitiveLocation = "westus";

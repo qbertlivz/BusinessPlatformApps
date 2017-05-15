@@ -16,11 +16,10 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var azureToken = request.DataStore.GetJson("AzureToken");
+            var azureToken = request.DataStore.GetJson("AzureTokenAS");
             var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
 
-            JObject graphToken = AzureTokenUtility.GetTokenForResource(request, azureToken, "https://graph.windows.net");
-
+            JObject graphToken = AzureTokenUtility.GetTokenForResourceFromExistingToken("as", request.Info.WebsiteRootUrl, azureToken, "https://graph.windows.net");
             var tenantId = AzureUtility.GetTenantFromToken(request.DataStore.GetJson("AzureToken"));
 
             // Generate new key for ClientSecret

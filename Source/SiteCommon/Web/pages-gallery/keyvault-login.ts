@@ -30,15 +30,11 @@ export class KeyVaultLogin extends AzureLogin {
                     this.MS.ErrorService.showContactUs = true;
                     return;
                 }
-                var tokenObj = {
-                    code: token
-                };
+
+                var tokenObj: any = { code: token, oauthType: this.oauthType };
                 this.authToken = await this.MS.HttpService.executeAsync('Microsoft-GetAzureToken', tokenObj);
                 if (this.authToken.IsSuccess) {
-                    this.MS.DataStore.addToDataStore('AzureTokenKV',
-                        this.authToken.Body.AzureToken,
-                        DataStoreType.Private);
-
+                    // The token will be added by the action - hence it was removed
                     this.hasToken = true;
                     this.isValidated = true;
                     this.showValidation = true;
@@ -49,9 +45,9 @@ export class KeyVaultLogin extends AzureLogin {
     }
 
     async connect(): Promise<void> {
-        this.MS.DataStore.addToDataStoreWithCustomRoute('dynamics365login-', 'oauthType', this.oauthType, DataStoreType.Public);
+        var tokenObj: any = { oauthType: this.oauthType };
         this.MS.DataStore.addToDataStore('AADTenant', 'common', DataStoreType.Public);
-        let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureAuthUri', {});
+        let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureAuthUri', tokenObj);
         window.location.href = response.Body.value;
     }
 

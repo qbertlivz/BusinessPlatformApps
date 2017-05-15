@@ -62,7 +62,10 @@
                 "oauthType": "mscrm",
                 "pricingCalculatorUrl": "$translate(INIT_D365_CALCULATOR)",
                 "pricingCost": "$translate(INIT_D365_PRICING_COST)",
-                "pricingUrl": "$translate(INIT_D365_PRICING_URL)"
+                "pricingUrl": "$translate(INIT_D365_PRICING_URL)",
+                "azureProviders": [
+                    "Microsoft.AnalysisServices"
+                ]
             },
             {
                 "displayname": "Login to the Key Vault",
@@ -92,34 +95,40 @@
                 "skip": "$dsall(azureSqlDisabled)[0]"
             },
             {
+                "displayname": "Login to Analysis Services",
+                "name": "$SiteCommon$/pages-gallery/as-login.html",
+                "oauthType": "as",
+                "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true' : 'false')"
+            },
+            {
                 "name": "$SiteCommon$/pages-gallery/ssas.html",
                 "displayname": "AAS Login",
                 "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true' : 'false')"
             },
             {
                 "displayname": "Customize",
-                "isValidated": true,
                 "name": "$SiteCommon$/pages-gallery/customize.html",
                 "showCrmUrl": true,
+                "isValidated": true,
                 "showValidation": false,
                 "sourceApplication": "DynamicsCRM"
             },
             {
-                "displayCompletionNotification": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')",
                 "displayname": "Summary",
                 "name": "$SiteCommon$/pages-gallery/summary.html",
-                "onNext": [
-                    {
-                        "name": "Microsoft-CrmGetEntityInitialCounts",
-                        "skip": "$run(this.MS.DataStore.getValue('DataMovement') === 'Scribe' ? false : true)"
-                    }
-                ],
                 "values": {
                     "Organization URL": "$(this.MS.DataStore.getValue('OrganizationUrl'))",
                     "Target Server": "$(this.MS.DataStore.getValue('Server'))",
                     "Target Database": "$(this.MS.DataStore.getValue('Database'))",
                     "Target Username": "$(this.MS.DataStore.getValue('Username'))"
-                }
+                },
+                "displayCompletionNotification": "$run(this.MS.DataStore.getValue('DataMovement') === 'Scribe' ? false : true)",
+                "onNext": [
+                    {
+                        "name": "Microsoft-CrmGetEntityInitialCounts",
+                        "skip": "$run(this.MS.DataStore.getValue('DataMovement') === 'Scribe' ? false : true)"
+                    }
+                ]
             },
             {
                 "datastoreEntriesToValidate": [

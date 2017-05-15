@@ -15,7 +15,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             string serverUrl = request.DataStore.GetValue("ASServerUrl");
-            var azureToken = request.DataStore.GetJson("AzureToken");
+            var azureToken = request.DataStore.GetJson("AzureTokenAS");
             string connectionString = GetASConnectionString(request, azureToken, serverUrl);
 
             return new ActionResponse(ActionStatus.Success);
@@ -33,7 +33,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
             Uri uri = new Uri(serverUrl);
             string resource = $"{Uri.UriSchemeHttps}://{uri.Host}";
 
-            var asToken = AzureTokenUtility.GetTokenForResource(request, azureToken, resource);
+            var asToken = AzureTokenUtility.GetTokenForResourceFromExistingToken("as", request.Info.WebsiteRootUrl, azureToken, resource);
             string asAccessToken = AzureUtility.GetAccessToken(asToken);
 
             if (!string.IsNullOrEmpty(asAccessToken))

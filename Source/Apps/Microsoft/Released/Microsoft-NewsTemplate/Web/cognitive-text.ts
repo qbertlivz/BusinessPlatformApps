@@ -3,12 +3,11 @@
 export class CognitiveText extends ViewModelBase {
     isBingChecked: boolean = false;
 
-    constructor() {
-        super();
-        this.isValidated = false;
+    verifyBing() {
+        this.isValidated = this.isBingChecked;
     }
 
-    verifyBing() {
+    async OnLoaded(): Promise<void> {
         this.isValidated = this.isBingChecked;
     }
 

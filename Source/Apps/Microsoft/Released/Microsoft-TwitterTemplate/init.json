@@ -21,7 +21,8 @@
             },
             {
                 "azureProviders": [
-                    "Microsoft.MachineLearning"
+                    "Microsoft.MachineLearning",
+                    "Microsoft.AnalysisServices"
                 ],
                 "bapiServices": [
                     "Microsoft.PowerApps"
@@ -31,6 +32,10 @@
                 "pricingCalculatorUrl": "$translate(INIT_TWITTER_PRICING_CALCULATOR_URL)",
                 "pricingCost": "$translate(INIT_TWITTER_PRICING_COST)",
                 "pricingUrl": "$translate(INIT_TWITTER_PRICING_URL)"
+            },
+            {
+                "displayname": "Cognitive API",
+                "name": "cognitive-text.html"
             },
             {
                 "displayname": "Source",
@@ -62,6 +67,12 @@
                 "skip": "$ds(azureSqlDisabled)"
             },
             {
+                "displayname": "Login to Analysis Services",
+                "name": "$SiteCommon$/pages-gallery/as-login.html",
+                "oauthType": "as",
+                "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true' : 'false')"
+            },
+            {
                 "displayname": "AAS Login",
                 "name": "$SiteCommon$/pages-gallery/ssas.html",
                 "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
@@ -79,10 +90,6 @@
                 "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(10))",
                 "uniqueIdFunction": "$save(this.MS.UtilityService.GetUniqueId(10))",
                 "asDatabase": "Twitter",
-                "datastoreEntriesToValidate": [
-                    "AzureToken",
-                    "SqlConnectionString"
-                ],
                 "displayname": "Deploy",
                 "filename": "$save('TwitterTemplate.pbix')",
                 "filenameSSAS": "TwitterAS.pbix",
@@ -124,11 +131,11 @@
                 "name": "Microsoft-CreatePowerAppSqlConnection",
                 "skip": "$run(this.MS.DataStore.getValue('SkipPowerApp') === 'true')"
             },
-            {
-                "displayname": "$translate(INIT_ACTION_DEPLOYING_POWERAPP)",
-                "name": "Microsoft-DeployPowerApp",
-                "skip": "$run(this.MS.DataStore.getValue('SkipPowerApp') === 'true')"
-            },
+            //{
+            //    "displayname": "$translate(INIT_ACTION_DEPLOYING_POWERAPP)",
+            //    "name": "Microsoft-DeployPowerApp",
+            //    "skip": "$run(this.MS.DataStore.getValue('SkipPowerApp') === 'true')"
+            //},
             {
                 "CognitiveServiceName": "TextCognitiveService",
                 "CognitiveServiceType": "TextAnalytics",
@@ -181,6 +188,10 @@
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_ASSETS)",
                 "name": "Microsoft-DeployTwitterCSharpFunctionAssets",
                 "subscriptionKey": "$dsall(CognitiveServiceKey)[0]"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_ASSETS)",
+                "name": "Microsoft-DeployTwitterCSharpFunctionAssets"
             },
             {
                 "DeploymentName": "LogicApp",

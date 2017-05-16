@@ -80,7 +80,7 @@ SELECT CASE
 	SET @StatusCode = 1 --Data pull is partially complete
 
 	
-DECLARE @CompletePercentage FLOAT;
+    DECLARE @CompletePercentage FLOAT;
     SELECT @CompletePercentage = Convert(float, [value])
     FROM psa.[configuration] WHERE configuration_group = 'SolutionTemplate' AND configuration_subgroup = 'Notifier' AND [name] = 'DataPullCompleteThreshold';
 
@@ -89,7 +89,7 @@ DECLARE @CompletePercentage FLOAT;
 	
 	SELECT p.[Percentage], p.[EntityName], i.lasttimestamp,  DATEDIFF(MINUTE, i.lasttimestamp, Sysdatetime()) AS [TimeDifference] INTO #entitiesComplete
     FROM #percentages p
-              INNER JOIN smgt.entityinitialcount i ON i.entityName = p.EntityName
+              INNER JOIN psa.entityinitialcount i ON i.entityName = p.EntityName
               WHERE 
 			  ((p.[Percentage] >= @CompletePercentage) AND DATEDIFF(MINUTE, i.lasttimestamp, Sysdatetime()) > 5) OR
 			  (p.[Percentage] >= 100) OR

@@ -18,7 +18,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            string azureToken = request.DataStore.GetJson("AzureToken", "access_token");
+            string azureToken = request.DataStore.GetJson("AzureTokenAS", "access_token");
             string subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             string resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
 

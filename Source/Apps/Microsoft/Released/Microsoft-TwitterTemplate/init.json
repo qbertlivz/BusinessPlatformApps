@@ -190,10 +190,6 @@
                 "subscriptionKey": "$dsall(CognitiveServiceKey)[0]"
             },
             {
-                "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_ASSETS)",
-                "name": "Microsoft-DeployTwitterCSharpFunctionAssets"
-            },
-            {
                 "DeploymentName": "LogicApp",
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_LOGIC_APP)",
                 "name": "Microsoft-DeployTwitterHistoricalLogicApp"

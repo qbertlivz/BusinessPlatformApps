@@ -132,7 +132,7 @@ export class SqlServer extends ViewModelBase {
         this.MS.DataStore.addToDataStore('SqlConnectionString', response.Body.value, DataStoreType.Private);
         this.MS.DataStore.addToDataStore('Server', this.getSqlServer(), DataStoreType.Public);
         this.MS.DataStore.addToDataStore('Username', this.username, DataStoreType.Public);
-        this.MS.DataStore.addToDataStore('Password', this.password, DataStoreType.Private);
+        this.MS.DataStore.addToDataStore('Password', '\'' + this.password + '\'', DataStoreType.Private);
 
         if (this.sqlInstance === 'ExistingSql') {
             this.MS.HttpService.executeAsync('Microsoft-ExistingSqlServer', { isInvisible: true });

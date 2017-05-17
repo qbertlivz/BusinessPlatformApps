@@ -17,6 +17,7 @@ using Microsoft.Deployment.Common.ErrorCode;
 using Microsoft.Deployment.Common.Helpers;
 using Microsoft.Deployment.Common.Enums;
 using System;
+using System.Data.SqlClient;
 
 namespace Microsoft.Deployment.Actions.Salesforce
 {
@@ -40,16 +41,20 @@ namespace Microsoft.Deployment.Actions.Salesforce
 
             string dataFactoryName = resourceGroup.Replace("_", string.Empty) + "SalesforceCopyFactory";
             var param = new AzureArmParameterGenerator();
-            var sqlCreds = SqlUtility.GetSqlCredentialsFromConnectionString(connString);
+
+            var sqlConn = new SqlConnectionStringBuilder(connString);
+
+            var sqlFqdn = (sqlConn.DataSource.Contains(":") && sqlConn.DataSource.Contains(",")) ? sqlConn.DataSource.Split(':')[1].Split(',')[0] : sqlConn.DataSource;
+
             param.AddStringParam("dataFactoryName", dataFactoryName);
-            param.AddStringParam("sqlServerFullyQualifiedName", sqlCreds.Server);
-            param.AddStringParam("sqlServerUsername", sqlCreds.Username);
-            param.AddStringParam("targetDatabaseName", sqlCreds.Database);
+            param.AddStringParam("sqlServerFullyQualifiedName", sqlFqdn);
+            param.AddStringParam("sqlServerUsername", sqlConn.UserID);
+            param.AddStringParam("targetDatabaseName", sqlConn.InitialCatalog);
             param.AddStringParam("salesforceUsername", sfUsername);
             param.AddStringParam("subscriptionId", subscription);
             param.AddStringParam("environmentUrl", sfUrl);
             param.AddParameter("salesforcePassword", "securestring", sfPassword);
-            param.AddParameter("sqlServerPassword", "securestring", sqlCreds.Password);
+            param.AddParameter("sqlServerPassword", "securestring", sqlConn.Password);
             param.AddParameter("salesforceSecurityToken", "securestring", sfToken);
 
             var armTemplate = JsonUtility.GetJsonObjectFromJsonString(System.IO.File.ReadAllText(Path.Combine(request.Info.App.AppFilePath, "Service/ADF/linkedServices.json")));

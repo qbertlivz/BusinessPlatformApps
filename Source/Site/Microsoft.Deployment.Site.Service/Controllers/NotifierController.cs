@@ -22,13 +22,15 @@ namespace Microsoft.Deployment.Site.Service.Controllers
     {
         [HttpPost]
         public async Task<HttpResponseMessage> PostDeploymentId()
-        {
+        {           
             try
             {
+                var resp = new HttpResponseMessage();
                 var body = this.Request.Content.ReadAsStringAsync().Result;
+
                 if (string.IsNullOrEmpty(body))
                 {
-                    var resp = new HttpResponseMessage(HttpStatusCode.Forbidden);
+                    resp = new HttpResponseMessage(HttpStatusCode.Forbidden);
                     resp.ReasonPhrase = "Content is null";
                     return resp;
                 }
@@ -37,13 +39,34 @@ namespace Microsoft.Deployment.Site.Service.Controllers
                 string refreshToken = content["tokens"]?["refresh"].ToString();
                 string accessToken = content["tokens"]?["access"].ToString();
                 string deploymentId = content["deploymentId"].ToString();
+
+                if (string.IsNullOrEmpty(refreshToken) || string.IsNullOrEmpty(accessToken) || string.IsNullOrEmpty(deploymentId))
+                {
+                    resp = new HttpResponseMessage(HttpStatusCode.Forbidden); 
+                    resp.ReasonPhrase = "Refresh token, access token or deployment id is null.";
+                    return resp;
+                }
+
                 var originalClaim = new JwtSecurityToken(accessToken).Claims.First(e => e.Type == "_claim_sources").Value;
 
                 string tokenUrl = string.Format(Constants.AzureTokenUri, "common");
-                var primaryResponse = await GetToken(refreshToken, tokenUrl, Constants.MicrosoftClientId);
 
-                var access = new JwtSecurityToken(primaryResponse["access_token"].ToString());
-                var newClaim = access.Claims.First(e => e.Type == "_claim_sources").Value;
+                string newClaim;
+
+                try
+                {
+
+                    var primaryResponse = await GetToken(refreshToken, tokenUrl, Constants.MicrosoftClientId);
+
+                    var access = new JwtSecurityToken(primaryResponse["access_token"].ToString());
+                    newClaim = access.Claims.First(e => e.Type == "_claim_sources").Value;
+                }
+                catch(Exception e)
+                {
+                    resp = new HttpResponseMessage(HttpStatusCode.Forbidden);
+                    resp.ReasonPhrase = "Access token could not be refreshed, or claim does not exist.";
+                    return resp;
+                }
 
                 if (originalClaim == newClaim)
                 {
@@ -51,10 +74,20 @@ namespace Microsoft.Deployment.Site.Service.Controllers
                     var cmd = $"INSERT INTO deploymentids VALUES('{deploymentId}','{DateTime.UtcNow.ToString("o")}')";
                     SqlUtility.InvokeSqlCommand(deploymentIdsConnection, cmd, new Dictionary<string, string>());
                 }
+                else
+                {
+                    resp = new HttpResponseMessage(HttpStatusCode.Forbidden);
+                    resp.ReasonPhrase = "Claims could not be verified.";
+                    return resp;
+                }
+                                
                 return new HttpResponseMessage(HttpStatusCode.OK);
             }
-            catch {
-                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            catch
+            {
+                var resp = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                resp.ReasonPhrase = "An internal error has occurred ";
+                return resp;               
             }
         }
 

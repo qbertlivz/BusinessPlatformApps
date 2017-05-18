@@ -109,21 +109,22 @@
                 "displayname": "Customize",
                 "name": "customize.html"
             },
-            {
-                "displayname": "Summary",
-                "name": "$SiteCommon$/pages-gallery/summary.html",
-                "displayCompletionNotification": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] !== 'true')",
-                "values": {
-                    "Target Server": "$(this.MS.DataStore.getValue('Server'))",
-                    "Target Database": "$(this.MS.DataStore.getValue('Database'))",
-                    "Target Username": "$(this.MS.DataStore.getValue('Username'))"
-                },
-                "onNext": [
-                    {
-                        "name": "Microsoft-SccmGetEntityInitialCounts"
-                    }
-                ]
+          {
+            "displayname": "Summary",
+            "name": "$SiteCommon$/pages-gallery/summary.html",
+            "displayCompletionNotification": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] !== 'true' && this.MS.DataStore.getValue('SelectedSubscription') !== null)",
+            "sendCompletionNotification": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] !== 'true' && this.MS.DataStore.getValue('SelectedSubscription') !== null)",
+            "values": {
+              "Target Server": "$(this.MS.DataStore.getValue('Server'))",
+              "Target Database": "$(this.MS.DataStore.getValue('Database'))",
+              "Target Username": "$(this.MS.DataStore.getValue('Username'))"
             },
+            "onNext": [
+              {
+                "name": "Microsoft-SccmGetEntityInitialCounts"
+              }
+            ]
+          },
             {
                 "asDatabase": "Sccm",
                 "displayname": "Progress",

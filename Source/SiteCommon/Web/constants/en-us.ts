@@ -51,6 +51,8 @@
     AZURE_LOGIN_SUBSCRIPTION_ERROR_CRM: `You do not have any Azure subscriptions linked to your CRM account and tenant.`,
     AZURE_LOGIN_SUBTITLE: `To create the solution we will be using a number of Azure Services which require an Azure subscription.`,
     AZURE_LOGIN_UNKNOWN_ERROR: `You do not have any Azure subscriptions linked to your account. You can get started with a free trial by clicking the link at the top of the page.`,
+    BYOE_CUSTOMIZE_SUBTITLE: `Get started by adding a new entity:`,
+    BYOE_CUSTOMIZE_TITLE: `Customize Entities`,
     BYOE_OPTION: `Bring your own entities? (Optional)`,
     BYOE_SUBTITLE: `As part of the setup, you can define your own entities which will be used to cross filter your data. By default, we start you out with the following entities: Organizations, Locations, and People. As an example, if you are creating a movie themed report you could add Actors and Composers to the default list:`,
     BYOE_TITLE: `Bring Your Own Entities`,

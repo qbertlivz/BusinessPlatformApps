@@ -56,6 +56,10 @@
                 "name": "bring-your-own-entities.html"
             },
             {
+                "displayname": "Customize",
+                "name": "customize.html"
+            },
+            {
                 "displayname": "Summary",
                 "name": "$SiteCommon$/pages-gallery/summary.html",
                 "values": {

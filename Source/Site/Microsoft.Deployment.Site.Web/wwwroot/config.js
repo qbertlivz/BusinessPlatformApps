@@ -19,6 +19,7 @@ System.config({
       "SiteCommon/Web/enums/variable-type.js",
       "SiteCommon/Web/models/action-request.js",
       "SiteCommon/Web/models/data-store-item.js",
+      "SiteCommon/Web/models/option.js",
       "SiteCommon/Web/models/variable.js",
       "SiteCommon/Web/services/data-store.js",
       "SiteCommon/Web/services/deployment-service.js",

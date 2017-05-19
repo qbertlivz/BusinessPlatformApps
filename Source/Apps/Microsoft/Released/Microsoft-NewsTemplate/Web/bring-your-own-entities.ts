@@ -3,7 +3,7 @@
 import { ViewModelBase } from '../../../../../SiteCommon/Web/services/view-model-base'
 
 export class BringYourOwnEntities extends ViewModelBase {
-    bringYourOwnEntities: string = this.option.NO;
+    bringYourOwnEntities: string = this.MS.Option.NO;
 
     async OnLoaded(): Promise<void> {
         this.isValidated = true;

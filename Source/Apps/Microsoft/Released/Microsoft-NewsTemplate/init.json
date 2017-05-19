@@ -57,7 +57,8 @@
             },
             {
                 "displayname": "Customize",
-                "name": "customize.html"
+                "name": "customize.html",
+                "skip": "$run(this.MS.DataStore.getValue('BringYourOwnEntities') === this.MS.Option.NO)"
             },
             {
                 "displayname": "Summary",

@@ -6,8 +6,6 @@ import { InitParser } from '../classes/init-parser';
 
 import { DataStoreType } from '../enums/data-store-type';
 
-import { Option } from '../models/option';
-
 import { MainService } from './main-service';
 
 export class ViewModelBase {
@@ -18,7 +16,6 @@ export class ViewModelBase {
     navigationMessage: string = '';
     onNext: any[] = [];
     onValidate: any[] = [];
-    option: Option = new Option();
     showValidation: boolean = false;
     showValidationDetails: boolean = false;
     textNext: string = 'Next';

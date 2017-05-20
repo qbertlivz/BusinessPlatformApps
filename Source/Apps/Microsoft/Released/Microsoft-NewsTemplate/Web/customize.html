@@ -1,4 +1,24 @@
 ﻿<template>
     <h1 class="st-title">${MS.Translate.BYOE_CUSTOMIZE_TITLE}</h1>
-    <p class="st-subtitle">${MS.Translate.BYOE_CUSTOMIZE_SUBTITLE}</p>
+
+    <p class="st-text">${MS.Translate.BYOE_CUSTOMIZE_SELECT_ENTITY}</p>
+
+    <button class="primary" click.trigger="addEntity()">${MS.Translate.BYOE_CUSTOMIZE_ADD_ENTITY}</button>
+
+    <p>
+        <select class="btn btn-default dropdown-toggle st-input" value.bind="selectedEntity">
+            <option repeat.for="entity of entities" model.bind="entity">${entity.name}</option>
+        </select>
+    </p>
+
+    <p class="st-text">${MS.Translate.BYOE_CUSTOMIZE_ENTITY_NAME}</p>
+    <input class="st-input" type="text" value.bind="selectedEntity.name" />
+
+    <p class="st-text">${MS.Translate.COMMON_COLOR}</p>
+
+    <p class="st-text">${MS.Translate.COMMON_ICON}</p>
+
+    <p class="st-text">${MS.Translate.BYOE_CUSTOMIZE_ENTITY_VALUES}</p>
+
+    <button class="primary" click.trigger="removeEntity()">${MS.Translate.BYOE_CUSTOMIZE_REMOVE_ENTITY}</button>
 </template>

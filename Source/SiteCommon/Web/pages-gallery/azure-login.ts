@@ -1,10 +1,7 @@
 ﻿import { QueryParameter } from '../constants/query-parameter';
-
 import { AzureConnection } from '../enums/azure-connection';
 import { DataStoreType } from '../enums/data-store-type';
-
 import { ActionResponse } from '../models/action-response';
-
 import { ViewModelBase } from '../services/view-model-base';
 
 export class AzureLogin extends ViewModelBase {
@@ -53,19 +50,14 @@ export class AzureLogin extends ViewModelBase {
                     return;
                 }
 
-                var tokenObj = { code: token };
+                var tokenObj: any = { code: token, oauthType: this.oauthType };
                 this.authToken = await this.MS.HttpService.executeAsync('Microsoft-GetAzureToken', tokenObj);
                 if (this.authToken.IsSuccess) {
-                    this.MS.DataStore.addToDataStore('AzureToken',
-                        this.authToken.Body.AzureToken,
-                        DataStoreType.Private);
                     let subscriptions: ActionResponse = await this.MS.HttpService
                         .executeAsync('Microsoft-GetAzureSubscriptions', {});
                     if (subscriptions.IsSuccess) {
                         this.subscriptionsList = subscriptions.Body.value;
-                        if (!this
-                            .subscriptionsList ||
-                            (this.subscriptionsList && this.subscriptionsList.length === 0)) {
+                        if (!this.subscriptionsList || (this.subscriptionsList && this.subscriptionsList.length === 0)) {
                             this.MS.ErrorService.message = this.MS.Translate.AZURE_LOGIN_SUBSCRIPTION_ERROR;
                         } else {
                             this.selectedSubscriptionId = this.subscriptionsList[0].SubscriptionId;
@@ -82,18 +74,23 @@ export class AzureLogin extends ViewModelBase {
         }
     }
 
-    AzureTrialClicked(event: any): any {
-        this.MS.LoggerService.TrackEvent('AzureTrialClicked');
-        return event;
-    }
+    async ValidateResourceGroup(): Promise<boolean> {
+        this.Invalidate();
+        let subscriptionObject = this.subscriptionsList.find(x => x.SubscriptionId === this.selectedSubscriptionId);
+        this.MS.DataStore.addToDataStore('SelectedSubscription', subscriptionObject, DataStoreType.Public);
+        this.MS.DataStore.addToDataStore('SelectedResourceGroup', this.selectedResourceGroup, DataStoreType.Public);
 
-    AzurePricingClicked(): void {
-        this.MS.LoggerService.TrackEvent('AzurePricingClicked');
+        let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-ExistsResourceGroup');
+
+        if (response.IsSuccess) {
+            this.isValidated = true;
+            this.showValidation = true;
+        }
+        return this.isValidated;
     }
 
     async connect(): Promise<void> {
-        this.MS.DataStore.addToDataStore('oauthType', this.oauthType, DataStoreType.Public);
-        this.MS.DataStore.addToDataStore('AzureOAuth', this.oauthType, DataStoreType.Public);
+        var tokenObj: any = { oauthType: this.oauthType };
 
         if (this.connectionType.toString() === AzureConnection.Microsoft.toString()) {
             this.MS.DataStore.addToDataStore('AADTenant', this.azureDirectory, DataStoreType.Public);
@@ -101,7 +98,7 @@ export class AzureLogin extends ViewModelBase {
             this.MS.DataStore.addToDataStore('AADTenant', 'common', DataStoreType.Public);
         }
 
-        let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureAuthUri', {});
+        let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureAuthUri', tokenObj);
         window.location.href = response.Body.value;
     }
 
@@ -136,7 +133,7 @@ export class AzureLogin extends ViewModelBase {
                 return false;
             }
         }
-
         return await super.NavigatingNext();
     }
+
 }

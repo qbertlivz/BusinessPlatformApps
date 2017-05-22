@@ -78,7 +78,11 @@ namespace Microsoft.Deployment.Actions.Salesforce
                 
                 binding.describeSObject(sheader, null, null, null, obj, out sobject);
 
-                metadata.Objects.Add(sobject);
+                var trimObject = new DescribeSObjectResult();
+                trimObject.fields = sobject.fields;
+                trimObject.name = sobject.name;
+
+                metadata.Objects.Add(trimObject);
             }
 
             return new ActionResponse(ActionStatus.Success, JsonUtility.GetJObjectFromObject(metadata));

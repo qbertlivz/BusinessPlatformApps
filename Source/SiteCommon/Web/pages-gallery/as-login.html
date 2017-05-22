@@ -1,0 +1,8 @@
+﻿<template>
+    <h1 class="st-title">${MS.Translate.AZURE_ANALYSIS_LOGIN_TITLE}</h1>
+    <p class="st-subtitle">${MS.Translate.AZURE_ANALYSIS_LOGIN_SUBTITLE}</p>
+
+    <div class="st-float" if.bind="!hasToken">
+        <button class="primary" click.trigger="connect()" disabled.bind="MS.HttpService.isServiceBusy">Connect</button>
+    </div>
+</template>

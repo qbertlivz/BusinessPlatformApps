@@ -10,90 +10,100 @@
                     "$translate(INIT_GETTING_STARTED_PBI_PRO)",
                     "$translate(INIT_GETTING_STARTED_TWITTER)"
                 ],
+                "list2": [
+                    "$translate(INIT_GETTING_STARTED_CLOUD_SOLUTION)",
+                    "$translate(INIT_GETTING_STARTED_TWITTER_REAL_TIME)",
+                    "$translate(INIT_GETTING_STARTED_CONNECT_AS_PBI)"
+                ],
+                "name": "$SiteCommon$/pages-gallery/getting-started.html",
+                "subtitle": "$translate(INIT_TWITTER_SUBTITLE)",
+                "templateName": "$translate(INIT_TWITTER_TEMPLATE_NAME)"
+            },
+            {
+                "azureProviders": [
+                    "Microsoft.MachineLearning",
+                    "Microsoft.AnalysisServices"
+                ],
+                "bapiServices": [
+                    "Microsoft.PowerApps"
+                ],
+                "displayname": "Login",
+                "name": "$SiteCommon$/pages-gallery/azure-login.html",
+                "pricingCalculatorUrl": "$translate(INIT_TWITTER_PRICING_CALCULATOR_URL)",
+                "pricingCost": "$translate(INIT_TWITTER_PRICING_COST)",
+                "pricingUrl": "$translate(INIT_TWITTER_PRICING_URL)"
+            },
+            {
+                "displayname": "Cognitive API",
+                "name": "cognitive-text.html"
+            },
+            {
+                "displayname": "Source",
+                "isAzureSql": true,
+                "name": "$SiteCommon$/pages-gallery/sql-server.html",
+                "newSqlDatabase": "twitterDB",
+                "showAzureSql": false,
+                "showNewSqlOption": "true",
+                "sqlInstance": "NewSql",
+                "subtitle": "$translate(INIT_TWITTER_SQL_SUBTITLE)",
+                "title": "$translate(INIT_TWITTER_SQL_TITLE)"
+            },
+            {
+                "displayname": "Twitter",
+                "name": "$SiteCommon$/pages-gallery/twitter.html"
+            },
+            {
+                "displayname": "Search Terms",
+                "name": "$SiteCommon$/pages-gallery/search-terms.html"
+            },
+            {
+                "displayname": "Twitter Handles",
+                "name": "$SiteCommon$/pages-gallery/twitter-handles.html"
+            },
+            {
+                "displayname": "AAS",
+                "name": "$SiteCommon$/pages-gallery/choose-analysis-server.html",
+                "showDescription": true,
+                "skip": "$ds(azureSqlDisabled)"
+            },
+            {
+                "displayname": "Login to Analysis Services",
+                "name": "$SiteCommon$/pages-gallery/as-login.html",
+                "oauthType": "as",
+                "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true' : 'false')"
+            },
+            {
+                "displayname": "AAS Login",
+                "name": "$SiteCommon$/pages-gallery/ssas.html",
+                "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
+            },
+            {
+                "displayname": "Summary",
+                "name": "$SiteCommon$/pages-gallery/summary.html",
+                "values": {
+                    "Target Server": "$(this.MS.DataStore.getValue('Server'))",
+                    "Target Database": "$(this.MS.DataStore.getValue('Database'))",
+                    "Target Username": "$(this.MS.DataStore.getValue('Username'))"
+                }
+            },
+            {
+                "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(10))",
+                "uniqueIdFunction": "$save(this.MS.UtilityService.GetUniqueId(10))",
+                "asDatabase": "Twitter",
+                "displayname": "Deploy",
+                "filename": "$save('TwitterTemplate.pbix')",
+                "filenameSSAS": "TwitterAS.pbix",
+                "functionAppHostingPlan": "$save(this.uniqueIdFunction)",
+                "hasPowerApp": true,
+                "LogicAppHostingPlan": "$save(this.uniqueId)",
+                "LogicAppName": "$save(this.uniqueId)",
+                "LogicAppNameHistorical": "$save(this.uniqueId)",
+                "name": "$SiteCommon$/pages-gallery/progress.html",
+                "powerAppFileName": "TwitterTemplate.msapp",
+                "SiteName": "$save(this.uniqueIdFunction)"
+            }
+        ],
 
-        "list2": [
-          "$translate(INIT_GETTING_STARTED_CLOUD_SOLUTION)",
-          "$translate(INIT_GETTING_STARTED_TWITTER_REAL_TIME)",
-          "$translate(INIT_GETTING_STARTED_CONNECT_AS_PBI)"
-        ],
-        "name": "$SiteCommon$/pages-gallery/getting-started.html",
-        "subtitle": "$translate(INIT_TWITTER_SUBTITLE)",
-        "templateName": "$translate(INIT_TWITTER_TEMPLATE_NAME)"
-      },
-      {
-        "bapiServices": [
-          "Microsoft.PowerApps"
-        ],
-        "displayname": "Login",
-        "name": "$SiteCommon$/pages-gallery/azure-login.html",
-        "pricingCalculatorUrl": "$translate(INIT_TWITTER_PRICING_CALCULATOR_URL)",
-        "pricingCost": "$translate(INIT_TWITTER_PRICING_COST)",
-        "pricingUrl": "$translate(INIT_TWITTER_PRICING_URL)"
-      },
-      {
-        "displayname": "Cognitive API",
-        "name": "cognitive-text.html"
-      },
-      {
-        "displayname": "Source",
-        "isAzureSql": true,
-        "name": "$SiteCommon$/pages-gallery/sql-server.html",
-        "newSqlDatabase": "twitterDB",
-        "showAzureSql": false,
-        "showNewSqlOption": "true",
-        "sqlInstance": "NewSql",
-        "subtitle": "$translate(INIT_TWITTER_SQL_SUBTITLE)",
-        "title": "$translate(INIT_TWITTER_SQL_TITLE)"
-      },
-      {
-        "displayname": "Twitter",
-        "name": "$SiteCommon$/pages-gallery/twitter.html"
-      },
-      {
-        "displayname": "Search Terms",
-        "name": "$SiteCommon$/pages-gallery/search-terms.html"
-      },
-      {
-        "displayname": "Twitter Handles",
-        "name": "$SiteCommon$/pages-gallery/twitter-handles.html"
-      },
-      {
-        "displayname": "AAS",
-        "name": "$SiteCommon$/pages-gallery/choose-analysis-server.html",
-        "showDescription": true,
-        "skip": "$ds(azureSqlDisabled)"
-      },
-      {
-        "displayname": "AAS Login",
-        "name": "$SiteCommon$/pages-gallery/ssas.html",
-        "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
-      },
-      {
-        "displayname": "Summary",
-        "name": "$SiteCommon$/pages-gallery/summary.html",
-        "values": {
-          "Target Server": "$(this.MS.DataStore.getValue('Server'))",
-          "Target Database": "$(this.MS.DataStore.getValue('Database'))",
-          "Target Username": "$(this.MS.DataStore.getValue('Username'))"
-        }
-      },
-      {
-        "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(10))",
-        "uniqueIdFunction": "$save(this.MS.UtilityService.GetUniqueId(10))",
-        "asDatabase": "Twitter",
-        "displayname": "Deploy",
-        "filename": "$save('TwitterTemplate.pbix')",
-        "filenameSSAS": "TwitterAS.pbix",
-        "functionAppHostingPlan": "$save(this.uniqueIdFunction)",
-        "hasPowerApp": true,
-        "LogicAppHostingPlan": "$save(this.uniqueId)",
-        "LogicAppName": "$save(this.uniqueId)",
-        "LogicAppNameHistorical": "$save(this.uniqueId)",
-        "name": "$SiteCommon$/pages-gallery/progress.html",
-        "powerAppFileName": "TwitterTemplate.msapp",
-        "SiteName": "$save(this.uniqueIdFunction)"
-      }
-    ],
         "Actions": [
             {
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
@@ -121,11 +131,11 @@
                 "name": "Microsoft-CreatePowerAppSqlConnection",
                 "skip": "$run(this.MS.DataStore.getValue('SkipPowerApp') === 'true')"
             },
-            {
-                "displayname": "$translate(INIT_ACTION_DEPLOYING_POWERAPP)",
-                "name": "Microsoft-DeployPowerApp",
-                "skip": "$run(this.MS.DataStore.getValue('SkipPowerApp') === 'true')"
-            },
+            //{
+            //    "displayname": "$translate(INIT_ACTION_DEPLOYING_POWERAPP)",
+            //    "name": "Microsoft-DeployPowerApp",
+            //    "skip": "$run(this.MS.DataStore.getValue('SkipPowerApp') === 'true')"
+            //},
             {
                 "CognitiveServiceName": "TextCognitiveService",
                 "CognitiveServiceType": "TextAnalytics",

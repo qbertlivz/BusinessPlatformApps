@@ -148,7 +148,7 @@ ul {
 
 .st-dropdown-i {
     border: 1px solid rgb(169, 169, 169);
-    padding: 6px 10px;
+    padding: 5px 10px;
 }
 
 .st-email-background {
@@ -333,6 +333,11 @@ ul {
 .st-input-column {
     float: left;
     margin-right: 10px;
+}
+
+.st-input-float {
+    display: inline-block;
+    margin-right: 50px;
 }
 
 .st-input-small {

@@ -15,7 +15,7 @@ export class Customize extends ViewModelBase {
     entityRemove(): void {
         let entityIndex: number = this.entities.indexOf(this.selectedEntity);
         this.entities.splice(entityIndex, 1);
-        this.selectedEntity = this.entities[entityIndex];
+        this.selectedEntity = this.entities[entityIndex > this.entities.length - 1 ? entityIndex - 1 : entityIndex];
     }
 
     iconSelect(icon: string) {

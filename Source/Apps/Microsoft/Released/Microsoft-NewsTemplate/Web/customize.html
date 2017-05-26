@@ -4,7 +4,9 @@
     <p class="st-text">${MS.Translate.BYOE_CUSTOMIZE_SELECT_ENTITY}</p>
 
     <button class="primary" click.trigger="entityAdd()">${MS.Translate.BYOE_CUSTOMIZE_ADD_ENTITY}</button>
-    <button class="primary" click.trigger="entityUpload()">${MS.Translate.BYOE_CUSTOMIZE_UPLOAD_CSV}</button>
+
+    <!--<button class="primary" click.trigger="entityUpload()">${MS.Translate.BYOE_CUSTOMIZE_ADD_ENTITY}</button>-->
+    <input accept=".csv" type="file" />
 
     <div if.bind="selectedEntity">
         <div class="st-byoe-preview">
@@ -15,7 +17,7 @@
                     <ul class="st-byoe-preview-list">
                         <li repeat.for="value of entity.values.split('\n').slice(0,3)">
                             <i class="fa fa-${entity.icon}" css="color: ${entity.color}"></i>
-                            <span>${value.length > 12 ? value.substr(0,9) + '...' : 'value'}</span>
+                            <span>${value.length > 12 ? value.substr(0,9) + '...' : value}</span>
                         </li>
                     </ul>
                 </div>

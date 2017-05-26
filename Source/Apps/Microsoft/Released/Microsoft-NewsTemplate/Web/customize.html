@@ -5,9 +5,6 @@
 
     <button class="primary" click.trigger="entityAdd()">${MS.Translate.BYOE_CUSTOMIZE_ADD_ENTITY}</button>
 
-    <!--<button class="primary" click.trigger="entityUpload()">${MS.Translate.BYOE_CUSTOMIZE_ADD_ENTITY}</button>-->
-    <input accept=".csv" type="file" />
-
     <div if.bind="selectedEntity">
         <div class="st-byoe-preview">
             <span class="st-text">${MS.Translate.BYOE_CUSTOMIZE_PREVIEW_OUTPUT}</span>
@@ -41,7 +38,10 @@
             </div>
 
             <div class="st-input-float">
-                <p class="st-text">${MS.Translate.COMMON_ICON}</p>
+                <p class="st-text">
+                    <span>${MS.Translate.COMMON_ICON}</span>
+                    <i class="glyphicon pbi-glyph-caretdown glyph-mini"></i>
+                </p>
                 <div class="st-dropdown" css="color: ${selectedEntity.color}">
                     <i class="st-dropdown-i fa fa-${selectedEntity.icon}"></i>
                     <div class="st-dropdown-content">

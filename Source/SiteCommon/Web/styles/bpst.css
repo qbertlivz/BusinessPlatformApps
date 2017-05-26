@@ -61,6 +61,23 @@ ul {
     margin-right: 12px;
 }
 
+.st-byoe-preview {
+    margin-left: 500px;
+    position: fixed;
+}
+
+.st-byoe-preview-entities {
+    height: 500px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 200px;
+}
+
+.st-byoe-preview-list {
+    list-style-type: none;
+    margin-left: 1em;
+}
+
 .st-center-inner {
     display: table-cell;
     text-align: center;

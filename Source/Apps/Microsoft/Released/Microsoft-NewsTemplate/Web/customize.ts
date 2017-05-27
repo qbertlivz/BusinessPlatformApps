@@ -24,10 +24,5 @@ export class Customize extends ViewModelBase {
 
     async OnLoaded(): Promise<void> {
         this.isValidated = true;
-
-        if (this.entities.length === 0) {
-            this.entities.push(new NewsEntity());
-            this.selectedEntity = this.entities[0];
-        }
     }
 }

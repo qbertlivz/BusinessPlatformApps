@@ -55,6 +55,7 @@
     BYOE_CUSTOMIZE_EDIT_NAME: `Edit Name:`,
     BYOE_CUSTOMIZE_ENTITY_SELECT: `Select Entity:`,
     BYOE_CUSTOMIZE_ENTITY_VALUES: `Entity Values:`,
+    BYOE_CUSTOMIZE_PREVIEW_OUTPUT: `Preview Output:`,
     BYOE_CUSTOMIZE_REMOVE_ENTITY: `Remove Entity`,
     BYOE_CUSTOMIZE_SELECT_ENTITY: `Get started by adding a new entity:`,
     BYOE_CUSTOMIZE_TITLE: `Customize Entities`,

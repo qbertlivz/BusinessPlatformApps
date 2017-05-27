@@ -18,10 +18,6 @@ export class Customize extends ViewModelBase {
         this.selectedEntity = this.entities[entityIndex > this.entities.length - 1 ? entityIndex - 1 : entityIndex];
     }
 
-    entityUpload(): void {
-        // csv parse
-    }
-
     iconSelect(icon: string) {
         this.selectedEntity.icon = icon;
     }

@@ -39,7 +39,7 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
             string username = request.DataStore.GetValue("D365Username");
 
             // Set authentication
-            ScribeKeyValue kvp = new ScribeKeyValue { Key = "DeploymentType", Value = ScribeUtility.AesEncrypt(apiToken, "Online") }; // OnPremise
+            ScribeKeyValue kvp = new ScribeKeyValue { Key = "DeploymentType", Value = ScribeUtility.AesEncrypt(apiToken, request.DataStore.GetValue("ScribeDeploymentType")) };
             connection.Properties.Add(kvp);
             kvp = new ScribeKeyValue { Key = "Url", Value = ScribeUtility.AesEncrypt(apiToken, request.DataStore.GetValue("ConnectorUrl")) };
             connection.Properties.Add(kvp);

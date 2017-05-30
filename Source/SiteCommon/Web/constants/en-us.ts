@@ -250,7 +250,7 @@
     INIT_D365_CALCULATOR: `https://azure.microsoft.com/en-us/pricing/calculator/`,
     INIT_D365_PRICING_COST: `By clicking next and deploying the template, you authorize Microsoft to create Azure resources on your subscription and bill based on their respective pricing rates. The approximate cost for the Azure SQL Database and Azure Key Vault required is $75 per month. These costs are estimates only and subject to change. The Azure premium tier Azure SQL Database is recommended during the initial data export and can be moved to a less expensive service tier after this step is completed.`,
     INIT_D365_PRICING_URL: `https://github.com/Microsoft/BusinessPlatformApps/tree/master/Source/Apps/Microsoft/Released/Microsoft-CRMSalesManagement#dynamics-365-export-pricing`,
-    INIT_D365_PSA_TITLE: `Professional Services for Dynamics 365`,
+    INIT_D365_PSA_TITLE: `Dynamics 365 Project Services Automation for Dynamics 365 Analytics`,
     INIT_D365_TITLE: `Sales Management for Dynamics 365`,
     INIT_GETTING_STARTED_AZURE_COGNITIVE_SERVICES: `Azure access to Cognitive Services`,
     INIT_GETTING_STARTED_AZURE_SQL: `Azure SQL Database`,

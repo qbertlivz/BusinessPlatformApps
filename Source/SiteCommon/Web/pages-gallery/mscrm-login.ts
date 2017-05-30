@@ -104,6 +104,9 @@ export class MsCrmLogin extends AzureLogin {
                     this.showValidation = true;
                 }
             }
+        } else {
+            this.isValidated = true;
+            this.showValidation = true;
         }
 
         return this.isValidated;

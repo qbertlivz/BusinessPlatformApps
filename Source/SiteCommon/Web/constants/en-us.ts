@@ -161,7 +161,7 @@
     DATA_MOVEMENT_SUBTITLE_D365: `Specify how data should be pulled from Dynamics 365 and moved to the destination.`,
     DATA_MOVEMENT_TITLE: `Move Data`,
     DATA_MOVEMENT_USERNAME: `Username:`,
-    D365_LOGIN_ORGANIZATION: `Dynamics 365 Organization:`,
+    D365_LOGIN_ORGANIZATION_NAME: `Dynamics 365 Organization Name (case sensitive):`,
     D365_LOGIN_ORGANIZATION_URL: `Dynamics 365 Organization Url:`,
     D365_LOGIN_PASSWORD: `Dynamics 365 Password:`,
     D365_LOGIN_SUBTITLE: `We now need to set up a connection Dynamics 365 so Scribe can access the data. In order to pull data, make sure you have system customizer privileges in your Dynamics 365 instance.`,

@@ -131,7 +131,7 @@ export class MsCrmLogin extends AzureLogin {
             } else {
                 this.MS.DataStore.addToDataStore('ConnectorUrl', this.d365OnPremiseUrl, DataStoreType.Private);
                 this.MS.DataStore.addToDataStore('OrganizationName', this.d365OnPremiseOrganizationName, DataStoreType.Private);
-                this.MS.DataStore.addToDataStore('ScribeDeploymentType', 'On-Premise', DataStoreType.Private);
+                this.MS.DataStore.addToDataStore('ScribeDeploymentType', 'OnPremise', DataStoreType.Private);
             }
             return true;
         } else {

@@ -44,7 +44,7 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
             kvp = new ScribeKeyValue { Key = "Url", Value = ScribeUtility.AesEncrypt(apiToken, request.DataStore.GetValue("ConnectorUrl")) };
             connection.Properties.Add(kvp);
             // Set CRM user name
-            kvp = new ScribeKeyValue { Key = "UserId", Value = ScribeUtility.AesEncrypt(apiToken, username.Split('\\').Last()) };
+            kvp = new ScribeKeyValue { Key = "UserId", Value = ScribeUtility.AesEncrypt(apiToken, username) };
             connection.Properties.Add(kvp);
             kvp = new ScribeKeyValue { Key = "Domain", Value = ScribeUtility.AesEncrypt(apiToken, username.Split('\\').First()) };
             connection.Properties.Add(kvp);

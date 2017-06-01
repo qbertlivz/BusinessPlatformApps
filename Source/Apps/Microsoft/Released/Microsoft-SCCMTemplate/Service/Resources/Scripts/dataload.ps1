@@ -15,18 +15,18 @@ $sqlcmd = ".\sqlcmd.exe"
 
 #region Win32 credential manager
 # This region reuses code published at https://gist.github.com/toburger/2947424, under:
-# 
+#
 # The MIT License
-# 
+#
 # Copyright (c) 2012 Tobias Burger
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
-# to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+# to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
 # and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 # The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
 # WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 $sig = @"
@@ -174,7 +174,7 @@ New-Item Logs -ItemType Directory -ErrorAction Ignore
 # Map of query files and destination tables
 $file2table = [ordered]@{ "site.sql"                = "pbist_sccm.site_staging";
                           "collection.sql"          = "pbist_sccm.collection_staging";
-                          "computerupdate.sql"      = "pbist_sccm.computerupdate_staging";                      
+                          "computerupdate.sql"      = "pbist_sccm.computerupdate_staging";
                           "update.sql"              = "pbist_sccm.update_staging";
                           "computermalware.sql"     = "pbist_sccm.computermalware_staging";
                           "malware.sql"             = "pbist_sccm.malware_staging";
@@ -182,7 +182,7 @@ $file2table = [ordered]@{ "site.sql"                = "pbist_sccm.site_staging";
                           "user.sql"                = "pbist_sccm.user_staging";
                           "program.sql"             = "pbist_sccm.program_staging";
                           "scanhistory.sql"         = "pbist_sccm.scanhistory_staging";
-                          "computer.sql"            = "pbist_sccm.computer_staging";                      
+                          "computer.sql"            = "pbist_sccm.computer_staging";
                           "computercollection.sql"  = "pbist_sccm.computercollection_staging";
                           "computerprogram.sql"     = "pbist_sccm.computerprogram_staging";
                         };

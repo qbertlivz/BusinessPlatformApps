@@ -1,6 +1,7 @@
 ﻿import { ViewModelBase } from '../services/view-model-base';
 
 export class ProgressViewModel extends ViewModelBase {
+    datastoreEntriesToValidate: string[] = [];
     downloadPbiText: string = this.MS.Translate.PROGRESS_DOWNLOAD_PBIX_INFO;
     filename: string = 'report.pbix';
     filenameSSAS: string = 'reportSSAS.pbix';
@@ -19,6 +20,7 @@ export class ProgressViewModel extends ViewModelBase {
     sliceStatus: any[] = [];
     sqlServerIndex: number = 0;
     successMessage: string = this.MS.Translate.PROGRESS_ALL_DONE;
+    successMessage2: string = this.MS.Translate.PROGRESS_ALL_DONE2;
     targetSchema: string = '';
 
     constructor() {
@@ -29,6 +31,13 @@ export class ProgressViewModel extends ViewModelBase {
         if (this.MS.DataStore.getValue('HasNavigated') == null) {
             this.MS.NavigationService.NavigateHome();
             return;
+        }
+
+        for (let i = 0; i < this.datastoreEntriesToValidate.length; i++) {
+            if (this.MS.DataStore.getValue(this.datastoreEntriesToValidate[i]) === null) {
+                this.MS.NavigationService.NavigateHome();
+                return;
+            }
         }
 
         this.hasPowerApp = this.hasPowerApp && this.MS.DataStore.getValue('SkipPowerApp') == null;
@@ -63,9 +72,12 @@ export class ProgressViewModel extends ViewModelBase {
                 let bodyPowerApp: any = {};
                 bodyPowerApp.PowerAppFileName = this.powerAppFileName;
                 let responsePowerApp = await this.MS.HttpService.executeAsync('Microsoft-WranglePowerApp', bodyPowerApp);
-                if (responsePowerApp.IsSuccess) {
+
+                if (responsePowerApp.IsSuccess && responsePowerApp.Body.value) {
                     this.isPowerAppReady = true;
                     this.powerAppDownloadLink = responsePowerApp.Body.value;
+                } else {
+                    this.hasPowerApp = false;
                 }
             }
 

@@ -16,7 +16,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var azureToken = request.DataStore.GetJson("AzureToken");
+            var azureToken = request.DataStore.GetJson("AzureTokenAS");
             string serverUrl = request.DataStore.GetValue("ASServerUrl");
 
             string xmla = request.DataStore.GetValue("xmlaFilePath");

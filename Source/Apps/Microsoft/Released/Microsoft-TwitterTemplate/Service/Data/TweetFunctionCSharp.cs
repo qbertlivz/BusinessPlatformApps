@@ -163,12 +163,18 @@ public class TweetHandler
         //log.Info("********************ParseTweet************************** Handle IDs: " + twitterHandleId);
         //log.Info("********************ParseTweet************************** Tweet Language: " + tweet.TweetLanguageCode.ToString());
         // Check if language of tweet is supported for sentiment analysis
+
         originalTweets["lang"] = tweet.TweetLanguageCode.ToString();
-        if (originalTweets["lang"] == "en")
+        originalTweets["sentimentPosNeg"] = "Undefined";
+        originalTweets["sentiment"] = null;
+        originalTweets["sentimentBin"] = null;
+        
+		string sentiment = await MakeSentimentRequest(tweet);
+
+		
+		if (sentiment != null)
         {
-            //log.Info("********************ParseTweet**************************" + tweet.TweetId.ToString());
-            string sentiment = await MakeSentimentRequest(tweet, log);
-            //log.Info("********************ParseTweet************************** Sentiment: " + sentiment);
+            sentiment = (double.Parse(sentiment) * 2 - 1).ToString(CultureInfo.InvariantCulture);
             string sentimentBin = (Math.Floor(double.Parse(sentiment) * 10) / 10).ToString(CultureInfo.InvariantCulture);
             string sentimentPosNeg = String.Empty;
             if (double.Parse(sentimentBin) > 0.1)
@@ -183,15 +189,10 @@ public class TweetHandler
             {
                 sentimentPosNeg = "Neutral";
             }
-
             //Save sentiment and language metadata into dictionary
             originalTweets["sentiment"] = sentiment;
             originalTweets["sentimentBin"] = sentimentBin;
             originalTweets["sentimentPosNeg"] = sentimentPosNeg;
-        }
-        else
-        {
-            originalTweets["sentimentPosNeg"] = "Undefined";
         }
 
         // Work out account and tweet direction for retweets
@@ -471,62 +472,60 @@ public class TweetHandler
         }
     }
 
-    static async Task<string> MakeSentimentRequest(dynamic tweet, TraceWriter log)
+    static async Task<string> MakeSentimentRequest(dynamic tweet)
     {
-        string result = string.Empty;
-
-        dynamic objResult = null;
-
-        //log.Info("*************MakeSentimentRequest***************** TweetText: " + tweet.TweetText.ToString());
-
-        using (var client = new HttpClient())
+        var client = new HttpClient();
+        Document response = new Document()
         {
-            var scoreRequest = new
-            {
-                Inputs = new Dictionary<string, List<Dictionary<string, string>>>() {
-                        {
-                            "input1",
-                            new List<Dictionary<string, string>>(){new Dictionary<string, string>(){
-                                            {
-                                                "Text", tweet.TweetText.ToString()
-                                            },
-                                }
-                            }
-                        },
-                    },
-                GlobalParameters = new Dictionary<string, string>() { }
-            };
+            Text = tweet.TweetText.ToString(),
+            Language = tweet.TweetLanguageCode.ToString(),
+            Id = tweet.TweetId.ToString()
+        };
 
-            //Request headers
-            string apiKey = System.Configuration.ConfigurationManager.ConnectionStrings["apiKey"].ConnectionString;
-            string url = System.Configuration.ConfigurationManager.ConnectionStrings["webserviceUrl"].ConnectionString;
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
-            client.BaseAddress = new Uri(url);
+        //Request headers
+        string subscriptionKey = System.Configuration.ConfigurationManager.ConnectionStrings["apiKey"].ConnectionString;
+        client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
+        var uri = "https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/sentiment";
+        //Request body
+        Sentiment sentiment = new Sentiment();
+        sentiment.documents = new List<Document>();
+        sentiment.documents.Add(response);
+        string serializedSentiment = JsonConvert.SerializeObject(sentiment);
+        StringContent content = new StringContent(serializedSentiment, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response = await client.PostAsJsonAsync("", scoreRequest);
-            if (response.IsSuccessStatusCode)
-            {
-                result = await response.Content.ReadAsStringAsync();
-                objResult = JsonConvert.DeserializeObject(result);
-                //log.Info("*************MakeSentimentRequest***************** Score: " + objResult.Results.output1[0].score);
-            }
-            else
-            {
-                //log.Info(string.Format("The request failed with status code: {0}", response.StatusCode));
+        //new request
 
-                // Print the headers - they include the requert ID and the timestamp,
-                // which are useful for debugging the failure
-                //log.Info(response.Headers.ToString());
 
-                string responseContent = await response.Content.ReadAsStringAsync();
-                log.Info(responseContent);
-            }
+        var sentimentResponse = await client.PostAsync(uri, content);
+        if (!sentimentResponse.IsSuccessStatusCode)
+        {
+            throw new Exception();
         }
 
-        if (objResult == null)
+        var sentimentResponseBody = await sentimentResponse.Content.ReadAsStringAsync();
+        dynamic sentimentDeserialized = JsonConvert.DeserializeObject(sentimentResponseBody);
+		
+	    string sentimentScore = null;
+        if (sentimentDeserialized.documents.ToString() != "[]")
         {
-            return string.Empty;
+            sentimentScore = sentimentDeserialized.documents[0].score.ToString();
         }
-        return objResult.Results.output1[0].score;
+		
+        return sentimentScore;
+
+
     }
+}
+
+public class Document
+{
+    public string Language { get; set; }
+    public string Id { get; set; }
+    public string Text { get; set; }
+}
+
+public class Sentiment
+{
+    [JsonProperty(PropertyName = "documents")]
+    public List<Document> documents { get; set; }
 }

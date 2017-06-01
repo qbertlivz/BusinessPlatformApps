@@ -6,9 +6,9 @@ import { EntryRow } from '../models/entry-row';
 import { ViewModelBase } from '../services/view-model-base';
 
 export class SummaryViewModel extends ViewModelBase {
+    displayCompletionNotification: boolean = true;
     emailAddress: string = '';
     sendCompletionNotification: boolean = true;
-    displayCompletionNotification: boolean = true;
     sendMarketingMail: boolean = false;
     summaryRows: EntryRow[];
     values: any = {};
@@ -48,7 +48,9 @@ export class SummaryViewModel extends ViewModelBase {
                 isInvisible: true
             });
         }
+
         this.MS.DataStore.addToDataStore('SendCompletionNotification', this.sendCompletionNotification, DataStoreType.Public);
+
         return true;
     }
 }

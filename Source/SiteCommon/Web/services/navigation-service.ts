@@ -127,8 +127,6 @@ export class NavigationService {
     }
 
     NavigateToIndex(): void {
-        // do not update index here
-
         // Initialize the page
         this.MS.DataStore.CurrentRoutePage = this.pages[this.index].RoutePageName.toLowerCase();
 
@@ -163,5 +161,10 @@ export class NavigationService {
         setTimeout(() => {
             this.NavigateToIndex();
         }, 100);
+    }
+
+    Activate(): void {
+        this.UpdateIndex();
+        this.MS.DataStore.CurrentRoutePage = this.pages[this.index].RoutePageName.toLowerCase();
     }
 }

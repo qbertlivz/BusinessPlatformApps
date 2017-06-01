@@ -26,8 +26,15 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
 
             SubscriptionCloudCredentials creds = new TokenCloudCredentials(subscription, azureToken);
             Microsoft.Azure.Management.Resources.ResourceManagementClient client = new ResourceManagementClient(creds);
-            var param = new ResourceGroup { Location = location };
-            var createdResourceGroup = await client.ResourceGroups.CreateOrUpdateAsync(resourceGroup, param, new CancellationToken());
+            var existsResourceGroup = await client.ResourceGroups.CheckExistenceAsync(resourceGroup, new CancellationToken());
+            if (existsResourceGroup.Exists)
+            {
+                //show error on page saying please pick another RG name
+                return new ActionResponse(ActionStatus.Failure, new ArgumentException("Resource Group " + resourceGroup + " already exists."), "ResourceGroupAlreadyExists");
+            }
+
+            var locationParam = new ResourceGroup { Location = location };
+            var createdResourceGroup = await client.ResourceGroups.CreateOrUpdateAsync(resourceGroup, locationParam, new CancellationToken());
 
             request.Logger.LogResource(request.DataStore, resourceGroup, DeployedResourceType.ResourceGroup, CreatedBy.BPST, DateTime.UtcNow.ToString("o"), createdResourceGroup.ResourceGroup.Id);
 

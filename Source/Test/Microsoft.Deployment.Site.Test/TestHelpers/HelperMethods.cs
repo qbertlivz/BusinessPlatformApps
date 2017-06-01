@@ -336,7 +336,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
                 //MSI scenario - carry on
             }
             var progressText = driver.FindElementsByCssSelector("span[class='semiboldFont st-progress-text']")
-                                     .FirstOrDefault(e => e.Text.Contains("The deployment has been successfully completed!"));
+                                     .FirstOrDefault(e => e.Text.Contains("The deployment successfully completed!"));
             var error = driver.FindElementsByCssSelector("span[class='st-tab-text st-error']")
                                      .FirstOrDefault(e => !string.IsNullOrEmpty(e.Text));
 
@@ -350,7 +350,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
                 }
 
                 progressText = driver.FindElementsByCssSelector("span[class='semiboldFont st-progress-text']")
-                                    .FirstOrDefault(e => e.Text.Contains("The deployment has been successfully completed!"));
+                                    .FirstOrDefault(e => e.Text.Contains("The deployment successfully completed!"));
 
                 if (progressText != null && !string.IsNullOrEmpty(progressText.Text))
                 {
@@ -361,7 +361,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
             }
 
             Assert.IsTrue(progressText != null);
-            Assert.IsTrue(progressText.Text.Contains("The deployment has been successfully completed!"));
+            Assert.IsTrue(progressText.Text.Contains("The deployment successfully completed!"));
         }
 
         public static void CleanSubscription(string username, string password, string tenantId, string clientId, string subscriptionId)

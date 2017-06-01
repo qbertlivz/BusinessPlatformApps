@@ -110,9 +110,17 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
                     resourceGroupName = Guid.NewGuid().ToString().Replace("-", "");
 
-                    resourceGroup.Clear();
+                    try
+                    {
+                        resourceGroup.Clear();
+                    }
+                    catch { }//no resource group error
+                    Thread.Sleep(new TimeSpan(0, 0, 10));
                     resourceGroup.SendKeys(resourceGroupName);
 
+                    var text = driver.FindElementByCssSelector("p[class='st-float st-text']");
+                    text.Click();
+                    
                     var option = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
 
                     if (option != null && option.Enabled == true)

@@ -102,6 +102,14 @@ namespace Microsoft.Deployment.Site.Web.Tests
                 azurePage = driver.FindElementsByClassName("st-text").FirstOrDefault(e => e.Text == "Azure Subscription:");
                 if (azurePage != null)
                 {
+                    var option = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
+                    if (option != null && option.Enabled == true)
+                    {
+                        option = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
+                        option.SendKeys(subscriptionName);
+                    }
+                    Thread.Sleep(new TimeSpan(0, 0, 10));
+
                     var advanced = driver.FindElementByCssSelector("p[class='st-float st-text au-target']");
                     djs.ExecuteScript("arguments[0].click()", advanced);
 
@@ -109,7 +117,6 @@ namespace Microsoft.Deployment.Site.Web.Tests
                                         .First(e => e.GetAttribute("value.bind").Contains("selectedResourceGroup"));
 
                     resourceGroupName = Guid.NewGuid().ToString().Replace("-", "");
-
                     try
                     {
                         resourceGroup.Clear();
@@ -117,19 +124,16 @@ namespace Microsoft.Deployment.Site.Web.Tests
                     catch { }//no resource group error
                     Thread.Sleep(new TimeSpan(0, 0, 10));
                     resourceGroup.SendKeys(resourceGroupName);
+                    Thread.Sleep(new TimeSpan(0, 0, 10));
 
                     var text = driver.FindElementByCssSelector("p[class='st-float st-text']");
                     text.Click();
-                    
-                    var option = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
-
-                    if (option != null && option.Enabled == true)
-                    {
-                        option = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
-                        option.SendKeys(subscriptionName);
-                        break;
-                    }
                     Thread.Sleep(new TimeSpan(0, 0, 10));
+
+                    //assert successfully validated, then return
+                    var validated = driver.FindElementByClassName("st-validated");
+                    Assert.IsTrue(validated.Text == "Successfully validated");
+                    return;
                 }
                 Thread.Sleep(new TimeSpan(0, 0, 10));
             }
@@ -196,12 +200,24 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
                     resourceGroupName = "delete_" + Guid.NewGuid().ToString().Replace("-", "");
 
-                    resourceGroup.Clear();
+                    try
+                    {
+                        resourceGroup.Clear();
+                    }
+                    catch { }//no resource group error
+                    Thread.Sleep(new TimeSpan(0, 0, 10));
                     resourceGroup.SendKeys(resourceGroupName);
+                    Thread.Sleep(new TimeSpan(0, 0, 10));
 
-                    Thread.Sleep(new TimeSpan(0, 0, 50));
+                    var text = driver.FindElementByCssSelector("p[class='st-float st-text']");
+                    text.Click();
+                    Thread.Sleep(new TimeSpan(0, 0, 10));
 
+                    //assert successfully validated, then return
+                    var validated = driver.FindElementByClassName("st-validated");
+                    Assert.IsTrue(validated.Text == "Successfully validated");
                     return;
+
                 }
                 Thread.Sleep(new TimeSpan(0, 0, 10));
             }
@@ -268,6 +284,9 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
             ClickButton("Next");
             Thread.Sleep(new TimeSpan(0, 0, 2));
+            ClickButton("Connect");
+            Thread.Sleep(new TimeSpan(0, 0, 2));
+
             var newAas = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
 
             while (newAas.Enabled != true)

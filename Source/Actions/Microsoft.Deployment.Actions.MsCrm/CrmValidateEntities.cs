@@ -82,14 +82,14 @@ namespace Microsoft.Deployment.Common.Actions.MsCrm
             if (checkResponse == null || checkResponse.EntityMetadata == null)
             {
                 logger.LogCustomProperty("PSAEntity", $"The {entity} entity cannot be retrieved from the PSA instance.");
-                throw new Exception($"The {entity} entity could not be retrieved from the PSA instance.");
+                throw new Exception($"The {entity} entity cannot be retrieved from the PSA instance.");
             }
 
             // Raise and error if we can't enable it, but we need to
             if (!checkResponse.EntityMetadata.CanChangeTrackingBeEnabled.Value)
             {
                 logger.LogCustomProperty("PSAEntity", $"The {entity} entity cannot be enabled for change tracking.");
-                throw new Exception($"The {entity} entity can not be enabled for change tracking.");
+                throw new Exception($"The {entity} entity cannot be enabled for change tracking.");
             }
 
             // Nothing to do further, try changing

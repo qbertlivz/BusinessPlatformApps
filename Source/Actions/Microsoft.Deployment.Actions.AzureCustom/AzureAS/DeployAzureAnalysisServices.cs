@@ -24,7 +24,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
 
             string serverName = request.DataStore.GetValue("ASServerName") ?? "analysisserver-" + RandomGenerator.GetRandomLowerCaseCharacters(5);
             string location = request.DataStore.GetValue("ASLocation") ?? "westus";
-            string sku = request.DataStore.GetValue("ASSku") ?? "D1";
+            string sku = request.DataStore.GetValue("ASSku") ?? "B1";
             string admin = AzureUtility.GetEmailFromToken(request.DataStore.GetJson("AzureToken"));
 
             SubscriptionCloudCredentials creds = new TokenCloudCredentials(subscription, azureToken);

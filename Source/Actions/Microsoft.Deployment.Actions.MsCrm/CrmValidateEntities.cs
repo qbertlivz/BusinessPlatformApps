@@ -44,12 +44,8 @@ namespace Microsoft.Deployment.Common.Actions.MsCrm
             {
                 try
                 {
-                    //Parallel.ForEach(entities, (e) => { this.CheckAndUpdateEntity(e, proxy, request.Logger); });
+                    Parallel.ForEach(entities, (e) => { this.CheckAndUpdateEntity(e, proxy, request.Logger); });
 
-                    foreach (var entity in entities)
-                    {
-                        this.CheckAndUpdateEntity(entity, proxy, request.Logger);
-                    }
                     retryNeeded = false;
                 }
                 catch (AggregateException aex)
@@ -85,32 +81,30 @@ namespace Microsoft.Deployment.Common.Actions.MsCrm
             // Check if entity exists
             if (checkResponse == null || checkResponse.EntityMetadata == null)
             {
-                logger.LogCustomProperty("PSAEntity", $"The {entity} entity could not be retrieved from the PSA instance.");
+                logger.LogCustomProperty("PSAEntity", $"The {entity} entity cannot be retrieved from the PSA instance.");
+                throw new Exception($"The {entity} entity could not be retrieved from the PSA instance.");
             }
-            else
-            {
-                // Raise and error if we can't enable it, but we need to
-                if (!checkResponse.EntityMetadata.CanChangeTrackingBeEnabled.Value)
-                {
-                    throw new Exception($"The {entity} entity can not be enabled for change tracking.");
-                }
-                else
-                {
-                    // Nothing to do further, try changing
-                    if (!(bool)checkResponse.EntityMetadata.ChangeTrackingEnabled)
-                    {
-                        UpdateEntityRequest updateRequest = new UpdateEntityRequest() { Entity = checkResponse.EntityMetadata };
-                        updateRequest.Entity.ChangeTrackingEnabled = true;
-                        
-                        UpdateEntityResponse updateResponse = (UpdateEntityResponse)proxy.Execute(updateRequest);
 
-                        Thread.Sleep(new TimeSpan(0, 0, 2));
-                        RetrieveEntityResponse verifyChange = (RetrieveEntityResponse)proxy.Execute(checkRequest);
-                        if(!(bool)verifyChange.EntityMetadata.ChangeTrackingEnabled)
-                        {
-                            logger.LogCustomProperty("PSAEntity", $"Warning: Change tracking for {entity} has been enabled, but is not yet active.");
-                        }
-                    }
+            // Raise and error if we can't enable it, but we need to
+            if (!checkResponse.EntityMetadata.CanChangeTrackingBeEnabled.Value)
+            {
+                logger.LogCustomProperty("PSAEntity", $"The {entity} entity cannot be enabled for change tracking.");
+                throw new Exception($"The {entity} entity can not be enabled for change tracking.");
+            }
+
+            // Nothing to do further, try changing
+            if (!(bool)checkResponse.EntityMetadata.ChangeTrackingEnabled)
+            {
+                UpdateEntityRequest updateRequest = new UpdateEntityRequest() { Entity = checkResponse.EntityMetadata };
+                updateRequest.Entity.ChangeTrackingEnabled = true;
+
+                UpdateEntityResponse updateResponse = (UpdateEntityResponse)proxy.Execute(updateRequest);
+
+                // Check the entity has actually been change tracking enabled
+                RetrieveEntityResponse verifyChange = (RetrieveEntityResponse)proxy.Execute(checkRequest);
+                if (!(bool)verifyChange.EntityMetadata.ChangeTrackingEnabled)
+                {
+                    logger.LogCustomProperty("PSAEntity", $"Warning: Change tracking for {entity} has been enabled, but is not yet active.");
                 }
             }
         }

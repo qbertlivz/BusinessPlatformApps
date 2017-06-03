@@ -4,6 +4,7 @@
     AAS_PASSWORD: `Azure Password:`,
     AAS_SERVER: `AAS Server:`,
     AAS_SKU: `AAS SKU:`,
+    AAS_BASIC_1: `Basic 1`,
     AAS_STANDARD_0: `Standard 0`,
     AAS_STANDARD_1: `Standard 1`,
     AAS_STANDARD_2: `Standard 2`,

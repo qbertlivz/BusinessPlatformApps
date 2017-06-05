@@ -1,4 +1,4 @@
-/// <binding BeforeBuild='pre-build, strip-typescript-reference-paths' AfterBuild='build-typescript, post-build' />
+/// <binding BeforeBuild='pre-build, strip-typescript-reference-paths' AfterBuild='build-typescript, post-build' Clean='clean-dist' />
 
 require('babel-polyfill');
 

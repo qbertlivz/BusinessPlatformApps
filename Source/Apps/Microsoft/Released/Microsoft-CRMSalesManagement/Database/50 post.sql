@@ -17,6 +17,7 @@ DROP TABLE dbo.lead;
 DROP TABLE dbo.opportunity;
 DROP TABLE dbo.opportunityproduct;
 DROP TABLE dbo.product;
+DROP TABLE dbo.team;
 DROP TABLE dbo.systemuser;
 DROP TABLE dbo.systemusermanagermap;
 DROP TABLE dbo.territory;

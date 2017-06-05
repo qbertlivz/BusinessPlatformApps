@@ -1,490 +1,208 @@
-System Center Configuration Manager Solution Template Documentation
--------------------------------------------------------------------
-
+# Power BI Project Service Automation Solution Template for Dynamics 365 Documentation
 # Table of Contents
 1. [Introduction](#introduction)
 2. [Architecture](#architecture)
 3. [System Requirements](#system-requirements)
 4. [How to Install](#how-to-install)
-5. [Reports Walkthrough](#report-walkthrough)
-6. [Technical Description](#technical-description)
-7. [Customizing the Template]()
-
+5. [Technical Description](#technical-description)
+6. [Report Walkthrough](#report-walkthrough)
 
 # Introduction
+Create a scalable, secure and flexible PowerBI dashboard on Dynamics 365 with the Power BI Project Service Automation solution template for Dynamics 365. The template creates everything required for an end-to-end analytics solution on your Dynamics 365 org including the data extraction, database constructs, and a Power BI report bound to the database. You can extend or customize the result to accommodate your own business requirements.
+The Project Service Automation solution template for Dynamics 365 is intended for customers who:
+-	Want to provision an analytics solution for tens or even thousands of users
+-	Want to deploy an analytics solution that scales with any size of Dynamics 365 instance from small to very large
+-	Want to be able to create data mashups on Dynamics 365 with data from their ERP, marketing, inventory management or other any other application
+The Project Service Automation solution template for Dynamics 365 is targeted at sales executives, managers and salespeople to forecast revenue, compare sales to the same period in the prior month, quarter or year, track sales against goals and monitor their pipeline .
+This document describes how to provision the Project Service Automation solution template for Dynamics 365, the architecture, and how to extend or customize the template. The audience for this document is intended to be the IT professional or administrator who implements and manages the solution template and/or the developer who extends or customizes the solution template.
+Please contact <PBISolnTemplates@microsoft.com> for any questions or issues with this document.
+
+# Architecture
 
 
-The SCCM solution template provides detailed information of your System Center Configuration Manager including client and server health, malware protection, software updates, and software inventory across your organization.
+All that is required is an Azure subscription (athough an existing Azure SQL DB can be used if available.)
+This has all the advantages of Software as a Service where you pay as you go. All the patching and upkeep is handled for you. You can also later publish your reports to PowerBi.com.
 
-The template lets you do things like:
 
--   Compare key System Center Configuration Manager metrics to personalized targets and see how they trend over time
+Data Export Services pushes new and changed records from Dynamics 365 to populate a destination database (how data is pulled and SQL database are described in later sections) after which the approach differs.
 
--   Identify trouble spots and get the information you need to understand what needs to be done
 
-The following document provides a walkthrough of installation steps as well as information on cost. For any questions not covered in this document, please contact the team at <PBISolnTemplates@microsoft.com>
+![ImportDataOption](Resources/Images/ImportDataOption.png)
 
-# Architecture 
-
-![Architecture](Resources/Images/Arch.png)
-
-The flow of the SCCM solution template is as follows:
-
--   Windows task scheduler launches a process that pulls data from your SCCM database each day.
-
--   The task copies data into Azure SQL (or SQL server)
-
--   Power BI imports data from Azure SQL (or SQL server) and renders pre-defined reports
 
 # System Requirements
+Setting up the template requires the following:
+-	an Azure Subscription
+-	Power BI Desktop (latest version)
+-	Power BI Pro (to share the template with others)
+-	Project Service Automation for Dynamics 365 2015 or later, on-premises or Online.
 
--   System Center 2012 Configuration Manager R2 SP1 (5.00.8239.1000) or later. Read access to System Center Configuration Manager database is required.
+**You must have administrative permissions on your Dynamics 365 for Project Service Automation instance**. You can check whether you are a system administrator
+ [here](https://www.microsoft.com/en-us/dynamics/crm-customer-center/find-your-dynamics-365-administrator-or-support-person.aspx). 
 
--   Destination database: Azure SQL database or SQL Server database (SQL Server 2008 R2 SP3 or later).
-
--   For the machine where the installation is run,
-
-    -   Microsoft .NET Framework 4.5 or later.
-
-    -   PowerShell version 3.0 or later.
-
-    -   For Operating System: Windows Server 2008 R2 SP1, or later. Windows 7 Professional, Enterprise, or later. Note that Windows 10 anniversary update (1607 or later) is not supported at this moment because of a bug in credential guard.
 
 # How to Install
+Installing the Project Service Automation solution template for Dynamics 365 configures the following:
+-	Data extraction
+-	Azure SQL Database
+-	Power BI Desktop file
+The detailed description of each component of the architecture is below. To get started, navigate to the Power BI solution templates from the Solutions menu on powerbi.com: 
+
+![SolutionsMenu](Resources/Images/SolutionsMenu.png)
+
+From there, select the Project Service Automation for Dynamics 365 solution template and click the “Install now” button.
+
+## Step 1: Connect to Dynamics 365 Online
+
+Next, connect to your Dynamics 365 instance to give permission to the provisioning application to set up data export service to populate the Azure SQL DB destiniation.
+
+**Note: You must have an Azure subscription in the same tenant as Dynamics 365.** 
+
+An Azure subscription grants you access to Windows Azure services and is the means by which resource usage is reported and services are billed.
+A tenant is a representation of an organization in Azure. It is also called a dedicated instance of Azure Active Directory. You may have an Azure subscription already, but it must be in the same tenant as your Sales for Dynamics 365 instance to be used for the solution template. To see if you have an Azure subscription in the same tenant:
+
+-	connect to the Azure portal (https://portal.azure.com) using the same credentials you connect to Sales for Dynamics 365.
+-	On the left panel, click the “Subscriptions” item.
+If you see a subscription on the right panel, you satisfy this requirement. If no subscription exists, it is simple, fast and free to create one.
+by following the instructions here: <https://account.windowsazure.com/subscriptions/>. 
+
+![Get Started](Resources/Images/Dynamics365AzSub.png)
+
+## Step 2: Specify Azure Subscription
+
+Choose the Dynamics 365 organization and specify the Azure subscription used to contains newly created resources.
+![Get Started](Resources/Images/Dynamics365AzSub2.png)
+
+Optionally change the name of the Azure Resource Group (to better manage your AzurE resource consumption.)
+
+Click "Next".
+
+## Step 3: Set up Azure Key Vault
+
+Azure Key Vault is a secure mechanism to store credentials to Azure SQL DB. The next step creates an Azure Key valut instance.
+
+![AZ Key Vault](Resources/Images/AzKeyVault.png)
+
+Click “Next” to continue.
+
+## Step 4: Connect to new or existing Azure SQL DB
+Connect to an existing SQL Server or provide details which the application will use to spin up an Azure SQL on your behalf. Only Azure SQL is supported for this template. If a user chooses to spin up a new Azure SQL, this will get deployed in their Azure subscription inside the newly created resource group.
+![ConnectSQL](Resources/Images/ConnectAzureSQL.png)
+
+Open the advanced tab to change the service tier of the destination Azure SQL Database or datacenter location.
+
+**_Important note_**: If you use an existing Azure SQL DB, you **_must_** safelist your client IP address shown on this page in the Azure portal before you continue.
+If you do not, you will not be able to read data from Azure SQL DB to populate the Power BI file. To safe-list the IP addresses, follow the instructions [here](https://azure.microsoft.com/en-us/documentation/articles/sql-database-configure-firewall-settings/).
+
+Click “Next” to continue.
+
+## Step 5: Summary
+Review your selectionms. Enter a valid email address to receive a notification when the solution template has completed provisioning. 
+
+![Customize](Resources/Images/CustomizePSA.png)
 
 
-![Image2](Resources/Images/GetStarted.png)
+The base Dynamics 365 URL is provided for links for each Project Service Automation object in the power BI reports.
 
-**Step 1: Connect to SCCM database**
+Provide an email to be contacted when the initial data publication is complete. There is no schedule to refresh data - it is replicated in realtime.
 
-Enter a server name for your SCCM database, provide a credential to the server, validate a connection to the server, and choose your SCCM database. Note that the template supports System Center 2012 Configuration Manager R2 SP1 (5.00.8239.1000) or later. The credential used to connect to SCCM will be used to create a scheduled task to pull data from SCCM.
+Click “Next” to continue.
 
-![Image3](Resources/Images/ConnectSCCM.png)
 
-**Step 2: Connect to your destination database**
 
-Enter a server name for your destination database, validate a connection to the server, and choose your database.
+## Step 6: Track Progress
+Once data starts moving, A Power BI file can be downloaded that is bound to the database specified earlier. 
+![Track Prog](Resources/Images/TrackProgress.png)
 
--   Option 1 (Azure SQL): SQL user name and password is required.
+A zip file ccan be downloaded that contains three Power BI desktop files (or pbix files) pre-bound to the data destination (either Azure SQL Server or Azure Analysis Services). Follow the instructions on the first page in the report to show your data.
 
--   Option 2 (SQL server): either Windows authentication or SQL authentication.
 
-Note that database owner role is required to create tables and execute stored procedures.
+## Step 7: Open the Power BI file
 
-![Image4](Resources/Images/ConnectSQL.png)
+Open the downloaded Power BI file and take the following steps:
+a)	Click “Apply Changes”
+![Apply Changes](Resources/Images/ApplyChanges.png)
+b)	Windows Credentials
+On the windows tab, select “Use my current credentials”:
+![Use my current credentials](Resources/Images/WindowsCredentials.png)
+c)	Database Credentials
+Click the Database item in the left-hand pane and enter the username and password you provided for the Azure SQL database:
+![Database Credentials](Resources/Images/DatabaseCredentials.png)
+Click “Save”.
 
-**Step 3: Customize your settings**
 
-Configure the following parameters and click “Validate”.
+## Step 8: View the Report
+At this point Power BI Desktop will connect and retrieve the data. Note that it may take some time for the initial data pull to finish.  
 
--   Daily Trigger Time: specify the condition that will trigger the daily task. (at 2:00 AM by default)
+## Common Provisioning Questions
+**I closed the “Track your Progress” page. How do I know when the data has been pulled out of Dynamics 365?**
+you will receive an email when the data has completed moving.
 
--   Data Retention Days: between 1 and 365
+**I didn’t download the Power BI file (the pbix file) but closed the “Track your Progress” page where it is downloaded from. Now what?**
+You can repeat the provisioning process or find the pbix files here:
+- [Account Manager report](https://github.com/Microsoft/BusinessPlatformApps/blob/dev/Source/Apps/Microsoft/Released/Microsoft-PSA/Service/PowerBI/PSA_AccountManager.pbix)
+- [Practice Manager report](https://github.com/Microsoft/BusinessPlatformApps/blob/dev/Source/Apps/Microsoft/Released/Microsoft-PSA/Service/PowerBI/PSA_PracticeManager.pbix)
+- [Resource Manager report](https://github.com/Microsoft/BusinessPlatformApps/blob/dev/Source/Apps/Microsoft/Released/Microsoft-PSA/Service/PowerBI/PSA_ResourceManager.pbix)
 
--   Endpoint Compliance Target: between 0 and 1
+# Report Walkthrough
+ The reports bare find in the Practice Manager Power BI desktopn file.
 
--   Health Evaluation Target: between 0 and 1
+## Gross Margin
+Details gross margins by date and customer.
+![Rep1](Resources/Images/PSAGrossMargin.png)
 
-Note that the scheduled task will not be triggered if a machine goes to sleep. The task will be restarted as soon as possible when the machine is out of sleep mode.
+## Cost
+Costs by practice by date.
+![Rep1](Resources/Images/PSACost.png)
 
-![Image5](Resources/Images/Config.png)
+## Cost Estimated vs Actual
+Detgais differences betwen estimated an actual cost by practice, customer and date.
+![Rep1](Resources/Images/PSACostEstAct.png)
 
-**Step 4: Verify and run**
+## Customer Revenue
+Provides revenue by date and customer.
 
-Verify the information and click “Run”.
+![Rep1](Resources/Images/PSACustRev.png)
 
-![Image6](Resources/Images/Verify.png)
-
-**Step 5: Track your progress**
-
-The setup will create new tables, views, stored procedures in destination database, install required SQL tools if not found, create/run a new task.
-
-![Image7](Resources/Images/Track.png)
-
-**Step 6: Start pulling data**
-
-We'll show you progress while you wait. Please don't close the browser until all the steps are completed. This might take a while, depending on the size of your SCCM database.
-
-![Image8](Resources/Images/Track2.png)
-
-**Step 7: Download PBIX**
-
-Download your Power BI report, open the report, and click “Apply changes” as below. Note that Power BI Desktop is required to open the report (Power BI Desktop can be download from [here](https://powerbi.microsoft.com/en-us/desktop/)).
-
-![Image9](Resources/Images/image9.png)
-
-Please click “Refresh” to import data from your destination database and enter your credentials.
-
-![Image10](Resources/Images/image10.png)
-
-**Step 8: Publish the report to PowerBI.com**
-
-At this point, you should be able to see your SCCM data. If you are interested in publishing the report to [Power BI](https://powerbi.microsoft.com/en-us/) and share it with colleagues, click “Publish” to Power BI.
-
-![Image11](Resources/Images/image11.png)
-
-# Reports walkthrough
-
-### Overview:
-
-The report provides a high level overview of key SCCM metrics to quickly identify machines not up-to-date with software updates, failed mitigations to malware infections to be able to act promptly, failed updates and more.
-
-![Image12](Resources/Images/image12.png)
-
-### Protection:
-
-You can track key protection measures for the period you configured during the installation.
-
-![Image13](Resources/Images/image13.png)
-
-### Malware:
-
-The report shows trend of resolved/unresolved malware count by severity, OS, and remediation type. Malware Category chart (lower-left) shows numbers of resolved malware (color saturation by unresolved malware).
-
-![Image14](Resources/Images/image14.png)
-
-Note that you can enable drill down by selecting the arrow icon in the top right corner of the bar chart. To drill down one field at a time, double-click one of the chart bars. For drill down in details, please click [here](https://powerbi.microsoft.com/en-us/documentation/powerbi-service-drill-down-in-a-visualization/).
-
-![Image15](Resources/Images/image15.png)
-
-### Update Compliance:
-
-The report lists missing updates by severity and device that can be used to take action.
-
-![Image16](Resources/Images/image16.png)
-
-We provide hyperlinks for the missing updates in the table (lower-left). You can click the urls for more information.
-
-![Image17](Resources/Images/image17.png)
-
-### Software Inventory:
-
-The report allows users to select a machine to show installed programs or select a program to show related machines.
-
-![Image18](Resources/Images/image18.png)
+## Resource Revenue
+Provides revenue by resource and customer.
+![Rep1](Resources/Images/PSAResRev.png)
 
 
 # Technical Description
 This section describes each component of the solution template in detail.
 
-## Client Data Extraction and Load
-
-A powershell script dataload.ps1 found in the folder C:\ProgramData\Business Platform Solution Templates\Microsoft-SCCMTemplate 
-executes a collection of scripts to pull data from the source SCCM datatbase into a flat file, bcp it to the
-destination database, and executes stored procedures in the destination database to merge this data with the results from 
-prior loads.
-
-The script is executed from Task Scheduler. To change or pause the schedule, open Task Scheduler and locate the Task "Power BI Solution Template - SCCM". 
-
-The same data is pulled with each load. Destination database stored procedures merge the results.
-
-## Understanding Credentials for Accessing the SCCM and Target Databases
-
-The task requires credentials to be able to access the SCCM and for the target databases. These credentials are securely stored with
-Credential Manager.
-
-You can manually manage the credentials for both the SCCM and target database after the solution template
-is provisioned. To change the windows credentials used to access the SCCM DB and target database, open task
-scheduler, find the task "Power BI Solution Template - SCCM" and change the task's credentials.
-
-To change the credentials used to access the target database when SQL Authentication was used, open Credential Manager (open Control Panel and search for Credential Manager), and edit the credential "pbi_sccm".
-
-## SQL Server DB - SQL Server or Azure SQL Database 
-### Tables
-
-The following additional tables are created in to the target database.
-
-<sub>
-
-| Table         |	Description |
-| -----         | ------------  |
-| collection          | An SCCM custom collection. These are not currently used by the solution template.  |
-| computer            | Distinct list of all computers. |
-| computercollection  | An SCCM primary or secondary site. |
-| computermalware     | Junction table listing which malware is on which computer. |
-| computerprogram     | Junction table listing which software is on which computer. |
-| computerupdate      | Junction table listing which update is on which computer.  |
-| configuration       | Table containing any config values used by the template. |
-| date                | A date table created and populated by the solution template |
-| malware             | List of all malware detected by SCCM |
-| operatingsystem     | List of all operating systems detected by SCCM |
-| program             | List of all software detected on the SCCM computers |
-| scanhistory         | A history of scan results for each computer |
-| site                | Primary and secondary SCCM sites |
-| update              | List of all updates installed on the computers |
-| user                | List of all users of SCCM computers |
-| usercomputer        | Junction table listing which user is associated with each computer |
-
-</sub>
-
-Each table is accompanied by a corresponding staging table with the same name with _temp appended; for example, the site table
-has a site_temp table. The structure of the staging table is identical to its counterpart.
-
-All tables are created in the pbist_sccm schema.
-
-#### Collection
-
-<sub>
-
-| Column         | Datatype     |	Description |
-| ---------------|--------------|--------------|
-| collectionid   | nvarchar(8)  | unique identified of the collection |
-| collection name | nvarchar(255) |  |
-
-</sub>
-
-Query to populate collections:
-
-<sub>
-
-```
-SELECT SiteID          [CollectionID],      
-       CollectionName  [Collection Name]    
-FROM   v_Collections
-
-```
-
-</sub>
-
-#### Computer
-
-
-<sub>
-
-| Column         | Datatype     |	Description |
-| ---------------|--------------|--------------|
-|	machineid    | int          |  |
-|	sitecode   |  nvarchar(3)   | The SCCM site the computer belongs to  | 
-|	[name]   |  nvarchar(256)          | Computer name |
-|	[operating system]    | nvarchar(256)   |  The operating system name. |
-|	[client type]    | tinyint          | 1: computer, 2: mobile |
-|	[manufacturer]    | nvarchar(255)          |  The computer manufacturer|
-|	[model]    | nvarchar(255)           | Model number. Contain "Virtual Machine" for VMs. |
-|	[platform]   |  nvarchar(255)           | eg, x64-based PC, X86-based PC |
-|	[physical memory]   |  bigint           | physical memory in bytes |
-|	[deleted date]    | datetime           | The date the computer was deleted. Computers are not physically deleted from this table but are marked as deleted with this date. This is the date the computer was first observed to be absent from SCCM. |
-
-</sub>
-
-Query to populate computer:
-
-<sub>
-
-```
-WITH hwplatform AS
-(
-    SELECT resourceid                   MachineID,
-           Max(cs.manufacturer0)        Manufacturer,
-           Max(cs.model0)               [Model],
-           Max(cs.systemtype0)          [Platform],
-           Max(cs.totalphysicalmemory0) [Physical Memory]
-    FROM   v_gs_computer_system cs
-    GROUP  BY resourceid
-)
-SELECT itemkey                         machineid,
-       client.sitecode                 sitecode,
-       c.name0                         [name],
-       c.operating_system_name_and0 AS [operating system],
-       c.client_type0                  [client type],
-       hwp.manufacturer,
-       hwp.[model],
-       hwp.[platform],
-       hwp.[physical memory]
-FROM   vsms_r_system c
-           LEFT JOIN v_clientmachines AS client ON c.itemkey = client.resourceid
-           LEFT JOIN hwplatform AS hwp ON c.itemkey = hwp.machineid
-WHERE
-    decommissioned0=0 AND obsolete0=0 AND c.name0 NOT LIKE N'%|%';
-
-```
-
-</sub>
-
-
-
-#### ComputerCollection
-
-
-<sub>
-
-| Column         | Datatype     |	Description |
-| ---------------|--------------|--------------|
-| collectionid   | nvarchar(8)  |  |
-| resourceid     | int          | |
-
-</sub>
-
-Query populating the table:
-
-<sub>
-
-```
-SELECT SiteID          [CollectionID],      
-       CollectionName  [Collection Name]    
-FROM   v_Collections;
-```
-
-</sub>
-
-
-#### ComputerMalware
-
-
-<sub>
-
-| Column         | Datatype     |	Description |
-| ---------------|--------------|--------------|
-|	threatid |  bigint |  Unique identifier of the threat |
-|	machineid |  int | |
-|	[detection date] |  datetime | date malware detected on the computer. |
-|	[observer product name] |  nvarchar(32) | product name detecting the malware, eg, SystemCenter Endpoint Protection |
-|	[observer product version] |  nvarchar(255)  | |
-|	[observer detection]  | nvarchar(8)  | |
-|	[remediation type] |  nvarchar(11) | action taken for remediation |
-|	[remediation result] |  nvarchar(5)  | whether or not remediation successful |
-|	[remediation error code] |  int  | if an error occurred, the error code |
-|	[remediation pending action] |  nvarchar(16)  | whether or not subsequent action required |
-|	[is active malware]  |  nvarchar(5)  | whether or not the malware is currently active |
-
-</sub>
-
-<sub>
-
-```
-SELECT t.threatid,
-       c.itemkey                                          MachineID,
-       Dateadd(day, Datediff(day, 0, t.detectiontime), 0) AS [Detection Date],
-       N'SystemCenter Endpoint Protection'                [Observer Product Name],
-       t.productversion                                   [Observer Product Version],
-       CASE
-         WHEN t.detectionsource = 0 THEN N'Unknown'
-         WHEN t.detectionsource = 1 THEN N'User'
-         WHEN t.detectionsource = 2 THEN N'System'
-         WHEN t.detectionsource = 3 THEN N'Realtime'
-         WHEN t.detectionsource = 4 THEN N'IOAV'
-         WHEN t.detectionsource = 5 THEN N'NIS'
-         WHEN t.detectionsource = 6 THEN N'BHO'
-       END                                                [Observer Detection],
-       CASE
-         WHEN t.cleaningaction = 0 THEN N'Unknown'
-         WHEN t.cleaningaction = 1 THEN N'Clean'
-         WHEN t.cleaningaction = 2 THEN N'Quarantine'
-         WHEN t.cleaningaction = 3 THEN N'Remove'
-         WHEN t.cleaningaction = 6 THEN N'Allow'
-         WHEN t.cleaningaction = 8 THEN N'UserDefined'
-         WHEN t.cleaningaction = 9 THEN N'NoAction'
-         WHEN t.cleaningaction = 10 THEN N'Block'
-       END                                                AS [Remediation Type],
-       CASE
-         WHEN t.actionsuccess = 1 THEN N'True'
-         ELSE N'False'
-       END                                                [Remediation Result],
-       t.errorcode                                        [Remediation Error Code],
-       CASE
-         WHEN t.pendingactions & 4 <> 0 THEN N'FullScan'
-         WHEN t.pendingactions & 8 <> 0 THEN N'Reboot'
-         WHEN t.pendingactions & 16 <> 0 THEN N'SettingsModified'
-         WHEN t.pendingactions & 32768 <> 0 THEN N'SystemSweeper'
-         ELSE N'NoActionRequired'
-       END                                                [Remediation Pending Action],
-       CASE
-         WHEN t.actionsuccess = 0 THEN N'True'
-         ELSE N'False'
-       END                                                [Is Active Malware]
-FROM   v_gs_threats t
-       INNER JOIN vsms_r_system c
-               ON t.resourceid = c.itemkey
-       INNER JOIN v_threatcatalog tc
-               ON t.threatid = tc.threatid
-WHERE  c.obsolete0 = 0
-       AND c.decommissioned0 = 0;
-```
-
-</sub>
-
-
-
-
-#### ComputerProgram
-
-
-<sub>
-
-| Column         | Datatype     |	Description |
-| ---------------|--------------|--------------|
-| [MachineID]    | int | |
-| [ProgramId]    | nvarchar(255) | |
-| [Install Date] | nvarchar(255) | Date program first observer to be installed |
-
-</sub>
-
-Query to populate ComputerProgram:
-
-<sub>
-
-```
-SELECT resourceid                                      MachineID,
-       Replace(Left(displayname0, 250), CHAR(9), ' ')  [Program Name],
-       Replace(Left(publisher0, 250), CHAR(9), ' ')    Publisher,
-       version0                                        [Version],
-       NULL                                            [timestamp]
-FROM   v_gs_add_remove_programs p INNER JOIN vsms_r_system s ON p.resourceid = s.itemkey
-WHERE  s.obsolete0 = 0 AND
-       s.decommissioned0 = 0 AND
-       p.displayname0 IS NOT NULL AND
-       p.displayname0<>'' 
-UNION
-SELECT resourceid                                      MachineID,
-       Replace(Left(displayname0, 250), CHAR(9), ' ')  [Program Name],
-       Replace(Left(publisher0, 250), CHAR(9), ' ')    Publisher,
-       version0                                        [Version],
-       NULL                                            [timestamp]
-FROM   v_gs_add_remove_programs_64 p INNER JOIN vsms_r_system s ON p.resourceid = s.itemkey
-WHERE  s.obsolete0 = 0 AND
-       s.decommissioned0 = 0 AND
-       p.displayname0 IS NOT NULL AND
-       p.displayname0<>''
-
-```
-
-</sub>
-
-
-
-#### ComputerUpdate
-
-
-<sub>
-
-| Column         | Datatype     |	Description |
-| ---------------|--------------|--------------|
-| machineID      | int  | |
-| CI_ID          | int  | |
-| LastStatusChangeTime | datetime  | |
-| LastStatusCheckTime | datetime | |
-| Status         | tinyint | |
-
-</sub>
-
-Query to populate ComputerUpdate:
-
-<sub>
-
-```
-SELECT machineid,
-       ucs.ci_id,
-       laststatuschangetime,
-       laststatuschecktime,
-       ucs.[status]
-FROM   vsms_update_compliancestatus ucs
-INNER JOIN vsms_softwareupdate u ON ucs.ci_id = u.ci_id
-INNER JOIN vsms_r_system c  ON ucs.machineid = c.itemkey AND u.isenabled = 1 AND u.issuperseded = 0
-WHERE  c.obsolete0 = 0 AND c.decommissioned0 = 0;
-```
-
-</sub>
-
-#### Date
+## Data Extraction and Load
+The Project Service Automation solution template utilizes Scribe replication jobs. The following tables are replicated:
+-	account
+-	bookableesource
+-	bookableesourcebooking
+-	bookableesourcecategory
+-	bookableresourcecategoryassn
+-	bookingstatus
+-	msdyn_actual
+-	msdyn_estimateline
+-	msdyn_orderlineresourcecategory
+-   msdyn_organizationalunit
+-   msdyn_project
+-   msdyn_resourcerequest
+-   msdyn_resourcerequirement
+-   msdyn_resourcerequirementdetail
+-   msdyn_timeentry
+-   msdyn_transactioncategory
+-   opportunity
+-   quote
+-   quotedetail
+-   salesorder
+-   salesorderdetail
+-   systemuser
+
+The tables are replicated with custom fields already included.
+
+Additional entities can be replicated to the target database. 
+
+
+### Date
 
 The Date table is autogenerated with the installation of the solution template from 2013 to 2020.
 
@@ -517,656 +235,472 @@ The Date table is autogenerated with the installation of the solution template f
 </sub>
 
 
-#### Malware
 
-The malware table is pulled from the SCCM malware catalog.
+## Views
+The Power BI file is bound to the views. These are defined below:
+
+
+### State values
+All views ending in "_state" are bound to the statemetadata table as follows:
+- account_state
+- bookableresourcebooking_state
+- bookableresourcecategoryassn_state
+- bookableresourcecategory_state
+- bookableresourcecategory_state
+- bookableresource_state
+- bookingstatus_state
+- msdyn_actual_state
+- msdyn_estimateline_state
+- msdyn_expensecategory_state
+- msdyn_expense_state
+- msdyn_orderlineresourcecategory_state
+- msdyn_organizationalunit_state
+- msdyn_projectteam_state
+- msdyn_resourcerequest_state
+- msdyn_resourcerequirementdetail_state
+- msdyn_resourcerequirement_state
+- msdyn_timeentry_state
+- msdyn_timeoffcalendar_state
+- opportunityclose_state
+- opportunity_state
+- quoteclose_state
+- quote_state
+- salesorder_state
 
 <sub>
 
-| Column         | Datatype     | Description |
-| ---------------|--------------|--------------|
-| ThreatID | bigint] | |
-|	[Malware Name] | nvarchar](128) | |
-|	[Malware Severity] | nvarchar](128) | |
-|	[Malware Category] | nvarchar](128) | |
-
+| Column         | Datatype           |  Source      | Description  |
+| ---------------|--------------------|--------------|--------------|
+| [value]  | 	int      |  state      |
+| [label]      | 	nvarchar(255)      | 	localizedlabel	|    |
 
 </sub>
 
-Query to populate Malware:
+### Code values
+
+Code values are bound to the optionsetmetadata table:
+- accountcategorycode_os_account
+- accountclassificationcode_os_account
+- accountratingcode_os_account
+- address1_addresstypecode_os_account
+- address1_freighttermscode_os_account
+- address1_shippingmethodcode_os_account
+- address2_freighttermscode_os_account
+- address2_shippingmethodcode_os_account
+- bookingtype_os_bookableresourcebooking
+- businesstypecode_os_account
+- customersizecode_os_account
+- customertypecode_os_account
+- freighttermscode_os_quote
+- freighttermscode_os_salesorder
+- industrycode_os_account
+- msdyn_allocationmethod_os_msdyn_projectteam
+- msdyn_allocationmethod_os_msdyn_resourcerequirement
+- msdyn_costperformence_os_msdyn_project
+- msdyn_membershipstatus_os_msdyn_projectteam
+- msdyn_ordertype_os_opportunity
+- msdyn_ordertype_os_quote
+- msdyn_ordertype_os_salesorder
+- msdyn_overallprojectstatus_os_msdyn_project
+- msdyn_relateditemtype_os_msdyn_timeentry
+- msdyn_scheduleperformance_os_msdyn_project
+- msdyn_type_os_msdyn_resourcerequirement
+- opportunityratingcode_os_opportunity
+- ownershipcode_os_account
+- paymenttermscode_os_account
+- paymenttermscode_os_quote
+- paymenttermscode_os_salesorder
+- preferredappointmentdaycode_os_account
+- preferredappointmenttimecode_os_account
+- preferredcontactmethodcode_os_account
+- prioritycode_os_opportunity
+- prioritycode_os_salesorder
+- quotestatecode_os_quotedetail
+- resourcetype_os_bookableresource
+- salesorderstatecode_os_salesorderdetail
+- salesstagecode_os_opportunity
+- shippingmethodcode_os_account
+- territorycode_os_account
+- shippingmethodcode_os_salesorder
+- shipto_freighttermscode_os_quote
+- shipto_freighttermscode_os_quotedetail
+- shipto_freighttermscode_os_salesorder
+- shipto_freighttermscode_os_salesorderdetail
+- status_os_bookingstatus
+- timeline_os_opportunity
 
 <sub>
 
-```
-    SELECT tc.threatid,
-       Coalesce(tc.NAME, N'UnknownThreat') [Malware Name],
-       Coalesce(sev.severity, N'Unknown')  [Malware Severity],
-       Coalesce(cat.category, N'Invalid')  [Malware Category]
-FROM   v_threatcatalog tc
-           LEFT JOIN v_threatseverities sev ON tc.severityid = sev.severityid
-           LEFT JOIN v_threatcategories cat ON tc.categoryid = cat.categoryid;
-
-```
+| Column         | Datatype           |  Source      | Description  |
+| ---------------|--------------------|--------------|--------------|
+| [value]  | 	int      |  option      |
+| [label]      | 	nvarchar(255)      | 	localizedlabel	|    |
 
 </sub>
 
+### Status values
 
-
-#### Program
-
-The program table is pulled from distint programs installed on computers. A program is considered unique with the same name, publisher and version.
+Status values are bound to the statusmetadata table:
+- bookableresourcebooking_status
+- bookableresourcecategory_status
+- bookableresource_status
+- bookingstatus_status
+- msdyn_actual_status
+- msdyn_estimateline_status
+- msdyn_expensecategory_status
+- msdyn_expense_status
+- msdyn_orderlineresourcecategory_status
+- msdyn_organizationalunit_status
+- msdyn_projectteam_status
+- msdyn_project_status
+- msdyn_resourcerequest_status
+- msdyn_resourcerequirementdetail_status
+- msdyn_resourcerequirement_status
+- msdyn_timeentry_status
+- msdyn_timeoffcalendar_status
+- opportunityclose_status
+- opportunity_status
+- quoteclose_status
+- quote_status
+- salesorder_status
 
 <sub>
 
-| Column         | Datatype     | Description |
-| ---------------|--------------|--------------|
-| [Program Name] | nvarchar(255) |  |
-| Publisher      | nvarchar(255) |  |
-| Version        | nvarchar(255) |  |
+| Column         | Datatype           |  Source      | Description  |
+| ---------------|--------------------|--------------|--------------|
+| [value]  | 	int      |  status    |
+| [label]      | 	nvarchar(255)      | 	localizedlabel	|    |
 
 </sub>
 
-Query to populate Program:
+### Global options
+
+Global options are bound to the globaloptionsetmetadata table:
+- budgetstatus_gos
+- initialcommunication_gos
+- msdyn_adjustmentstatus_gos
+- msdyn_amountmethod_gos
+- msdyn_billingmethod_gos
+- msdyn_billingstatus_gos
+- msdyn_billingtype_gos
+- msdyn_bulkgenerationstatus_gos
+- msdyn_committype_gos
+- msdyn_competitive_gos
+- msdyn_customertype_gos
+- msdyn_entrystatus_gos
+- msdyn_estimatedbudget_gos
+- msdyn_estimatedschedule_gos
+- msdyn_expensestatus_gos
+- msdyn_expensetype_gos
+- msdyn_feasible_gos
+- msdyn_profitability_gos
+- msdyn_psastate_gos
+- msdyn_psastatusreason_gos
+- msdyn_receiptrequired_gos
+- msdyn_targetentrystatus_gos
+- msdyn_targetexpensestatus_gos
+- msdyn_transactionclassification_gos
+- msdyn_transactiontypecode_gos
+- msdyn_type_gos
+- msdyn_vendortype_gos
+- need_gos
+- pricingerrorcode_gos
+- producttypecode_gos
+- propertyconfigurationstatus_gos
+- purchaseprocess_gos
+- purchasetimeframe_gos
+- salesstage_gos
+
 
 <sub>
 
-```
-    SELECT DISTINCT
-           Replace(Left(displayname0, 250), CHAR(9), ' ')  [Program Name],
-           Replace(Left(publisher0, 250), CHAR(9), ' ')    Publisher,
-           version0                                        [Version]          
-	FROM  v_Add_Remove_Programs
-	WHERE displayname0 IS NOT NULL AND
-	      displayname0 <> ''
-```
+| Column         | Datatype           |  Source      | Description  |
+| ---------------|--------------------|--------------|--------------|
+| [value]  | 	int      |  option      |
+| [label]      | 	nvarchar(255)      | 	localizedlabel	|    |
 
 </sub>
 
+### BookingStatusView
+This view is populated from the bookingstatus table. It is “flattened” from the recursive source. That is, instead of a recursive parent child relationship, the first three levels are separate columns.
 
 
-#### Scanhistory
+  | Column         | Datatype           |  Source      | Description  |
+| ---------------|--------------------|--------------|--------------|
+| [Booking Status Id]  | 	int      |  bookingstatusid      |
+| [Booking Status Code]     | 	nvarchar(255)      | 	status	|    |
+| [Booking Status Name]     | 	nvarchar(255)      | 	bookingstatus.label	|    |
+| [Commit Type]     | 	nvarchar(255)      | 	CommitType.label	|    |
+| [Commit Type Code]     |  int      | 	msdyn_committype 	|    |
 
-Contains a daily snapshot of the state of each computer.
+
+
+### BusinessTransactionView
+This view is a union fo values from msdyn_actual and msdyn_estimateline.
+
+ | Column         | Datatype           |  Source      | Description  |
+| ---------------|--------------------|--------------|--------------|
+| [Is Estimate] | int | calcuation | 0 for actual, 1 for estimate |
+| [Billing Type]  | 	nvarchar(255)      |  BillingType.label      |
+| [Billing Status]     | 	nvarchar(255)      | 	BillingStatus.label 	|    |
+| [Billing Type Code]     | 	int      | 	msdyn_billingtype	|    |
+| [Billing Status Code] | int | msdyn_billingstatus | | 
+| [Transaction Category Id] | int | msdyn_transactioncategory| | 
+| [Transaction Type Code] | int | msdyn_transactionclassification | |
+| [Transaction Class Code] | int | msdyn_transactionclassification | |
+| [Transaction Type] | nvarchar(255) | TransactionTypeCode.label | |
+| [Transaction Class] |  nvarchar(255) |  TransactionClass.label | |
+| [Customer Id]  | UNIQUEIDENTIFIER | msdyn_accountcustomer | |
+
+
+Note that business units recursing deeper than third level are not included and are included as the third level.
+
+### ConfigurationView
+This view is exclusively populated from the psa.Configuration.
 
 <sub>
 
-| Column         | Datatype     | Description |
-| ---------------|--------------|--------------|
-| [machineid] |  int | |
-| 	[date_key] |  int | |
-| 	[sitecode] |  nvarchar(3)  | |
-| 	[client type] |  smallint | |
-| 	[enabled] |  int  | |
-| 	[client version] |  nvarchar(255)  | |
-| 	[real time protection enabled] |  bit  | |
-| 	[on access protection enabled] |  bit  | |
-| 	[input/output protection enabled] |  bit  | |
-| 	[behavior monitor enabled]  | bit  | |
-| 	[antivirus enabled] |  bit  | |
-| 	[antispyware enabled] |  bit  | |
-| 	[nis enabled]  | bit | |
-| 	[quick scan age (days)] | int  | |
-| 	[full scan age (days)] |  int  | |
-| 	[signature age (days)] |  int  | |
-| 	[engine version]  | nvarchar(255)  | |
-| 	[antivirus signature version] |  nvarchar(255)  | |
-| 	[missing important update count] |  int  | |
-| 	[missing critical update count] |  int  | |
-| 	[client active status]  | bit NOT  | |
-| 	[health evaluation result] |  smallint  | |
-| 	[health evaluation]  | datetime  | |
-| 	[last online]  | datetime  | |
-| 	[health status message] |  datetime  | |
-| 	[client state] |  smallint  | |
-| 	[Last DDR]  | datetime  | |
-| 	[Last HW] |  datetime  | |
-| 	[Last SW] |  datetime  | |
-| 	[Last Status Message]  | datetime  | |
-| 	[Last Policy Request] |  datetime  | |
-|  	[Last Scan Time] |  datetime  | |
+| Column         | Datatype           |  Source      | Description  |
+| ---------------|--------------------|--------------|--------------|
+| Id | int | Id | Values are only included in the view if visible=1 |
+| [Configuration Group] | varchar(150) | configuration_group | |
+| [Configuration Subgroup] | varchar(150) | configuration_subgroup	| |
+| Name | varchar(150) | name | 	|
+| Value | varchar(max) | value	 |  |
 
 </sub>
 
-Query to retrieve computer state:
+### ContractView
+This view is  populated from dbo.salesorder.
 
 <sub>
 
-```<language>
-DECLARE @curdate DATE = GETDATE();
-
-WITH machines AS
-(
-    SELECT itemkey                    AS MachineID,
-           sitecode,
-           name0                      [NAME],
-           operating_system_name_and0 AS [Operating System],
-           client_type0               [Client Type]
-    FROM   vsms_r_system computer
-            LEFT JOIN v_clientmachines AS client  ON computer.itemkey=client.resourceid
-    WHERE  decommissioned0=0 AND obsolete0=0
-),
-missingupdates AS
-(
-    SELECT u.ci_id AS CI_ID,
-           [status].machineid,
-           [status],
-           severity,
-           laststatuschangetime
-    FROM   vsms_update_compliancestatus [status]
-               INNER JOIN vsms_softwareupdate u ON [status].ci_id=u.ci_id  AND [status].[status]<>3 AND isenabled=1 AND issuperseded=0 AND severity>=8
-),
-missingupdatecount AS
-(
-    SELECT  machineid,
-            Count(CASE severity
-                    WHEN 10 THEN 1
-                    ELSE NULL
-                  END) AS [Missing Critical Update Count],
-            Count(CASE severity
-                    WHEN 8 THEN 1
-                    ELSE NULL
-                  END) AS [Missing Important Update Count]
-    FROM   missingupdates
-    GROUP  BY machineid
-),
-epcompliance AS
-(
-    SELECT  am.resourceid             AS MachineID,
-            CASE
-                WHEN enabled = 1 THEN 1
-                ELSE 0
-            END                       AS [Enabled],
-            version                   [Client Version],
-            CASE
-                WHEN rtpenabled = 1 THEN 1
-                ELSE 0
-            END                       AS [Real Time Protection Enabled],
-            CASE
-                WHEN onaccessprotectionenabled = 1 THEN 1
-                ELSE 0
-            END                       AS [On Access Protection Enabled],
-            CASE
-                WHEN ioavprotectionenabled = 1 THEN 1
-                ELSE 0
-            END                       AS [Input/Output Protection Enabled],
-            CASE
-                WHEN behaviormonitorenabled = 1 THEN 1
-                ELSE 0
-            END                       AS [Behavior Monitor Enabled],
-            CASE
-                WHEN antivirusenabled = 1 THEN 1
-                ELSE 0
-            END                       AS [Antivirus Enabled],
-            CASE
-                WHEN antispywareenabled = 1 THEN 1
-                ELSE 0
-            END                       AS [Antispyware Enabled],
-            CASE
-                WHEN nisenabled = 1 THEN 1
-                ELSE 0
-            END                       AS [NIS Enabled],
-            CASE
-                WHEN lastquickscandatetimestart > Getdate() THEN 0
-                ELSE Datediff(day, lastquickscandatetimestart, Getdate())
-            END                       AS [Quick Scan Age (days)],
-            CASE
-                WHEN lastfullscandatetimestart > Getdate() THEN 0
-                ELSE Datediff(day, lastfullscandatetimestart, Getdate())
-            END                       AS [Full Scan Age (days)],
-            CASE
-                WHEN antivirussignatureupdatedatetime > Getdate() THEN 0
-                ELSE Datediff(day, antivirussignatureupdatedatetime, Getdate())
-            END                       AS [Signature Age (days)],
-            engineversion             [Engine Version],
-            antivirussignatureversion AS [Antivirus Signature Version]
-    FROM   vsms_g_system_antimalwarehealthstatus am
-),
-healthsummary AS
-(
-    SELECT cs.resourceid                 AS MachineID,
-           cs.lastonline,
-           cs.laststatusmessage          [Last Health Status Message],
-           cs.lasthealthevaluation       [Last Health Evaluation],
-           cs.lasthealthevaluationresult [Last Health Evaluation Result],
-           cs.clientactivestatus         [Client Active Status],
-           cs.clientstate                [Client State],
-           cs.lastddr                    [Last DDR],
-           cs.lasthw                     [Last HW],
-           cs.lastsw                     [Last SW],
-           cs.laststatusmessage          [Last Status Message],
-           cs.lastpolicyrequest          [Last Policy Request]
-    FROM  dbo.[v_ch_clientsummary] cs
-),
-scansummary AS
-(
-    SELECT uss.resourceid   AS MachineID,
-           uss.lastscantime [Last Scan Time]
-    FROM   v_updatescanstatus uss
-)
-SELECT
-    c.machineid   AS MachineID,
-    10000*Year(@curdate) + 100*Month(@curdate) + Day(@curdate) AS date_key,
-    sitecode,
-    [client type],
-    ep.[enabled],
-    ep.[client version],
-    ep.[real time protection enabled],
-    ep.[on access protection enabled],
-    ep.[input/output protection enabled],
-    ep.[behavior monitor enabled],
-    ep.[antivirus enabled],
-    ep.[antispyware enabled],
-    ep.[nis enabled],
-    ep.[quick scan age (days)],
-    ep.[full scan age (days)],
-    ep.[signature age (days)],
-    ep.[engine version],
-    ep.[antivirus signature version],
-    updates.[missing important update count],
-    updates.[missing critical update count],
-    hs.[client active status],
-    hs.[last health evaluation result],
-    hs.[last health evaluation],
-    hs.[last health status message],
-    hs.lastonline [Last Online],
-    hs.[client state],
-    hs.[last ddr],
-    hs.[last hw],
-    hs.[last sw],
-    hs.[last status message],
-    hs.[last policy request],
-    ss.[last scan time]
-FROM   machines c
-       LEFT OUTER JOIN epcompliance ep ON c.machineid = ep.machineid
-       LEFT OUTER JOIN missingupdatecount updates ON updates.machineid = c.machineid
-       INNER JOIN healthsummary hs ON hs.machineid = c.machineid
-       LEFT OUTER JOIN scansummary ss ON ss.machineid = c.machineid;
-```
+| Column         | Datatype           |  Source      | Description  |
+| ---------------|--------------------|--------------|--------------|
+| ContractId | int | salesorderid |  |
+| Contract Name | nvarchar(max) | Name |  |
+| [Contract State Code] | int | msdyn_psastate	| |
+| [Contract State] | nvarchar(256) | PSA_State.label | 	|
+| [Contract Status Code] | int |  msdyn_psastatusreason | 	|
+| [Contract Status] | nvarchar(256) |  PSA_StatusReason.label | 	|
+| [Contract Customer Id] | uniqueidentifer| customerid | 	|
+| [Contract Total Amount] | decimal(38,10) | totalamount_base | 	|
 
 </sub>
 
 
-
-#### Site
-
-Contains information on each primary and secondary site.
+### CustomerView
 
 <sub>
 
-| Column         | Datatype     | Description |
-| ---------------|--------------|--------------|
-| [sitecode] | nvarchar(3)  |  |
-| 	[site name] |  nvarchar(200)  |  |
-| 	[version] |  nvarchar(32)  |  |
-| 	[server name] |  nvarchar(256)  |  |
-| 	[availability] |  [varchar](9)  |  |
-| 	[location]  | nvarchar(256)  |  |
-| 	[overalllinkstatus] |  nvarchar(12)  |  |
-| 	[client successfully communicating with mp] |  int  |  |
-| 	[client failing to communicate with mp]  | int  |  |
-| 	[health check count]  | int  |  |
-| 	[ok health check count] |  int  |  |
-| 	[av definition compliance count]  | int  |  |
-| 	[scep count] |  int  |  |
-| 	[av reach count]  | int NULL |  |
+| Column         | Datatype           |  Source      | Description  |
+| ---------------|--------------------|--------------|--------------|
+| [Customer Id] | uniqueidentifier| accountid | |
+| [Customer Name] | nvarchar(max) | NAME| |
+| sic | nvarchar(max) | sic	| |
+| Postal Code | nvarchar(max) | address1_postalcode | |
+| Phone | nvarchar(max) |  address1_telephone1	 |  |
+| [State/Province] |  nvarchar(max) |  address1_stateorprovince |  |
+| Country |  nvarchar(max) | address1_country |  |
+| City |  nvarchar(max) | address1_city |  |
+| E-Mail |  nvarchar(max) | emailaddress1 | |
+| Customer Type |  nvarchar(256) | customertypecode.label |  |
+| [Industry Code] | int| industrycode |  |
+| Industry | nvarchar(256) | IndustryCode.label	 |  |
+ 
+</sub>
+
+
+
+### DateView
+All Dateview columns are exclusively from the Date table.
+
+<sub>
+
+| Column         | Datatype           |  Source      | Description  |
+| ---------------|--------------------|--------------|--------------|
+| date_key | char(150) | [full_date]	 |  | 
+| [Day of the Week] | tinyint | [day_of_week] | |
+| [Day Number of the Month] | tinyint | [day_num_in_month]	 | |
+| [Day Name] | char(9) | [day_name] | Long day name; eg, Monday |
+| [Day Abbreviated] | char(3) | [day_abbrev] | Short day name; eg, Mon |
+| [Weekday Flag] | char(1) | [weekday_flag]	 | |
+| month | tinyint | month | integer month from 1 to 12 |
+| [Month Name] | char(9) | month_name | Long month name |
+| [month_abbrev] | char(3) | [month_abbrev]	 | |
+| quarter | tinyint | Quarter | |
+| Year | smallint | year |  |
+| same_day_year_ago_date | date | same_day_year_ago_date | |
+| [Week Begin Date] | date | [week_begin_date] | |
 
 </sub>
 
-Query to retrieve site table:
+### MeasuresView
+This is an empty table that is used as a source for calculated measures in Power BI.
 
 <sub>
 
-```<language>
-WITH siteavcompliance AS
-(
-    SELECT sms_assigned_sites0 AS SiteCode,
-           Sum(CASE
-                   WHEN ep.deploymentstate=3 OR ep.deploymentstate=5 THEN 1
-                   ELSE 0
-               END)            AS [SCEP Count],
-           Sum(CASE
-                   WHEN ep.deploymentstate=3 AND ahs.antivirussignatureage BETWEEN 0 AND 7 THEN 1
-                   ELSE 0
-               END)            AS [AV Definition Compliance Count],
-           Sum(CASE
-                   WHEN ep.deploymentstate=3 THEN 1
-                   ELSE 0
-               END)            AS [AV Reach Count]
-       FROM   ep_deploymentstate ep
-               INNER JOIN v_ra_system_smsassignedsites ass ON ass.resourceid = ep.machineid
-               INNER JOIN (SELECT DISTINCT resourceid
-                           FROM   dbo.v_ra_system_systemroles) col ON col.resourceid = ep.machineid
-               INNER JOIN v_gs_antimalwarehealthstatus ahs ON ass.resourceid = ahs.resourceid
-       GROUP  BY sms_assigned_sites0
-),
-sitecomputerhealth AS
-(
-    SELECT s.sitecode,
-           Sum(CASE
-                   WHEN ev.healthcheckid = 1 OR ev.result = 6 THEN 1
-                   ELSE 0
-               END)                             [OK Health Check Count],
-           Count(ev.healthcheckid)              [Health Check Count]
-    FROM ch_evalresults ev INNER JOIN v_r_system [sys] ON [sys].resourceid = ev.machineid
-                           INNER JOIN v_ra_system_smsinstalledsites SMSInst ON SMSInst.resourceid = [sys].resourceid
-                           INNER JOIN v_site s ON SMSInst.sms_installed_sites0 = s.sitecode
-    GROUP BY s.sitecode
-),
-sitehealth AS
-(
-    SELECT sub.[site]   SiteCode,
-           Sum(CASE sub.healthstate
-                   WHEN 1 THEN sub.cnt
-               END)     AS [Client successfully communicating with MP],
-           Sum(CASE sub.healthstate
-                   WHEN 2 THEN sub.cnt
-               END)     AS [Client failing to communicate with MP],
-           Sum(sub.cnt) AS 'Total'
-           FROM   ( SELECT sit.sitecode           AS 'Site',
-                        chs.healthstate,
-                        Count(chs.healthstate) AS 'Cnt'
-                    FROM v_site sit INNER JOIN v_clienthealthstate chs ON sit.sitecode=chs.assignedsitecode AND
-                                                                          chs.healthtype = '1000' AND
-                                                                          chs.lasthealthreportdate > (SELECT Dateadd(day, -1, Getdate())) AND
-                                                                          sit.[type]=2
-                    GROUP BY sit.sitecode, chs.healthstate
-                   ) sub
-            GROUP  BY sub.[site]
-)
-SELECT s.sitecode,
-       sitename                                              [Site Name],
-       [version],
-       servername                                            [Server Name],
-       CASE
-         WHEN sss.availabilitystate = 1 THEN 'Warning'
-         WHEN sss.availabilitystate = 2 THEN 'Error'
-         ELSE 'Available'
-       END                                                   [Availability],
-       Isnull((SELECT TOP 1 Isnull(CONVERT(XML, value1).query('/ServerLocation/Address/text()'), 'No Data') AS Location
-               FROM   vsms_sc_property_sdk
-               WHERE  propertyname = 'SiteLocation' AND sitecode = s.sitecode), 'No Data') [Location],
-       CASE lnk.overalllinkstatus
-         WHEN 0 THEN 'Deleted'
-         WHEN 1 THEN 'Tombstoned'
-         WHEN 2 THEN 'Active'
-         WHEN 3 THEN 'Initializing'
-         WHEN 4 THEN 'NotStarted'
-         WHEN 5 THEN 'Error'
-         WHEN 6 THEN 'Unknown'
-         WHEN 7 THEN 'Degraded'
-         WHEN 8 THEN 'Failed'
-       END                                                   AS OverallLinkStatus,
-       sh.[client successfully communicating with mp],
-       sh.[client failing to communicate with mp],
-       sch.[health check count],
-       sch.[ok health check count],
-       sav.[av definition compliance count],
-       sav.[scep count],
-       sav.[av reach count]
-FROM   v_site s
-       LEFT OUTER JOIN vsummarizers_sitestatus sss ON s.sitecode = sss.sitecode
-       LEFT OUTER JOIN dbo.rcm_replicationlinksummary_child lnk ON lnk.childsitecode = s.sitecode
-       LEFT OUTER JOIN sitehealth sh ON sh.sitecode = s.sitecode
-       LEFT OUTER JOIN sitecomputerhealth sch ON sch.sitecode = s.sitecode
-       LEFT OUTER JOIN siteavcompliance sav ON sav.sitecode = s.sitecode;
-```
+| Column         | Datatype           |  Source      | Description  |
+| ---------------|--------------------|--------------|--------------|
+| MeasureValues	| int | Calcuated column	| |
 
 </sub>
 
 
-#### Update
-
-Contains information about each update detected by SCCM.
-
-<sub>
-
-| Column         | Datatype     | Description |
-| ---------------|--------------|--------------|
-| [ci_id] |  int  |  |
-| 	[articleid] |  nvarchar(64) |  |
-| 	[bulletinid] |  nvarchar(64)  |  |
-| 	[title] |  nvarchar(513) |  |
-| 	[severity] |  int  |  |
-| 	[severityname] |  nvarchar(64) |  |
-| 	[infoURL] |  nvarchar(512) |  |
-
-</sub>
-
-Query to retreive updates:
+### Opportunityview
+Values are taken from the opportunity table.
 
 <sub>
 
-```<language>
-SELECT su.ci_id,
-       su.articleid,
-       su.bulletinid,
-       title,
-       severity,
-       customname [Severity Name],
-       infourl
-FROM   v_updateinfo su LEFT OUTER JOIN customseverityreference s ON su.severity=s.severityid;
-```
+| Column         | Datatype           |  Source      | Description  |
+| ---------------|--------------------|--------------|--------------|
+| [Opportunity Id]   | uniqueidentifer | opportunityid    | |
+| [Opportunity Name] | nvarchar(max) |        NAME        | |
+| [Opportunity Description]       | nvarchar(max)  |          [description] | |                 
+| [Opportunity Type Code]         | int |      msdyn_ordertype  | |
+| [Opportunity Type] | nvarchar(256) |          OrderType.label | |
+| [Sales Stage Code] | int |          salesstage        |     |                   
+| [Sales Stage]      | nvarchar(256) |          SalesStage.label     | | 
+| [Opportunity Actual Close Date] | date |  CONVERT(DATE as actualclosedate)      |  |
+| [Opportunity Actual Revenue]    | decimal(38,10) | actualvalue_base        |  |
+| [Step Name]        | nvarchar(max)  |       stepname                         |    | 
+| [Opportunity Status Code]       | int |       statuscode                   |  |
+| [Opportunity Status]            | nvarchar(256) | ent_status.label     |     | 
+| [Opportunity Rating Code]       | int |        opportunityratingcode      |   |
+| [Opportunity Rating]            | nvarchar(256) | OpportunityRating.label  | |
+| [Opportunity Close Probability] | numeric(13,2) | closeprobability * 0.01   | |
+| [Opportunity Estimated Revenue] | decimal(38,10) | estimatedvalue_base      |  |
+| [Opportunity Created On Date]   | date |      CONVERT(DATE as opportunity.createdon)| |
+| [Opportunity Estimated Close Date]  | date  |  CONVERT(DATE as estimatedclosedate) | |
+| [Customer Id]      | uniqueidentifer |         customerid          |  |
+| [Customer Need]    | nvarchar(max) |        customerneed          | |               
+| [Opportunity Final Decision Date] |date | CONVERT(DATE as finaldecisiondate)    | |
+| [Opportunity Purchase Time Frame Code] | int | purchasetimeframe                  |  | 
+| [Opportunity Purchase Time Frame] | nvarchar(256) | PurchaseTimeframe.label | |
+| [Opportunity Total Amount]        | decimal(38,10)  |    totalamount_base  |         |  
+| [Opportunity State Code]          | int  | statecode                      |      | 
+| [Opportunity State]               | nvarchar(256)  | ent_state.label        |    | 
+| [Customer Pain Points]            | nvarchar(max)  |  customerpainpoints  |  |
+| [Opportunity Account Manager Id]  | uniqueidentifier |  msdyn_accountmanagerid |  |
+| [Opportunity Account Manager]     | nvarchar(max)   | systemuser.fullname   |  |
+| [Opportunity Timeline Code]       | int | timeline                        |     |
+| [Opportunity Timeline]            | nvarchar(256)  | Timeline.label  |  |
 
 </sub>
 
-
-#### User
-
-All accounts discovered by SCCM excluding machine accounts.
+### ProjectView
+Values are sourced from the msdyn_project table.
 
 <sub>
 
-| Column         | Datatype     | Description |
-| ---------------|--------------|--------------|
-| [username]  | nvarchar(256)  |  |
-| 	[full name]  | nvarchar(255)  |  |
+| Column         | Datatype           |  Source      | Description  |
+| ---------------|--------------------|--------------|--------------|
+|[Project Id] | uniqueidentifer | msdyn_projectid   | |
+|[Project Customer Id] |uniqueidentifer |        msdyn_customer| |                      
+|[Project Name] | nvarchar(max) |        msdyn_subject | |                      
+ |[Project Description] | nvarchar(max) | msdyn_description| |
+ |[Project Manager User Id] |uniqueidentifer | msdyn_projectmanager | |                
+|[Project Manager Name] | nvarchar(max) |        systemuser.fullname | |
+|[Project Actual Start] | date |        CONVERT(DATE as msdyn_actualstart) | |   
+ |[Project Actual End] | date |       CONVERT(DATE as msdyn_actualend)    | |  
+|[Project Scheduled Start] |date  |        CONVERT(DATE as msdyn_scheduledstart) | | 
+|[Project Scheduled End] | date |        CONVERT(DATE as msdyn_scheduledend)   | |
+|[Project Cost Performance] | nvarchar(256) |        CostPerformance.label | |              
+|[Project Cost Performance Code] | int |        msdyn_costperformence | |             
+|[Project Schedule Performance] |  nvarchar(256) | SchedulePerformance.label| |
+|[Project Schedule Performance Code] | int | msdyn_scheduleperformance| |
+|[Project Stage Name] |  nvarchar(256) | msdyn_stagename| |
+|[Project Contracting Unit Id]  | uniqueidentifer|       msdyn_contractorganizationalunitid  | |
 
 </sub>
 
-Query to retreive users:
+
+### ProjectContractView
+Values are sourced from the msdyn_project and salesorderdetail.
 
 <sub>
 
-```<language>
-SELECT DISTINCT user_name0              AS userName,
-                unique_user_name0       AS [full name]       
-FROM   v_r_user
-WHERE  user_name0 IS NOT NULL AND 
-       full_user_name0 NOT LIKE '%$%';
-```
+| Column         | Datatype           |  Source      | Description  |
+| ---------------|--------------------|--------------|--------------|
+| [contract id] | uniqueidentifier | [contract id] | |
+| [Project ID] | uniqueidentifier | msdyn_project | |
 
 </sub>
 
 
-#### Usercomputer
+### QuoteView
+
+Values are sourced from the quote table.
 
 <sub>
 
-| Column         | Datatype     | Description |
-| ---------------|--------------|--------------|
-| [machineid]  | int |  |
-| 	[username]  | nvarchar(256) |  |
-| [full name]  | nvarchar(255) |  |
+| Column         | Datatype           |  Source      | Description  |
+| ---------------|--------------------|--------------|--------------|
+| [Quote Id] | uniqueidentifier | quoteid  | |                                      
+|[Quote Description]| nvarchar(max) |       description  | |                                 
+  |[Quote Number]| nvarchar(max)  |        quotenumber   | |                               
+ |[Quote Name]| nvarchar(max)  |        NAME        | |                                  
+ |[Quote Type Code]| int |        msdyn_ordertype   | |                            
+|[Quote Type]| nvarchar(256)  |        OrderType.label      | |                          
+  |[Customer Id]| uniqueidentifier |        customerid    | |                               
+ |[Quote Budget Estimation]| nvarchar(256) |       EstimatedBudget.label   | |                       
+|[Quote Budget Estimation Code]| int |      msdyn_estimatedbudget   | |                       
+|[Quote Schedule Estimation]|  nvarchar(256) |        EstimatedSchedule.label  | |                      
+ |[Quote Schedule Estimation Code]| int |       msdyn_estimatedschedule   | |                    
+|[Quote Feasibility]|  nvarchar(256) |        Feasible.label  | |                               
+|[Quote Feasibility Code]| int |        msdyn_feasible               | |                  
+|[Quote Profitability]|  nvarchar(256) |        Profitability.label  | |                         
+|[Quote Profitability Code]| int |      msdyn_profitability  | |                          
+|[Quote Competitivness] | nvarchar(256) |        Competitive.label     | |                         
+  |[Quote Competitivness Code]| int |       msdyn_competitive    | |                         
+|[Quote Gross Margin (%)] | numeric(38,9) |        msdyn_grossmargin * 0.01 | |                     
+|[Quote Adjusted Gross Margin (%)]|  numeric(38,9) |        msdyn_adjustedgrossmargin * 0.01     | |          
+|[Quote Customer Budget]|  numeric(38,10)|        msdyn_customerbudgetrollup_base    | |            
+|[Quote Total Amount]| numeric(38,10) |        totalamount_base                   | |            
+|[Quote Total Chargeable Cost]|   numeric(38,10)|        msdyn_totalchargeablecostrollup_base| |           
+|[Quote Total Non-Chargeable Cost]|  numeric(38,10)|        msdyn_totalnonchargeablecostrollup_base   | |     
+|[Quote Account Manager User Id]| uniqueidentifier|        msdyn_accountmanagerid   | |                      
+|[Quote Account Manager]| nvarchar(max)|       systemuser.fullname              | |              
+ |[Quote Created On Date]| date |        CONVERT(DATE as quote.createdon)   | |             
+|[Quote Effective To Date]| date  |       CONVERT(DATE as effectiveto) | |                    
+|[Quote Estimated Completion Date]| date |       CONVERT(DATE as msdyn_estimatedcompletionrollup) | | 
+|[Quote Effective From Date]| date |        CONVERT(DATE as effectivefrom)   | |                
+|[Quote Closed On Date] | date |        | if no quote close date then we assume it is the date when quote state was changed to Won or Closed |                      
+|[Quote Requested Delivery Date]| date |       CONVERT(DATE as requestdeliveryby)   | |             
+|[Opportunity Id]|  uniqueidentifier|        opportunityid    | |                              
+ |[Quote State Code]| int |        statecode  | |                                   
+  |[Quote State]| nvarchar(256)|       StateCode.label     | |                          
+|[Quote Discount Amount]| numeric(38,10) |       discountamount_base     | |                       
+ |[Quote Discount (%)]| numeric(38,9) |        discountpercentage * 0.01   | |                  
+|[Quote Total Discount Amount]|numeric(38,10) |        totaldiscountamount_base      | |                 
+|[Quote Total Line Item Discount Amount]|numeric(38,10) |        totallineitemdiscountamount_base       | |        
+|[Quote Total Line Item Amount]    | numeric(38,10)numeric(38,9)|     totallineitemamount_base      | |                 
 
-    
 </sub>
 
-Query to retreive usercomputer:
+
+### QuoteLineView
+
+Values are sourced from the quotedetail table.
 
 <sub>
 
-```<language>
-SELECT resourceid                       AS machineid,
-       user_name0                       AS username,
-       user_domain0 + '\' + user_name0  AS [full name]
-FROM   v_r_system
-WHERE  user_domain0 IS NOT NULL AND
-       user_name0 IS NOT NULL AND
-       decommissioned0=0 AND 
-       obsolete0=0;
-```
+| Column         | Datatype           |  Source      | Description  |
+| ---------------|--------------------|--------------|--------------|
+ |   [Quote Id]| uniqueidentifier |quoteid      |  |            
+ |   [Quote Product Type Code]|  int |        producttypecode |  |         
+|   [Quote Product Type]| nvarchar(256) |        ProductTypeCode.label   |  | 
+|   [Quote Line Extended Amount]|  decimal(38,10)|        extendedamount_base |  |
+ |   [Quote Line Base Amount]|  decimal(38,10) |        baseamount_base    |  |       
+|   [Quote Line Manual Discount Amount]| decimal(38,10) |        manualdiscountamount_base |  | 
+|   [Quote Line Volume Discount Amount]| decimal(38,10) |        volumediscountamount_base |  | 
 
 </sub>
 
-### Views
+# Project Service Automation for Dynamics 365 Pricing
 
-For the most part, all views are simple selects from the tables.
+For a detailed breakdown of Azure Key Vault costs you can refer to the [Key Vault Pricing Calculator](https://azure.microsoft.com/en-us/pricing/details/key-vault/)
 
-Exception to this is [pbist_sccm].[vw_computer] where an extra column [operating system name] is
- added as a friendly name for operating system.
+For a detailed breakdown of Azure SQL costs you can refer to the [SQL Database Pricing Calculator](https://azure.microsoft.com/en-us/pricing/details/sql-database)
 
-### Stored Procedures
-
-Each table in the template populated with data from SCCM has a corresponding stored procedure 
-executed from the powershell that merges the most recent results. Each stored procedure has the name 
-pbist_sccm.sp_populate<TableName>, eg; pbist_sccm.sp_populateSite.
-
-With some exceptions noted below, the general approach for each stored procedure is:
-
-- start a transaction
-- truncate the target table
-- copy the resuls from the staging table into the target table
-- truncate the staging table
-- commit the transaction
-
-Exceptions to this approach:
-- __pbist_sccmPopulateComputer__: Deleted computers are retained and marked as deleted by setting the deleted
-flag. This stored procedure first  sets this flag to the current day if the computer was deleted by SCCM.
-A merge statement updates the existing computers with changes and inserts new records.
-- __pbist_sccmPopulateScanHistory__: Daily records are maintained. If the stored procedure is run more frequently
-than daily, that day's record is updated. A merge statement inserts new records per day or updates that day's records.
-- __sp_populatecomputerprogram__: due to the large size of this table, the destination table is simply dropped,  the staging table
-is renamed as the destination table, and a new staging table is created.
-
-
-### Power BI
-#### Tables and Relationships
-
-The relationships between the tables are shown in the diagram below:
-![Tables](Resources/Images/SCCMTblsRlns.png)
-
-
-#### Power BI Measures
-The table below lists the measures in the Power BI file:
-
-<sub>
-
-|Measure | Description |
-|--------|-------------|
-| Installation Count | Count of currently installed software |
-| Last Malware Check | The date the computer or device scanned for malware |
-| Malware Count | Malware count by day |
-| Unresolved Malware Count | Count of active malware by day |
-| Computer Software Update Count | Count of software updates |
-| Computers with Missing Updates | Count of computers missing distributed updates |
-| Missing Updates | Count of missing updates (where one computer or device can be missing more than one update) |
-| endpointtarget | Target value for end point compliance (a configured value) |
-| healthevaluationtarget | Target value for health evaluation (a configured value) |
-| Last data load date | the last successful date the data was read from SCCM |
-| Last Date | the last date in the date table |
-| Program Count | The number of distinct software programs installed across the SCCM instance |
-| Antispyware Enabled % | The percentage of computers equipped with anti-spyware software |
-| Antivirus Enabled % | The percentage of computers equipped with anti-virus software |
-| Behavior Monitor Enabled % | The percentage of computers equipped with behavior monitoring software |
-| Client Not Healthy Count | the number of computers or devices evaluated as not healthy 
-| Computer Count | Number of computers on a given day (note that this includes computers active at a point in time that were since deleted) |
-| Endpoint Compliance % | Percentage of devices the satisfy endpint compliance policy |
-| Endpoint NonCompliance Count | Count of devices out of endpoint compliance |
-| Health Evaluation Success % | Percentage of devices evaluated as healthy. Note that devices that have not been scanned are not considered |
-| I/O Protection Enabled % | Percentage of devices with I/O protection enabled. Note that devices that have not been scanned are not considered |
-| AV Compliance % | Percentage of site servers in AV compliance |
-| MP Success Percentage | Percentage of site servers comunicating with management server |
-| Site Availability % | Percentage of site servers that are available |
-| Site Count | Number of site servers |
-| Site Server Client Health % | NUmber of site servers that are healthy (when site server considered a client ) |
-| SQL Replication % | Number of site servers with active link status |
-| User Count | Number of users as of the latest SCCM scan |
-
-</sub>
-
-## Power BI Calculated Columns
-<sub>
-
-| Table | Column | Description |
-|-------|--------|-------------|
-| Computer | Antivirus | Contains one of three valid values indicating whether the computer is within antivirus policy :  "Not compliant", "Compliant", or "Unknown" |
-| Computer |  Behavior Monitor | Contains one of three valid values indicating whether the computer is within antivirus policy :  "Not compliant", "Compliant", or "Unknown" |
-| Computer |  Current Antispyware  | Contains one of three valid values indicating whether the computer has the latest antispyware software:  "Not compliant", "Compliant", or "Unknown" |
-| Computer | Endpoint Protection  | Contains one of three valid values indicating whether the computer has the latest endpoint protection software:  "Not compliant", "Compliant", or "Unknown" |
-| Computer | Input/Output Protection  | Contains one of three valid values indicating whether the computer has the latest I/O protection:  "Not compliant", "Compliant", or "Unknown" |
-| Computer | Is On Access Protection Compliant | Contains one of three valid values indicating whether the computer has the latest On Access Protection:  "Not compliant", "Compliant", or "Unknown" |
-| Computer | Real Time Protection | Contains one of three valid values indicating whether the computer has real time access enabled. Valid values:  "Not compliant", "Compliant", or "Unknown" |
-| ComputerMalware | IsMostRecentMalwareCheck | Whether or not the computer was checked for malware on the most recent scan |
-| ComputerUpdate | last status change date | the last date the computer's check for updates changed |
-| Date | IsWithinLast2Months | Whether the current date is within the last two months  |
-| Date | IsWithinLast6Months | Whether the current date is within the last six months  |
-| Scan History | Client State Description | Sttae of the device, valid values: "Active/Pass", "Active/Fail", "Active/Unknown", "Inactive/Pass", "Inactive/Fail", "Inactive/Unknown", or "Unknown" |
-| Scan History | Endpoint Compliance | Whether or not the machine meets all endpoint criteria (antispyware, antivirus, behavior monitor, I/O protection, NIS enabled, On Access protection and realtime protection) |
-| Scan History | Health Evaluation Description | Most recent health evaluation. One of "Not yet evaluated", "Not applicable", "Evaluation failed", "Evaluated, remediation failed", "Not evaluated, dependency failed" ,"Evaluated, remediation succeeded", Evaluated, succeeded: All tests passed", or "Unknown" |
-| Scan History | Is Most Recent | Set to true for the most recent scan, otherwise false |
-| Scan History | Last Health Evaluation Summary | Results of most recent health evaluation. One of "Failed", "Failed", "Failed", "Failed", "Failed", "Success", "Success", or "Unknown" |
-| Scan History | Signature Age (days) within Compliance | Whether or note the signature age is within the last seven days |
-
-</sub>
-
-# Customizing the Template
-## Configuration Table
-
-Once you set up the solution template you may want to modify your settings. In order to do this,
- you will the solution template configuration table. It should look something like this:
-
-![Image19](Resources/Images/image19.png)
-
-If you want to change, for example, the data retention days from 120 days to 60 days, the SQL query will be following:
-
-<sub>
-
-```<language>
-UPDATE [pbist_sccm].[configuration]
-	SET value=60
-	WHERE name='dataretentiondays'
-```
-
-</sub>
-
-## Extending the Solution Template
-
-__Note: this is an advanced topic and only of interest to developers extending the solution template.__
-
-To add columns to existing tables, take the following steps:
-- Change the sql query in the solution template folder C:\ProgramData\Business Platform Solution Templates\Microsoft-SCCMTemplate
-- Add the column to the staging and target tables in the destination database
-- Update the view in the destination database
-- Update the PBIX file
-
-To add a new table to the solution template:
-- Add the sql query to retrieve the data from the SCCM database to the template folder, foo.sql
-- Add the staging and destination tables to the destination database: pbist_sccm.foo_staging and pbist_sccm.foo
-- Add a view to the destination database, pbist_sccm.vw_foo (solution templates alway use a view abstraction from the table so later changes to the underlying table do not necessarily require changes downstream) 
-- Update the powershell hashtable file2table in dataload.ps1 in the template folder:
-
-```<language>
-$file2table = [ordered]@{ "site.sql"                = "pbist_sccm.site_staging";
-                          ...
-                          "foo.sql"                 = pbist_sccm.foo_staging";
-                          ...
-                         };
-```
-
-
-
-
-## Cost
-
-Estimated Azure SQL database sizes with number of devices managed by SCCM are following:
-
-| Number of clients | Est. database size (MB) |
-|-------------------|-------------------------|
-| 500               | 260                     |
-| 5,000             | 470                     |
-| 50,000            | 2,500                   |
-| 500,000           | 23,000                  |
-
-\* data retention is set at 180 days
-
-## Extending to add other information 
+For a detailed breakdown of Azure Analysis Services costs you can refer to the [SQL Database Pricing Calculator](https://azure.microsoft.com/en-us/pricing/details/sql-database)

@@ -144,27 +144,27 @@ AS
 go
 
 -- TeamView
-CREATE VIEW [smgt].[teamview]
+CREATE VIEW smgt.teamview
 AS
-  SELECT id                          AS [Team Id],
-         [NAME]                      AS [Team Name]
-  FROM   dbo.team 
+  SELECT id      AS [Team Id],
+         NAME    AS [Team Name]
+  FROM   dbo.Team;
 go
 
 
 -- OwnerView
-CREATE VIEW [smgt].[ownerview]
-  as
-  select id         AS [Owner Id],
-     [Name]			AS [Owner Name],
-	 'Team'			AS [Owner Type]
-	 from dbo.team
-  union
-  select id         AS [Owner Id],
-    fullname        AS [Owner Name],
-	'User'			AS [Owner Type]
-  from dbo.systemuser
-  go
+CREATE VIEW smgt.ownerview
+AS
+  SELECT id         AS [Owner Id],
+         [Name]			AS [Owner Name],
+         'Team'			AS [Owner Type]
+  FROM dbo.Team
+  UNION
+  SELECT id         AS [Owner Id],
+         fullname        AS [Owner Name],
+         'User'			AS [Owner Type]
+  FROM dbo.systemuser;
+go
 
 -- MeasuresView
 CREATE VIEW smgt.measuresview
@@ -200,7 +200,7 @@ AS
             o.actualvalue                       AS [Actual Value],
             o.estimatedvalue                    AS [Estimated Value],
             o.estimatedvalue* o.closeprobability/100.0
-			                                    AS [Expected Value],
+                                                AS [Expected Value],
             osm1.LocalizedLabel                 AS [Status],
             CASE
                 WHEN stepname IS NULL OR Charindex('-', o.stepname) = 0 THEN NULL

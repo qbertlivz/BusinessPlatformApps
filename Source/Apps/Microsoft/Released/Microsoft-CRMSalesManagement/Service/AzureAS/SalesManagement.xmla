@@ -8,7 +8,7 @@
         "dataSources": [
           {
             "name": "ST_DS",
-            "connectionString": "Provider=SQLNCLI11.1;Data Source=tcp:pbisttest.database.windows.net;Persist Security Info=True;User ID=pbiadmin;Initial Catalog=richtkCRMTest",
+            "connectionString": "Provider=SQLNCLI11;Data Source=tcp:a.database.windows.net;Persist Security Info=False;User ID=pbiadmin;Initial Catalog=SMDB",
             "impersonationMode": "impersonateServiceAccount",
             "annotations": [
               {
@@ -1604,4 +1604,3 @@
     }
   }
 }
-

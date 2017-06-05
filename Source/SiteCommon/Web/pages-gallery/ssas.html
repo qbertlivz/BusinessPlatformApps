@@ -18,6 +18,7 @@
         <div if.bind="ssasType == 'New'">
             <p class="st-text">${MS.Translate.AAS_SKU}</p>
             <select class="btn btn-default dropdown-toggle st-input" disabled.bind="MS.HttpService.isServiceBusy" value.bind="sku">
+                <option value="B1">${MS.Translate.AAS_BASIC_1}</option>
                 <option value="D1">${MS.Translate.AAS_DEVELOPER}</option>
                 <option value="S0">${MS.Translate.AAS_STANDARD_0}</option>
                 <option value="S1">${MS.Translate.AAS_STANDARD_1}</option>

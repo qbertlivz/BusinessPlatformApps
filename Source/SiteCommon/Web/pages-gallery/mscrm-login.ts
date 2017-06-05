@@ -9,6 +9,8 @@ import { MsCrmOrganization } from '../models/ms-crm-organization';
 import { AzureLogin } from './azure-login';
 
 export class MsCrmLogin extends AzureLogin {
+    d365OnPremiseOrganizationName: string = '';
+    d365OnPremiseUrl: string = '';
     d365OrganizationId: string = '';
     d365Organizations: D365Organization[] = [];
     d365Password: string = '';
@@ -44,7 +46,8 @@ export class MsCrmLogin extends AzureLogin {
                         return;
                     }
                     var tokenObj = {
-                        code: token
+                        code: token,
+                        oauthType: this.oauthType
                     };
                     this.authToken = await this.MS.HttpService.executeAsync('Microsoft-GetAzureToken', tokenObj);
                     if (this.authToken.IsSuccess) {
@@ -88,38 +91,48 @@ export class MsCrmLogin extends AzureLogin {
         this.MS.DataStore.addToDataStore('D365Username', this.d365Username, DataStoreType.Private);
         this.MS.DataStore.addToDataStore('D365Password', this.d365Password, DataStoreType.Private);
 
-        let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetD365Organizations');
+        if (!this.d365OnPremiseOrganizationName && !this.d365OnPremiseUrl) {
+            let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetD365Organizations');
 
-        if (response.IsSuccess) {
-            this.d365Organizations = JSON.parse(response.Body.value);
+            if (response.IsSuccess) {
+                this.d365Organizations = JSON.parse(response.Body.value);
 
-            if (this.d365Organizations && this.d365Organizations.length > 0) {
-                this.d365OrganizationId = this.d365Organizations[0].Id;
+                if (this.d365Organizations && this.d365Organizations.length > 0) {
+                    this.d365OrganizationId = this.d365Organizations[0].Id;
 
-                this.isValidated = true;
-                this.showValidation = true;
+                    this.isValidated = true;
+                    this.showValidation = true;
+                }
             }
+        } else {
+            this.isValidated = true;
+            this.showValidation = true;
         }
 
         return this.isValidated;
     }
 
     async connect(): Promise<void> {
-        this.MS.DataStore.addToDataStore('oauthType', this.oauthType, DataStoreType.Public);
-        this.MS.DataStore.addToDataStore('AzureOAuth', this.oauthType, DataStoreType.Public);
-
+        var tokenObj: any = { oauthType: this.oauthType };
         this.MS.DataStore.addToDataStore('AADTenant', 'common', DataStoreType.Public);
-        let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureAuthUri', {});
+        let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureAuthUri', tokenObj);
         window.location.href = response.Body.value;
     }
-
+     
     public async NavigatingNext(): Promise<boolean> {
         this.MS.DataStore.addToDataStore('Entities', this.entities, DataStoreType.Public);
 
         if (this.isScribe) {
-            let d365Organization: D365Organization = this.d365Organizations.find(x => x.Id === this.d365OrganizationId);
-            this.MS.DataStore.addToDataStore('ConnectorUrl', d365Organization.ConnectorUrl, DataStoreType.Private);
-            this.MS.DataStore.addToDataStore('OrganizationName', d365Organization.Name, DataStoreType.Private);
+            if (!this.d365OnPremiseOrganizationName && !this.d365OnPremiseUrl) {
+                let d365Organization: D365Organization = this.d365Organizations.find(x => x.Id === this.d365OrganizationId);
+                this.MS.DataStore.addToDataStore('ConnectorUrl', d365Organization.ConnectorUrl, DataStoreType.Private);
+                this.MS.DataStore.addToDataStore('OrganizationName', d365Organization.Name, DataStoreType.Private);
+                this.MS.DataStore.addToDataStore('ScribeDeploymentType', 'Online', DataStoreType.Private);
+            } else {
+                this.MS.DataStore.addToDataStore('ConnectorUrl', this.d365OnPremiseUrl, DataStoreType.Private);
+                this.MS.DataStore.addToDataStore('OrganizationName', this.d365OnPremiseOrganizationName, DataStoreType.Private);
+                this.MS.DataStore.addToDataStore('ScribeDeploymentType', 'OnPremise', DataStoreType.Private);
+            }
             return true;
         } else {
             let msCrmOrganization: MsCrmOrganization = this.msCrmOrganizations.find(o => o.OrganizationId === this.msCrmOrganizationId);
@@ -146,6 +159,14 @@ export class MsCrmLogin extends AzureLogin {
 
                 let response = await this.MS.HttpService.executeAsync('Microsoft-CreateResourceGroup', {});
 
+                for (let i = 0; i < this.azureProviders.length; i++) {
+                    this.MS.DataStore.addToDataStore('AzureProvider', this.azureProviders[i], DataStoreType.Public);
+                    let responseRegister = await this.MS.HttpService.executeAsync('Microsoft-RegisterProvider', {});
+                    if (!responseRegister.IsSuccess) {
+                        return false;
+                    }
+                }
+
                 if (!response.IsSuccess) {
                     return false;
                 }
@@ -156,4 +177,6 @@ export class MsCrmLogin extends AzureLogin {
             }
         }
     }
+
+
 }

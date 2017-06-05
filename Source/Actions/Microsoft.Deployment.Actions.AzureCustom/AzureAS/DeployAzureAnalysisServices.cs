@@ -18,13 +18,13 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            string azureToken = request.DataStore.GetJson("AzureToken", "access_token");
+            string azureToken = request.DataStore.GetJson("AzureTokenAS", "access_token");
             string subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             string resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
 
             string serverName = request.DataStore.GetValue("ASServerName") ?? "analysisserver-" + RandomGenerator.GetRandomLowerCaseCharacters(5);
             string location = request.DataStore.GetValue("ASLocation") ?? "westus";
-            string sku = request.DataStore.GetValue("ASSku") ?? "D1";
+            string sku = request.DataStore.GetValue("ASSku") ?? "B1";
             string admin = AzureUtility.GetEmailFromToken(request.DataStore.GetJson("AzureToken"));
 
             SubscriptionCloudCredentials creds = new TokenCloudCredentials(subscription, azureToken);

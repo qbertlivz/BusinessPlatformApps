@@ -60,7 +60,7 @@ gulp.task('copy-apps', function () {
 });
 
 gulp.task('copy-sitecommon', function () {
-    gulp.src('../../SiteCommon/Web/**/*').pipe(gulp.dest('wwwroot/dist/SiteCommon/Web'));
+    return gulp.src('../../SiteCommon/Web/**/*').pipe(gulp.dest('wwwroot/dist/SiteCommon/Web'));
 });
 
 gulp.task('copy-src', function () {
@@ -72,11 +72,11 @@ gulp.task('clean-dist', function () {
 });
 
 gulp.task('pre-build', function (callback) {
-    runSequence('clean-dist', ['copy-apps', 'copy-sitecommon', 'copy-src'], callback);
+    return runSequence('clean-dist', ['copy-apps', 'copy-sitecommon', 'copy-src'], callback);
 });
 
 gulp.task('strip-typescript-reference-paths', function (callback) {
-    gulp.src('wwwroot/dist/**/*.ts').pipe(strip.text({ trim: true })).pipe(gulp.dest('wwwroot/dist'));
+    return gulp.src('wwwroot/dist/**/*.ts').pipe(strip.text({ trim: true })).pipe(gulp.dest('wwwroot/dist'));
 });
 
 gulp.task('build-typescript', function () {

@@ -52,6 +52,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureML
 
             // Create commitment plan
             var commitmentPlan = new Azure.Management.MachineLearning.CommitmentPlans.Models.CommitmentPlan();
+
             commitmentPlan.Sku = new ResourceSku()
             {
                 Capacity = 1,
@@ -89,7 +90,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureML
             webService.Properties.CommitmentPlan = new CommitmentPlan(createdCommitmentPlan.Id);
             // A little bit of juggling to change the name
             webService = new WebService(webService.Location, webService.Properties, null, webserviceName, webService.Type, webService.Tags);
-
+            webService.Validate();
             WebService result = null;
             try
             {
@@ -132,24 +133,24 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureML
 
                     if (nodeConverted.SelectToken("parameters") != null)
                     {
-                        if (nodeConverted["parameters"]["Database Server Name"] != null)
+                        if (nodeConverted["parameters"]["Database Server Name"] != null && nodeConverted["parameters"]["Database Server Name"]["value"] != null)
                         {
-                            nodeConverted["parameters"]["Database Server Name"] = sqlCredentials.Server;
+                            nodeConverted["parameters"]["Database Server Name"]["value"] = sqlCredentials.Server;
                         }
 
-                        if (nodeConverted["parameters"]["Database Name"] != null)
+                        if (nodeConverted["parameters"]["Database Name"] != null && nodeConverted["parameters"]["Database Name"]["value"] != null)
                         {
-                            nodeConverted["parameters"]["Database Name"] = sqlCredentials.Database;
+                            nodeConverted["parameters"]["Database Name"]["value"] = sqlCredentials.Database;
                         }
 
-                        if (nodeConverted["parameters"]["Server User Account Name"] != null)
+                        if (nodeConverted["parameters"]["Server User Account Name"] != null && nodeConverted["parameters"]["Server User Account Name"]["value"] != null)
                         {
-                            nodeConverted["parameters"]["Server User Account Name"] = sqlCredentials.Username;
+                            nodeConverted["parameters"]["Server User Account Name"]["value"] = sqlCredentials.Username;
                         }
 
-                        if (nodeConverted["parameters"]["Server User Account Password"] != null)
+                        if (nodeConverted["parameters"]["Server User Account Password"] != null && nodeConverted["parameters"]["Server User Account Password"]["value"] != null)
                         {
-                            nodeConverted["parameters"]["Server User Account Password"] = sqlCredentials.Password;
+                            nodeConverted["parameters"]["Server User Account Password"]["value"] = sqlCredentials.Password;
                         }
                     }
                 }
@@ -157,24 +158,24 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureML
 
                 if (obj["properties"].SelectToken("parameters") != null)
                 {
-                    if (obj["properties"]["parameters"]["database server name"] != null)
+                    if (obj["properties"]["parameters"]["database server name"] != null && obj["properties"]["parameters"]["database server name"]["value"] != null)
                     {
-                        obj["properties"]["parameters"]["database server name"] = sqlCredentials.Server;
+                        obj["properties"]["parameters"]["database server name"]["value"] = sqlCredentials.Server;
                     }
 
-                    if (obj["properties"]["parameters"]["database name"] != null)
+                    if (obj["properties"]["parameters"]["database name"] != null && obj["properties"]["parameters"]["database name"]["value"] != null)
                     {
-                        obj["properties"]["parameters"]["database name"] = sqlCredentials.Database;
+                        obj["properties"]["parameters"]["database name"]["value"] = sqlCredentials.Database;
                     }
 
-                    if (obj["properties"]["parameters"]["user name"] != null)
+                    if (obj["properties"]["parameters"]["user name"] != null && obj["properties"]["parameters"]["user name"]["value"] != null)
                     {
-                        obj["properties"]["parameters"]["user name"] = sqlCredentials.Username;
+                        obj["properties"]["parameters"]["user name"]["value"] = sqlCredentials.Username;
                     }
 
-                    if (obj["properties"]["parameters"]["Server User Account Password"] != null)
+                    if (obj["properties"]["parameters"]["Server User Account Password"] != null && obj["properties"]["parameters"]["Server User Account Password"]["value"] != null)
                     {
-                        obj["properties"]["parameters"]["Server User Account Password"] = sqlCredentials.Password;
+                        obj["properties"]["parameters"]["Server User Account Password"]["value"] = sqlCredentials.Password;
                     }
                 }
             }

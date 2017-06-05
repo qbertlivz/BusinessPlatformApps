@@ -16,7 +16,7 @@ BEGIN
                        INNER JOIN sys.schemas sc ON ta.schema_id = sc.schema_id
     WHERE
         sc.name='dbo' AND ta.is_ms_shipped = 0 AND pa.index_id IN (0,1) AND
-        ta.name IN ('opportunityproduct', 'territory', 'lead', 'opportunity', 'account', 'systemusermanagermap', /* 'businessunit', */ 'systemuser', 'product')
+        ta.name IN ('opportunityproduct', 'territory', 'lead', 'opportunity', 'account', 'systemusermanagermap', /* 'businessunit', */ 'systemuser', 'product', 'team')
     GROUP BY ta.name
     ORDER BY ta.name;
 END;
@@ -41,7 +41,7 @@ BEGIN
                        INNER JOIN sys.schemas sc ON ta.schema_id = sc.schema_id
     WHERE
         sc.name='dbo' AND ta.is_ms_shipped = 0 AND pa.index_id IN (0,1) AND
-	    ta.name IN ('opportunityproduct', 'territory', 'lead', 'opportunity', 'account', 'systemusermanagermap', /* 'businessunit', */ 'systemuser', 'product')
+	    ta.name IN ('opportunityproduct', 'territory', 'lead', 'opportunity', 'account', 'systemusermanagermap', /* 'businessunit', */ 'systemuser', 'product', 'team')
     GROUP BY ta.[name];
 
 SELECT CASE
@@ -109,7 +109,7 @@ SELECT CASE
     MERGE smgt.entityinitialcount AS target
     USING #counts AS source
     ON (target.entityname = source.entityname)
-    WHEN MATCHED AND source.[Count] > target.lastcount
+    WHEN MATCHED AND source.[Count] > target.lastcount 
     THEN
         UPDATE SET target.lastcount = source.[Count], target.lasttimestamp = Sysdatetime();
 
@@ -126,12 +126,12 @@ BEGIN
     SELECT Count(*) AS ExistingObjectCount
     FROM   information_schema.tables
     WHERE  ( table_schema = 'dbo' AND
-             table_name IN ('account', 'businessunit', 'lead', 'opportunity', 'opportunityproduct', 'product', 'systemuser', 'systemusermanagermap', 'territory')
+             table_name IN ('account', 'businessunit', 'lead', 'opportunity', 'opportunityproduct', 'product', 'team', 'systemuser', 'systemusermanagermap', 'territory')
            ) OR
            ( table_schema = 'smgt' AND
-             table_name IN ('AccountView', 'ActualSales', 'ActualSalesView', 'BusinessUnitView', 'configuration', 'ConfigurationView', 'date', 'DateView',
-                            'LeadView', 'MeasuresView', 'OpportunityProductView', 'OpportunityView', 'ProductView', 'Quotas', 'QuotaView', 'Targets',
-                            'TargetView', 'TempUserView', 'TerritoryView', 'UserAscendantsView', 'userMapping', 'UserView'
+             table_name IN ('AccountView', 'BusinessUnitView', 'configuration', 'ConfigurationView', 'date', 'DateView',
+                            'LeadView', 'MeasuresView', 'OpportunityProductView', 'OpportunityView', 'ProductView', 'TeamView', 
+                            'TempUserView', 'TerritoryView', 'UserAscendantsView', 'userMapping', 'UserView'
                            )
            );
 END;

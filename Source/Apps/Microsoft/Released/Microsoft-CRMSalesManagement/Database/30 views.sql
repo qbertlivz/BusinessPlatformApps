@@ -143,6 +143,28 @@ AS
                     LEFT OUTER JOIN dbo.GlobalOptionSetMetadata osm6 ON lead.purchasetimeframe=osm6.[Option] AND osm6.OptionSetName='purchasetimeframe'  COLLATE Latin1_General_100_CI_AS AND osm6.IsUserLocalizedLabel=0 AND osm6.LocalizedLabelLanguageCode=1033;
 go
 
+-- TeamView
+CREATE VIEW [smgt].[teamview]
+AS
+  SELECT id                          AS [Team Id],
+         [NAME]                      AS [Team Name]
+  FROM   dbo.team 
+go
+
+
+-- OwnerView
+CREATE VIEW [smgt].[ownerview]
+  as
+  select id         AS [Owner Id],
+     [Name]			AS [Owner Name],
+	 'Team'			AS [Owner Type]
+	 from dbo.team
+  union
+  select id         AS [Owner Id],
+    fullname        AS [Owner Name],
+	'User'			AS [Owner Type]
+  from dbo.systemuser
+  go
 
 -- MeasuresView
 CREATE VIEW smgt.measuresview

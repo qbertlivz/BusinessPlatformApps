@@ -693,6 +693,67 @@ CREATE TABLE dbo.opportunity
 );
 CREATE NONCLUSTERED INDEX idx_opportunity_owner_id ON dbo.opportunity(ownerid);
 
+-- Team
+CREATE TABLE [dbo].[team](
+	[Id] [uniqueidentifier] NOT NULL,
+	[SinkCreatedOn] [datetime] NULL,
+	[SinkModifiedOn] [datetime] NULL,
+	[teamtype] [int] NULL,
+	[systemmanaged] [bit] NULL,
+	[isdefault] [bit] NULL,
+	[modifiedonbehalfby] [uniqueidentifier] NULL,
+	[modifiedonbehalfby_entitytype] [nvarchar](128) NULL,
+	[administratorid] [uniqueidentifier] NULL,
+	[administratorid_entitytype] [nvarchar](128) NULL,
+	[createdonbehalfby] [uniqueidentifier] NULL,
+	[createdonbehalfby_entitytype] [nvarchar](128) NULL,
+	[transactioncurrencyid] [uniqueidentifier] NULL,
+	[transactioncurrencyid_entitytype] [nvarchar](128) NULL,
+	[regardingobjectid] [uniqueidentifier] NULL,
+	[regardingobjectid_entitytype] [nvarchar](128) NULL,
+	[businessunitid] [uniqueidentifier] NULL,
+	[businessunitid_entitytype] [nvarchar](128) NULL,
+	[modifiedby] [uniqueidentifier] NULL,
+	[modifiedby_entitytype] [nvarchar](128) NULL,
+	[createdby] [uniqueidentifier] NULL,
+	[createdby_entitytype] [nvarchar](128) NULL,
+	[teamtemplateid] [uniqueidentifier] NULL,
+	[teamtemplateid_entitytype] [nvarchar](128) NULL,
+	[queueid] [uniqueidentifier] NULL,
+	[queueid_entitytype] [nvarchar](128) NULL,
+	[traversedpath] [nvarchar](1250) NULL,
+	[transactioncurrencyidname] [nvarchar](100) NULL,
+	[description] [nvarchar](max) NULL,
+	[queueidname] [nvarchar](400) NULL,
+	[modifiedbyyominame] [nvarchar](100) NULL,
+	[teamid] [uniqueidentifier] NULL,
+	[name] [nvarchar](160) NULL,
+	[stageid] [uniqueidentifier] NULL,
+	[regardingobjecttypecode] [nvarchar](4000) NULL,
+	[importsequencenumber] [int] NULL,
+	[organizationid] [uniqueidentifier] NULL,
+	[businessunitidname] [nvarchar](100) NULL,
+	[emailaddress] [nvarchar](100) NULL,
+	[createdbyyominame] [nvarchar](100) NULL,
+	[modifiedbyname] [nvarchar](100) NULL,
+	[versionnumber] [bigint] NULL,
+	[administratoridname] [nvarchar](100) NULL,
+	[administratoridyominame] [nvarchar](100) NULL,
+	[exchangerate] [decimal](38, 10) NULL,
+	[createdonbehalfbyyominame] [nvarchar](100) NULL,
+	[processid] [uniqueidentifier] NULL,
+	[yominame] [nvarchar](160) NULL,
+	[modifiedon] [datetime] NULL,
+	[modifiedonbehalfbyyominame] [nvarchar](100) NULL,
+	[createdbyname] [nvarchar](100) NULL,
+	[createdon] [datetime] NULL,
+	[organizationidname] [nvarchar](100) NULL,
+	[modifiedonbehalfbyname] [nvarchar](100) NULL,
+	[createdonbehalfbyname] [nvarchar](100) NULL,
+	[overriddencreatedon] [datetime] NULL
+);
+
+
 -- OpportunityProduct
 CREATE TABLE dbo.opportunityproduct
 (

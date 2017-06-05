@@ -104,6 +104,7 @@ BEGIN
 				 'opportunity',
 				 'opportunityproduct',
 				 'product',
+				 'team',
 				 'systemuser',
 				 'systemusermanagermap',
 				 'territory'));
@@ -141,6 +142,8 @@ BEGIN
 			SELECT Count(*) AS tableCount FROM dbo.opportunityproduct
 			UNION ALL
 			SELECT Count(*) AS tableCount FROM dbo.product
+			UNION ALL
+			SELECT Count(*) AS tableCount FROM dbo.team
 			UNION ALL
 			SELECT Count(*) AS tableCount FROM dbo.systemuser
 			UNION ALL

@@ -75,7 +75,7 @@ gulp.task('pre-build', function (callback) {
     return runSequence('clean-dist', ['copy-apps', 'copy-sitecommon', 'copy-src'], callback);
 });
 
-gulp.task('strip-typescript-reference-paths', function (callback) {
+gulp.task('strip-typescript-reference-paths', function () {
     return gulp.src('wwwroot/dist/**/*.ts').pipe(strip.text({ trim: true })).pipe(gulp.dest('wwwroot/dist'));
 });
 
@@ -107,7 +107,7 @@ gulp.task('build-typescript', function () {
         .pipe(gulp.dest('wwwroot/'));
 });
 
-gulp.task('post-build', function (callback) {
+gulp.task('post-build', function () {
     return bundler.bundle(config);
     //return bundler.unbundle(config);
 });

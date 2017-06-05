@@ -68,7 +68,6 @@ namespace Microsoft.Deployment.Tests.Actions.TestHelpers
             dataStore.AddToDataStore("SelectedResourceGroup", ResourceGroup);
 
             var resourceGroupResult = await TestManager.ExecuteActionAsync("Microsoft-CreateResourceGroup", dataStore);
-            Assert.IsTrue(resourceGroupResult.IsSuccess);
 
             System.IO.File.WriteAllText("datastore.json", JsonUtility.GetJObjectFromObject(dataStore).ToString());
             return dataStore;

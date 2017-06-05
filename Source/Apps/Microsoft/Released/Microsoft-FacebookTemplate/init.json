@@ -66,6 +66,11 @@
         "CognitiveSkuName": "S1"
       },
       {
+        "displayname": "Get Cognitive Key",
+        "name": "Microsoft-GetCognitiveKey",
+        "CognitiveServiceName": "TextCognitiveService",
+      },
+      {
         "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
         "name": "Microsoft-DeploySQLScripts",
         "SqlServerIndex": "0",
@@ -85,7 +90,7 @@
         "displayname": "Deploy Azure Function",
         "name": "Microsoft-DeployAzureFunction",
         "DeploymentName": "Deployment1",
-        "FunctionName": "$save('solutiontemplatefunc' + this.uniqueId)",
+        "FunctionName": "$save('solutiontemplatefunc' + this.MS.DataStore.getValue('uniqueId'))",
         "RepoUrl": "https://github.com/MohaaliMicrosoft/FacebookExtraction",
         "sku": "Standard"
       },
@@ -93,7 +98,7 @@
         "displayname": "Deploy Storage",
         "name": "Microsoft-CreateAzureStorageAccount",
         "DeploymentName": "Deployment2",
-        "StorageAccountName": "$save('solutiontemplatestor' + this.uniqueId)",
+        "StorageAccountName": "$save('stor' + this.MS.DataStore.getValue('uniqueId'))",
         "StorageAccountType": "Standard_LRS",
         "StorageAccountEncryptionEnabled": "true"
       },
@@ -139,19 +144,19 @@
           "FacebookClientSecret": "$ds(FacebookClientSecret)"
         }
       },
-      {
-        "displayname": "Wait for Cognitive Services",
-        "name": "Microsoft-WaitForCognitiveService"
-      },
+      //{
+      //  "displayname": "Wait for Cognitive Services",
+      //  "name": "Microsoft-WaitForCognitiveService"
+      //},
       {
         "displayname": "Deploy Logic Apps",
         "name": "Microsoft-DeployAzureArmTemplate",
         "AzureArmFile": "Service/Arm/logicapps.json",
         "AzureArmParameters": {
           "functionname": "$ds(FunctionName)",
-          "storageName": "$ds(SelectedSubscription)['SubscriptionId']",
-          "subscription": "$ds(Schema)",
-          "resourceGroup": "$ds(FacebookClientId)"
+          "storageName": "$ds(StorageAccountName)",
+          "subscription": "$ds(SelectedSubscription)['SubscriptionId']",
+          "resourceGroup": "$ds(SelectedResourceGroup)"
         }
       }
     ]

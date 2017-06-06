@@ -10,6 +10,7 @@ using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Enums;
 using Microsoft.Deployment.Common.Helpers;
+using System.Data.SqlClient;
 
 namespace Microsoft.Deployment.Actions.OnPremise
 {
@@ -49,9 +50,23 @@ namespace Microsoft.Deployment.Actions.OnPremise
         {
             var cmd = File.ReadAllText(entity);
 
+            SqlParameter[] parameters = new SqlParameter[] { new SqlParameter("retention", GetRetentionDays()) };
+
             DataTable count = SqlUtility.RunCommand(connectionString, cmd, SqlCommandType.ExecuteWithData);
 
-            return Convert.ToInt32(count.Rows[0].ItemArray.First());
+            return Convert.ToInt32(count.Rows[0][0]);
+        }
+
+        private int GetRetentionDays()
+        {
+            int retentionDays = 60;
+            const string cmd = "SELECT [value] FROM pbist_sccm.vw_configuration WHERE [name]='dataretentiondays' AND [configuration group]='SolutionTemplate' AND [configuration subgroup]='System Center'";
+            DataTable result = SqlUtility.RunCommand(connectionString, cmd, SqlCommandType.ExecuteWithData);
+
+            if (result!=null && result.Rows.Count>0 && result.Rows[0][0]!= DBNull.Value)
+                retentionDays = Convert.ToInt32(result.Rows[0][0]);
+
+            return retentionDays;
         }
     }
 }

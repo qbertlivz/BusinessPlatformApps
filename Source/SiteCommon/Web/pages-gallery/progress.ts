@@ -27,6 +27,9 @@ export class ProgressViewModel extends ViewModelBase {
         super();
     }
 
+    publishReport(): void {
+    }
+
     async OnLoaded(): Promise<void> {
         if (this.MS.DataStore.getValue('HasNavigated') == null) {
             this.MS.NavigationService.NavigateHome();

@@ -374,6 +374,7 @@
     PROGRESS_DOWNLOAD_POWERAPP_INFO: 'If you or someone else needs to change the twitter query later, download the Power App (or .msapp file). Use PowerApps studio to run the app or share with others. Download PowerApps Studio',
     PROGRESS_GETTING_READY: `Getting your Power BI file ready...`,
     PROGRESS_GETTING_READY_POWERAPP: `Getting your PowerApp file ready...`,
+    PROGRESS_PUBLISH_PBIX: `Publish Report`,
     PROGRESS_SUBTITLE: `This might take a while. We'll show you progress while you wait. Please don't close the browser until all the steps are completed. The setup could take 10-15 minutes.`,
     PROGRESS_TITLE: `Track your progress`,
     PROGRESS_UNSUBSCRIBE: `You can unsubscribe at any time.`,

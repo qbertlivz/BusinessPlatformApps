@@ -909,7 +909,6 @@ CREATE TABLE dbo.product
 -- SystemUser
 CREATE TABLE dbo.systemuser
 (
-  id                                UNIQUEIDENTIFIER NOT NULL,
   traversedpath                           NVARCHAR(1250) NULL,
   address1_city                           NVARCHAR(128) NULL,
   address1_line1                          NVARCHAR(1024) NULL,

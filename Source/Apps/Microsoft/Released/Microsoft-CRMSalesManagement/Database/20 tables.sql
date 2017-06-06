@@ -693,6 +693,68 @@ CREATE TABLE dbo.opportunity
 );
 CREATE NONCLUSTERED INDEX idx_opportunity_owner_id ON dbo.opportunity(ownerid);
 
+-- Team
+CREATE TABLE dbo.team
+(
+	id                               UNIQUEIDENTIFIER NOT NULL,
+	sinkcreatedon                    DATETIME NULL,
+	sinkmodifiedon                   DATETIME NULL,
+	teamtype                         INT NULL,
+	systemmanaged                    BIT NULL,
+	isdefault                        BIT NULL,
+	modifiedonbehalfby               UNIQUEIDENTIFIER NULL,
+	modifiedonbehalfby_entitytype    NVARCHAR(128) NULL,
+	administratorid                  UNIQUEIDENTIFIER NULL,
+	administratorid_entitytype       NVARCHAR(128) NULL,
+	createdonbehalfby                UNIQUEIDENTIFIER NULL,
+	createdonbehalfby_entitytype     NVARCHAR(128) NULL,
+	transactioncurrencyid            UNIQUEIDENTIFIER NULL,
+	transactioncurrencyid_entitytype NVARCHAR(128) NULL,
+	regardingobjectid                UNIQUEIDENTIFIER NULL,
+	regardingobjectid_entitytype     NVARCHAR(128) NULL,
+	businessunitid                   UNIQUEIDENTIFIER NULL,
+	businessunitid_entitytype        NVARCHAR(128) NULL,
+	modifiedby                       UNIQUEIDENTIFIER NULL,
+	modifiedby_entitytype            NVARCHAR(128) NULL,
+	createdby                        UNIQUEIDENTIFIER NULL,
+	createdby_entitytype             NVARCHAR(128) NULL,
+	teamtemplateid                   UNIQUEIDENTIFIER NULL,
+	teamtemplateid_entitytype        NVARCHAR(128) NULL,
+	queueid                          UNIQUEIDENTIFIER NULL,
+	queueid_entitytype               NVARCHAR(128) NULL,
+	traversedpath                    NVARCHAR(1250) NULL,
+	transactioncurrencyidname        NVARCHAR(100) NULL,
+	[description]                    NVARCHAR(max) NULL,
+	queueidname                      NVARCHAR(400) NULL,
+	modifiedbyyominame               NVARCHAR(100) NULL,
+	teamid                           UNIQUEIDENTIFIER NULL,
+	name                             NVARCHAR(160) NULL,
+	stageid                          UNIQUEIDENTIFIER NULL,
+	regardingobjecttypecode          NVARCHAR(max) NULL,
+	importsequencenumber             INT NULL,
+	organizationid                   UNIQUEIDENTIFIER NULL,
+	businessunitidname               NVARCHAR(100) NULL,
+	emailaddress                     NVARCHAR(100) NULL,
+	createdbyyominame                NVARCHAR(100) NULL,
+	modifiedbyname                   NVARCHAR(100) NULL,
+	versionnumber                    BIGINT NULL,
+	administratoridname              NVARCHAR(100) NULL,
+	administratoridyominame          NVARCHAR(100) NULL,
+	exchangerate                     DECIMAL(38, 10) NULL,
+	createdonbehalfbyyominame        NVARCHAR(100) NULL,
+	processid                        UNIQUEIDENTIFIER NULL,
+	yominame                         NVARCHAR(160) NULL,
+	modifiedon                       DATETIME NULL,
+	modifiedonbehalfbyyominame       NVARCHAR(100) NULL,
+	createdbyname                    NVARCHAR(100) NULL,
+	createdon                        DATETIME NULL,
+	organizationidname               NVARCHAR(100) NULL,
+	modifiedonbehalfbyname           NVARCHAR(100) NULL,
+	createdonbehalfbyname            NVARCHAR(100) NULL,
+	overriddencreatedon              DATETIME NULL
+);
+
+
 -- OpportunityProduct
 CREATE TABLE dbo.opportunityproduct
 (

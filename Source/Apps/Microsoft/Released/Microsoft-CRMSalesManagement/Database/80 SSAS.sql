@@ -72,7 +72,7 @@ go
 -- SSAS stored procs
 -- =============================================
 -- set process flag
-CREATE PROCEDURE [smgt].[sp_set_process_flag] 
+CREATE PROCEDURE smgt.sp_set_process_flag
 	@process_flag nvarchar = '1'
 AS
 BEGIN
@@ -191,9 +191,27 @@ BEGIN
 END;
 GO
 
+-- timeout jobs
+CREATE PROCEDURE smgt.sp_reset_job
+AS
+BEGIN
+	SET NOCOUNT ON;
+	UPDATE smgt.[ssas_jobs] 
+	
+	SET [statusMessage]='Timed Out',
+	[endTime]=GetDate()
+	WHERE endTime is NULL AND
+	DATEPART(HOUR, getdate() - startTime) >= 
+	(SELECT [value] FROM smgt.[configuration] WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS' AND [name]='Timeout')
+	
+	DELETE 
+	FROM smgt.[ssas_jobs] 
+	WHERE DATEPART(DAY, getdate() - startTime) >= 30
+END;
+GO
 
 -- start job
-CREATE PROCEDURE [smgt].[sp_start_job]
+CREATE PROCEDURE smgt.sp_start_job
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -218,7 +236,7 @@ BEGIN
 	FROM smgt.[configuration]
 	WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS' AND [name]='CheckProcessFlag'; 
 	
-	EXEC [smgt].[sp_reset_job]
+	EXEC smgt.sp_reset_job
 	
 	INSERT smgt.[ssas_jobs] (startTime, statusMessage)
     VALUES ( GETDATE(), 'Running');
@@ -287,26 +305,6 @@ BEGIN
 	SET [value]=CAST(@newRowCount as NVARCHAR(MAX))
 	WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS' AND [name]='LastProcessedRecordCounts';
 
-	return @id;
-	END
-GO
-
-
--- timeout jobs
-CREATE PROCEDURE [smgt].[sp_reset_job] 
-AS
-BEGIN
-	SET NOCOUNT ON;
-	UPDATE smgt.[ssas_jobs] 
-	
-	SET [statusMessage]='Timed Out',
-	[endTime]=GetDate()
-	WHERE endTime is NULL AND
-	DATEPART(HOUR, getdate() - startTime) >= 
-	(SELECT [value] FROM smgt.[configuration] WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS' AND [name]='Timeout')
-	
-	DELETE 
-	FROM smgt.[ssas_jobs] 
-	WHERE DATEPART(DAY, getdate() - startTime) >= 30
-END
+	RETURN @id;
+	END;
 GO

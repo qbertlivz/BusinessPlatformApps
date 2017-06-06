@@ -160,9 +160,9 @@ AS
          'Team'			AS [Owner Type]
   FROM dbo.Team
   UNION
-  SELECT id         AS [Owner Id],
-         fullname        AS [Owner Name],
-         'User'			AS [Owner Type]
+  SELECT systemuserid AS [Owner Id],
+         fullname     AS [Owner Name],
+         'User'		  AS [Owner Type]
   FROM dbo.systemuser;
 go
 

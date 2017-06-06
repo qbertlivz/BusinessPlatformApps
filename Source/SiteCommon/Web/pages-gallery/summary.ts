@@ -42,7 +42,7 @@ export class SummaryViewModel extends ViewModelBase {
     }
 
     async NavigatingNext(): Promise<boolean> {
-        this.MS.DataStore.addToDataStore('EmailAddress', this.emailAddress, DataStoreType.Public);
+        this.MS.DataStore.addToDataStore('EmailAddress', this.emailAddress, DataStoreType.Private);
         if (this.sendMarketingMail) {
             this.MS.HttpService.executeAsync('Microsoft-EmailSubscription', {
                 isInvisible: true

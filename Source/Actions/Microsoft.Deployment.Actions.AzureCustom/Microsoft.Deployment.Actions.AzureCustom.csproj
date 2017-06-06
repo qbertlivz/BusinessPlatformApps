@@ -227,13 +227,14 @@
     <Compile Include="CognitiveServices\DeployCognitiveService.cs" />
     <Compile Include="Common\DeployStorageAccountContainer.cs" />
     <Compile Include="Common\GetAzureSubscriptions.cs" />
-    <Compile Include="Common\GetCognitiveKey.cs" />
+    <Compile Include="CognitiveServices\GetCognitiveKey.cs" />
     <Compile Include="Common\GetLocations.cs" />
     <Compile Include="AzureAS\DeployAzureAnalysisServices.cs" />
     <Compile Include="Common\GetStorageAccountKey.cs" />
     <Compile Include="CreateSqlConnector.cs" />
     <Compile Include="FTPUtilityTest.cs" />
     <Compile Include="LogicApp\LogicAppConnector.cs" />
+    <Compile Include="LogicApp\ForceRunLogicApp.cs" />
     <Compile Include="News\DeployAzureMLSchedulerLogicApp.cs" />
     <Compile Include="News\DeployNewsFunctionAsset.cs" />
     <Compile Include="News\DeployNewsTemplateHistorical.cs" />

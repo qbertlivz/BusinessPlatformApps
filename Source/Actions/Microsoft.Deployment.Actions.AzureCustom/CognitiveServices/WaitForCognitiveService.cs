@@ -26,7 +26,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.CognitiveServices
         {
             var cognitiveServiceKey = request.DataStore.GetValue("CognitiveServiceKey");
 
-            RetryUtility.Retry(30, async () =>
+            RetryUtility.Retry(10, () =>
             {
                 CognitiveServicePayload payloadObj = new CognitiveServicePayload();
                 payloadObj.Documents.Add(new Document());
@@ -34,11 +34,10 @@ namespace Microsoft.Deployment.Actions.AzureCustom.CognitiveServices
                 HttpClient client = new HttpClient();
                 client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", cognitiveServiceKey);
                 HttpContent content = new StringContent(JObject.FromObject(payloadObj).ToString(), System.Text.Encoding.UTF8, "application/json");
-                var response = await client.PostAsync("https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/keyPhrases", content);
-                string result = await response.Content.ReadAsStringAsync();
+                var response = client.PostAsync("https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/keyPhrases", content).Result;
+                string result = response.Content.ReadAsStringAsync().Result;
                 if (!response.IsSuccessStatusCode)
                 { 
-                    await Task.Delay(10000);
                     throw new Exception();
                 }
             });

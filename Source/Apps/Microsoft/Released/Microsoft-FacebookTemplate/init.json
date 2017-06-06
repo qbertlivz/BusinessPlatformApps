@@ -3,6 +3,7 @@
     "Pages": [
       {
         "architectureDiagram": "",
+        "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(10))",
         "displayname": "Getting Started",
         "list1": [
 
@@ -47,7 +48,7 @@
         "filename": "$save('FacebookTemplate.pbix')",
         "showCounts": false,
         "finishedActionName": "",
-        "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(10))",
+       
 
         // specifically for the template
         "FacebookClientId": "$save('422676881457852')",
@@ -68,7 +69,7 @@
       {
         "displayname": "Get Cognitive Key",
         "name": "Microsoft-GetCognitiveKey",
-        "CognitiveServiceName": "TextCognitiveService",
+        "CognitiveServiceName": "TextCognitiveService"
       },
       {
         "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
@@ -144,10 +145,6 @@
           "FacebookClientSecret": "$ds(FacebookClientSecret)"
         }
       },
-      //{
-      //  "displayname": "Wait for Cognitive Services",
-      //  "name": "Microsoft-WaitForCognitiveService"
-      //},
       {
         "displayname": "Deploy Logic Apps",
         "name": "Microsoft-DeployAzureArmTemplate",
@@ -158,6 +155,11 @@
           "subscription": "$ds(SelectedSubscription)['SubscriptionId']",
           "resourceGroup": "$ds(SelectedResourceGroup)"
         }
+      },
+      {
+        "displayname": "Run Logic App History",
+        "name": "Microsoft-ForceRunLogicApp",
+        "LogicAppName": "GetHistoryForFacebookPages"
       }
     ]
   }

@@ -27,7 +27,7 @@
   "resources": [
     {
       "type": "Microsoft.Logic/workflows",
-      "name": "GetHistoryForPages",
+      "name": "GetHistoryForFacebookPages",
       "apiVersion": "2016-06-01",
       "location": "[resourceGroup().location]",
       "scale": null,
@@ -69,7 +69,11 @@
               "type": "ApiConnection"
             },
             "Initialize_variable": {
-              "runAfter": {},
+              "runAfter": {
+                "Create_a_new_queue": [
+                  "Succeeded"
+                ]
+              },
               "type": "InitializeVariable",
               "inputs": {
                 "variables": [

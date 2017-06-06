@@ -14,7 +14,14 @@
         "name": "$SiteCommon$/pages-gallery/getting-started.html",
         "templateName": "Brand And Campaign Management For Facebook"
       },
-
+      {
+        "name": "facebookLogin.html",
+        "displayname": "Facebook Login"
+      },
+      {
+        "name": "facebookPages.html",
+        "displayname": "Facebook Pages"
+      },
       {
         "defaultLocation": "5",
         "displayname": "Login",
@@ -48,11 +55,7 @@
         "filename": "$save('FacebookTemplate.pbix')",
         "showCounts": false,
         "finishedActionName": "",
-       
 
-        // specifically for the template
-        "FacebookClientId": "$save('422676881457852')",
-        "FacebookClientSecret": "$save('bf5fca097936ece936290031623b577b')",
         "Schema": "$save('fb')"
       }
     ],
@@ -85,7 +88,7 @@
         "SqlGroup": "SolutionTemplate",
         "SqlSubGroup": "ETL",
         "SqlEntryName": "PagesToFollow",
-        "SqlEntryValue": "walmart,target"
+        "SqlEntryValue": "$ds(FacebookPagesToFollow)"
       },
       {
         "displayname": "Deploy Azure Function",

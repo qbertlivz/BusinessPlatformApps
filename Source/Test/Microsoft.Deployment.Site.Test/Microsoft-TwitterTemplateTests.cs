@@ -54,6 +54,8 @@ namespace Microsoft.Deployment.Site.Web.Tests
             Given_CorrectCredentials_When_AzureAuth_Then_Success();
             Thread.Sleep(new TimeSpan(0, 0, 5));
             HelperMethods.ClickButton("Next");
+            HelperMethods.WaitForPage();
+            ConnectToCognitiveServices();
             Given_CorrectSqlCredentials_When_ExistingSqlSelected_Then_PageValidatesSuccessfully();
             HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Next");
@@ -108,6 +110,16 @@ namespace Microsoft.Deployment.Site.Web.Tests
             Assert.IsTrue(validated.Text == "Successfully validated");
 
             HelperMethods.SelectSqlDatabase(database);
+        }
+
+        public void ConnectToCognitiveServices()
+        {
+
+            var checkBox = driver.FindElementsByCssSelector("input[class='au-target']").First(e => e.GetAttribute("type") == "checkbox");
+            var js = (IJavaScriptExecutor)driver;
+            js.ExecuteScript("arguments[0].click()", checkBox);
+
+            HelperMethods.ClickButton("Next");
         }
 
         public void Given_CorrectTwitterCredentials_When_Authenticating_Then_Success()

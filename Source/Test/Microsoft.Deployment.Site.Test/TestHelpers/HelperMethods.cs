@@ -102,6 +102,16 @@ namespace Microsoft.Deployment.Site.Web.Tests
                 azurePage = driver.FindElementsByClassName("st-text").FirstOrDefault(e => e.Text == "Azure Subscription:");
                 if (azurePage != null)
                 {
+                    Thread.Sleep(new TimeSpan(0, 0, 10));
+                    var option = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
+                    if (option != null && option.Enabled == true)
+                    {
+                        option = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
+                        option.SendKeys(subscriptionName);
+                    }
+                    else { break; }
+                    Thread.Sleep(new TimeSpan(0, 0, 10));
+
                     var advanced = driver.FindElementByCssSelector("p[class='st-float st-text au-target']");
                     djs.ExecuteScript("arguments[0].click()", advanced);
 
@@ -109,19 +119,23 @@ namespace Microsoft.Deployment.Site.Web.Tests
                                         .First(e => e.GetAttribute("value.bind").Contains("selectedResourceGroup"));
 
                     resourceGroupName = Guid.NewGuid().ToString().Replace("-", "");
-
-                    resourceGroup.Clear();
-                    resourceGroup.SendKeys(resourceGroupName);
-
-                    var option = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
-
-                    if (option != null && option.Enabled == true)
+                    try
                     {
-                        option = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
-                        option.SendKeys(subscriptionName);
-                        break;
+                        resourceGroup.Clear();
                     }
+                    catch { }//no resource group error
+                    Thread.Sleep(new TimeSpan(0, 0, 20));
+                    resourceGroup.SendKeys(resourceGroupName);
                     Thread.Sleep(new TimeSpan(0, 0, 10));
+
+                    var text = driver.FindElementByCssSelector("p[class='st-float st-text']");
+                    text.Click();
+                    Thread.Sleep(new TimeSpan(0, 0, 20));
+
+                    //assert successfully validated, then return
+                    var validated = driver.FindElementByClassName("st-validated");
+                    Assert.IsTrue(validated.Text == "Successfully validated");
+                    return;
                 }
                 Thread.Sleep(new TimeSpan(0, 0, 10));
             }
@@ -188,12 +202,24 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
                     resourceGroupName = "delete_" + Guid.NewGuid().ToString().Replace("-", "");
 
-                    resourceGroup.Clear();
+                    try
+                    {
+                        resourceGroup.Clear();
+                    }
+                    catch { }//no resource group error
+                    Thread.Sleep(new TimeSpan(0, 0, 10));
                     resourceGroup.SendKeys(resourceGroupName);
+                    Thread.Sleep(new TimeSpan(0, 0, 10));
 
-                    Thread.Sleep(new TimeSpan(0, 0, 50));
+                    var text = driver.FindElementByCssSelector("p[class='st-float st-text']");
+                    text.Click();
+                    Thread.Sleep(new TimeSpan(0, 0, 10));
 
+                    //assert successfully validated, then return
+                    var validated = driver.FindElementByClassName("st-validated");
+                    Assert.IsTrue(validated.Text == "Successfully validated");
                     return;
+
                 }
                 Thread.Sleep(new TimeSpan(0, 0, 10));
             }
@@ -260,6 +286,27 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
             ClickButton("Next");
             Thread.Sleep(new TimeSpan(0, 0, 2));
+            ClickButton("Connect");
+            Thread.Sleep(new TimeSpan(0, 0, 2));
+
+            var anotherAccount = driver.FindElementById("use_another_account");
+            anotherAccount.Click();
+
+            var usernameBox1 = driver.FindElementById("cred_userid_inputtext");
+            usernameBox1.SendKeys(username);
+
+            var passwordBox1 = driver.FindElementById("cred_password_inputtext");
+            passwordBox1.SendKeys(password);
+
+            Thread.Sleep(new TimeSpan(0, 0, 5));
+            var djs = (IJavaScriptExecutor)driver;
+            var acceptButton = driver.FindElementById("cred_accept_button");
+            djs.ExecuteScript("arguments[0].click()", acceptButton);
+
+            WaitForPage();
+            ClickButton("Next");
+            Thread.Sleep(new TimeSpan(0, 0, 2));
+
             var newAas = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
 
             while (newAas.Enabled != true)
@@ -274,17 +321,6 @@ namespace Microsoft.Deployment.Site.Web.Tests
             var elements = driver.FindElementsByCssSelector("input[class='st-input au-target']");
 
             var serverBox = elements.FirstOrDefault(e => e.GetAttribute("value.bind").Contains("server"));
-            var usernameBox = elements.FirstOrDefault(e => e.GetAttribute("value.bind").Contains("email"));
-            var passwordBox = elements.FirstOrDefault(e => e.GetAttribute("value.bind").Contains("password"));
-
-            while (usernameBox.Enabled != true && passwordBox.Enabled != true && passwordBox.Enabled != true)
-            {
-                Thread.Sleep(new TimeSpan(0, 0, 1));
-            }
-
-            passwordBox.SendKeys(password);
-            usernameBox.Clear();
-            usernameBox.SendKeys(username);
             serverBox.SendKeys(server);
 
             var aasSku = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
@@ -294,10 +330,21 @@ namespace Microsoft.Deployment.Site.Web.Tests
                 Thread.Sleep(new TimeSpan(0, 0, 1));
                 aasSku = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
             }
-
             aasSku.SendKeys("Developer");
 
             ClickButton("Validate");
+
+            //var usernameBox = elements.FirstOrDefault(e => e.GetAttribute("value.bind").Contains("email"));
+            //var passwordBox = elements.FirstOrDefault(e => e.GetAttribute("value.bind").Contains("password"));
+
+            //while (usernameBox.Enabled != true && passwordBox.Enabled != true && passwordBox.Enabled != true)
+            //{
+            //    Thread.Sleep(new TimeSpan(0, 0, 1));
+            //}
+
+            //passwordBox.SendKeys(password);
+            //usernameBox.Clear();
+            //usernameBox.SendKeys(username);
         }
 
         public static void SelectSqlDatabase(string databaseName)
@@ -328,7 +375,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
                 //MSI scenario - carry on
             }
             var progressText = driver.FindElementsByCssSelector("span[class='semiboldFont st-progress-text']")
-                                     .FirstOrDefault(e => e.Text.Contains("The deployment has been successfully completed!"));
+                                     .FirstOrDefault(e => e.Text.Contains("The deployment successfully completed!"));
             var error = driver.FindElementsByCssSelector("span[class='st-tab-text st-error']")
                                      .FirstOrDefault(e => !string.IsNullOrEmpty(e.Text));
 
@@ -342,7 +389,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
                 }
 
                 progressText = driver.FindElementsByCssSelector("span[class='semiboldFont st-progress-text']")
-                                    .FirstOrDefault(e => e.Text.Contains("The deployment has been successfully completed!"));
+                                    .FirstOrDefault(e => e.Text.Contains("The deployment successfully completed!"));
 
                 if (progressText != null && !string.IsNullOrEmpty(progressText.Text))
                 {
@@ -353,7 +400,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
             }
 
             Assert.IsTrue(progressText != null);
-            Assert.IsTrue(progressText.Text.Contains("The deployment has been successfully completed!"));
+            Assert.IsTrue(progressText.Text.Contains("The deployment successfully completed!"));
         }
 
         public static void CleanSubscription(string username, string password, string tenantId, string clientId, string subscriptionId)

@@ -1,4 +1,6 @@
 ﻿export const EN_US = {
+    AAS_BASIC_1: `Basic 1`,
+    AAS_BASIC_2: `Basic 2`,
     AAS_DEVELOPER: `Developer`,
     AAS_EMAIL: `Azure Email:`,
     AAS_PASSWORD: `Azure Password:`,

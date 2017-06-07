@@ -56,7 +56,7 @@
             },
             {
                 "displayname": "Dynamics 365 Login",
-                "entities": "account,lead,opportunity,opportunityproduct,product,systemuser,systemusermanagermap,territory",
+                "entities": "account,lead,opportunity,opportunityproduct,product,systemuser,systemusermanagermap,territory,team",
                 "isScribe": "$run(this.MS.DataStore.getValue('DataMovement') === 'Scribe')",
                 "name": "$SiteCommon$/pages-gallery/mscrm-login.html",
                 "oauthType": "mscrm",

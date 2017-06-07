@@ -85,7 +85,18 @@ The first step is to choose the source of the data - Dynamics 365 Online or on p
 
 If Dynamics 365 Online is chosen, jump to Step 2a:Connect to Dynamics 365 Online. Otherwise jump to Step 2b: SQL Server Installation.
 
-## Step 2a: Connect to Dynamics 365 Online
+## Step 2a: Choose how to Move Data
+Select how to move your data. 
+
+Data Export is an add-on service made available as a Microsoft Dynamics
+365 online  that adds the ability to replicate Dynamics 365 online data to
+a Microsoft Azure SQL Database store. Data is copied in real-time.
+
+Scribe is a third party data integration platform. Choose this option if you have an existing account or plan on creating an accoutn with Scribe.
+
+![MoveData](Resources/Images/MoveData.png)
+
+## Step 3a: Connect to Dynamics 365 Online
 
 Next, connect to your Dynamics 365 instance to give permission to the provisioning application to set up data export service to populate the Azure SQL DB destiniation.
 
@@ -101,14 +112,15 @@ by following the instructions here: <https://account.windowsazure.com/subscripti
 
 ![Get Started](Resources/Images/Dynamics365AzSub.png)
 
-## Step 3a: Specify Azure Subscription
+## Step 4a: Specify Azure Subscription
 
 Choose the Dynamics 365 organization and specify the Azure subscription used to contains newly created resources.
 ![Get Started](Resources/Images/Dynamics365AzSub2.png)
 
 Click "Next".
 
-## Step 4a: Set up Azure Key Vault
+## Step 5a: Set up Azure Key Vault
+Note: This is required for Data Export Services. Scribe does not require Azure Key Vault.
 
 Azure Key Vault is a secure mechanism to store credentials to Azure SQL DB. The next step creates an Azure Key valut instance.
 
@@ -116,7 +128,7 @@ Azure Key Vault is a secure mechanism to store credentials to Azure SQL DB. The 
 
 Click “Next” to continue.
 
-## Step 5a: Connect to new or existing Azure SQL DB
+## Step 6a: Connect to new or existing Azure SQL DB
 Connect to an existing SQL Server or provide details which the application will use to spin up an Azure SQL on your behalf. Only Azure SQL is supported for this template. If a user chooses to spin up a new Azure SQL, this will get deployed in their Azure subscription inside the newly created resource group.
 ![ConnectSQL](Resources/Images/ConnectAzureSQL.png)
 
@@ -128,16 +140,16 @@ If you do not, you will not be able to read data from Azure SQL DB to populate t
 
 Click “Next” to continue.
 
-## Step 6a: Tailor your Sales Management solution template for Dynamics 365
+## Step 7a: Tailor your Sales Management solution template for Dynamics 365
 Provide the starting month of your fiscal calendar. This is required for fiscal year calculations in the Power BI file. 
 
-## Step 6a: Azure Analysis Services Election
+## Step 8a: Azure Analysis Services Election
 Choose whether Azure Analysis Services is to be used in the solution.c
 
 ![ChooseAAS](Resources/Images/AzureASOption.png)
 
 
-## Step 7a: Configure Azure Analysis Services
+## Step 9a: Configure Azure Analysis Services
 If Azure Analysis Services was chosen, create a new instance of Analysis Services or use an existing one.
 
 ![ConnectAAS](Resources/Images/AzureASConnect.png)
@@ -147,18 +159,26 @@ For new instances, select the Azure Analysis Services service tier. Learn more a
 
  The credentials provided are used as the system administrator for the Azure Analysis Services instance. When connecting to this instance, these credentials must be used (unless other users have been provided access separately).
 
-## Step 8a: Tailor your Sales Management solution template for Dynamics 365
+## Step 10a: Tailor your Sales Management solution template for Dynamics 365
 Provide the starting month of you8 fiscal calendar. This is required for fiscal year calculations in the Power BI file. 
 
 ![Customize](Resources/Images/CustomizeCRMDataExport.png)
-
-There is no schedule to refresh data - it is replicated in realtime.
 
 The base Dynamics 365 URL is provided for links for each opportunity, lead and account in the power BI reports.
 
 Click “Next” to continue.
 
-## Step 9a: Track Progress
+
+## Step 11a: Verify and Run Solution
+Verify the values entered.
+
+![Customize](Resources/Images/VerifyCRM.png)
+
+Provide your email to be notified when the data has finished moving and the reports are ready for viewing.
+
+Click “Next” to continue.
+
+## Step 12a: Track Progress
 The next several steps actually provision the soluution template. 
 ![Track Prog](Resources/Images/TrackProgress.png)
 
@@ -167,10 +187,6 @@ Once data starts moving, A Power BI file can be downloaded that is bound to the 
 ![Track Prog](Resources/Images/TrackProgress2.png)
 
 The Power BI report file (or pbix file) is pre-bound to the data destination (either Azure SQL Server or Azure Analysis Services). Follow the instructions on the first page in the report to show your data.
-
-
-
-
 
 
 

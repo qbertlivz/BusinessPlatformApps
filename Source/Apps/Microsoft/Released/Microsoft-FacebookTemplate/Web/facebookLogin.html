@@ -1,0 +1,20 @@
+﻿<template>
+    <h1 class="st-title">Facebook Login</h1>
+    <p class="st-subtitle">Enter in your facebook developer credentials</p>
+    <p>
+        In order to use this template you must have a facebook Developer Account and have created a Facebook Application. Both are completely free and can be set up by  
+        <a target="_blank" href="https://developers.facebook.com/docs/apps/register#developer-account">following guide</a>
+    </p>
+
+    <div class="st-float">
+        <p class="st-text">Facebook Client Id</p>
+        <input class="st-input" type="text" placeholder="12345678" change.delegate="viewmodel.Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.facebookClientId" />
+
+        <p class="st-text">Facebook Client Secret</p>
+        <input class="st-input" type="password" placeholder="12345678" change.delegate="viewmodel.Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.facebookClientSecret" />
+    </div>
+
+    <p class="st-float">
+        <button class="primary" click.trigger="viewmodel.OnValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_VALIDATE}</button>
+    </p>
+</template>

@@ -183,14 +183,10 @@ BEGIN
 	WHERE [statusMessage] = 'Success'
 	ORDER BY startTime DESC;
     
-    IF( @newRowCount = @oldRowCount)
-    BEGIN
-        RETURN 0
-    END
-    ELSE
-    BEGIN
-        RETURN 1
-    END
+	IF @newRowCount = @oldRowCount
+		RETURN 0;
+	ELSE
+		RETURN 1;
 END;
 go
 
@@ -204,14 +200,14 @@ BEGIN
 	DECLARE @newRowCount INT;
 	EXECUTE @newRowCount = [pbist_sccm].sp_get_current_record_counts;
 
-	IF(@jobMessage = 'Success')
-	UPDATE [pbist_sccm].[ssas_jobs] 
-	SET [endTime]=GETDATE(), [statusMessage]=@jobMessage, [lastCount]=@newRowCount
-	WHERE [id] = @jobid
+	IF @jobMessage = 'Success'
+		UPDATE [pbist_sccm].[ssas_jobs] 
+		SET [endTime]=GETDATE(), [statusMessage]=@jobMessage, [lastCount]=@newRowCount
+		WHERE [id] = @jobid;
 	ELSE
-	UPDATE [pbist_sccm].[ssas_jobs] 
-	SET [endTime]=GETDATE(), [statusMessage]=@jobMessage
-	WHERE [id] = @jobid
+		UPDATE [pbist_sccm].[ssas_jobs] 
+		SET [endTime]=GETDATE(), [statusMessage]=@jobMessage
+		WHERE [id] = @jobid;
 END;
 GO
 

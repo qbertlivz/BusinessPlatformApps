@@ -157,14 +157,10 @@ BEGIN
 	WHERE [statusMessage] = 'Success'
 	ORDER BY startTime DESC;
 
-	IF( @newRowCount = @oldRowCount)
-	BEGIN
-		RETURN 0
-	END
+	IF @newRowCount = @oldRowCount
+		RETURN 0;
 	ELSE
-	BEGIN
-		RETURN 1
-	END
+		RETURN 1;
 END;
 go
 
@@ -178,14 +174,14 @@ BEGIN
 	DECLARE @newRowCount INT;
 	EXECUTE @newRowCount = [pbist_twitter].sp_get_current_record_counts;
 
-	IF(@jobMessage = 'Success')
-	UPDATE [pbist_twitter].[ssas_jobs] 
-	SET [endTime]=GETDATE(), [statusMessage]=@jobMessage, [lastCount]=@newRowCount
-	WHERE [id] = @jobid
+	IF @jobMessage = 'Success'
+		UPDATE [pbist_twitter].[ssas_jobs] 
+		SET [endTime]=GETDATE(), [statusMessage]=@jobMessage, [lastCount]=@newRowCount
+		WHERE [id] = @jobid;
 	ELSE
-	UPDATE [pbist_twitter].[ssas_jobs] 
-	SET [endTime]=GETDATE(), [statusMessage]=@jobMessage
-	WHERE [id] = @jobid
+		UPDATE [pbist_twitter].[ssas_jobs] 
+		SET [endTime]=GETDATE(), [statusMessage]=@jobMessage
+		WHERE [id] = @jobid;
 END;
 GO
 
@@ -225,8 +221,7 @@ BEGIN
 	
     DECLARE @validateSchemaResult INT = 0;
 	if(@validateSchema = 1)
-	BEGIN
-		
+	BEGIN		
 		EXECUTE @validateSchemaResult = pbist_twitter.sp_validate_schema;
 		if(@validateSchemaResult = 0)
 		BEGIN

@@ -181,6 +181,38 @@
                 "SqlServerIndex": "0"
             },
             {
+                "DeploymentName": "ADFDeployment",
+                "displayname": "$translate(INIT_ACTION_CREATING_DATA_CONNECTIONS)",
+                "name": "Microsoft-ADFDeployLinkedServices",
+                "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
+            },
+            {
+                "DeploymentName": "ADFPreDeploymentDatasets",
+                "displayname": "$translate(INIT_ACTION_CREATING_MAPPINGS)",
+                "name": "Microsoft-ADFDeployDatasets",
+                "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
+            },
+            {
+                "DeploymentName": "ADFPreDeploymentPipeline",
+                "displayname": "$translate(INIT_ACTION_SCHEDULING_HISTORICAL)",
+                "name": "Microsoft-ADFDeployPipelines",
+                "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
+            },
+            {
+                "DeploymentName": "ADFPostDeploymentDatasets",
+                "displayname": "$translate(INIT_ACTION_CREATING_MAPPINGS_FUTURE)",
+                "name": "Microsoft-ADFDeployDatasets",
+                "postDeploymentPipelineType": "PostDeployment",
+                "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
+            },
+            {
+                "DeploymentName": "ADFPostDeploymentPipeline",
+                "displayname": "$translate(INIT_ACTION_SCHEDULING_DATA_LOADS)",
+                "name": "Microsoft-ADFDeployPipelines",
+                "postDeploymentPipelineType": "PostDeployment",
+                "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
+            },
+            {
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
                 "name": "Microsoft-SetConfigValueInSql",
                 "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
@@ -244,38 +276,6 @@
                 "displayname": "$translate(INIT_ACTION_SETTING_UP_AS_SCHEDULER)",
                 "name": "Microsoft-DeployAzureFunctionConnectionStrings",
                 "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
-            },
-            {
-                "DeploymentName": "ADFDeployment",
-                "displayname": "$translate(INIT_ACTION_CREATING_DATA_CONNECTIONS)",
-                "name": "Microsoft-ADFDeployLinkedServices",
-                "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
-            },
-            {
-                "DeploymentName": "ADFPreDeploymentDatasets",
-                "displayname": "$translate(INIT_ACTION_CREATING_MAPPINGS)",
-                "name": "Microsoft-ADFDeployDatasets",
-                "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
-            },
-            {
-                "DeploymentName": "ADFPreDeploymentPipeline",
-                "displayname": "$translate(INIT_ACTION_SCHEDULING_HISTORICAL)",
-                "name": "Microsoft-ADFDeployPipelines",
-                "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
-            },
-            {
-                "DeploymentName": "ADFPostDeploymentDatasets",
-                "displayname": "$translate(INIT_ACTION_CREATING_MAPPINGS_FUTURE)",
-                "name": "Microsoft-ADFDeployDatasets",
-                "postDeploymentPipelineType": "PostDeployment",
-                "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
-            },
-            {
-                "DeploymentName": "ADFPostDeploymentPipeline",
-                "displayname": "$translate(INIT_ACTION_SCHEDULING_DATA_LOADS)",
-                "name": "Microsoft-ADFDeployPipelines",
-                "postDeploymentPipelineType": "PostDeployment",
-                "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
             },
             {
                 "displayname": "$translate(NOTIFIER_INSERTING_INITIAL_COUNTS)",

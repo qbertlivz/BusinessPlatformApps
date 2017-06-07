@@ -46,7 +46,7 @@ namespace Microsoft.Deployment.Tests.Actions.Facebook
             var dataStore = new DataStore();
             dataStore.AddToDataStore("FacebookClientId", "422676881457852");
             dataStore.AddToDataStore("FacebookClientSecret", "bf5fca097936ece936290031623b577b");
-            dataStore.AddToDataStore("FacebookPage", "walmart");
+            dataStore.AddToDataStore("FacebookPages", "walmart");
             var response = TestManager.ExecuteAction("Microsoft-ValidateFacebookPage", dataStore);
             Assert.IsTrue(response.IsSuccess);
         }
@@ -57,7 +57,7 @@ namespace Microsoft.Deployment.Tests.Actions.Facebook
             var dataStore = new DataStore();
             dataStore.AddToDataStore("FacebookClientId", "422676881457852");
             dataStore.AddToDataStore("FacebookClientSecret", "bf5fca097936ece936290031623b577b");
-            dataStore.AddToDataStore("FacebookPage", "walmartsfakepagethatdoesnotexist");
+            dataStore.AddToDataStore("FacebookPages", "walmartsfakepagethatdoesnotexist");
             var response = TestManager.ExecuteAction("Microsoft-ValidateFacebookPage", dataStore);
             Assert.IsTrue(!response.IsSuccess);
         }
@@ -172,7 +172,6 @@ namespace Microsoft.Deployment.Tests.Actions.Facebook
             response = TestManager.ExecuteAction("Microsoft-DeployAzureFunctionConnectionStrings", dataStore);
             Assert.IsTrue(response.IsSuccess);
 
-           
 
             dataStore.AddToDataStore("AzureArmFile", "Service/Arm/logicapps.json");
             JObject logicapps = new JObject();

@@ -17,7 +17,8 @@ namespace Microsoft.Deployment.Actions.OnPremise
     [Export(typeof(IAction))]
     public class SccmGetEntityInitialCounts : BaseAction
     {
-        string connectionString = string.Empty;
+        string connectionStringSrc = string.Empty;
+        string connectionStringDest = string.Empty;
 
         public async override Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
@@ -29,7 +30,8 @@ namespace Microsoft.Deployment.Actions.OnPremise
                 return new ActionResponse(ActionStatus.Success);
             }            
 
-            connectionString = request.DataStore.GetAllValues("SqlConnectionString")[0].ToString();
+            connectionStringSrc = request.DataStore.GetAllValues("SqlConnectionString")[0].ToString();
+            connectionStringDest = request.DataStore.GetAllValues("SqlConnectionString")[1].ToString();
             string rootPath = request.Info.App.AppFilePath + @"\Service\Counts\";
             var entities = Directory.EnumerateFiles(rootPath);
 
@@ -52,16 +54,16 @@ namespace Microsoft.Deployment.Actions.OnPremise
 
             SqlParameter[] parameters = new SqlParameter[] { new SqlParameter("retention", GetRetentionDays()) };
 
-            DataTable count = SqlUtility.RunCommand(connectionString, cmd, SqlCommandType.ExecuteWithData);
+            DataTable count = SqlUtility.RunCommand(connectionStringSrc, cmd, SqlCommandType.ExecuteWithData);
 
             return Convert.ToInt32(count.Rows[0][0]);
         }
 
         private int GetRetentionDays()
         {
-            int retentionDays = 60;
+            int retentionDays = 120;
             const string cmd = "SELECT [value] FROM pbist_sccm.vw_configuration WHERE [name]='dataretentiondays' AND [configuration group]='SolutionTemplate' AND [configuration subgroup]='System Center'";
-            DataTable result = SqlUtility.RunCommand(connectionString, cmd, SqlCommandType.ExecuteWithData);
+            DataTable result = SqlUtility.RunCommand(connectionStringDest, cmd, SqlCommandType.ExecuteWithData);
 
             if (result!=null && result.Rows.Count>0 && result.Rows[0][0]!= DBNull.Value)
                 retentionDays = Convert.ToInt32(result.Rows[0][0]);

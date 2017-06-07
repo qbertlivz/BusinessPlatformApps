@@ -12,6 +12,17 @@ $sql_pwd=""
 $bcp = ".\bcp.exe"
 $sqlcmd = ".\sqlcmd.exe"
 
+# Use FQDN if possible
+if ($SourceServer -notlike "*.*")
+{
+    $SourceServer = [System.Net.Dns]::GetHostEntry($SourceServer).HostName;
+}
+
+if ($DestinationServer -notlike "*.*")
+{
+    $DestinationServer = [System.Net.Dns]::GetHostEntry($DestinationServer).HostName;
+}
+
 
 #region Win32 credential manager
 # This region reuses code published at https://gist.github.com/toburger/2947424, under:

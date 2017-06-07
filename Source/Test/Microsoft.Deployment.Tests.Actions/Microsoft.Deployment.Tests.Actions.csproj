@@ -143,6 +143,7 @@
     <Compile Include="AzureTests\ConnectorTest.cs" />
     <Compile Include="AzureTests\AzureMLTest.cs" />
     <Compile Include="AzureTests\CognitiveServices.cs" />
+    <Compile Include="AzureTests\EventHubTest.cs" />
     <Compile Include="AzureTests\LogicAppTests.cs" />
     <Compile Include="AzureTests\StreamAnalyticsTest.cs" />
     <Compile Include="NotifierTests.cs" />

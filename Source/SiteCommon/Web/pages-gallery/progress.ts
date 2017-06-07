@@ -23,10 +23,6 @@ export class ProgressViewModel extends ViewModelBase {
     successMessage2: string = this.MS.Translate.PROGRESS_ALL_DONE2;
     targetSchema: string = '';
 
-    constructor() {
-        super();
-    }
-
     publishReport(): void {
     }
 

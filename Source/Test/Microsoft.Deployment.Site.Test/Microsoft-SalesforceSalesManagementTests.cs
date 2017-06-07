@@ -69,6 +69,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
             Given_CorrectSqlCredentials_When_ExistingSqlSelected_Then_PageValidatesSuccessfully();
             HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Next");
+            HelperMethods.WaitForPage();
             HelperMethods.NewAnalysisServices("salesforceas" + HelperMethods.resourceGroupName, Credential.Instance.ServiceAccount.Username, Credential.Instance.ServiceAccount.Password);
             HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Next");
@@ -195,6 +196,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
             HelperMethods.baseURL = baseURL + "?name=Microsoft-SalesforceSalesManagement";
             var options = new ChromeOptions();
             options.AddArgument("no-sandbox");
+            options.AddUserProfilePreference("profile.password_manager_enabled", false);
             try
             {
                 HelperMethods.CreateDatabase(Credential.Instance.Sql.Server,

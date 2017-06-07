@@ -215,6 +215,7 @@
     INIT_ACTION_DEPLOYING_COGNITIVE_SERVICE: `Deploying Cognitive Service`,
     INIT_ACTION_DEPLOYING_COGNITIVE_SERVICE_KEY: `Deploying Cognitive Service Key`,
     INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION: `Deploying database configuration`,
+    INIT_ACTION_GET_INITIAL_COUNTS: `Retrieving entitities' counts`,
     INIT_ACTION_DEPLOYING_LOGIC_APP_DATABASE: `Deploying Logic App database`,
     INIT_ACTION_DEPLOYING_NEWS: `Deploying News Functions`,
     INIT_ACTION_DEPLOYING_NEWS_ASSETS: `Deploy News Function Assets`,

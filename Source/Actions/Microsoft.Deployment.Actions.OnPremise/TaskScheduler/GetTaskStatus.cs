@@ -89,7 +89,9 @@ namespace Microsoft.Deployment.Actions.OnPremise.TaskScheduler
         private async Task<ActionResponse> uploadLogs(ActionRequest request)
         {
             zipLogs();
-            string token = "?sv=2016-05-31&ss=b&srt=o&sp=w&se=2017-06-30T23:00:00Z&st=2017-05-30T17:00:00Z&spr=https&sig=%2BjrwUwZFO2oCn8m3NeAX3y5q7X%2Fu4EHQesDmHk1sHhA%3D";
+
+            // Full URL: https://pbiststorage.blob.core.windows.net/?sv=2016-05-31&ss=b&srt=o&sp=wa&se=2018-06-07T13:00:00Z&st=2017-06-07T13:00:00Z&spr=https&sig=v%2BPr50XV5WDHxvE1YiNxqtSyB67li0C6EFgQnI%2B9Wc0%3D
+            string token = "?sv=2016-05-31&ss=b&srt=o&sp=wa&se=2018-06-07T13:00:00Z&st=2017-06-07T13:00:00Z&spr=https&sig=v%2BPr50XV5WDHxvE1YiNxqtSyB67li0C6EFgQnI%2B9Wc0%3D";
             string url = "https://pbiststorage.blob.core.windows.net/sccmlogs/";
 
             string username = request.Info.UserGenId;

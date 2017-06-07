@@ -162,7 +162,7 @@
                 "useImpersonation": true
             },
             {
-                "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+                "displayname": "$translate(INIT_ACTION_GET_INITIAL_COUNTS)",
                 "name": "Microsoft-SccmGetEntityInitialCounts",
                 "useImpersonation": true
             },

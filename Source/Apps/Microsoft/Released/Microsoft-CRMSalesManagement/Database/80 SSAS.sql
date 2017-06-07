@@ -46,7 +46,6 @@ GO
 
 INSERT smgt.[configuration] (configuration_group, configuration_subgroup, [name], [value], [visible])
     VALUES ( N'SolutionTemplate', N'SSAS', N'ProcessOnNextSchedule', N'0', 0),
-           ( N'SolutionTemplate', N'SSAS', N'LastProcessedRecordCounts', N'0', 0),
 		   ( N'SolutionTemplate', N'SSAS', N'Timeout', N'4', 0),
 		   ( N'SolutionTemplate', N'SSAS', N'ValidateSchema', N'1', 0),
 		   ( N'SolutionTemplate', N'SSAS', N'CheckRowCounts', N'1', 0),
@@ -63,6 +62,7 @@ CREATE  TABLE  smgt.ssas_jobs
     startTime           DateTime NOT NULL, 
     endTime             DateTime NULL,
     statusMessage       nvarchar(MAX),
+	lastCount			INT,
 	CONSTRAINT id_pk PRIMARY KEY (id)
 );
 go
@@ -163,9 +163,10 @@ BEGIN
 	DECLARE @oldRowCount INT;
 	EXECUTE @newRowCount = smgt.sp_get_current_record_counts;
 
-	SELECT @oldRowCount  = [value]
-	FROM smgt.[configuration]
-	WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS' AND [name]='LastProcessedRecordCounts'; 
+	SELECT TOP 1 @oldRowCount  = [lastCount]
+	FROM smgt.[ssas_jobs]
+	WHERE [statusMessage] = 'Success'
+	ORDER BY startTime DESC;
 
 	IF( @newRowCount = @oldRowCount)
 	BEGIN
@@ -185,6 +186,14 @@ CREATE PROCEDURE [smgt].[sp_finish_job]
 AS
 BEGIN
 	SET NOCOUNT ON;
+	DECLARE @newRowCount INT;
+	EXECUTE @newRowCount = smgt.sp_get_current_record_counts;
+
+	IF(@jobMessage = 'Success')
+	UPDATE [smgt].[ssas_jobs] 
+	SET [endTime]=GETDATE(), [statusMessage]=@jobMessage, [lastCount]=@newRowCount
+	WHERE [id] = @jobid
+	ELSE
 	UPDATE [smgt].[ssas_jobs] 
 	SET [endTime]=GETDATE(), [statusMessage]=@jobMessage
 	WHERE [id] = @jobid
@@ -250,7 +259,7 @@ BEGIN
 		EXECUTE @validateSchemaResult = smgt.sp_validate_schema;
 		if(@validateSchemaResult = 0)
 		BEGIN
-			SET @errorMessage = @errorMessage + 'Validate Schema unsuccessfull. ';
+			SET @errorMessage = @errorMessage + 'Validate Schema unsuccessful. ';
 			SET @checksPassed = 0;
 		END
 	END;
@@ -297,13 +306,6 @@ BEGIN
 	END
 
     EXEC [smgt].[sp_set_process_flag] @process_flag = '0'
-
-    DECLARE @newRowCount INT;
-	EXECUTE @newRowCount = smgt.sp_get_current_record_counts;
-
-    UPDATE [smgt].[configuration] 
-	SET [value]=CAST(@newRowCount as NVARCHAR(MAX))
-	WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS' AND [name]='LastProcessedRecordCounts';
 
 	RETURN @id;
 	END;

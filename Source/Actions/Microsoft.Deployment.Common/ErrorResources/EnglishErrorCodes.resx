@@ -130,7 +130,7 @@
     <value>Credential Guard is enabled on this computer and does not yet support Windows Task Scheduler. Please choose a different computer.</value>
   </data>
   <data name="DefaultErrorCode" xml:space="preserve">
-    <value>An error has occured, see additional details to learn more</value>
+    <value>An error has occurred, see additional details to learn more</value>
   </data>
   <data name="DefaultLoginFailed" xml:space="preserve">
     <value>Login failed, please check that you have entered in the correct credentials</value>

@@ -3,6 +3,7 @@
 export class ProgressViewModel extends ViewModelBase {
     datastoreEntriesToValidate: string[] = [];
     downloadPbiText: string = this.MS.Translate.PROGRESS_DOWNLOAD_PBIX_INFO;
+    enablePublishReport: boolean = false;
     filename: string = 'report.pbix';
     filenameSSAS: string = 'reportSSAS.pbix';
     asDatabase: string = 'Sccm';

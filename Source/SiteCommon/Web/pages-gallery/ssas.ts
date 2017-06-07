@@ -3,15 +3,11 @@ import { DataStoreType } from '../enums/data-store-type';
 import { ViewModelBase } from '../services/view-model-base';
 
 export class Customize extends ViewModelBase {
-    ssasType: string = 'New';
-    server: string = '';
     email: string = '';
     password: string = '';
-    sku: string = 'S0';
-
-    Invalidate(): void {
-        super.Invalidate();
-    }
+    server: string = '';
+    sku: string = 'B1';
+    ssasType: string = 'New';
 
     async OnLoaded(): Promise<void> {
         this.isValidated = false;
@@ -27,20 +23,15 @@ export class Customize extends ViewModelBase {
 
             let body: any = {};
             body.ASServerName = this.server;
-            let response = await this.MS.HttpService.executeAsync('Microsoft-CheckASServerNameAvailability', body);
-            if (response.IsSuccess) {
-                this.isValidated = true;
-                return true;
-            }
 
-            this.isValidated = false;
-            return false;
+            this.isValidated = (await this.MS.HttpService.executeAsync('Microsoft-CheckASServerNameAvailability', body)).IsSuccess
+
+            return this.isValidated;
         } else {
             let body: any = {};
             body.ASServerUrl = this.server;
 
-            let response = await this.MS.HttpService.executeAsync('Microsoft-ValidateConnectionToAS', body);
-            if (response.IsSuccess) {
+            if ((await this.MS.HttpService.executeAsync('Microsoft-ValidateConnectionToAS', body)).IsSuccess) {
                 this.isValidated = true;
                 this.MS.DataStore.addToDataStore("ASServerUrl", this.server, DataStoreType.Public);
                 return true;
@@ -57,19 +48,12 @@ export class Customize extends ViewModelBase {
             body.ASServerName = this.server;
             body.ASSku = this.sku;
 
-            let response = await this.MS.HttpService.executeAsync('Microsoft-DeployAzureAnalysisServices', body);
-            if (!response.IsSuccess) {
-                return false;
-            }
+            if (!(await this.MS.HttpService.executeAsync('Microsoft-DeployAzureAnalysisServices', body)).IsSuccess) return false;
 
             this.server = this.MS.DataStore.getValue("ASServerUrl");
             this.ssasType = "Existing";
 
-
-            let response2 = await this.MS.HttpService.executeAsync('Microsoft-ValidateConnectionToAS');
-            if (!response2.IsSuccess) {
-                return false;
-            }
+            if (!(await this.MS.HttpService.executeAsync('Microsoft-ValidateConnectionToAS')).IsSuccess) return false;
         }
 
         return true;

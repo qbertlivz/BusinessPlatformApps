@@ -699,16 +699,13 @@ go
 CREATE PROCEDURE pbist_sccm.sp_populatecomputercollection AS
 BEGIN
     SET NOCOUNT ON;
+    DECLARE @result_code INT;
 
-    BEGIN TRANSACTION;
-    TRUNCATE TABLE pbist_sccm.computercollection;
-
-    INSERT INTO pbist_sccm.computercollection(collectionid,resourceid)
-    SELECT collectionid, resourceid
-    FROM pbist_sccm.computercollection_staging;
-
-    TRUNCATE TABLE pbist_sccm.computercollection_staging;
+    -- Logically, this is a simple insert from staging. But it's a lot of data. Drop + rename is much faster
+    DROP TABLE pbist_sccm.computercollection;
+    EXEC @result_code = sp_rename 'pbist_sccm.computercollection_staging', 'computercollection', 'OBJECT';
     
-    COMMIT;
+    -- The * should obey the column order used when the table was created
+    SELECT TOP 0 * INTO pbist_sccm.computercollection_staging FROM pbist_sccm.computercollection;
 END;
 go

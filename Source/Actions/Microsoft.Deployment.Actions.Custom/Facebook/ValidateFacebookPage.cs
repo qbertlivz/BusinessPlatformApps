@@ -19,6 +19,7 @@ namespace Microsoft.Deployment.Actions.Custom.Facebook
             string clientId = request.DataStore.GetValue("FacebookClientId");
             string clientSecret = request.DataStore.GetValue("FacebookClientSecret");
             string pages = request.DataStore.GetValue("FacebookPages");
+            string pageIds = "";
 
             foreach (var pageToSearch in pages.Split(','))
             {
@@ -34,7 +35,7 @@ namespace Microsoft.Deployment.Actions.Custom.Facebook
 
                 string accessToken = JObject.Parse(responseObj)["access_token"].ToString();
 
-                string pageRequestUri = $"https://graph.facebook.com/{page}/feed?access_token={accessToken}";
+                string pageRequestUri = $"https://graph.facebook.com/{page}?access_token={accessToken}";
                 response = await client.GetAsync(pageRequestUri);
                 responseObj = await response.Content.ReadAsStringAsync();
                 if (!response.IsSuccessStatusCode)
@@ -42,7 +43,7 @@ namespace Microsoft.Deployment.Actions.Custom.Facebook
                     return new ActionResponse(ActionStatus.FailureExpected, responseObj, $"Facebook Page not found: {page}");
                 }
             }
-            
+
             return new ActionResponse(ActionStatus.Success);
         }
     }

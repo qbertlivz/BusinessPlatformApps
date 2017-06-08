@@ -31,6 +31,8 @@ INSERT INTO fb.[Comments]
 	,[Post Id2]
 	,[Original Post Id]
 	,[Page]
+    ,[PageDisplayName]
+    ,[PageId]
 )
 SELECT DISTINCT
 	 [Id1]
@@ -43,7 +45,9 @@ SELECT DISTINCT
 	,[Post Id1]
 	,[Post Id2]
 	,[Original Post Id]
-	,[Page] 
+	,[Page]
+    ,[PageDisplayName]
+    ,[PageId]
  FROM fb.StagingComments
     
 TRUNCATE TABLE [fb].[StagingComments];	 
@@ -106,7 +110,7 @@ ON t.Id1 = s.Id1 AND t.Id2 = s.Id2;
 
 INSERT INTO fb.Posts
 (
-        [Id1]
+     [Id1]
 	,[Id2]
 	,[Original Id]
 	,[Created Date]
@@ -118,7 +122,9 @@ INSERT INTO fb.Posts
 	,[Total Shares]
 	,[Total Reactions]
 	,[Page]
-	,[Total Comments]
+    ,[PageDisplayName]
+    ,[PageId]
+    ,[Total Comments]
 )
 SELECT DISTINCT
      [Id1]
@@ -133,6 +139,8 @@ SELECT DISTINCT
 	,[Total Shares]
 	,[Total Reactions]
 	,[Page]
+    ,[PageDisplayName]
+    ,[PageId]
 	,[Total Comments]
     FROM fb.StagingPosts
 TRUNCATE TABLE [fb].StagingPosts;	 	 

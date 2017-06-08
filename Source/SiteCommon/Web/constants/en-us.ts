@@ -124,7 +124,7 @@
     COMMON_TERMS_OF_USE: `Terms of Use`,
     COMMON_TOKEN: `token`,
     COMMON_UNINSTALL: `Uninstall`,
-    COMMON_UNKNOWN_ERROR: `Unknown Error has occured`,
+    COMMON_UNKNOWN_ERROR: `Unknown Error has occurred`,
     COMMON_USERNAME: `username`,
     COMMON_VALIDATE: `Validate`,
     COMMON_YES: `Yes`,

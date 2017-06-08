@@ -47,7 +47,9 @@ CREATE TABLE [fb].[Comments](
 	[Post Id1] [bigint] NULL,
 	[Post Id2] [bigint] NULL,
 	[Original Post Id] [nvarchar](50) NULL,
-	[Page] [nchar](100) NULL
+	[Page] [nchar](100) NULL,
+    [PageDisplayName] [nchar](200) NULL,
+    [PageId] [nchar](100) NULL
 )
 
 CREATE TABLE [fb].[Posts](
@@ -63,6 +65,8 @@ CREATE TABLE [fb].[Posts](
 	[Total Shares] [int] NULL,
 	[Total Reactions] [int] NULL,
 	[Page] [nvarchar](100) NULL,
+    [PageDisplayName] [nchar](200) NULL,
+    [PageId] [nchar](100) NULL,
 	[Total Comments] [int] NULL
 )
 
@@ -110,7 +114,9 @@ CREATE TABLE [fb].[StagingComments](
 	[Post Id1] [bigint] NULL,
 	[Post Id2] [bigint] NULL,
 	[Original Post Id] [nvarchar](50) NULL,
-	[Page] [nchar](100) NULL
+	[Page] [nchar](100) NULL,
+    [PageDisplayName] [nchar](200) NULL,
+    [PageId] [nchar](100) NULL
 )
 
 CREATE TABLE [fb].[StagingError](
@@ -152,6 +158,8 @@ CREATE TABLE [fb].[StagingPosts](
 	[Total Shares] [int] NULL,
 	[Total Reactions] [int] NULL,
 	[Page] [nvarchar](100) NULL,
+    [PageDisplayName] [nchar](200) NULL,
+    [PageId] [nchar](100) NULL,
 	[Total Comments] [int] NULL,
 	[BulkInsertId] [int] NULL
 )

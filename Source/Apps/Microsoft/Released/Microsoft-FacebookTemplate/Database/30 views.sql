@@ -10,35 +10,43 @@ CREATE VIEW [fb].[CommentsPostsView] AS
 (
 
 SELECT 
-      [Original Id]
+       [Original Id]
       ,[Created Date]
-	  ,CONVERT(date, [Created Date]) AS [Created Date Only]
+      ,CONVERT(date, [Created Date]) AS [Created Date Only]
       ,[Message]
       ,[From Id]
       ,[From Name]
-	  ,[Page]
-	  ,[media]
+      ,[Page]
+      ,[PageDisplayName]
+      ,[PageId]
+      ,[media]
       ,[Original Id] AS [Original Post Id]
-	  ,'Post' AS [Type]
+      ,'Post' AS [Type]
+      ,CASE WHEN CONVERT(nvarchar,[From Id]) = [PageId] THEN 'Internal' ELSE 'External' END AS PostType
+      ,CASE WHEN CONVERT(nvarchar,[From Id]) = [PageId] THEN '1' ELSE '0' END AS IsPageOwner
   FROM [fb].[Posts]
 
   UNION ALL 
 
   SELECT 
-      [Original Id]
+       [Original Id]
       ,[Created Date]
-	  ,CONVERT(date, [Created Date]) AS [Created Date Only]
+      ,CONVERT(date, [Created Date]) AS [Created Date Only]
       ,[Message]
       ,[From Id]
       ,[From Name]
-	  ,[Page]
-	  ,null AS [media]
+      ,[Page]
+      ,[PageDisplayName]
+      ,[PageId]
+      ,null AS [media]
       ,[Original Post Id]
-	  ,'Comment' AS [Type]
+      ,'Comment' AS [Type]
+      ,'' AS PostType
+      ,CASE WHEN CONVERT(nvarchar,[From Id]) = [PageId] THEN '1' ELSE '0' END AS IsPageOwner
   FROM [fb].[Comments]
   )
-
 GO
+
 
 CREATE VIEW [fb].[HashTagView] AS (
 

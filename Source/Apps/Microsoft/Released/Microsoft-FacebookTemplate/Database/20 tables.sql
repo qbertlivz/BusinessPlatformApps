@@ -49,7 +49,7 @@ CREATE TABLE [fb].[Comments](
 	[Original Post Id] [nvarchar](50) NULL,
 	[Page] [nchar](100) NULL,
     [PageDisplayName] [nchar](200) NULL,
-    [PageId] [nchar](100) NULL
+    [PageId] [bigint] NULL
 )
 
 CREATE TABLE [fb].[Posts](
@@ -66,7 +66,7 @@ CREATE TABLE [fb].[Posts](
 	[Total Reactions] [int] NULL,
 	[Page] [nvarchar](100) NULL,
     [PageDisplayName] [nchar](200) NULL,
-    [PageId] [nchar](100) NULL,
+    [PageId] [bigint] NULL,
 	[Total Comments] [int] NULL
 )
 
@@ -116,7 +116,7 @@ CREATE TABLE [fb].[StagingComments](
 	[Original Post Id] [nvarchar](50) NULL,
 	[Page] [nchar](100) NULL,
     [PageDisplayName] [nchar](200) NULL,
-    [PageId] [nchar](100) NULL
+    [PageId] [bigint] NULL
 )
 
 CREATE TABLE [fb].[StagingError](
@@ -159,7 +159,7 @@ CREATE TABLE [fb].[StagingPosts](
 	[Total Reactions] [int] NULL,
 	[Page] [nvarchar](100) NULL,
     [PageDisplayName] [nchar](200) NULL,
-    [PageId] [nchar](100) NULL,
+    [PageId] [bigint] NULL,
 	[Total Comments] [int] NULL,
 	[BulkInsertId] [int] NULL
 )
@@ -184,6 +184,29 @@ CREATE TABLE [fb].[StagingSentiment](
 )
 
 GO
+
+CREATE TABLE [fb].[Users](
+	[Id] [bigint] NULL,
+	[Name] [nvarchar](100) NULL,
+)
+
+CREATE TABLE [fb].[Edges](
+	[SourceVertex] [bigint] NULL,
+    [TargetVertex] [bigint] NULL,
+    [EdgeWeight] [int] NULL,
+	[PageId] [bigint] NULL
+)
+GO
+
+CREATE NONCLUSTERED INDEX [SourceVertedId] ON [fb].[Edges]
+(
+	[SourceVertex] ASC
+)
+
+CREATE NONCLUSTERED INDEX [UserId] ON [fb].[Users]
+(
+	[Id] ASC
+)
 
 CREATE NONCLUSTERED INDEX [StagingCommentsId1] ON [fb].[Comments]
 (
@@ -347,5 +370,29 @@ CREATE NONCLUSTERED INDEX [IX_StagingSentiment_2] ON [fb].[StagingSentiment]
 	[BulkInsertId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
 GO
+
+CREATE NONCLUSTERED INDEX [UserId1] ON [fb].[StagingComments]
+(
+	[From Id] ASC
+)
+GO
+
+CREATE NONCLUSTERED INDEX [UserId1] ON [fb].[StagingPosts]
+(
+	[From Id] ASC
+)
+
+CREATE NONCLUSTERED INDEX [UserId1] ON [fb].[Comments]
+(
+	[From Id] ASC
+)
+GO
+
+CREATE NONCLUSTERED INDEX [UserId1] ON [fb].[Posts]
+(
+	[From Id] ASC
+)
+
+
 ALTER TABLE [fb].[configuration] ADD  DEFAULT ((0)) FOR [visible]
 

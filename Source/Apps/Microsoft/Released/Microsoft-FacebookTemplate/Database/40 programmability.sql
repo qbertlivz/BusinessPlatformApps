@@ -10,6 +10,39 @@ CREATE PROCEDURE [fb].[Merge]
 AS
 BEGIN
 
+---------------------Merge Users-------------------------------------
+BEGIN TRAN
+
+DELETE t 
+FROM fb.[Users] as t
+INNER JOIN fb.StagingComments s 
+ON s.[From Id] = t.[Id];
+INSERT INTO fb.[Users]
+(
+     [Id]
+	,[Name]
+)
+SELECT DISTINCT
+	[From Id] AS [Id]
+	,[From Name] AS [Name]
+ FROM fb.StagingComments
+
+ DELETE t 
+FROM fb.[Users] as t
+INNER JOIN fb.StagingPosts s 
+ON s.[From Id] = t.[Id];
+INSERT INTO fb.[Users]
+(
+     [Id]
+	,[Name]
+)
+SELECT DISTINCT
+	[From Id] AS [Id]
+	,[From Name] AS [Name]
+ FROM fb.StagingPosts
+
+ COMMIT
+
 ---------------------Merge Comments-------------------------------------
 BEGIN TRAN
 DELETE t 
@@ -193,8 +226,39 @@ SELECT DISTINCT
 	,[Original Id]
 	,[Sentiment]
 FROM [fb].[StagingSentiment]
-TRUNCATE TABLE [fb].[StagingSentiment];	 	 
+TRUNCATE TABLE [fb].[StagingSentiment]; 
 COMMIT
 
 END
 go
+
+CREATE PROCEDURE [fb].[UpdateEdges]
+AS
+BEGIN
+
+BEGIN TRAN
+TRUNCATE TABLE fb.[Edges];
+
+INSERT INTO fb.[Edges]
+(
+     SourceVertex
+    ,TargetVertex
+    ,EdgeWeight
+    ,PageId
+)
+(
+    SELECT 
+    tbl1.[From Id] as SourceVertex, 
+    tbl2.[From Id] as TargetVertex,
+    count(1) as EdgeWeight,
+    tbl1.[PageId]  as PageId
+    FROM [fb].Comments tbl1 join [fb].Comments tbl2 on tbl1.[Post Id1] = tbl2.[Post Id1] AND tbl1.[Post Id2] = tbl2.[Post Id2]  
+    WHERE tbl1.[From Id] !=  tbl1.[PageId] and tbl2.[From Id] !=  tbl2.[PageId] and tbl1.[From Id] != tbl2.[From Id] 
+    group by tbl1.[From Id], tbl2.[From Id], tbl1.[PageId]
+    having count(1) > 2 
+);
+
+COMMIT
+
+END
+GO

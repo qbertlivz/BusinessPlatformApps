@@ -95,3 +95,33 @@ SELECT [Original Id]
 FROM [fb].[Sentiment]
 )
 GO
+
+CREATE VIEW [fb].[UsersView] AS (
+SELECT [Id]
+      ,[Name]
+FROM [fb].[Users]
+)
+GO
+
+CREATE VIEW [fb].[PagesView] AS (
+SELECT DISTINCT 
+        [PageId]
+      ,[PageDisplayName]
+FROM [fb].[Posts]
+)
+GO
+
+CREATE VIEW [fb].[EdgesView] AS (
+SELECT  
+     [SourceVertex]
+	 ,s.[Name] AS [SourceVertexName] 
+    ,[TargetVertex]
+	,t.[Name] AS [TargetVertexName] 
+    ,[EdgeWeight] 
+	,[PageId] 
+FROM [fb].[Edges]
+JOIN fb.[Users] s ON s.Id = [SourceVertex] 
+JOIN fb.[Users] t ON t.Id = [TargetVertex]
+)
+
+GO

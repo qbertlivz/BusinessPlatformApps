@@ -11,12 +11,6 @@ export class Customize extends ViewModelBase {
         this.showValidation = false;
     }
 
-    async OnValidate(): Promise<boolean> {
-        this.isValidated = true;
-        this.showValidation = false;
-        return true;
-    }
-
     async NavigatingNext(): Promise<boolean> {
         this.MS.DataStore.addToDataStoreWithCustomRoute('ssas', 'ssasDisabled', this.ssasEnabled === 'true' ? 'false' : 'true', DataStoreType.Public);
         return true;

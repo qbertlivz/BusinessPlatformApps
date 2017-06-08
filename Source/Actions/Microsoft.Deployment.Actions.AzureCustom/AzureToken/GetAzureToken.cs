@@ -1,12 +1,13 @@
 ﻿using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Newtonsoft.Json.Linq;
+
 using Microsoft.Deployment.Common;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.ErrorCode;
-
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
 {

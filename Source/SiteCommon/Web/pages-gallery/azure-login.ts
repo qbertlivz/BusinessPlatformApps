@@ -1,7 +1,10 @@
 ﻿import { QueryParameter } from '../constants/query-parameter';
+
 import { AzureConnection } from '../enums/azure-connection';
 import { DataStoreType } from '../enums/data-store-type';
+
 import { ActionResponse } from '../models/action-response';
+
 import { ViewModelBase } from '../services/view-model-base';
 
 export class AzureLogin extends ViewModelBase {

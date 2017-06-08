@@ -79,7 +79,7 @@ namespace Microsoft.Deployment.Tests.Actions.Facebook
             var dataStore =  await TestManager.GetDataStore(true);
             dataStore.AddToDataStore("FacebookClientId", "422676881457852");
             dataStore.AddToDataStore("FacebookClientSecret", "bf5fca097936ece936290031623b577b");
-            dataStore.AddToDataStore("SqlConnectionString", "Server=tcp:modb1.database.windows.net,1433;Initial Catalog=fb;Persist Security Info=False;User ID=pbiadmin;Password=Corp123!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            dataStore.AddToDataStore("SqlConnectionString", "Server=tcp:modb1.database.windows.net,1433;Initial Catalog=fb4;Persist Security Info=False;User ID=pbiadmin;Password=Corp123!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             dataStore.AddToDataStore("Schema", "fb");
           
 
@@ -90,7 +90,7 @@ namespace Microsoft.Deployment.Tests.Actions.Facebook
             dataStore.AddToDataStore("SqlGroup", "SolutionTemplate");
             dataStore.AddToDataStore("SqlSubGroup", "ETL");
             dataStore.AddToDataStore("SqlEntryName", "PagesToFollow");
-            dataStore.AddToDataStore("SqlEntryValue", "walmart,target");
+            dataStore.AddToDataStore("SqlEntryValue", "dcextendeduniverse,MarvelCinematicUniverse");
             dataStore.AddToDataStore("SqlConfigTable", "fb.configuration");
 
             ActionResponse response = null;
@@ -123,7 +123,7 @@ namespace Microsoft.Deployment.Tests.Actions.Facebook
 
 
             dataStore.AddToDataStore("DeploymentName", "FunctionDeploymentTest1");
-            dataStore.AddToDataStore("FunctionName", "unittestfunction1154");
+            dataStore.AddToDataStore("FunctionName", "unittestfunction1154789");
             dataStore.AddToDataStore("RepoUrl", "https://github.com/MohaaliMicrosoft/FacebookExtraction");
             dataStore.AddToDataStore("sku", "Standard");
 
@@ -132,7 +132,7 @@ namespace Microsoft.Deployment.Tests.Actions.Facebook
 
 
             dataStore.AddToDataStore("DeploymentName", "FunctionDeploymentTest2");
-            dataStore.AddToDataStore("StorageAccountName", "testmostorage123456");
+            dataStore.AddToDataStore("StorageAccountName", "testmostorage12345678");
             dataStore.AddToDataStore("StorageAccountType", "Standard_LRS");
             dataStore.AddToDataStore("StorageAccountEncryptionEnabled", "true");
 

@@ -60,16 +60,13 @@
                 "useImpersonation": true
             },
             {
+                "checkSqlVersion": true,
                 "credentialTarget": "Simplement.SolutionTemplate.AR.SQL",
                 "displayname": "Target",
                 "name": "$SiteCommon$/pages-gallery/sql-server.html",
                 "onNext": [
                     {
                         "name": "Microsoft-WriteSAPJson"
-                    },
-                    {
-                        "name": "Microsoft-CheckSQLVersion",
-                        "useImpersonation": true
                     }
                 ],
                 "subtitle": "$translate(INIT_SQL_SUBTITLE)",

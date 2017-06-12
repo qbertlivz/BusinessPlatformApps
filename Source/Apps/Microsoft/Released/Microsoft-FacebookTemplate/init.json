@@ -2,14 +2,18 @@
   "Install": {
     "Pages": [
       {
-        "architectureDiagram": "",
+        "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-FacebookTemplate/Web/images/ArchitectureDiagram.png",
         "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(10))",
         "displayname": "Getting Started",
         "list1": [
-
+          "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",
+          "$translate(INIT_GETTING_STARTED_PBI_DESKTOP)",
+          "$translate(INIT_GETTING_STARTED_PBI_PRO)",
+          "Facebook Developer Account"
         ],
         "list2": [
-
+          "$translate(INIT_GETTING_STARTED_CLOUD_SOLUTION)",
+          "$translate(INIT_GETTING_STARTED_CONNECT_AS_PBI)"
         ],
         "name": "$SiteCommon$/pages-gallery/getting-started.html",
         "templateName": "Brand And Campaign Management For Facebook"
@@ -26,25 +30,30 @@
         "defaultLocation": "5",
         "displayname": "Login",
         "name": "$SiteCommon$/pages-gallery/azure-login.html",
-        "pricingCalculatorUrl": "",
-        "pricingCost": "",
-        "pricingUrl": ""
+        "pricingCalculatorUrl": "$translate(INIT_NEWS_PRICING_CALCULATOR)",
+        "pricingCost": "By clicking next and deploying the template, you authorize Microsoft to create Azure resources on your subscription and bill based on their respective pricing rates.  The approximate base cost of the Azure resources used by this template is $300 a month, and every 1,000 posts or comments will incur an additional cost of approximately $1.50.  These costs are estimates only and subject to change.",
+        "pricingUrl": "https://github.com/Microsoft/BusinessPlatformApps/blob/dev/Source/Apps/Microsoft/Released/Microsoft-FacebookTemplate/README.md"
       },
-
+      {
+        "bingUrl": "placeholder",
+        "cognitiveUrl": "placeholder",
+        "displayname": "Cognitive API",
+        "name": "$SiteCommon$/pages-gallery/cognitive-Terms.html"
+      },
       {
         "name": "$SiteCommon$/pages-gallery/sql-server.html",
         "displayname": "Target",
-        "isAzureSql": "true",
+        "isAzureSql": true,
         "newSqlDatabase": "facebook",
-        "showAzureSql": true,
+        "showAzureSql": false,
         "showNewSqlOption": "true",
+        "sqlInstance": "NewSql",
         "showSkuS1": true,
         "sqlSku": "S1",
-        "subtitle": "",
+        "subtitle": "$translate(INIT_SQL_TITLE)",
         "title": "$translate(INIT_SQL_TITLE)",
         "checkSqlVersion": true
       },
-
       {
         "datastoreEntriesToValidate": [
           "SqlConnectionString"

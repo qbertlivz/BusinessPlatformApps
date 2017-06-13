@@ -5,7 +5,7 @@
 
     <button class="primary" click.trigger="entityAdd()">${MS.Translate.BYOE_CUSTOMIZE_ADD_ENTITY}</button>
     <label class="st-button-right st-file-upload">
-        <input type="file" accept=".csv" change.delegate="entityUpload()" files.bind="csv" />
+        <input type="file" accept=".csv" change.delegate="entityUpload()" files.bind="csv" value.bind="csvPath" />
         <span>${MS.Translate.BYOE_CUSTOMIZE_UPLOAD_ENTITIES}</span>
     </label>
 

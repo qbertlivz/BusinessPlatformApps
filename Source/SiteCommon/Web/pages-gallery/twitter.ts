@@ -11,8 +11,13 @@ export class Twitter extends ViewModelBase {
     selectedSubscriptionId: string;
     subscriptionsList: any[];
 
-    constructor() {
-        super();
+    async connect(): Promise<void> {
+        if (!this.isAuthenticated) {
+            let response = await this.MS.HttpService.executeAsync('Microsoft-CreateTwitterConnectionToLogicApp');
+            if (response.IsSuccess) {
+                window.location.href = response.Body['Consent']['value'][0]['link'];
+            }
+        }
     }
 
     async OnLoaded(): Promise<void> {
@@ -26,47 +31,30 @@ export class Twitter extends ViewModelBase {
             if (code) {
                 this.MS.DataStore.addToDataStore('TwitterCode', code, DataStoreType.Private);
 
-                let response = await this.MS.HttpService.executeAsync('Microsoft-ConsentTwitterConnectionToLogicApp', {});
-                if (response.IsSuccess) {
+                if ((await this.MS.HttpService.executeAsync('Microsoft-ConsentTwitterConnectionToLogicApp')).IsSuccess) {
                     this.isAuthenticated = true;
                     this.isValidated = true;
                     this.showValidation = true;
                 }
             } else {
-                // Do existing flow
-                let response = await this.MS.HttpService.executeAsync('Microsoft-VerifyTwitterConnection', {});
+                let response = await this.MS.HttpService.executeAsync('Microsoft-VerifyTwitterConnection');
                 if (response.Status === ActionStatus.FailureExpected) {
-                    this.MS.ErrorService.details = '';
-                    this.MS.ErrorService.message = '';
+                    this.MS.ErrorService.Clear();
                 }
-
                 if (response.IsSuccess) {
                     this.isAuthenticated = true;
                     this.isValidated = true;
                     this.showValidation = true;
                 }
             }
-
             this.MS.UtilityService.RemoveItem('queryUrl');
         } else {
-            // No redirect was present, dont bother checking
-            // We still check for now
-            let response = await this.MS.HttpService.executeAsync('Microsoft-VerifyTwitterConnection', {});
-            this.MS.ErrorService.details = '';
-            this.MS.ErrorService.message = '';
+            let response = await this.MS.HttpService.executeAsync('Microsoft-VerifyTwitterConnection');
+            this.MS.ErrorService.Clear();
             if (response.IsSuccess) {
                 this.isAuthenticated = true;
                 this.isValidated = true;
                 this.showValidation = true;
-            }
-        }
-    }
-
-    async connect(): Promise<void> {
-        if (!this.isAuthenticated) {
-            let response = await this.MS.HttpService.executeAsync('Microsoft-CreateTwitterConnectionToLogicApp', {});
-            if (response.IsSuccess) {
-                window.location.href = response.Body['Consent']['value'][0]['link'];
             }
         }
     }

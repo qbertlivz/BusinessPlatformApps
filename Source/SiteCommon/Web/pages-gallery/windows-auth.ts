@@ -3,16 +3,11 @@ import { DataStoreType } from '../enums/data-store-type';
 import { ViewModelBase } from '../services/view-model-base';
 
 export class WindowsAuth extends ViewModelBase {
-    username: string = '';
-    password: string = '';
-
     discoveredUsername: string = '';
     enteredUsername: string = '';
     logInAsCurrentUser: boolean = false;
-
-    constructor() {
-        super();
-    }
+    password: string = '';
+    username: string = '';
 
     loginSelectionChanged(): void {
         this.Invalidate();
@@ -28,30 +23,6 @@ export class WindowsAuth extends ViewModelBase {
         }
     }
 
-    async OnValidate(): Promise<boolean> {
-        this.isValidated = false;
-        let usernameError: string = this.MS.UtilityService.validateUsername(this.username);
-        if (usernameError) {
-            this.MS.ErrorService.message = usernameError;
-            return false;
-        }
-
-        let domain: string = this.MS.UtilityService.extractDomain(this.username);
-        let usernameWithoutDomain: string = this.MS.UtilityService.extractUsername(this.username);
-
-        this.MS.DataStore.addToDataStore('ImpersonationDomain', domain, DataStoreType.Private);
-        this.MS.DataStore.addToDataStore('ImpersonationUsername', usernameWithoutDomain, DataStoreType.Private);
-        this.MS.DataStore.addToDataStore('ImpersonationPassword', this.password, DataStoreType.Private);
-
-        let response = await this.MS.HttpService.executeAsync('Microsoft-ValidateNtCredential', {});
-        if (response.IsSuccess) {
-            this.isValidated = true;
-        }
-
-        super.OnValidate();
-        return this.isValidated;
-    }
-
     async OnLoaded(): Promise<void> {
         this.isValidated = false;
 
@@ -60,5 +31,25 @@ export class WindowsAuth extends ViewModelBase {
             this.discoveredUsername = response.Body.Value;
             this.loginSelectionChanged();
         }
-   }
+    }
+
+    async OnValidate(): Promise<boolean> {
+        this.isValidated = false;
+
+        let usernameError: string = this.MS.UtilityService.validateUsername(this.username);
+        if (usernameError) {
+            this.MS.ErrorService.message = usernameError;
+        } else {
+            let domain: string = this.MS.UtilityService.extractDomain(this.username);
+            let usernameWithoutDomain: string = this.MS.UtilityService.extractUsername(this.username);
+
+            this.MS.DataStore.addToDataStore('ImpersonationDomain', domain, DataStoreType.Private);
+            this.MS.DataStore.addToDataStore('ImpersonationUsername', usernameWithoutDomain, DataStoreType.Private);
+            this.MS.DataStore.addToDataStore('ImpersonationPassword', this.password, DataStoreType.Private);
+
+            this.isValidated = (await this.MS.HttpService.executeAsync('Microsoft-ValidateNtCredential')).IsSuccess;
+        }
+
+        return this.isValidated;
+    }
 }

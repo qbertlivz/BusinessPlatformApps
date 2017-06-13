@@ -13,10 +13,6 @@ export class SummaryViewModel extends ViewModelBase {
     summaryRows: EntryRow[];
     values: any = {};
 
-    constructor() {
-        super();
-    }
-
     loadSummaryObjectIntoRows(): void {
         this.textNext = this.MS.Translate.COMMON_RUN;
         this.summaryRows = new Array<EntryRow>();
@@ -35,22 +31,18 @@ export class SummaryViewModel extends ViewModelBase {
         }
     }
 
-    async OnLoaded(): Promise<void> {
-        this.loadSummaryObjectIntoRows();
-        this.isValidated = true;
-        this.emailAddress = this.MS.DataStore.getValue("EmailAddress");
-    }
-
     async NavigatingNext(): Promise<boolean> {
         this.MS.DataStore.addToDataStore('EmailAddress', this.emailAddress, DataStoreType.Private);
         if (this.sendMarketingMail) {
-            this.MS.HttpService.executeAsync('Microsoft-EmailSubscription', {
-                isInvisible: true
-            });
+            this.MS.HttpService.executeAsync('Microsoft-EmailSubscription', { isInvisible: true });
         }
-
         this.MS.DataStore.addToDataStore('SendCompletionNotification', this.sendCompletionNotification, DataStoreType.Public);
-
         return true;
+    }
+
+    async OnLoaded(): Promise<void> {
+        this.emailAddress = this.MS.DataStore.getValue('EmailAddress');
+        this.isValidated = true;
+        this.loadSummaryObjectIntoRows();
     }
 }

@@ -22,14 +22,14 @@ export class MsCrmLogin extends AzureLogin {
     showAzureTrial: boolean = false;
 
     async d365Login(): Promise<void> {
-        var response = await this.MS.HttpService.executeAsync('Microsoft-CrmGetOrgs', {});
+        var response = await this.MS.HttpService.executeAsync('Microsoft-CrmGetOrgs');
         if (response.IsSuccess) {
             this.msCrmOrganizations = JSON.parse(response.Body.value);
 
             if (this.msCrmOrganizations.length > 0) {
                 this.msCrmOrganizationId = this.msCrmOrganizations[0].OrganizationId;
 
-                let subscriptions: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureSubscriptions', {});
+                let subscriptions: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureSubscriptions');
                 if (subscriptions.IsSuccess) {
                     this.subscriptionsList = subscriptions.Body.value;
                     if (!this.subscriptionsList || (this.subscriptionsList && this.subscriptionsList.length === 0)) {
@@ -143,7 +143,7 @@ export class MsCrmLogin extends AzureLogin {
                     this.MS.DataStore.addToDataStore('SelectedSubscription', subscriptionObject, DataStoreType.Public);
                     this.MS.DataStore.addToDataStore('SelectedResourceGroup', this.selectedResourceGroup, DataStoreType.Public);
 
-                    let locationsResponse: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetLocations', {});
+                    let locationsResponse: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetLocations');
                     if (locationsResponse.IsSuccess) {
                         this.MS.DataStore.addToDataStore('SelectedLocation', locationsResponse.Body.value[5], DataStoreType.Public);
                     }

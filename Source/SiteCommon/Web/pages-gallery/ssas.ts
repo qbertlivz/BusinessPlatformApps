@@ -9,6 +9,19 @@ export class Customize extends ViewModelBase {
     sku: string = 'B1';
     ssasType: string = 'New';
 
+    async NavigatingNext(): Promise<boolean> {
+        if (this.ssasType == 'New') {
+            if (!(await this.MS.HttpService.executeAsync('Microsoft-DeployAzureAnalysisServices', { ASServerName: this.server, ASSku: this.sku })).IsSuccess) return false;
+
+            this.server = this.MS.DataStore.getValue("ASServerUrl");
+            this.ssasType = "Existing";
+
+            if (!(await this.MS.HttpService.executeAsync('Microsoft-ValidateConnectionToAS')).IsSuccess) return false;
+        }
+
+        return true;
+    }
+
     async OnLoaded(): Promise<void> {
         this.isValidated = false;
     }
@@ -40,22 +53,5 @@ export class Customize extends ViewModelBase {
             this.isValidated = false;
             return false;
         }
-    }
-
-    async NavigatingNext(): Promise<boolean> {
-        if (this.ssasType == "New") {
-            let body: any = {};
-            body.ASServerName = this.server;
-            body.ASSku = this.sku;
-
-            if (!(await this.MS.HttpService.executeAsync('Microsoft-DeployAzureAnalysisServices', body)).IsSuccess) return false;
-
-            this.server = this.MS.DataStore.getValue("ASServerUrl");
-            this.ssasType = "Existing";
-
-            if (!(await this.MS.HttpService.executeAsync('Microsoft-ValidateConnectionToAS')).IsSuccess) return false;
-        }
-
-        return true;
     }
 }

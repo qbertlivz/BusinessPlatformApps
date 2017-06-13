@@ -7,11 +7,6 @@ export class CognitiveService extends ViewModelBase {
     cognitiveSelectedType: string = 'NewKey';
     cognitiveServiceName: string = 'SolutionTemplateCognitiveService';
 
-    constructor() {
-        super();
-        this.isValidated = true;
-    }
-
     onKeyTypeChange(): void {
         this.Invalidate();
         if (this.cognitiveSelectedType === 'ExistingKey') {
@@ -22,39 +17,26 @@ export class CognitiveService extends ViewModelBase {
         }
     }
 
-    Invalidate(): void {
-        super.Invalidate();
-    }
-
-    async OnValidate(): Promise<boolean> {
-        if (!super.OnValidate()) {
-            return false;
-        }
-
-        if (this.cognitiveSelectedType === 'ExistingKey') {
-            let body: any = {};
-            body.CognitiveServiceKey = this.cognitiveServiceKey
-            let response = await this.MS.HttpService.executeAsync('Microsoft-ValidateCognitiveKey', body);
-            if (response.IsSuccess) {
-                this.isValidated = true;
-                this.showValidation = true;
-            }
-        } else if (this.cognitiveSelectedType === 'NewKey') {
-            this.isValidated = true;
-        }
-
-        return this.isValidated;
-    }
-
     async NavigatingNext(): Promise<boolean> {
-        if (!super.NavigatingNext()) {
-            return false;
-        }
-
         this.MS.DataStore.addToDataStore('CognitiveServiceKey', this.cognitiveServiceKey, DataStoreType.Private);
         this.MS.DataStore.addToDataStore('CognitiveServiceName', this.cognitiveServiceName, DataStoreType.Public);
         this.MS.DataStore.addToDataStore('CognitiveSkuName', 'S1', DataStoreType.Public);
 
         return true;
+    }
+
+    async OnLoaded(): Promise<void> {
+        this.isValidated = true;
+    }
+
+    async OnValidate(): Promise<boolean> {
+        if (this.cognitiveSelectedType === 'ExistingKey') {
+            this.isValidated = (await this.MS.HttpService.executeAsync('Microsoft-ValidateCognitiveKey', { CognitiveServiceKey: this.cognitiveServiceKey })).IsSuccess;
+            this.showValidation = this.isValidated;
+        } else if (this.cognitiveSelectedType === 'NewKey') {
+            this.isValidated = true;
+        }
+
+        return this.isValidated;
     }
 }

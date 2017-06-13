@@ -25,8 +25,6 @@ export class SapSource extends ViewModelBase {
     }
 
     async OnValidate(): Promise<boolean> {
-        super.OnValidate();
-
         this.isValidated = false;
         this.showValidation = false;
 

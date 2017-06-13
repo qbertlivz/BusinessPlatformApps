@@ -51,10 +51,9 @@ export class AzureLogin extends ViewModelBase {
                     this.MS.ErrorService.details = this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.ERRORDESCRIPTION, queryParam);
                     this.MS.ErrorService.showContactUs = true;
                 } else {
-                    var tokenObj: any = { code: token, oauthType: this.oauthType };
-                    this.authToken = await this.MS.HttpService.executeAsync('Microsoft-GetAzureToken', tokenObj);
+                    this.authToken = await this.MS.HttpService.executeAsync('Microsoft-GetAzureToken', { code: token, oauthType: this.oauthType });
                     if (this.authToken.IsSuccess) {
-                        let subscriptions: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureSubscriptions', {});
+                        let subscriptions: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureSubscriptions');
                         if (subscriptions.IsSuccess) {
                             this.subscriptionsList = subscriptions.Body.value;
                             if (!this.subscriptionsList || (this.subscriptionsList && this.subscriptionsList.length === 0)) {

@@ -1,5 +1,6 @@
-﻿import { DataStoreType } from '../enums/data-store-type';
-import { QueryParameter } from '../constants/query-parameter';
+﻿import { QueryParameter } from '../constants/query-parameter';
+
+import { DataStoreType } from '../enums/data-store-type';
 
 import { ActionResponse } from '../models/action-response';
 
@@ -18,7 +19,6 @@ export class ProgressViewModel extends ViewModelBase {
     isPbixReady: boolean = false;
     isPowerAppReady: boolean = false;
     isUninstall: boolean = false;
-    oauthType: string = 'powerbi';
     pbixDownloadLink: string = '';
     powerAppDownloadLink: string = '';
     powerAppFileName: string = '';
@@ -31,9 +31,7 @@ export class ProgressViewModel extends ViewModelBase {
     targetSchema: string = '';
 
     async publishReport(): Promise<void> {
-        this.MS.DataStore.addToDataStore('oauthType', 'powerbi', DataStoreType.Public);
-        this.MS.DataStore.addToDataStore('AADTenant', 'common', DataStoreType.Public);
-        let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureAuthUri');
+        let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureAuthUri', { AADTenant: 'common', oauthType: 'powerbi' });
         window.location.href = response.Body.value;
     }
 
@@ -66,50 +64,53 @@ export class ProgressViewModel extends ViewModelBase {
             }
 
             if (isDataStoreValid) {
-                this.hasPowerApp = this.hasPowerApp && this.MS.DataStore.getValue('SkipPowerApp') == null;
+                this.ExecuteActions();
+            }
+        }
+    }
 
-                // Run all actions
-                let success: boolean = await this.MS.DeploymentService.ExecuteActions();
+    async ExecuteActions(): Promise<void> {
+        this.hasPowerApp = this.hasPowerApp && this.MS.DataStore.getValue('SkipPowerApp') == null;
 
-                if (!success) {
-                    return;
-                }
+        let success: boolean = await this.MS.DeploymentService.ExecuteActions();
 
-                if (!this.isUninstall) {
-                    let body: any = {};
-                    let ssas = this.MS.DataStore.getValue("ssasDisabled");
-                    let response = null;
-                    if (ssas && ssas === 'false') {
-                        body.FileNameSSAS = this.filenameSSAS;
-                        body.ASDatabase = this.asDatabase;
-                        response = await this.MS.HttpService.executeAsync('Microsoft-WranglePBISSAS', body);
-                    } else {
-                        body.FileName = this.filename;
-                        body.SqlServerIndex = this.sqlServerIndex;
-                        response = await this.MS.HttpService.executeAsync('Microsoft-WranglePBI', body);
-                    }
+        if (!success) {
+            return;
+        }
 
-                    if (response.IsSuccess) {
-                        this.pbixDownloadLink = response.Body.value;
-                        this.isPbixReady = true;
-                    }
+        if (!this.isUninstall) {
+            let body: any = {};
+            let ssas = this.MS.DataStore.getValue("ssasDisabled");
+            let response = null;
+            if (ssas && ssas === 'false') {
+                body.FileNameSSAS = this.filenameSSAS;
+                body.ASDatabase = this.asDatabase;
+                response = await this.MS.HttpService.executeAsync('Microsoft-WranglePBISSAS', body);
+            } else {
+                body.FileName = this.filename;
+                body.SqlServerIndex = this.sqlServerIndex;
+                response = await this.MS.HttpService.executeAsync('Microsoft-WranglePBI', body);
+            }
 
-                    if (this.hasPowerApp) {
-                        let bodyPowerApp: any = {};
-                        bodyPowerApp.PowerAppFileName = this.powerAppFileName;
-                        let responsePowerApp = await this.MS.HttpService.executeAsync('Microsoft-WranglePowerApp', bodyPowerApp);
+            if (response.IsSuccess) {
+                this.pbixDownloadLink = response.Body.value;
+                this.isPbixReady = true;
+            }
 
-                        if (responsePowerApp.IsSuccess && responsePowerApp.Body.value) {
-                            this.isPowerAppReady = true;
-                            this.powerAppDownloadLink = responsePowerApp.Body.value;
-                        } else {
-                            this.hasPowerApp = false;
-                        }
-                    }
+            if (this.hasPowerApp) {
+                let bodyPowerApp: any = {};
+                bodyPowerApp.PowerAppFileName = this.powerAppFileName;
+                let responsePowerApp = await this.MS.HttpService.executeAsync('Microsoft-WranglePowerApp', bodyPowerApp);
 
-                    this.QueryRecordCounts();
+                if (responsePowerApp.IsSuccess && responsePowerApp.Body.value) {
+                    this.isPowerAppReady = true;
+                    this.powerAppDownloadLink = responsePowerApp.Body.value;
+                } else {
+                    this.hasPowerApp = false;
                 }
             }
+
+            this.QueryRecordCounts();
         }
     }
 

@@ -61,20 +61,6 @@ export class UtilityService {
         return obj;
     }
 
-    HasInternetAccess(): boolean {
-        let response = true;
-        if (window.navigator && window.navigator.onLine !== null && window.navigator.onLine !== undefined) {
-            response = window.navigator.onLine;
-        }
-        return response;
-    }
-
-    Reload(): void {
-        if (window && window.location && window.location.reload) {
-            window.location.reload();
-        }
-    }
-
     extractDomain(username: string): string {
         let usernameSplit: string[] = username.split('\\');
         return usernameSplit[0];
@@ -87,37 +73,6 @@ export class UtilityService {
 
     isEdge(): boolean {
         return window && window.navigator && window.navigator.userAgent && /Edge\/\d./i.test(window.navigator.userAgent);
-    }
-
-    isTargetListObjectPropertyUnique(list: any[], property: string): boolean {
-        let isTargetListObjectPropertyUnique: boolean = true;
-
-        let validator: any = {};
-        for (let i = 0; i < list.length && isTargetListObjectPropertyUnique; i++) {
-            let obj: any = list[i];
-            if (validator[obj[property]]) {
-                isTargetListObjectPropertyUnique = false;
-            } else {
-                validator[obj[property]] = true;
-            }
-        }
-
-        return isTargetListObjectPropertyUnique;
-    }
-
-    isTargetListUnique(list: string[]): boolean {
-        let isTargetListUnique: boolean = true;
-
-        let validator: any = {};
-        for (let i = 0; i < list.length && isTargetListUnique; i++) {
-            if (validator[list[i]]) {
-                isTargetListUnique = false;
-            } else {
-                validator[list[i]] = true;
-            }
-        }
-
-        return isTargetListUnique;
     }
 
     parseCsv(content: string): string[][] {
@@ -139,6 +94,12 @@ export class UtilityService {
                 callback(fileContent.target.result);
             };
             fileReader.readAsText(file);
+        }
+    }
+
+    reload(): void {
+        if (window && window.location && window.location.reload) {
+            window.location.reload();
         }
     }
 

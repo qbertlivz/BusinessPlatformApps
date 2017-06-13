@@ -92,49 +92,37 @@ export class AzureLogin extends ViewModelBase {
     }
 
     async connect(): Promise<void> {
-        var tokenObj: any = { oauthType: this.oauthType };
-
         if (this.connectionType.toString() === AzureConnection.Microsoft.toString()) {
             this.MS.DataStore.addToDataStore('AADTenant', this.azureDirectory, DataStoreType.Public);
         } else {
             this.MS.DataStore.addToDataStore('AADTenant', 'common', DataStoreType.Public);
         }
 
-        let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureAuthUri', tokenObj);
+        let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureAuthUri', { oauthType: this.oauthType });
         window.location.href = response.Body.value;
     }
 
     async NavigatingNext(): Promise<boolean> {
-        let subscriptionObject = this.subscriptionsList.find(x => x.SubscriptionId === this.selectedSubscriptionId);
-        this.MS.DataStore.addToDataStore('SelectedSubscription', subscriptionObject, DataStoreType.Public);
+        let isSuccess: boolean = true;
+
+        this.MS.DataStore.addToDataStore('SelectedSubscription', this.subscriptionsList.find(x => x.SubscriptionId === this.selectedSubscriptionId), DataStoreType.Public);
         this.MS.DataStore.addToDataStore('SelectedResourceGroup', this.selectedResourceGroup, DataStoreType.Public);
 
-        let locationsResponse: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetLocations', {});
+        let locationsResponse: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetLocations');
         if (locationsResponse.IsSuccess) {
             this.MS.DataStore.addToDataStore('SelectedLocation', locationsResponse.Body.value[this.defaultLocation], DataStoreType.Public);
         }
 
-        let response = await this.MS.HttpService.executeAsync('Microsoft-CreateResourceGroup', {});
+        isSuccess = (await this.MS.HttpService.executeAsync('Microsoft-CreateResourceGroup')).IsSuccess;
 
-        if (!response.IsSuccess) {
-            return false;
+        for (let i = 0; i < this.azureProviders.length && isSuccess; i++) {
+            isSuccess = (await this.MS.HttpService.executeAsync('Microsoft-RegisterProvider', { AzureProvider: this.azureProviders[i] })).IsSuccess;
         }
 
-        for (let i = 0; i < this.azureProviders.length; i++) {
-            this.MS.DataStore.addToDataStore('AzureProvider', this.azureProviders[i], DataStoreType.Public);
-            let responseRegister = await this.MS.HttpService.executeAsync('Microsoft-RegisterProvider', {});
-            if (!responseRegister.IsSuccess) {
-                return false;
-            }
+        for (let i = 0; i < this.bapiServices.length && isSuccess; i++) {
+            isSuccess = (await this.MS.HttpService.executeAsync('Microsoft-RegisterBapiService', { BapiService: this.bapiServices[i] })).IsSuccess;
         }
 
-        for (let i = 0; i < this.bapiServices.length; i++) {
-            this.MS.DataStore.addToDataStore('BapiService', this.bapiServices[i], DataStoreType.Public);
-            let responseRegister = await this.MS.HttpService.executeAsync('Microsoft-RegisterBapiService', {});
-            if (!responseRegister.IsSuccess) {
-                return false;
-            }
-        }
-        return await super.NavigatingNext();
+        return isSuccess;
     }
 }

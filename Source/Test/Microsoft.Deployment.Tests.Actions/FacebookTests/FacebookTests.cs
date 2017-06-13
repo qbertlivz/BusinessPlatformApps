@@ -46,7 +46,7 @@ namespace Microsoft.Deployment.Tests.Actions.Facebook
             var dataStore = new DataStore();
             dataStore.AddToDataStore("FacebookClientId", "422676881457852");
             dataStore.AddToDataStore("FacebookClientSecret", "bf5fca097936ece936290031623b577b");
-            dataStore.AddToDataStore("FacebookPages", "walmart");
+            dataStore.AddToDataStore("FacebookPages", "walmart test,,,,");
             var response = TestManager.ExecuteAction("Microsoft-ValidateFacebookPage", dataStore);
             Assert.IsTrue(response.IsSuccess);
         }

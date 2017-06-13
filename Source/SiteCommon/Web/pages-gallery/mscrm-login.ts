@@ -43,40 +43,40 @@ export class MsCrmLogin extends AzureLogin {
                         this.MS.ErrorService.message = this.MS.Translate.MSCRM_LOGIN_ERROR;
                         this.MS.ErrorService.details = this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.ERRORDESCRIPTION, queryParam);
                         this.MS.ErrorService.showContactUs = true;
-                        return;
-                    }
-                    var tokenObj = {
-                        code: token,
-                        oauthType: this.oauthType
-                    };
-                    this.authToken = await this.MS.HttpService.executeAsync('Microsoft-GetAzureToken', tokenObj);
-                    if (this.authToken.IsSuccess) {
-                        var response = await this.MS.HttpService.executeAsync('Microsoft-CrmGetOrgs', {});
-                        if (response.IsSuccess) {
-                            this.msCrmOrganizations = JSON.parse(response.Body.value);
+                    } else {
+                        var tokenObj = {
+                            code: token,
+                            oauthType: this.oauthType
+                        };
+                        this.authToken = await this.MS.HttpService.executeAsync('Microsoft-GetAzureToken', tokenObj);
+                        if (this.authToken.IsSuccess) {
+                            var response = await this.MS.HttpService.executeAsync('Microsoft-CrmGetOrgs', {});
+                            if (response.IsSuccess) {
+                                this.msCrmOrganizations = JSON.parse(response.Body.value);
 
-                            if (this.msCrmOrganizations.length > 0) {
-                                this.msCrmOrganizationId = this.msCrmOrganizations[0].OrganizationId;
+                                if (this.msCrmOrganizations.length > 0) {
+                                    this.msCrmOrganizationId = this.msCrmOrganizations[0].OrganizationId;
 
-                                let subscriptions: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureSubscriptions', {});
-                                if (subscriptions.IsSuccess) {
-                                    this.subscriptionsList = subscriptions.Body.value;
-                                    if (!this.subscriptionsList ||
-                                        (this.subscriptionsList && this.subscriptionsList.length === 0)) {
-                                        this.MS.ErrorService.message = this.MS.Translate.AZURE_LOGIN_SUBSCRIPTION_ERROR_CRM;
-                                        this.showAzureTrial = true;
-                                    } else {
-                                        this.selectedSubscriptionId = this.subscriptionsList[0].SubscriptionId;
-                                        this.showPricingConfirmation = true;
-                                        this.isValidated = true;
-                                        this.showValidation = true;
+                                    let subscriptions: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureSubscriptions', {});
+                                    if (subscriptions.IsSuccess) {
+                                        this.subscriptionsList = subscriptions.Body.value;
+                                        if (!this.subscriptionsList ||
+                                            (this.subscriptionsList && this.subscriptionsList.length === 0)) {
+                                            this.MS.ErrorService.message = this.MS.Translate.AZURE_LOGIN_SUBSCRIPTION_ERROR_CRM;
+                                            this.showAzureTrial = true;
+                                        } else {
+                                            this.selectedSubscriptionId = this.subscriptionsList[0].SubscriptionId;
+                                            this.showPricingConfirmation = true;
+                                            this.isValidated = true;
+                                            this.showValidation = true;
+                                        }
                                     }
+                                } else {
+                                    this.MS.ErrorService.message = this.MS.Translate.MSCRM_LOGIN_NO_AUTHORIZATION;
                                 }
                             } else {
-                                this.MS.ErrorService.message = this.MS.Translate.MSCRM_LOGIN_NO_AUTHORIZATION;
+                                this.MS.ErrorService.message = this.MS.Translate.MSCRM_LOGIN_NO_ORGANIZATIONS;
                             }
-                        } else {
-                            this.MS.ErrorService.message = this.MS.Translate.MSCRM_LOGIN_NO_ORGANIZATIONS;
                         }
                     }
                 }

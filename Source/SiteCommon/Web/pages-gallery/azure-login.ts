@@ -50,23 +50,22 @@ export class AzureLogin extends ViewModelBase {
                     this.MS.ErrorService.message = this.MS.Translate.AZURE_LOGIN_UNKNOWN_ERROR;
                     this.MS.ErrorService.details = this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.ERRORDESCRIPTION, queryParam);
                     this.MS.ErrorService.showContactUs = true;
-                    return;
-                }
-
-                var tokenObj: any = { code: token, oauthType: this.oauthType };
-                this.authToken = await this.MS.HttpService.executeAsync('Microsoft-GetAzureToken', tokenObj);
-                if (this.authToken.IsSuccess) {
-                    let subscriptions: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureSubscriptions', {});
-                    if (subscriptions.IsSuccess) {
-                        this.subscriptionsList = subscriptions.Body.value;
-                        if (!this.subscriptionsList || (this.subscriptionsList && this.subscriptionsList.length === 0)) {
-                            this.MS.ErrorService.message = this.MS.Translate.AZURE_LOGIN_SUBSCRIPTION_ERROR;
-                        } else {
-                            this.selectedSubscriptionId = this.subscriptionsList[0].SubscriptionId;
-                            this.showPricingConfirmation = true;
-                            this.isValidated = true;
-                            this.showValidation = true;
-                            await this.MS.HttpService.executeAsync('Microsoft-PowerBiLogin');
+                } else {
+                    var tokenObj: any = { code: token, oauthType: this.oauthType };
+                    this.authToken = await this.MS.HttpService.executeAsync('Microsoft-GetAzureToken', tokenObj);
+                    if (this.authToken.IsSuccess) {
+                        let subscriptions: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureSubscriptions', {});
+                        if (subscriptions.IsSuccess) {
+                            this.subscriptionsList = subscriptions.Body.value;
+                            if (!this.subscriptionsList || (this.subscriptionsList && this.subscriptionsList.length === 0)) {
+                                this.MS.ErrorService.message = this.MS.Translate.AZURE_LOGIN_SUBSCRIPTION_ERROR;
+                            } else {
+                                this.selectedSubscriptionId = this.subscriptionsList[0].SubscriptionId;
+                                this.showPricingConfirmation = true;
+                                this.isValidated = true;
+                                this.showValidation = true;
+                                await this.MS.HttpService.executeAsync('Microsoft-PowerBiLogin');
+                            }
                         }
                     }
                 }

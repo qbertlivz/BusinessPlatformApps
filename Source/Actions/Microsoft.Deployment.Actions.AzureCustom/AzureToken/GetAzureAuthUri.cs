@@ -52,11 +52,11 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             {
                 case "keyvault":
                     var registrationResponse = RegisterKeyVault(request);
-                    if(!registrationResponse.IsSuccess)
+                    if (!registrationResponse.IsSuccess)
                     {
                         return registrationResponse;
                     }
-                break;
+                    break;
             }
 
             string authUri = AzureTokenUtility.GetAzureAuthUri(oauthType, request.Info.WebsiteRootUrl + Constants.WebsiteRedirectPath, authBase);

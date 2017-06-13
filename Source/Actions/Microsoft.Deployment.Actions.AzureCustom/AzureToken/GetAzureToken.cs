@@ -26,9 +26,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
 
             if (token.SelectToken("error") != null)
             {
-                return new ActionResponse(ActionStatus.Failure, token, null,
-                    DefaultErrorCodes.DefaultLoginFailed,
-                    token.SelectToken("error_description")?.ToString());
+                return new ActionResponse(ActionStatus.Failure, token, null, DefaultErrorCodes.DefaultLoginFailed, token.SelectToken("error_description")?.ToString());
             }
 
             var emailAddress = AzureUtility.GetEmailFromToken(token);
@@ -50,6 +48,11 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                     JObject crmToken = AzureTokenUtility.GetTokenForResourceFromExistingToken(oauthType, request.Info.WebsiteRootUrl, token, Constants.MsCrmResource);
                     request.DataStore.AddToDataStore("MsCrmToken", crmToken);
                     request.DataStore.AddToDataStore("AzureToken", token);
+                    break;
+                case "powerbi":
+                    request.DataStore.AddToDataStore("PbiToken", token);
+                    request.DataStore.AddToDataStore("DirectoryName", emailAddress.Split('@').Last());
+                    request.DataStore.AddToDataStore("PowerBITenantId", AzureUtility.GetTenantFromToken(token));
                     break;
                 default:
                     request.DataStore.AddToDataStore("AzureToken", token);

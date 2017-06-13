@@ -93,7 +93,7 @@ gulp.task('build-typescript', function () {
             noUnusedLocals: true,
             noUnusedParameters: true,
             removeComments: true,
-            sourceMap: true,
+            //sourceMap: true,
             target: 'es6'
         }))
         .pipe(babel({

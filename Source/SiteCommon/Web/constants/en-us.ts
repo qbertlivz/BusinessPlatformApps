@@ -79,11 +79,9 @@
     COGNITIVE_SERVICES_PRIVACY_1_B: `including the Microsoft Cognitive Services section. You must comply with those terms, including the use and display requirements for the Bing Search APIs available at`,
     COGNITIVE_SERVICES_PRIVACY_1_C: `. For example, results you obtain through the Bing Search APIs must only be used in Internet search experiences (as defined in the use and display requirements).  You are responsible for ensuring that your use of data received from the Bing Search APIs does not violate any applicable laws or third party rights.`,
     COGNITIVE_SERVICES_PRIVACY_2: `Microsoft may use data you send to the Cognitive Services to improve Microsoft products and services. For example, we may use content that you provide to the Cognitive Services to improve our underlying algorithms and models over time. Where you send personal data to the Cognitive Services, you are responsible for obtaining sufficient consent from the data subjects. The Microsoft Privacy Statement located at https://go.microsoft.com/fwlink/?LinkId=521839 applies to your use of the Cognitive Services, except that the Microsoft Cognitive Services section in the Online Services Terms controls to the extent it conflicts with the Microsoft Privacy Statement.  The General Privacy and Security Terms in the Online Services Terms do not apply to the Cognitive Services except where indicated in the Microsoft Cognitive Services section.`,
-
     COGNITIVE_SERVICES_PRIVACY_GENERIC_1_A: `Your use of the Microsoft Cognitive Services is governed by your existing Azure customer agreement, which incorporates the`,
     COGNITIVE_SERVICES_PRIVACY_GENERIC_1_B: `including the Microsoft Cognitive Services section.`,
     COGNITIVE_SERVICES_PRIVACY_GENERIC_2: `Microsoft may use data you send to the Cognitive Services to improve Microsoft products and services. For example, we may use content that you provide to the Cognitive Services to improve our underlying algorithms and models over time. Where you send personal data to the Cognitive Services, you are responsible for obtaining sufficient consent from the data subjects. The Microsoft Privacy Statement located at https://go.microsoft.com/fwlink/?LinkId=521839 applies to your use of the Cognitive Services, except that the Microsoft Cognitive Services section in the Online Services Terms controls to the extent it conflicts with the Microsoft Privacy Statement.  The General Privacy and Security Terms in the Online Services Terms do not apply to the Cognitive Services except where indicated in the Microsoft Cognitive Services section.`,
-
     COGNITIVE_SERVICES_PRIVACY_TWITTER: `Microsoft will use data you send to the Cognitive Services to improve Microsoft products and services. Where you send personal data to the Cognitive Services, you are responsible for obtaining sufficient consent from the data subjects. The General Privacy and Security Terms in the Online Services Terms do not apply to the Cognitive Services. Please refer to the Microsoft Cognitive Services section in the Online Services Terms for details. Microsoft offers policy controls that may be used to disable new Cognitive Services deployments.`,
     COGNITIVE_SERVICES_SUBTITLE: `This solution template deploys the Text Analytics API and the Bing News Search API of Cognitive Services.  The Text Analytics API enriches data through sentiment analysis and key phrase extraction.  The Bing News Search API finds articles based on a user’s search query. Together these services provide an advanced search solution.`,
     COGNITIVE_SERVICES_SUBTITLE_TWITTER: `This solution template deploys the Text Analytics API to carry out sentiment analysis.`,
@@ -93,6 +91,7 @@
     COGNITIVE_SERVICES_TITLE: `Connect to Cognitive Services`,
     COMMON_ADVANCED_OPTIONAL: `Advanced (optional)`,
     COMMON_AND: `and`,
+    COMMON_BLANK: `Blank`,
     COMMON_CHECK_OUT_THE: `Check out the`,
     COMMON_COLOR: `Color:`,
     COMMON_CONNECT: `Connect`,

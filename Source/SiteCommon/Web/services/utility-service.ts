@@ -89,6 +89,59 @@ export class UtilityService {
         return window && window.navigator && window.navigator.userAgent && /Edge\/\d./i.test(window.navigator.userAgent);
     }
 
+    isTargetListObjectPropertyUnique(list: any[], property: string): boolean {
+        let isTargetListObjectPropertyUnique: boolean = true;
+
+        let validator: any = {};
+        for (let i = 0; i < list.length && isTargetListObjectPropertyUnique; i++) {
+            let obj: any = list[i];
+            if (validator[obj[property]]) {
+                isTargetListObjectPropertyUnique = false;
+            } else {
+                validator[obj[property]] = true;
+            }
+        }
+
+        return isTargetListObjectPropertyUnique;
+    }
+
+    isTargetListUnique(list: string[]): boolean {
+        let isTargetListUnique: boolean = true;
+
+        let validator: any = {};
+        for (let i = 0; i < list.length && isTargetListUnique; i++) {
+            if (validator[list[i]]) {
+                isTargetListUnique = false;
+            } else {
+                validator[list[i]] = true;
+            }
+        }
+
+        return isTargetListUnique;
+    }
+
+    parseCsv(content: string): string[][] {
+        let data: string[][] = [];
+
+        let rows: string[] = content.split('\r\n');
+
+        for (let i = 0; i < rows.length; i++) {
+            data.push(rows[i].split(','));
+        }
+
+        return data;
+    }
+
+    readFile(file: File, callback: (result: any) => void): void {
+        if (file) {
+            let fileReader: FileReader = new FileReader();
+            fileReader.onload = (fileContent: any) => {
+                callback(fileContent.target.result);
+            };
+            fileReader.readAsText(file);
+        }
+    }
+
     validateUsername(username: string): string {
         if (username.includes('\\')) {
             return '';

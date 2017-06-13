@@ -69,18 +69,18 @@ namespace Microsoft.Deployment.Site.Web.Tests
             HelperMethods.WaitForPage();
             try
             {
-                HelperMethods.CreateDatabase(Credential.Instance.Sql.Server,
-                                            Credential.Instance.Sql.Username, Credential.Instance.Sql.Password,
-                                            Credential.Instance.Sql.SCCMDatabase);
+                HelperMethods.CreateDatabase(Credential.Instance.SccmSql.Server,
+                                            Credential.Instance.ServiceAccount.Username, Credential.Instance.ServiceAccount.Password,
+                                            Credential.Instance.SccmSql.Target);
             }
             catch
             {
-                HelperMethods.DeleteDatabase(Credential.Instance.Sql.Server,
-                                            Credential.Instance.Sql.Username, Credential.Instance.Sql.Password,
-                                            Credential.Instance.Sql.SCCMDatabase);
-                HelperMethods.CreateDatabase(Credential.Instance.Sql.Server,
-                                            Credential.Instance.Sql.Username, Credential.Instance.Sql.Password,
-                                            Credential.Instance.Sql.SCCMDatabase);
+                HelperMethods.DeleteDatabase(Credential.Instance.SccmSql.Server,
+                                            Credential.Instance.ServiceAccount.Username, Credential.Instance.ServiceAccount.Password,
+                                            Credential.Instance.SccmSql.Target);
+                HelperMethods.CreateDatabase(Credential.Instance.SccmSql.Server,
+                                            Credential.Instance.ServiceAccount.Username, Credential.Instance.ServiceAccount.Password,
+                                            Credential.Instance.SccmSql.Target);
             }
             try
             {
@@ -113,9 +113,9 @@ namespace Microsoft.Deployment.Site.Web.Tests
             HelperMethods.ClickButton("Run");
             HelperMethods.CheckDeploymentStatus();
 
-            int totalNumRows = HelperMethods.rowsInAllTables(Credential.Instance.Sql.Server,
-                            Credential.Instance.Sql.Username, Credential.Instance.Sql.Password,
-                            Credential.Instance.Sql.SCCMDatabase);
+            int totalNumRows = HelperMethods.rowsInAllTables(Credential.Instance.SccmSql.Server,
+                                            Credential.Instance.ServiceAccount.Username, Credential.Instance.ServiceAccount.Password,
+                                            Credential.Instance.SccmSql.Target);
             if (totalNumRows <= 0)
             {
                 Assert.Fail();
@@ -153,12 +153,15 @@ namespace Microsoft.Deployment.Site.Web.Tests
             HelperMethods.ClickButton("Next");
             Thread.Sleep(new TimeSpan(0, 0, 5));
             HelperMethods.WaitForPage();
-            MsiAsSelectionExperience();
-            MsiAzureExperience();
-            HelperMethods.ClickButton("Next");
+            //MsiAsSelectionExperience();
+            //MsiAzureExperience();
+            //HelperMethods.ClickButton("Next");
+            //HelperMethods.AzurePage(Credential.Instance.ServiceAccount.Username, Credential.Instance.ServiceAccount.Password, Credential.Instance.ServiceAccount.SubscriptionId);
             Thread.Sleep(new TimeSpan(0, 0, 5));
-            HelperMethods.WaitForPage();
-            MsiAsExperience("sccmas" + HelperMethods.resourceGroupName, Credential.Instance.ServiceAccount.Username, Credential.Instance.ServiceAccount.Password);
+            //HelperMethods.WaitForPage();
+            //HelperMethods.ClickButton("Connect");
+            //HelperMethods.WaitForPage();
+            HelperMethods.MSINewAnalysisServices("sccmas" + HelperMethods.resourceGroupName, Credential.Instance.ServiceAccount.Username, Credential.Instance.ServiceAccount.Password, Credential.Instance.ServiceAccount.SubscriptionName);
             HelperMethods.ClickButton("Next");
             HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Validate");
@@ -169,8 +172,8 @@ namespace Microsoft.Deployment.Site.Web.Tests
             HelperMethods.CheckDeploymentStatus();
 
             int totalNumRows = HelperMethods.rowsInAllTables(Credential.Instance.Sql.Server,
-                            Credential.Instance.Sql.Username, Credential.Instance.Sql.Password,
-                            Credential.Instance.Sql.SCCMDatabase);
+                                            Credential.Instance.Sql.Username, Credential.Instance.Sql.Password,
+                                            Credential.Instance.Sql.SCCMDatabase);
             if (totalNumRows <= 0)
             {
                 Assert.Fail();

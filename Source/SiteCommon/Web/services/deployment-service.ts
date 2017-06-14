@@ -104,7 +104,7 @@ export class DeploymentService {
         this.isFinished = true;
 
         if (this.experienceType === ExperienceType.uninstall && !this.hasError) {
-            this.MS.HttpService.Close();
+            this.MS.HttpService.close();
         }
 
         return !this.hasError;

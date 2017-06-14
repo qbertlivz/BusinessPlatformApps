@@ -41,7 +41,7 @@ export class HttpService {
         }
     }
 
-    Close(): void {
+    close(): void {
         this.command.close(!this.MS.DeploymentService.hasError && this.MS.DeploymentService.isFinished);
     }
 

@@ -46,7 +46,7 @@ namespace Microsoft.Deployment.Tests.Actions.Facebook
             var dataStore = new DataStore();
             dataStore.AddToDataStore("FacebookClientId", "422676881457852");
             dataStore.AddToDataStore("FacebookClientSecret", "bf5fca097936ece936290031623b577b");
-            dataStore.AddToDataStore("FacebookPage", "walmart");
+            dataStore.AddToDataStore("FacebookPages", "walmart test,,,,");
             var response = TestManager.ExecuteAction("Microsoft-ValidateFacebookPage", dataStore);
             Assert.IsTrue(response.IsSuccess);
         }
@@ -57,7 +57,7 @@ namespace Microsoft.Deployment.Tests.Actions.Facebook
             var dataStore = new DataStore();
             dataStore.AddToDataStore("FacebookClientId", "422676881457852");
             dataStore.AddToDataStore("FacebookClientSecret", "bf5fca097936ece936290031623b577b");
-            dataStore.AddToDataStore("FacebookPage", "walmartsfakepagethatdoesnotexist");
+            dataStore.AddToDataStore("FacebookPages", "walmartsfakepagethatdoesnotexist");
             var response = TestManager.ExecuteAction("Microsoft-ValidateFacebookPage", dataStore);
             Assert.IsTrue(!response.IsSuccess);
         }
@@ -79,7 +79,7 @@ namespace Microsoft.Deployment.Tests.Actions.Facebook
             var dataStore =  await TestManager.GetDataStore(true);
             dataStore.AddToDataStore("FacebookClientId", "422676881457852");
             dataStore.AddToDataStore("FacebookClientSecret", "bf5fca097936ece936290031623b577b");
-            dataStore.AddToDataStore("SqlConnectionString", "Server=tcp:facebookpoc.database.windows.net,1433;Initial Catalog=facebook;Persist Security Info=False;User ID=pbiadmin;Password=Corp123!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            dataStore.AddToDataStore("SqlConnectionString", "Server=tcp:modb1.database.windows.net,1433;Initial Catalog=fb4;Persist Security Info=False;User ID=pbiadmin;Password=Corp123!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             dataStore.AddToDataStore("Schema", "fb");
           
 
@@ -90,7 +90,7 @@ namespace Microsoft.Deployment.Tests.Actions.Facebook
             dataStore.AddToDataStore("SqlGroup", "SolutionTemplate");
             dataStore.AddToDataStore("SqlSubGroup", "ETL");
             dataStore.AddToDataStore("SqlEntryName", "PagesToFollow");
-            dataStore.AddToDataStore("SqlEntryValue", "walmart");
+            dataStore.AddToDataStore("SqlEntryValue", "dcextendeduniverse,MarvelCinematicUniverse");
             dataStore.AddToDataStore("SqlConfigTable", "fb.configuration");
 
             ActionResponse response = null;
@@ -114,11 +114,16 @@ namespace Microsoft.Deployment.Tests.Actions.Facebook
             response = await TestManager.ExecuteActionAsync("Microsoft-SetConfigValueInSql", dataStore, "Microsoft-FacebookTemplate");
             Assert.IsTrue(response.IsSuccess);
 
-            dataStore.AddToDataStore("SqlConnectionString", "Server=tcp:facebookpoc.database.windows.net,1433;Initial Catalog=facebookPOC2;Persist Security Info=False;User ID=pbiadmin;Password=Corp123!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            // Testing to see if the tear down works
+            response = await TestManager.ExecuteActionAsync("Microsoft-DeploySQLScripts", dataStore, "Microsoft-FacebookTemplate");
+            Assert.IsTrue(response.IsSuccess);
+
+            response = await TestManager.ExecuteActionAsync("Microsoft-SetConfigValueInSql", dataStore, "Microsoft-FacebookTemplate");
+            Assert.IsTrue(response.IsSuccess);
 
 
             dataStore.AddToDataStore("DeploymentName", "FunctionDeploymentTest1");
-            dataStore.AddToDataStore("FunctionName", "unittestfunction11");
+            dataStore.AddToDataStore("FunctionName", "unittestfunction1154789");
             dataStore.AddToDataStore("RepoUrl", "https://github.com/MohaaliMicrosoft/FacebookExtraction");
             dataStore.AddToDataStore("sku", "Standard");
 
@@ -127,7 +132,7 @@ namespace Microsoft.Deployment.Tests.Actions.Facebook
 
 
             dataStore.AddToDataStore("DeploymentName", "FunctionDeploymentTest2");
-            dataStore.AddToDataStore("StorageAccountName", "testmostorage1234");
+            dataStore.AddToDataStore("StorageAccountName", "testmostorage12345678");
             dataStore.AddToDataStore("StorageAccountType", "Standard_LRS");
             dataStore.AddToDataStore("StorageAccountEncryptionEnabled", "true");
 
@@ -172,7 +177,6 @@ namespace Microsoft.Deployment.Tests.Actions.Facebook
             response = TestManager.ExecuteAction("Microsoft-DeployAzureFunctionConnectionStrings", dataStore);
             Assert.IsTrue(response.IsSuccess);
 
-           
 
             dataStore.AddToDataStore("AzureArmFile", "Service/Arm/logicapps.json");
             JObject logicapps = new JObject();

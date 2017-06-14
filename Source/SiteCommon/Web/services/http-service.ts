@@ -69,7 +69,7 @@ export class HttpService {
 
         if (!content.isInvisible) {
             this.isServiceBusy = true;
-            this.MS.ErrorService.Clear();
+            this.MS.ErrorService.clear();
         }
 
         let uniqueId = this.MS.UtilityService.GetUniqueId(20);
@@ -99,14 +99,13 @@ export class HttpService {
             }
 
             if (!content.isInvisible) {
-                // Handle any errors here
                 if (actionResponse.Status === ActionStatus.Failure || actionResponse.Status === ActionStatus.FailureExpected) {
-                    this.MS.ErrorService.details = `${actionResponse.ExceptionDetail.AdditionalDetailsErrorMessage} --- Action Failed ${method} --- Error ID:(${this.MS.LoggerService.UserGenId})`;
-                    this.MS.ErrorService.logLocation = actionResponse.ExceptionDetail.LogLocation;
-                    this.MS.ErrorService.message = actionResponse.ExceptionDetail.FriendlyErrorMessage;
-                    this.MS.ErrorService.showContactUs = actionResponse.Status === ActionStatus.Failure;
+                    this.MS.ErrorService.set(actionResponse.ExceptionDetail.FriendlyErrorMessage,
+                        `${actionResponse.ExceptionDetail.AdditionalDetailsErrorMessage} --- Action Failed ${method} --- Error ID:(${this.MS.LoggerService.UserGenId})`,
+                        actionResponse.Status === ActionStatus.Failure,
+                        actionResponse.ExceptionDetail.LogLocation);
                 } else if (actionResponse.Status !== ActionStatus.Invisible) {
-                    this.MS.ErrorService.Clear();
+                    this.MS.ErrorService.clear();
                 }
             }
         } catch (e) {
@@ -120,6 +119,10 @@ export class HttpService {
         }
 
         return actionResponse;
+    }
+
+    async isExecuteSuccessAsync(method: string, content: any = {}): Promise<boolean> {
+        return (await this.executeAsync(method, content)).IsSuccess;
     }
 
     private getRequestObject(method: string, relativeUrl: string, body: any = {}): any {

@@ -108,7 +108,7 @@ export class Gettingstarted extends ViewModelBase {
     }
 
     async Register() {
-        this.MS.ErrorService.Clear();
+        this.MS.ErrorService.clear();
 
         this.registrationNameFirst = this.registrationNameFirst.trim();
         this.registrationNameLast = this.registrationNameLast.trim();

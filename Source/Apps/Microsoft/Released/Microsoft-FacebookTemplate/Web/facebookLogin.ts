@@ -12,10 +12,10 @@ export class FacebookLogin extends ViewModelBase {
 
     async OnValidate(): Promise<boolean> {
         if (this.facebookClientId.length > 0 && this.facebookClientSecret.length > 0) {
-            this.isValidated = (await this.MS.HttpService.executeAsync('Microsoft-ValidateFacebookDeveloperAccount', {
+            this.isValidated = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-ValidateFacebookDeveloperAccount', {
                 FacebookClientId: this.facebookClientId,
                 FacebookClientSecret: this.facebookClientSecret
-            })).IsSuccess;
+            });
             this.showValidation = this.isValidated;
 
             this.MS.DataStore.addToDataStore('FacebookClientId', this.facebookClientId, DataStoreType.Private);

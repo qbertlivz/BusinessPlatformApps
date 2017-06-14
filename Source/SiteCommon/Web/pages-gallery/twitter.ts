@@ -31,7 +31,7 @@ export class Twitter extends ViewModelBase {
             if (code) {
                 this.MS.DataStore.addToDataStore('TwitterCode', code, DataStoreType.Private);
 
-                if ((await this.MS.HttpService.executeAsync('Microsoft-ConsentTwitterConnectionToLogicApp')).IsSuccess) {
+                if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-ConsentTwitterConnectionToLogicApp')) {
                     this.isAuthenticated = true;
                     this.isValidated = true;
                     this.showValidation = true;
@@ -39,7 +39,7 @@ export class Twitter extends ViewModelBase {
             } else {
                 let response = await this.MS.HttpService.executeAsync('Microsoft-VerifyTwitterConnection');
                 if (response.Status === ActionStatus.FailureExpected) {
-                    this.MS.ErrorService.Clear();
+                    this.MS.ErrorService.clear();
                 }
                 if (response.IsSuccess) {
                     this.isAuthenticated = true;
@@ -50,7 +50,7 @@ export class Twitter extends ViewModelBase {
             this.MS.UtilityService.RemoveItem('queryUrl');
         } else {
             let response = await this.MS.HttpService.executeAsync('Microsoft-VerifyTwitterConnection');
-            this.MS.ErrorService.Clear();
+            this.MS.ErrorService.clear();
             if (response.IsSuccess) {
                 this.isAuthenticated = true;
                 this.isValidated = true;

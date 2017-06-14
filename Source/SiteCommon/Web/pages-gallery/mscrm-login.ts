@@ -69,7 +69,7 @@ export class MsCrmLogin extends AzureLogin {
                         this.MS.ErrorService.details = this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.ERRORDESCRIPTION, queryParam);
                         this.MS.ErrorService.showContactUs = true;
                     } else {
-                        if ((await this.MS.HttpService.executeAsync('Microsoft-GetAzureToken', { code: token, oauthType: this.oauthType })).IsSuccess) {
+                        if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-GetAzureToken', { code: token, oauthType: this.oauthType })) {
                             await this.d365Login();
                         }
                     }
@@ -136,7 +136,7 @@ export class MsCrmLogin extends AzureLogin {
                 this.MS.DataStore.addToDataStore('OrganizationName', msCrmOrganization.OrganizationName, DataStoreType.Public);
                 this.MS.DataStore.addToDataStore('OrganizationUrl', msCrmOrganization.OrganizationUrl, DataStoreType.Public);
 
-                isSuccess = !(await this.MS.HttpService.executeAsync('Microsoft-CrmGetOrganization')).IsSuccess;
+                isSuccess = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-CrmGetOrganization');
 
                 if (isSuccess) {
                     let subscriptionObject = this.subscriptionsList.find(x => x.SubscriptionId === this.selectedSubscriptionId);
@@ -148,10 +148,10 @@ export class MsCrmLogin extends AzureLogin {
                         this.MS.DataStore.addToDataStore('SelectedLocation', locationsResponse.Body.value[5], DataStoreType.Public);
                     }
 
-                    isSuccess = (await this.MS.HttpService.executeAsync('Microsoft-CreateResourceGroup')).IsSuccess;
+                    isSuccess = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-CreateResourceGroup');
 
                     for (let i = 0; i < this.azureProviders.length && isSuccess; i++) {
-                        isSuccess = (await this.MS.HttpService.executeAsync('Microsoft-RegisterProvider', { AzureProvider: this.azureProviders[i] })).IsSuccess;
+                        isSuccess = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-RegisterProvider', { AzureProvider: this.azureProviders[i] });
                     }
                 }
             }

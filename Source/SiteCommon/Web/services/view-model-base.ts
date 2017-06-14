@@ -99,7 +99,6 @@ export class ViewModelBase {
                     let currentRoute = this.MS.NavigationService.getCurrentSelectedPage().RoutePageName.toLowerCase();
                     let viewmodelPreviousSave = window.sessionStorage.getItem(currentRoute);
 
-                    // Save view model state
                     if (viewmodelPreviousSave) {
                         window.sessionStorage.removeItem(currentRoute);
                     }
@@ -130,7 +129,7 @@ export class ViewModelBase {
         this.isValidated = false;
     }
 
-    public async onNavigatingNext(): Promise<boolean> {
+    async onNavigatingNext(): Promise<boolean> {
         return true;
     }
 

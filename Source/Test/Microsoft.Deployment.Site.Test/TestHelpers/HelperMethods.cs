@@ -99,6 +99,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
 
             for (int i = 0; i < 10; i++)
             {
+                Thread.Sleep(new TimeSpan(0, 0, 10));
                 azurePage = driver.FindElementsByClassName("st-text").FirstOrDefault(e => e.Text == "Azure Subscription:");
                 if (azurePage != null)
                 {
@@ -333,18 +334,78 @@ namespace Microsoft.Deployment.Site.Web.Tests
             aasSku.SendKeys("Developer");
 
             ClickButton("Validate");
+        }
 
-            //var usernameBox = elements.FirstOrDefault(e => e.GetAttribute("value.bind").Contains("email"));
-            //var passwordBox = elements.FirstOrDefault(e => e.GetAttribute("value.bind").Contains("password"));
+        public static void MSINewAnalysisServices(string server, string username, string password, string subscription)
+        {
+            var button = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
 
-            //while (usernameBox.Enabled != true && passwordBox.Enabled != true && passwordBox.Enabled != true)
-            //{
-            //    Thread.Sleep(new TimeSpan(0, 0, 1));
-            //}
+            while (button.Enabled != true)
+            {
+                Thread.Sleep(new TimeSpan(0, 0, 1));
+                button = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
+            }
 
-            //passwordBox.SendKeys(password);
-            //usernameBox.Clear();
-            //usernameBox.SendKeys(username);
+            button.SendKeys("Yes");
+
+            ClickButton("Next");
+            Thread.Sleep(new TimeSpan(0, 0, 2));
+            //msi has slightly different wording
+            AzurePage(username, password, subscription);
+            Thread.Sleep(new TimeSpan(0, 0, 2));
+            var validated = driver.FindElementByClassName("st-validated");
+            Assert.IsTrue(validated.Text == "Successfully validated");
+            ClickButton("Next");
+            WaitForPage();
+            ClickButton("Connect");
+            WaitForPage();
+
+            var djs = (IJavaScriptExecutor)driver;
+            var anotherAccount = driver.FindElementById("use_another_account");
+            djs.ExecuteScript("arguments[0].click()", anotherAccount);
+            Thread.Sleep(new TimeSpan(0, 0, 5));
+
+            var usernameBox1 = driver.FindElementById("cred_userid_inputtext");
+            usernameBox1.SendKeys(username);
+
+            var passwordBox1 = driver.FindElementById("cred_password_inputtext");
+            passwordBox1.SendKeys(password);
+
+            Thread.Sleep(new TimeSpan(0, 0, 5));
+            var dj = (IJavaScriptExecutor)driver;
+            var acceptButton = driver.FindElementById("cred_accept_button");
+            dj.ExecuteScript("arguments[0].click()", acceptButton);
+
+            WaitForPage();
+            ClickButton("Next");
+            Thread.Sleep(new TimeSpan(0, 0, 2));
+
+            var newAas = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
+
+            while (newAas.Enabled != true)
+            {
+                Thread.Sleep(new TimeSpan(0, 0, 1));
+                newAas = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
+            }
+
+            newAas.SendKeys("New");
+            Thread.Sleep(new TimeSpan(0, 0, 2));
+
+            var elements = driver.FindElementsByCssSelector("input[class='st-input au-target']");
+
+            var serverBox = elements.FirstOrDefault(e => e.GetAttribute("value.bind").Contains("server"));
+            serverBox.SendKeys(server);
+
+            var aasSku = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
+
+            while (aasSku.Enabled != true)
+            {
+                Thread.Sleep(new TimeSpan(0, 0, 1));
+                aasSku = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
+            }
+            aasSku.SendKeys("Developer");
+
+            ClickButton("Validate");
         }
 
         public static void SelectSqlDatabase(string databaseName)

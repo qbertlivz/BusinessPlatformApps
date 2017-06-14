@@ -1,18 +1,17 @@
-﻿using Microsoft.Deployment.Common.Actions;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Deployment.Common.ActionModel;
-using Microsoft.Azure;
-using Microsoft.Azure.Management.Resources;
 using System.Dynamic;
 using System.Net.Http;
-using Microsoft.Deployment.Common.Helpers;
-using Microsoft.Deployment.Common.ErrorCode;
 using System.Threading;
+using System.Threading.Tasks;
+
+using Microsoft.Azure;
+using Microsoft.Azure.Management.Resources;
+
+using Microsoft.Deployment.Common.Actions;
+using Microsoft.Deployment.Common.ActionModel;
+using Microsoft.Deployment.Common.ErrorCode;
+using Microsoft.Deployment.Common.Helpers;
 
 namespace Microsoft.Deployment.Actions.AzureCustom
 {

@@ -8,11 +8,16 @@ import { AzureLogin } from './azure-login';
 
 export class ASLogin extends AzureLogin {
     hasToken: boolean = false;
-    
 
     constructor() {
         super();
-        this.oauthType = "as"
+        this.oauthType = 'as';
+    }
+
+    async connect(): Promise<void> {
+        this.MS.DataStore.addToDataStore('AADTenant', 'common', DataStoreType.Public);
+        let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureAuthUri', { oauthType: this.oauthType });
+        window.location.href = response.Body.value;
     }
 
     async OnLoaded(): Promise<void> {
@@ -30,30 +35,16 @@ export class ASLogin extends AzureLogin {
                     this.MS.ErrorService.message = this.MS.Translate.AZURE_LOGIN_UNKNOWN_ERROR;
                     this.MS.ErrorService.details = this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.ERRORDESCRIPTION, queryParam);
                     this.MS.ErrorService.showContactUs = true;
-                    return;
-                }
-
-                var tokenObj: any = { code: token, oauthType: this.oauthType };
-                this.authToken = await this.MS.HttpService.executeAsync('Microsoft-GetAzureToken', tokenObj);
-                if (this.authToken.IsSuccess) {
-                    // The token will be added by the action - hence it was removed
-                    this.hasToken = true;
-                    this.isValidated = true;
-                    this.showValidation = true;
+                } else {
+                    this.authToken = await this.MS.HttpService.executeAsync('Microsoft-GetAzureToken', { code: token, oauthType: this.oauthType });
+                    if (this.authToken.IsSuccess) {
+                        this.hasToken = true;
+                        this.isValidated = true;
+                        this.showValidation = true;
+                    }
                 }
                 this.MS.UtilityService.RemoveItem('queryUrl');
             }
         }
-    }
-
-    async connect(): Promise<void> {
-        var tokenObj: any = { oauthType: this.oauthType };
-        this.MS.DataStore.addToDataStore('AADTenant', 'common', DataStoreType.Public);
-        let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureAuthUri', tokenObj);
-        window.location.href = response.Body.value;
-    }
-
-    public async NavigatingNext(): Promise<boolean> {
-        return true;
     }
 }

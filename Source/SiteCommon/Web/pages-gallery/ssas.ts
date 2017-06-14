@@ -9,53 +9,43 @@ export class Customize extends ViewModelBase {
     sku: string = 'B1';
     ssasType: string = 'New';
 
+    async NavigatingNext(): Promise<boolean> {
+        let isSuccess: boolean = true;
+
+        if (this.ssasType == 'New') {
+            isSuccess = (await this.MS.HttpService.executeAsync('Microsoft-DeployAzureAnalysisServices', { ASServerName: this.server, ASSku: this.sku })).IsSuccess;
+
+            if (isSuccess) {
+                this.server = this.MS.DataStore.getValue('ASServerUrl');
+                this.ssasType = "Existing";
+
+                isSuccess = (await this.MS.HttpService.executeAsync('Microsoft-ValidateConnectionToAS')).IsSuccess;
+            }
+        }
+
+        return isSuccess;
+    }
+
     async OnLoaded(): Promise<void> {
         this.isValidated = false;
     }
 
     async OnValidate(): Promise<boolean> {
         this.showValidation = true;
-        if (this.ssasType == "New") {
+        if (this.ssasType == 'New') {
             if (this.server.length < 3 || this.server.length > 63 || !/[a-z]/.test(this.server[0]) || !/^[a-z0-9]+$/.test(this.server)) {
                 this.MS.ErrorService.message = this.MS.Translate.SSAS_INVALID_SERVER_NAME;
-                return false;
+                this.isValidated = false;
+            } else {
+                this.isValidated = (await this.MS.HttpService.executeAsync('Microsoft-CheckASServerNameAvailability', { ASServerName: this.server })).IsSuccess
             }
-
-            let body: any = {};
-            body.ASServerName = this.server;
-
-            this.isValidated = (await this.MS.HttpService.executeAsync('Microsoft-CheckASServerNameAvailability', body)).IsSuccess
-
-            return this.isValidated;
         } else {
-            let body: any = {};
-            body.ASServerUrl = this.server;
-
-            if ((await this.MS.HttpService.executeAsync('Microsoft-ValidateConnectionToAS', body)).IsSuccess) {
-                this.isValidated = true;
-                this.MS.DataStore.addToDataStore("ASServerUrl", this.server, DataStoreType.Public);
-                return true;
+            this.isValidated = (await this.MS.HttpService.executeAsync('Microsoft-ValidateConnectionToAS', { ASServerUrl: this.server })).IsSuccess;
+            if (this.isValidated) {
+                this.MS.DataStore.addToDataStore('ASServerUrl', this.server, DataStoreType.Public);
             }
-
-            this.isValidated = false;
-            return false;
-        }
-    }
-
-    async NavigatingNext(): Promise<boolean> {
-        if (this.ssasType == "New") {
-            let body: any = {};
-            body.ASServerName = this.server;
-            body.ASSku = this.sku;
-
-            if (!(await this.MS.HttpService.executeAsync('Microsoft-DeployAzureAnalysisServices', body)).IsSuccess) return false;
-
-            this.server = this.MS.DataStore.getValue("ASServerUrl");
-            this.ssasType = "Existing";
-
-            if (!(await this.MS.HttpService.executeAsync('Microsoft-ValidateConnectionToAS')).IsSuccess) return false;
         }
 
-        return true;
+        return this.isValidated;
     }
 }

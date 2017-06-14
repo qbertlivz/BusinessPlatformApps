@@ -94,7 +94,7 @@
             "filename": "$save('TwitterTemplate.pbix')",
             "filenameSSAS": "TwitterAS.pbix",
             "functionAppHostingPlan": "$save(this.uniqueIdFunction)",
-            "hasPowerApp": true,
+            "hasPowerApp": "$run(this.MS.DataStore.getValue('SkipPowerApp') === null)",
             "LogicAppHostingPlan": "$save(this.uniqueId)",
             "LogicAppName": "$save(this.uniqueId)",
             "LogicAppNameHistorical": "$save('historic' + this.uniqueId)",

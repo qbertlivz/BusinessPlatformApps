@@ -122,17 +122,6 @@ export class HttpService {
         return actionResponse;
     }
 
-    async executeAsyncWithImpersonation(method: string, content: any): Promise<ActionResponse> {
-        let body: any = {};
-
-        if (content) {
-            body = content;
-        }
-
-        body.useImpersonation = true;
-        return this.executeAsync(method, content);
-    }
-
     private getRequestObject(method: string, relativeUrl: string, body: any = {}): any {
         let uniqueId = this.MS.UtilityService.GetUniqueId(20);
         var request = this.HttpClient.createRequest(relativeUrl);

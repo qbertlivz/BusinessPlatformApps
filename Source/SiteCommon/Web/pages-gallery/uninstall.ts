@@ -12,16 +12,12 @@ export class Uninstall extends ViewModelBase {
     templateName: string = '';
     uninstallList: string[] = [];
 
-    constructor() {
-        super();
-    }
-
     async OnLoaded(): Promise<void> {
-        this.showPrivacy = true;
         this.isValidated = true;
+        this.showPrivacy = true;
 
         if (this.isDownload && !this.isEvaluation) {
-            let response = await this.MS.HttpService.executeAsync('Microsoft-GetMsiDownloadLink', {});
+            let response = await this.MS.HttpService.executeAsync('Microsoft-GetMsiDownloadLink');
             this.downloadLink = response.Body.value;
         }
     }

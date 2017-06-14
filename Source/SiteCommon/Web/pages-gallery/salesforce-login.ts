@@ -1,18 +1,15 @@
 ﻿import { DataStoreType } from '../enums/data-store-type';
 
+import { ActionResponse } from '../models/action-response';
+
 import { ViewModelBase } from '../services/view-model-base';
 
 export class Salesforce extends ViewModelBase {
     salesforceUsername: string = '';
     salesforcePassword: string = '';
     salesforceToken: string = '';
-    salesforceUrl: string = '';
+    salesforceUrl: string = 'login.salesforce.com';
     salesforceObjects: string = '';
-
-    constructor() {
-        super();
-        this.salesforceUrl = 'login.salesforce.com';
-    }
 
     async OnLoaded(): Promise<void> {
         this.isValidated = false;
@@ -26,20 +23,15 @@ export class Salesforce extends ViewModelBase {
         this.MS.DataStore.addToDataStore('SalesforceUrl', this.salesforceUrl, DataStoreType.Public);
         this.MS.DataStore.addToDataStore('ObjectTables', this.salesforceObjects, DataStoreType.Public);
 
-        let salesforceLoginResponse = await this.MS.HttpService.executeAsync('Microsoft-ValidateSalesforceCredentials', {});
+        let salesforceLoginResponse: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-ValidateSalesforceCredentials');
 
-        if (!salesforceLoginResponse.IsSuccess) {
-            return false;
+        this.isValidated = salesforceLoginResponse.IsSuccess;
+        this.showValidation = this.isValidated;
+
+        if (this.isValidated) {
+            this.MS.DataStore.addToDataStore('SalesforceBaseUrl', salesforceLoginResponse.Body.serverUrlField, DataStoreType.Public);
         }
 
-        if (!super.OnValidate()) {
-            return false;
-        }
-
-        this.isValidated = true;
-        this.showValidation = true;
-        this.MS.DataStore.addToDataStore('SalesforceBaseUrl', salesforceLoginResponse.Body.serverUrlField, DataStoreType.Public);
-
-        return true;
+        return this.isValidated;
     }
 }

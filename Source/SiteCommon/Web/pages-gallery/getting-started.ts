@@ -24,10 +24,6 @@ export class Gettingstarted extends ViewModelBase {
     templateName: string = '';
     upgrade: boolean = false;
 
-    constructor() {
-        super();
-    }
-
     async GetDownloadLink(): Promise<void> {
         let response = await this.MS.HttpService.executeAsync('Microsoft-GetMsiDownloadLink');
         if (this.registration.text) {
@@ -44,10 +40,7 @@ export class Gettingstarted extends ViewModelBase {
             this.selection.label = '';
             this.selection.choice = this.selection.choiceDownload;
             this.SelectionChanged();
-            let res = await this.MS.HttpService.executeAsync('Microsoft-CheckVersion');
-            if (res.Body === true) {
-                this.upgrade = res.Body;
-            }
+            this.upgrade = !!(await this.MS.HttpService.executeAsync('Microsoft-CheckVersion')).Body;
         }
 
         if (this.isDownload) {

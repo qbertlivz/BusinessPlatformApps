@@ -124,7 +124,7 @@ export class ViewModelBase {
 
     VerifyNavigation(): void {
         if (this.MS.UtilityService.isEdge()) {
-            this.MS.UtilityService.Reload();
+            this.MS.UtilityService.reload();
         }
     }
 

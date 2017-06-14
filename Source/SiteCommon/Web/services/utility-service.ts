@@ -61,20 +61,6 @@ export class UtilityService {
         return obj;
     }
 
-    HasInternetAccess(): boolean {
-        let response = true;
-        if (window.navigator && window.navigator.onLine !== null && window.navigator.onLine !== undefined) {
-            response = window.navigator.onLine;
-        }
-        return response;
-    }
-
-    Reload(): void {
-        if (window && window.location && window.location.reload) {
-            window.location.reload();
-        }
-    }
-
     extractDomain(username: string): string {
         let usernameSplit: string[] = username.split('\\');
         return usernameSplit[0];
@@ -87,6 +73,34 @@ export class UtilityService {
 
     isEdge(): boolean {
         return window && window.navigator && window.navigator.userAgent && /Edge\/\d./i.test(window.navigator.userAgent);
+    }
+
+    parseCsv(content: string): string[][] {
+        let data: string[][] = [];
+
+        let rows: string[] = content.split('\r\n');
+
+        for (let i = 0; i < rows.length; i++) {
+            data.push(rows[i].split(','));
+        }
+
+        return data;
+    }
+
+    readFile(file: File, callback: (result: any) => void): void {
+        if (file) {
+            let fileReader: FileReader = new FileReader();
+            fileReader.onload = (fileContent: any) => {
+                callback(fileContent.target.result);
+            };
+            fileReader.readAsText(file);
+        }
+    }
+
+    reload(): void {
+        if (window && window.location && window.location.reload) {
+            window.location.reload();
+        }
     }
 
     validateUsername(username: string): string {

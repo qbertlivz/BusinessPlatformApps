@@ -20,7 +20,7 @@ export class ViewModelBase {
     showValidationDetails: boolean = false;
     textNext: string = 'Next';
     useDefaultValidateButton: boolean = false;
-    validationText: string;
+    validationText: string = '';
     viewmodel: ViewModelBase;
 
     constructor() {
@@ -87,7 +87,7 @@ export class ViewModelBase {
         window.sessionStorage.setItem(currentRoute, JSON.stringify(this.saveViewModel()));
 
         this.MS.NavigationService.NavigateBack();
-        this.MS.ErrorService.Clear();
+        this.MS.ErrorService.clear();
         this.MS.NavigationService.isCurrentlyNavigating = false;
         this.VerifyNavigation();
     }
@@ -157,7 +157,7 @@ export class ViewModelBase {
         this.isValidated = false;
         this.showValidation = false;
         this.validationText = null;
-        this.MS.ErrorService.Clear();
+        this.MS.ErrorService.clear();
     }
 
     // Called when object is validating user input
@@ -169,7 +169,7 @@ export class ViewModelBase {
 
         this.isValidated = false;
         this.showValidation = false;
-        this.MS.ErrorService.Clear();
+        this.MS.ErrorService.clear();
         this.isValidated = await InitParser.executeActions(this.onValidate, this);
         this.showValidation = true;
         return this.isValidated;

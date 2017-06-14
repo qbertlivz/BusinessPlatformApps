@@ -21,8 +21,7 @@ export class ASLogin extends AzureLogin {
     }
 
     async OnLoaded(): Promise<void> {
-        this.isValidated = false;
-        this.showValidation = false;
+        this.Invalidate();
 
         if (this.hasToken) {
             this.isValidated = true;
@@ -32,9 +31,7 @@ export class ASLogin extends AzureLogin {
             if (queryParam) {
                 let token = this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.CODE, queryParam);
                 if (token === '') {
-                    this.MS.ErrorService.message = this.MS.Translate.AZURE_LOGIN_UNKNOWN_ERROR;
-                    this.MS.ErrorService.details = this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.ERRORDESCRIPTION, queryParam);
-                    this.MS.ErrorService.showContactUs = true;
+                    this.MS.ErrorService.set(this.MS.Translate.AZURE_LOGIN_UNKNOWN_ERROR, this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.ERRORDESCRIPTION, queryParam));
                 } else {
                     this.authToken = await this.MS.HttpService.executeAsync('Microsoft-GetAzureToken', { code: token, oauthType: this.oauthType });
                     if (this.authToken.IsSuccess) {

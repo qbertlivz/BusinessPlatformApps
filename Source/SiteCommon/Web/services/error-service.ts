@@ -11,10 +11,17 @@ export class ErrorService {
         this.MS = MainService;
     }
 
-    Clear(): void {
+    clear(): void {
         this.details = '';
         this.logLocation = '';
         this.message = '';
         this.showContactUs = false;
+    }
+
+    set(message: string, details: string, showContactUs: boolean = true, logLocation: string = ''): void {
+        this.details = details;
+        this.logLocation = logLocation;
+        this.message = message;
+        this.showContactUs = showContactUs;
     }
 }

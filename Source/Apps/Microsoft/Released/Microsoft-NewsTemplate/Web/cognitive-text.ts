@@ -8,8 +8,8 @@ export class CognitiveText extends ViewModelBase {
     }
 
     async NavigatingNext(): Promise<boolean> {
-        return (await this.MS.HttpService.executeAsync('Microsoft-RegisterCognitiveServices', { CognitiveLocation: 'westus', CognitiveServices: 'TextAnalytics' })).IsSuccess &&
-            (await this.MS.HttpService.executeAsync('Microsoft-RegisterCognitiveServices', { CognitiveLocation: 'global', CognitiveServices: 'Bing.Search' })).IsSuccess;
+        return await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-RegisterCognitiveServices', { CognitiveLocation: 'westus', CognitiveServices: 'TextAnalytics' }) &&
+            await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-RegisterCognitiveServices', { CognitiveLocation: 'global', CognitiveServices: 'Bing.Search' });
     }
 
     async OnLoaded(): Promise<void> {

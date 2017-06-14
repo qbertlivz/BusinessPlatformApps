@@ -11,7 +11,7 @@ export class facebookPages extends ViewModelBase {
 
     async OnValidate(): Promise<boolean> {
         if (this.searchQuery.length > 0) {
-            this.isValidated = (await this.MS.HttpService.executeAsync('Microsoft-ValidateFacebookPage', { FacebookPages: this.searchQuery })).IsSuccess;
+            this.isValidated = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-ValidateFacebookPage', { FacebookPages: this.searchQuery });
             this.showValidation = this.isValidated;
 
             if (this.isValidated) {

@@ -31,7 +31,7 @@ export class CognitiveService extends ViewModelBase {
 
     async OnValidate(): Promise<boolean> {
         if (this.cognitiveSelectedType === 'ExistingKey') {
-            this.isValidated = (await this.MS.HttpService.executeAsync('Microsoft-ValidateCognitiveKey', { CognitiveServiceKey: this.cognitiveServiceKey })).IsSuccess;
+            this.isValidated = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-ValidateCognitiveKey', { CognitiveServiceKey: this.cognitiveServiceKey });
             this.showValidation = this.isValidated;
         } else if (this.cognitiveSelectedType === 'NewKey') {
             this.isValidated = true;

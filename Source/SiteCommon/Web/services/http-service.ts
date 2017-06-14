@@ -121,6 +121,10 @@ export class HttpService {
         return actionResponse;
     }
 
+    async getExecuteResponseAsync(method: string, content: any = {}): Promise<any> {
+        return (await this.executeAsync(method, content)).Body.Value;
+    }
+
     async isExecuteSuccessAsync(method: string, content: any = {}): Promise<boolean> {
         return (await this.executeAsync(method, content)).IsSuccess;
     }

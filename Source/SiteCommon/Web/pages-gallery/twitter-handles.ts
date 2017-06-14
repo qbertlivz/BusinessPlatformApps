@@ -7,12 +7,12 @@ export class TwitterHandles extends ViewModelBase {
     twitterHandleId: string = '';
     twitterHandleName: string = '';
 
-    async OnLoaded(): Promise<void> {
+    async onLoaded(): Promise<void> {
         this.isValidated = true;
         this.showValidation = false;
     }
 
-    async OnValidate(): Promise<boolean> {
+    async onValidate(): Promise<boolean> {
         let response = await this.MS.HttpService.executeAsync('Microsoft-ValidateTwitterAccount', { Accounts: this.accounts });
         if (response.IsSuccess) {
             this.isValidated = true;
@@ -26,11 +26,11 @@ export class TwitterHandles extends ViewModelBase {
         return this.isValidated;
     }
 
-    async Invalidate(): Promise<void> {
+    async onInvalidate(): Promise<void> {
         this.isValidated = !this.accounts;
     }
 
-    async NavigatingNext(): Promise<boolean> {
+    async onNavigatingNext(): Promise<boolean> {
         this.MS.DataStore.addToDataStoreWithCustomRoute('c1', 'SqlGroup', 'SolutionTemplate', DataStoreType.Public);
         this.MS.DataStore.addToDataStoreWithCustomRoute('c1', 'SqlSubGroup', 'Twitter', DataStoreType.Public);
         this.MS.DataStore.addToDataStoreWithCustomRoute('c1', 'SqlEntryName', 'twitterHandle', DataStoreType.Public);

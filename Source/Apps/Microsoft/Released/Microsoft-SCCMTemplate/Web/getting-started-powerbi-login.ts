@@ -54,7 +54,7 @@ export class Gettingstarted extends ViewModelBase {
         }
     }
 
-    async OnLoaded(): Promise<void> {
+    async onLoaded(): Promise<void> {
         if (this.MS.HttpService.isOnPremise) {
             let res = await this.MS.HttpService.executeAsync('Microsoft-CheckVersion');
             if (res.Body === true) {

@@ -80,7 +80,7 @@ export class NavigationService {
         return this.index;
     }
 
-    NavigateNext(): void {
+    navigateNext(): void {
         this.UpdateIndex();
         if (this.index >= this.pages.length - 1 && this.index < this.pages.length - 1) {
             return;
@@ -101,7 +101,7 @@ export class NavigationService {
         this.NavigateToIndex();
     }
 
-    NavigateBack(): void {
+    navigateBack(): void {
         this.UpdateIndex();
         if (this.index == 0) {
             return;

@@ -35,7 +35,7 @@ export class ProgressViewModel extends ViewModelBase {
         window.location.href = response.Body.value;
     }
 
-    async OnLoaded(): Promise<void> {
+    async onLoaded(): Promise<void> {
         let queryParam: any = this.MS.UtilityService.GetItem('queryUrl');
 
         if (queryParam) {

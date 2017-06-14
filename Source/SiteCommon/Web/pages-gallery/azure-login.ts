@@ -28,7 +28,7 @@ export class AzureLogin extends ViewModelBase {
     showPricingConfirmation: boolean = false;
     subscriptionsList: any[] = [];
 
-    async OnLoaded(): Promise<void> {
+    async onLoaded(): Promise<void> {
         this.isValidated = false;
         this.showValidation = false;
         if (this.subscriptionsList.length > 0) {
@@ -67,7 +67,7 @@ export class AzureLogin extends ViewModelBase {
     }
 
     async ValidateResourceGroup(): Promise<boolean> {
-        this.Invalidate();
+        this.onInvalidate();
         let subscriptionObject = this.subscriptionsList.find(x => x.SubscriptionId === this.selectedSubscriptionId);
         this.MS.DataStore.addToDataStore('SelectedSubscription', subscriptionObject, DataStoreType.Public);
         this.MS.DataStore.addToDataStore('SelectedResourceGroup', this.selectedResourceGroup, DataStoreType.Public);
@@ -91,7 +91,7 @@ export class AzureLogin extends ViewModelBase {
         window.location.href = response.Body.value;
     }
 
-    async NavigatingNext(): Promise<boolean> {
+    async onNavigatingNext(): Promise<boolean> {
         let isSuccess: boolean = true;
 
         this.MS.DataStore.addToDataStore('SelectedSubscription', this.subscriptionsList.find(x => x.SubscriptionId === this.selectedSubscriptionId), DataStoreType.Public);

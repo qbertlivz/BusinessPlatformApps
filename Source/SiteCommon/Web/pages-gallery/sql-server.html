@@ -13,7 +13,7 @@
     <div if.bind="sqlInstance == 'ExistingSql'">
         <div class="st-float">
             <p class="st-text">${MS.Translate.SQL_SERVER_SERVER_NAME}</p>
-            <input class="st-input" type="text" change.delegate="Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="sqlServer" />
+            <input class="st-input" type="text" change.delegate="onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="sqlServer" />
             <span if.bind="isAzureSql && !isGovAzureSql">${azureSqlSuffix}</span>
             <span if.bind="isGovAzureSql && isAzureSql">${azureGovtSuffix}</span>
         </div>
@@ -42,12 +42,12 @@
                 <span class="glyphicon pbi-glyph-info glyph-mini st-tooltip" title="${MS.Translate.SQL_SERVER_WINDOWS_DESCRIPTION}" if.bind="showCredsWhenWindowsAuth"></span>
                 <span if.bind="!showCredsWhenWindowsAuth">${MS.Translate.SQL_SERVER_USERNAME}</span>
             </p>
-            <input class="st-input" type="text" change.delegate="Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" if.bind="!logInAsCurrentUser" value.bind="username" />
+            <input class="st-input" type="text" change.delegate="onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" if.bind="!logInAsCurrentUser" value.bind="username" />
             <p class="st-text">
                 <span>${MS.Translate.SQL_SERVER_PASSWORD}</span>
                 <span class="glyphicon pbi-glyph-info glyph-mini st-tooltip" title="${MS.Translate_SQL_SERVER_PASSWORD_DESCRIPTION}" if.bind="showCredsWhenWindowsAuth"></span>
             </p>
-            <input class="st-input" type="password" change.delegate="Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="password" />
+            <input class="st-input" type="password" change.delegate="onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="password" />
             <p>
         </div>
 
@@ -66,7 +66,7 @@
         </div>
 
         <p class="st-float">
-            <button class="primary" click.trigger="OnValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_VALIDATE}</button>
+            <button class="primary" click.trigger="onValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_VALIDATE}</button>
         </p>
     </div>
 
@@ -75,17 +75,17 @@
 
         <div class="st-float">
             <p class="st-text">${MS.Translate.SQL_SERVER_SERVER_NAME}</p>
-            <input class="st-input" type="text" change.delegate="Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="sqlServer" />
+            <input class="st-input" type="text" change.delegate="onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="sqlServer" />
             <span>${azureSqlSuffix}</span>
             <p class="st-text">${MS.Translate.SQL_SERVER_USERNAME}</p>
-            <input class="st-input" type="text" change.delegate="Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="username" />
+            <input class="st-input" type="text" change.delegate="onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="username" />
             <p class="st-text">
                 <span>${MS.Translate.SQL_SERVER_PASSWORD}</span>
                 <span class="glyphicon pbi-glyph-info glyph-mini st-tooltip" title="${MS.Translate.SQL_SERVER_PASSWORD_NEW_DESCRIPTION}"></span>
             </p>
-            <input class="st-input" type="password" change.delegate="Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="password" />
+            <input class="st-input" type="password" change.delegate="onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="password" />
             <p class="st-text">${MS.Translate.SQL_SERVER_PASSWORD_CONFIRMATION}</p>
-            <input class="st-input" type="password" change.delegate="Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="passwordConfirmation" />
+            <input class="st-input" type="password" change.delegate="onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="passwordConfirmation" />
         </div>
 
         <p class="st-float st-text" click.trigger="viewmodel.showAdvanced = !viewmodel.showAdvanced" if.bind="!MS.HttpService.isServiceBusy">
@@ -113,7 +113,7 @@
         </div>
 
         <p class="st-float">
-            <button class="primary" click.trigger="OnValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.SQL_SERVER_CHECK_AVAILABILITY}</button>
+            <button class="primary" click.trigger="onValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.SQL_SERVER_CHECK_AVAILABILITY}</button>
         </p>
     </div>
 

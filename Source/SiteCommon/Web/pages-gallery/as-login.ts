@@ -20,8 +20,8 @@ export class ASLogin extends AzureLogin {
         window.location.href = response.Body.value;
     }
 
-    async OnLoaded(): Promise<void> {
-        this.Invalidate();
+    async onLoaded(): Promise<void> {
+        this.onInvalidate();
 
         if (this.hasToken) {
             this.isValidated = true;

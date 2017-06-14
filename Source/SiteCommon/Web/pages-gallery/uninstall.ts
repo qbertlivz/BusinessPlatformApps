@@ -12,7 +12,7 @@ export class Uninstall extends ViewModelBase {
     templateName: string = '';
     uninstallList: string[] = [];
 
-    async OnLoaded(): Promise<void> {
+    async onLoaded(): Promise<void> {
         this.isValidated = true;
         this.showPrivacy = true;
 

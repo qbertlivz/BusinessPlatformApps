@@ -33,7 +33,7 @@ export class Gettingstarted extends ViewModelBase {
         }
     }
 
-    async OnLoaded(): Promise<void> {
+    async onLoaded(): Promise<void> {
         this.isValidated = true;
 
         if (this.MS.HttpService.isOnPremise) {

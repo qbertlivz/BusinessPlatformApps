@@ -20,7 +20,7 @@ export class Twitter extends ViewModelBase {
         }
     }
 
-    async OnLoaded(): Promise<void> {
+    async onLoaded(): Promise<void> {
         this.isAuthenticated = false;
         this.isValidated = false;
         this.showValidation = false;

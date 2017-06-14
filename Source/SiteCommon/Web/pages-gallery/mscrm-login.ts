@@ -50,8 +50,8 @@ export class MsCrmLogin extends AzureLogin {
         }
     }
 
-    async OnLoaded(): Promise<void> {
-        this.Invalidate();
+    async onLoaded(): Promise<void> {
+        this.onInvalidate();
 
         this.showAzureTrial = false;
         this.showValidation = false;
@@ -79,8 +79,8 @@ export class MsCrmLogin extends AzureLogin {
         }
     }
 
-    async OnValidate(): Promise<boolean> {
-        this.Invalidate();
+    async onValidate(): Promise<boolean> {
+        this.onInvalidate();
 
         this.MS.DataStore.addToDataStore('D365Username', this.d365Username, DataStoreType.Private);
         this.MS.DataStore.addToDataStore('D365Password', this.d365Password, DataStoreType.Private);
@@ -112,7 +112,7 @@ export class MsCrmLogin extends AzureLogin {
         window.location.href = response.Body.value;
     }
 
-    public async NavigatingNext(): Promise<boolean> {
+    async onNavigatingNext(): Promise<boolean> {
         let isSuccess: boolean = true;
 
         this.MS.DataStore.addToDataStore('Entities', this.entities, DataStoreType.Public);

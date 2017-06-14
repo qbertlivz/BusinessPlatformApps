@@ -20,7 +20,7 @@ export class Azure extends ViewModelBase {
         this.isValidated = false;
     }
 
-    async OnLoaded() {
+    async onLoaded() {
         this.isValidated = false;
         this.showValidation = false;
         if (this.subscriptionsList.length > 0) {
@@ -70,7 +70,7 @@ export class Azure extends ViewModelBase {
         window.location.href = response.response.value;
     }
 
-    async NavigatingNext(): Promise<boolean> {
+    async onNavigatingNext(): Promise<boolean> {
         let subscriptionObject = this.subscriptionsList.find(x => x.SubscriptionId === this.selectedSubscriptionId);
         this.MS.DataService.AddToDataStore('Azure', 'SelectedSubscription', subscriptionObject);
 
@@ -94,6 +94,6 @@ export class Azure extends ViewModelBase {
             return false;
         }
 
-        return super.NavigatingNext();
+        return super.onNavigatingNext();
     }
 }

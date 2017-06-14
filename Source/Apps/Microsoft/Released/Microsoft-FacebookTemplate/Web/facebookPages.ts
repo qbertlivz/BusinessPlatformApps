@@ -5,11 +5,11 @@ import { ViewModelBase } from '../../../../../SiteCommon/Web/services/view-model
 export class facebookPages extends ViewModelBase {
     searchQuery: string = '';
 
-    async OnLoaded(): Promise<void> {
+    async onLoaded(): Promise<void> {
         this.isValidated = false;
     }
 
-    async OnValidate(): Promise<boolean> {
+    async onValidate(): Promise<boolean> {
         if (this.searchQuery.length > 0) {
             this.isValidated = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-ValidateFacebookPage', { FacebookPages: this.searchQuery });
             this.showValidation = this.isValidated;

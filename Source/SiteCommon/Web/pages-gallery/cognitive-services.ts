@@ -8,7 +8,7 @@ export class CognitiveService extends ViewModelBase {
     cognitiveServiceName: string = 'SolutionTemplateCognitiveService';
 
     onKeyTypeChange(): void {
-        this.Invalidate();
+        this.onInvalidate();
         if (this.cognitiveSelectedType === 'ExistingKey') {
             this.isValidated = false;
         } else if (this.cognitiveSelectedType === 'NewKey') {
@@ -17,7 +17,7 @@ export class CognitiveService extends ViewModelBase {
         }
     }
 
-    async NavigatingNext(): Promise<boolean> {
+    async onNavigatingNext(): Promise<boolean> {
         this.MS.DataStore.addToDataStore('CognitiveServiceKey', this.cognitiveServiceKey, DataStoreType.Private);
         this.MS.DataStore.addToDataStore('CognitiveServiceName', this.cognitiveServiceName, DataStoreType.Public);
         this.MS.DataStore.addToDataStore('CognitiveSkuName', 'S1', DataStoreType.Public);
@@ -25,11 +25,11 @@ export class CognitiveService extends ViewModelBase {
         return true;
     }
 
-    async OnLoaded(): Promise<void> {
+    async onLoaded(): Promise<void> {
         this.isValidated = true;
     }
 
-    async OnValidate(): Promise<boolean> {
+    async onValidate(): Promise<boolean> {
         if (this.cognitiveSelectedType === 'ExistingKey') {
             this.isValidated = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-ValidateCognitiveKey', { CognitiveServiceKey: this.cognitiveServiceKey });
             this.showValidation = this.isValidated;

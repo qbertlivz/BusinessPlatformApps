@@ -42,8 +42,8 @@ export class SqlServer extends ViewModelBase {
     validateWindowsCredentials: boolean = false;
     validationTextBox: string = '';
 
-    async OnLoaded(): Promise<void> {
-        this.Invalidate();
+    async onLoaded(): Promise<void> {
+        this.onInvalidate();
 
         if (this.showNewSqlOption) {
             if (!this.azureLocations || this.azureLocations.length === 0) {
@@ -58,8 +58,8 @@ export class SqlServer extends ViewModelBase {
         }
     }
 
-    Invalidate(): void {
-        super.Invalidate();
+    onInvalidate(): void {
+        super.onInvalidate();
         this.database = null;
         this.databases = [];
         this.showDatabases = false;
@@ -78,8 +78,8 @@ export class SqlServer extends ViewModelBase {
         this.password = '';
     } 
 
-    async OnValidate(): Promise<boolean> {
-        this.Invalidate();
+    async onValidate(): Promise<boolean> {
+        this.onInvalidate();
 
         this.sqlServer = this.sqlServer.toLowerCase();
         if (this.sqlInstance === 'ExistingSql') {
@@ -107,13 +107,13 @@ export class SqlServer extends ViewModelBase {
             }
         }
 
-        let isInitValid: boolean = await super.OnValidate();
+        let isInitValid: boolean = await super.onValidate();
         this.isValidated = this.isValidated && isInitValid;
 
         return this.isValidated;
     }
 
-    async NavigatingNext(): Promise<boolean> {
+    async onNavigatingNext(): Promise<boolean> {
         let body = this.GetBody(true);
         let response: ActionResponse = null;
 

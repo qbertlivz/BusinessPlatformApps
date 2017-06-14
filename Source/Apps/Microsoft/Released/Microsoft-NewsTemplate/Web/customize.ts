@@ -57,14 +57,14 @@ export class Customize extends ViewModelBase {
         this.selectedEntity.icon = icon;
     }
 
-    async OnLoaded(): Promise<void> {
+    async onLoaded(): Promise<void> {
         this.isValidated = true;
 
         let entities: NewsEntity[] = JSON.parse(this.MS.DataStore.getValue('UserDefinedEntities'));
         this.entities = entities || [];
     }
 
-    async NavigatingNext(): Promise<boolean> {
+    async onNavigatingNext(): Promise<boolean> {
         let validator: any = {};
 
         for (let i = 0; i < this.entities.length; i++) {

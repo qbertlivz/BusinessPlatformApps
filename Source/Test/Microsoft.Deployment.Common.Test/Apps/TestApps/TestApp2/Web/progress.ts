@@ -7,7 +7,7 @@ export class ProgressVM extends ProgressViewModel {
         super();
     }
 
-    async OnLoaded() {
+    async onLoaded() {
         let body: any = {};
         body.FileName = 'TwitterSolutionTemplate.pbix';
 
@@ -17,6 +17,6 @@ export class ProgressVM extends ProgressViewModel {
             this.isPbixReady = true;
         }
 
-        super.OnLoaded();
+        super.onLoaded();
     }
 }

@@ -19,7 +19,7 @@ export class Customize extends ViewModelBase {
     showRecurrenceOptions: boolean = false;
     sourceApplication: string = '';
 
-    async OnLoaded(): Promise<void> {
+    async onLoaded(): Promise<void> {
         this.emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         this.isValidated = true;
         if (this.showCrmUrl) {
@@ -37,7 +37,7 @@ export class Customize extends ViewModelBase {
         }
     }
 
-    async OnValidate(): Promise<boolean> {
+    async onValidate(): Promise<boolean> {
         this.isValidated = false;
         this.showValidation = false;
         this.isEmailValidated = false;
@@ -60,7 +60,7 @@ export class Customize extends ViewModelBase {
         return true;
     }
 
-    async NavigatingNext(): Promise<boolean> {
+    async onNavigatingNext(): Promise<boolean> {
         if (this.sourceApplication === 'Salesforce') {
             switch (this.recurrent) {
                 case 'Every 15 minutes':
@@ -137,8 +137,7 @@ export class Customize extends ViewModelBase {
     }
 
     InvalidateEmails(): void {
-        this.Invalidate();
-
+        this.onInvalidate();
         this.isValidated = this.emails.length === 0 || this.isEmailValidated;
     }
 }

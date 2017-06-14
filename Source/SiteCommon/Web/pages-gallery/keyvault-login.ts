@@ -15,7 +15,7 @@ export class KeyVaultLogin extends AzureLogin {
         window.location.href = response.Body.value;
     }
 
-    async OnLoaded(): Promise<void> {
+    async onLoaded(): Promise<void> {
         this.isValidated = false;
         this.showValidation = false;
 

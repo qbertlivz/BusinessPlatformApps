@@ -4,17 +4,17 @@
 
     <div class="st-float">
         <p class="st-text">${MS.Translate.SALESFORCE_LOGIN_USERNAME}</p>
-        <input class="st-input" type="text" placeholder.bind="MS.Translate.COMMON_USERNAME" change.delegate="Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="salesforceUsername" />
+        <input class="st-input" type="text" placeholder.bind="MS.Translate.COMMON_USERNAME" change.delegate="onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="salesforceUsername" />
     </div>
 
     <div class="st-float">
         <p class="st-text">${MS.Translate.SALESFORCE_LOGIN_PASSWORD}</p>
-        <input class="st-input" type="password" placeholder.bind="MS.Translate.COMMON_PASSWORD" change.delegate="Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="salesforcePassword" />
+        <input class="st-input" type="password" placeholder.bind="MS.Translate.COMMON_PASSWORD" change.delegate="onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="salesforcePassword" />
     </div>
 
     <div class ="st-float">
         <p class="st-text">${MS.Translate.SALESFORCE_LOGIN_URL}</p>
-        <select class="btn btn-default dropdown-toggle st-input" change.delegate="Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="salesforceUrl">
+        <select class="btn btn-default dropdown-toggle st-input" change.delegate="onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="salesforceUrl">
             <option>login.salesforce.com</option>
             <option>test.salesforce.com</option>
         </select>
@@ -22,11 +22,11 @@
 
     <div class="st-float">
         <p class="st-text">${MS.Translate.SALESFORCE_LOGIN_TOKEN}</p>
-        <input class="st-input" type="text" placeholder.bind="MS.Translate.COMMON_TOKEN" change.delegate="Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="salesforceToken" />
+        <input class="st-input" type="text" placeholder.bind="MS.Translate.COMMON_TOKEN" change.delegate="onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="salesforceToken" />
         <span class="glyphicon pbi-glyph-info glyph-mini st-tooltip" title="${MS.Translate.SALESFORCE_LOGIN_TOKEN_DESCRIPTION}"></span>
     </div>
 
     <p class="st-float">
-        <button class="primary" click.trigger="OnValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_VALIDATE}</button>
+        <button class="primary" click.trigger="onValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_VALIDATE}</button>
     </p>
 </template>

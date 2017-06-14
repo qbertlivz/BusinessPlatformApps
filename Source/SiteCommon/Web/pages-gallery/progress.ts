@@ -8,7 +8,7 @@ export class ProgressViewModel extends ViewModelBase {
     aadTenant: string = 'common';
     datastoreEntriesToValidate: string[] = [];
     downloadPbiText: string = this.MS.Translate.PROGRESS_DOWNLOAD_PBIX_INFO;
-    enablePublishReport: boolean = false; // if azure sql
+    enablePublishReport: boolean = false;
     filename: string = 'report.pbix';
     filenameSSAS: string = 'reportSSAS.pbix';
     asDatabase: string = 'Sccm';

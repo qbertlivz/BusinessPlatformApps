@@ -22,14 +22,14 @@ export class LoggerService {
         var applicationInsights = init.loadAppInsights();
         this.appInsights = applicationInsights;
 
-        this.UserGenId = this.MS.UtilityService.GetItem('UserGeneratedId');
+        this.UserGenId = this.MS.UtilityService.getItem('UserGeneratedId');
         this.SessionId = applicationInsights.context.session.id;
         this.UserId = applicationInsights.context.user.id;
         this.OperationId = applicationInsights.context.operation.id;
     }
 
     TrackStartRequest(request: any, uniqueId: any): void {
-        let properties: any = this.GetPropertiesForTelemtry();
+        let properties: any = this.getPropertiesForTelemetry();
         properties.UserGenId = this.UserGenId;
         properties.SessionId = this.SessionId;
         properties.UserId = this.UserId;
@@ -42,7 +42,7 @@ export class LoggerService {
     }
 
     TrackEndRequest(request: any, uniqueId: any, isSucess: any): void {
-        let properties: any = this.GetPropertiesForTelemtry();
+        let properties: any = this.getPropertiesForTelemetry();
         properties.UserGenId = this.UserGenId;
         properties.SessionId = this.SessionId;
         properties.UserId = this.UserId;
@@ -56,7 +56,7 @@ export class LoggerService {
     }
 
     TrackEvent(requestName: any): void {
-        let properties: any = this.GetPropertiesForTelemtry();
+        let properties: any = this.getPropertiesForTelemetry();
         properties.UserGenId = this.UserGenId;
         properties.SessionId = this.SessionId;
         properties.UserId = this.UserId;
@@ -67,7 +67,7 @@ export class LoggerService {
     }
 
     TrackDeploymentStepStartEvent(deploymentIndex: any, deploymentName: any): void {
-        let properties: any = this.GetPropertiesForTelemtry();
+        let properties: any = this.getPropertiesForTelemetry();
         properties.UserGenId = this.UserGenId;
         properties.SessionId = this.SessionId;
         properties.UserId = this.UserId;
@@ -80,7 +80,7 @@ export class LoggerService {
     }
 
     TrackDeploymentStepStoptEvent(deploymentIndex: any, deploymentName: any, isSuccess: any): void {
-        let properties: any = this.GetPropertiesForTelemtry();
+        let properties: any = this.getPropertiesForTelemetry();
         properties.UserGenId = this.UserGenId;
         properties.SessionId = this.SessionId;
         properties.UserId = this.UserId;
@@ -94,7 +94,7 @@ export class LoggerService {
     }
 
     TrackDeploymentStart(): void {
-        let properties: any = this.GetPropertiesForTelemtry();
+        let properties: any = this.getPropertiesForTelemetry();
         properties.UserGenId = this.UserGenId;
         properties.SessionId = this.SessionId;
         properties.UserId = this.UserId;
@@ -106,7 +106,7 @@ export class LoggerService {
     }
 
     TrackUninstallStart(): void {
-        let properties: any = this.GetPropertiesForTelemtry();
+        let properties: any = this.getPropertiesForTelemetry();
         properties.UserGenId = this.UserGenId;
         properties.SessionId = this.SessionId;
         properties.UserId = this.UserId;
@@ -118,7 +118,7 @@ export class LoggerService {
     }
 
     TrackUninstallEnd(isSuccess: any): void {
-        let properties: any = this.GetPropertiesForTelemtry();
+        let properties: any = this.getPropertiesForTelemetry();
         properties.UserGenId = this.UserGenId;
         properties.SessionId = this.SessionId;
         properties.UserId = this.UserId;
@@ -130,7 +130,7 @@ export class LoggerService {
     }
 
     TrackDeploymentEnd(isSucess: any): void {
-        let properties: any = this.GetPropertiesForTelemtry();
+        let properties: any = this.getPropertiesForTelemetry();
         properties.UserGenId = this.UserGenId;
         properties.SessionId = this.SessionId;
         properties.UserId = this.UserId;
@@ -141,7 +141,7 @@ export class LoggerService {
         this.appInsights.flush();
     }
 
-    GetPropertiesForTelemtry(): any {
+    getPropertiesForTelemetry(): any {
         let obj: any = {};
         obj.AppName = this.MS.NavigationService.appName;
         obj.FullUrl = window.location.href;
@@ -161,7 +161,7 @@ export class LoggerService {
     }
 
     TrackPageView(page: any, url: any): void {
-        let properties: any = this.GetPropertiesForTelemtry();
+        let properties: any = this.getPropertiesForTelemetry();
         this.appInsights.trackPageView(page, url, properties);
         this.appInsights.flush();
     }

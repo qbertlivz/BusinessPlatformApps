@@ -61,12 +61,12 @@ export class MsCrmLogin extends AzureLogin {
                 this.isValidated = true;
                 this.showValidation = true;
             } else {
-                let queryParam = this.MS.UtilityService.GetItem('queryUrl');
+                let queryParam = this.MS.UtilityService.getItem('queryUrl');
                 if (queryParam) {
-                    let token = this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.CODE, queryParam);
+                    let token = this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.CODE, queryParam);
                     if (token === '') {
                         this.MS.ErrorService.message = this.MS.Translate.MSCRM_LOGIN_ERROR;
-                        this.MS.ErrorService.details = this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.ERRORDESCRIPTION, queryParam);
+                        this.MS.ErrorService.details = this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.ERRORDESCRIPTION, queryParam);
                         this.MS.ErrorService.showContactUs = true;
                     } else {
                         if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-GetAzureToken', { code: token, oauthType: this.oauthType })) {
@@ -74,7 +74,7 @@ export class MsCrmLogin extends AzureLogin {
                         }
                     }
                 }
-                this.MS.UtilityService.RemoveItem('queryUrl');
+                this.MS.UtilityService.removeItem('queryUrl');
             }
         }
     }

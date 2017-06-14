@@ -27,11 +27,11 @@ export class ASLogin extends AzureLogin {
             this.isValidated = true;
             this.showValidation = true;
         } else {
-            let queryParam = this.MS.UtilityService.GetItem('queryUrl');
+            let queryParam = this.MS.UtilityService.getItem('queryUrl');
             if (queryParam) {
-                let token = this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.CODE, queryParam);
+                let token = this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.CODE, queryParam);
                 if (token === '') {
-                    this.MS.ErrorService.set(this.MS.Translate.AZURE_LOGIN_UNKNOWN_ERROR, this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.ERRORDESCRIPTION, queryParam));
+                    this.MS.ErrorService.set(this.MS.Translate.AZURE_LOGIN_UNKNOWN_ERROR, this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.ERRORDESCRIPTION, queryParam));
                 } else {
                     this.authToken = await this.MS.HttpService.executeAsync('Microsoft-GetAzureToken', { code: token, oauthType: this.oauthType });
                     if (this.authToken.IsSuccess) {
@@ -40,7 +40,7 @@ export class ASLogin extends AzureLogin {
                         this.showValidation = true;
                     }
                 }
-                this.MS.UtilityService.RemoveItem('queryUrl');
+                this.MS.UtilityService.removeItem('queryUrl');
             }
         }
     }

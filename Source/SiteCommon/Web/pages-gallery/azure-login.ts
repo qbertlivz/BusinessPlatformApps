@@ -22,7 +22,7 @@ export class AzureLogin extends ViewModelBase {
     pricingCalculatorUrl: string = '';
     pricingUrl: string = '';
     pricingCost: string = '';
-    selectedResourceGroup: string = `SolutionTemplate-${this.MS.UtilityService.GetUniqueId(5)}`;
+    selectedResourceGroup: string = `SolutionTemplate-${this.MS.UtilityService.getUniqueId(5)}`;
     selectedSubscriptionId: string = '';
     showAdvanced: boolean = false;
     showPricingConfirmation: boolean = false;
@@ -35,13 +35,11 @@ export class AzureLogin extends ViewModelBase {
             this.isValidated = true;
             this.showValidation = true;
         } else {
-            let queryParam = this.MS.UtilityService.GetItem('queryUrl');
+            let queryParam = this.MS.UtilityService.getItem('queryUrl');
             if (queryParam) {
-                let token = this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.CODE, queryParam);
+                let token = this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.CODE, queryParam);
                 if (token === '') {
-                    this.MS.ErrorService.message = this.MS.Translate.AZURE_LOGIN_UNKNOWN_ERROR;
-                    this.MS.ErrorService.details = this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.ERRORDESCRIPTION, queryParam);
-                    this.MS.ErrorService.showContactUs = true;
+                    this.MS.ErrorService.set(this.MS.Translate.AZURE_LOGIN_UNKNOWN_ERROR, this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.ERRORDESCRIPTION, queryParam));
                 } else {
                     this.authToken = await this.MS.HttpService.executeAsync('Microsoft-GetAzureToken', { code: token, oauthType: this.oauthType });
                     if (this.authToken.IsSuccess) {
@@ -61,7 +59,7 @@ export class AzureLogin extends ViewModelBase {
                     }
                 }
 
-                this.MS.UtilityService.RemoveItem('queryUrl');
+                this.MS.UtilityService.removeItem('queryUrl');
             }
         }
     }

@@ -36,7 +36,7 @@ export class InitParser {
             this.parseVariable(propertyName, val, objToChange, this.MS, self);
 
             if (val && typeof (val) === 'object' && propertyName !== 'onNext' && propertyName !== 'onValidate') {
-                this.loadVariables(objToChange[propertyName], this.MS.UtilityService.Clone(val), this.MS, self);
+                this.loadVariables(objToChange[propertyName], this.MS.UtilityService.clone(val), this.MS, self);
             }
         }
     }

@@ -10,7 +10,7 @@ export class Customize extends ViewModelBase {
     healthEvaluationTarget: string = '0.99';
 
     async onLoaded(): Promise<void> {
-        this.dailyTriggers = this.MS.UtilityService.GenerateDailyTriggers();
+        this.dailyTriggers = this.MS.UtilityService.generateDailyTriggers();
         this.isValidated = false;
         this.useDefaultValidateButton = true;
     }

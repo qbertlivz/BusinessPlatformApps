@@ -87,8 +87,8 @@
                 }
             },
           {
-            "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(10))",
-            "uniqueIdFunction": "$save(this.MS.UtilityService.GetUniqueId(10))",
+            "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))",
+            "uniqueIdFunction": "$save(this.MS.UtilityService.getUniqueId(10))",
             "asDatabase": "Twitter",
             "displayname": "Deploy",
             "filename": "$save('TwitterTemplate.pbix')",

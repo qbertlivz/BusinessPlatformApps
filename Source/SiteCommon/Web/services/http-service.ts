@@ -47,7 +47,7 @@ export class HttpService {
 
     async getApp(name: string): Promise<any> {
         var response = null;
-        let uniqueId = this.MS.UtilityService.GetUniqueId(20);
+        let uniqueId = this.MS.UtilityService.getUniqueId(20);
         this.MS.LoggerService.TrackStartRequest('GetApp-name', uniqueId);
         if (this.isOnPremise) {
             response = await this.command.gettemplate(this.MS.LoggerService.UserId, this.MS.LoggerService.UserGenId, '', this.MS.LoggerService.OperationId, uniqueId, name);
@@ -72,7 +72,7 @@ export class HttpService {
             this.MS.ErrorService.clear();
         }
 
-        let uniqueId = this.MS.UtilityService.GetUniqueId(20);
+        let uniqueId = this.MS.UtilityService.getUniqueId(20);
 
         try {
             var actionRequest: ActionRequest = new ActionRequest(content, this.MS.DataStore);
@@ -130,7 +130,7 @@ export class HttpService {
     }
 
     private getRequestObject(method: string, relativeUrl: string, body: any = {}): any {
-        let uniqueId = this.MS.UtilityService.GetUniqueId(20);
+        let uniqueId = this.MS.UtilityService.getUniqueId(20);
         var request = this.HttpClient.createRequest(relativeUrl);
         request = request
             .withBaseUrl(this.baseUrl)

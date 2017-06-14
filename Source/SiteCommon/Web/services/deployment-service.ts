@@ -55,7 +55,7 @@ export class DeploymentService {
 
             let param: any = {};
             if (lastActionStatus !== ActionStatus.BatchWithState) {
-                param = this.MS.UtilityService.Clone(this.actions[i].AdditionalParameters);
+                param = this.MS.UtilityService.clone(this.actions[i].AdditionalParameters);
             }
 
             InitParser.loadVariables(param, param, this.MS, this);

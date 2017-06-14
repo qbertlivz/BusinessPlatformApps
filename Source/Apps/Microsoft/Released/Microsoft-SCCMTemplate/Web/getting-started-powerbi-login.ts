@@ -67,13 +67,13 @@ export class Gettingstarted extends ViewModelBase {
             this.isAuthenticated = true;
             this.isValidated = true;
         } else {
-            let queryParam = this.MS.UtilityService.GetItem('queryUrl');
+            let queryParam = this.MS.UtilityService.getItem('queryUrl');
             if (queryParam) {
-                let token = this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.CODE, queryParam);
+                let token = this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.CODE, queryParam);
 
                 if (token === '') {
                     this.MS.ErrorService.message = this.MS.Translate.AZURE_LOGIN_UNKNOWN_ERROR;
-                    this.MS.ErrorService.details = this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.ERRORDESCRIPTION, queryParam);
+                    this.MS.ErrorService.details = this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.ERRORDESCRIPTION, queryParam);
                     this.MS.ErrorService.showContactUs = true;
                     return;
                 }

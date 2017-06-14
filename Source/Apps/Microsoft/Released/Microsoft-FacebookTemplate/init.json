@@ -16,7 +16,7 @@
                 ],
                 "name": "$SiteCommon$/pages-gallery/getting-started.html",
                 "templateName": "Brand And Campaign Management For Facebook",
-                "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(10))"
+                "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
             },
             {
                 "displayname": "Facebook Login",

@@ -19,13 +19,12 @@ export class Customize extends ViewModelBase {
     }
 
     async onLoaded(): Promise<void> {
-        this.dailyTriggers = this.MS.UtilityService.GenerateDailyTriggers();
+        this.dailyTriggers = this.MS.UtilityService.generateDailyTriggers();
         this.isValidated = false;
         this.useDefaultValidateButton = true;
     }
 
     async onValidate(): Promise<boolean> {
-        super.onValidate();
         this.isValidated = true;
         this.showValidation = true;
         return this.isValidated;

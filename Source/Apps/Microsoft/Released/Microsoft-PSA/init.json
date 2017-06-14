@@ -37,7 +37,7 @@
                 "displayname": "Target",
                 "isAzureSql": true,
                 "name": "$SiteCommon$/pages-gallery/sql-server.html",
-                "newSqlDatabase": "$(this.MS.UtilityService.GetUniqueId(10))",
+                "newSqlDatabase": "$(this.MS.UtilityService.getUniqueId(10))",
                 "showAzureSql": false,
                 "showNewSqlOption": true,
                 "showSkuS1": false,

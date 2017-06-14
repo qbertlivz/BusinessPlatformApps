@@ -30,7 +30,7 @@
         "displayname": "Deploy Arm File",
         "AzureArmFile": "Service/Arm/armtemplate.json",
         "AzureArmParameters": {
-          "SqlServerName": "$(this.MS.UtilityService.GetUniqueId(18))",
+          "SqlServerName": "$(this.MS.UtilityService.getUniqueId(18))",
           "SqlDatabaseName": "database",
           "Username": "testuser",
           "Password": "P@ssw0rd123"

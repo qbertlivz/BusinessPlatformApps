@@ -35,7 +35,7 @@ export class WindowsAuth extends ViewModelBase {
     async onValidate(): Promise<boolean> {
         this.isValidated = false;
 
-        let usernameError: string = this.MS.UtilityService.validateUsername(this.username);
+        let usernameError: string = this.validateUsername(this.username);
         if (usernameError) {
             this.MS.ErrorService.message = usernameError;
         } else {
@@ -50,5 +50,15 @@ export class WindowsAuth extends ViewModelBase {
         }
 
         return this.isValidated;
+    }
+
+    validateUsername(username: string): string {
+        let error: string = this.MS.Translate.WINDOWS_AUTH_USERNAME_ERROR;
+        if (username.includes('\\')) {
+            error = '';
+        } else if (username.length > 0) {
+            error = this.MS.Translate.WINDOW_AUTH_USERNAME_ERROR_2;
+        }
+        return error;
     }
 }

@@ -32,9 +32,9 @@ export class ViewModelBase {
         this.MS.NavigationService.Activate();
 
         this.isActivated = false;
-        this.MS.UtilityService.SaveItem('Current Page', window.location.href);
+        this.MS.UtilityService.saveItem('Current Page', window.location.href);
         let currentRoute = this.MS.NavigationService.getCurrentSelectedPage().RoutePageName.toLowerCase();
-        this.MS.UtilityService.SaveItem('Current Route', currentRoute);
+        this.MS.UtilityService.saveItem('Current Route', currentRoute);
         let viewmodelPreviousSave = window.sessionStorage.getItem(currentRoute);
 
         if (viewmodelPreviousSave) {
@@ -62,7 +62,7 @@ export class ViewModelBase {
 
     loadParameters(): void {
         var parameters = this.MS.NavigationService.getCurrentSelectedPage().Parameters;
-        InitParser.loadVariables(this, this.MS.UtilityService.Clone(parameters), this.MS, this);
+        InitParser.loadVariables(this, this.MS.UtilityService.clone(parameters), this.MS, this);
     }
 
     navigateBack(): void {

@@ -10,8 +10,9 @@ export class Customize extends ViewModelBase {
     healthEvaluationTarget: string = '0.99';
 
     async onLoaded(): Promise<void> {
+        super.onLoaded();
+
         this.dailyTriggers = this.MS.UtilityService.generateDailyTriggers();
-        this.isValidated = false;
         this.useDefaultValidateButton = true;
     }
 
@@ -54,13 +55,13 @@ export class Customize extends ViewModelBase {
 
         let dataRetentionDaysError: string = dataRetentionDays > 0 && dataRetentionDays <= 365
             ? ''
-            : 'Data Retention Days must be a number between 1 and 365.';
+            : this.MS.Translate.CUSTOMIZE_SCCM_ERROR_DATA_RETENTION_DAYS;
         let endpointComplianceTargetError: string = endpointComplianceTarget >= 0 && endpointComplianceTarget <= 1
             ? ''
-            : 'Endpoint Compliance Target must be a number between 0 and 1.';
+            : this.MS.Translate.CUSTOMIZE_SCCM_ERROR_ENDPOINT_COMPLIANCE_TARGET;
         let healthEvaluationTargetError: string = healthEvaluationTarget >= 0 && healthEvaluationTarget <= 1
             ? ''
-            : 'Health Evaluation Target must be a number between 0 and 1.';
+            : this.MS.Translate.CUSTOMIZE_SCCM_ERROR_HEALTH_EVALUATION_TARGET;
 
         let validationError: string = dataRetentionDaysError || endpointComplianceTargetError || healthEvaluationTargetError;
         if (validationError) {
@@ -70,8 +71,7 @@ export class Customize extends ViewModelBase {
             this.endpointComplianceTarget = endpointComplianceTarget.toString();
             this.healthEvaluationTarget = healthEvaluationTarget.toString();
 
-            this.isValidated = true;
-            this.showValidation = true;
+            this.setValidated();
         }
 
         return this.isValidated;

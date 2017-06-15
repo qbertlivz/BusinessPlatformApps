@@ -46,7 +46,9 @@ export class ProgressViewModel extends ViewModelBase {
                 await this.wrangle();
 
                 this.isDataPullDone = true;
-                this.showReportLink;
+
+                //this.publishReportLink = '';
+                //this.showReportLink = true;
             });
         } else if (this.MS.DataStore.getValue('HasNavigated') === null) {
             this.MS.NavigationService.NavigateHome();

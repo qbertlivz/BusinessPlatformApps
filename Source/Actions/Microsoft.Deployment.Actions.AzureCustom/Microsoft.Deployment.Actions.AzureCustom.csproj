@@ -178,6 +178,8 @@
     </Compile>
     <Compile Include="ActivityLogs\CreateStreamAnalyticsJob.cs" />
     <Compile Include="ActivityLogs\ExportActivityLogToEventHub.cs" />
+    <Compile Include="ActivityLogs\GetEventHubPrimaryKey.cs" />
+    <Compile Include="ActivityLogs\SetStreamAnalyticsInputAsEventHub.cs" />
     <Compile Include="Arm\DeployAzureArmTemplate.cs" />
     <Compile Include="Arm\WaitForArmDeploymentStatus.cs" />
     <Compile Include="AzureAS\AssignPermissionsForUser.cs" />

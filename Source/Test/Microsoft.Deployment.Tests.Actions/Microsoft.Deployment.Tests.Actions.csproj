@@ -146,6 +146,7 @@
     <Compile Include="AzureTests\CognitiveServices.cs" />
     <Compile Include="AzureTests\EventHubTests.cs" />
     <Compile Include="AzureTests\ExportActivityLogToEventHubTest.cs" />
+    <Compile Include="AzureTests\ConfigureStreamAnalyticsTest.cs" />
     <Compile Include="AzureTests\LogicAppTests.cs" />
     <Compile Include="AzureTests\StreamAnalyticsTest.cs" />
     <Compile Include="NotifierTests.cs" />

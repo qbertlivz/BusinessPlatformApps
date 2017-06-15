@@ -26,10 +26,6 @@ export class Customize extends ViewModelBase {
         return isSuccess;
     }
 
-    async onLoaded(): Promise<void> {
-        this.isValidated = false;
-    }
-
     async onValidate(): Promise<boolean> {
         this.showValidation = true;
         if (this.ssasType == 'New') {

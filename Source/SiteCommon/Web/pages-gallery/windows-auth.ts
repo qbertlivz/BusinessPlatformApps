@@ -15,16 +15,12 @@ export class WindowsAuth extends ViewModelBase {
             this.enteredUsername = this.username;
             this.username = this.discoveredUsername;
         } else {
-            if (!this.enteredUsername) {
-                this.username = this.discoveredUsername;
-            } else {
-                this.username = this.enteredUsername;
-            }
+            this.username = this.enteredUsername ? this.enteredUsername : this.discoveredUsername;
         }
     }
 
     async onLoaded(): Promise<void> {
-        this.isValidated = false;
+        super.onLoaded();
 
         if (!this.username) {
             this.discoveredUsername = await this.MS.HttpService.getExecuteResponseAsync('Microsoft-GetCurrentUserAndDomain', 'Value');
@@ -33,17 +29,14 @@ export class WindowsAuth extends ViewModelBase {
     }
 
     async onValidate(): Promise<boolean> {
-        this.isValidated = false;
+        this.onInvalidate();
 
         let usernameError: string = this.validateUsername(this.username);
         if (usernameError) {
             this.MS.ErrorService.message = usernameError;
         } else {
-            let domain: string = this.MS.UtilityService.extractDomain(this.username);
-            let usernameWithoutDomain: string = this.MS.UtilityService.extractUsername(this.username);
-
-            this.MS.DataStore.addToDataStore('ImpersonationDomain', domain, DataStoreType.Private);
-            this.MS.DataStore.addToDataStore('ImpersonationUsername', usernameWithoutDomain, DataStoreType.Private);
+            this.MS.DataStore.addToDataStore('ImpersonationDomain', this.MS.UtilityService.extractDomain(this.username), DataStoreType.Private);
+            this.MS.DataStore.addToDataStore('ImpersonationUsername', this.MS.UtilityService.extractUsername(this.username), DataStoreType.Private);
             this.MS.DataStore.addToDataStore('ImpersonationPassword', this.password, DataStoreType.Private);
 
             this.isValidated = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-ValidateNtCredential');

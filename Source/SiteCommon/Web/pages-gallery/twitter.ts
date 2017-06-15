@@ -21,9 +21,9 @@ export class Twitter extends ViewModelBase {
     }
 
     async onLoaded(): Promise<void> {
+        super.onLoaded();
+
         this.isAuthenticated = false;
-        this.isValidated = false;
-        this.showValidation = false;
 
         let queryParam = this.MS.UtilityService.getItem('queryUrl');
         if (queryParam) {

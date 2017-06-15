@@ -130,18 +130,8 @@
     "Uninstall": {
         "Pages": [
             {
-                "architectureDiagram": "dist/Apps/Microsoft/Released/Simplement-SAP-ARTemplate/Web/Images/sap-accounts-receivable.png",
-                "displayname": "Uninstall",
-                "isDownload": "$(!this.MS.HttpService.isOnPremise)",
-                "name": "$SiteCommon$/pages-gallery/uninstall.html",
-                "templateName": "$translate(INIT_SAP_TITLE)",
-                "uninstallList": [
-                    "$translate(INIT_UNINSTALL_SAP)",
-                    "$translate(INIT_UNINSTALL_SQL)"
-                ]
-            },
-            {
                 "displayname": "Uninstall Progress",
+                "HasNavigated": "$save(true)",
                 "isUninstall": true,
                 "name": "$SiteCommon$/pages-gallery/progress.html",
                 "successMessage": "$translate(INIT_UNINSTALL_SUCCESS)"

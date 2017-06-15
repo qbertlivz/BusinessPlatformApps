@@ -3,8 +3,8 @@ import { DataStoreType } from '../enums/data-store-type';
 import { ViewModelBase } from '../services/view-model-base';
 
 export class CognitiveService extends ViewModelBase {
-    cognitiveServiceKey: string = '';
     cognitiveSelectedType: string = 'NewKey';
+    cognitiveServiceKey: string = '';
     cognitiveServiceName: string = 'SolutionTemplateCognitiveService';
 
     onKeyTypeChange(): void {
@@ -17,16 +17,15 @@ export class CognitiveService extends ViewModelBase {
         }
     }
 
+    async onLoaded(): Promise<void> {
+        this.isValidated = true;
+    }
+
     async onNavigatingNext(): Promise<boolean> {
         this.MS.DataStore.addToDataStore('CognitiveServiceKey', this.cognitiveServiceKey, DataStoreType.Private);
         this.MS.DataStore.addToDataStore('CognitiveServiceName', this.cognitiveServiceName, DataStoreType.Public);
         this.MS.DataStore.addToDataStore('CognitiveSkuName', 'S1', DataStoreType.Public);
-
         return true;
-    }
-
-    async onLoaded(): Promise<void> {
-        this.isValidated = true;
     }
 
     async onValidate(): Promise<boolean> {
@@ -36,7 +35,6 @@ export class CognitiveService extends ViewModelBase {
         } else if (this.cognitiveSelectedType === 'NewKey') {
             this.isValidated = true;
         }
-
         return this.isValidated;
     }
 }

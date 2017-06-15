@@ -10,13 +10,13 @@
 
     <div class="st-float">
         <p class="st-text">Facebook App Id</p>
-        <input class="st-input" type="text" placeholder="12345678" change.delegate="viewmodel.Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.facebookClientId" />
+        <input class="st-input" type="text" placeholder="12345678" change.delegate="viewmodel.onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.facebookClientId" />
 
         <p class="st-text">Facebook App Secret</p>
-        <input class="st-input" type="password" placeholder="12345678" change.delegate="viewmodel.Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.facebookClientSecret" />
+        <input class="st-input" type="password" placeholder="12345678" change.delegate="viewmodel.onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.facebookClientSecret" />
     </div>
 
     <p class="st-float">
-        <button class="primary" click.trigger="viewmodel.OnValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_VALIDATE}</button>
+        <button class="primary" click.trigger="viewmodel.onValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_VALIDATE}</button>
     </p>
 </template>

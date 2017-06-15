@@ -18,7 +18,7 @@ export class ErrorService {
         this.showContactUs = false;
     }
 
-    set(message: string, details: string, showContactUs: boolean = true, logLocation: string = ''): void {
+    set(message: string, details: string = '', showContactUs: boolean = true, logLocation: string = ''): void {
         this.details = details;
         this.logLocation = logLocation;
         this.message = message;

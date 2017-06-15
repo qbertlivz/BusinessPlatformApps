@@ -10,7 +10,7 @@
             </p>
         </div>
 
-        <input class="st-input" type="text" change.delegate="Invalidate()" disabled.bind="MS.HttpService.isServiceBusy || logInAsCurrentUser" value.bind="username" />
+        <input class="st-input" type="text" change.delegate="onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy || logInAsCurrentUser" value.bind="username" />
         <label class="st-label">
             <input type="checkbox" tabindex="-1" change.delegate="loginSelectionChanged()" checked.bind="logInAsCurrentUser" disabled.bind="MS.HttpService.isServiceBusy">
             <span class="smallFontSize">${MS.Translate.WINDOWS_AUTH_CURRENT}</span>
@@ -19,10 +19,10 @@
 
     <div class="st-float">
         <p class="st-text">${MS.Translate.WINDOWS_AUTH_PASSWORD}</p>
-        <input class="st-input" type="password" placeholder="password" change.delegate="Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="password" />
+        <input class="st-input" type="password" placeholder="password" change.delegate="onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="password" />
     </div>
 
     <p class="st-float">
-        <button class="primary" click.trigger="OnValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_VALIDATE}</button>
+        <button class="primary" click.trigger="onValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_VALIDATE}</button>
     </p>
 </template>

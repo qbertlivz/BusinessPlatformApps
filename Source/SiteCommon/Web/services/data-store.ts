@@ -67,7 +67,7 @@ export class DataStore {
 
     /// This method will be used on startup from the main service
     private loadDataStores(): void {
-        let datastore: any = this.MS.UtilityService.GetItem(this.MS.NavigationService.appName + ' datastore');
+        let datastore: any = this.MS.UtilityService.getItem(this.MS.NavigationService.appName + ' datastore');
         if (!datastore) {
             this.PublicDataStore = new Dictionary<Dictionary<any>>();
             this.PrivateDataStore = new Dictionary<Dictionary<any>>();
@@ -77,7 +77,7 @@ export class DataStore {
     }
 
     private cacheDataStores(): void {
-        this.MS.UtilityService.SaveItem(this.MS.NavigationService.appName + ' datastore', this);
+        this.MS.UtilityService.saveItem(this.MS.NavigationService.appName + ' datastore', this);
     }
 
     public routeExists(route: string, dataStoreType: DataStoreType = DataStoreType.Any): boolean {

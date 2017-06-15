@@ -29,11 +29,11 @@ export class DataMovement extends ViewModelBase {
     username: string = '';
 
     OnDataMovementChanged(): void {
-        this.Invalidate();
+        this.onInvalidate();
         this.isValidated = this.dataMovement === this.dataMovementType.ADF || this.dataMovement === this.dataMovementType.D365;
     }
 
-    async OnLoaded(): Promise<void> {
+    async onLoaded(): Promise<void> {
         this.isValidated = this.dataMovement === this.dataMovementType.ADF || this.dataMovement === this.dataMovementType.D365;
     }
 
@@ -67,8 +67,8 @@ export class DataMovement extends ViewModelBase {
         }
     }
 
-    async OnValidate(): Promise<boolean> {
-        this.Invalidate();
+    async onValidate(): Promise<boolean> {
+        this.onInvalidate();
 
         switch (this.dataMovement) {
             case this.dataMovementType.Informatica:
@@ -131,7 +131,7 @@ export class DataMovement extends ViewModelBase {
         return this.isValidated;
     }
 
-    async NavigatingNext(): Promise<boolean> {
+    async onNavigatingNext(): Promise<boolean> {
         this.MS.DataStore.addToDataStore('DataMovement', this.dataMovement, DataStoreType.Public);
 
         switch (this.dataMovement) {

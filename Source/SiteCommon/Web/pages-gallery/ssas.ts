@@ -9,7 +9,7 @@ export class Customize extends ViewModelBase {
     sku: string = 'B1';
     ssasType: string = 'New';
 
-    async NavigatingNext(): Promise<boolean> {
+    async onNavigatingNext(): Promise<boolean> {
         let isSuccess: boolean = true;
 
         if (this.ssasType == 'New') {
@@ -26,11 +26,11 @@ export class Customize extends ViewModelBase {
         return isSuccess;
     }
 
-    async OnLoaded(): Promise<void> {
+    async onLoaded(): Promise<void> {
         this.isValidated = false;
     }
 
-    async OnValidate(): Promise<boolean> {
+    async onValidate(): Promise<boolean> {
         this.showValidation = true;
         if (this.ssasType == 'New') {
             if (this.server.length < 3 || this.server.length > 63 || !/[a-z]/.test(this.server[0]) || !/^[a-z0-9]+$/.test(this.server)) {

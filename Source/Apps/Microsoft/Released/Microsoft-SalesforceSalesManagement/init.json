@@ -140,7 +140,7 @@
                 "name": "$SiteCommon$/pages-gallery/progress.html",
                 "showCounts": true,
                 "targetSchema": "dbo",
-                "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(10))"
+                "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
             }
         ],
 

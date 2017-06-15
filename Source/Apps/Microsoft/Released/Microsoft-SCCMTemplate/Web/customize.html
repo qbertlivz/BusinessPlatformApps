@@ -7,10 +7,10 @@
             <option repeat.for="dailyTriggerOption of dailyTriggers">${dailyTriggerOption}</option>
         </select>
         <p class="st-text">${MS.Translate.CUSTOMIZE_DATA_RETENTION_DAYS}</p>
-        <input class="st-input" type="text" change.delegate="Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="dataRetentionDays" />
+        <input class="st-input" type="text" change.delegate="onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="dataRetentionDays" />
         <p class="st-text">${MS.Translate.CUSTOMIZE_ENDPOINT_COMPLIANCE_TARGET}</p>
-        <input class="st-input" type="text" change.delegate="Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="endpointComplianceTarget" />
+        <input class="st-input" type="text" change.delegate="onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="endpointComplianceTarget" />
         <p class="st-text">${MS.Translate.CUSTOMIZE_HEALTH_EVALUATION_TARGET}</p>
-        <input class="st-input" type="text" change.delegate="Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="healthEvaluationTarget" />
+        <input class="st-input" type="text" change.delegate="onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="healthEvaluationTarget" />
     </div>
 </template>

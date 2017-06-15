@@ -21,7 +21,7 @@
                 To figure this out please refer to our <a href="http://community.powerbi.com/t5/Power-BI-Solution-Templates/Guide-for-using-Microsoft-accounts-with-Twitter-template/m-p/60088#M31" target="_blank">guide</a>.
             </p>
             <p class="st-text">Azure Directory:</p>
-            <input class="st-input" placeholder="directoryname.onmicrosoft.com" type="text" change.delegate="viewmodel.Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="azureDirectory" />
+            <input class="st-input" placeholder="directoryname.onmicrosoft.com" type="text" change.delegate="viewmodel.onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="azureDirectory" />
         </div>
 
         <div class="st-float">

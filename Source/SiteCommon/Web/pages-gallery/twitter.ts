@@ -20,14 +20,14 @@ export class Twitter extends ViewModelBase {
         }
     }
 
-    async OnLoaded(): Promise<void> {
+    async onLoaded(): Promise<void> {
         this.isAuthenticated = false;
         this.isValidated = false;
         this.showValidation = false;
 
-        let queryParam = this.MS.UtilityService.GetItem('queryUrl');
+        let queryParam = this.MS.UtilityService.getItem('queryUrl');
         if (queryParam) {
-            let code = this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.CODE, queryParam);
+            let code = this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.CODE, queryParam);
             if (code) {
                 this.MS.DataStore.addToDataStore('TwitterCode', code, DataStoreType.Private);
 
@@ -47,7 +47,7 @@ export class Twitter extends ViewModelBase {
                     this.showValidation = true;
                 }
             }
-            this.MS.UtilityService.RemoveItem('queryUrl');
+            this.MS.UtilityService.removeItem('queryUrl');
         } else {
             let response = await this.MS.HttpService.executeAsync('Microsoft-VerifyTwitterConnection');
             this.MS.ErrorService.clear();

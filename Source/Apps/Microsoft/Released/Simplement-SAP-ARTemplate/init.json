@@ -41,7 +41,7 @@
             {
                 "displayname": "Login",
                 "name": "$SiteCommon$/pages-gallery/windows-auth.html",
-                "onValidate": [
+                "onValidateActions": [
                     {
                         "name": "Microsoft-ValidateAdminPrivileges"
                     },

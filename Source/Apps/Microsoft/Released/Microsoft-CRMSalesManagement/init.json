@@ -77,7 +77,7 @@
                 "name": "$SiteCommon$/pages-gallery/sql-server.html",
                 "displayname": "Target",
                 "isAzureSql": "$run(!this.MS.HttpService.isOnPremise)",
-                "newSqlDatabase": "$(this.MS.UtilityService.GetUniqueId(10))",
+                "newSqlDatabase": "$(this.MS.UtilityService.getUniqueId(10))",
                 "showAzureSql": false,
                 "showCredsWhenWindowsAuth": "$run(this.MS.HttpService.isOnPremise)",
                 "showNewSqlOption": "$run(this.MS.DataStore.getValue('DataMovement') === 'D365')",
@@ -145,7 +145,7 @@
                 "finishedActionName": "$run(this.MS.DataStore.getValue('DataMovement') === 'D365' ? 'Microsoft-CrmGetProfileStatus' : 'Microsoft-GetScribeSolutionStatus')",
                 "asDatabase": "SalesManagement",
                 "filenameSSAS": "SalesManagementReportAS.pbix",
-                "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(10))"
+                "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
             }
         ],
 

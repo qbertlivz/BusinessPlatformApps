@@ -27,7 +27,7 @@
             },
             {
                 "displayname": "Login",
-                "onValidate": [
+                "onValidateActions": [
                     {
                         "name": "Microsoft-ValidateAdminPrivileges"
                     },

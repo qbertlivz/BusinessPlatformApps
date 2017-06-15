@@ -11,12 +11,12 @@ export class Salesforce extends ViewModelBase {
     salesforceUrl: string = 'login.salesforce.com';
     salesforceObjects: string = '';
 
-    async OnLoaded(): Promise<void> {
+    async onLoaded(): Promise<void> {
         this.isValidated = false;
         this.showValidation = false;
     }
 
-    async OnValidate(): Promise<boolean> {
+    async onValidate(): Promise<boolean> {
         this.MS.DataStore.addToDataStore('SalesforceUser', this.salesforceUsername, DataStoreType.Public);
         this.MS.DataStore.addToDataStore('SalesforcePassword', this.salesforcePassword, DataStoreType.Private);
         this.MS.DataStore.addToDataStore('SalesforceToken', this.salesforceToken, DataStoreType.Private);

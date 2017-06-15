@@ -489,5 +489,7 @@
     WINDOWS_AUTH_PASSWORD: `Password:`,
     WINDOWS_AUTH_TITLE: `Connect to Windows`,
     WINDOWS_AUTH_USERNAME: `Windows Username:`,
-    WINDOWS_AUTH_USERNAME_DESCRIPTION: `Must be in <domain>\<username> or <machinename>\<username> format`
+    WINDOWS_AUTH_USERNAME_DESCRIPTION: `Must be in <domain>\<username> or <machinename>\<username> format`,
+    WINDOWS_AUTH_USERNAME_ERROR: `Please enter your username`,
+    WINDOWS_AUTH_USERNAME_ERROR_2: `Username must be in <domain>\\<username> or <machinename>\\<username> format.`
 };

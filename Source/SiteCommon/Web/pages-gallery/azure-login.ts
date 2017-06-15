@@ -1,6 +1,4 @@
-﻿import { QueryParameter } from '../constants/query-parameter';
-
-import { AzureConnection } from '../enums/azure-connection';
+﻿import { AzureConnection } from '../enums/azure-connection';
 import { DataStoreType } from '../enums/data-store-type';
 
 import { ActionResponse } from '../models/action-response';
@@ -22,64 +20,11 @@ export class AzureLogin extends ViewModelBase {
     pricingCalculatorUrl: string = '';
     pricingUrl: string = '';
     pricingCost: string = '';
-    selectedResourceGroup: string = `SolutionTemplate-${this.MS.UtilityService.GetUniqueId(5)}`;
+    selectedResourceGroup: string = `SolutionTemplate-${this.MS.UtilityService.getUniqueId(5)}`;
     selectedSubscriptionId: string = '';
     showAdvanced: boolean = false;
     showPricingConfirmation: boolean = false;
     subscriptionsList: any[] = [];
-
-    async OnLoaded(): Promise<void> {
-        this.isValidated = false;
-        this.showValidation = false;
-        if (this.subscriptionsList.length > 0) {
-            this.isValidated = true;
-            this.showValidation = true;
-        } else {
-            let queryParam = this.MS.UtilityService.GetItem('queryUrl');
-            if (queryParam) {
-                let token = this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.CODE, queryParam);
-                if (token === '') {
-                    this.MS.ErrorService.message = this.MS.Translate.AZURE_LOGIN_UNKNOWN_ERROR;
-                    this.MS.ErrorService.details = this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.ERRORDESCRIPTION, queryParam);
-                    this.MS.ErrorService.showContactUs = true;
-                } else {
-                    this.authToken = await this.MS.HttpService.executeAsync('Microsoft-GetAzureToken', { code: token, oauthType: this.oauthType });
-                    if (this.authToken.IsSuccess) {
-                        let subscriptions: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureSubscriptions');
-                        if (subscriptions.IsSuccess) {
-                            this.subscriptionsList = subscriptions.Body.value;
-                            if (!this.subscriptionsList || (this.subscriptionsList && this.subscriptionsList.length === 0)) {
-                                this.MS.ErrorService.message = this.MS.Translate.AZURE_LOGIN_SUBSCRIPTION_ERROR;
-                            } else {
-                                this.selectedSubscriptionId = this.subscriptionsList[0].SubscriptionId;
-                                this.showPricingConfirmation = true;
-                                this.isValidated = true;
-                                this.showValidation = true;
-                                await this.MS.HttpService.executeAsync('Microsoft-PowerBiLogin');
-                            }
-                        }
-                    }
-                }
-
-                this.MS.UtilityService.RemoveItem('queryUrl');
-            }
-        }
-    }
-
-    async ValidateResourceGroup(): Promise<boolean> {
-        this.Invalidate();
-        let subscriptionObject = this.subscriptionsList.find(x => x.SubscriptionId === this.selectedSubscriptionId);
-        this.MS.DataStore.addToDataStore('SelectedSubscription', subscriptionObject, DataStoreType.Public);
-        this.MS.DataStore.addToDataStore('SelectedResourceGroup', this.selectedResourceGroup, DataStoreType.Public);
-
-        let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-ExistsResourceGroup');
-
-        if (response.IsSuccess) {
-            this.isValidated = true;
-            this.showValidation = true;
-        }
-        return this.isValidated;
-    }
 
     async connect(): Promise<void> {
         if (this.connectionType.toString() === AzureConnection.Microsoft.toString()) {
@@ -91,7 +36,32 @@ export class AzureLogin extends ViewModelBase {
         window.location.href = response.Body.value;
     }
 
-    async NavigatingNext(): Promise<boolean> {
+    async onLoaded(): Promise<void> {
+        this.onInvalidate();
+
+        if (this.subscriptionsList.length > 0) {
+            this.isValidated = true;
+            this.showValidation = true;
+        } else {
+            await this.MS.UtilityService.getToken(this.oauthType, async () => {
+                let subscriptions: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureSubscriptions');
+                if (subscriptions.IsSuccess) {
+                    this.subscriptionsList = subscriptions.Body.value;
+                    if (!this.subscriptionsList || (this.subscriptionsList && this.subscriptionsList.length === 0)) {
+                        this.MS.ErrorService.message = this.MS.Translate.AZURE_LOGIN_SUBSCRIPTION_ERROR;
+                    } else {
+                        this.selectedSubscriptionId = this.subscriptionsList[0].SubscriptionId;
+                        this.showPricingConfirmation = true;
+                        this.isValidated = true;
+                        this.showValidation = true;
+                        await this.MS.HttpService.executeAsync('Microsoft-PowerBiLogin');
+                    }
+                }
+            });
+        }
+    }
+
+    async onNavigatingNext(): Promise<boolean> {
         let isSuccess: boolean = true;
 
         this.MS.DataStore.addToDataStore('SelectedSubscription', this.subscriptionsList.find(x => x.SubscriptionId === this.selectedSubscriptionId), DataStoreType.Public);
@@ -113,5 +83,20 @@ export class AzureLogin extends ViewModelBase {
         }
 
         return isSuccess;
+    }
+
+    async validateResourceGroup(): Promise<boolean> {
+        this.onInvalidate();
+
+        let subscriptionObject = this.subscriptionsList.find(x => x.SubscriptionId === this.selectedSubscriptionId);
+        this.MS.DataStore.addToDataStore('SelectedSubscription', subscriptionObject, DataStoreType.Public);
+        this.MS.DataStore.addToDataStore('SelectedResourceGroup', this.selectedResourceGroup, DataStoreType.Public);
+
+        if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-ExistsResourceGroup')) {
+            this.isValidated = true;
+            this.showValidation = true;
+        }
+
+        return this.isValidated;
     }
 }

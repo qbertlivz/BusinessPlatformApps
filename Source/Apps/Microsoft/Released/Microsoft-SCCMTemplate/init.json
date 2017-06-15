@@ -29,7 +29,7 @@
             {
                 "displayname": "Login",
                 "name": "$SiteCommon$/pages-gallery/windows-auth.html",
-                "onValidate": [
+                "onValidateActions": [
                     {
                         "name": "Microsoft-ValidateAdminPrivileges"
                     },
@@ -131,7 +131,7 @@
                 "showCounts": true,
                 "sqlServerIndex": 1,
                 "targetSchema": "pbist_sccm",
-                "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(10))"
+                "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
             }
         ],
 

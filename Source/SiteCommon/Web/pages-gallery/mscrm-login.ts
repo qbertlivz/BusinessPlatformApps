@@ -50,8 +50,8 @@ export class MsCrmLogin extends AzureLogin {
         }
     }
 
-    async OnLoaded(): Promise<void> {
-        this.Invalidate();
+    async onLoaded(): Promise<void> {
+        this.onInvalidate();
 
         this.showAzureTrial = false;
         this.showValidation = false;
@@ -61,12 +61,12 @@ export class MsCrmLogin extends AzureLogin {
                 this.isValidated = true;
                 this.showValidation = true;
             } else {
-                let queryParam = this.MS.UtilityService.GetItem('queryUrl');
+                let queryParam = this.MS.UtilityService.getItem('queryUrl');
                 if (queryParam) {
-                    let token = this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.CODE, queryParam);
+                    let token = this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.CODE, queryParam);
                     if (token === '') {
                         this.MS.ErrorService.message = this.MS.Translate.MSCRM_LOGIN_ERROR;
-                        this.MS.ErrorService.details = this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.ERRORDESCRIPTION, queryParam);
+                        this.MS.ErrorService.details = this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.ERRORDESCRIPTION, queryParam);
                         this.MS.ErrorService.showContactUs = true;
                     } else {
                         if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-GetAzureToken', { code: token, oauthType: this.oauthType })) {
@@ -74,13 +74,13 @@ export class MsCrmLogin extends AzureLogin {
                         }
                     }
                 }
-                this.MS.UtilityService.RemoveItem('queryUrl');
+                this.MS.UtilityService.removeItem('queryUrl');
             }
         }
     }
 
-    async OnValidate(): Promise<boolean> {
-        this.Invalidate();
+    async onValidate(): Promise<boolean> {
+        this.onInvalidate();
 
         this.MS.DataStore.addToDataStore('D365Username', this.d365Username, DataStoreType.Private);
         this.MS.DataStore.addToDataStore('D365Password', this.d365Password, DataStoreType.Private);
@@ -112,7 +112,7 @@ export class MsCrmLogin extends AzureLogin {
         window.location.href = response.Body.value;
     }
 
-    public async NavigatingNext(): Promise<boolean> {
+    async onNavigatingNext(): Promise<boolean> {
         let isSuccess: boolean = true;
 
         this.MS.DataStore.addToDataStore('Entities', this.entities, DataStoreType.Public);

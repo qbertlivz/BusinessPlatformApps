@@ -10,8 +10,8 @@ export class SearchTerms extends ViewModelBase {
         this.isValidated = false;
     }
 
-    async OnValidate(): Promise<boolean> {
-        if (!super.OnValidate()) {
+    async onValidate(): Promise<boolean> {
+        if (!super.onValidate()) {
             return false;
         }
 

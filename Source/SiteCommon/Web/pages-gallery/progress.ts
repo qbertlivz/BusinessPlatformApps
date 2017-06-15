@@ -19,9 +19,11 @@ export class ProgressViewModel extends ViewModelBase {
     pbixDownloadLink: string = '';
     powerAppDownloadLink: string = '';
     powerAppFileName: string = '';
+    publishReportLink: string = '';
     recordCounts: any[] = [];
     showCounts: boolean = false;
     showPublishReport: boolean = false;
+    showReportLink: boolean = false;
     sliceStatus: any[] = [];
     sqlServerIndex: number = 0;
     successMessage: string = this.MS.Translate.PROGRESS_ALL_DONE;
@@ -44,7 +46,7 @@ export class ProgressViewModel extends ViewModelBase {
                 await this.wrangle();
 
                 this.isDataPullDone = true;
-                this.showPublishReport = this.enablePublishReport;
+                this.showReportLink;
             });
         } else if (this.MS.DataStore.getValue('HasNavigated') === null) {
             this.MS.NavigationService.NavigateHome();

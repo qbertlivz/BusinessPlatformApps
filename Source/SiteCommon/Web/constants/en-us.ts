@@ -417,6 +417,7 @@
     PROGRESS_SUBTITLE: `This might take a while. We'll show you progress while you wait. Please don't close the browser until all the steps are completed. The setup could take 10-15 minutes.`,
     PROGRESS_TITLE: `Track your progress`,
     PROGRESS_UNSUBSCRIBE: `You can unsubscribe at any time.`,
+    PROGRESS_VIEW_PBIX: `View Report`,
     RECURRENT_NEVER: `Never`,
     RECURRENT_15_MINUTES: `Every 15 minutes`,
     RECURRENT_30_MINUTES: `Every 30 minutes`,

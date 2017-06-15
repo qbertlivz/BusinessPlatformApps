@@ -1,6 +1,6 @@
-﻿import { DataStoreType } from '../enums/data-store-type';
+﻿﻿import { DataStoreType } from '../../../../../SiteCommon/Web/enums/data-store-type';
 
-import { ViewModelBase } from '../services/view-model-base';
+import { ViewModelBase } from '../../../../../SiteCommon/Web/services/view-model-base';
 
 export class Customize extends ViewModelBase {
     dailyTrigger: string = '2:00';
@@ -8,13 +8,6 @@ export class Customize extends ViewModelBase {
     dataRetentionDays: string = '120';
     endpointComplianceTarget: string = '0.99';
     healthEvaluationTarget: string = '0.99';
-
-    async onLoaded(): Promise<void> {
-        super.onLoaded();
-
-        this.dailyTriggers = this.MS.UtilityService.generateDailyTriggers();
-        this.useDefaultValidateButton = true;
-    }
 
     async onNavigatingNext(): Promise<boolean> {
         let sourceServer = this.MS.DataStore.getAllValues('Server')[0];
@@ -45,35 +38,44 @@ export class Customize extends ViewModelBase {
         this.MS.DataStore.addToDataStoreWithCustomRoute('Customize2', 'SqlEntryName', 'dataretentiondays', DataStoreType.Public);
         this.MS.DataStore.addToDataStoreWithCustomRoute('Customize2', 'SqlEntryValue', this.dataRetentionDays, DataStoreType.Public);
 
-        return true;
+        return super.onNavigatingNext();
     }
 
-    async onValidate(): Promise<boolean> {
+    async OnLoaded(): Promise<void> {
+        this.dailyTriggers = this.MS.UtilityService.generateDailyTriggers();
+        this.isValidated = false;
+        this.useDefaultValidateButton = true;
+    }
+
+    async OnValidate(): Promise<boolean> {
+        super.onValidate();
+
         let dataRetentionDays: number = parseInt(this.dataRetentionDays);
         let endpointComplianceTarget: number = parseFloat(this.endpointComplianceTarget);
         let healthEvaluationTarget: number = parseFloat(this.healthEvaluationTarget);
 
         let dataRetentionDaysError: string = dataRetentionDays > 0 && dataRetentionDays <= 365
             ? ''
-            : this.MS.Translate.CUSTOMIZE_SCCM_ERROR_DATA_RETENTION_DAYS;
+            : 'Data Retention Days must be a number between 1 and 365.';
         let endpointComplianceTargetError: string = endpointComplianceTarget >= 0 && endpointComplianceTarget <= 1
             ? ''
-            : this.MS.Translate.CUSTOMIZE_SCCM_ERROR_ENDPOINT_COMPLIANCE_TARGET;
+            : 'Endpoint Compliance Target must be a number between 0 and 1.';
         let healthEvaluationTargetError: string = healthEvaluationTarget >= 0 && healthEvaluationTarget <= 1
             ? ''
-            : this.MS.Translate.CUSTOMIZE_SCCM_ERROR_HEALTH_EVALUATION_TARGET;
+            : 'Health Evaluation Target must be a number between 0 and 1.';
 
         let validationError: string = dataRetentionDaysError || endpointComplianceTargetError || healthEvaluationTargetError;
         if (validationError) {
-            this.MS.ErrorService.set(validationError);
+            this.MS.ErrorService.message = validationError;
         } else {
             this.dataRetentionDays = dataRetentionDays.toString();
             this.endpointComplianceTarget = endpointComplianceTarget.toString();
             this.healthEvaluationTarget = healthEvaluationTarget.toString();
 
-            this.setValidated();
+            this.isValidated = true;
+            this.showValidation = true;
         }
 
-        return this.isValidated;
+        return super.onValidate();
     }
 }

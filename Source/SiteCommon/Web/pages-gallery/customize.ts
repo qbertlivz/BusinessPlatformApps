@@ -22,42 +22,42 @@ export class Customize extends ViewModelBase {
     async onLoaded(): Promise<void> {
         this.emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         this.isValidated = true;
+
         if (this.showCrmUrl) {
             let orgUrl: string = this.MS.DataStore.getValue('OrganizationUrl');
             if (orgUrl && orgUrl[orgUrl.length - 1] === '/') {
                 orgUrl = orgUrl.substr(0, orgUrl.length - 1);
             }
             this.baseUrl = orgUrl;
-            this.isValidated = true;
         }
 
         if (this.sourceApplication === 'Salesforce' && this.showEmails && this.emails != '') {
-            this.isValidated = false;
-            this.showValidation = false;
+            this.onInvalidate();
         }
     }
 
     async onValidate(): Promise<boolean> {
-        this.isValidated = false;
-        this.showValidation = false;
+        this.onInvalidate();
+
         this.isEmailValidated = false;
+        this.isValidated = true;
 
         if (this.emails != null && this.emails != '') {
-            let mails = this.emails.split(',');
-            for (let mail in mails) {
-                if (!this.emailRegex.test(mails[mail])) {
+            let mails: string[] = this.emails.split(',');
+            for (let i = 0; i < mails.length && this.isValidated; i++) {
+                let mail: string = mails[i];
+                if (!this.emailRegex.test(mail)) {
+                    this.MS.ErrorService.message = 'Validation failed. The email address ' + mail + ' is not valid.';
                     this.isValidated = false;
-                    this.showValidation = false;
-                    this.MS.ErrorService.message = 'Validation failed. The email address ' + mails[mail] + ' is not valid.';
-                    return false;
                 }
             }
         }
 
-        this.isValidated = true;
-        this.showValidation = true;
-        this.isEmailValidated = true;
-        return true;
+        if (this.isValidated) {
+            this.isEmailValidated = this.setValidated();
+        }
+
+        return this.isValidated;
     }
 
     async onNavigatingNext(): Promise<boolean> {

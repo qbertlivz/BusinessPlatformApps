@@ -1,17 +1,14 @@
-﻿import { QueryParameter } from '../constants/query-parameter';
-
-import { ActionResponse } from '../models/action-response';
+﻿import { ActionResponse } from '../models/action-response';
 
 import { ViewModelBase } from '../services/view-model-base';
 
 export class ProgressViewModel extends ViewModelBase {
-    aadTenant: string = 'common';
+    asDatabase: string = 'Sccm';
     datastoreEntriesToValidate: string[] = [];
     downloadPbiText: string = this.MS.Translate.PROGRESS_DOWNLOAD_PBIX_INFO;
     enablePublishReport: boolean = false;
     filename: string = 'report.pbix';
     filenameSSAS: string = 'reportSSAS.pbix';
-    asDatabase: string = 'Sccm';
     finishedActionName: string = '';
     hasPowerApp: boolean = false;
     isDataPullDone: boolean = false;
@@ -22,34 +19,37 @@ export class ProgressViewModel extends ViewModelBase {
     pbixDownloadLink: string = '';
     powerAppDownloadLink: string = '';
     powerAppFileName: string = '';
+    publishReportLink: string = '';
     recordCounts: any[] = [];
     showCounts: boolean = false;
+    showPublishReport: boolean = false;
+    showReportLink: boolean = false;
     sliceStatus: any[] = [];
     sqlServerIndex: number = 0;
     successMessage: string = this.MS.Translate.PROGRESS_ALL_DONE;
     successMessage2: string = this.MS.Translate.PROGRESS_ALL_DONE2;
     targetSchema: string = '';
 
-    async publishReport(): Promise<void> {
-        let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureAuthUri', { AADTenant: this.aadTenant, oauthType: this.oauthType });
-        window.location.href = response.Body.value;
+    async executeActions(): Promise<void> {
+        if (await this.MS.DeploymentService.ExecuteActions() && !this.isUninstall) {
+            await this.wrangle();
+
+            this.queryRecordCounts();
+        }
     }
 
     async onLoaded(): Promise<void> {
-        let queryParam: any = this.MS.UtilityService.getItem('queryUrl');
+        if (this.MS.UtilityService.getItem('queryUrl')) {
+            this.MS.UtilityService.getToken(this.oauthType, async () => {
+                this.MS.DeploymentService.isFinished = true;
 
-        if (queryParam) {
-            let token = this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.CODE, queryParam);
+                await this.wrangle();
 
-            if (token === '') {
-                this.MS.ErrorService.message = this.MS.Translate.AZURE_LOGIN_UNKNOWN_ERROR;
-                this.MS.ErrorService.details = this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.ERRORDESCRIPTION, queryParam);
-                this.MS.ErrorService.showContactUs = true;
-            } else {
-                await this.MS.HttpService.executeAsync('Microsoft-GetAzureToken', { AADTenant: this.aadTenant, code: token, oauthType: this.oauthType });
-            }
+                this.isDataPullDone = true;
 
-            this.MS.UtilityService.removeItem('queryUrl');
+                //this.publishReportLink = '';
+                //this.showReportLink = true;
+            });
         } else if (this.MS.DataStore.getValue('HasNavigated') === null) {
             this.MS.NavigationService.NavigateHome();
         } else {
@@ -63,41 +63,16 @@ export class ProgressViewModel extends ViewModelBase {
             }
 
             if (isDataStoreValid) {
-                this.ExecuteActions();
+                this.executeActions();
             }
         }
     }
 
-    async ExecuteActions(): Promise<void> {
-        if (await this.MS.DeploymentService.ExecuteActions() && !this.isUninstall) {
-            let ssas = this.MS.DataStore.getValue('ssasDisabled');
-            let response: ActionResponse = null;
-            if (ssas && ssas === 'false') {
-                response = await this.MS.HttpService.executeAsync('Microsoft-WranglePBISSAS', { ASDatabase: this.asDatabase, FileNameSSAS: this.filenameSSAS });
-            } else {
-                response = await this.MS.HttpService.executeAsync('Microsoft-WranglePBI', { FileName: this.filename, SqlServerIndex: this.sqlServerIndex });
-            }
-            if (response.IsSuccess) {
-                this.pbixDownloadLink = response.Body.value;
-                this.isPbixReady = true;
-            }
-
-            if (this.hasPowerApp) {
-                let responsePowerApp = await this.MS.HttpService.executeAsync('Microsoft-WranglePowerApp', { PowerAppFileName: this.powerAppFileName });
-
-                if (responsePowerApp.IsSuccess && responsePowerApp.Body.value) {
-                    this.isPowerAppReady = true;
-                    this.powerAppDownloadLink = responsePowerApp.Body.value;
-                } else {
-                    this.hasPowerApp = false;
-                }
-            }
-
-            this.QueryRecordCounts();
-        }
+    async publishReport(): Promise<void> {
+        this.MS.UtilityService.connectToAzure(this.oauthType);
     }
 
-    async QueryRecordCounts(): Promise<void> {
+    async queryRecordCounts(): Promise<void> {
         if (this.showCounts && !this.isDataPullDone && !this.MS.DeploymentService.hasError) {
             let response = await this.MS.HttpService.executeAsync('Microsoft-GetDataPullStatus', {
                 FinishedActionName: this.finishedActionName,
@@ -109,9 +84,36 @@ export class ProgressViewModel extends ViewModelBase {
                 this.recordCounts = response.Body.status;
                 this.sliceStatus = response.Body.slices;
                 this.isDataPullDone = response.Body.isFinished;
-                this.QueryRecordCounts();
+                this.queryRecordCounts();
             } else {
                 this.MS.DeploymentService.hasError = true;
+            }
+        } else {
+            this.showPublishReport = this.enablePublishReport;
+        }
+    }
+
+    async wrangle(): Promise<void> {
+        let ssas = this.MS.DataStore.getValue('ssasDisabled');
+        let response: ActionResponse = null;
+        if (ssas && ssas === 'false') {
+            response = await this.MS.HttpService.executeAsync('Microsoft-WranglePBISSAS', { ASDatabase: this.asDatabase, FileNameSSAS: this.filenameSSAS });
+        } else {
+            response = await this.MS.HttpService.executeAsync('Microsoft-WranglePBI', { FileName: this.filename, SqlServerIndex: this.sqlServerIndex });
+        }
+        if (response.IsSuccess) {
+            this.pbixDownloadLink = response.Body.value;
+            this.isPbixReady = true;
+        }
+
+        if (this.hasPowerApp) {
+            let responsePowerApp = await this.MS.HttpService.executeAsync('Microsoft-WranglePowerApp', { PowerAppFileName: this.powerAppFileName });
+
+            if (responsePowerApp.IsSuccess && responsePowerApp.Body.value) {
+                this.isPowerAppReady = true;
+                this.powerAppDownloadLink = responsePowerApp.Body.value;
+            } else {
+                this.hasPowerApp = false;
             }
         }
     }

@@ -5,16 +5,11 @@ import { ActionResponse } from '../models/action-response';
 import { ViewModelBase } from '../services/view-model-base';
 
 export class Salesforce extends ViewModelBase {
-    salesforceUsername: string = '';
+    salesforceObjects: string = '';
     salesforcePassword: string = '';
     salesforceToken: string = '';
     salesforceUrl: string = 'login.salesforce.com';
-    salesforceObjects: string = '';
-
-    async onLoaded(): Promise<void> {
-        this.isValidated = false;
-        this.showValidation = false;
-    }
+    salesforceUsername: string = '';
 
     async onValidate(): Promise<boolean> {
         this.MS.DataStore.addToDataStore('SalesforceUser', this.salesforceUsername, DataStoreType.Public);

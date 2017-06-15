@@ -21,9 +21,9 @@ export class Twitter extends ViewModelBase {
     }
 
     async onLoaded(): Promise<void> {
+        super.onLoaded();
+
         this.isAuthenticated = false;
-        this.isValidated = false;
-        this.showValidation = false;
 
         let queryParam = this.MS.UtilityService.getItem('queryUrl');
         if (queryParam) {
@@ -32,9 +32,7 @@ export class Twitter extends ViewModelBase {
                 this.MS.DataStore.addToDataStore('TwitterCode', code, DataStoreType.Private);
 
                 if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-ConsentTwitterConnectionToLogicApp')) {
-                    this.isAuthenticated = true;
-                    this.isValidated = true;
-                    this.showValidation = true;
+                    this.isAuthenticated = this.setValidated();
                 }
             } else {
                 let response = await this.MS.HttpService.executeAsync('Microsoft-VerifyTwitterConnection');
@@ -42,9 +40,7 @@ export class Twitter extends ViewModelBase {
                     this.MS.ErrorService.clear();
                 }
                 if (response.IsSuccess) {
-                    this.isAuthenticated = true;
-                    this.isValidated = true;
-                    this.showValidation = true;
+                    this.isAuthenticated = this.setValidated();
                 }
             }
             this.MS.UtilityService.removeItem('queryUrl');
@@ -52,9 +48,7 @@ export class Twitter extends ViewModelBase {
             let response = await this.MS.HttpService.executeAsync('Microsoft-VerifyTwitterConnection');
             this.MS.ErrorService.clear();
             if (response.IsSuccess) {
-                this.isAuthenticated = true;
-                this.isValidated = true;
-                this.showValidation = true;
+                this.isAuthenticated = this.setValidated();
             }
         }
     }

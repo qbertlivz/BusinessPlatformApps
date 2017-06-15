@@ -52,8 +52,7 @@ export class AzureLogin extends ViewModelBase {
         super.onLoaded();
 
         if (this.subscriptionsList.length > 0) {
-            this.isValidated = true;
-            this.showValidation = true;
+            this.setValidated();
         } else {
             await this.MS.UtilityService.getToken(this.oauthType, async () => {
                 await this.getSubscriptions();
@@ -93,8 +92,7 @@ export class AzureLogin extends ViewModelBase {
         this.MS.DataStore.addToDataStore('SelectedResourceGroup', this.selectedResourceGroup, DataStoreType.Public);
 
         if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-ExistsResourceGroup')) {
-            this.isValidated = true;
-            this.showValidation = true;
+            this.setValidated();
         }
 
         return this.isValidated;

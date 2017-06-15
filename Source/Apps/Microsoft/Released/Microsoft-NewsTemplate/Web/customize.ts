@@ -88,6 +88,7 @@ export class Customize extends ViewModelBase {
         }
 
         this.MS.DataStore.addToDataStore('UserDefinedEntities', JSON.stringify(validEntities), DataStoreType.Public);
+
         return true;
     }
 }

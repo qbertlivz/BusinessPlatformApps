@@ -58,7 +58,10 @@
             <a class="st-button-left" href.bind="pbixDownloadLink" target="${MS.HttpService.isOnPremise ? '_self' : '_blank'}">
                 <button class="primary">${MS.Translate.PROGRESS_DOWNLOAD_PBIX}</button>
             </a>
-            <button class="primary" click.trigger="publishReport()" if.bind="enablePublishReport">${MS.Translate.PROGRESS_PUBLISH_PBIX}</button>
+            <button class="primary" click.trigger="publishReport()" disabled.bind="MS.HttpService.isServiceBusy" if.bind="showPublishReport">${MS.Translate.PROGRESS_PUBLISH_PBIX}</button>
+            <a href.bind="publishReportLink" disabled.bind="!publishReportLink" if.bind="showReportLink" target="${MS.HttpService.isOnPremise ? '_self' : '_blank'}">
+                <button class="primary">${MS.Translate.PROGRESS_VIEW_PBIX}</button>
+            </a>
             <bpst-link class="st-float" a-description="${downloadPbiText}" a-link="https://powerbi.microsoft.com/en-us/downloads/" a-link-text="${MS.Translate.COMMON_HERE}"></bpst-link>
         </p>
         <div class="smallFontSize" if.bind="!isPbixReady">

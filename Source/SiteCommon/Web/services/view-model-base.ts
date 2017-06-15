@@ -6,6 +6,8 @@ import { InitParser } from '../classes/init-parser';
 
 import { DataStoreType } from '../enums/data-store-type';
 
+import { OpenAuthorizationType } from '../models/open-authorization-type';
+
 import { MainService } from './main-service';
 
 export class ViewModelBase {
@@ -16,6 +18,7 @@ export class ViewModelBase {
     navigationMessage: string = '';
     onNext: any[] = [];
     onValidateActions: any[] = [];
+    openAuthorizationType: OpenAuthorizationType = new OpenAuthorizationType();
     showValidation: boolean = false;
     showValidationDetails: boolean = false;
     textNext: string = 'Next';
@@ -126,7 +129,7 @@ export class ViewModelBase {
     }
 
     async onLoaded(): Promise<void> {
-        this.isValidated = false;
+        this.onInvalidate();
     }
 
     async onNavigatingNext(): Promise<boolean> {
@@ -157,6 +160,12 @@ export class ViewModelBase {
             }
         }
         return cleanedViewModel;
+    }
+
+    setValidated(showValidation: boolean = true): boolean {
+        this.isValidated = true;
+        this.showValidation = showValidation;
+        return true;
     }
 
     verifyNavigation(): void {

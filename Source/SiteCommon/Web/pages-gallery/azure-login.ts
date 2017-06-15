@@ -27,36 +27,36 @@ export class AzureLogin extends ViewModelBase {
     subscriptionsList: any[] = [];
 
     async connect(): Promise<void> {
-        if (this.connectionType.toString() === AzureConnection.Microsoft.toString()) {
-            this.MS.DataStore.addToDataStore('AADTenant', this.azureDirectory, DataStoreType.Public);
-        } else {
-            this.MS.DataStore.addToDataStore('AADTenant', 'common', DataStoreType.Public);
+        this.MS.UtilityService.connectToAzure(this.oauthType, this.isConnectionMicrosoft() ? this.azureDirectory : this.MS.Translate.DEFAULT_TENANT);
+    }
+
+    async getSubscriptions(): Promise<void> {
+        let subscriptions: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureSubscriptions');
+        if (subscriptions.IsSuccess) {
+            this.subscriptionsList = subscriptions.Body.value;
+            if (!this.subscriptionsList || (this.subscriptionsList && this.subscriptionsList.length === 0)) {
+                this.MS.ErrorService.message = this.MS.Translate.AZURE_LOGIN_SUBSCRIPTION_ERROR;
+            } else {
+                this.selectedSubscriptionId = this.subscriptionsList[0].SubscriptionId;
+                this.showPricingConfirmation = this.setValidated();
+                await this.MS.HttpService.executeAsync('Microsoft-PowerBiLogin');
+            }
         }
-        let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureAuthUri', { oauthType: this.oauthType });
-        window.location.href = response.Body.value;
+    }
+
+    isConnectionMicrosoft(): boolean {
+        return this.connectionType.toString() === AzureConnection.Microsoft.toString();
     }
 
     async onLoaded(): Promise<void> {
-        this.onInvalidate();
+        super.onLoaded();
 
         if (this.subscriptionsList.length > 0) {
             this.isValidated = true;
             this.showValidation = true;
         } else {
             await this.MS.UtilityService.getToken(this.oauthType, async () => {
-                let subscriptions: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureSubscriptions');
-                if (subscriptions.IsSuccess) {
-                    this.subscriptionsList = subscriptions.Body.value;
-                    if (!this.subscriptionsList || (this.subscriptionsList && this.subscriptionsList.length === 0)) {
-                        this.MS.ErrorService.message = this.MS.Translate.AZURE_LOGIN_SUBSCRIPTION_ERROR;
-                    } else {
-                        this.selectedSubscriptionId = this.subscriptionsList[0].SubscriptionId;
-                        this.showPricingConfirmation = true;
-                        this.isValidated = true;
-                        this.showValidation = true;
-                        await this.MS.HttpService.executeAsync('Microsoft-PowerBiLogin');
-                    }
-                }
+                await this.getSubscriptions();
             });
         }
     }

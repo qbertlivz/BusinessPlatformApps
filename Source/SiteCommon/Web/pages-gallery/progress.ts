@@ -3,12 +3,12 @@
 import { ViewModelBase } from '../services/view-model-base';
 
 export class ProgressViewModel extends ViewModelBase {
+    asDatabase: string = 'Sccm';
     datastoreEntriesToValidate: string[] = [];
     downloadPbiText: string = this.MS.Translate.PROGRESS_DOWNLOAD_PBIX_INFO;
     enablePublishReport: boolean = false;
     filename: string = 'report.pbix';
     filenameSSAS: string = 'reportSSAS.pbix';
-    asDatabase: string = 'Sccm';
     finishedActionName: string = '';
     hasPowerApp: boolean = false;
     isDataPullDone: boolean = false;
@@ -21,40 +21,14 @@ export class ProgressViewModel extends ViewModelBase {
     powerAppFileName: string = '';
     recordCounts: any[] = [];
     showCounts: boolean = false;
+    showPublishReport: boolean = false;
     sliceStatus: any[] = [];
     sqlServerIndex: number = 0;
     successMessage: string = this.MS.Translate.PROGRESS_ALL_DONE;
     successMessage2: string = this.MS.Translate.PROGRESS_ALL_DONE2;
     targetSchema: string = '';
 
-    async publishReport(): Promise<void> {
-        this.MS.UtilityService.connectToAzure(this.oauthType);
-    }
-
-    async onLoaded(): Promise<void> {
-        if (this.MS.UtilityService.getItem('queryUrl')) {
-            this.MS.UtilityService.getToken(this.oauthType, async () => {
-                this.MS.DeploymentService.isFinished = true;
-            });
-        } else if (this.MS.DataStore.getValue('HasNavigated') === null) {
-            this.MS.NavigationService.NavigateHome();
-        } else {
-            let isDataStoreValid: boolean = true;
-
-            for (let i = 0; i < this.datastoreEntriesToValidate.length && isDataStoreValid; i++) {
-                if (this.MS.DataStore.getValue(this.datastoreEntriesToValidate[i]) === null) {
-                    this.MS.NavigationService.NavigateHome();
-                    isDataStoreValid = false;
-                }
-            }
-
-            if (isDataStoreValid) {
-                this.ExecuteActions();
-            }
-        }
-    }
-
-    async ExecuteActions(): Promise<void> {
+    async executeActions(): Promise<void> {
         if (await this.MS.DeploymentService.ExecuteActions() && !this.isUninstall) {
             let ssas = this.MS.DataStore.getValue('ssasDisabled');
             let response: ActionResponse = null;
@@ -79,11 +53,38 @@ export class ProgressViewModel extends ViewModelBase {
                 }
             }
 
-            this.QueryRecordCounts();
+            this.queryRecordCounts();
         }
     }
 
-    async QueryRecordCounts(): Promise<void> {
+    async onLoaded(): Promise<void> {
+        if (this.MS.UtilityService.getItem('queryUrl')) {
+            this.MS.UtilityService.getToken(this.oauthType, async () => {
+                this.MS.DeploymentService.isFinished = true;
+            });
+        } else if (this.MS.DataStore.getValue('HasNavigated') === null) {
+            this.MS.NavigationService.NavigateHome();
+        } else {
+            let isDataStoreValid: boolean = true;
+
+            for (let i = 0; i < this.datastoreEntriesToValidate.length && isDataStoreValid; i++) {
+                if (this.MS.DataStore.getValue(this.datastoreEntriesToValidate[i]) === null) {
+                    this.MS.NavigationService.NavigateHome();
+                    isDataStoreValid = false;
+                }
+            }
+
+            if (isDataStoreValid) {
+                this.executeActions();
+            }
+        }
+    }
+
+    async publishReport(): Promise<void> {
+        this.MS.UtilityService.connectToAzure(this.oauthType);
+    }
+
+    async queryRecordCounts(): Promise<void> {
         if (this.showCounts && !this.isDataPullDone && !this.MS.DeploymentService.hasError) {
             let response = await this.MS.HttpService.executeAsync('Microsoft-GetDataPullStatus', {
                 FinishedActionName: this.finishedActionName,
@@ -95,10 +96,12 @@ export class ProgressViewModel extends ViewModelBase {
                 this.recordCounts = response.Body.status;
                 this.sliceStatus = response.Body.slices;
                 this.isDataPullDone = response.Body.isFinished;
-                this.QueryRecordCounts();
+                this.queryRecordCounts();
             } else {
                 this.MS.DeploymentService.hasError = true;
             }
+        } else {
+            this.showPublishReport = this.enablePublishReport;
         }
     }
 }

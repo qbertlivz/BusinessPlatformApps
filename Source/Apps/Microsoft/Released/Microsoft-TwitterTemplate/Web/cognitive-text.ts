@@ -8,6 +8,6 @@ export class CognitiveText extends ViewModelBase {
     }
 
     async onLoaded(): Promise<void> {
-        this.isValidated = false;
+        this.isValidated = this.isTermsChecked;
     }
 }

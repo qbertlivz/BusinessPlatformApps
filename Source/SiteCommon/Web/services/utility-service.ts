@@ -1,4 +1,6 @@
-﻿import { MainService } from './main-service';
+﻿import { QueryParameter } from '../constants/query-parameter';
+
+import { MainService } from './main-service';
 
 export class UtilityService {
     MS: MainService;
@@ -53,6 +55,21 @@ export class UtilityService {
         return (!results || !results[2])
             ? ''
             : decodeURIComponent(results[2].replace(/\+/g, ' '));
+    }
+
+    async getToken(openAuthorizationType: string, callback: () => Promise<void>): Promise<void> {
+        let queryParam: any = this.getItem('queryUrl');
+        if (queryParam) {
+            let token = this.getQueryParameterFromUrl(QueryParameter.CODE, queryParam);
+            if (token === '') {
+                this.MS.ErrorService.set(this.MS.Translate.AZURE_LOGIN_UNKNOWN_ERROR, this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.ERRORDESCRIPTION, queryParam));
+            } else {
+                if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-GetAzureToken', { code: token, oauthType: openAuthorizationType })) {
+                    await callback();
+                }
+            }
+            this.MS.UtilityService.removeItem('queryUrl');
+        }
     }
 
     getUniqueId(characters: number): string {

@@ -1,6 +1,4 @@
-﻿import { QueryParameter } from '../constants/query-parameter';
-
-import { DataStoreType } from '../enums/data-store-type';
+﻿import { DataStoreType } from '../enums/data-store-type';
 
 import { ActionResponse } from '../models/action-response';
 
@@ -27,21 +25,11 @@ export class ASLogin extends AzureLogin {
             this.isValidated = true;
             this.showValidation = true;
         } else {
-            let queryParam = this.MS.UtilityService.getItem('queryUrl');
-            if (queryParam) {
-                let token = this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.CODE, queryParam);
-                if (token === '') {
-                    this.MS.ErrorService.set(this.MS.Translate.AZURE_LOGIN_UNKNOWN_ERROR, this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.ERRORDESCRIPTION, queryParam));
-                } else {
-                    this.authToken = await this.MS.HttpService.executeAsync('Microsoft-GetAzureToken', { code: token, oauthType: this.oauthType });
-                    if (this.authToken.IsSuccess) {
-                        this.hasToken = true;
-                        this.isValidated = true;
-                        this.showValidation = true;
-                    }
-                }
-                this.MS.UtilityService.removeItem('queryUrl');
-            }
+            await this.MS.UtilityService.getToken(this.oauthType, async () => {
+                this.hasToken = true;
+                this.isValidated = true;
+                this.showValidation = true;
+            });
         }
     }
 }

@@ -55,8 +55,7 @@ export class DataMovement extends ViewModelBase {
 
                 if (this.scribeAgents && this.scribeAgents.length > 0) {
                     this.scribeAgentId = this.scribeAgents[0].id;
-                    this.isValidated = true;
-                    this.showValidation = true;
+                    this.setValidated();
                 } else {
                     let responseScribeAgentInstall: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetScribeAgentInstall');
                     if (responseScribeAgentInstall.IsSuccess) {
@@ -75,9 +74,7 @@ export class DataMovement extends ViewModelBase {
                 this.MS.DataStore.addToDataStore('InformaticaUsername', this.username, DataStoreType.Private);
                 this.MS.DataStore.addToDataStore('InformaticaPassword', this.password, DataStoreType.Private);
 
-                let responseInformatica: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-VerifyInformaticaCredentials');
-
-                if (responseInformatica.IsSuccess) {
+                if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-VerifyInformaticaCredentials')) {
                     if (this.MS.HttpService.isOnPremise) {
                         let responseInformaticaAgents: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetInformaticaAgents');
                         if (responseInformaticaAgents.IsSuccess) {
@@ -85,8 +82,7 @@ export class DataMovement extends ViewModelBase {
 
                             if (this.informaticaAgents && this.informaticaAgents.length > 0) {
                                 this.informaticaAgentId = this.informaticaAgents[0].id;
-                                this.isValidated = true;
-                                this.showValidation = true;
+                                this.setValidated();
                             } else {
                                 let responseInformaticaAgentLocation: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetInformaticaAgentLocation');
                                 if (responseInformaticaAgentLocation.IsSuccess) {
@@ -96,8 +92,7 @@ export class DataMovement extends ViewModelBase {
                         }
                     } else {
                         this.MS.DataStore.addToDataStore('InformaticaAgentName', 'Informatica Cloud Hosted Agent', DataStoreType.Public);
-                        this.isValidated = true;
-                        this.showValidation = true;
+                        this.setValidated();
                     }
                 }
 
@@ -118,9 +113,7 @@ export class DataMovement extends ViewModelBase {
                             this.OnScribeOrganizationChanged();
                         } else {
                             this.MS.DataStore.addToDataStore('ScribeAgentName', 'Cloud Agent', DataStoreType.Public);
-
-                            this.isValidated = true;
-                            this.showValidation = true;
+                            this.setValidated();
                         }
                     }
                 }

@@ -17,7 +17,7 @@ export class Customize extends ViewModelBase {
 
             if (isSuccess) {
                 this.server = this.MS.DataStore.getValue('ASServerUrl');
-                this.ssasType = "Existing";
+                this.ssasType = 'Existing';
 
                 isSuccess = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-ValidateConnectionToAS');
             }
@@ -27,7 +27,8 @@ export class Customize extends ViewModelBase {
     }
 
     async onValidate(): Promise<boolean> {
-        this.showValidation = true;
+        this.onInvalidate();
+
         if (this.ssasType == 'New') {
             if (this.server.length < 3 || this.server.length > 63 || !/[a-z]/.test(this.server[0]) || !/^[a-z0-9]+$/.test(this.server)) {
                 this.MS.ErrorService.message = this.MS.Translate.SSAS_INVALID_SERVER_NAME;

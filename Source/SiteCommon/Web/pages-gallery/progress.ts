@@ -1,11 +1,8 @@
-﻿import { QueryParameter } from '../constants/query-parameter';
-
-import { ActionResponse } from '../models/action-response';
+﻿import { ActionResponse } from '../models/action-response';
 
 import { ViewModelBase } from '../services/view-model-base';
 
 export class ProgressViewModel extends ViewModelBase {
-    aadTenant: string = 'common';
     datastoreEntriesToValidate: string[] = [];
     downloadPbiText: string = this.MS.Translate.PROGRESS_DOWNLOAD_PBIX_INFO;
     enablePublishReport: boolean = false;
@@ -31,25 +28,14 @@ export class ProgressViewModel extends ViewModelBase {
     targetSchema: string = '';
 
     async publishReport(): Promise<void> {
-        let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureAuthUri', { AADTenant: this.aadTenant, oauthType: this.oauthType });
-        window.location.href = response.Body.value;
+        this.MS.UtilityService.connectToAzure(this.oauthType);
     }
 
     async onLoaded(): Promise<void> {
-        let queryParam: any = this.MS.UtilityService.getItem('queryUrl');
-
-        if (queryParam) {
-            let token = this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.CODE, queryParam);
-
-            if (token === '') {
-                this.MS.ErrorService.message = this.MS.Translate.AZURE_LOGIN_UNKNOWN_ERROR;
-                this.MS.ErrorService.details = this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.ERRORDESCRIPTION, queryParam);
-                this.MS.ErrorService.showContactUs = true;
-            } else {
-                await this.MS.HttpService.executeAsync('Microsoft-GetAzureToken', { AADTenant: this.aadTenant, code: token, oauthType: this.oauthType });
-            }
-
-            this.MS.UtilityService.removeItem('queryUrl');
+        if (this.MS.UtilityService.getItem('queryUrl')) {
+            this.MS.UtilityService.getToken(this.oauthType, async () => {
+                this.MS.DeploymentService.isFinished = true;
+            });
         } else if (this.MS.DataStore.getValue('HasNavigated') === null) {
             this.MS.NavigationService.NavigateHome();
         } else {

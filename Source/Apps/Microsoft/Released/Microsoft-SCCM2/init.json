@@ -79,7 +79,7 @@
             },
             {
                 "displayname": "Customize",
-                "name": "customize.html"
+                "name": "$SiteCommon$/pages-gallery/customize-sccm.html"
             },
             {
                 "displayname": "Summary",

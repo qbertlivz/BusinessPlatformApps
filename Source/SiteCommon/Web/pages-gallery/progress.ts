@@ -30,28 +30,7 @@ export class ProgressViewModel extends ViewModelBase {
 
     async executeActions(): Promise<void> {
         if (await this.MS.DeploymentService.ExecuteActions() && !this.isUninstall) {
-            let ssas = this.MS.DataStore.getValue('ssasDisabled');
-            let response: ActionResponse = null;
-            if (ssas && ssas === 'false') {
-                response = await this.MS.HttpService.executeAsync('Microsoft-WranglePBISSAS', { ASDatabase: this.asDatabase, FileNameSSAS: this.filenameSSAS });
-            } else {
-                response = await this.MS.HttpService.executeAsync('Microsoft-WranglePBI', { FileName: this.filename, SqlServerIndex: this.sqlServerIndex });
-            }
-            if (response.IsSuccess) {
-                this.pbixDownloadLink = response.Body.value;
-                this.isPbixReady = true;
-            }
-
-            if (this.hasPowerApp) {
-                let responsePowerApp = await this.MS.HttpService.executeAsync('Microsoft-WranglePowerApp', { PowerAppFileName: this.powerAppFileName });
-
-                if (responsePowerApp.IsSuccess && responsePowerApp.Body.value) {
-                    this.isPowerAppReady = true;
-                    this.powerAppDownloadLink = responsePowerApp.Body.value;
-                } else {
-                    this.hasPowerApp = false;
-                }
-            }
+            await this.wrangle();
 
             this.queryRecordCounts();
         }
@@ -61,6 +40,11 @@ export class ProgressViewModel extends ViewModelBase {
         if (this.MS.UtilityService.getItem('queryUrl')) {
             this.MS.UtilityService.getToken(this.oauthType, async () => {
                 this.MS.DeploymentService.isFinished = true;
+
+                await this.wrangle();
+
+                this.isDataPullDone = true;
+                this.showPublishReport = this.enablePublishReport;
             });
         } else if (this.MS.DataStore.getValue('HasNavigated') === null) {
             this.MS.NavigationService.NavigateHome();
@@ -102,6 +86,31 @@ export class ProgressViewModel extends ViewModelBase {
             }
         } else {
             this.showPublishReport = this.enablePublishReport;
+        }
+    }
+
+    async wrangle(): Promise<void> {
+        let ssas = this.MS.DataStore.getValue('ssasDisabled');
+        let response: ActionResponse = null;
+        if (ssas && ssas === 'false') {
+            response = await this.MS.HttpService.executeAsync('Microsoft-WranglePBISSAS', { ASDatabase: this.asDatabase, FileNameSSAS: this.filenameSSAS });
+        } else {
+            response = await this.MS.HttpService.executeAsync('Microsoft-WranglePBI', { FileName: this.filename, SqlServerIndex: this.sqlServerIndex });
+        }
+        if (response.IsSuccess) {
+            this.pbixDownloadLink = response.Body.value;
+            this.isPbixReady = true;
+        }
+
+        if (this.hasPowerApp) {
+            let responsePowerApp = await this.MS.HttpService.executeAsync('Microsoft-WranglePowerApp', { PowerAppFileName: this.powerAppFileName });
+
+            if (responsePowerApp.IsSuccess && responsePowerApp.Body.value) {
+                this.isPowerAppReady = true;
+                this.powerAppDownloadLink = responsePowerApp.Body.value;
+            } else {
+                this.hasPowerApp = false;
+            }
         }
     }
 }

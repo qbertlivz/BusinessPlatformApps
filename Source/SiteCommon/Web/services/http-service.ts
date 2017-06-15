@@ -45,25 +45,6 @@ export class HttpService {
         this.command.close(!this.MS.DeploymentService.hasError && this.MS.DeploymentService.isFinished);
     }
 
-    async getApp(name: string): Promise<any> {
-        var response = null;
-        let uniqueId = this.MS.UtilityService.getUniqueId(20);
-        this.MS.LoggerService.TrackStartRequest('GetApp-name', uniqueId);
-        if (this.isOnPremise) {
-            response = await this.command.gettemplate(this.MS.LoggerService.UserId, this.MS.LoggerService.UserGenId, '', this.MS.LoggerService.OperationId, uniqueId, name);
-        } else {
-            response = await this.getRequestObject('get', `/App/${name}`).send();
-            response = response.response;
-        }
-        if (!response) {
-            response = '{}';
-        }
-
-        this.MS.LoggerService.TrackEndRequest('GetTemplate-name', uniqueId, true);
-        let responseParsed = JSON.parse(response);
-        return responseParsed;
-    }
-
     async executeAsync(method: string, content: any = {}): Promise<ActionResponse> {
         var actionResponse: ActionResponse = null;
 
@@ -119,6 +100,25 @@ export class HttpService {
         }
 
         return actionResponse;
+    }
+
+    async getApp(name: string): Promise<any> {
+        var response = null;
+        let uniqueId = this.MS.UtilityService.getUniqueId(20);
+        this.MS.LoggerService.TrackStartRequest('GetApp-name', uniqueId);
+        if (this.isOnPremise) {
+            response = await this.command.gettemplate(this.MS.LoggerService.UserId, this.MS.LoggerService.UserGenId, '', this.MS.LoggerService.OperationId, uniqueId, name);
+        } else {
+            response = await this.getRequestObject('get', `/App/${name}`).send();
+            response = response.response;
+        }
+        if (!response) {
+            response = '{}';
+        }
+
+        this.MS.LoggerService.TrackEndRequest('GetTemplate-name', uniqueId, true);
+        let responseParsed = JSON.parse(response);
+        return responseParsed;
     }
 
     async getExecuteResponseAsync(method: string, property: string = 'value', content: any = {}): Promise<any> {

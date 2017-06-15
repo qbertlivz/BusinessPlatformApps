@@ -35,7 +35,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.News
                 entityTypes.Rows.Add(entityTypeRow);
 
                 List<string> values = new List<string>(
-                           userEntity.Values.Split(new string[] { "\r\n" },
+                           userEntity.Values.Split(new string[] { "\n" },
                            System.StringSplitOptions.RemoveEmptyEntries));
 
                 foreach (string value in values)

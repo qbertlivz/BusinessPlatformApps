@@ -7,8 +7,7 @@ export class Customize extends ViewModelBase {
     ssasEnabled: string = 'false';
    
     async onLoaded(): Promise<void> {
-        this.isValidated = true;
-        this.showValidation = false;
+        this.setValidated(false);
     }
 
     async onNavigatingNext(): Promise<boolean> {

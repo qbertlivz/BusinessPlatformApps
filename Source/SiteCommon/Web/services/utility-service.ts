@@ -1,5 +1,7 @@
 ﻿import { QueryParameter } from '../constants/query-parameter';
 
+import { DataStoreType } from '../enums/data-store-type';
+
 import { MainService } from './main-service';
 
 export class UtilityService {
@@ -15,6 +17,11 @@ export class UtilityService {
 
     clone(obj: any): any {
         return JSON.parse(JSON.stringify(obj));
+    }
+
+    async connectToAzure(openAuthorizationType: string, azureActiveDirectoryTenant: string = this.MS.Translate.DEFAULT_TENANT): Promise<void> {
+        this.MS.DataStore.addToDataStore('AADTenant', azureActiveDirectoryTenant, DataStoreType.Public);
+        window.location.href = await this.MS.HttpService.getExecuteResponseAsync('Microsoft-GetAzureAuthUri', 'value', { oauthType: openAuthorizationType });
     }
 
     extractDomain(username: string): string {

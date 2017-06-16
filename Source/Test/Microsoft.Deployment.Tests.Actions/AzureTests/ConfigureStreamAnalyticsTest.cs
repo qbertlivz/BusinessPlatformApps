@@ -13,13 +13,13 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
     public class ConfigureStreamAnalyticsTest
     {
         public DataStore dataStore;
-        public async void SetupDataStoreWithEventHubKey()
+        public void SetupDataStoreWithEventHubKey()
         {
            
-            this.dataStore = await TestManager.GetDataStore();
+            dataStore = TestManager.GetDataStore().Result;
             dataStore.AddToDataStore("apiVersion", "2014-09-01");
             dataStore.AddToDataStore("namespace", "LancesEventHubNamespace-twq5uxxrAq2aimv");
-            var response = await TestManager.ExecuteActionAsync("Microsoft-GetEventHubPrimaryKey", dataStore);
+            var response = TestManager.ExecuteActionAsync("Microsoft-GetEventHubPrimaryKey", dataStore).Result;
             Assert.IsTrue(response.IsSuccess);
         }
 
@@ -27,7 +27,7 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
         public async Task SetStreamAnalyticsInputTest()
         {
             SetupDataStoreWithEventHubKey();
-            dataStore.AddToDataStore("StreamAnalyticsInputAlias", "eh-input");
+            dataStore.AddToDataStore("StreamAnalyticsInputAlias", "eh-input2323");
             var response = await TestManager.ExecuteActionAsync("Microsoft-SetStreamAnalyticsInputAsEventHub", dataStore);
 
             Assert.IsTrue(response.IsSuccess);

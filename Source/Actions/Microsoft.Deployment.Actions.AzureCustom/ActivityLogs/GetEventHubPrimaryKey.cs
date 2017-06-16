@@ -30,9 +30,11 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
             {
                 string keyString = await response.Content.ReadAsStringAsync();
                 JObject keys = JsonUtility.GetJObjectFromJsonString(keyString);
-                request.DataStore.AddToDataStore("policyKeys", keys);
+                string primaryKey = keys.GetValue("primaryKey").ToString();
+                request.DataStore.AddToDataStore("primaryKey", primaryKey);
+                return new ActionResponse(ActionStatus.Success);
             }
-            return new ActionResponse(ActionStatus.Success);
+            return new ActionResponse(ActionStatus.Failure);
         }
     }
 }

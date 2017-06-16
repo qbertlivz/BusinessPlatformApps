@@ -2,12 +2,11 @@
 
 import { activationStrategy } from 'aurelia-router';
 
-import { InitParser } from '../classes/init-parser';
-
 import { DataStoreType } from '../enums/data-store-type';
 
 import { OpenAuthorizationType } from '../models/open-authorization-type';
 
+import { InitParser } from './init-parser';
 import { MainService } from './main-service';
 
 export class ViewModelBase {

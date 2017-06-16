@@ -1,9 +1,8 @@
-﻿import { InitParser } from '../classes/init-parser';
-
-import { ActionStatus } from '../enums/action-status';
+﻿import { ActionStatus } from '../enums/action-status';
 import { DataStoreType } from '../enums/data-store-type';
 import { ExperienceType } from '../enums/experience-type';
 
+import { InitParser } from './init-parser';
 import { MainService } from './main-service';
 
 export class DeploymentService {

@@ -251,8 +251,6 @@ System.config({
   },
   bundles: {
     "app-build.js": [
-      "SiteCommon/Web/classes/dictionary.js",
-      "SiteCommon/Web/classes/init-parser.js",
       "SiteCommon/Web/constants/en-us.js",
       "SiteCommon/Web/constants/language.js",
       "SiteCommon/Web/constants/query-parameter.js",
@@ -266,8 +264,10 @@ System.config({
       "SiteCommon/Web/models/variable.js",
       "SiteCommon/Web/services/data-store.js",
       "SiteCommon/Web/services/deployment-service.js",
+      "SiteCommon/Web/services/dictionary.js",
       "SiteCommon/Web/services/error-service.js",
       "SiteCommon/Web/services/http-service.js",
+      "SiteCommon/Web/services/init-parser.js",
       "SiteCommon/Web/services/logger-service.js",
       "SiteCommon/Web/services/main-service.js",
       "SiteCommon/Web/services/navigation-service.js",

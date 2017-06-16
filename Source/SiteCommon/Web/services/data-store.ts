@@ -1,9 +1,8 @@
-﻿import { Dictionary } from '../classes/dictionary'
-
-import { DataStoreType } from '../enums/data-store-type';
+﻿import { DataStoreType } from '../enums/data-store-type';
 
 import { DataStoreItem } from '../models/data-store-item';
 
+import { Dictionary } from './dictionary'
 import { MainService } from './main-service';
 
 export class DataStore {

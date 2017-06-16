@@ -10,5 +10,10 @@ namespace Microsoft.Deployment.Common.Model.PBI
         public string IsReadOnly;
         [JsonProperty("name")]
         public string Name;
+
+        public PBIWorkspace(string name)
+        {
+            this.Name = name;
+        }
     }
 }

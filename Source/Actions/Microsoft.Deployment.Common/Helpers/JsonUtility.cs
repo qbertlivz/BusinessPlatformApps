@@ -87,7 +87,6 @@ namespace Microsoft.Deployment.Common.Helpers
                 return JsonUtility.GetEmptyJObject().ToString();
             }
 
-            JsonSerializerSettings settings = new JsonSerializerSettings();
             var obj = JObject.FromObject(json);
             return obj.Root.ToString();
         }
@@ -120,7 +119,14 @@ namespace Microsoft.Deployment.Common.Helpers
                 || token.Type == JTokenType.Null;
         }
 
-        public static string Serialize(DataTable table)
+        public static string Serialize<T>(T value)
+        {
+            var settings = new JsonSerializerSettings();
+            settings.ContractResolver = new JsonUtilityLowercaseSerializer();
+            return JsonConvert.SerializeObject(value, settings);
+        }
+
+        public static string SerializeTable(DataTable table)
         {
             string result;
 

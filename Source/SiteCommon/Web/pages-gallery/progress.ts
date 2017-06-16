@@ -1,4 +1,5 @@
 ﻿import { ActionResponse } from '../models/action-response';
+import { PBIWorkspace } from '../models/pbi-workspace';
 
 import { ViewModelBase } from '../services/view-model-base';
 
@@ -16,7 +17,7 @@ export class ProgressViewModel extends ViewModelBase {
     isPowerAppReady: boolean = false;
     isUninstall: boolean = false;
     oauthType: string = 'powerbi';
-    pbiWorkspaces: string[] = [];
+    pbiWorkspaces: PBIWorkspace[] = [];
     pbixDownloadLink: string = '';
     powerAppDownloadLink: string = '';
     powerAppFileName: string = '';
@@ -48,8 +49,7 @@ export class ProgressViewModel extends ViewModelBase {
                 this.isDataPullDone = true;
 
                 if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-GetPBIClusterUri')) {
-                    await this.MS.HttpService.executeAsync('Microsoft-GetPBIWorkspaces');
-                    //this.pbiWorkspaces = await this.MS.HttpService.getExecuteResponseAsync('Microsoft-GetPBIWorkspaces');
+                    this.pbiWorkspaces = await this.MS.HttpService.getResponseAsync('Microsoft-GetPBIWorkspaces');
                     //this.publishReportLink = '';
                 }
             });

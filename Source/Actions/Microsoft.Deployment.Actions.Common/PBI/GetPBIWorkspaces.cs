@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.Composition;
+﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -12,6 +13,7 @@ namespace Microsoft.Deployment.Actions.Common.PBI
     [Export(typeof(IAction))]
     public class GetPBIWorkspaces : BaseAction
     {
+        private const string PBI_DEFAULT_WORKSPACE = "My workspace";
         private const string PBI_ENDPOINT_GROUPS = "/v1.0/myorg/groups";
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
@@ -21,7 +23,9 @@ namespace Microsoft.Deployment.Actions.Common.PBI
 
             PBIWorkspaces pbiWorkspaces = JsonUtility.Deserialize<PBIWorkspaces>(await client.Request(HttpMethod.Get, pbiClusterUri + PBI_ENDPOINT_GROUPS));
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetJObjectFromObject(pbiWorkspaces));
+            pbiWorkspaces.Workspaces.Insert(0, new PBIWorkspace(PBI_DEFAULT_WORKSPACE));
+
+            return new ActionResponse(ActionStatus.Success, JsonUtility.Serialize<List<PBIWorkspace>>(pbiWorkspaces.Workspaces));
         }
     }
 }

@@ -47,7 +47,8 @@ export class ProgressViewModel extends ViewModelBase {
 
                 this.isDataPullDone = true;
 
-                if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-GetPBIUri')) {
+                if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-GetPBIClusterUri')) {
+                    await this.MS.HttpService.executeAsync('Microsoft-GetPBIWorkspaces');
                     //this.pbiWorkspaces = await this.MS.HttpService.getExecuteResponseAsync('Microsoft-GetPBIWorkspaces');
                     //this.publishReportLink = '';
                 }

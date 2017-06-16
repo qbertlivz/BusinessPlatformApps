@@ -103,7 +103,7 @@
     <Compile Include="ExistingSqlServer.cs" />
     <Compile Include="GetMsiDownloadLink.cs" />
     <Compile Include="InsertInitialCounts.cs" />
-    <Compile Include="PBI\GetPBIUri.cs" />
+    <Compile Include="PBI\GetPBIClusterUri.cs" />
     <Compile Include="PBI\GetPBIWorkspaces.cs" />
     <Compile Include="PBI\WranglePBISSAS.cs" />
     <Compile Include="PBI\WranglePBI.cs" />

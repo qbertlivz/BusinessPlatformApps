@@ -7,16 +7,21 @@
         this.internalValues = new Array<T>();
     }
 
-    length(): number {
-        return this.internalKeys.length;
+    add(key: string, value: T): void {
+        if (this.internalKeys.indexOf(key) > -1) {
+            throw new Error("Key is already inside dictionary");
+        }
+
+        this.internalKeys.push(key);
+        this.internalValues.push(value);
     }
 
-    keys(): string[] {
-        return this.internalKeys;
-    }
+    containsKey(key: string): boolean {
+        if (this.internalKeys.indexOf(key) === -1) {
+            return false;
+        }
 
-    values(): any[] {
-        return this.internalValues;
+        return true;
     }
 
     get(key: string): T {
@@ -30,13 +35,12 @@
         return [key, value];
     }
 
-    add(key: string, value: T): void {
-        if (this.internalKeys.indexOf(key) > -1) {
-            throw new Error("Key is already inside dictionary");
-        }
+    keys(): string[] {
+        return this.internalKeys;
+    }
 
-        this.internalKeys.push(key);
-        this.internalValues.push(value);
+    length(): number {
+        return this.internalKeys.length;
     }
 
     modify(key: string, value: T) {
@@ -56,14 +60,6 @@
         }
     }
 
-    containsKey(key: string): boolean {
-        if (this.internalKeys.indexOf(key) === -1) {
-            return false;
-        }
-
-        return true;
-    }
-
     toJSON(): any {
         let toConvert: any = {};
 
@@ -72,5 +68,9 @@
         }
 
         return toConvert;
+    }
+
+    values(): any[] {
+        return this.internalValues;
     }
 }

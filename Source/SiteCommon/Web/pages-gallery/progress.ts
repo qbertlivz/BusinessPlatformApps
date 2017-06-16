@@ -23,7 +23,6 @@ export class ProgressViewModel extends ViewModelBase {
     recordCounts: any[] = [];
     showCounts: boolean = false;
     showPublishReport: boolean = false;
-    showReportLink: boolean = false;
     sliceStatus: any[] = [];
     sqlServerIndex: number = 0;
     successMessage: string = this.MS.Translate.PROGRESS_ALL_DONE;
@@ -48,7 +47,6 @@ export class ProgressViewModel extends ViewModelBase {
                 this.isDataPullDone = true;
 
                 //this.publishReportLink = '';
-                //this.showReportLink = true;
             });
         } else if (this.MS.DataStore.getValue('HasNavigated') === null) {
             this.MS.NavigationService.navigateHome();

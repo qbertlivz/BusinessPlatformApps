@@ -6,7 +6,7 @@ namespace Microsoft.Deployment.Common.Helpers
     {
         protected override string ResolvePropertyName(string propertyName)
         {
-            return propertyName.ToLower();
+            return char.ToLowerInvariant(propertyName[0]) + propertyName.Substring(1);
         }
     }
 }

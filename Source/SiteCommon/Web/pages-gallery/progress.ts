@@ -23,7 +23,9 @@ export class ProgressViewModel extends ViewModelBase {
     powerAppFileName: string = '';
     publishReportLink: string = '';
     recordCounts: any[] = [];
+    selectedPBIWorkspaceId: string = '';
     showCounts: boolean = false;
+    showPBIWorkspaces: boolean = false;
     showPublishReport: boolean = false;
     sliceStatus: any[] = [];
     sqlServerIndex: number = 0;
@@ -50,6 +52,7 @@ export class ProgressViewModel extends ViewModelBase {
 
                 if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-GetPBIClusterUri')) {
                     this.pbiWorkspaces = await this.MS.HttpService.getResponseAsync('Microsoft-GetPBIWorkspaces');
+                    this.showPBIWorkspaces = true;
                     //this.publishReportLink = '';
                 }
             });

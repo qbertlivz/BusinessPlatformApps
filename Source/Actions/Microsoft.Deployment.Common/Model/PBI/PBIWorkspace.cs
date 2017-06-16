@@ -13,6 +13,7 @@ namespace Microsoft.Deployment.Common.Model.PBI
 
         public PBIWorkspace(string name)
         {
+            this.Id = string.Empty;
             this.Name = name;
         }
     }

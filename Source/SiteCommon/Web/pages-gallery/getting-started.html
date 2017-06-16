@@ -74,12 +74,12 @@
     </div>
 
     <!-- Download new version -->
-    <div class="st-email-background" if.bind="upgrade"></div>
-    <div class="st-email-background st-email-wrapper" click.trigger="upgrade = false" if.bind="upgrade">
-        <div class="st-email-submission" click.trigger="$event.stopPropagation()">
+    <div class="st-modal-background" if.bind="upgrade"></div>
+    <div class="st-modal-background st-modal-wrapper" click.trigger="upgrade = false" if.bind="upgrade">
+        <div class="st-modal" click.trigger="$event.stopPropagation()">
             <span class="glyphicon pbi-glyph-close st-contact-us-close" click.trigger="upgrade = false"></span>
-            <div class="st-email-centered st-email-heading">${MS.Translate.GETTING_STARTED_NEW_VERSION}</div>
-            <div class="st-email-centered st-text">${MS.Translate.GETTING_STARTED_NEW_VERSION_INFO}</div>
+            <div class="st-modal-centered st-modal-heading">${MS.Translate.GETTING_STARTED_NEW_VERSION}</div>
+            <div class="st-modal-centered st-text">${MS.Translate.GETTING_STARTED_NEW_VERSION_INFO}</div>
             <button class="primary" click.trigger="openNewMSILink()">${MS.Translate.COMMON_DOWNLOAD}</button>
         </div>
     </div>

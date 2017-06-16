@@ -14,7 +14,7 @@ namespace Microsoft.Deployment.Actions.Common.PBI
     public class GetPBIWorkspaces : BaseAction
     {
         private const string PBI_DEFAULT_WORKSPACE = "My workspace";
-        private const string PBI_ENDPOINT_GROUPS = "/v1.0/myorg/groups";
+        private const string PBI_ENDPOINT_GROUPS = "v1.0/myorg/groups";
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {

@@ -418,6 +418,8 @@
     PROGRESS_TITLE: `Track your progress`,
     PROGRESS_UNSUBSCRIBE: `You can unsubscribe at any time.`,
     PROGRESS_VIEW_PBIX: `View Report`,
+    PROGRESS_WORKSPACES_DESTINATION: `Select a destination:`,
+    PROGRESS_WORKSPACES_TITLE: `Publish to Power BI`,
     RECURRENT_NEVER: `Never`,
     RECURRENT_15_MINUTES: `Every 15 minutes`,
     RECURRENT_30_MINUTES: `Every 30 minutes`,

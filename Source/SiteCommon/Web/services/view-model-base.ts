@@ -32,7 +32,7 @@ export class ViewModelBase {
     }
 
     async activate(): Promise<void> {
-        this.MS.NavigationService.Activate();
+        this.MS.NavigationService.activate();
 
         this.isActivated = false;
         this.MS.UtilityService.saveItem('Current Page', window.location.href);

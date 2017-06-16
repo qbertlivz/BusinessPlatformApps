@@ -31,7 +31,7 @@ export class ProgressViewModel extends ViewModelBase {
     targetSchema: string = '';
 
     async executeActions(): Promise<void> {
-        if (await this.MS.DeploymentService.ExecuteActions() && !this.isUninstall) {
+        if (await this.MS.DeploymentService.executeActions() && !this.isUninstall) {
             await this.wrangle();
 
             this.queryRecordCounts();
@@ -51,13 +51,13 @@ export class ProgressViewModel extends ViewModelBase {
                 //this.showReportLink = true;
             });
         } else if (this.MS.DataStore.getValue('HasNavigated') === null) {
-            this.MS.NavigationService.NavigateHome();
+            this.MS.NavigationService.navigateHome();
         } else {
             let isDataStoreValid: boolean = true;
 
             for (let i = 0; i < this.datastoreEntriesToValidate.length && isDataStoreValid; i++) {
                 if (this.MS.DataStore.getValue(this.datastoreEntriesToValidate[i]) === null) {
-                    this.MS.NavigationService.NavigateHome();
+                    this.MS.NavigationService.navigateHome();
                     isDataStoreValid = false;
                 }
             }

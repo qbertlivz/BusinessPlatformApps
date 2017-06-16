@@ -21,14 +21,7 @@ export class DeploymentService {
         this.MS = MainService;
     }
 
-    init(actionsJson: any): void {
-        for (let i = 0; i < actionsJson.length; i++) {
-            actionsJson[i].DisplayName = InitParser.translateInitValue(actionsJson[i].DisplayName, this.MS);
-        }
-        this.actions = actionsJson;
-    }
-
-    async ExecuteActions(): Promise<boolean> {
+    async executeActions(): Promise<boolean> {
         if (this.isFinished && !this.hasError) {
             return false;
         }
@@ -108,5 +101,12 @@ export class DeploymentService {
         }
 
         return !this.hasError;
+    }
+
+    init(actionsJson: any): void {
+        for (let i = 0; i < actionsJson.length; i++) {
+            actionsJson[i].DisplayName = InitParser.translateInitValue(actionsJson[i].DisplayName, this.MS);
+        }
+        this.actions = actionsJson;
     }
 }

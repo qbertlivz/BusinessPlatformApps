@@ -129,6 +129,7 @@
     COMMON_ROWS: `Rows`,
     COMMON_RUN: `Run`,
     COMMON_SEE: `See`,
+    COMMON_SELECT: `Select`,
     COMMON_SHOW_DOWNLOAD: `Since you are copying your data into SQL Server, you will need to use our local installer to set up the template. In order to download the solution template installer, please click the Download button below.`,
     COMMON_SUBSCRIBE: `Subscribe`,
     COMMON_TERMS_OF_USE: `Terms of Use`,

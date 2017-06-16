@@ -33,6 +33,12 @@ export class ProgressViewModel extends ViewModelBase {
     successMessage2: string = this.MS.Translate.PROGRESS_ALL_DONE2;
     targetSchema: string = '';
 
+    async clickSelectWorkspace(): Promise<void> {
+        this.showPBIWorkspaces = false;
+
+        this.publishReportLink = await this.MS.HttpService.getResponseAsync('Microsoft-PublishPBIReport');
+    }
+
     async executeActions(): Promise<void> {
         if (await this.MS.DeploymentService.executeActions() && !this.isUninstall) {
             await this.wrangle();
@@ -53,7 +59,6 @@ export class ProgressViewModel extends ViewModelBase {
                 if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-GetPBIClusterUri')) {
                     this.pbiWorkspaces = await this.MS.HttpService.getResponseAsync('Microsoft-GetPBIWorkspaces');
                     this.showPBIWorkspaces = true;
-                    //this.publishReportLink = '';
                 }
             });
         } else if (this.MS.DataStore.getValue('HasNavigated') === null) {

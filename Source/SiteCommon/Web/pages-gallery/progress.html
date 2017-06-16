@@ -72,15 +72,17 @@
 
     <!-- PBIX Workspaces -->
     <div class="st-modal-background" if.bind="showPBIWorkspaces"></div>
-    <div class="st-modal-background st-modal-wrapper" click.trigger="showPBIWorkspaces = false" if.bind="upgrade">
+    <div class="st-modal-background st-modal-wrapper" click.trigger="showPBIWorkspaces = false" if.bind="showPBIWorkspaces">
         <div class="st-modal" click.trigger="$event.stopPropagation()">
             <span class="glyphicon pbi-glyph-close st-contact-us-close" click.trigger="showPBIWorkspaces = false"></span>
             <div class="st-modal-centered st-modal-heading">${MS.Translate.PROGRESS_WORKSPACES_TITLE}</div>
             <div class="st-modal-centered st-text">${MS.Translate.PROGRESS_WORKSPACES_DESTINATION}</div>
-            <select class="btn btn-default dropdown-toggle st-input st-modal-centered" disabled.bind="MS.HttpService.isServiceBusy" value.bind="selectedPBIWorkspaceId">
-                <option repeat.for="pbiWorkspace of pbiWorkspaces" value.bind="pbiWorkspace.id">${pbiWorkspace.name}</option>
-            </select>
-            <button class="primary" click.trigger="OpenNewMSILink()">${MS.Translate.COMMON_DOWNLOAD}</button>
+            <div class="st-modal-centered">
+                <select class="btn btn-default dropdown-toggle st-input" disabled.bind="MS.HttpService.isServiceBusy" value.bind="selectedPBIWorkspaceId">
+                    <option repeat.for="pbiWorkspace of pbiWorkspaces" value.bind="pbiWorkspace.id">${pbiWorkspace.name}</option>
+                </select>
+            </div>
+            <button class="primary" click.trigger="clickSelectWorkspace()">${MS.Translate.COMMON_SELECT}</button>
         </div>
     </div>
 

@@ -105,6 +105,7 @@
     <Compile Include="InsertInitialCounts.cs" />
     <Compile Include="PBI\GetPBIClusterUri.cs" />
     <Compile Include="PBI\GetPBIWorkspaces.cs" />
+    <Compile Include="PBI\PublishPBIReport.cs" />
     <Compile Include="PBI\WranglePBISSAS.cs" />
     <Compile Include="PBI\WranglePBI.cs" />
     <Compile Include="PowerBiLogin.cs" />

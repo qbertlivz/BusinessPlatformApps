@@ -30,10 +30,10 @@ export class DeploymentService {
         this.isFinished = false;
 
         if (this.experienceType === ExperienceType.uninstall) {
-            this.MS.LoggerService.TrackUninstallStart();
+            this.MS.LoggerService.trackUninstallStart();
         }
         if (this.experienceType === ExperienceType.install) {
-            this.MS.LoggerService.TrackDeploymentStart();
+            this.MS.LoggerService.trackDeploymentStart();
         }
 
         let lastActionStatus: ActionStatus = ActionStatus.Success;
@@ -58,11 +58,11 @@ export class DeploymentService {
                 continue;
             }
 
-            this.MS.LoggerService.TrackDeploymentStepStartEvent(i, this.actions[i].OperationName);
+            this.MS.LoggerService.trackDeploymentStepStartEvent(i, this.actions[i].OperationName);
             let response = await this.MS.HttpService.executeAsync(this.actions[i].OperationName, param);
             this.message = '';
 
-            this.MS.LoggerService.TrackDeploymentStepStoptEvent(i, this.actions[i].OperationName, response.IsSuccess);
+            this.MS.LoggerService.trackDeploymentStepStopEvent(i, this.actions[i].OperationName, response.IsSuccess);
 
             if (!(response.IsSuccess)) {
                 this.hasError = true;
@@ -89,10 +89,10 @@ export class DeploymentService {
         }
 
         if (this.experienceType === ExperienceType.uninstall) {
-            this.MS.LoggerService.TrackUninstallEnd(!this.hasError);
+            this.MS.LoggerService.trackUninstallEnd(!this.hasError);
         }
         if (this.experienceType === ExperienceType.install) {
-            this.MS.LoggerService.TrackDeploymentEnd(!this.hasError);
+            this.MS.LoggerService.trackDeploymentEnd(!this.hasError);
         }
         this.isFinished = true;
 

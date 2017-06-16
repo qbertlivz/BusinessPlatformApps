@@ -76,7 +76,7 @@ export class NavigationService {
 
         this.updateIndex();
         this.MS.DataStore.CurrentRoutePage = this.pages[this.index].RoutePageName.toLowerCase();
-        this.MS.LoggerService.TrackPageView(this.getCurrentRoutePath(), window.location.href);
+        this.MS.LoggerService.trackPageView(this.getCurrentRoutePath(), window.location.href);
     }
 
     isFirstPage(): boolean {
@@ -151,7 +151,7 @@ export class NavigationService {
         this.MS.Router.navigate('#/' + this.pages[this.index].RoutePageName.toLowerCase());
 
         this.updateIndex();
-        this.MS.LoggerService.TrackPageView(this.appName + '/' + this.pages[this.index].RoutePageName.toLowerCase(), window.location.href);
+        this.MS.LoggerService.trackPageView(this.appName + '/' + this.pages[this.index].RoutePageName.toLowerCase(), window.location.href);
     }
 
     updateIndex(): any {

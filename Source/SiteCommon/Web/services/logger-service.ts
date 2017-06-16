@@ -28,119 +28,6 @@ export class LoggerService {
         this.OperationId = applicationInsights.context.operation.id;
     }
 
-    TrackStartRequest(request: any, uniqueId: any): void {
-        let properties: any = this.getPropertiesForTelemetry();
-        properties.UserGenId = this.UserGenId;
-        properties.SessionId = this.SessionId;
-        properties.UserId = this.UserId;
-        properties.OperationId = this.OperationId;
-        properties.Request = request;
-        properties.UniqueId = uniqueId;
-        properties.TemplateName = this.MS.NavigationService.appName;
-        this.appInsights.trackEvent('UI-StartRequest-' + request, properties);
-        this.appInsights.flush();
-    }
-
-    TrackEndRequest(request: any, uniqueId: any, isSucess: any): void {
-        let properties: any = this.getPropertiesForTelemetry();
-        properties.UserGenId = this.UserGenId;
-        properties.SessionId = this.SessionId;
-        properties.UserId = this.UserId;
-        properties.OperationId = this.OperationId;
-        properties.Request = request;
-        properties.UniqueId = uniqueId;
-        properties.Sucess = isSucess;
-        properties.TemplateName = this.MS.NavigationService.appName;
-        this.appInsights.trackEvent('UI-EndRequest-' + request, properties);
-        this.appInsights.flush();
-    }
-
-    TrackEvent(requestName: any): void {
-        let properties: any = this.getPropertiesForTelemetry();
-        properties.UserGenId = this.UserGenId;
-        properties.SessionId = this.SessionId;
-        properties.UserId = this.UserId;
-        properties.OperationId = this.OperationId;
-        properties.TemplateName = this.MS.NavigationService.appName;
-        this.appInsights.trackEvent('UI-' + requestName, properties);
-        this.appInsights.flush();
-    }
-
-    TrackDeploymentStepStartEvent(deploymentIndex: any, deploymentName: any): void {
-        let properties: any = this.getPropertiesForTelemetry();
-        properties.UserGenId = this.UserGenId;
-        properties.SessionId = this.SessionId;
-        properties.UserId = this.UserId;
-        properties.OperationId = this.OperationId;
-        properties.DeploymentIndex = deploymentIndex;
-        properties.DeploymentName = deploymentName;
-        properties.TemplateName = this.MS.NavigationService.appName;
-        this.appInsights.trackEvent('UI-' + deploymentName + '-Start-' + deploymentIndex, properties);
-        this.appInsights.flush();
-    }
-
-    TrackDeploymentStepStoptEvent(deploymentIndex: any, deploymentName: any, isSuccess: any): void {
-        let properties: any = this.getPropertiesForTelemetry();
-        properties.UserGenId = this.UserGenId;
-        properties.SessionId = this.SessionId;
-        properties.UserId = this.UserId;
-        properties.OperationId = this.OperationId;
-        properties.DeploymentIndex = deploymentIndex;
-        properties.DeploymentName = deploymentName;
-        properties.TemplateName = this.MS.NavigationService.appName;
-        properties.Sucess = isSuccess;
-        this.appInsights.trackEvent('UI-' + deploymentName + '-End-' + deploymentIndex, properties);
-        this.appInsights.flush();
-    }
-
-    TrackDeploymentStart(): void {
-        let properties: any = this.getPropertiesForTelemetry();
-        properties.UserGenId = this.UserGenId;
-        properties.SessionId = this.SessionId;
-        properties.UserId = this.UserId;
-        properties.OperationId = this.OperationId;
-
-        properties.TemplateName = this.MS.NavigationService.appName;
-        this.appInsights.trackEvent('UI-DeploymentStart', properties);
-        this.appInsights.flush();
-    }
-
-    TrackUninstallStart(): void {
-        let properties: any = this.getPropertiesForTelemetry();
-        properties.UserGenId = this.UserGenId;
-        properties.SessionId = this.SessionId;
-        properties.UserId = this.UserId;
-        properties.OperationId = this.OperationId;
-
-        properties.TemplateName = this.MS.NavigationService.appName;
-        this.appInsights.trackEvent('UI-UninstallStart', properties);
-        this.appInsights.flush();
-    }
-
-    TrackUninstallEnd(isSuccess: any): void {
-        let properties: any = this.getPropertiesForTelemetry();
-        properties.UserGenId = this.UserGenId;
-        properties.SessionId = this.SessionId;
-        properties.UserId = this.UserId;
-        properties.OperationId = this.OperationId;
-        properties.TemplateName = this.MS.NavigationService.appName;
-        properties.Sucess = isSuccess;
-        this.appInsights.trackEvent('UI-UninstallEnd', properties);
-        this.appInsights.flush();
-    }
-
-    TrackDeploymentEnd(isSucess: any): void {
-        let properties: any = this.getPropertiesForTelemetry();
-        properties.UserGenId = this.UserGenId;
-        properties.SessionId = this.SessionId;
-        properties.UserId = this.UserId;
-        properties.OperationId = this.OperationId;
-        properties.TemplateName = this.MS.NavigationService.appName;
-        properties.Sucess = isSucess;
-        this.appInsights.trackEvent('UI-DeploymentEnd', properties);
-        this.appInsights.flush();
-    }
-
     getPropertiesForTelemetry(): any {
         let obj: any = {};
         obj.AppName = this.MS.NavigationService.appName;
@@ -160,14 +47,116 @@ export class LoggerService {
         return obj;
     }
 
-    TrackPageView(page: any, url: any): void {
+    trackDeploymentEnd(isSucess: any): void {
         let properties: any = this.getPropertiesForTelemetry();
-        this.appInsights.trackPageView(page, url, properties);
-        this.appInsights.flush();
+        properties.UserGenId = this.UserGenId;
+        properties.SessionId = this.SessionId;
+        properties.UserId = this.UserId;
+        properties.OperationId = this.OperationId;
+        properties.TemplateName = this.MS.NavigationService.appName;
+        properties.Sucess = isSucess;
+        this.appInsights.trackEvent('UI-DeploymentEnd', properties);
     }
 
-    TrackTrace(trace: string): void {
+    trackDeploymentStart(): void {
+        let properties: any = this.getPropertiesForTelemetry();
+        properties.UserGenId = this.UserGenId;
+        properties.SessionId = this.SessionId;
+        properties.UserId = this.UserId;
+        properties.OperationId = this.OperationId;
+
+        properties.TemplateName = this.MS.NavigationService.appName;
+        this.appInsights.trackEvent('UI-DeploymentStart', properties);
+    }
+
+    trackDeploymentStepStartEvent(deploymentIndex: any, deploymentName: any): void {
+        let properties: any = this.getPropertiesForTelemetry();
+        properties.UserGenId = this.UserGenId;
+        properties.SessionId = this.SessionId;
+        properties.UserId = this.UserId;
+        properties.OperationId = this.OperationId;
+        properties.DeploymentIndex = deploymentIndex;
+        properties.DeploymentName = deploymentName;
+        properties.TemplateName = this.MS.NavigationService.appName;
+        this.appInsights.trackEvent('UI-' + deploymentName + '-Start-' + deploymentIndex, properties);
+    }
+
+    trackDeploymentStepStopEvent(deploymentIndex: any, deploymentName: any, isSuccess: any): void {
+        let properties: any = this.getPropertiesForTelemetry();
+        properties.UserGenId = this.UserGenId;
+        properties.SessionId = this.SessionId;
+        properties.UserId = this.UserId;
+        properties.OperationId = this.OperationId;
+        properties.DeploymentIndex = deploymentIndex;
+        properties.DeploymentName = deploymentName;
+        properties.TemplateName = this.MS.NavigationService.appName;
+        properties.Sucess = isSuccess;
+        this.appInsights.trackEvent('UI-' + deploymentName + '-End-' + deploymentIndex, properties);
+    }
+
+    trackEndRequest(request: any, uniqueId: any, isSucess: any): void {
+        let properties: any = this.getPropertiesForTelemetry();
+        properties.UserGenId = this.UserGenId;
+        properties.SessionId = this.SessionId;
+        properties.UserId = this.UserId;
+        properties.OperationId = this.OperationId;
+        properties.Request = request;
+        properties.UniqueId = uniqueId;
+        properties.Sucess = isSucess;
+        properties.TemplateName = this.MS.NavigationService.appName;
+        this.appInsights.trackEvent('UI-EndRequest-' + request, properties);
+    }
+
+    trackEvent(requestName: any): void {
+        let properties: any = this.getPropertiesForTelemetry();
+        properties.UserGenId = this.UserGenId;
+        properties.SessionId = this.SessionId;
+        properties.UserId = this.UserId;
+        properties.OperationId = this.OperationId;
+        properties.TemplateName = this.MS.NavigationService.appName;
+        this.appInsights.trackEvent('UI-' + requestName, properties);
+    }
+
+    trackPageView(page: any, url: any): void {
+        let properties: any = this.getPropertiesForTelemetry();
+        this.appInsights.trackPageView(page, url, properties);
+    }
+
+    trackStartRequest(request: any, uniqueId: any): void {
+        let properties: any = this.getPropertiesForTelemetry();
+        properties.UserGenId = this.UserGenId;
+        properties.SessionId = this.SessionId;
+        properties.UserId = this.UserId;
+        properties.OperationId = this.OperationId;
+        properties.Request = request;
+        properties.UniqueId = uniqueId;
+        properties.TemplateName = this.MS.NavigationService.appName;
+        this.appInsights.trackEvent('UI-StartRequest-' + request, properties);
+    }
+
+    trackTrace(trace: string): void {
         this.appInsights.trackTrace('UI-' + trace);
-        this.appInsights.flush();
+    }
+
+    trackUninstallEnd(isSuccess: any): void {
+        let properties: any = this.getPropertiesForTelemetry();
+        properties.UserGenId = this.UserGenId;
+        properties.SessionId = this.SessionId;
+        properties.UserId = this.UserId;
+        properties.OperationId = this.OperationId;
+        properties.TemplateName = this.MS.NavigationService.appName;
+        properties.Sucess = isSuccess;
+        this.appInsights.trackEvent('UI-UninstallEnd', properties);
+    }
+
+    trackUninstallStart(): void {
+        let properties: any = this.getPropertiesForTelemetry();
+        properties.UserGenId = this.UserGenId;
+        properties.SessionId = this.SessionId;
+        properties.UserId = this.UserId;
+        properties.OperationId = this.OperationId;
+
+        properties.TemplateName = this.MS.NavigationService.appName;
+        this.appInsights.trackEvent('UI-UninstallStart', properties);
     }
 }

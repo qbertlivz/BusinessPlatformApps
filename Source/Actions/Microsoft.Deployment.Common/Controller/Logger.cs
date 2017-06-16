@@ -47,7 +47,6 @@ namespace Microsoft.Deployment.Common.Controller
         public void LogEvent(string eventName, Dictionary<string, string> properties)
         {
             this.telemetryClient.TrackEvent(eventName, properties);
-            this.Flush();
         }
 
         public void LogCustomProperty(string propKey, string propValue)
@@ -61,20 +60,17 @@ namespace Microsoft.Deployment.Common.Controller
         public void LogMetric(string metricName, double value, Dictionary<string, string> properties)
         {
             //this.telemetryClient.TrackMetric(metricName, value, properties);
-            this.Flush();
         }
 
         public void LogPageView(string page)
         {
             this.telemetryClient.TrackPageView(page);
-            this.Flush();
         }
 
         public void LogRequest(string request, TimeSpan duration, bool sucess)
         {
             string respone = sucess ? "200" : "504";
             this.telemetryClient.TrackRequest(request, DateTimeOffset.Now, duration, respone, sucess);
-            this.Flush();
         }
 
         public void LogDependancyCall(string dependancy, string callName, TimeSpan duration, bool sucess)
@@ -85,7 +81,6 @@ namespace Microsoft.Deployment.Common.Controller
         public void LogException(Exception exception, Dictionary<string, string> properties = null)
         {
             this.telemetryClient.TrackException(exception, properties);
-            this.Flush();
         }
 
         public void LogTrace(string objectString, ActionRequest obj, string traceId)
@@ -129,13 +124,7 @@ namespace Microsoft.Deployment.Common.Controller
 
             this.telemetryClient.TrackTrace(JsonUtility.GetJsonStringFromObject(container));
 
-            this.Flush();
             this.ClearTraceId();
-        }
-
-        public void Flush()
-        {
-            //this.telemetryClient.Flush();
         }
 
         public void AddTraceId(string traceId)
@@ -169,7 +158,6 @@ namespace Microsoft.Deployment.Common.Controller
             this.LogTrace("RequestBody", requestBody, traceId);
             this.LogTrace("ResponseBody", responseToReturn, traceId);
             this.telemetryClient.TrackEvent(eventName, properties);
-            this.Flush();
             this.ClearTraceId();
         }
 
@@ -186,7 +174,6 @@ namespace Microsoft.Deployment.Common.Controller
             this.LogTrace("RequestBody", requestBody, traceId);
             this.LogTrace("ResponseBody", responseToReturn, traceId);
             this.telemetryClient.TrackException(exception, properties);
-            this.Flush();
             this.ClearTraceId();
         }
 
@@ -253,7 +240,6 @@ namespace Microsoft.Deployment.Common.Controller
             this.LogTrace("ResponseBody", responseToReturn, traceId);
 
             this.telemetryClient.TrackRequest(request, DateTimeOffset.Now, duration, respone, sucess);
-            this.Flush();
             this.ClearTraceId();
         }
 

@@ -115,7 +115,7 @@ namespace Microsoft.Deployment.Common.Helpers
             }
         }
 
-        public async Task<string> ExecuteGenericRequestWithHeaderAndReadAsync(HttpMethod method, string url, string body)
+        public async Task<string> ExecuteGenericRequestWithHeaderAndReadAsync(HttpMethod method, string url, string body = "")
         {
             HttpResponseMessage response = await this.ExecuteGenericRequestWithHeaderAsync(method, url, body);
             return await response.Content.ReadAsStringAsync();

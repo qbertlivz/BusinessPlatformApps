@@ -14,27 +14,16 @@ namespace Microsoft.Deployment.Common.Helpers
 {
     public static class JsonUtility
     {
-        public static JObject GetJsonObjectFromJsonString(string json)
+        public static JObject CreateJObjectWithValueFromObject(object response)
         {
-            var obj = JObject.Parse(json);
-            return obj;
+            dynamic obj = new ExpandoObject();
+            obj.value = response;
+            return JObject.FromObject(obj);
         }
 
-        public static JObject GetEmptyJObject()
+        public static T Deserialize<T>(string json)
         {
-            return GetJsonObjectFromJsonString("{}");
-        }
-
-        public static JObject GetJObjectFromObject(object json)
-        {
-            if (json == null)
-            {
-                return new JObject();
-            }
-
-            JsonSerializerSettings settings = new JsonSerializerSettings();
-            var obj = JObject.FromObject(json);
-            return obj;
+            return JsonConvert.DeserializeObject<T>(json);
         }
 
         public static dynamic GetDynamicFromJObject(JObject json)
@@ -45,21 +34,9 @@ namespace Microsoft.Deployment.Common.Helpers
             return obj;
         }
 
-        public static string GetJsonStringFromObject(object json)
+        public static JObject GetEmptyJObject()
         {
-            if (json == null)
-            {
-                return JsonUtility.GetEmptyJObject().ToString();
-            }
-
-            JsonSerializerSettings settings = new JsonSerializerSettings();
-            var obj = JObject.FromObject(json);
-            return obj.Root.ToString();
-        }
-
-        public static JObject GetJObjectFromStringValue(string value)
-        {
-            return GetJsonObjectFromJsonString("{\"value\":" + JsonConvert.ToString(value) + "}");
+            return GetJsonObjectFromJsonString("{}");
         }
 
         public static JObject GetJObjectFromJsonString(string json)
@@ -75,11 +52,63 @@ namespace Microsoft.Deployment.Common.Helpers
             return templatefileContent;
         }
 
-        public static JObject CreateJObjectWithValueFromObject(object response)
+        public static JObject GetJObjectFromObject(object json)
         {
-            dynamic obj = new ExpandoObject();
-            obj.value = response;
-            return JObject.FromObject(obj);
+            if (json == null)
+            {
+                return new JObject();
+            }
+
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            var obj = JObject.FromObject(json);
+            return obj;
+        }
+
+        public static JObject GetJObjectFromStringValue(string value)
+        {
+            return GetJsonObjectFromJsonString("{\"value\":" + JsonConvert.ToString(value) + "}");
+        }
+
+        public static string GetJObjectProperty(JObject obj, string property)
+        {
+            return obj[property] == null ? null : obj[property].ToString();
+        }
+
+        public static JObject GetJsonObjectFromJsonString(string json)
+        {
+            var obj = JObject.Parse(json);
+            return obj;
+        }
+
+        public static string GetJsonStringFromObject(object json)
+        {
+            if (json == null)
+            {
+                return JsonUtility.GetEmptyJObject().ToString();
+            }
+
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            var obj = JObject.FromObject(json);
+            return obj.Root.ToString();
+        }
+
+        public static string GetWebToken(string token, string property)
+        {
+            string webToken = null;
+
+            if (token != null)
+            {
+                foreach (Claim c in new JwtSecurityToken(token).Claims)
+                {
+                    if (c.Type.ToLowerInvariant().EqualsIgnoreCase(property))
+                    {
+                        webToken = c.Value;
+                        break;
+                    }
+                }
+            }
+
+            return webToken;
         }
 
         public static bool IsNullOrEmpty(this JToken token)
@@ -122,30 +151,6 @@ namespace Microsoft.Deployment.Common.Helpers
             }
 
             return result;
-        }
-
-        public static string GetJObjectProperty(JObject obj, string property)
-        {
-            return obj[property] == null ? null : obj[property].ToString();
-        }
-
-        public static string GetWebToken(string token, string property)
-        {
-            string webToken = null;
-
-            if (token != null)
-            {
-                foreach (Claim c in new JwtSecurityToken(token).Claims)
-                {
-                    if (c.Type.ToLowerInvariant().EqualsIgnoreCase(property))
-                    {
-                        webToken = c.Value;
-                        break;
-                    }
-                }
-            }
-
-            return webToken;
         }
     }
 }

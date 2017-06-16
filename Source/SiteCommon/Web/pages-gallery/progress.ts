@@ -16,6 +16,7 @@ export class ProgressViewModel extends ViewModelBase {
     isPowerAppReady: boolean = false;
     isUninstall: boolean = false;
     oauthType: string = 'powerbi';
+    pbiWorkspaces: string[] = [];
     pbixDownloadLink: string = '';
     powerAppDownloadLink: string = '';
     powerAppFileName: string = '';
@@ -46,7 +47,10 @@ export class ProgressViewModel extends ViewModelBase {
 
                 this.isDataPullDone = true;
 
-                //this.publishReportLink = '';
+                if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-GetPBIUri')) {
+                    //this.pbiWorkspaces = await this.MS.HttpService.getExecuteResponseAsync('Microsoft-GetPBIWorkspaces');
+                    //this.publishReportLink = '';
+                }
             });
         } else if (this.MS.DataStore.getValue('HasNavigated') === null) {
             this.MS.NavigationService.navigateHome();
@@ -61,7 +65,11 @@ export class ProgressViewModel extends ViewModelBase {
             }
 
             if (isDataStoreValid) {
-                this.executeActions();
+                this.MS.DeploymentService.isFinished = true;
+                await this.wrangle();
+                this.isDataPullDone = true;
+                this.showPublishReport = this.enablePublishReport;
+                //this.executeActions();
             }
         }
     }

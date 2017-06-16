@@ -137,6 +137,7 @@
     <Compile Include="Model\Informatica\InformaticaTaskEmail.cs" />
     <Compile Include="Model\Informatica\InformaticaUser.cs" />
     <Compile Include="Model\PbixConnection.cs" />
+    <Compile Include="Model\PBI\PBIClusterUri.cs" />
     <Compile Include="Model\QDEFF.cs" />
     <Compile Include="Model\Scribe\D365Organization.cs" />
     <Compile Include="Model\Scribe\ScribeAgent.cs" />

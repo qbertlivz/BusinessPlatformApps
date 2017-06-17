@@ -131,6 +131,13 @@ namespace Microsoft.Deployment.Common.Helpers
 
                 HttpContent fileContent = new StringContent(file);
 
+                //Content-Type: multipart/form-data; boundary=---------------------------8d4b4bdf9867764
+                //Host: df-msit-scus-redirect.analysis.windows.net
+                //Content-Length: 8402985
+                //-----------------------------8d4b4bdf9867764
+                //Content-Disposition: form-data; name="file0"; filename="FacebookTemplate.pbix"
+                //Content-Type: application/x-zip-compressed
+
                 using (MultipartFormDataContent content = new MultipartFormDataContent())
                 {
                     content.Add(fileContent);

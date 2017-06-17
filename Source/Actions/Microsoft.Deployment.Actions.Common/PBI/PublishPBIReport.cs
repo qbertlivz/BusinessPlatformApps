@@ -13,6 +13,7 @@ namespace Microsoft.Deployment.Actions.Common.PBI
     [Export(typeof(IAction))]
     public class PublishPBIReport : BaseAction
     {
+        private const string PBI_IMPORT_STATUS_URI = "beta/myorg/{0}imports/{1}";
         private const string PBI_IMPORT_URI = "beta/myorg/{0}imports/?datasetDisplayName={1}&nameConflict=Abort";
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)

@@ -70,7 +70,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
             //Don't need to create/delete DB, since this isn't azure, and therefore not costing on our subscriptions
             try
             {
-                var background = driver.FindElementByCssSelector("div[class='st-email-background st-email-wrapper au-target']");
+                var background = driver.FindElementByCssSelector("div[class='st-modal-background st-modal-wrapper au-target']");
                 background.Click();
             }
             catch { /* If not found means s3 is behind s1, expected behaviour*/}
@@ -121,7 +121,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
                                             Credential.Instance.Sql.SCCMDatabase);
             try
             {
-                var background = driver.FindElementByCssSelector("div[class='st-email-background st-email-wrapper au-target']");
+                var background = driver.FindElementByCssSelector("div[class='st-modal-background st-modal-wrapper au-target']");
                 background.Click();
             }
             catch { /* If not found means s3 is behind s1, expected behaviour*/}

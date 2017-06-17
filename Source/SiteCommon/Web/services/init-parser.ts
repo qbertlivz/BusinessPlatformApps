@@ -10,23 +10,49 @@ export class InitParser {
     public static MS: MainService;
 
     public static async executeActions(actions: any[], self: any): Promise<boolean> {
-        for (let index in actions) {
-            let actionToExecute: any = actions[index];
-            let name: string = actionToExecute.name;
+        let isSuccess: boolean = true;
+
+        for (let i = 0; i < actions.length && isSuccess; i++) {
+            let action: any = actions[i];
+            let name: string = action.name;
             if (name) {
                 var body = {};
-                this.loadVariables(body, actionToExecute, this.MS, self);
+                this.loadVariables(body, action, this.MS, self);
 
                 var response: ActionResponse = await this.MS.HttpService.executeAsync(name, body);
-                if (!response.IsSuccess) {
-                    return false;
+                if (response.IsSuccess) {
+                    this.MS.DataStore.addObjectToDataStore(response, DataStoreType.Private);
+                } else {
+                    isSuccess = false;
                 }
-
-                this.MS.DataStore.addObjectToDataStore(response, DataStoreType.Private);
             }
         }
 
-        return true;
+        return isSuccess;
+    }
+
+    public static extractVariable(value: any): string {
+        let resultSplit = value.split(',');
+        return resultSplit[0].trim();
+    }
+
+    public static isPermanentEntryIntoDataStore(value: any): boolean {
+        let resultSplit = value.split(',');
+
+        for (let index = 0; index < resultSplit.length; index++) {
+            if (index < 1) {
+                continue;
+            }
+
+            let param: string = resultSplit[index].trim().toLowerCase();
+            let paramSplit = param.split('=');
+
+            if (paramSplit[0] === 'issaved' && paramSplit[1] === 'true') {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public static loadVariables(objToChange: any, obj: any, MS: MainService, self: any): void {
@@ -41,7 +67,6 @@ export class InitParser {
         }
     }
 
-    // The code to go ahead and parse the Variable
     public static parseVariable(key: string, value: any, obj: any, MS: MainService, self: any): void {
         let variable: Variable = this.getVariableType(value);
         let result: string = '';
@@ -184,30 +209,5 @@ export class InitParser {
 
         variable.type = type;
         variable.value = dsValue;
-    }
-
-    // old stuff
-    public static extractVariable(value: any): string {
-        let resultSplit = value.split(',');
-        return resultSplit[0].trim();
-    }
-
-    public static isPermanentEntryIntoDataStore(value: any): boolean {
-        let resultSplit = value.split(',');
-
-        for (let index = 0; index < resultSplit.length; index++) {
-            if (index < 1) {
-                continue;
-            }
-
-            let param: string = resultSplit[index].trim().toLowerCase();
-            let paramSplit = param.split('=');
-
-            if (paramSplit[0] === 'issaved' && paramSplit[1] === 'true') {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

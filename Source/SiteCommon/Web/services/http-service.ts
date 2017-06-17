@@ -57,7 +57,7 @@ export class HttpService {
 
         try {
             var actionRequest: ActionRequest = new ActionRequest(content, this.MS.DataStore);
-            this.MS.LoggerService.TrackStartRequest(method, uniqueId);
+            this.MS.LoggerService.trackStartRequest(method, uniqueId);
             var response = null;
 
             if (this.isOnPremise) {
@@ -73,7 +73,7 @@ export class HttpService {
             actionResponse = responseParsed;
             actionResponse.Status = (<any>ActionStatus)[responseParsed.Status];
 
-            this.MS.LoggerService.TrackEndRequest(method, uniqueId, !actionResponse.IsSuccess);
+            this.MS.LoggerService.trackEndRequest(method, uniqueId, !actionResponse.IsSuccess);
 
             if (actionResponse.Status !== ActionStatus.Invisible) {
                 this.MS.DataStore.loadDataStoreFromJson(actionResponse.DataStore);
@@ -105,7 +105,7 @@ export class HttpService {
     async getApp(name: string): Promise<any> {
         var response = null;
         let uniqueId = this.MS.UtilityService.getUniqueId(20);
-        this.MS.LoggerService.TrackStartRequest('GetApp-name', uniqueId);
+        this.MS.LoggerService.trackStartRequest('GetApp-name', uniqueId);
         if (this.isOnPremise) {
             response = await this.command.gettemplate(this.MS.LoggerService.UserId, this.MS.LoggerService.UserGenId, '', this.MS.LoggerService.OperationId, uniqueId, name);
         } else {
@@ -116,13 +116,27 @@ export class HttpService {
             response = '{}';
         }
 
-        this.MS.LoggerService.TrackEndRequest('GetTemplate-name', uniqueId, true);
+        this.MS.LoggerService.trackEndRequest('GetTemplate-name', uniqueId, true);
         let responseParsed = JSON.parse(response);
         return responseParsed;
     }
 
     async getExecuteResponseAsync(method: string, property: string = 'value', content: any = {}): Promise<any> {
         return (await this.executeAsync(method, content)).Body[property];
+    }
+
+    async getResponseAsync(method: string, content: any = {}): Promise<any> {
+        let response: any = null;
+
+        let body: any = (await this.executeAsync(method, content)).Body.Value;
+
+        try {
+            response = JSON.parse(body);
+        } catch (e) {
+            response = body;
+        }
+
+        return response;
     }
 
     async isExecuteSuccessAsync(method: string, content: any = {}): Promise<boolean> {

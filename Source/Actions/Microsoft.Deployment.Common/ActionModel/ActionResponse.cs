@@ -49,7 +49,6 @@ namespace Microsoft.Deployment.Common.ActionModel
             this.Body = response;
         }
 
-
         public ActionResponse(ActionStatus status, object response, string friendlyErrorMessageCode)
         {
             if (status == ActionStatus.Failure)
@@ -61,8 +60,7 @@ namespace Microsoft.Deployment.Common.ActionModel
             this.Body = JsonUtility.GetJObjectFromObject(response);
         }
 
-        public ActionResponse(ActionStatus status, object response, Exception exception,
-            string friendlyMessageCode, string additionaldetails)
+        public ActionResponse(ActionStatus status, object response, Exception exception, string friendlyMessageCode, string additionaldetails)
         {
             this.Status = status;
             this.Body = response;
@@ -71,8 +69,7 @@ namespace Microsoft.Deployment.Common.ActionModel
             this.ExceptionDetail.AdditionalDetailsErrorMessage = additionaldetails;
         }
 
-        public ActionResponse(ActionStatus status, object response, Exception exception,
-            string friendlyMessageCode)
+        public ActionResponse(ActionStatus status, object response, Exception exception, string friendlyMessageCode)
         {
             this.Status = status;
             this.Body = response;

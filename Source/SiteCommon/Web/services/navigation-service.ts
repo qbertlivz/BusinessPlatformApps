@@ -1,5 +1,4 @@
-﻿import { InitParser } from "../classes/init-parser";
-
+﻿import { InitParser } from './init-parser';
 import { MainService } from './main-service';
 
 export class NavigationService {
@@ -13,6 +12,37 @@ export class NavigationService {
 
     constructor(MainService: MainService) {
         this.MS = MainService;
+    }
+
+    activate(): void {
+        this.updateIndex();
+        this.MS.DataStore.CurrentRoutePage = this.pages[this.index].RoutePageName.toLowerCase();
+    }
+
+    getCurrentRoutePath(): string {
+        let history: any = this.MS.Router.history;
+        let route: string = history.location.hash;
+        let routePage = this.MS.NavigationService.appName + route.replace('#', '');
+        if (routePage.endsWith('/')) {
+            routePage += '//';
+            routePage.replace('///', '');
+        }
+
+        return routePage;
+    }
+
+    getCurrentSelectedPage(): any {
+        return this.pages[this.index];
+    }
+
+    getIndex(): number {
+        return this.index;
+    }
+
+    getRoute(): string {
+        let history: any = this.MS.Router.history;
+        let route: string = history.location.hash;
+        return route.replace('#', '').replace('/', '');
     }
 
     init(pagesJson: any): void {
@@ -43,45 +73,56 @@ export class NavigationService {
             this.pages[0].RoutePageName = '';
         }
 
-        this.UpdateIndex();
+        this.updateIndex();
         this.MS.DataStore.CurrentRoutePage = this.pages[this.index].RoutePageName.toLowerCase();
-        this.MS.LoggerService.TrackPageView(this.GetCurrentRoutePath(), window.location.href);
+        this.MS.LoggerService.trackPageView(this.getCurrentRoutePath(), window.location.href);
     }
 
-    GetCurrentRoutePath(): string {
-        let history: any = this.MS.Router.history;
-        let route: string = history.location.hash;
-        let routePage = this.MS.NavigationService.appName + route.replace('#', '');
-        if (routePage.endsWith('/')) {
-            routePage += '//';
-            routePage.replace('///', '');
+    isFirstPage(): boolean {
+        return this.getIndex() === 0;
+    }
+
+    isLastPage(): boolean {
+        return this.pages.length - 1 === this.getIndex();
+    }
+
+    jumpTo(index: any): void {
+        this.index = index;
+        this.navigateToIndex();
+    }
+
+    navigateBack(): void {
+        this.updateIndex();
+        if (this.index == 0) {
+            return;
         }
+        this.index = this.index - 1;
 
-        return routePage;
-    }
-
-    GetRoute(): string {
-        let history: any = this.MS.Router.history;
-        let route: string = history.location.hash;
-        return route.replace('#', '').replace('/', '');
-    }
-
-    UpdateIndex(): any {
-        let routePageName = this.GetRoute();
-        for (let i = 0; i < this.pages.length; i++) {
-            if (this.pages[i].RoutePageName.toLowerCase() === routePageName.toLowerCase()) {
-                this.index = i;
+        // If you skip the last page then we should throw an error - no check in place - to be added
+        while (this.pages[this.index].Parameters.skip && this.index > 0) {
+            let body: any = {};
+            InitParser.loadVariables(body, this.pages[this.index].Parameters, this.MS, this);
+            if (body.skip && body.skip.toString().toLowerCase() === 'true') {
+                this.index = this.index - 1;
+                continue;
             }
+            break;
         }
-        for (let i = 0; i < this.pages.length; i++) {
-            this.pages[i].isActive = i === this.index;
-            this.pages[i].isComplete = i < this.index;
-        }
-        return this.index;
+        this.navigateToIndex();
+    }
+
+    navigateHome(): void {
+        this.index = 0;
+        this.pages[0].isActive = true;
+        let body: any = {};
+        InitParser.loadVariables(body, this.pages[this.index].Parameters, this.MS, this);
+        setTimeout(() => {
+            this.navigateToIndex();
+        }, 100);
     }
 
     navigateNext(): void {
-        this.UpdateIndex();
+        this.updateIndex();
         if (this.index >= this.pages.length - 1 && this.index < this.pages.length - 1) {
             return;
         }
@@ -98,73 +139,31 @@ export class NavigationService {
             break;
         }
 
-        this.NavigateToIndex();
+        this.navigateToIndex();
     }
 
-    navigateBack(): void {
-        this.UpdateIndex();
-        if (this.index == 0) {
-            return;
-        }
-        this.index = this.index - 1;
-
-        // If you skip the last page then we should throw an error - no check in place - to be added
-        while (this.pages[this.index].Parameters.skip && this.index > 0) {
-            let body: any = {};
-            InitParser.loadVariables(body, this.pages[this.index].Parameters, this.MS, this);
-            if (body.skip && body.skip.toString().toLowerCase() === 'true') {
-                this.index = this.index - 1;
-                continue;
-            }
-            break;
-        }
-        this.NavigateToIndex();
-    }
-
-    JumpTo(index: any): void {
-        this.index = index;
-        this.NavigateToIndex();
-    }
-
-    NavigateToIndex(): void {
+    navigateToIndex(): void {
         // Initialize the page
         this.MS.DataStore.CurrentRoutePage = this.pages[this.index].RoutePageName.toLowerCase();
 
         // The index is set to the next step
         this.MS.Router.navigate('#/' + this.pages[this.index].RoutePageName.toLowerCase());
 
-        this.UpdateIndex();
-        this.MS.LoggerService.TrackPageView(this.appName + '/' + this.pages[this.index].RoutePageName.toLowerCase(), window.location.href);
+        this.updateIndex();
+        this.MS.LoggerService.trackPageView(this.appName + '/' + this.pages[this.index].RoutePageName.toLowerCase(), window.location.href);
     }
 
-    getCurrentSelectedPage(): any {
-        return this.pages[this.index];
-    }
-
-    getIndex(): number {
+    updateIndex(): any {
+        let routePageName = this.getRoute();
+        for (let i = 0; i < this.pages.length; i++) {
+            if (this.pages[i].RoutePageName.toLowerCase() === routePageName.toLowerCase()) {
+                this.index = i;
+            }
+        }
+        for (let i = 0; i < this.pages.length; i++) {
+            this.pages[i].isActive = i === this.index;
+            this.pages[i].isComplete = i < this.index;
+        }
         return this.index;
-    }
-
-    isLastPage(): boolean {
-        return this.pages.length - 1 === this.getIndex();
-    }
-
-    isFirstPage(): boolean {
-        return this.getIndex() === 0;
-    }
-
-    NavigateHome(): void {
-        this.index = 0;
-        this.pages[0].isActive = true;
-        let body: any = {};
-        InitParser.loadVariables(body, this.pages[this.index].Parameters, this.MS, this);
-        setTimeout(() => {
-            this.NavigateToIndex();
-        }, 100);
-    }
-
-    Activate(): void {
-        this.UpdateIndex();
-        this.MS.DataStore.CurrentRoutePage = this.pages[this.index].RoutePageName.toLowerCase();
     }
 }

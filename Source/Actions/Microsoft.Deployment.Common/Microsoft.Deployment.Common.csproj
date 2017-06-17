@@ -104,6 +104,7 @@
     <Compile Include="Helpers\ImpersonateUtility.cs" />
     <Compile Include="Helpers\InformaticaUtility.cs" />
     <Compile Include="Helpers\JsonUtility.cs" />
+    <Compile Include="Helpers\JsonUtilityLowercaseSerializer.cs" />
     <Compile Include="Helpers\NTHelper.cs" />
     <Compile Include="Helpers\NTPermissionUtility.cs" />
     <Compile Include="Helpers\PBIXUtils.cs" />
@@ -137,6 +138,10 @@
     <Compile Include="Model\Informatica\InformaticaTaskEmail.cs" />
     <Compile Include="Model\Informatica\InformaticaUser.cs" />
     <Compile Include="Model\PbixConnection.cs" />
+    <Compile Include="Model\PBI\PBIClusterUri.cs" />
+    <Compile Include="Model\PBI\PBIImport.cs" />
+    <Compile Include="Model\PBI\PBIWorkspace.cs" />
+    <Compile Include="Model\PBI\PBIWorkspaces.cs" />
     <Compile Include="Model\QDEFF.cs" />
     <Compile Include="Model\Scribe\D365Organization.cs" />
     <Compile Include="Model\Scribe\ScribeAgent.cs" />

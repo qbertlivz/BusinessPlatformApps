@@ -57,7 +57,7 @@ namespace Microsoft.Deployment.Actions.OnPremise
             }
             else
             {
-                response = new ActionResponse(ActionStatus.Success, JsonUtility.GetJsonObjectFromJsonString("{isFinished:false,status:" + JsonUtility.Serialize(recordCounts) + "}"));
+                response = new ActionResponse(ActionStatus.Success, JsonUtility.GetJsonObjectFromJsonString("{isFinished:false,status:" + JsonUtility.SerializeTable(recordCounts) + "}"));
             }
 
             if (string.IsNullOrEmpty(finishedActionName))
@@ -79,14 +79,14 @@ namespace Microsoft.Deployment.Actions.OnPremise
                         "{isFinished:true,FinishedActionName:\"" +
                         finishedActionName +
                         "\",TargetSchema:\"" + targetSchema +
-                        "\",status:" + JsonUtility.Serialize(recordCounts) +
+                        "\",status:" + JsonUtility.SerializeTable(recordCounts) +
                         ", slices:" + JObject.FromObject(finishedResponse.Body)["value"]?.ToString() + "}"));
                 }
                 else
                 {
                     resp = new ActionResponse(ActionStatus.Success,
                         JsonUtility.GetJsonObjectFromJsonString(
-                            "{isFinished:true, status:" + JsonUtility.Serialize(recordCounts) + "}"));
+                            "{isFinished:true, status:" + JsonUtility.SerializeTable(recordCounts) + "}"));
                 }
                 return resp;
             }
@@ -101,14 +101,14 @@ namespace Microsoft.Deployment.Actions.OnPremise
                     "{isFinished:false,FinishedActionName:\"" +
                     finishedActionName +
                      "\",TargetSchema:\"" + targetSchema +
-                     "\",status:" + JsonUtility.Serialize(recordCounts) +
+                     "\",status:" + JsonUtility.SerializeTable(recordCounts) +
                     ", slices:" + JObject.FromObject(finishedResponse.Body)["value"]?.ToString() + "}"));
                 }
                 else
                 {
                     resp = new ActionResponse(ActionStatus.Success,
                         JsonUtility.GetJsonObjectFromJsonString(
-                        "{isFinished:false, status:" + JsonUtility.Serialize(recordCounts) + "}"));
+                        "{isFinished:false, status:" + JsonUtility.SerializeTable(recordCounts) + "}"));
                 }
                 return resp;
             }

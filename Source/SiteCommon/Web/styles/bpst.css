@@ -178,37 +178,8 @@ ul {
     padding: 5px 5px;
 }
 
-.st-email-background {
-    background-color: rgba(0,0,0,.7);
-    bottom: 0;
-    height: 100%;
-    left: 0;
-    opacity: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
-    position: fixed;
-    right: 0;
-    top: 60px;
-    transition: all .25s;
-    z-index: -1;
-}
-
-.st-email-centered {
-    margin-left: auto;
-    margin-right: auto;
-    width: 83%;
-}
-
 .st-email-fields {
     margin-top: 20px;
-}
-
-.st-email-heading {
-    font-size: 36px;
-    font-weight: 700;
-    letter-spacing: -.01em;
-    line-height: 1.22;
-    margin-bottom: 20px;
 }
 
 .st-email-label {
@@ -222,32 +193,6 @@ ul {
 
 .st-email-link:hover {
     cursor: pointer;
-}
-
-.st-email-submission {
-    background-color: #FFF;
-    background-position: 50% 50%;
-    background-repeat: no-repeat;
-    background-size: cover;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-    display: block;
-    left: 50%;
-    max-height: 100vh;
-    max-width: 600px;
-    overflow: auto;
-    padding: 50px 0;
-    position: relative;
-    text-align: center;
-    top: 50%;
-    transform: translate(-50%, -50%) scale(1);
-    transition: all .25s;
-    width: 50%;
-    z-index: 99999;
-}
-
-.st-email-wrapper {
-    opacity: 1;
-    z-index: 88889;
 }
 
 .st-error {
@@ -528,6 +473,61 @@ ul {
     position: absolute;
     right: 0;
     top: 0;
+}
+
+.st-modal {
+    background-color: #FFF;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    display: block;
+    left: 50%;
+    max-height: 100vh;
+    max-width: 600px;
+    overflow: auto;
+    padding: 50px 0;
+    position: relative;
+    text-align: center;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    transition: all .25s;
+    width: 50%;
+    z-index: 99999;
+}
+
+.st-modal-background {
+    background-color: rgba(0,0,0,.7);
+    bottom: 0;
+    height: 100%;
+    left: 0;
+    opacity: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: fixed;
+    right: 0;
+    top: 60px;
+    transition: all .25s;
+    z-index: -1;
+}
+
+.st-modal-centered {
+    margin-left: auto;
+    margin-right: auto;
+    width: 83%;
+}
+
+.st-modal-heading {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    line-height: 1.22;
+    margin-bottom: 20px;
+}
+
+.st-modal-wrapper {
+    opacity: 1;
+    z-index: 88889;
 }
 
 .st-nav {

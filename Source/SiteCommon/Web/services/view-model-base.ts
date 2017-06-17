@@ -2,12 +2,11 @@
 
 import { activationStrategy } from 'aurelia-router';
 
-import { InitParser } from '../classes/init-parser';
-
 import { DataStoreType } from '../enums/data-store-type';
 
 import { OpenAuthorizationType } from '../models/open-authorization-type';
 
+import { InitParser } from './init-parser';
 import { MainService } from './main-service';
 
 export class ViewModelBase {
@@ -32,7 +31,7 @@ export class ViewModelBase {
     }
 
     async activate(): Promise<void> {
-        this.MS.NavigationService.Activate();
+        this.MS.NavigationService.activate();
 
         this.isActivated = false;
         this.MS.UtilityService.saveItem('Current Page', window.location.href);

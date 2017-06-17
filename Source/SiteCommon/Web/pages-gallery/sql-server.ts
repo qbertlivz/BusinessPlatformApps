@@ -1,6 +1,4 @@
-﻿import { SqlServerValidationUtility } from '../classes/sql-server-validation-utility';
-
-import { DataStoreType } from '../enums/data-store-type';
+﻿import { DataStoreType } from '../enums/data-store-type';
 
 import { ActionResponse } from '../models/action-response';
 import { AzureLocation } from '../models/azure-location';
@@ -16,6 +14,7 @@ export class SqlServer extends ViewModelBase {
     database: string = null;
     databases: string[] = [];
     hideSqlAuth: boolean = false;
+    invalidUsernames: string[] = ['admin', 'administrator', 'dbmanager', 'dbo', 'guest', 'loginmanager', 'public', 'root', 'sa'];
     isAzureSql: boolean = false;
     isGovAzureSql: boolean = false;
     isWindowsAuth: boolean = true;
@@ -131,7 +130,7 @@ export class SqlServer extends ViewModelBase {
                 this.onInvalidate();
             }
         } else if (this.sqlInstance === 'NewSql') {
-            let newSqlError: string = SqlServerValidationUtility.validateAzureSQLCreate(this.sqlServer, this.username, this.password, this.passwordConfirmation);
+            let newSqlError: string = this.validateAzureSQLCreate(this.username, this.password, this.passwordConfirmation);
             if (newSqlError) {
                 this.MS.ErrorService.set(newSqlError);
             } else {
@@ -196,5 +195,39 @@ export class SqlServer extends ViewModelBase {
 
     private async isAzureServerIsAvailable(): Promise<boolean> {
         return await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-ValidateAzureSqlExists', this.getBody(false));
+    }
+
+    private validateAzureSQLCreate(username: string, password: string, password2: string): string {
+        return this.validatePassword(password, password2, 8) || this.validateUsername(username, this.invalidUsernames, 'Username') || '';
+    }
+
+    private validatePassword(pwd: string, pwd2: string, length: number): string {
+        let passwordError: string = '';
+        if (pwd !== pwd2) {
+            passwordError = this.MS.Translate.SQL_ERROR_PASSWORD_MATCH;
+        } else if (length && pwd.length < length) {
+            passwordError = this.MS.Translate.SQL_ERROR_PASSWORD_LENGTH;
+        } else if ((/\s/g).test(pwd)) {
+            passwordError = this.MS.Translate.SQL_ERROR_PASSWORD_SPACES;
+        } else if (!(/[A-Z]/).test(pwd) || (/^[a-zA-Z0-9]*$/).test(pwd)) {
+            passwordError = this.MS.Translate.SQL_ERROR_PASSWORD_SPECIAL_CHARACTERS;
+        }
+        return passwordError;
+    }
+
+    private validateUsername(username: string, invalidUsernames: string[], usernameText: string): string {
+        let usernameError: string = '';
+        if ((/\s/g).test(username)) {
+            usernameError = `${usernameText} ${this.MS.Translate.SQL_ERROR_USERNAME_SPACES}`;
+        } else if (username.length > 63) {
+            usernameError = `${usernameText} ${this.MS.Translate.SQL_ERROR_USERNAME_LENGTH}`;
+        } else if (invalidUsernames.indexOf(username.toLowerCase()) > -1) {
+            usernameError = `${usernameText} ${this.MS.Translate.SQL_ERROR_USERNAME_RESERVED}`;
+        } else if (!(/^[a-zA-Z0-9\-]+$/).test(username)) {
+            usernameError = `${usernameText} ${this.MS.Translate.SQL_ERROR_USERNAME_ALPHANUMERIC}`;
+        } else if (username[0] === '-' || username[username.length - 1] === '-') {
+            usernameError = `${usernameText} ${this.MS.Translate.SQL_ERROR_USERNAME_HYPHEN}`;
+        }
+        return usernameError;
     }
 }

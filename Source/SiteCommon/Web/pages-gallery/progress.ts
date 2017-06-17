@@ -1,4 +1,5 @@
 ﻿import { ActionResponse } from '../models/action-response';
+import { PBIWorkspace } from '../models/pbi-workspace';
 
 import { ViewModelBase } from '../services/view-model-base';
 
@@ -16,26 +17,42 @@ export class ProgressViewModel extends ViewModelBase {
     isPowerAppReady: boolean = false;
     isUninstall: boolean = false;
     oauthType: string = 'powerbi';
+    pbiWorkspaces: PBIWorkspace[] = [];
     pbixDownloadLink: string = '';
     powerAppDownloadLink: string = '';
     powerAppFileName: string = '';
     publishReportLink: string = '';
     recordCounts: any[] = [];
+    selectedPBIWorkspaceId: string = '';
     showCounts: boolean = false;
+    showPBIWorkspaces: boolean = false;
     showPublishReport: boolean = false;
-    showReportLink: boolean = false;
     sliceStatus: any[] = [];
     sqlServerIndex: number = 0;
     successMessage: string = this.MS.Translate.PROGRESS_ALL_DONE;
     successMessage2: string = this.MS.Translate.PROGRESS_ALL_DONE2;
     targetSchema: string = '';
 
+    async clickSelectWorkspace(): Promise<void> {
+        this.showPBIWorkspaces = false;
+
+        this.publishReportLink = await this.MS.HttpService.getResponseAsync('Microsoft-PublishPBIReport', {
+            PBIWorkspaceId: this.selectedPBIWorkspaceId,
+            PBIXLocation: this.pbixDownloadLink
+        });
+    }
+
     async executeActions(): Promise<void> {
-        if (await this.MS.DeploymentService.ExecuteActions() && !this.isUninstall) {
+        if (await this.MS.DeploymentService.executeActions() && !this.isUninstall) {
             await this.wrangle();
 
             this.queryRecordCounts();
         }
+    }
+
+    hidePBIWorkspaces(): void {
+        this.showPBIWorkspaces = false;
+        this.showPublishReport = this.enablePublishReport;
     }
 
     async onLoaded(): Promise<void> {
@@ -47,22 +64,28 @@ export class ProgressViewModel extends ViewModelBase {
 
                 this.isDataPullDone = true;
 
-                //this.publishReportLink = '';
-                //this.showReportLink = true;
+                if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-GetPBIClusterUri')) {
+                    this.pbiWorkspaces = await this.MS.HttpService.getResponseAsync('Microsoft-GetPBIWorkspaces');
+                    this.showPBIWorkspaces = true;
+                }
             });
         } else if (this.MS.DataStore.getValue('HasNavigated') === null) {
-            this.MS.NavigationService.NavigateHome();
+            this.MS.NavigationService.navigateHome();
         } else {
             let isDataStoreValid: boolean = true;
 
             for (let i = 0; i < this.datastoreEntriesToValidate.length && isDataStoreValid; i++) {
                 if (this.MS.DataStore.getValue(this.datastoreEntriesToValidate[i]) === null) {
-                    this.MS.NavigationService.NavigateHome();
+                    this.MS.NavigationService.navigateHome();
                     isDataStoreValid = false;
                 }
             }
 
             if (isDataStoreValid) {
+                //this.MS.DeploymentService.isFinished = true;
+                //await this.wrangle();
+                //this.isDataPullDone = true;
+                //this.showPublishReport = this.enablePublishReport;
                 this.executeActions();
             }
         }

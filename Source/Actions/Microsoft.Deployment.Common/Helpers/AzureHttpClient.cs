@@ -38,6 +38,39 @@ namespace Microsoft.Deployment.Common.Helpers
             this.Token = token;
         }
 
+        public async Task<HttpResponseMessage> ExecuteGenericRequestWithHeaderAsync(HttpMethod method, string url, string body)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                string requestUri = url;
+                HttpRequestMessage message = new HttpRequestMessage(method, requestUri);
+
+                if (method == HttpMethod.Post || method == HttpMethod.Put)
+                {
+                    message.Content = new StringContent(body, Encoding.UTF8, "application/json");
+                }
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.Token);
+
+                if (this.Headers != null)
+                {
+                    foreach (KeyValuePair<string, string> header in this.Headers)
+                    {
+                        client.DefaultRequestHeaders.Add(header.Key, header.Value);
+                    }
+                }
+
+                return await client.SendAsync(message);
+            }
+        }
+
+        public async Task<HttpResponseMessage> ExecuteWebsiteAsync(HttpMethod method, string site, string relativeUrl, string body)
+        {
+            string requestUri = $"https://{site}{Constants.AzureWebSite}{relativeUrl}";
+
+            return await this.ExecuteGenericRequestWithHeaderAsync(method, requestUri, body);
+        }
+
         public async Task<HttpResponseMessage> ExecuteWithSubscriptionAndResourceGroupAsync(HttpMethod method, string relativeUrl, string apiVersion, string body, Dictionary<string, string> queryParameters)
         {
             StringBuilder parameters = new StringBuilder();
@@ -66,39 +99,6 @@ namespace Microsoft.Deployment.Common.Helpers
             return await this.ExecuteGenericRequestWithHeaderAsync(method, requestUri, body);
         }
 
-        public async Task<HttpResponseMessage> ExecuteWebsiteAsync(HttpMethod method, string site, string relativeUrl, string body)
-        {
-            string requestUri = $"https://{site}{Constants.AzureWebSite}{relativeUrl}";
-
-            return await this.ExecuteGenericRequestWithHeaderAsync(method, requestUri, body);
-        }
-
-        public async Task<HttpResponseMessage> ExecuteGenericRequestWithHeaderAsync(HttpMethod method, string url, string body)
-        {
-            using (HttpClient client = new HttpClient())
-            {
-                string requestUri = url;
-                HttpRequestMessage message = new HttpRequestMessage(method, requestUri);
-
-                if (method == HttpMethod.Post || method == HttpMethod.Put)
-                {
-                    message.Content = new StringContent(body, Encoding.UTF8, "application/json");
-                }
-
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.Token);
-
-                if (this.Headers != null)
-                {
-                    foreach(KeyValuePair<string, string> header in this.Headers)
-                    {
-                        client.DefaultRequestHeaders.Add(header.Key, header.Value);
-                    }
-                }
-
-                return await client.SendAsync(message);
-            }
-        }
-
         public async Task<HttpResponseMessage> ExecuteGenericRequestNoHeaderAsync(HttpMethod method, string url, string body)
         {
             using (HttpClient client = new HttpClient())
@@ -115,9 +115,37 @@ namespace Microsoft.Deployment.Common.Helpers
             }
         }
 
-        public async Task<string> ExecuteGenericRequestWithHeaderAndReadAsync(HttpMethod method, string url, string body)
+        public async Task<string> Request(HttpMethod method, string url, string body = "")
         {
             HttpResponseMessage response = await this.ExecuteGenericRequestWithHeaderAsync(method, url, body);
+            return await response.Content.ReadAsStringAsync();
+        }
+
+        public async Task<string> Request(string url, string file)
+        {
+            HttpResponseMessage response = null;
+
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.Token);
+
+                HttpContent fileContent = new StringContent(file);
+
+                //Content-Type: multipart/form-data; boundary=---------------------------8d4b4bdf9867764
+                //Host: df-msit-scus-redirect.analysis.windows.net
+                //Content-Length: 8402985
+                //-----------------------------8d4b4bdf9867764
+                //Content-Disposition: form-data; name="file0"; filename="FacebookTemplate.pbix"
+                //Content-Type: application/x-zip-compressed
+
+                using (MultipartFormDataContent content = new MultipartFormDataContent())
+                {
+                    content.Add(fileContent);
+
+                    response = await client.PostAsync(url, content);
+                }
+            }
+
             return await response.Content.ReadAsStringAsync();
         }
     }

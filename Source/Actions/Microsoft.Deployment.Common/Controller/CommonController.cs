@@ -32,7 +32,6 @@ namespace Microsoft.Deployment.Common.Controller
 
             var allTemplates = templateNames as IList<string> ?? templateNames.ToList();
             logger.LogRequest("GetAllApps", end - start, allTemplates.Any());
-            logger.Flush();
             return allTemplates;
         }
 
@@ -47,7 +46,6 @@ namespace Microsoft.Deployment.Common.Controller
             var end = DateTime.Now;
 
             logger.LogRequest("GetApp-" + info.AppName, end - start, app != null);
-            logger.Flush();
             return app;
         }
 
@@ -79,7 +77,6 @@ namespace Microsoft.Deployment.Common.Controller
                 logger.LogEvent("End-" + info.ActionName, null, request, responseToReturn);
                 logger.LogRequest(action.OperationUniqueName, DateTime.Now - start,
                     responseToReturn.Status.IsSucessfullStatus(), request, responseToReturn);
-                logger.Flush();
                 return responseToReturn;
             }
 
@@ -87,7 +84,6 @@ namespace Microsoft.Deployment.Common.Controller
             logger.LogRequest(info.ActionName, DateTime.Now - start, false, request, null);
             var ex = new ActionNotFoundException();
             logger.LogException(ex, null, request, null);
-            logger.Flush();
             throw ex;
         }
 

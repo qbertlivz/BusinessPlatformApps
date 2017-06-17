@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -121,7 +122,7 @@ namespace Microsoft.Deployment.Common.Helpers
             return await response.Content.ReadAsStringAsync();
         }
 
-        public async Task<string> Request(string url, string file)
+        public async Task<string> Request(string url, byte[] file, string name)
         {
             HttpResponseMessage response = null;
 
@@ -129,18 +130,23 @@ namespace Microsoft.Deployment.Common.Helpers
             {
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.Token);
 
-                HttpContent fileContent = new StringContent(file);
-
-                //Content-Type: multipart/form-data; boundary=---------------------------8d4b4bdf9867764
-                //Host: df-msit-scus-redirect.analysis.windows.net
-                //Content-Length: 8402985
-                //-----------------------------8d4b4bdf9867764
-                //Content-Disposition: form-data; name="file0"; filename="FacebookTemplate.pbix"
-                //Content-Type: application/x-zip-compressed
-
                 using (MultipartFormDataContent content = new MultipartFormDataContent())
                 {
+                    content.Headers.ContentType.Parameters.Clear();
+                    string boundary = "---------------------------8d4b4bdf9867764";
+                    content.Headers.ContentType.Parameters.Add(new NameValueHeaderValue("boundary", boundary));
+
+                    HttpContent fileContent = new StreamContent(new MemoryStream(file));
+                    fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data");
+                    fileContent.Headers.ContentDisposition.Name = "\"file0\"";
+                    fileContent.Headers.ContentDisposition.FileName = $"\"{name}\"";
+                    fileContent.Headers.ContentLength = null;
+                    fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/x-zip-compressed");
+
                     content.Add(fileContent);
+                    content.Headers.ContentLength += file.Length + (boundary.Length - 1) +
+                        fileContent.Headers.ContentDisposition.ToString().Length +
+                        fileContent.Headers.ContentType.ToString().Length;
 
                     response = await client.PostAsync(url, content);
                 }

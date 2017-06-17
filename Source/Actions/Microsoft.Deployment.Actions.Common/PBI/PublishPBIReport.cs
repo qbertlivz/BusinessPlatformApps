@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.Composition;
-using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -25,22 +24,15 @@ namespace Microsoft.Deployment.Actions.Common.PBI
 
             pbiWorkspaceId = string.IsNullOrEmpty(pbiWorkspaceId) ? string.Empty : "groups/" + pbiWorkspaceId + "/";
 
-            string file = string.Empty;
-            WebRequest fileRequest = WebRequest.Create(pbixLocation);
-            using (WebResponse fileResponse = fileRequest.GetResponse())
+            byte[] file = null;
+            using (WebClient webClient = new WebClient())
             {
-                using (Stream fileContent = fileResponse.GetResponseStream())
-                {
-                    using (StreamReader fileReader = new StreamReader(fileContent))
-                    {
-                        file = fileReader.ReadToEnd();
-                    }
-                }
+                file = webClient.DownloadData(pbixLocation);
             }
 
             string filename = request.Info.AppName + RandomGenerator.GetDateStamp() + ".pbix";
 
-            PBIImport pbiImport = JsonUtility.Deserialize<PBIImport>(await client.Request(pbiClusterUri + string.Format(PBI_IMPORT_URI, pbiWorkspaceId, filename), file));
+            PBIImport pbiImport = JsonUtility.Deserialize<PBIImport>(await client.Request(pbiClusterUri + string.Format(PBI_IMPORT_URI, pbiWorkspaceId, filename), file, filename));
 
             return new ActionResponse(ActionStatus.Success, string.Empty);
         }

@@ -139,6 +139,7 @@
     <Compile Include="Model\Informatica\InformaticaUser.cs" />
     <Compile Include="Model\PbixConnection.cs" />
     <Compile Include="Model\PBI\PBIClusterUri.cs" />
+    <Compile Include="Model\PBI\PBIImport.cs" />
     <Compile Include="Model\PBI\PBIWorkspace.cs" />
     <Compile Include="Model\PBI\PBIWorkspaces.cs" />
     <Compile Include="Model\QDEFF.cs" />

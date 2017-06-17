@@ -72,9 +72,9 @@
 
     <!-- PBIX Workspaces -->
     <div class="st-modal-background" if.bind="showPBIWorkspaces"></div>
-    <div class="st-modal-background st-modal-wrapper" click.trigger="showPBIWorkspaces = false" if.bind="showPBIWorkspaces">
+    <div class="st-modal-background st-modal-wrapper" click.trigger="hidePBIWorkspaces()" if.bind="showPBIWorkspaces">
         <div class="st-modal" click.trigger="$event.stopPropagation()">
-            <span class="glyphicon pbi-glyph-close st-contact-us-close" click.trigger="showPBIWorkspaces = false"></span>
+            <span class="glyphicon pbi-glyph-close st-contact-us-close" click.trigger="hidePBIWorkspaces()"></span>
             <div class="st-modal-centered st-modal-heading">${MS.Translate.PROGRESS_WORKSPACES_TITLE}</div>
             <div class="st-modal-centered st-text">${MS.Translate.PROGRESS_WORKSPACES_DESTINATION}</div>
             <div class="st-modal-centered">

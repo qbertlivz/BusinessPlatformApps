@@ -120,5 +120,26 @@ namespace Microsoft.Deployment.Common.Helpers
             HttpResponseMessage response = await this.ExecuteGenericRequestWithHeaderAsync(method, url, body);
             return await response.Content.ReadAsStringAsync();
         }
+
+        public async Task<string> Request(string url, string file)
+        {
+            HttpResponseMessage response = null;
+
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.Token);
+
+                HttpContent fileContent = new StringContent(file);
+
+                using (MultipartFormDataContent content = new MultipartFormDataContent())
+                {
+                    content.Add(fileContent);
+
+                    response = await client.PostAsync(url, content);
+                }
+            }
+
+            return await response.Content.ReadAsStringAsync();
+        }
     }
 }

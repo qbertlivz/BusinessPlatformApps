@@ -36,7 +36,10 @@ export class ProgressViewModel extends ViewModelBase {
     async clickSelectWorkspace(): Promise<void> {
         this.showPBIWorkspaces = false;
 
-        this.publishReportLink = await this.MS.HttpService.getResponseAsync('Microsoft-PublishPBIReport');
+        this.publishReportLink = await this.MS.HttpService.getResponseAsync('Microsoft-PublishPBIReport', {
+            PBIWorkspaceId: this.selectedPBIWorkspaceId,
+            PBIXLocation: this.pbixDownloadLink
+        });
     }
 
     async executeActions(): Promise<void> {
@@ -45,6 +48,11 @@ export class ProgressViewModel extends ViewModelBase {
 
             this.queryRecordCounts();
         }
+    }
+
+    hidePBIWorkspaces(): void {
+        this.showPBIWorkspaces = false;
+        this.showPublishReport = this.enablePublishReport;
     }
 
     async onLoaded(): Promise<void> {

@@ -58,7 +58,7 @@ BEGIN
                      ) 
             END AS [Percentage], 
             c.EntityName as EntityName INTO #percentages 
-	    FROM #counts c INNER JOIN pbist_sccm.entityinitialcount i ON i.entityname = c.entityname
+	    FROM #counts c INNER JOIN pbist_sccm.entityinitialcount i ON i.entityname = c.entityname COLLATE Latin1_General_100_CI_AS
 
 
 	DECLARE @DeploymentTimestamp datetime2;
@@ -81,7 +81,7 @@ BEGIN
 	
 	SELECT p.[Percentage], p.[EntityName], i.lasttimestamp,  DATEDIFF(MINUTE, i.lasttimestamp, Sysdatetime()) AS [TimeDifference] INTO #entitiesComplete
     FROM #percentages p
-              INNER JOIN pbist_sccm.entityinitialcount i ON i.entityName = p.EntityName
+              INNER JOIN pbist_sccm.entityinitialcount i ON i.entityName = p.EntityName COLLATE Latin1_General_100_CI_AS
               WHERE 
 			  ((p.[Percentage] >= @CompletePercentage) AND DATEDIFF(MINUTE, i.lasttimestamp, Sysdatetime()) > 5) OR
 			  (p.[Percentage] >= 100) OR
@@ -122,7 +122,7 @@ BEGIN
 
 	MERGE pbist_sccm.entityinitialcount AS TARGET
 	USING #counts AS SOURCE
-	ON (TARGET.entityname = SOURCE.entityname)
+	ON (TARGET.entityname = SOURCE.entityname COLLATE Latin1_General_100_CI_AS)
 	WHEN MATCHED AND SOURCE.[Count] > TARGET.lastcount
 	THEN 
 	UPDATE SET target.lastcount = source.[Count], target.lasttimestamp = Sysdatetime();

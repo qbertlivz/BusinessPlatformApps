@@ -135,7 +135,7 @@ namespace Microsoft.Deployment.Common.Helpers
                 using (MultipartFormDataContent content = new MultipartFormDataContent())
                 {
                     content.Headers.ContentType.Parameters.Clear();
-                    string boundary = string.Format("---------------------------{0:N}", RandomGenerator.GetRandomHexadecimal(FORM_BOUNDARY_SIZE));
+                    string boundary = GetFormBoundary();
                     content.Headers.ContentType.Parameters.Add(new NameValueHeaderValue("boundary", boundary));
 
                     HttpContent fileContent = new StreamContent(new MemoryStream(file));
@@ -152,6 +152,11 @@ namespace Microsoft.Deployment.Common.Helpers
             }
 
             return await response.Content.ReadAsStringAsync();
+        }
+
+        private string GetFormBoundary()
+        {
+            return string.Format("---------------------------{0:N}", RandomGenerator.GetRandomHexadecimal(FORM_BOUNDARY_SIZE));
         }
     }
 }

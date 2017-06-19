@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.Composition;
 using System.Net;
+using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.Deployment.Common.ActionModel;
@@ -12,6 +14,7 @@ namespace Microsoft.Deployment.Actions.Common.PBI
     [Export(typeof(IAction))]
     public class PublishPBIReport : BaseAction
     {
+        private const int MAXIMUM_IMPORT_STATUS_ATTEMPTS = 92;
         private const string PBI_IMPORT_STATUS_URI = "beta/myorg/{0}imports/{1}";
         private const string PBI_IMPORT_URI = "beta/myorg/{0}imports/?datasetDisplayName={1}&nameConflict=Abort";
 
@@ -34,7 +37,30 @@ namespace Microsoft.Deployment.Actions.Common.PBI
 
             PBIImport pbiImport = JsonUtility.Deserialize<PBIImport>(await client.Request(pbiClusterUri + string.Format(PBI_IMPORT_URI, pbiWorkspaceId, filename), file, filename));
 
-            return new ActionResponse(ActionStatus.Success, string.Empty);
+            PBIImportStatus pbiImportStatus = null;
+            int attempts = 0;
+            bool isImportInProgress = true;
+            while (isImportInProgress && attempts < MAXIMUM_IMPORT_STATUS_ATTEMPTS)
+            {
+                pbiImportStatus = JsonUtility.Deserialize<PBIImportStatus>(await client.Request(HttpMethod.Get, string.Format(PBI_IMPORT_STATUS_URI, pbiWorkspaceId, pbiImport.Id)));
+                switch (pbiImportStatus.ImportState)
+                {
+                    case "Publishing":
+                        Thread.Sleep(5000);
+                        break;
+                    case "Succeeded":
+                        isImportInProgress = false;
+                        break;
+                    default:
+                        isImportInProgress = false;
+                        break;
+                }
+                attempts++;
+            }
+
+            string reportUrl = pbiImportStatus == null || pbiImportStatus.Reports == null || pbiImportStatus.Reports.Count == 0 ? string.Empty : pbiImportStatus.Reports[0].WebUrl;
+
+            return new ActionResponse(ActionStatus.Success, reportUrl);
         }
     }
 }

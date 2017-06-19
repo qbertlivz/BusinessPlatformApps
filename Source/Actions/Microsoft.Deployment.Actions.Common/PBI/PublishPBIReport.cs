@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.Composition;
-using System.IO;
 using System.Net;
+using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.Deployment.Common.ActionModel;
@@ -13,6 +14,9 @@ namespace Microsoft.Deployment.Actions.Common.PBI
     [Export(typeof(IAction))]
     public class PublishPBIReport : BaseAction
     {
+        private const int MAXIMUM_IMPORT_STATUS_ATTEMPTS = 92;
+        private const int WAIT_IMPORT_STATUS = 5000;
+
         private const string PBI_IMPORT_STATUS_URI = "beta/myorg/{0}imports/{1}";
         private const string PBI_IMPORT_URI = "beta/myorg/{0}imports/?datasetDisplayName={1}&nameConflict=Abort";
 
@@ -25,24 +29,40 @@ namespace Microsoft.Deployment.Actions.Common.PBI
 
             pbiWorkspaceId = string.IsNullOrEmpty(pbiWorkspaceId) ? string.Empty : "groups/" + pbiWorkspaceId + "/";
 
-            string file = string.Empty;
-            WebRequest fileRequest = WebRequest.Create(pbixLocation);
-            using (WebResponse fileResponse = fileRequest.GetResponse())
+            byte[] file = null;
+            using (WebClient wc = new WebClient())
             {
-                using (Stream fileContent = fileResponse.GetResponseStream())
-                {
-                    using (StreamReader fileReader = new StreamReader(fileContent))
-                    {
-                        file = fileReader.ReadToEnd();
-                    }
-                }
+                file = wc.DownloadData(pbixLocation);
             }
 
             string filename = request.Info.AppName + RandomGenerator.GetDateStamp() + ".pbix";
 
-            PBIImport pbiImport = JsonUtility.Deserialize<PBIImport>(await client.Request(pbiClusterUri + string.Format(PBI_IMPORT_URI, pbiWorkspaceId, filename), file));
+            PBIImport pbiImport = JsonUtility.Deserialize<PBIImport>(await client.Request(pbiClusterUri + string.Format(PBI_IMPORT_URI, pbiWorkspaceId, filename), file, filename));
 
-            return new ActionResponse(ActionStatus.Success, string.Empty);
+            PBIImportStatus pbiImportStatus = null;
+            int attempts = 0;
+            bool isImportInProgress = true;
+            while (isImportInProgress && attempts < MAXIMUM_IMPORT_STATUS_ATTEMPTS)
+            {
+                pbiImportStatus = JsonUtility.Deserialize<PBIImportStatus>(await client.Request(HttpMethod.Get, pbiClusterUri + string.Format(PBI_IMPORT_STATUS_URI, pbiWorkspaceId, pbiImport.Id)));
+                switch (pbiImportStatus.ImportState)
+                {
+                    case "Publishing":
+                        Thread.Sleep(WAIT_IMPORT_STATUS);
+                        break;
+                    case "Succeeded":
+                        isImportInProgress = false;
+                        break;
+                    default:
+                        isImportInProgress = false;
+                        break;
+                }
+                attempts++;
+            }
+
+            string reportUrl = pbiImportStatus == null || pbiImportStatus.Reports == null || pbiImportStatus.Reports.Count == 0 ? string.Empty : pbiImportStatus.Reports[0].WebUrl;
+
+            return new ActionResponse(ActionStatus.Success, reportUrl);
         }
     }
 }

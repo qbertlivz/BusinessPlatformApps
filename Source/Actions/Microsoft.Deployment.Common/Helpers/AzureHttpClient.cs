@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -8,6 +9,8 @@ namespace Microsoft.Deployment.Common.Helpers
 {
     public class AzureHttpClient
     {
+        private const int FORM_BOUNDARY_SIZE = 15;
+
         public Dictionary<string, string> Headers { get; set; }
         public Task Providers { get; set; }
         public string ResourceGroup { get; }
@@ -121,7 +124,7 @@ namespace Microsoft.Deployment.Common.Helpers
             return await response.Content.ReadAsStringAsync();
         }
 
-        public async Task<string> Request(string url, string file)
+        public async Task<string> Request(string url, byte[] file, string name)
         {
             HttpResponseMessage response = null;
 
@@ -129,17 +132,19 @@ namespace Microsoft.Deployment.Common.Helpers
             {
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.Token);
 
-                HttpContent fileContent = new StringContent(file);
-
-                //Content-Type: multipart/form-data; boundary=---------------------------8d4b4bdf9867764
-                //Host: df-msit-scus-redirect.analysis.windows.net
-                //Content-Length: 8402985
-                //-----------------------------8d4b4bdf9867764
-                //Content-Disposition: form-data; name="file0"; filename="FacebookTemplate.pbix"
-                //Content-Type: application/x-zip-compressed
-
                 using (MultipartFormDataContent content = new MultipartFormDataContent())
                 {
+                    content.Headers.ContentType.Parameters.Clear();
+                    string boundary = GetFormBoundary();
+                    content.Headers.ContentType.Parameters.Add(new NameValueHeaderValue("boundary", boundary));
+
+                    HttpContent fileContent = new StreamContent(new MemoryStream(file));
+                    fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data");
+                    fileContent.Headers.ContentDisposition.Name = "\"file0\"";
+                    fileContent.Headers.ContentDisposition.FileName = $"\"{name}\"";
+                    fileContent.Headers.ContentLength = null;
+                    fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/x-zip-compressed");
+
                     content.Add(fileContent);
 
                     response = await client.PostAsync(url, content);
@@ -147,6 +152,11 @@ namespace Microsoft.Deployment.Common.Helpers
             }
 
             return await response.Content.ReadAsStringAsync();
+        }
+
+        private string GetFormBoundary()
+        {
+            return string.Format("---------------------------{0:N}", RandomGenerator.GetRandomHexadecimal(FORM_BOUNDARY_SIZE));
         }
     }
 }

@@ -82,11 +82,11 @@ export class ProgressViewModel extends ViewModelBase {
             }
 
             if (isDataStoreValid) {
-                //this.MS.DeploymentService.isFinished = true;
-                //await this.wrangle();
-                //this.isDataPullDone = true;
-                //this.showPublishReport = this.enablePublishReport;
-                this.executeActions();
+                this.MS.DeploymentService.isFinished = true;
+                await this.wrangle();
+                this.isDataPullDone = true;
+                this.showPublishReport = this.enablePublishReport;
+                //this.executeActions();
             }
         }
     }

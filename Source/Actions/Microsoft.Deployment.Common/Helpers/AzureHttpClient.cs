@@ -9,6 +9,8 @@ namespace Microsoft.Deployment.Common.Helpers
 {
     public class AzureHttpClient
     {
+        private const int FORM_BOUNDARY_SIZE = 15;
+
         public Dictionary<string, string> Headers { get; set; }
         public Task Providers { get; set; }
         public string ResourceGroup { get; }
@@ -133,7 +135,7 @@ namespace Microsoft.Deployment.Common.Helpers
                 using (MultipartFormDataContent content = new MultipartFormDataContent())
                 {
                     content.Headers.ContentType.Parameters.Clear();
-                    string boundary = "---------------------------8d4b4bdf9867764";
+                    string boundary = string.Format("---------------------------{0:N}", RandomGenerator.GetRandomHexadecimal(FORM_BOUNDARY_SIZE));
                     content.Headers.ContentType.Parameters.Add(new NameValueHeaderValue("boundary", boundary));
 
                     HttpContent fileContent = new StreamContent(new MemoryStream(file));
@@ -144,9 +146,6 @@ namespace Microsoft.Deployment.Common.Helpers
                     fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/x-zip-compressed");
 
                     content.Add(fileContent);
-                    content.Headers.ContentLength += file.Length + (boundary.Length - 1) +
-                        fileContent.Headers.ContentDisposition.ToString().Length +
-                        fileContent.Headers.ContentType.ToString().Length;
 
                     response = await client.PostAsync(url, content);
                 }

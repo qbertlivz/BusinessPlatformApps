@@ -25,9 +25,9 @@ namespace Microsoft.Deployment.Actions.Common.PBI
             pbiWorkspaceId = string.IsNullOrEmpty(pbiWorkspaceId) ? string.Empty : "groups/" + pbiWorkspaceId + "/";
 
             byte[] file = null;
-            using (WebClient webClient = new WebClient())
+            using (WebClient wc = new WebClient())
             {
-                file = webClient.DownloadData(pbixLocation);
+                file = wc.DownloadData(pbixLocation);
             }
 
             string filename = request.Info.AppName + RandomGenerator.GetDateStamp() + ".pbix";

@@ -17,14 +17,13 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
         private const int SQL_CONNECTION_ID_LENGTH = 32;
 
         private const string BASE_POWER_APPS_URL = "https://management.azure.com/providers/Microsoft.PowerApps";
-        private const string SQL_CONNECTION_ID_CHARACTERS = "0123456789abcdef";
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
             AzureHttpClient client = new AzureHttpClient(azureToken);
 
-            string newSqlConnectionId = GetNewSqlConnectionId();
+            string newSqlConnectionId = RandomGenerator.GetRandomHexadecimal(SQL_CONNECTION_ID_LENGTH);
             string powerAppEnvironment = request.DataStore.GetValue("PowerAppEnvironment");
 
             if (powerAppEnvironment == null)
@@ -44,19 +43,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
             request.DataStore.AddToDataStore("PowerAppSqlConnectionId", newSqlConnectionId, DataStoreType.Private);
 
             return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
-        }
-
-        private string GetNewSqlConnectionId()
-        {
-            Random randy = new Random();
-            StringBuilder sb = new StringBuilder();
-
-            for (int i = 0; i < SQL_CONNECTION_ID_LENGTH; i++)
-            {
-                sb.Append(SQL_CONNECTION_ID_CHARACTERS[randy.Next(SQL_CONNECTION_ID_CHARACTERS.Length)]);
-            }
-
-            return sb.ToString();
         }
     }
 }

@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Globalization;
 using System.Threading.Tasks;
-
-using Newtonsoft.Json;
 
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
@@ -16,7 +13,6 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
     public class CreateScribeConnectionSalesforce : BaseAction
     {
         private const string CONNECTOR_ID = "8ADD76FC-525F-4B4B-B79E-945A6A762792";
-        private const string URL_CONNECTIONS = "/v1/orgs/{0}/connections";
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
@@ -54,7 +50,7 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
             kvp = new ScribeKeyValue { Key = "SecurityToken", Value = ScribeUtility.AesEncrypt(apiToken, request.DataStore.GetValue("SalesforceToken")) };
             connection.Properties.Add(kvp);
 
-            await rc.Post(string.Format(CultureInfo.InvariantCulture, URL_CONNECTIONS, orgId), JsonConvert.SerializeObject(connection, Formatting.Indented));
+            await rc.Post(string.Format(ScribeUtility.URL_CONNECTIONS, orgId), JsonUtility.Serialize(connection));
 
             return new ActionResponse(ActionStatus.Success);
         }

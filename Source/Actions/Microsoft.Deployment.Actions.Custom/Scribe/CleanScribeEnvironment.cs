@@ -3,8 +3,6 @@ using System.ComponentModel.Composition;
 using System.Globalization;
 using System.Threading.Tasks;
 
-using Newtonsoft.Json;
-
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
@@ -15,18 +13,13 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
     [Export(typeof(IAction))]
     public class CleanScribeEnvironment : BaseAction
     {
-        private const string URL_CONNECTION = "/v1/orgs/{0}/connections/{1}";
-        private const string URL_CONNECTIONS = "/v1/orgs/{0}/connections";
-        private const string URL_SOLUTION = "/v1/orgs/{0}/solutions/{1}";
-        private const string URL_SOLUTIONS = "/v1/orgs/{0}/solutions";
-
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             RestClient rc = ScribeUtility.Initialize(request.DataStore.GetValue("ScribeUsername"), request.DataStore.GetValue("ScribePassword"));
 
             string orgId = request.DataStore.GetLastValue("ScribeOrganizationId");
 
-            List<ScribeSolution> solutions = await GetSolutions(rc, orgId);
+            List<ScribeSolution> solutions = await ScribeUtility.GetSolutions(rc, orgId);
             if (solutions != null)
             {
                 foreach (ScribeSolution solution in solutions)
@@ -55,24 +48,17 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
 
         private async Task DeleteConnection(RestClient rc, string orgId, string connectionId)
         {
-            await rc.Delete(string.Format(CultureInfo.InvariantCulture, URL_CONNECTION, orgId, connectionId), null, null);
+            await rc.Delete(string.Format(ScribeUtility.URL_CONNECTION, orgId, connectionId), null, null);
         }
 
         private async Task DeleteSolution(RestClient rc, string orgId, string solutionId)
         {
-            await rc.Delete(string.Format(CultureInfo.InvariantCulture, URL_SOLUTION, orgId, solutionId));
+            await rc.Delete(string.Format(ScribeUtility.URL_SOLUTION, orgId, solutionId));
         }
 
         private async Task<List<ScribeConnection>> GetConnections(RestClient rc, string orgId)
         {
-            string response = await rc.Get(string.Format(CultureInfo.InvariantCulture, URL_CONNECTIONS, orgId));
-            return JsonConvert.DeserializeObject<List<ScribeConnection>>(response);
-        }
-
-        private async Task<List<ScribeSolution>> GetSolutions(RestClient rc, string orgId)
-        {
-            string response = await rc.Get(string.Format(CultureInfo.InvariantCulture, URL_SOLUTIONS, orgId), null, null);
-            return JsonConvert.DeserializeObject<List<ScribeSolution>>(response);
+            return JsonUtility.Deserialize<List<ScribeConnection>>(await rc.Get(string.Format(ScribeUtility.URL_CONNECTIONS, orgId)));
         }
     }
 }

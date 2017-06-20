@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Globalization;
 using System.Threading.Tasks;
-
-using Newtonsoft.Json;
 
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
@@ -16,11 +13,6 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
     [Export(typeof(IAction))]
     public class CreateScribeSolution : BaseAction
     {
-        private const string URL_AGENTS = "/v1/orgs/{0}/agents";
-        private const string URL_CONNECTIONS = "/v1/orgs/{0}/connections";
-        private const string URL_SOLUTION_SCHEDULE = "/v1/orgs/{0}/solutions/{1}/schedule";
-        private const string URL_SOLUTIONS = "/v1/orgs/{0}/solutions";
-
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             RestClient rc = ScribeUtility.Initialize(request.DataStore.GetValue("ScribeUsername"), request.DataStore.GetValue("ScribePassword"));
@@ -38,23 +30,21 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
                 AgentId = await GetAgentId(rc, orgId, request.DataStore.GetValue("ScribeAgentName"))
             };
 
-            string response = await rc.Post(string.Format(CultureInfo.InvariantCulture, URL_SOLUTIONS, orgId), JsonConvert.SerializeObject(solution));
-            ScribeSolution result = JsonConvert.DeserializeObject<ScribeSolution>(response);
+            ScribeSolution result = JsonUtility.Deserialize<ScribeSolution>(await rc.Post(string.Format(ScribeUtility.URL_SOLUTIONS, orgId), JsonUtility.Serialize(solution)));
 
             ScribeSolutionSchedule schedule = new ScribeSolutionSchedule(request.DataStore.GetValue("RefreshSchedule"));
-            await rc.Put(string.Format(CultureInfo.InvariantCulture, URL_SOLUTION_SCHEDULE, orgId, result.Id), JsonConvert.SerializeObject(schedule));
+            await rc.Put(string.Format(ScribeUtility.URL_SOLUTION_SCHEDULE, orgId, result.Id), JsonUtility.Serialize(schedule));
 
             return new ActionResponse(ActionStatus.Success);
         }
 
         private async Task<string> GetAgentId(RestClient rc, string orgId, string agentName)
         {
-            string response = await rc.Get(string.Format(CultureInfo.InvariantCulture, URL_AGENTS, orgId));
-            List<ScribeAgent> agents = JsonConvert.DeserializeObject<List<ScribeAgent>>(response);
+            List<ScribeAgent> agents = JsonUtility.Deserialize<List<ScribeAgent>>(await rc.Get(string.Format(ScribeUtility.URL_AGENTS, orgId)));
 
             foreach (ScribeAgent agent in agents)
             {
-                if (agent.Name.Equals(agentName, StringComparison.OrdinalIgnoreCase))
+                if (agent.Name.EqualsIgnoreCase(agentName))
                 {
                     return agent.Id;
                 }
@@ -65,10 +55,9 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
 
         private async Task<string> GetConnectionId(RestClient rc, string orgId, string connectionName)
         {
-            string response = await rc.Get(string.Format(CultureInfo.InvariantCulture, URL_CONNECTIONS, orgId),
-                string.Format(CultureInfo.InvariantCulture, "name={0}&limit=1&expand=false", connectionName), null);
-            List<ScribeConnection> result = JsonConvert.DeserializeObject<List<ScribeConnection>>(response);
-            return result.Count == 1 ? result[0].Id : null;
+            List<ScribeConnection> connection = JsonUtility.Deserialize<List<ScribeConnection>>(await rc.Get(string.Format(ScribeUtility.URL_CONNECTIONS, orgId),
+                string.Format("name={0}&limit=1&expand=false", connectionName), null));
+            return connection.Count == 1 ? connection[0].Id : null;
         }
     }
 }

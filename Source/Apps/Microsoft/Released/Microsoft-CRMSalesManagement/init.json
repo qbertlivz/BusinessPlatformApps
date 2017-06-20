@@ -139,8 +139,9 @@
                     "SqlConnectionString"
                 ],
                 "displayname": "Progress",
-                "name": "$SiteCommon$/pages-gallery/progress.html",
+                "enablePublishReport": "$run(!this.MS.HttpService.isOnPremise)",
                 "filename": "$save('SalesManagementReport.pbix')",
+                "name": "$SiteCommon$/pages-gallery/progress.html",
                 "showCounts": true,
                 "finishedActionName": "$run(this.MS.DataStore.getValue('DataMovement') === 'D365' ? 'Microsoft-CrmGetProfileStatus' : 'Microsoft-GetScribeSolutionStatus')",
                 "asDatabase": "SalesManagement",

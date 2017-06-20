@@ -39,7 +39,7 @@ namespace Microsoft.Deployment.Actions.OnPremise
         {
             ActionResponse confirmation = await RequestUtility.CallAction(request, actionName);
 
-            if (dataPull.Status != ActionStatus.InProgress && confirmation != null)
+            if (confirmation != null)
             {
                 switch (confirmation.Status)
                 {

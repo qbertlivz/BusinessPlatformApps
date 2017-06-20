@@ -53,7 +53,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             FtpUtilityTest.UploadFileToServer(ftpServer, username, password, "/ArticleExtractor/bin/Microsoft.KnowledgeMining.MainArticleExtractor.dll", 
             request.ControllerModel.SiteCommonFilePath + "/Assemblies/Microsoft.KnowledgeMining.MainArticleExtractor.dll");
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
     }
 }

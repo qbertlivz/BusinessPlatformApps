@@ -21,7 +21,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
 
             if (paSqlConnectionId == null)
             {
-                return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+                return new ActionResponse(ActionStatus.Success);
             }
 
             string paOriginal = request.Info.App.AppFilePath + $"/service/PowerApp/{paFileName}";

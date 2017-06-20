@@ -295,7 +295,6 @@
             {
                 "displayname": "$translate(INIT_ACTION_WAITING_DATA)",
                 "FinishedActionName": "Microsoft-CrmGetProfileStatus",
-                "IsWaiting": true,
                 "name": "Microsoft-GetDataPullStatus",
                 "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'D365')",
                 "SqlServerIndex": 0,
@@ -330,7 +329,6 @@
             {
                 "displayname": "$translate(INIT_ACTION_CHECKING_DATA)",
                 "FinishedActionName": "Microsoft-GetScribeSolutionStatus",
-                "IsWaiting": true,
                 "name": "Microsoft-GetDataPullStatus",
                 "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')",
                 "SqlServerIndex": 0,

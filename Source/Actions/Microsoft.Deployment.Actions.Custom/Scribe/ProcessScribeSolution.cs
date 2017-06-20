@@ -39,7 +39,7 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
 
             await rc.Post(string.Format(CultureInfo.InvariantCulture, URL_SOLUTION_PROCESS, orgId, solutionId), string.Empty);
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
 
         private async Task<string> GetSolutionId(RestClient rc, string orgId, string name)

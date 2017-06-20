@@ -23,7 +23,7 @@ namespace Microsoft.Deployment.Actions.OnPremise.WinNT
             {
                 key = Registry.LocalMachine.OpenSubKey("SYSTEM\\CurrentControlSet\\Control\\Lsa");
                 if (key == null)
-                    return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+                    return new ActionResponse(ActionStatus.Success);
 
                 object v = key.GetValue("disabledomaincreds");
                 if (v != null && (int)v != 0)
@@ -31,7 +31,7 @@ namespace Microsoft.Deployment.Actions.OnPremise.WinNT
                     request.Logger.LogCustomProperty("DISABLEDOMAINCREDS", v.ToString());
                     return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "DisabledDomainCredsEnabled");
                 }
-                return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+                return new ActionResponse(ActionStatus.Success);
             }
             catch (Exception e)
             {

@@ -70,7 +70,7 @@ namespace Microsoft.Deployment.Actions.Custom.SCCM
 
             DirectoryCopy(Path.Combine(request.Info.App.AppFilePath, RESOURCE_PATH), targetPath, true);
             
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
     }
 }

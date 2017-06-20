@@ -46,7 +46,7 @@ namespace Microsoft.Deployment.Actions.SQL
                 SqlUtility.InvokeSqlCommand(connectionString, query, null);
             }
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
 
         private const string queryTemplate = @"MERGE {0} AS t  

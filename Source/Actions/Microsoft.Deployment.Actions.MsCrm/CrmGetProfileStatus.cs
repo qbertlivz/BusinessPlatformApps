@@ -49,9 +49,9 @@
                 // END REMOVE
 
                 if (done || tempDone) // if (done)
-                    return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+                    return new ActionResponse(ActionStatus.Success);
                 else
-                    return new ActionResponse(ActionStatus.BatchNoState, JsonUtility.GetEmptyJObject());
+                    return new ActionResponse(ActionStatus.InProgress);
 
             }
             catch (Exception e)

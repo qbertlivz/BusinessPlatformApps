@@ -50,7 +50,7 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
                 }
             }
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
 
         private async Task DeleteConnection(RestClient rc, string orgId, string connectionId)

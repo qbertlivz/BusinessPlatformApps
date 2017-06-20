@@ -28,7 +28,7 @@ namespace Microsoft.Deployment.Actions.SQL
             int sourceLCID = (int)dtSrcLCID.Rows[0]["DB_LCID"];
             int destLCID = (int)dtDestLCID.Rows[0]["DB_LCID"];
 
-            return sourceLCID==destLCID ? new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject()) :
+            return sourceLCID==destLCID ? new ActionResponse(ActionStatus.Success) :
                                           new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "SQL_TargetCollationDoesntMatch");
         }
     }

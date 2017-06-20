@@ -95,7 +95,6 @@ export class ProgressViewModel extends ViewModelBase {
         if (this.showCounts && !this.isDataPullDone && !this.MS.DeploymentService.hasError) {
             let response = await this.MS.HttpService.executeAsync('Microsoft-GetDataPullStatus', {
                 FinishedActionName: this.finishedActionName,
-                IsWaiting: false,
                 SqlServerIndex: this.sqlServerIndex,
                 TargetSchema: this.targetSchema
             });

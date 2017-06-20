@@ -4,7 +4,7 @@
     {
         Failure,
         FailureExpected,
-        BatchNoState,
+        InProgress,
         BatchWithState,
         UserInteractionRequired,
         Success,
@@ -33,7 +33,7 @@
                 case ActionStatus.BatchWithState:
                     return "202";
 
-                case ActionStatus.BatchNoState:
+                case ActionStatus.InProgress:
                     return "202";
 
                 case ActionStatus.UserInteractionRequired:

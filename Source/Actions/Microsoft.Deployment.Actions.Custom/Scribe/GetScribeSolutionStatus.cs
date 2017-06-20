@@ -37,15 +37,15 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
 
             if (status.Equals("IdleLastRunFailed", StringComparison.OrdinalIgnoreCase) || status.Equals("OnDemandLastRunFailed", StringComparison.OrdinalIgnoreCase))
             {
-                return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject());
+                return new ActionResponse(ActionStatus.Failure);
             }
             else if (status.Equals("Idle", StringComparison.OrdinalIgnoreCase) || status.Equals("OnDemand", StringComparison.OrdinalIgnoreCase))
             {
-                return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+                return new ActionResponse(ActionStatus.Success);
             }
             else
             {
-                return new ActionResponse(ActionStatus.BatchNoState, JsonUtility.GetEmptyJObject());
+                return new ActionResponse(ActionStatus.InProgress);
             }
         }
 

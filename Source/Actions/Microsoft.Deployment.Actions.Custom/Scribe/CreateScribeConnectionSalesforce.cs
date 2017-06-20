@@ -56,7 +56,7 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
 
             await rc.Post(string.Format(CultureInfo.InvariantCulture, URL_CONNECTIONS, orgId), JsonConvert.SerializeObject(connection, Formatting.Indented));
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
     }
 }

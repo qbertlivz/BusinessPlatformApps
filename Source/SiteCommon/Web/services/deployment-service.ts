@@ -69,8 +69,7 @@ export class DeploymentService {
             }
 
             this.MS.DataStore.addObjectToDataStore(response.Body, DataStoreType.Private);
-            if (response.Status === ActionStatus.BatchWithState ||
-                response.Status === ActionStatus.BatchNoState) {
+            if (response.Status === ActionStatus.BatchWithState || response.Status === ActionStatus.InProgress) {
                 i = i - 1; // Loop again but dont add parameter back
             }
 

@@ -25,7 +25,7 @@ namespace Microsoft.Deployment.Actions.OnPremise.WinNT
             // This will throw an error if the permission cannot be granted
             NTPermissionUtility.SetRight(Environment.MachineName, domainAccount, NTPermissionUtility.LOGON_AS_BATCH_PERM, false);
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
     }
 }

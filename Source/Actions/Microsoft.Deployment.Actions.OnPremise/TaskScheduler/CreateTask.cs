@@ -91,7 +91,7 @@ namespace Microsoft.Deployment.Actions.OnPremise.TaskScheduler
                 ts.RootFolder.RegisterTaskDefinition(taskName, td, TaskCreation.CreateOrUpdate, taskUsername, taskPassword, TaskLogonType.Password, null);
             }
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
     }
 }

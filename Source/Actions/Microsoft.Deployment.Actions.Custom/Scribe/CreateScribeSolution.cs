@@ -44,7 +44,7 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
             ScribeSolutionSchedule schedule = new ScribeSolutionSchedule(request.DataStore.GetValue("RefreshSchedule"));
             await rc.Put(string.Format(CultureInfo.InvariantCulture, URL_SOLUTION_SCHEDULE, orgId, result.Id), JsonConvert.SerializeObject(schedule));
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
 
         private async Task<string> GetAgentId(RestClient rc, string orgId, string agentName)

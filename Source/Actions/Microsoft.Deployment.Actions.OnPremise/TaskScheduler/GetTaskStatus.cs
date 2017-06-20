@@ -43,7 +43,7 @@ namespace Microsoft.Deployment.Actions.OnPremise.TaskScheduler
                     switch (task.LastTaskResult)
                     {
                         case 0:
-                            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+                            return new ActionResponse(ActionStatus.Success);
                         case 267014:
                             var uploaded = await uploadLogs(request);
                             if (!uploaded.IsSuccess)
@@ -60,7 +60,7 @@ namespace Microsoft.Deployment.Actions.OnPremise.TaskScheduler
                     }
 
                     if (task.State == TaskState.Running)
-                        return new ActionResponse(ActionStatus.BatchNoState, JsonUtility.GetEmptyJObject());
+                        return new ActionResponse(ActionStatus.InProgress);
 
                     if (NTHelper.IsCredentialGuardEnabled())
                         return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "CredentialGuardEnabled");

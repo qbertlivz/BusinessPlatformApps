@@ -59,6 +59,7 @@
                     "SqlConnectionString"
                 ],
                 "displayname": "Progress",
+                "enablePublishReport": true,
                 "filename": "$save('FacebookTemplate.pbix')",
                 "name": "$SiteCommon$/pages-gallery/progress.html",
                 "Schema": "$save('fb')",

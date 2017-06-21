@@ -31,7 +31,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
                 request.DataStore.AddToDataStore("SkipPowerApp", "true", DataStoreType.Public);
             }
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
     }
 }

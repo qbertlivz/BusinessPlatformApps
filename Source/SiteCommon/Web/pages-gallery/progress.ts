@@ -1,4 +1,5 @@
 ﻿import { ActionResponse } from '../models/action-response';
+import { DataPullStatus } from '../models/data-pull-status';
 import { PBIWorkspace } from '../models/pbi-workspace';
 
 import { ViewModelBase } from '../services/view-model-base';
@@ -93,16 +94,19 @@ export class ProgressViewModel extends ViewModelBase {
 
     async queryRecordCounts(): Promise<void> {
         if (this.showCounts && !this.isDataPullDone && !this.MS.DeploymentService.hasError) {
-            let response = await this.MS.HttpService.executeAsync('Microsoft-GetDataPullStatus', {
+            let dataPullStatus: DataPullStatus = await this.MS.HttpService.getResponseAsync('Microsoft-GetDataPullStatus', {
                 FinishedActionName: this.finishedActionName,
-                IsWaiting: false,
                 SqlServerIndex: this.sqlServerIndex,
                 TargetSchema: this.targetSchema
             });
-            if (response.IsSuccess) {
-                this.recordCounts = response.Body.status;
-                this.sliceStatus = response.Body.slices;
-                this.isDataPullDone = response.Body.isFinished;
+            if (dataPullStatus) {
+                try {
+                    this.recordCounts = JSON.parse(dataPullStatus.status);
+                    this.sliceStatus = JSON.parse(dataPullStatus.slices);
+                } catch (e) {
+                    // do nothing
+                }
+                this.isDataPullDone = dataPullStatus.isFinished;
                 this.queryRecordCounts();
             } else {
                 this.MS.DeploymentService.hasError = true;

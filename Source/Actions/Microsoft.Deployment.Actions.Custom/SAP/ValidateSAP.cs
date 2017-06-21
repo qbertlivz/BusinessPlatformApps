@@ -41,7 +41,7 @@ namespace Microsoft.Deployment.Actions.Custom.SAP
 
             if (exeProcess.ExitCode == 0)
             {
-                return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+                return new ActionResponse(ActionStatus.Success);
             }
 
             return new ActionResponse(ActionStatus.FailureExpected, JsonUtility.GetEmptyJObject(), null, DefaultErrorCodes.DefaultLoginFailed, exeProcess.ExitCode.ToString());

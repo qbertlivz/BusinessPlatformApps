@@ -29,7 +29,7 @@ namespace Microsoft.Deployment.Actions.OnPremise.WinNT
 
             p.WaitForExit();
 
-            return p.ExitCode >= 5 ? new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject()) :
+            return p.ExitCode >= 5 ? new ActionResponse(ActionStatus.Success) :
                                      new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "LowPowerShellVersion");
         }
     }

@@ -1,9 +1,9 @@
 ﻿export class MsCrmOrganization {
-    ConnectorUrl: string;
-    ErrorCategory: number;
-    ErrorCode: number;
-    ErrorMessage: string;
-    OrganizationId: string;
-    OrganizationName: string;
-    OrganizationUrl: string;
+    connectorUrl: string;
+    errorCategory: number;
+    errorCode: number;
+    errorMessage: string;
+    organizationId: string;
+    organizationName: string;
+    organizationUrl: string;
 }

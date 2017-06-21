@@ -134,6 +134,7 @@
                     "SqlConnectionString"
                 ],
                 "displayname": "Progress",
+                "enablePublishReport": "$run(!this.MS.HttpService.isOnPremise)",
                 "filename": "$save('SalesManagementReport.pbix')",
                 "filenameSSAS": "SalesManagementReportAS.pbix",
                 "finishedActionName": "$run(this.MS.DataStore.getValue('DataMovement') === 'ADF' ? 'Microsoft-ADFSliceStatus' : this.MS.DataStore.getValue('DataMovement') === 'Scribe' ? 'Microsoft-GetScribeSolutionStatus' : 'Microsoft-GetInformaticaTaskStatus')",
@@ -307,7 +308,6 @@
             {
                 "displayname": "$translate(INIT_ACTION_CHECKING_DATA)",
                 "FinishedActionName": "Microsoft-ADFSliceStatus",
-                "IsWaiting": true,
                 "name": "Microsoft-GetDataPullStatus",
                 "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')",
                 "SqlServerIndex": 0,
@@ -342,7 +342,6 @@
             {
                 "displayname": "$translate(INIT_ACTION_CHECKING_DATA)",
                 "FinishedActionName": "Microsoft-GetInformaticaTaskStatus",
-                "IsWaiting": true,
                 "name": "Microsoft-GetDataPullStatus",
                 "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Informatica')",
                 "SqlServerIndex": 0,
@@ -377,7 +376,6 @@
             {
                 "displayname": "$translate(INIT_ACTION_CHECKING_DATA)",
                 "FinishedActionName": "Microsoft-GetScribeSolutionStatus",
-                "IsWaiting": true,
                 "name": "Microsoft-GetDataPullStatus",
                 "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')",
                 "SqlServerIndex": 0,

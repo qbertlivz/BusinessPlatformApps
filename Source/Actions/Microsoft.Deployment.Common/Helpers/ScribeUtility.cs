@@ -8,8 +8,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-using Newtonsoft.Json;
-
 using Microsoft.Deployment.Common.Model.Scribe;
 
 namespace Microsoft.Deployment.Common.Helpers
@@ -19,10 +17,23 @@ namespace Microsoft.Deployment.Common.Helpers
         public const string BPST_SOLUTION_NAME = "BPST Solution";
         public const string BPST_SOURCE_NAME = "BPST Source";
         public const string BPST_TARGET_NAME = "BPST Target";
-
-        private const string URL_CONNECTORS = "/v1/orgs/{0}/connectors";
-        private const string URL_CONNECTORSINSTALL = "/v1/orgs/{0}/connectors/{1}/install";
-        private const string URL_ENDPOINT = "https://api.scribesoft.com";
+        public const string REPLICATION_SERVICES = "Replication Services (RS)";
+        public const string URL_AGENTS = "/v1/orgs/{0}/agents";
+        public const string URL_CONNECTION = "/v1/orgs/{0}/connections/{1}";
+        public const string URL_CONNECTIONS = "/v1/orgs/{0}/connections";
+        public const string URL_CONNECTORS = "/v1/orgs/{0}/connectors";
+        public const string URL_CONNECTORSINSTALL = "/v1/orgs/{0}/connectors/{1}/install";
+        public const string URL_ENDPOINT = "https://api.scribesoft.com";
+        public const string URL_HISTORY = "/v1/orgs/{0}/solutions/{1}/history";
+        public const string URL_ORGANIZATIONS = "/v1/orgs";
+        public const string URL_PROVISION_CLOUD_AGENT = "/v1/orgs/{0}/agents/provision_cloud_agent";
+        public const string URL_PROVISION_ONPREMISE_AGENT = "/v1/orgs/{0}/agents/provision_onpremise_agent";
+        public const string URL_SECURITY_RULES = "/v1/orgs/{0}/securityrules";
+        public const string URL_SOLUTION = "/v1/orgs/{0}/solutions/{1}";
+        public const string URL_SOLUTION_PROCESS = "v1/orgs/{0}/solutions/{1}/start";
+        public const string URL_SOLUTION_SCHEDULE = "/v1/orgs/{0}/solutions/{1}/schedule";
+        public const string URL_SOLUTIONS = "/v1/orgs/{0}/solutions";
+        public const string URL_SUBSCRIPTIONS = "/v1/orgs/{0}/subscriptions";
 
         public static RestClient Initialize(string username, string password)
         {
@@ -79,10 +90,29 @@ namespace Microsoft.Deployment.Common.Helpers
             return result;
         }
 
+        public static async Task<string> GetSolutionId(RestClient rc, string orgId, string name)
+        {
+            List<ScribeSolution> solutions = await ScribeUtility.GetSolutions(rc, orgId);
+
+            foreach (ScribeSolution solution in solutions)
+            {
+                if (name == solution.Name)
+                {
+                    return solution.Id;
+                }
+            }
+
+            return null;
+        }
+
+        public static async Task<List<ScribeSolution>> GetSolutions(RestClient rc, string orgId)
+        {
+            return JsonUtility.Deserialize<List<ScribeSolution>>(await rc.Get(string.Format(CultureInfo.InvariantCulture, ScribeUtility.URL_SOLUTIONS, orgId), null, null));
+        }
+
         public static async Task InstallConnector(RestClient rc, string orgId, string connectorId)
         {
-            var response = await rc.Get(string.Format(CultureInfo.InvariantCulture, URL_CONNECTORS, orgId));
-            List<ScribeConnector> connectors = JsonConvert.DeserializeObject<List<ScribeConnector>>(response);
+            List<ScribeConnector> connectors = JsonUtility.Deserialize<List<ScribeConnector>>(await rc.Get(string.Format(URL_CONNECTORS, orgId)));
 
             if (!connectors.Any(p => p.Id.Equals(connectorId, StringComparison.OrdinalIgnoreCase)))
             {

@@ -53,7 +53,7 @@ namespace Microsoft.Deployment.Actions.SQL
             if ( Convert.ToInt32(result.Rows[0]["compatibility_level"])<100)
                 return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "SQL_CompatLevelTooLow");
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
     }
 }

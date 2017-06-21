@@ -53,7 +53,7 @@ namespace Microsoft.Deployment.Actions.Custom.SCCM
             }
 
             if (isHigher)
-                return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+                return new ActionResponse(ActionStatus.Success);
             else
                 return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "SccmVersionTooLow");
         }

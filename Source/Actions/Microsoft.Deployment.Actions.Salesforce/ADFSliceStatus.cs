@@ -104,7 +104,7 @@ namespace Microsoft.Deployment.Actions.Salesforce
 
             if (ready.Count() > 0)
             {
-                return new ActionResponse(ActionStatus.BatchNoState, response);
+                return new ActionResponse(ActionStatus.InProgress, response);
             }
             else
             {

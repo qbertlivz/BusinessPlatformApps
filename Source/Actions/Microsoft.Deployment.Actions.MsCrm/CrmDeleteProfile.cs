@@ -40,7 +40,7 @@
                     await rc.Delete(MsCrmEndpoints.URL_PROFILES + "/" + p.Id);
             }
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
     }
 }

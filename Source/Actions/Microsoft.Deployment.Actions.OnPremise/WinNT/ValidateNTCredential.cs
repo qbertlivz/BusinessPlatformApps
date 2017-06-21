@@ -28,7 +28,7 @@ namespace Microsoft.Deployment.Actions.OnPremise.WinNT
             }
 
             return isValid
-                ? new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject())
+                ? new ActionResponse(ActionStatus.Success)
                 : new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "IncorrectNTCredentials");
         }
     }

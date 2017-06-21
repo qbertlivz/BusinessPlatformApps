@@ -53,7 +53,7 @@
                                                                                            };
                 request.Logger.LogEvent("MSCRM-ProfileStarted", properties);
 
-                return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+                return new ActionResponse(ActionStatus.Success);
             }
             catch (Exception e)
             {

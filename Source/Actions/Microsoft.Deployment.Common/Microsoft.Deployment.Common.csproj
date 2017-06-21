@@ -66,6 +66,11 @@
     <Compile Include="ActionModel\DictionaryIgnoreCase.cs" />
     <Compile Include="Enums\CreatedBy.cs" />
     <Compile Include="Enums\DeploymentResourceType.cs" />
+    <Compile Include="ErrorResources\EnglishErrorCodes.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EnglishErrorCodes.resx</DependentUpon>
+    </Compile>
     <Compile Include="Exceptions\ActionFailedException.cs" />
     <Compile Include="ActionModel\ActionRequest.cs" />
     <Compile Include="ActionModel\ActionResponse.cs" />
@@ -92,7 +97,6 @@
     <Compile Include="ErrorCode\AzureErrorCodes.cs" />
     <Compile Include="ErrorCode\DefaultErrorCodes.cs" />
     <Compile Include="ErrorCode\SqlErrorCodes.cs" />
-    <Compile Include="ErrorResources\EnglishErrorCodes.Designer.cs" />
     <Compile Include="Exceptions\ActionNotFoundException.cs" />
     <Compile Include="Exceptions\ActionResponseCode.cs" />
     <Compile Include="Helpers\AzureArmParameter.cs" />
@@ -118,6 +122,7 @@
     <Compile Include="Helpers\StringEnumConverterLower.cs" />
     <Compile Include="Helpers\StringExtension.cs" />
     <Compile Include="Controller\Logger.cs" />
+    <Compile Include="Model\DataPullStatus.cs" />
     <Compile Include="Model\Informatica\InformaticaActivityLog.cs" />
     <Compile Include="Model\Informatica\InformaticaAgent.cs" />
     <Compile Include="Model\Informatica\InformaticaConnection.cs" />
@@ -151,6 +156,7 @@
     <Compile Include="Model\Scribe\ScribeAgentInstall.cs" />
     <Compile Include="Model\Scribe\ScribeConnection.cs" />
     <Compile Include="Model\Scribe\ScribeConnector.cs" />
+    <Compile Include="Model\Scribe\ScribeHistory.cs" />
     <Compile Include="Model\Scribe\ScribeKeyValue.cs" />
     <Compile Include="Model\Scribe\ScribeObject.cs" />
     <Compile Include="Model\Scribe\ScribeOrganization.cs" />
@@ -173,7 +179,10 @@
     <Compile Include="Tags\UninstallTagHandler.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ErrorResources\EnglishErrorCodes.resx" />
+    <EmbeddedResource Include="ErrorResources\EnglishErrorCodes.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EnglishErrorCodes.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

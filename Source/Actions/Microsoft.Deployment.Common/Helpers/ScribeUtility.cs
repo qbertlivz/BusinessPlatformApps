@@ -24,6 +24,7 @@ namespace Microsoft.Deployment.Common.Helpers
         public const string URL_CONNECTORS = "/v1/orgs/{0}/connectors";
         public const string URL_CONNECTORSINSTALL = "/v1/orgs/{0}/connectors/{1}/install";
         public const string URL_ENDPOINT = "https://api.scribesoft.com";
+        public const string URL_HISTORY = "/v1/orgs/{0}/solutions/{1}/history";
         public const string URL_ORGANIZATIONS = "/v1/orgs";
         public const string URL_PROVISION_CLOUD_AGENT = "/v1/orgs/{0}/agents/provision_cloud_agent";
         public const string URL_PROVISION_ONPREMISE_AGENT = "/v1/orgs/{0}/agents/provision_onpremise_agent";

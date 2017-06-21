@@ -15,7 +15,7 @@
         {
             string result = EnglishErrorCodes.ResourceManager.GetString(code);
 
-            return result == null ? EnglishErrorCodes.DefaultAdditionalDetailsMessage : result;
+            return result == null ? code : result;
         }
     }
 }

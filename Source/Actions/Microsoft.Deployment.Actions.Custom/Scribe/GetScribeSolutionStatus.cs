@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,13 +24,15 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
 
             Thread.Sleep(SOLUTION_STATUS_WAIT);
 
-            ScribeSolution solution = JsonUtility.Deserialize<ScribeSolution>(await rc.Get(string.Format(ScribeUtility.URL_SOLUTION, orgId, await ScribeUtility.GetSolutionId(rc, orgId, ScribeUtility.BPST_SOLUTION_NAME))));
+            string solutionId = await ScribeUtility.GetSolutionId(rc, orgId, ScribeUtility.BPST_SOLUTION_NAME);
+
+            ScribeSolution solution = JsonUtility.Deserialize<ScribeSolution>(await rc.Get(string.Format(ScribeUtility.URL_SOLUTION, orgId, solutionId)));
 
             string status = solution.status ?? string.Empty;
 
             if (status.Equals("IdleLastRunFailed", StringComparison.OrdinalIgnoreCase) || status.Equals("OnDemandLastRunFailed", StringComparison.OrdinalIgnoreCase))
             {
-                return new ActionResponse(ActionStatus.Failure);
+                return new ActionResponse(ActionStatus.Failure, new ActionResponseExceptionDetail(await GetHistory(rc, orgId, solutionId)));
             }
             else if (status.Equals("Idle", StringComparison.OrdinalIgnoreCase) || status.Equals("OnDemand", StringComparison.OrdinalIgnoreCase))
             {
@@ -39,6 +42,20 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
             {
                 return new ActionResponse(ActionStatus.InProgress);
             }
+        }
+
+        private async Task<string> GetHistory(RestClient rc, string orgId, string solutionId)
+        {
+            string result = string.Empty;
+
+            List<ScribeHistory> history = JsonUtility.Deserialize<List<ScribeHistory>>(await rc.Get(string.Format(ScribeUtility.URL_HISTORY, orgId, solutionId)));
+
+            if (history != null && history.Count > 0)
+            {
+                result = history[0].Details;
+            }
+
+            return result;
         }
     }
 }

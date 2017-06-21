@@ -20,14 +20,9 @@
 
         public string AdditionalDetailsErrorMessage { get; set; } = string.Empty;
 
-        public ActionResponseExceptionDetail()
+        public ActionResponseExceptionDetail(string code = "")
         {
-
-        }
-
-        public ActionResponseExceptionDetail(string code)
-        {
-            this.AdditionalDetailsErrorMessage = ErrorUtility.GetAdditionalDetailsMessage(code);
+            if (!string.IsNullOrEmpty(code)) this.AdditionalDetailsErrorMessage = ErrorUtility.GetAdditionalDetailsMessage(code);
         }
     }
 }

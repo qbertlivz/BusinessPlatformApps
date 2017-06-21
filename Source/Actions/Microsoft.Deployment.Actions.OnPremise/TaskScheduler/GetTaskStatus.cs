@@ -16,6 +16,7 @@ using Task = Microsoft.Win32.TaskScheduler.Task;
 using System.IO.Compression;
 using Microsoft.WindowsAzure.Storage.Blob;
 using System.Text;
+using System.Runtime.InteropServices;
 
 namespace Microsoft.Deployment.Actions.OnPremise.TaskScheduler
 {
@@ -29,64 +30,41 @@ namespace Microsoft.Deployment.Actions.OnPremise.TaskScheduler
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             string taskName = request.DataStore.GetValue("TaskName");
-            
-
-            TaskCollection tasks = null;
 
             using (TaskService ts = new TaskService())
             {
-                tasks = ts.RootFolder.GetTasks(new Regex(taskName));
+                TaskCollection tasks = ts.RootFolder.GetTasks(new Regex(taskName));
+                if (tasks == null || tasks.Count == 0)
+                    return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "SccmTaskNotFound");
 
                 // We expect only one task to match
-                foreach (Task task in tasks)
-                {
-                    switch (task.LastTaskResult)
-                    {
-                        case 0:
-                            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
-                        case 267014:
-                            var uploaded = await uploadLogs(request);
-                            if (!uploaded.IsSuccess)
-                            {
-                                request.Logger.LogCustomProperty("UploadLogs", "Upload of Logs Failed.");
-                            }
-                            return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(),
-                                                                new Exception("The scheduled task was terminated by the user."),
-                                                                "TaskSchedulerRunFailed");
-                        case 411:
-                            return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(),
-                                                      new Exception("PowerShell version too low - please upgrade to latest version https://msdn.microsoft.com/en-us/powershell/wmf/5.0/requirements"),
-                                                      "TaskSchedulerRunFailed");
-                    }
+                // The tasks is still running. No status to report!
+                if (tasks[0].State == TaskState.Running)
+                    return new ActionResponse(ActionStatus.BatchNoState, JsonUtility.GetEmptyJObject());
 
-                    if (task.State == TaskState.Running)
-                        return new ActionResponse(ActionStatus.BatchNoState, JsonUtility.GetEmptyJObject());
+                if (tasks[0].LastTaskResult == 0)
+                    return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+                
+                // there was an error
+                uploadLogs(request);
+                if (NTHelper.IsCredentialGuardEnabled())
+                    return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "CredentialGuardEnabled");
 
-                    if (NTHelper.IsCredentialGuardEnabled())
-                        return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "CredentialGuardEnabled");
+                // azurebcp exits with 0 or 2, the powershell script might return 1 - anything else must be a Windows error
+                Exception e = tasks[0].LastTaskResult > 2 ? 
+                                                new Exception($"Scheduled task exited with code {tasks[0].LastTaskResult}", new System.ComponentModel.Win32Exception(tasks[0].LastTaskResult)):
+                                                new Exception($"Scheduled task exited with code {tasks[0].LastTaskResult}");
 
-                    //If we've encountered an error, copy the logs, zip them up, and send to blob
-                    var uploadedLogs = await uploadLogs(request);
-                    if (!uploadedLogs.IsSuccess)
-                    {
-                        request.Logger.LogCustomProperty("UploadLogs", "Upload of Logs Failed.");
-                    }
+                ActionResponse response = new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), e, "TaskSchedulerRunFailed");
+                response.ExceptionDetail.LogLocation = FileUtility.GetLocalTemplatePath(request.Info.AppName);
 
-                    ActionResponse response = new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(),
-                        new Exception($"Scheduled task exited with code {task.LastTaskResult}"), "TaskSchedulerRunFailed");
-                    response.ExceptionDetail.LogLocation = FileUtility.GetLocalTemplatePath(request.Info.AppName);
-
-                    return response;
-                }
+                return response;
             }
-
-            // We should never return this
-            return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "SccmTaskNotFound");
         }
 
 
 
-        private async Task<ActionResponse> uploadLogs(ActionRequest request)
+        private void uploadLogs(ActionRequest request)
         {
             zipLogs();
 
@@ -100,7 +78,7 @@ namespace Microsoft.Deployment.Actions.OnPremise.TaskScheduler
             {
                 if (Directory.Exists(exportLogDir))
                 {
-                    System.Collections.Generic.IEnumerable<string> logFiles = Directory.EnumerateFiles(exportLogDir);
+                    var logFiles = Directory.EnumerateFiles(exportLogDir);
                     foreach (string filePath in logFiles)
                     {
                         string[] pathBits = filePath.Split('\\');
@@ -110,17 +88,15 @@ namespace Microsoft.Deployment.Actions.OnPremise.TaskScheduler
                         FileStream writeStream = new FileStream(filePath, FileMode.Open);
                         writeStream.Position = 0;
                         CloudBlockBlob blob = new CloudBlockBlob(new Uri(sasUri));
-                        await blob.UploadFromStreamAsync(writeStream);
+                        blob.UploadFromStream(writeStream);
                     }
-                    return new ActionResponse(ActionStatus.Success);
                 }
             }
             catch (Exception e)
-            { 
+            {
+                request.Logger.LogEvent("Upload azurebcp logs failed");
                 request.Logger.LogException(e);
-                return new ActionResponse(ActionStatus.Failure);
             }
-            return new ActionResponse(ActionStatus.Failure);
         }
 
 
@@ -135,7 +111,7 @@ namespace Microsoft.Deployment.Actions.OnPremise.TaskScheduler
                 Directory.CreateDirectory(exportLogDir);
 
                 //copy the logs first.  (If you try to do a read on the original log file, you get an error saying another process is using it.)
-                System.Collections.Generic.IEnumerable<string> logFiles = Directory.EnumerateFiles(userLogDir);
+                var logFiles = Directory.EnumerateFiles(userLogDir);
                 foreach (string filePath in logFiles)
                 {
                     string[] pathBits = filePath.Split('\\');

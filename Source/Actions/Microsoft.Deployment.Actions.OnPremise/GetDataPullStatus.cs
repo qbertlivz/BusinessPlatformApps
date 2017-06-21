@@ -23,6 +23,11 @@ namespace Microsoft.Deployment.Actions.OnPremise
             DataTable recordCounts = GetRecordCounts(request.DataStore.GetValueAtIndex("SqlConnectionString", "SqlServerIndex"),
                 $"[{request.DataStore.GetValue("TargetSchema")}].{SP_REPLICATION_COUNTS}");
 
+            return await ConfirmStatus(request, recordCounts, request.DataStore.GetValue("FinishedActionName"));
+        }
+
+        private async Task<ActionResponse> ConfirmStatus(ActionRequest request, DataTable recordCounts, string actionName)
+        {
             ActionResponse response = new ActionResponse(IsAtLeastOneRecordComingIn(recordCounts) ? ActionStatus.Success : ActionStatus.InProgress,
                 JsonUtility.Serialize<DataPullStatus>(new DataPullStatus()
                 {
@@ -30,13 +35,6 @@ namespace Microsoft.Deployment.Actions.OnPremise
                     Status = JsonUtility.SerializeTable(recordCounts)
                 }));
 
-            await ConfirmStatus(request, response, recordCounts, request.DataStore.GetValue("FinishedActionName"));
-
-            return response;
-        }
-
-        private async Task ConfirmStatus(ActionRequest request, ActionResponse dataPull, DataTable recordCounts, string actionName)
-        {
             ActionResponse confirmation = await RequestUtility.CallAction(request, actionName);
 
             if (confirmation != null)
@@ -44,10 +42,10 @@ namespace Microsoft.Deployment.Actions.OnPremise
                 switch (confirmation.Status)
                 {
                     case ActionStatus.Failure:
-                        dataPull = confirmation;
+                        response = confirmation;
                         break;
                     case ActionStatus.Success:
-                        dataPull = new ActionResponse(ActionStatus.Success, JsonUtility.Serialize<DataPullStatus>(new DataPullStatus()
+                        response = new ActionResponse(ActionStatus.Success, JsonUtility.Serialize<DataPullStatus>(new DataPullStatus()
                         {
                             IsFinished = true,
                             Slices = JObject.FromObject(confirmation.Body)["value"]?.ToString(),
@@ -56,6 +54,8 @@ namespace Microsoft.Deployment.Actions.OnPremise
                         break;
                 }
             }
+
+            return response;
         }
 
         private DataTable GetRecordCounts(string connectionString, string query)

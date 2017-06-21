@@ -26,42 +26,59 @@ namespace Microsoft.Deployment.Actions.OnPremise.TaskScheduler
         static String userLogDir = "C:\\ProgramData\\Business Platform Solution Templates\\Microsoft-SCCMTemplate\\Logs";
         static String exportLogDir = "C:\\ProgramData\\Business Platform Solution Templates\\Microsoft-SCCMTemplate\\Logs\\Export";
 
-
-        public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
+        public Task GetScheduledTask(string taskName)
         {
-            string taskName = request.DataStore.GetValue("TaskName");
-
             using (TaskService ts = new TaskService())
             {
                 TaskCollection tasks = ts.RootFolder.GetTasks(new Regex(taskName));
-                if (tasks == null || tasks.Count == 0)
-                    return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "SccmTaskNotFound");
-
-                // We expect only one task to match
-                // The tasks is still running. No status to report!
-                if (tasks[0].State == TaskState.Running)
-                    return new ActionResponse(ActionStatus.BatchNoState, JsonUtility.GetEmptyJObject());
-
-                if (tasks[0].LastTaskResult == 0)
-                    return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
-                
-                // there was an error
-                uploadLogs(request);
-                if (NTHelper.IsCredentialGuardEnabled())
-                    return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "CredentialGuardEnabled");
-
-                // azurebcp exits with 0 or 2, the powershell script might return 1 - anything else must be a Windows error
-                Exception e = tasks[0].LastTaskResult > 2 ? 
-                                                new Exception($"Scheduled task exited with code {tasks[0].LastTaskResult}", new System.ComponentModel.Win32Exception(tasks[0].LastTaskResult)):
-                                                new Exception($"Scheduled task exited with code {tasks[0].LastTaskResult}");
-
-                ActionResponse response = new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), e, "TaskSchedulerRunFailed");
-                response.ExceptionDetail.LogLocation = FileUtility.GetLocalTemplatePath(request.Info.AppName);
-
-                return response;
+                if (tasks != null && tasks.Count > 0)
+                    return tasks[0]; // We expect only one task to match
+                else
+                    return null;
             }
         }
 
+        public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
+        {
+            const int MAX_RETRIES = 15;
+
+            // This loop tries to avoid an unknown task state, thinking it's transient
+            Task task = null;
+            for (int i = 0; i <= MAX_RETRIES; i++)
+            {
+                System.Threading.Thread.Sleep(100);
+                task = GetScheduledTask(request.DataStore.GetValue("TaskName"));
+                if (task == null)
+                    return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "SccmTaskNotFound");
+
+                if (task.State == TaskState.Unknown)
+                    continue;
+                else
+                    break;
+            }
+
+            // Let it run
+            if (task.State == TaskState.Queued || task.State == TaskState.Running)
+                return new ActionResponse(ActionStatus.BatchNoState, JsonUtility.GetEmptyJObject());
+
+            // If we're here, the task completed
+            if (task.LastTaskResult == 0)
+                return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+
+            // there was an error since we haven't exited above
+            uploadLogs(request);
+            if (NTHelper.IsCredentialGuardEnabled())
+                return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "CredentialGuardEnabled");
+
+            // azurebcp exits with 0, 1, 2, the powershell script might return 1 - anything else must be a Windows error
+            Exception e = (uint)task.LastTaskResult > 2 ?
+                                            new Exception($"Scheduled task exited with code {task.LastTaskResult}", new System.ComponentModel.Win32Exception(task.LastTaskResult)) :
+                                            new Exception($"Scheduled task exited with code {task.LastTaskResult}");
+
+            ActionResponse response = new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), e, "TaskSchedulerRunFailed");
+            response.ExceptionDetail.LogLocation = FileUtility.GetLocalTemplatePath(request.Info.AppName);
+            return response;
+        }
 
 
         private void uploadLogs(ActionRequest request)

@@ -250,6 +250,15 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No Dynamics 365 organizations were found, verify that your username and password are correct.
+        /// </summary>
+        public static string MsCrm_No_Organizations {
+            get {
+                return ResourceManager.GetString("MsCrm_No_Organizations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No Dynamics 365 organization with this URL could be found.
         /// </summary>
         public static string MsCrm_NoOrg {

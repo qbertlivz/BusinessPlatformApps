@@ -82,10 +82,10 @@ export class HttpService {
             if (!content.isInvisible) {
                 if (actionResponse.Status === ActionStatus.Failure || actionResponse.Status === ActionStatus.FailureExpected) {
                     let additionalDetails: string = actionResponse.ExceptionDetail.AdditionalDetailsErrorMessage
-                        ? `${actionResponse.ExceptionDetail.AdditionalDetailsErrorMessage} --- {this.MS.Translate.COMMON_ACTION_FAILED}`
+                        ? `${actionResponse.ExceptionDetail.AdditionalDetailsErrorMessage} --- ${this.MS.Translate.COMMON_ACTION_FAILED}`
                         : this.MS.Translate.COMMON_ACTION_FAILED;
                     this.MS.ErrorService.set(actionResponse.ExceptionDetail.FriendlyErrorMessage,
-                        `${additionalDetails} ${method} --- {this.MS.Translate.COMMON_ERROR_ID}:(${this.MS.LoggerService.UserGenId})`,
+                        `${additionalDetails} ${method} --- ${this.MS.Translate.COMMON_ERROR_ID}:(${this.MS.LoggerService.UserGenId})`,
                         actionResponse.Status === ActionStatus.Failure,
                         actionResponse.ExceptionDetail.LogLocation);
                 } else if (actionResponse.Status !== ActionStatus.Invisible) {

@@ -24,29 +24,24 @@ export class MsCrmLogin extends AzureLogin {
     }
 
     async d365Login(): Promise<void> {
-        var response = await this.MS.HttpService.executeAsync('Microsoft-CrmGetOrgs');
-        if (response.IsSuccess) {
-            this.msCrmOrganizations = JSON.parse(response.Body.value);
+        this.msCrmOrganizations = await this.MS.HttpService.getResponseAsync('Microsoft-CrmGetOrgs');
 
-            if (this.msCrmOrganizations.length > 0) {
-                this.msCrmOrganizationId = this.msCrmOrganizations[0].OrganizationId;
+        if (this.msCrmOrganizations && this.msCrmOrganizations.length > 0) {
+            this.msCrmOrganizationId = this.msCrmOrganizations[0].organizationId;
 
-                let subscriptions: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureSubscriptions');
-                if (subscriptions.IsSuccess) {
-                    this.subscriptionsList = subscriptions.Body.value;
-                    if (!this.subscriptionsList || (this.subscriptionsList && this.subscriptionsList.length === 0)) {
-                        this.MS.ErrorService.message = this.MS.Translate.AZURE_LOGIN_SUBSCRIPTION_ERROR_CRM;
-                        this.showAzureTrial = true;
-                    } else {
-                        this.selectedSubscriptionId = this.subscriptionsList[0].SubscriptionId;
-                        this.showPricingConfirmation = this.setValidated();
-                    }
+            let subscriptions: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureSubscriptions');
+            if (subscriptions.IsSuccess) {
+                this.subscriptionsList = subscriptions.Body.value;
+                if (!this.subscriptionsList || (this.subscriptionsList && this.subscriptionsList.length === 0)) {
+                    this.MS.ErrorService.message = this.MS.Translate.AZURE_LOGIN_SUBSCRIPTION_ERROR_CRM;
+                    this.showAzureTrial = true;
+                } else {
+                    this.selectedSubscriptionId = this.subscriptionsList[0].SubscriptionId;
+                    this.showPricingConfirmation = this.setValidated();
                 }
-            } else {
-                this.MS.ErrorService.message = this.MS.Translate.MSCRM_LOGIN_NO_AUTHORIZATION;
             }
         } else {
-            this.MS.ErrorService.message = this.MS.Translate.MSCRM_LOGIN_NO_ORGANIZATIONS;
+            this.MS.ErrorService.message = this.MS.Translate.MSCRM_LOGIN_NO_AUTHORIZATION;
         }
     }
 
@@ -73,9 +68,9 @@ export class MsCrmLogin extends AzureLogin {
 
         if (this.isScribe) {
             if (!this.d365OnPremiseOrganizationName && !this.d365OnPremiseUrl) {
-                let d365Organization: D365Organization = this.d365Organizations.find(x => x.Id === this.d365OrganizationId);
-                this.MS.DataStore.addToDataStore('ConnectorUrl', d365Organization.ConnectorUrl, DataStoreType.Private);
-                this.MS.DataStore.addToDataStore('OrganizationName', d365Organization.Name, DataStoreType.Private);
+                let d365Organization: D365Organization = this.d365Organizations.find(x => x.id === this.d365OrganizationId);
+                this.MS.DataStore.addToDataStore('ConnectorUrl', d365Organization.connectorUrl, DataStoreType.Private);
+                this.MS.DataStore.addToDataStore('OrganizationName', d365Organization.name, DataStoreType.Private);
                 this.MS.DataStore.addToDataStore('ScribeDeploymentType', 'Online', DataStoreType.Private);
             } else {
                 this.MS.DataStore.addToDataStore('ConnectorUrl', this.d365OnPremiseUrl, DataStoreType.Private);
@@ -83,12 +78,12 @@ export class MsCrmLogin extends AzureLogin {
                 this.MS.DataStore.addToDataStore('ScribeDeploymentType', 'OnPremise', DataStoreType.Private);
             }
         } else {
-            let msCrmOrganization: MsCrmOrganization = this.msCrmOrganizations.find(o => o.OrganizationId === this.msCrmOrganizationId);
+            let msCrmOrganization: MsCrmOrganization = this.msCrmOrganizations.find(o => o.organizationId === this.msCrmOrganizationId);
 
             if (msCrmOrganization) {
-                this.MS.DataStore.addToDataStore('OrganizationId', msCrmOrganization.OrganizationId, DataStoreType.Public);
-                this.MS.DataStore.addToDataStore('OrganizationName', msCrmOrganization.OrganizationName, DataStoreType.Public);
-                this.MS.DataStore.addToDataStore('OrganizationUrl', msCrmOrganization.OrganizationUrl, DataStoreType.Public);
+                this.MS.DataStore.addToDataStore('OrganizationId', msCrmOrganization.organizationId, DataStoreType.Public);
+                this.MS.DataStore.addToDataStore('OrganizationName', msCrmOrganization.organizationName, DataStoreType.Public);
+                this.MS.DataStore.addToDataStore('OrganizationUrl', msCrmOrganization.organizationUrl, DataStoreType.Public);
 
                 isSuccess = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-CrmGetOrganization');
 
@@ -121,15 +116,11 @@ export class MsCrmLogin extends AzureLogin {
         this.MS.DataStore.addToDataStore('D365Password', this.d365Password, DataStoreType.Private);
 
         if (!this.d365OnPremiseOrganizationName && !this.d365OnPremiseUrl) {
-            let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetD365Organizations');
+            this.d365Organizations = await this.MS.HttpService.getResponseAsync('Microsoft-GetD365Organizations');
 
-            if (response.IsSuccess) {
-                this.d365Organizations = JSON.parse(response.Body.value);
-
-                if (this.d365Organizations && this.d365Organizations.length > 0) {
-                    this.d365OrganizationId = this.d365Organizations[0].Id;
-                    this.setValidated();
-                }
+            if (this.d365Organizations && this.d365Organizations.length > 0) {
+                this.d365OrganizationId = this.d365Organizations[0].id;
+                this.setValidated();
             }
         } else {
             this.setValidated();

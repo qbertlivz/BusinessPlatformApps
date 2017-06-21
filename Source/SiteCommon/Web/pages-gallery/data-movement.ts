@@ -1,6 +1,5 @@
 ﻿import { DataStoreType } from '../enums/data-store-type';
 
-import { ActionResponse } from '../models/action-response';
 import { DataMovementType } from '../models/data-movement-type';
 import { InformaticaAgent } from '../models/informatica-agent';
 import { ScribeAgent } from '../models/scribe-agent';
@@ -41,11 +40,9 @@ export class DataMovement extends ViewModelBase {
         if (this.MS.HttpService.isOnPremise) {
             this.MS.DataStore.addToDataStore('ScribeOrganizationId', this.scribeOrganizationId, DataStoreType.Private);
 
-            let responseScribeAgents: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetScribeAgents');
+            let scribeAgents: ScribeAgent[] = await this.MS.HttpService.getResponseAsync('Microsoft-GetScribeAgents');
 
-            if (responseScribeAgents.IsSuccess) {
-                let scribeAgents: ScribeAgent[] = JSON.parse(responseScribeAgents.Body.value);
-
+            if (scribeAgents && scribeAgents.length > 0) {
                 for (let i = 0; i < scribeAgents.length; i++) {
                     let scribeAgent: ScribeAgent = scribeAgents[i];
                     if (!scribeAgent.isCloudAgent) {
@@ -57,10 +54,7 @@ export class DataMovement extends ViewModelBase {
                     this.scribeAgentId = this.scribeAgents[0].id;
                     this.setValidated();
                 } else {
-                    let responseScribeAgentInstall: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetScribeAgentInstall');
-                    if (responseScribeAgentInstall.IsSuccess) {
-                        this.scribeAgentInstall = JSON.parse(responseScribeAgentInstall.Body.value);
-                    }
+                    this.scribeAgentInstall = await this.MS.HttpService.getResponseAsync('Microsoft-GetScribeAgentInstall');
                 }
             }
         }
@@ -76,19 +70,13 @@ export class DataMovement extends ViewModelBase {
 
                 if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-VerifyInformaticaCredentials')) {
                     if (this.MS.HttpService.isOnPremise) {
-                        let responseInformaticaAgents: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetInformaticaAgents');
-                        if (responseInformaticaAgents.IsSuccess) {
-                            this.informaticaAgents = JSON.parse(responseInformaticaAgents.Body.value);
+                        this.informaticaAgents = await this.MS.HttpService.getResponseAsync('Microsoft-GetInformaticaAgents');
 
-                            if (this.informaticaAgents && this.informaticaAgents.length > 0) {
-                                this.informaticaAgentId = this.informaticaAgents[0].id;
-                                this.setValidated();
-                            } else {
-                                let responseInformaticaAgentLocation: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetInformaticaAgentLocation');
-                                if (responseInformaticaAgentLocation.IsSuccess) {
-                                    this.informaticaAgentLocation = JSON.parse(responseInformaticaAgentLocation.Body.value);
-                                }
-                            }
+                        if (this.informaticaAgents && this.informaticaAgents.length > 0) {
+                            this.informaticaAgentId = this.informaticaAgents[0].id;
+                            this.setValidated();
+                        } else {
+                            this.informaticaAgentLocation = await this.MS.HttpService.getResponseAsync('Microsoft-GetInformaticaAgentLocation');
                         }
                     } else {
                         this.MS.DataStore.addToDataStore('InformaticaAgentName', 'Informatica Cloud Hosted Agent', DataStoreType.Public);
@@ -101,20 +89,14 @@ export class DataMovement extends ViewModelBase {
                 this.MS.DataStore.addToDataStore('ScribeUsername', this.username, DataStoreType.Private);
                 this.MS.DataStore.addToDataStore('ScribePassword', this.password, DataStoreType.Private);
 
-                let responseScribe: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetScribeOrganizations');
-
-                if (responseScribe.IsSuccess) {
-                    this.scribeOrganizations = JSON.parse(responseScribe.Body.value);
-
-                    if (this.scribeOrganizations && this.scribeOrganizations.length > 0) {
-                        this.scribeOrganizationId = this.scribeOrganizations[0].id;
-
-                        if (this.MS.HttpService.isOnPremise) {
-                            this.OnScribeOrganizationChanged();
-                        } else {
-                            this.MS.DataStore.addToDataStore('ScribeAgentName', 'Cloud Agent', DataStoreType.Public);
-                            this.setValidated();
-                        }
+                this.scribeOrganizations = await this.MS.HttpService.getResponseAsync('Microsoft-GetScribeOrganizations');
+                if (this.scribeOrganizations && this.scribeOrganizations.length > 0) {
+                    this.scribeOrganizationId = this.scribeOrganizations[0].id;
+                    if (this.MS.HttpService.isOnPremise) {
+                        this.OnScribeOrganizationChanged();
+                    } else {
+                        this.MS.DataStore.addToDataStore('ScribeAgentName', 'Cloud Agent', DataStoreType.Public);
+                        this.setValidated();
                     }
                 }
 

@@ -267,4 +267,7 @@
   <data name="FacebookPagesInvalid" xml:space="preserve">
     <value>One or more of the pages you entered could not be found</value>
   </data>
+  <data name="DefaultAdditionalDetailsMessage" xml:space="preserve">
+    <value>Please contact us using the provided email link</value>
+  </data>
 </root>

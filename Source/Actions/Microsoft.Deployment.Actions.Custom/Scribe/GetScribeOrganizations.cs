@@ -35,7 +35,7 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
             }
 
             return configuredOrgs.Count == 0
-                ? new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), null, "Scribe_No_Organizations")
+                ? new ActionResponse(ActionStatus.Failure, new ActionResponseExceptionDetail("Scribe_No_Organizations"))
                 : new ActionResponse(ActionStatus.Success, JsonUtility.Serialize(configuredOrgs));
         }
 

@@ -33,7 +33,7 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
         {
             List<D365Organization> d365Organizations = this.SearchForOrganizations(request.DataStore.GetValue("D365Username"), request.DataStore.GetValue("D365Password"));
             return d365Organizations == null || d365Organizations.Count == 0
-                ? new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), null, "MsCrm_No_Organizations")
+                ? new ActionResponse(ActionStatus.Failure, new ActionResponseExceptionDetail("MsCrm_No_Organizations"))
                 : new ActionResponse(ActionStatus.Success, JsonUtility.Serialize(d365Organizations));
         }
 

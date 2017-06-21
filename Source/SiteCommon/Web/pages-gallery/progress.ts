@@ -99,9 +99,13 @@ export class ProgressViewModel extends ViewModelBase {
                 SqlServerIndex: this.sqlServerIndex,
                 TargetSchema: this.targetSchema
             });
-            if (status) {
-                this.recordCounts = dataPullStatus.status;
-                this.sliceStatus = dataPullStatus.slices;
+            if (dataPullStatus) {
+                try {
+                    this.recordCounts = JSON.parse(dataPullStatus.status);
+                    this.sliceStatus = JSON.parse(dataPullStatus.slices);
+                } catch (e) {
+                    // do nothing
+                }
                 this.isDataPullDone = dataPullStatus.isFinished;
                 this.queryRecordCounts();
             } else {

@@ -26,6 +26,7 @@ namespace Microsoft.Deployment.Actions.Salesforce
             var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
             var dataFactory = resourceGroup.Replace("_", string.Empty) + "SalesforceCopyFactory";
+            string coreObjects = request.DataStore.GetValue("ObjectTables");
 
             var url = string.Format(getDatasetRelativeUrl, dataFactory);
 
@@ -56,7 +57,7 @@ namespace Microsoft.Deployment.Actions.Salesforce
                 foreach (var dataset in connectionData["value"])
                 {
                     var nameParts = dataset["name"].ToString().Split('_');
-                    if (nameParts[0] == "PreDeployment" && nameParts[2] == "Output")
+                    if (nameParts[0] == "PreDeployment" && nameParts[2] == "Output" && coreObjects.Contains(nameParts[1]))
                     {
                         Dictionary<string, string> queryParameters = new Dictionary<string, string>();
                         queryParameters.Add("start", DateTime.UtcNow.AddYears(-3).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));

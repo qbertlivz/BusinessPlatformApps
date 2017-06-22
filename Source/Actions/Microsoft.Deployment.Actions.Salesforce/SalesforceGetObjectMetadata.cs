@@ -24,7 +24,15 @@ namespace Microsoft.Deployment.Actions.Salesforce
             string sfPassword = request.DataStore.GetValue("SalesforcePassword");
             string sfToken = request.DataStore.GetValue("SalesforceToken");
             string sfTestUrl = request.DataStore.GetValue("SalesforceUrl");
+            var additionalObjects = request.DataStore.GetValue("AdditionalObjects");
+            
             List<string> sfObjects = objects.Split(',').ToList();
+
+            if(!string.IsNullOrEmpty(additionalObjects))
+            {
+                var add = additionalObjects.Split(',').ToList();
+                sfObjects.AddRange(add);
+            }
 
             SoapClient binding = new SoapClient("Soap");
 

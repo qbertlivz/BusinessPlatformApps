@@ -24,7 +24,7 @@ namespace Microsoft.Deployment.Actions.Salesforce
             string sfPassword = request.DataStore.GetValue("SalesforcePassword");
             string sfToken = request.DataStore.GetValue("SalesforceToken");
             string sfTestUrl = request.DataStore.GetValue("SalesforceUrl");
-            List<string> sfObjects = new List<string>();
+            var requiredObjects = request.DataStore.GetValue("ObjectTables").Split(',');
 
             SoapClient binding = new SoapClient("Soap");
 
@@ -45,10 +45,9 @@ namespace Microsoft.Deployment.Actions.Salesforce
                sfUsername,
                string.Concat(sfPassword, sfToken));
 
-            dynamic metadata = new ExpandoObject();
+            var sfObjects = new List<string>();
 
             binding = new SoapClient("Soap");
-            metadata.Objects = new List<DescribeSObjectResult>();
             SessionHeader sheader = new SessionHeader();
             BasicHttpBinding bind = new BasicHttpBinding();
             bind = (BasicHttpBinding)binding.Endpoint.Binding;
@@ -73,16 +72,26 @@ namespace Microsoft.Deployment.Actions.Salesforce
             binding.Endpoint.ListenUri = new Uri(lr.metadataServerUrl);
 
             DescribeGlobalResult result;
-            binding.describeGlobal(sheader, null, null, out result);
+            try
+            {
+                binding.describeGlobal(sheader, null, null, out result);
+            }
+            catch (Exception e)
+            {
+                return new ActionResponse(ActionStatus.FailureExpected, JsonUtility.GetEmptyJObject(), e, "FailedToGetAdditionalEntities");
+            }
 
             foreach (var obj in result.sobjects)
             {
                 sfObjects.Add(obj.name);
             }
 
-            request.DataStore.AddObjectDataStore("sfdcOjects", JsonUtility.GetJObjectFromObject(sfObjects), DataStoreType.Public);
-
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetJObjectFromObject(metadata));
+            foreach(var requiredObj in requiredObjects)
+            {
+                sfObjects.Remove(requiredObj);
+            }
+          
+            return new ActionResponse(ActionStatus.Success, JsonUtility.Serialize(sfObjects));
         }
     }
 }

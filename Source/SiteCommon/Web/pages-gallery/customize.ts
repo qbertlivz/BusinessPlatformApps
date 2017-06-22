@@ -156,7 +156,13 @@ export class Customize extends ViewModelBase {
     }
 
     async getEntities(): Promise<void> {
-        this.additionalEntities = await this.MS.HttpService.getResponseAsync('Microsoft-SalesforceGetEntities');
+        if (this.sourceApplication === 'Salesforce') {
+            this.additionalEntities = await this.MS.HttpService.getResponseAsync('Microsoft-SalesforceGetEntities');
+        }
+
+        if (this.sourceApplication === "DynamicsCRM") {
+        this.additionalEntities = await this.MS.HttpService.getResponseAsync('Microsoft-CrmGetEntities');
+        }
     }
 
     onAddingEntityToEntitiesToReplicate() {

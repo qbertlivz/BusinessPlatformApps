@@ -54,6 +54,8 @@
             string kV = request.DataStore.GetValue("KeyVault");
             string[] entities = request.DataStore.GetValue("Entities").Split(new[] {',', ' ', '\t'}, StringSplitOptions.RemoveEmptyEntries);
 
+
+
             MsCrmProfile profile = new MsCrmProfile
             {
                 Entities = new MsCrmEntity[entities.Length],

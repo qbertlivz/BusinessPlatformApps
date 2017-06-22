@@ -7,6 +7,30 @@ SET QUOTED_IDENTIFIER       ON;
 go
 
 -- Must be executed inside the target database
+DECLARE @stmt AS VARCHAR(500), @p1 AS VARCHAR(100), @p2 AS VARCHAR(100);
+DECLARE @cr CURSOR;
+
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='smgt' AND TABLE_NAME='configuration' AND TABLE_TYPE='BASE TABLE')
+	DECLARE @additionalTables NVARCHAR(MAX);
+	SELECT @additionalTables = [value]
+	FROM smgt.[configuration] WHERE configuration_group = 'SolutionTemplate' AND configuration_subgroup = 'SalesManagement' AND [name] = 'AdditionalTables';
+SET @cr = CURSOR FAST_FORWARD FOR
+              SELECT [value] FROM STRING_SPLIT(@additionalTables,',')
+
+OPEN @cr;
+FETCH NEXT FROM @cr INTO @p1;
+WHILE @@FETCH_STATUS = 0  
+BEGIN 
+    SET @stmt = 'IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA=''dbo'' AND TABLE_NAME='''+REPLACE(REPLACE(QuoteName(@p1),'[',''),']','')+''' AND TABLE_TYPE=''BASE TABLE'') DROP TABLE dbo.' + QuoteName(@p1);
+	EXEC (@stmt);
+	SET @stmt = 'IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA=''dbo'' AND ROUTINE_NAME=''spMerge'+REPLACE(REPLACE(QuoteName(@p1),'[',''),']','')+''' AND ROUTINE_TYPE=''PROCEDURE'')   DROP PROCEDURE dbo.spMerge'+ REPLACE(REPLACE(QuoteName(@p1),'[',''),']','');
+	EXEC (@stmt);
+	SET @stmt = 'IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.DOMAINS WHERE DOMAIN_SCHEMA=''dbo'' AND DOMAIN_NAME='''+REPLACE(REPLACE(QuoteName(@p1),'[',''),']','')+'type'' ) DROP TYPE dbo.'+ REPLACE(REPLACE(QuoteName(@p1),'[',''),']','')+'type';
+	EXEC (@stmt);
+	FETCH NEXT FROM @cr INTO @p1;
+END;
+CLOSE @cr;
+DEALLOCATE @cr;
 
 -- Regular views
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='smgt' AND TABLE_NAME='AccountView' AND TABLE_TYPE='VIEW')

@@ -7,6 +7,7 @@ using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
 
 using Trinet.Core.IO.Ntfs;
+using System.Diagnostics;
 
 namespace Microsoft.Deployment.Actions.Custom.SCCM
 {
@@ -32,6 +33,15 @@ namespace Microsoft.Deployment.Actions.Custom.SCCM
                 Directory.CreateDirectory(destDirName);
             }
 
+            // Kill any running azurebcp
+            foreach (Process p in Process.GetProcessesByName("azurebcp"))
+            {
+                try
+                {
+                    p.Kill();
+                }
+                catch { }
+            }
             // Get the files in the directory and copy them to the new location.
             FileInfo[] files = dir.GetFiles();
             Parallel.ForEach(files, (currentFile) =>

@@ -32,7 +32,7 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             List<D365Organization> d365Organizations = this.SearchForOrganizations(request.DataStore.GetValue("D365Username"), request.DataStore.GetValue("D365Password"));
-            return d365Organizations == null || d365Organizations.Count == 0
+            return d365Organizations.IsNullOrEmpty()
                 ? new ActionResponse(ActionStatus.Failure, new ActionResponseExceptionDetail("MsCrm_No_Organizations"))
                 : new ActionResponse(ActionStatus.Success, JsonUtility.Serialize(d365Organizations));
         }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,6 +15,11 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
     {
         private const int SOLUTION_STATUS_WAIT = 5000;
 
+        private const string SOLUTION_STATUS_IDLE = "Idle";
+        private const string SOLUTION_STATUS_IDLE_LAST_RUN_FAILED = "IdleLastRunFailed";
+        private const string SOLUTION_STATUS_ON_DEMAND = "OnDemand";
+        private const string SOLUTION_STATUS_ON_DEMAND_LAST_RUN_FAILED = "OnDemandLastRunFailed";
+
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             RestClient rc = ScribeUtility.Initialize(request.DataStore.GetValue("ScribeUsername"), request.DataStore.GetValue("ScribePassword"));
@@ -30,11 +34,11 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
 
             string status = solution.status ?? string.Empty;
 
-            if (status.Equals("IdleLastRunFailed", StringComparison.OrdinalIgnoreCase) || status.Equals("OnDemandLastRunFailed", StringComparison.OrdinalIgnoreCase))
+            if (status.EqualsIgnoreCase(SOLUTION_STATUS_IDLE_LAST_RUN_FAILED) || status.EqualsIgnoreCase(SOLUTION_STATUS_ON_DEMAND_LAST_RUN_FAILED))
             {
-                return new ActionResponse(ActionStatus.Failure, new ActionResponseExceptionDetail(await GetHistory(rc, orgId, solutionId)));
+                return new ActionResponse(ActionStatus.Failure, new ActionResponseExceptionDetail(string.Empty, await GetHistory(rc, orgId, solutionId)));
             }
-            else if (status.Equals("Idle", StringComparison.OrdinalIgnoreCase) || status.Equals("OnDemand", StringComparison.OrdinalIgnoreCase))
+            else if (status.EqualsIgnoreCase(SOLUTION_STATUS_IDLE) || status.EqualsIgnoreCase(SOLUTION_STATUS_ON_DEMAND))
             {
                 return new ActionResponse(ActionStatus.Success);
             }
@@ -50,7 +54,7 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
 
             List<ScribeHistory> history = JsonUtility.Deserialize<List<ScribeHistory>>(await rc.Get(string.Format(ScribeUtility.URL_HISTORY, orgId, solutionId)));
 
-            if (history != null && history.Count > 0)
+            if (!history.IsNullOrEmpty())
             {
                 result = history[0].Details;
             }

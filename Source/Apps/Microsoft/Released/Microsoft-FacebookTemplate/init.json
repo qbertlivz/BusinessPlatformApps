@@ -102,8 +102,13 @@
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_AZURE_FUNCTION)",
                 "FunctionName": "$save('solutiontemplatefunc' + this.MS.DataStore.getValue('uniqueId'))",
                 "name": "Microsoft-DeployAzureFunction",
-                "RepoUrl": "https://github.com/MohaaliMicrosoft/FacebookExtraction",
+                "RepoUrl": "https://github.com/MohaaliMicrosoft/FacebookETL",
                 "sku": "Standard"
+            },
+            {
+                "DeploymentName": "Deployment1",
+                "displayname": "$translate(INIT_ACTION_WAITING_DEPLOYMENT)",
+                "name": "Microsoft-WaitForArmDeploymentStatus"
             },
             {
                 "DeploymentName": "Deployment2",
@@ -112,11 +117,6 @@
                 "StorageAccountEncryptionEnabled": "true",
                 "StorageAccountName": "$save('stor' + this.MS.DataStore.getValue('uniqueId'))",
                 "StorageAccountType": "Standard_LRS"
-            },
-            {
-                "DeploymentName": "Deployment1",
-                "displayname": "$translate(INIT_ACTION_WAITING_DEPLOYMENT)",
-                "name": "Microsoft-WaitForArmDeploymentStatus"
             },
             {
                 "DeploymentName": "Deployment2",

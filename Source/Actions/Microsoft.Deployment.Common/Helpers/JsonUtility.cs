@@ -43,7 +43,7 @@ namespace Microsoft.Deployment.Common.Helpers
         {
             JObject templatefileContent = new JObject();
 
-            if (string.IsNullOrEmpty(json) || json.Equals("null", StringComparison.OrdinalIgnoreCase))
+            if (string.IsNullOrEmpty(json) || json.EqualsIgnoreCase("null"))
             {
                 json = GetEmptyJObject().ToString();
             }

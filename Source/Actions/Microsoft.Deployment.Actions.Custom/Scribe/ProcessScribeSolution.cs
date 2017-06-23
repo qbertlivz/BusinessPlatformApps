@@ -15,6 +15,9 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
         private const int SOLUTION_STATUS_ATTEMPTS = 50;
         private const int SOLUTION_STATUS_WAIT = 5000;
 
+        private const string SOLUTION_STATUS_PREPARING = "Preparing";
+        private const string SOLUTION_STATUS_PROVISIONING = "Provisioning";
+
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             Thread.Sleep(SOLUTION_STATUS_WAIT);
@@ -39,7 +42,7 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
         {
             ScribeSolution solution = JsonUtility.Deserialize<ScribeSolution>(await rc.Get(string.Format(ScribeUtility.URL_SOLUTION, orgId, solutionId)));
             string status = solution.status ?? string.Empty;
-            return !status.EqualsIgnoreCase("Provisioning") && !status.EqualsIgnoreCase("Preparing");
+            return !status.EqualsIgnoreCase(SOLUTION_STATUS_PREPARING) && !status.EqualsIgnoreCase(SOLUTION_STATUS_PROVISIONING);
         }
     }
 }

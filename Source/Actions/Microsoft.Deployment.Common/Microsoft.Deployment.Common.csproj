@@ -109,6 +109,7 @@
     <Compile Include="Helpers\InformaticaUtility.cs" />
     <Compile Include="Helpers\JsonUtility.cs" />
     <Compile Include="Helpers\JsonUtilityLowercaseSerializer.cs" />
+    <Compile Include="Helpers\ListExtension.cs" />
     <Compile Include="Helpers\NTHelper.cs" />
     <Compile Include="Helpers\NTPermissionUtility.cs" />
     <Compile Include="Helpers\PBIXUtils.cs" />

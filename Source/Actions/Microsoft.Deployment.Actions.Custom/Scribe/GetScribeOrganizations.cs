@@ -20,7 +20,7 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
             List<ScribeOrganization> orgs = JsonUtility.Deserialize<List<ScribeOrganization>>(await rc.Get(ScribeUtility.URL_ORGANIZATIONS));
             List<ScribeOrganization> configuredOrgs = new List<ScribeOrganization>();
 
-            if (orgs != null && orgs.Count > 0)
+            if (!orgs.IsNullOrEmpty())
             {
                 foreach(ScribeOrganization org in orgs)
                 {
@@ -51,7 +51,7 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
                 {
                     for (int i = 0; i < subscriptions.Count && !isConfigured; i++)
                     {
-                        isConfigured = subscriptions[i].Name.Equals(ScribeUtility.REPLICATION_SERVICES, StringComparison.OrdinalIgnoreCase) &&
+                        isConfigured = subscriptions[i].Name.EqualsIgnoreCase(ScribeUtility.REPLICATION_SERVICES) &&
                             DateTime.Now.CompareTo(Convert.ToDateTime(subscriptions[i].ExpirationDate)) < 0;
                     }
                 }

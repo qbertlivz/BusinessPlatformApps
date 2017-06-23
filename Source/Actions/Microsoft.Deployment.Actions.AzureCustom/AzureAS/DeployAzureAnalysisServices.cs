@@ -1,15 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
+
 using Microsoft.Azure;
+using Newtonsoft.Json.Linq;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
-using Microsoft.Deployment.Common.Helpers;
 using Microsoft.Deployment.Common.Enums;
-using System;
+using Microsoft.Deployment.Common.Helpers;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
 {
@@ -55,7 +57,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
             JObject responseObj = JsonUtility.GetJObjectFromJsonString(responseBody);
             request.DataStore.AddToDataStore("ASServerUrl", responseObj["properties"]["serverFullName"], DataStoreType.Public);
 
-            request.Logger.LogResource(request.DataStore, responseObj["properties"]["serverFullName"].ToString(), 
+            request.Logger.LogResource(request.DataStore, responseObj["properties"]["serverFullName"].ToString(),
                 DeployedResourceType.AzureAnalysisServices, CreatedBy.BPST, DateTime.UtcNow.ToString("o"), string.Empty, sku);
 
             return new ActionResponse(ActionStatus.Success, responseObj);

@@ -65,7 +65,6 @@ namespace Microsoft.Deployment.Common.Helpers
                     aes.Key = rfcDerivative.GetBytes(aes.KeySize / 8);
                 }
 
-
                 using (ICryptoTransform encryptor = aes.CreateEncryptor())
                 {
                     using (MemoryStream memoryStream = new MemoryStream())
@@ -114,7 +113,7 @@ namespace Microsoft.Deployment.Common.Helpers
         {
             List<ScribeConnector> connectors = JsonUtility.Deserialize<List<ScribeConnector>>(await rc.Get(string.Format(URL_CONNECTORS, orgId)));
 
-            if (!connectors.Any(p => p.Id.Equals(connectorId, StringComparison.OrdinalIgnoreCase)))
+            if (!connectors.Any(p => p.Id.EqualsIgnoreCase(connectorId)))
             {
                 await rc.Post(string.Format(CultureInfo.InvariantCulture, URL_CONNECTORSINSTALL, orgId, connectorId), string.Empty, null, null);
             }

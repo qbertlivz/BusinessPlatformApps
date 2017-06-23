@@ -138,6 +138,29 @@ AS
   WHERE ( SCRIBE_DELETEDON IS NULL );
 go
 
+-- TeamView
+CREATE VIEW smgt.teamview
+AS
+  SELECT id      AS [Team Id],
+         NAME    AS [Team Name]
+  FROM   dbo.Team
+  WHERE SCRIBE_DELETEDON IS NULL;
+go
+
+
+-- OwnerView
+CREATE VIEW smgt.ownerview
+AS
+  SELECT id         AS [Owner Id],
+         [Name]	    AS [Owner Name],
+         'Team'	    AS [Owner Type]
+  FROM dbo.Team WHERE SCRIBE_DELETEDON IS NULL
+  UNION
+  SELECT systemuserid AS [Owner Id],
+         fullname     AS [Owner Name],
+         'User'	      AS [Owner Type]
+  FROM dbo.systemuser WHERE SCRIBE_DELETEDON IS NULL;;
+go
 
 -- MeasuresView
 CREATE VIEW smgt.measuresview
@@ -174,7 +197,7 @@ AS
             o.actualvalue                       AS [Actual Value],
             o.estimatedvalue                    AS [Estimated Value],
             o.estimatedvalue * o.closeprobability/100.0
-	                                        AS [Expected Value],
+                                            AS [Expected Value],
             o.statuscode_displayname            AS [Status],
             CASE
                 WHEN stepname IS NULL OR Charindex('-', o.stepname) = 0 THEN NULL
@@ -226,28 +249,6 @@ AS
             FROM   tree) AS hierarchy LEFT OUTER JOIN dbo.product AS b ON b.productid = level1 AND b.SCRIBE_DELETEDON IS NULL
                                       LEFT OUTER JOIN dbo.product AS c ON c.productid = level2 AND c.SCRIBE_DELETEDON IS NULL
                                       LEFT OUTER JOIN dbo.product AS d ON d.productid = level3 AND d.SCRIBE_DELETEDON IS NULL;
-go
-
-
--- QuotaView
-CREATE VIEW smgt.quotaview
-AS
-    SELECT [amount]                               AS [Amount],
-           CONVERT(DATE, [date], 101)             AS [Date],
-           CONVERT(UNIQUEIDENTIFIER, [ownerid])   AS [Owner Id],
-           CONVERT(UNIQUEIDENTIFIER, [productid]) AS [Product Id]
-    FROM   smgt.quotas;
-go
-
--- TargetView
-CREATE VIEW smgt.targetview
-AS
-    SELECT CONVERT(UNIQUEIDENTIFIER, productid)      AS [Product Id],
-           CONVERT(UNIQUEIDENTIFIER, businessunitid) AS [Business Unit Id],
-           CONVERT(UNIQUEIDENTIFIER, territoryid)    AS [Territory Id],
-           [target]                                  AS [Target],
-           CONVERT(DATE, [date], 101)                AS [Date]
-    FROM   smgt.targets;
 go
 
 -- TempUserView

@@ -123,7 +123,7 @@ SELECT CASE
         UPDATE SET target.lastcount = source.[Count], target.lasttimestamp = SYSUTCDATETIME();
 
 END;
-GO
+go
 
 
 
@@ -133,7 +133,7 @@ BEGIN
     SET NOCOUNT ON;
 
     SELECT Count(*) AS ExistingObjectCount
-    FROM   information_schema.tables
+    FROM   INFORMATION_SCHEMA.TABLES
     WHERE  ( table_schema = 'dbo' AND
              table_name IN ('account', 'businessunit', 'lead', 'opportunity', 'opportunityproduct', 'product', 'team', 'systemuser', 'systemusermanagermap', 'territory')
            ) OR

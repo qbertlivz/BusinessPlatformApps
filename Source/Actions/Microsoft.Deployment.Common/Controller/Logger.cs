@@ -44,7 +44,7 @@ namespace Microsoft.Deployment.Common.Controller
             this.AddToDictionary(this.globalParams, this.telemetryClient.Context.Properties);
         }
 
-        public void LogEvent(string eventName, Dictionary<string, string> properties)
+        public void LogEvent(string eventName, Dictionary<string, string> properties = null)
         {
             this.telemetryClient.TrackEvent(eventName, properties);
         }
@@ -180,9 +180,9 @@ namespace Microsoft.Deployment.Common.Controller
         public void LogEmailSubscription(string emailAddress, string nameFirst, string nameLast)
         {
             Dictionary<string, string> emailSubscription = new Dictionary<string, string>();
-            emailSubscription.Add("Email Address", emailAddress);
-            emailSubscription.Add("First Name", nameFirst);
-            emailSubscription.Add("Last Name", nameLast);
+            emailSubscription.Add("Email Address", emailAddress);
+            emailSubscription.Add("First Name", nameFirst);
+            emailSubscription.Add("Last Name", nameLast);
             this.LogEvent("Email-Subscription", emailSubscription);
         }
 

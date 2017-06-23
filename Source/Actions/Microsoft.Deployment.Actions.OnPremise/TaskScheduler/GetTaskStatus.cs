@@ -1,22 +1,18 @@
 ﻿using System;
 using System.IO;
+using System.IO.Compression;
 using System.ComponentModel.Composition;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-using Microsoft.WindowsAzure.Storage.Auth;
-
 using Microsoft.Win32.TaskScheduler;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
 
 using Task = Microsoft.Win32.TaskScheduler.Task;
-using System.IO.Compression;
-using Microsoft.WindowsAzure.Storage.Blob;
-using System.Text;
-using System.Runtime.InteropServices;
 
 namespace Microsoft.Deployment.Actions.OnPremise.TaskScheduler
 {
@@ -59,11 +55,11 @@ namespace Microsoft.Deployment.Actions.OnPremise.TaskScheduler
 
             // Let it run
             if (task.State == TaskState.Queued || task.State == TaskState.Running)
-                return new ActionResponse(ActionStatus.BatchNoState, JsonUtility.GetEmptyJObject());
+                return new ActionResponse(ActionStatus.InProgress);
 
             // If we're here, the task completed
             if (task.LastTaskResult == 0)
-                return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+                return new ActionResponse(ActionStatus.Success);
 
             // there was an error since we haven't exited above
             uploadLogs(request);
@@ -115,7 +111,6 @@ namespace Microsoft.Deployment.Actions.OnPremise.TaskScheduler
                 request.Logger.LogException(e);
             }
         }
-
 
         private void zipLogs()
         {

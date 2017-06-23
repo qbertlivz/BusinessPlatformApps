@@ -12,10 +12,7 @@
 
         // Used for when you encounter an Error - these should never be returned
         Retry,
-        UnhandledException,
-
-        // temp
-        BatchNoState
+        UnhandledException
     }
 
     public static class ActionStatusHelper

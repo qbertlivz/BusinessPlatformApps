@@ -146,17 +146,17 @@
                 }
             },
             {
+                "asDatabase": "SalesManagement",
                 "datastoreEntriesToValidate": [
                     "SqlConnectionString"
                 ],
                 "displayname": "Progress",
                 "enablePublishReport": "$run(!this.MS.HttpService.isOnPremise)",
                 "filename": "$save('SalesManagementReport.pbix')",
+                "filenameSSAS": "SalesManagementReportAS.pbix",
+                "finishedActionName": "$run(this.MS.DataStore.getValue('DataMovement') === 'D365' ? 'Microsoft-CrmGetProfileStatus' : 'Microsoft-GetScribeSolutionStatus')",
                 "name": "$SiteCommon$/pages-gallery/progress.html",
                 "showCounts": true,
-                "finishedActionName": "$run(this.MS.DataStore.getValue('DataMovement') === 'D365' ? 'Microsoft-CrmGetProfileStatus' : 'Microsoft-GetScribeSolutionStatus')",
-                "asDatabase": "SalesManagement",
-                "filenameSSAS": "SalesManagementReportAS.pbix",
                 "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
             }
         ],

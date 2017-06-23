@@ -1,11 +1,13 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
+
 using Microsoft.AnalysisServices.Tabular;
+using Newtonsoft.Json.Linq;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Actions.AzureCustom.AzureToken;
-using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
 {
@@ -57,7 +59,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
             }
             finally
             {
-                if (server!=null)
+                if (server != null)
                 {
                     // In theory, we could end up here with a connected server object
                     if (server.Connected)

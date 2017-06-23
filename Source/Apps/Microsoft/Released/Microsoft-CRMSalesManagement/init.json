@@ -55,6 +55,9 @@
                 "subtitle": "$translate(DATA_MOVEMENT_SUBTITLE_D365)"
             },
             {
+                "azureProviders": [
+                    "Microsoft.AnalysisServices"
+                ],
                 "displayname": "Dynamics 365 Login",
                 "entities": "account,lead,opportunity,opportunityproduct,product,systemuser,systemusermanagermap,territory,team",
                 "isScribe": "$run(this.MS.DataStore.getValue('DataMovement') === 'Scribe')",
@@ -62,10 +65,7 @@
                 "oauthType": "mscrm",
                 "pricingCalculatorUrl": "$translate(INIT_D365_CALCULATOR)",
                 "pricingCost": "$translate(INIT_D365_PRICING_COST)",
-                "pricingUrl": "$translate(INIT_D365_PRICING_URL)",
-                "azureProviders": [
-                    "Microsoft.AnalysisServices"
-                ]
+                "pricingUrl": "$translate(INIT_D365_PRICING_URL)"
             },
             {
                 "displayname": "Login to the Key Vault",

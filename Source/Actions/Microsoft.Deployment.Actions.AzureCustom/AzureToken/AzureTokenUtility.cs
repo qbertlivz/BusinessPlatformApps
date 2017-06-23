@@ -46,7 +46,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             return GetTokenForResourceFromCode(meta, tenantId, redirect, code);
         }
 
-
         public static JObject GetTokenForResourceFromCode(AzureTokenRequestMeta meta, string tenantId, string redirect, string code)
         {
             JObject tokenObj;
@@ -145,6 +144,5 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
 
             return builder.ToString();
         }
-
     }
 }

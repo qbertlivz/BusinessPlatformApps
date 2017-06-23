@@ -1,13 +1,15 @@
-﻿using Microsoft.Deployment.Common.ActionModel;
-using Microsoft.Deployment.Common.Actions;
-using Microsoft.Deployment.Common.Helpers;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.ComponentModel.Composition;
 using System.Dynamic;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+
+using Newtonsoft.Json.Linq;
+
+using Microsoft.Deployment.Common.ActionModel;
+using Microsoft.Deployment.Common.Actions;
+using Microsoft.Deployment.Common.Helpers;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
 {
@@ -20,7 +22,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
 
             JObject graphToken = AzureTokenUtility.GetTokenForResourceFromExistingToken("as", request.Info.WebsiteRootUrl, azureToken, "https://graph.windows.net");
-            var tenantId = AzureUtility.GetTenantFromToken(request.DataStore.GetJson("AzureToken"));
+            var tenantId = AzureUtility.GetTenantFromToken(azureToken);
 
             // Generate new key for ClientSecret
             string key = GetNewKey();

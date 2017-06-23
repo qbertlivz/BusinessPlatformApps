@@ -3,85 +3,83 @@
         "Pages": [
             {
                 "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-FacebookTemplate/Web/images/ArchitectureDiagram.png",
-                "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(10))",
                 "displayname": "Getting Started",
                 "list1": [
                     "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",
                     "$translate(INIT_GETTING_STARTED_PBI_DESKTOP)",
                     "$translate(INIT_GETTING_STARTED_PBI_PRO)",
-                    "Facebook Developer Account"
+                    "$translate(INIT_GETTING_STARTED_FACEBOOK)"
                 ],
                 "list2": [
                     "$translate(INIT_GETTING_STARTED_CLOUD_SOLUTION)",
                     "$translate(INIT_GETTING_STARTED_CONNECT_AS_PBI)"
                 ],
                 "name": "$SiteCommon$/pages-gallery/getting-started.html",
-                "templateName": "Brand And Campaign Management For Facebook"
+                "templateName": "Brand And Campaign Management For Facebook",
+                "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
             },
             {
-                "name": "facebookLogin.html",
-                "displayname": "Facebook Login"
+                "displayname": "Facebook Login",
+                "name": "facebookLogin.html"
             },
             {
-                "name": "facebookPages.html",
-                "displayname": "Facebook Pages"
+                "displayname": "Facebook Pages",
+                "name": "facebookPages.html"
             },
             {
                 "defaultLocation": "5",
                 "displayname": "Login",
                 "name": "$SiteCommon$/pages-gallery/azure-login.html",
                 "pricingCalculatorUrl": "$translate(INIT_NEWS_PRICING_CALCULATOR)",
-                "pricingCost": "By clicking next and deploying the template, you authorize Microsoft to create Azure resources on your subscription and bill based on their respective pricing rates.  The approximate base cost of the Azure resources used by this template is $300 a month, and every 1,000 posts or comments will incur an additional cost of approximately $1.50.  These costs are estimates only and subject to change.",
-                "pricingUrl": "https://github.com/Microsoft/BusinessPlatformApps/blob/dev/Source/Apps/Microsoft/Released/Microsoft-FacebookTemplate/README.md"
+                "pricingCost": "$translate(INIT_FACEBOOK_PRICING_COST)",
+                "pricingUrl": "$translate(INIT_FACEBOOK_PRICING_URL)"
             },
             {
                 "bingUrl": "placeholder",
                 "cognitiveUrl": "placeholder",
                 "displayname": "Cognitive API",
-                "name": "$SiteCommon$/pages-gallery/cognitive-Terms.html"
+                "name": "$SiteCommon$/pages-gallery/cognitive-terms.html"
             },
             {
-                "name": "$SiteCommon$/pages-gallery/sql-server.html",
+                "checkSqlVersion": true,
                 "displayname": "Target",
                 "isAzureSql": true,
+                "name": "$SiteCommon$/pages-gallery/sql-server.html",
                 "newSqlDatabase": "facebook",
                 "showAzureSql": false,
                 "showNewSqlOption": "true",
-                "sqlInstance": "NewSql",
                 "showSkuS1": true,
+                "sqlInstance": "NewSql",
                 "sqlSku": "S1",
                 "subtitle": "$translate(INIT_SQL_TITLE)",
-                "title": "$translate(INIT_SQL_TITLE)",
-                "checkSqlVersion": true
+                "title": "$translate(INIT_SQL_TITLE)"
             },
             {
                 "datastoreEntriesToValidate": [
                     "SqlConnectionString"
                 ],
-
                 "displayname": "Progress",
-                "name": "$SiteCommon$/pages-gallery/progress.html",
+                "enablePublishReport": true,
                 "filename": "$save('FacebookTemplate.pbix')",
-                "showCounts": false,
-                "finishedActionName": "",
-
-                "Schema": "$save('fb')"
+                "name": "$SiteCommon$/pages-gallery/progress.html",
+                "Schema": "$save('fb')",
+                "showCounts": false
             }
         ],
 
         "Actions": [
             {
-                "displayname": "Deploy Cognitive Services",
-                "name": "Microsoft-DeployCognitiveService",
-                "DeploymentName": "Deployment",
                 "CognitiveServiceName": "TextCognitiveService",
                 "CognitiveServiceType": "TextAnalytics",
-                "CognitiveSkuName": "S1"
+                "CognitiveSkuName": "S1",
+                "DeploymentName": "Deployment",
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_COGNITIVE_SERVICE)",
+                "name": "Microsoft-DeployCognitiveService"
             },
             {
-                "displayname": "Get Cognitive Key",
-                "name": "Microsoft-GetCognitiveKey",
-                "CognitiveServiceName": "TextCognitiveService"
+                "CognitiveServiceName": "TextCognitiveService",
+                "displayname": "$translate(INIT_ACTION_GETTING_COGNITIVE_KEY)",
+                "name": "Microsoft-GetCognitiveKey"
             },
             {
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
@@ -92,85 +90,85 @@
             {
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
                 "name": "Microsoft-SetConfigValueInSql",
-                "SqlServerIndex": "0",
                 "SqlConfigTable": "[fb].[configuration]",
-                "SqlGroup": "SolutionTemplate",
-                "SqlSubGroup": "ETL",
                 "SqlEntryName": "PagesToFollow",
-                "SqlEntryValue": "$ds(FacebookPagesToFollow)"
+                "SqlEntryValue": "$ds(FacebookPagesToFollow)",
+                "SqlGroup": "SolutionTemplate",
+                "SqlServerIndex": "0",
+                "SqlSubGroup": "ETL"
             },
             {
-                "displayname": "Deploy Azure Function",
-                "name": "Microsoft-DeployAzureFunction",
                 "DeploymentName": "Deployment1",
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_AZURE_FUNCTION)",
                 "FunctionName": "$save('solutiontemplatefunc' + this.MS.DataStore.getValue('uniqueId'))",
+                "name": "Microsoft-DeployAzureFunction",
                 "RepoUrl": "https://github.com/MohaaliMicrosoft/FacebookETL",
                 "sku": "Standard"
             },
             {
-                "displayname": "Wait for deployment",
-                "name": "Microsoft-WaitForArmDeploymentStatus",
-                "DeploymentName": "Deployment1"
+                "DeploymentName": "Deployment1",
+                "displayname": "$translate(INIT_ACTION_WAITING_DEPLOYMENT)",
+                "name": "Microsoft-WaitForArmDeploymentStatus"
             },
             {
-                "displayname": "Deploy Storage",
-                "name": "Microsoft-CreateAzureStorageAccount",
                 "DeploymentName": "Deployment2",
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_STORAGE_ACCOUNT)",
+                "name": "Microsoft-CreateAzureStorageAccount",
+                "StorageAccountEncryptionEnabled": "true",
                 "StorageAccountName": "$save('stor' + this.MS.DataStore.getValue('uniqueId'))",
-                "StorageAccountType": "Standard_LRS",
-                "StorageAccountEncryptionEnabled": "true"
+                "StorageAccountType": "Standard_LRS"
             },
             {
-                "displayname": "Wait for deployment",
-                "name": "Microsoft-WaitForArmDeploymentStatus",
-                "DeploymentName": "Deployment2"
+                "DeploymentName": "Deployment2",
+                "displayname": "$translate(INIT_ACTION_WAITING_DEPLOYMENT)",
+                "name": "Microsoft-WaitForArmDeploymentStatus"
             },
             {
-                "displayname": "Get Keys",
+                "displayname": "$translate(INIT_ACTION_GETTING_STORAGE_ACCOUNT_KEY)",
                 "name": "Microsoft-GetStorageAccountKey"
             },
             {
-                "displayname": "Create Connector",
-                "name": "Microsoft-UpdateBlobStorageConnector",
                 "ConnectorName": "azurequeues",
                 "ConnectorPayload": {
                     "sharedkey": "$ds(StorageAccountKey)",
                     "storageaccount": "$ds(StorageAccountName)"
-                }
+                },
+                "displayname": "$translate(INIT_ACTION_CREATING_LOGIC_APP_CONNECTOR)",
+                "name": "Microsoft-UpdateBlobStorageConnector"
             },
             {
-                "displayname": "Deploy App Settings",
-                "name": "Microsoft-DeployAzureFunctionAppSettings",
                 "AppSettingKeys": {
                     "queue": "$ds(StorageAccountConnectionString)"
-                }
+                },
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_APP_SETTINGS)",
+                "name": "Microsoft-DeployAzureFunctionAppSettings"
             },
             {
-                "displayname": "Deploy Connection String",
-                "name": "Microsoft-DeployAzureFunctionConnectionStrings",
                 "AppSettingKeys": {
-                    "SqlConnectionString": "$ds(SqlConnectionString)",
                     "CognitiveKey": "$ds(CognitiveServiceKey)",
-                    "Schema": "$ds(Schema)",
                     "FacebookClientId": "$ds(FacebookClientId)",
-                    "FacebookClientSecret": "$ds(FacebookClientSecret)"
-                }
+                    "FacebookClientSecret": "$ds(FacebookClientSecret)",
+                    "Schema": "$ds(Schema)",
+                    "SqlConnectionString": "$ds(SqlConnectionString)"
+                },
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_CONNECTION_STRINGS)",
+                "name": "Microsoft-DeployAzureFunctionConnectionStrings"
             },
             {
-                "displayname": "Deploy Logic Apps",
-                "name": "Microsoft-DeployAzureArmTemplate",
                 "AzureArmFile": "Service/Arm/logicapps.json",
                 "AzureArmParameters": {
                     "functionname": "$ds(FunctionName)",
                     "storageName": "$ds(StorageAccountName)",
                     "subscription": "$ds(SelectedSubscription)['SubscriptionId']",
                     "resourceGroup": "$ds(SelectedResourceGroup)"
-                }
+                },
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_LOGIC_APP)",
+                "name": "Microsoft-DeployAzureArmTemplate"
             },
             {
-                "displayname": "Run Logic App History",
-                "name": "Microsoft-ForceRunLogicApp",
-                "LogicAppName": "GetHistoryForFacebookPages"
+                "displayname": "$translate(INIT_ACTION_RUNNING_LOGIC_APP_HISTORICAL)",
+                "LogicAppName": "GetHistoryForFacebookPages",
+                "name": "Microsoft-ForceRunLogicApp"
             }
         ]
     }

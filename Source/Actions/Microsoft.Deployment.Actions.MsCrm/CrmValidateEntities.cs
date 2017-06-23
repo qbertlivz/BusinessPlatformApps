@@ -30,6 +30,14 @@ namespace Microsoft.Deployment.Common.Actions.MsCrm
             string organizationUrl = request.DataStore.GetValue("OrganizationUrl");
             string[] entities = request.DataStore.GetValue("Entities").Split(new[] { ',', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
 
+            var additionalObjects = request.DataStore.GetValue("AdditionalObjects");
+
+            if (!string.IsNullOrEmpty(additionalObjects))
+            {
+                string[] add = additionalObjects.Split(',');
+                entities.ToList().AddRange(add);
+            }
+
             var crmToken = CrmTokenUtility.RetrieveCrmOnlineToken(refreshToken, request.Info.WebsiteRootUrl, request.DataStore, organizationUrl);
 
             var proxy = new OrganizationWebProxyClient(new Uri($"{organizationUrl}XRMServices/2011/Organization.svc/web"), true)

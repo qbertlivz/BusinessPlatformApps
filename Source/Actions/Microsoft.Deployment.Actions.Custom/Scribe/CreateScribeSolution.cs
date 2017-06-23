@@ -10,6 +10,7 @@ using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
 using Microsoft.Deployment.Common.Model.Scribe;
+using System.Linq;
 
 namespace Microsoft.Deployment.Actions.Custom.Scribe
 {
@@ -27,12 +28,21 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
 
             string orgId = request.DataStore.GetValue("ScribeOrganizationId");
 
+            var sfObjects = request.DataStore.GetValue("Entities").Split(new[] { ',', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var additionalObjects = request.DataStore.GetValue("AdditionalObjects");
+
+            if (!string.IsNullOrEmpty(additionalObjects))
+            {
+                var add = additionalObjects.Split(',').ToList();
+                sfObjects.AddRange(add);
+            }
+
             ScribeSolution solution = new ScribeSolution
             {
                 Name = ScribeUtility.BPST_SOLUTION_NAME,
                 Description = string.Empty,
                 SolutionType = "Replication",
-                ReplicationSettings = new ScribeReplicationSettings(request.DataStore.GetValue("Entities").Split(new[] { ',', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries)),
+                ReplicationSettings = new ScribeReplicationSettings(sfObjects.ToArray()),
                 ConnectionIdForSource = await GetConnectionId(rc, orgId, ScribeUtility.BPST_SOURCE_NAME),
                 ConnectionIdForTarget = await GetConnectionId(rc, orgId, ScribeUtility.BPST_TARGET_NAME),
                 AgentId = await GetAgentId(rc, orgId, request.DataStore.GetValue("ScribeAgentName"))

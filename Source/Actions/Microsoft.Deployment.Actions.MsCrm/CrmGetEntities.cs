@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Deployment.Common.ActionModel;
+using Microsoft.Deployment.Common.Actions.MsCrm.Model;
 using Microsoft.Deployment.Common.Helpers;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.WebServiceClient;
+using Newtonsoft.Json;
 
 namespace Microsoft.Deployment.Common.Actions.MsCrm
 {
@@ -17,6 +20,8 @@ namespace Microsoft.Deployment.Common.Actions.MsCrm
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
+            RestClient rc;
+            List<string> result = new List<string>();
             string refreshToken = request.DataStore.GetJson("MsCrmToken")["refresh_token"].ToString();
             string organizationUrl = request.DataStore.GetValue("OrganizationUrl");
 
@@ -24,22 +29,29 @@ namespace Microsoft.Deployment.Common.Actions.MsCrm
 
             var crmToken = CrmTokenUtility.RetrieveCrmOnlineToken(refreshToken, request.Info.WebsiteRootUrl, request.DataStore, organizationUrl);
 
-            var proxy = new OrganizationWebProxyClient(new Uri($"{organizationUrl}XRMServices/2011/Organization.svc/web"), true)
-            {
-                HeaderToken = crmToken["access_token"].ToString()
-            };
+            //var proxy = new OrganizationWebProxyClient(new Uri($"{organizationUrl}XRMServices/2011/Organization.svc/web"), true)
+            //{
+            //    HeaderToken = crmToken["access_token"].ToString()
+            //};           
 
-            RetrieveAllEntitiesRequest retrieveAllEntityRequest = new RetrieveAllEntitiesRequest
-            {
-                RetrieveAsIfPublished = true,
-                EntityFilters = EntityFilters.Attributes
-            };
+            var token = request.DataStore.GetJson("MsCrmToken", "access_token");
+            AuthenticationHeaderValue bearer = new AuthenticationHeaderValue("Bearer", token);
+            var orgUrl = request.DataStore.GetValue("OrganizationUrl");
+            rc = new RestClient(request.DataStore.GetValue("ConnectorUrl"), bearer);
+            string response = await rc.Get(MsCrmEndpoints.URL_ENTITIES, "organizationurl=" + orgUrl);
+            MsCrmEntity[] provisionedEntities = JsonConvert.DeserializeObject<MsCrmEntity[]>(response);
 
-            RetrieveAllEntitiesResponse retrieveAllEntityResponse = (RetrieveAllEntitiesResponse)proxy.Execute(retrieveAllEntityRequest);
+            //RetrieveAllEntitiesRequest retrieveAllEntityRequest = new RetrieveAllEntitiesRequest
+            //{
+            //    RetrieveAsIfPublished = true,
+            //    EntityFilters = EntityFilters.Attributes
+            //};
 
-            foreach(var entity in retrieveAllEntityResponse.EntityMetadata)
+            //RetrieveAllEntitiesResponse retrieveAllEntityResponse = (RetrieveAllEntitiesResponse)proxy.Execute(retrieveAllEntityRequest);
+
+            foreach(var entity in provisionedEntities)
             {
-                crmObjects.Add(entity.SchemaName);
+                crmObjects.Add(entity.LogicalName);
             }
 
             return new ActionResponse(ActionStatus.Success, JsonUtility.Serialize(crmObjects));

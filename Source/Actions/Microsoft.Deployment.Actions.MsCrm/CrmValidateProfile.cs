@@ -12,6 +12,7 @@
     using Microsoft.Deployment.Common.ActionModel;
     using Microsoft.Deployment.Common.Actions;
     using Microsoft.Deployment.Common.Helpers;
+    using System.Linq;
 
     [Export(typeof(IAction))]
     public class CrmValidateProfile : BaseAction
@@ -54,6 +55,13 @@
             string kV = request.DataStore.GetValue("KeyVault");
             string[] entities = request.DataStore.GetValue("Entities").Split(new[] {',', ' ', '\t'}, StringSplitOptions.RemoveEmptyEntries);
 
+            var additionalObjects = request.DataStore.GetValue("AdditionalObjects");
+
+            if (!string.IsNullOrEmpty(additionalObjects))
+            {
+                string[] add = additionalObjects.Split(',');
+                entities.ToList().AddRange(add);
+            }
 
 
             MsCrmProfile profile = new MsCrmProfile

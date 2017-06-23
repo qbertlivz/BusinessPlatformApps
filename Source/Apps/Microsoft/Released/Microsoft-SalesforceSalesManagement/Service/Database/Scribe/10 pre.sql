@@ -11,12 +11,13 @@ DECLARE @stmt AS VARCHAR(500), @p1 AS VARCHAR(100), @p2 AS VARCHAR(100);
 DECLARE @cr CURSOR;
 
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='smgt' AND TABLE_NAME='configuration' AND TABLE_TYPE='BASE TABLE')
+BEGIN
 	DECLARE @additionalTables NVARCHAR(MAX);
 	SELECT @additionalTables = [value]
 	FROM smgt.[configuration] WHERE configuration_group = 'SolutionTemplate' AND configuration_subgroup = 'SalesManagement' AND [name] = 'AdditionalTables';
 SET @cr = CURSOR FAST_FORWARD FOR
               SELECT [value] FROM STRING_SPLIT(@additionalTables,',')
-
+			  
 OPEN @cr;
 FETCH NEXT FROM @cr INTO @p1;
 WHILE @@FETCH_STATUS = 0  
@@ -31,6 +32,7 @@ BEGIN
 END;
 CLOSE @cr;
 DEALLOCATE @cr;
+END;
 
 -- Regular views
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='smgt' AND TABLE_NAME='accountview' AND TABLE_TYPE='VIEW')

@@ -34,14 +34,8 @@ namespace Microsoft.Deployment.Actions.Custom.SCCM
             }
 
             // Kill any running azurebcp
-            foreach (Process p in Process.GetProcessesByName("azurebcp"))
-            {
-                try
-                {
-                    p.Kill();
-                }
-                catch { }
-            }
+            NTHelper.KillProcess("azurebcp");
+
             // Get the files in the directory and copy them to the new location.
             FileInfo[] files = dir.GetFiles();
             Parallel.ForEach(files, (currentFile) =>

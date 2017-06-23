@@ -35,14 +35,7 @@ namespace Microsoft.Deployment.Actions.OnPremise.TaskScheduler
                                 if (task.State == TaskState.Running || task.State == TaskState.Queued)
                                 {
                                     task.Stop();
-                                    foreach (Process p in Process.GetProcessesByName("azurebcp"))
-                                    {
-                                        try
-                                        {
-                                            p.Kill();
-                                        }
-                                        catch { }
-                                    }
+                                    NTHelper.KillProcess("azurebcp");
                                 }
                                 ts.RootFolder.DeleteTask(taskName, false);
                             }

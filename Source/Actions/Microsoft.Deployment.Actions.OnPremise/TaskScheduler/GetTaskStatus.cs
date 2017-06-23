@@ -59,7 +59,7 @@ namespace Microsoft.Deployment.Actions.OnPremise.TaskScheduler
 
             // Let it run
             if (task.State == TaskState.Queued || task.State == TaskState.Running)
-                return new ActionResponse(ActionStatus.InProgress, JsonUtility.GetEmptyJObject());
+                return new ActionResponse(ActionStatus.BatchNoState, JsonUtility.GetEmptyJObject());
 
             // If we're here, the task completed
             if (task.LastTaskResult == 0)

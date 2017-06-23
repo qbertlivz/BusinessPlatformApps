@@ -22,7 +22,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
 
             JObject graphToken = AzureTokenUtility.GetTokenForResourceFromExistingToken("as", request.Info.WebsiteRootUrl, azureToken, "https://graph.windows.net");
-            var tenantId = AzureUtility.GetTenantFromToken(azureToken);
+            var tenantId = AzureUtility.GetTenantFromToken(request.DataStore.GetValue("AzureToken"));
 
             // Generate new key for ClientSecret
             string key = GetNewKey();

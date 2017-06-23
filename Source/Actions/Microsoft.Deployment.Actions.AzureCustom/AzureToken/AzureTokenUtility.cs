@@ -1,15 +1,14 @@
-﻿using Hyak.Common.Internals;
-using Microsoft.Deployment.Common;
-using Microsoft.Deployment.Common.ActionModel;
-using Microsoft.Deployment.Common.Helpers;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
+
+using Hyak.Common.Internals;
+using Newtonsoft.Json.Linq;
+
+using Microsoft.Deployment.Common;
+using Microsoft.Deployment.Common.Helpers;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
 {

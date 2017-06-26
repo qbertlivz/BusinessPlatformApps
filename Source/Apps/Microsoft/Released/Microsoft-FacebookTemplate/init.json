@@ -34,12 +34,12 @@
                 "pricingCost": "$translate(INIT_FACEBOOK_PRICING_COST)",
                 "pricingUrl": "$translate(INIT_FACEBOOK_PRICING_URL)"
             },
-            //{
-            //    "bingUrl": "placeholder",
-            //    "cognitiveUrl": "placeholder",
-            //    "displayname": "Cognitive API",
-            //    "name": "$SiteCommon$/pages-gallery/cognitive-terms.html"
-            //},
+            {
+                "bingUrl": "placeholder",
+                "cognitiveUrl": "placeholder",
+                "displayname": "Cognitive API",
+                "name": "$SiteCommon$/pages-gallery/cognitive-services-terms.html"
+            },
             {
                 "checkSqlVersion": true,
                 "displayname": "Target",
@@ -111,12 +111,20 @@
                 "name": "Microsoft-WaitForArmDeploymentStatus"
             },
             {
-                "DeploymentName": "Deployment2",
-                "displayname": "$translate(INIT_ACTION_DEPLOYING_STORAGE_ACCOUNT)",
+                "displayname": "Create Function",
+                "name": "Microsoft-CheckFunctionStatus"
+            },
+            {
+                "displayname": "Create Function",
+                "name": "Microsoft-CheckFunctionStatus"
+            },
+            {
+                "displayname": "Deploy Storage",
                 "name": "Microsoft-CreateAzureStorageAccount",
-                "StorageAccountEncryptionEnabled": "true",
+                "DeploymentName": "Deployment2",
                 "StorageAccountName": "$save('stor' + this.MS.DataStore.getValue('uniqueId'))",
-                "StorageAccountType": "Standard_LRS"
+                "StorageAccountType": "Standard_LRS",
+                "StorageAccountEncryptionEnabled": "true"
             },
             {
                 "DeploymentName": "Deployment2",

@@ -68,6 +68,7 @@ export class SqlServer extends ViewModelBase {
                     }
                 }
             }
+            this.sqlLocation = this.sqlLocation || 'westus2';
         }
     }
 

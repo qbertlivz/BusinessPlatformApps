@@ -32,9 +32,9 @@ namespace Microsoft.Deployment.Actions.Custom.Facebook
 
                 string accessToken = JObject.Parse(responseObj)["access_token"].ToString();
 
-                string pageRequestUri = $"https://graph.facebook.com/{page}?access_token={accessToken}";
+                string pageRequestUri = $"https://graph.facebook.com/{page}?access_token={accessToken}&fields=picture,name";
                 response = await client.GetAsync(pageRequestUri);
-                //responseObj = await response.Content.ReadAsStringAsync();
+                responseObj = await response.Content.ReadAsStringAsync();
                 if (!response.IsSuccessStatusCode)
                 {
                     return new ActionResponse(ActionStatus.FailureExpected, null, null, $"FacebookPagesInvalid", $"{page} not found");

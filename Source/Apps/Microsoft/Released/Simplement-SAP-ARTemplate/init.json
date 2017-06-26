@@ -60,7 +60,6 @@
                 "useImpersonation": true
             },
             {
-                "checkSqlVersion": true,
                 "credentialTarget": "Simplement.SolutionTemplate.AR.SQL",
                 "displayname": "Target",
                 "name": "$SiteCommon$/pages-gallery/sql-server.html",

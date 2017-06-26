@@ -34,12 +34,12 @@
                 "pricingCost": "$translate(INIT_FACEBOOK_PRICING_COST)",
                 "pricingUrl": "$translate(INIT_FACEBOOK_PRICING_URL)"
             },
-            //{
-            //    "bingUrl": "placeholder",
-            //    "cognitiveUrl": "placeholder",
-            //    "displayname": "Cognitive API",
-            //    "name": "$SiteCommon$/pages-gallery/cognitive-terms.html"
-            //},
+            {
+                "bingUrl": "placeholder",
+                "cognitiveUrl": "placeholder",
+                "displayname": "Cognitive API",
+                "name": "$SiteCommon$/pages-gallery/cognitive-terms.html"
+            },
             {
                 "checkSqlVersion": true,
                 "displayname": "Target",
@@ -109,6 +109,10 @@
                 "DeploymentName": "Deployment1",
                 "displayname": "$translate(INIT_ACTION_WAITING_DEPLOYMENT)",
                 "name": "Microsoft-WaitForArmDeploymentStatus"
+            },
+            {
+                "displayname": "Create Function",
+                "name": "Microsoft-CheckFunctionStatus"
             },
             {
                 "DeploymentName": "Deployment2",

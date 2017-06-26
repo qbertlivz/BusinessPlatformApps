@@ -6,6 +6,9 @@ using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
 
+using Trinet.Core.IO.Ntfs;
+using System.Diagnostics;
+
 namespace Microsoft.Deployment.Actions.Custom.SCCM
 {
     [Export(typeof(IAction))]
@@ -30,12 +33,23 @@ namespace Microsoft.Deployment.Actions.Custom.SCCM
                 Directory.CreateDirectory(destDirName);
             }
 
+            // Kill any running azurebcp
+            NTHelper.KillProcess("azurebcp");
+
             // Get the files in the directory and copy them to the new location.
             FileInfo[] files = dir.GetFiles();
             Parallel.ForEach(files, (currentFile) =>
             {
                 string temppath = Path.Combine(destDirName, currentFile.Name);
                 currentFile.CopyTo(temppath, true);
+                FileInfo destination = new FileInfo(temppath);
+                try
+                {
+                    if (destination.AlternateDataStreamExists("Zone.Identifier"))
+                        destination.DeleteAlternateDataStream("Zone.Identifier");
+                }
+                catch { }
+               
             });
 
             // If copying subdirectories, copy them and their contents to new location.

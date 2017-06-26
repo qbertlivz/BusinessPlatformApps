@@ -106,10 +106,12 @@
             <p class="st-text">
                 <bpst-link a-description="${MS.Translate.SQL_SERVER_SKU_DESCRIPTION}" a-link="${MS.Translate.SQL_SERVER_SKU_LINK}" a-link-text="${MS.Translate.COMMON_HERE}"></bpst-link>
             </p>
-            <p class="st-text">${MS.Translate.SQL_SERVER_LOCATION}</p>
-            <select class="btn btn-default dropdown-toggle st-input" disabled.bind="MS.HttpService.isServiceBusy" value.bind="sqlLocation">
-                <option repeat.for="azureLocation of azureLocations" value.bind="azureLocation.Name">${azureLocation.DisplayName}</option>
-            </select>
+            <div if.bind="azureLocations && azureLocations.length > 0">
+                <p class="st-text">${MS.Translate.SQL_SERVER_LOCATION}</p>
+                <select class="btn btn-default dropdown-toggle st-input" disabled.bind="MS.HttpService.isServiceBusy" value.bind="sqlLocation">
+                    <option repeat.for="azureLocation of azureLocations" value.bind="azureLocation.Name">${azureLocation.DisplayName}</option>
+                </select>
+            </div>
         </div>
 
         <p class="st-float">

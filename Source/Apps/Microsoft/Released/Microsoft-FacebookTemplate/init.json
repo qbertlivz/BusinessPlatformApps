@@ -115,6 +115,10 @@
                 "name": "Microsoft-CheckFunctionStatus"
             },
             {
+                "displayname": "Create Function",
+                "name": "Microsoft-CheckFunctionStatus"
+            },
+            {
                 "displayname": "Deploy Storage",
                 "name": "Microsoft-CreateAzureStorageAccount",
                 "DeploymentName": "Deployment2",

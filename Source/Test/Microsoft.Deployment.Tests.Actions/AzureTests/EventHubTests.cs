@@ -17,17 +17,19 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
         public async Task CreateEventHubNameSpaceTest()
         {
             // Tests the Action to create an Event Hub Namespace
-            string id = RandomGenerator.GetRandomCharacters();
-            System.Diagnostics.Debug.WriteLine($"id: {id}");
             var dataStore = await TestManager.GetDataStore(true);
-            dataStore.AddToDataStore("DeploymentName", $"LanceEHDeployment-{id}");
+            dataStore.AddToDataStore("DeploymentName", $"POC-EHDeployment3");
             dataStore.AddToDataStore("AzureArmFile", "Service/ARM/EventHub.json");
             var payload = new JObject();
-            payload.Add("namespaceName", $"LancesEventHubNamespace-{id}");
-            payload.Add("eventHubName", $"LancesEventHub-{id}");
-            payload.Add("consumerGroupName", "LancesConsumerGroup");
+            payload.Add("namespaceName", "POC-Namespace3");
+            payload.Add("eventHubName", "POC-EventHub3");
+            payload.Add("consumerGroupName", "LancesConsumerGroup3");
             dataStore.AddToDataStore("AzureArmParameters", payload);
-            var deployArmResult = await TestManager.ExecuteActionAsync("Microsoft-CreateEventHubNameSpace", dataStore, "Microsoft-ActivityLogTemplate");
+            //var deployArmResult = await TestManager.ExecuteActionAsync(
+            //    "Microsoft-CreateEventHubNameSpace", dataStore, "Microsoft-ActivityLogTemplate");            
+            
+            var deployArmResult = await TestManager.ExecuteActionAsync(
+                "Microsoft-DeployAzureArmTemplate", dataStore, "Microsoft-ActivityLogTemplate");
             Assert.IsTrue(deployArmResult.IsSuccess);
         }
 
@@ -35,10 +37,8 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
         public async Task ExportActivityLogToEventHubTest()
         {
             // Tests the Action to export an Activity Log to Event Hub
-            string id = RandomGenerator.GetRandomCharacters();
             var dataStore = await TestManager.GetDataStore();
-            // dataStore.AddToDataStore("namespace", $"LancesEventHubNamespace-{id}");
-            dataStore.AddToDataStore("namespace", "LancesEventHubNamespace-twq5uxxrAq2aimv");
+            dataStore.AddToDataStore("namespace", "POC-Namespace3");
             var response = await TestManager.ExecuteActionAsync("Microsoft-ExportActivityLogToEventHub", dataStore);
             Assert.IsTrue(response.IsSuccess);
         }
@@ -48,7 +48,7 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
         {
             // Tests the Action to obtain the primary policy key for an Event Hub
             var dataStore = await TestManager.GetDataStore();
-            dataStore.AddToDataStore("namespace", "LancesEventHubNamespace");
+            dataStore.AddToDataStore("namespace", "POC-Namespace3");
             var response = await TestManager.ExecuteActionAsync("Microsoft-GetEventHubPrimaryKey", dataStore);
             Assert.IsTrue(response.IsSuccess);
         }

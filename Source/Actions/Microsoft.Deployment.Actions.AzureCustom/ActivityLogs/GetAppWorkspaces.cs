@@ -22,11 +22,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
             string uri = "https://api.powerbi.com/v1.0/myorg/groups";
             AzureHttpClient ahc = new AzureHttpClient(token, subscription);
             HttpResponseMessage response = await ahc.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Get, uri, "{}");
-            if (response.IsSuccessStatusCode)
-            {
-                return new ActionResponse(ActionStatus.Success);
-            }
-            return new ActionResponse(ActionStatus.Failure);
+            return response.IsSuccessStatusCode ? new ActionResponse(ActionStatus.Success) : new ActionResponse(ActionStatus.Failure);
         }
     }
 }

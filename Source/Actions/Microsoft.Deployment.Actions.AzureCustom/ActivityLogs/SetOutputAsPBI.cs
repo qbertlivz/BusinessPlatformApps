@@ -19,6 +19,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
         {
             string code = request.DataStore.GetValue("codepowerbi");
             string state = request.DataStore.GetValue("statepowerbi");
+            string session_state = request.DataStore.GetValue("sessionstatepowerbi");
             var uri = $"https://main.streamanalytics.ext.azure.com/api/PowerBI/GetTokens?authUrl=https%3A%2F%2Fms.portal.azure.com%2FTokenAuthorize%3Fcode%3D{Uri.EscapeDataString(code)}%26session_state%3D{Uri.EscapeDataString(state)}";
             HttpResponseMessage response = await ahc.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Get, uri, "{}");
             string responseString = await response.Content.ReadAsStringAsync();

@@ -22,12 +22,12 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
             var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
             var jobName = request.DataStore.GetValue("jobName");
-            var transformationName = request.DataStore.GetValue("Transformation");
+            var transformationName = request.DataStore.GetValue("transformationName");
             var apiVersion = "2015-10-01";
             string uri = $"https://management.azure.com/subscriptions/{subscription}/resourceGroups/{resourceGroup}/providers/Microsoft.StreamAnalytics/streamingjobs/{jobName}/transformations/{transformationName}?api-version={apiVersion}";
             string input = request.DataStore.GetValue("inputAlias");
             string output = request.DataStore.GetValue("outputAlias");
-            var body = "{\"properties\":{\"streamingUnits\":1,\"query\":\"select * from sampleinput;\"}}";
+            var body = $"{{\"properties\":{{\"streamingUnits\":1,\"query\":\"select operationName, time into [{output}] from [{input}];\"}}}}";
             AzureHttpClient ahc = new AzureHttpClient(token, subscription);
             HttpResponseMessage response = await ahc.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Put, uri, body);
             return response.IsSuccessStatusCode ? new ActionResponse(ActionStatus.Success) : new ActionResponse(ActionStatus.Failure);

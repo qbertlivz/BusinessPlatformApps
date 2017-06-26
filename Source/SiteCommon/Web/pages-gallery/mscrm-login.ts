@@ -39,6 +39,8 @@ export class MsCrmLogin extends AzureLogin {
                     this.selectedSubscriptionId = this.subscriptionsList[0].SubscriptionId;
                     this.showPricingConfirmation = this.setValidated();
                 }
+            } else {
+                this.showAzureTrial = true;
             }
         } else {
             this.MS.ErrorService.message = this.MS.Translate.MSCRM_LOGIN_NO_AUTHORIZATION;

@@ -83,14 +83,12 @@ namespace Microsoft.Deployment.Actions.Salesforce
 
             foreach (var obj in result.sobjects)
             {
-                sfObjects.Add(obj.name);
+                if (!requiredObjects.Contains(obj.name))
+                {
+                    sfObjects.Add(obj.name);
+                }
             }
 
-            foreach(var requiredObj in requiredObjects)
-            {
-                sfObjects.Remove(requiredObj);
-            }
-          
             return new ActionResponse(ActionStatus.Success, JsonUtility.Serialize(sfObjects));
         }
     }

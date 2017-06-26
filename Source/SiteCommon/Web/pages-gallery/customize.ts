@@ -21,14 +21,21 @@ export class Customize extends ViewModelBase {
     showCrmUrl: boolean = false;
     showRefreshSchedule: boolean = false;
     showRecurrenceOptions: boolean = false;
-    addAdditionalEntities: boolean = true;
+    addAdditionalEntities: boolean = false;
     sourceApplication: string = '';
 
     async onLoaded(): Promise<void> {
         this.emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         this.isValidated = true;
-
-        await this.getEntities();
+        
+        if (this.sourceApplication === 'DynamicsCRM' && this.MS.DataStore.getValue('DataMovement') !== 'Scribe') {
+            await this.getEntities();
+            this.addAdditionalEntities = true;
+        }
+        if (this.sourceApplication === 'Salesforce') {
+            await this.getEntities();
+            this.addAdditionalEntities = true;
+        }
 
         if (this.showCrmUrl) {
             let orgUrl: string = this.MS.DataStore.getValue('OrganizationUrl');

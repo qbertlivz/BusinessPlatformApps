@@ -24,15 +24,10 @@ namespace Microsoft.Deployment.Common.Actions.MsCrm
             List<string> result = new List<string>();
             string refreshToken = request.DataStore.GetJson("MsCrmToken")["refresh_token"].ToString();
             string organizationUrl = request.DataStore.GetValue("OrganizationUrl");
-
+            string[] coreObjects = request.DataStore.GetValue("Entities").Split(new[] { ',', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
             var crmObjects = new List<string>();
 
             var crmToken = CrmTokenUtility.RetrieveCrmOnlineToken(refreshToken, request.Info.WebsiteRootUrl, request.DataStore, organizationUrl);
-
-            //var proxy = new OrganizationWebProxyClient(new Uri($"{organizationUrl}XRMServices/2011/Organization.svc/web"), true)
-            //{
-            //    HeaderToken = crmToken["access_token"].ToString()
-            //};           
 
             var token = request.DataStore.GetJson("MsCrmToken", "access_token");
             AuthenticationHeaderValue bearer = new AuthenticationHeaderValue("Bearer", token);
@@ -41,17 +36,12 @@ namespace Microsoft.Deployment.Common.Actions.MsCrm
             string response = await rc.Get(MsCrmEndpoints.URL_ENTITIES, "organizationurl=" + orgUrl);
             MsCrmEntity[] provisionedEntities = JsonConvert.DeserializeObject<MsCrmEntity[]>(response);
 
-            //RetrieveAllEntitiesRequest retrieveAllEntityRequest = new RetrieveAllEntitiesRequest
-            //{
-            //    RetrieveAsIfPublished = true,
-            //    EntityFilters = EntityFilters.Attributes
-            //};
-
-            //RetrieveAllEntitiesResponse retrieveAllEntityResponse = (RetrieveAllEntitiesResponse)proxy.Execute(retrieveAllEntityRequest);
-
-            foreach(var entity in provisionedEntities)
+            foreach (var entity in provisionedEntities)
             {
-                crmObjects.Add(entity.LogicalName);
+                if (!coreObjects.Contains(entity.LogicalName))
+                {
+                    crmObjects.Add(entity.LogicalName);
+                }
             }
 
             return new ActionResponse(ActionStatus.Success, JsonUtility.Serialize(crmObjects));

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Microsoft.Deployment.Common.Helpers
@@ -23,6 +25,16 @@ namespace Microsoft.Deployment.Common.Helpers
         public static string GetStringFromUTF8(this byte[] value)
         {
             return (value == null ? null : Encoding.UTF8.GetString(value));
+        }
+
+        public static List<string> SplitByCommaSpaceTabReturnList(this string value)
+        {
+            return value == null ? null : value.Split(new[] { ',', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+        }
+
+        public static string[] SplitByCommaSpaceTabReturnArray(this string value)
+        {
+            return value == null ? null : value.Split(new[] { ',', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
         }
     }
 }

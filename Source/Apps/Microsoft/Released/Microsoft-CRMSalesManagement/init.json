@@ -127,13 +127,14 @@
                 "sourceApplication": "DynamicsCRM"
             },
             {
-                "displayCompletionNotification": "$run(this.MS.HttpService.isOnPremise ? false : true)",
+                "sendCompletionNotification": "$run(this.MS.DataStore.getValue('DataMovement') === 'D365' && !this.MS.HttpService.isOnPremise)",
+                "displayCompletionNotification": "$run(this.MS.DataStore.getValue('DataMovement') === 'D365' && !this.MS.HttpService.isOnPremise)",
                 "displayname": "Summary",
                 "name": "$SiteCommon$/pages-gallery/summary.html",
                 "onNext": [
                     {
                         "name": "Microsoft-CrmGetEntityInitialCounts",
-                        "skip": "$run(this.MS.DataStore.getValue('DataMovement') === 'Scribe' ? false : true)"
+                        "skip": "$run(this.MS.DataStore.getValue('DataMovement') === 'Scribe')"
                     }
                 ],
                 "values": {
@@ -281,27 +282,27 @@
                 "displayname": "$translate(NOTIFIER_INSERTING_INITIAL_COUNTS)",
                 "name": "Microsoft-InsertInitialCounts",
                 "SqlSchema": "$save('smgt')",
-                "skip": "$run((this.MS.DataStore.getValue('DataMovement') !== 'D365') && (this.MS.DataStore.getValue('SendCompletionNotification')))"
+                "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
             },
             {
                 "DeploymentName": "SqlConnectionDeployment",
                 "displayname": "$translate(NOTIFIER_CREATING_DATABASE_CONNECTION)",
                 "name": "Microsoft-CreateSqlConnector",
                 "ApiConnectionName": "$save('sqlNotifierConnection')",
-                "skip": "$run((this.MS.DataStore.getValue('DataMovement') !== 'D365') && (this.MS.DataStore.getValue('SendCompletionNotification')))"
+                "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
             },
             {
                 "DeploymentName": "NotifierLogicApp",
                 "displayname": "$translate(NOTIFIER_CREATING_NOTIFIER_APP)",
                 "name": "Microsoft-DeployNotifierLogicApp",
                 "logicAppName": "notifierLogicApp",
-                "skip": "$run((this.MS.DataStore.getValue('DataMovement') !== 'D365') && (this.MS.DataStore.getValue('SendCompletionNotification')))"
+                "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
             },
             {
                 "displayname": "$translate(NOTIFIER_CONFIGURE_NOTIFIER_APP)",
                 "name": "Microsoft-ConfigureNotifier",
                 "SqlConfigTable": "[smgt].[configuration]",
-                "skip": "$run((this.MS.DataStore.getValue('DataMovement') !== 'D365') && (this.MS.DataStore.getValue('SendCompletionNotification')))"
+                "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
             },
             {
                 "displayname": "$translate(INIT_ACTION_WAITING_DATA)",

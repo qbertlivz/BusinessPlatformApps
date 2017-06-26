@@ -7,7 +7,6 @@ SET QUOTED_IDENTIFIER       ON;
 go
 
 -- Must be executed inside the target database
-
 -- Regular views
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='smgt' AND TABLE_NAME='accountview' AND TABLE_TYPE='VIEW')
     DROP VIEW smgt.accountview;

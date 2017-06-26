@@ -91,7 +91,7 @@
             {
                 await _rc.Post(MsCrmEndpoints.URL_PROFILES_VALIDATE, JsonConvert.SerializeObject(profile));
                 
-                return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+                return new ActionResponse(ActionStatus.Success);
             }
             catch (Exception e)
             {

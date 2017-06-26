@@ -34,12 +34,12 @@
                 "pricingCost": "$translate(INIT_FACEBOOK_PRICING_COST)",
                 "pricingUrl": "$translate(INIT_FACEBOOK_PRICING_URL)"
             },
-            {
-                "bingUrl": "placeholder",
-                "cognitiveUrl": "placeholder",
-                "displayname": "Cognitive API",
-                "name": "$SiteCommon$/pages-gallery/cognitive-terms.html"
-            },
+            //{
+            //    "bingUrl": "placeholder",
+            //    "cognitiveUrl": "placeholder",
+            //    "displayname": "Cognitive API",
+            //    "name": "$SiteCommon$/pages-gallery/cognitive-terms.html"
+            //},
             {
                 "checkSqlVersion": true,
                 "displayname": "Target",
@@ -59,6 +59,7 @@
                     "SqlConnectionString"
                 ],
                 "displayname": "Progress",
+                "enablePublishReport": true,
                 "filename": "$save('FacebookTemplate.pbix')",
                 "name": "$SiteCommon$/pages-gallery/progress.html",
                 "Schema": "$save('fb')",
@@ -101,8 +102,13 @@
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_AZURE_FUNCTION)",
                 "FunctionName": "$save('solutiontemplatefunc' + this.MS.DataStore.getValue('uniqueId'))",
                 "name": "Microsoft-DeployAzureFunction",
-                "RepoUrl": "https://github.com/MohaaliMicrosoft/FacebookExtraction",
+                "RepoUrl": "https://github.com/MohaaliMicrosoft/FacebookETL",
                 "sku": "Standard"
+            },
+            {
+                "DeploymentName": "Deployment1",
+                "displayname": "$translate(INIT_ACTION_WAITING_DEPLOYMENT)",
+                "name": "Microsoft-WaitForArmDeploymentStatus"
             },
             {
                 "DeploymentName": "Deployment2",
@@ -111,11 +117,6 @@
                 "StorageAccountEncryptionEnabled": "true",
                 "StorageAccountName": "$save('stor' + this.MS.DataStore.getValue('uniqueId'))",
                 "StorageAccountType": "Standard_LRS"
-            },
-            {
-                "DeploymentName": "Deployment1",
-                "displayname": "$translate(INIT_ACTION_WAITING_DEPLOYMENT)",
-                "name": "Microsoft-WaitForArmDeploymentStatus"
             },
             {
                 "DeploymentName": "Deployment2",

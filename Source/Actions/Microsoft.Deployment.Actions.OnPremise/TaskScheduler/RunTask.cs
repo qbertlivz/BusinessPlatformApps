@@ -30,7 +30,7 @@ namespace Microsoft.Deployment.Actions.OnPremise.TaskScheduler
                     try
                     {
                         RunningTask runningTask = task.Run();
-                        return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+                        return new ActionResponse(ActionStatus.Success);
                     }
                     catch (Exception e)
                     {

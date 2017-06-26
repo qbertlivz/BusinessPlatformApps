@@ -10,5 +10,12 @@
 
             return result == null ? EnglishErrorCodes.DefaultErrorCode : result;
         }
+
+        public static string GetAdditionalDetailsMessage(string code)
+        {
+            string result = EnglishErrorCodes.ResourceManager.GetString(code);
+
+            return result == null ? code : result;
+        }
     }
 }

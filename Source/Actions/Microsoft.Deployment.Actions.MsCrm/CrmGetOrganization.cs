@@ -38,7 +38,7 @@
 
                 request.DataStore.AddToDataStore("ConnectorUrl", orgObject.ConnectorUrl, DataStoreType.Public);
 
-                return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+                return new ActionResponse(ActionStatus.Success);
             }
             catch (Exception e)
             {

@@ -1,7 +1,7 @@
 ﻿export enum ActionStatus {
     Failure,
     FailureExpected,
-    BatchNoState,
+    InProgress,
     BatchWithState,
     UserInteractionRequired,
     Success,

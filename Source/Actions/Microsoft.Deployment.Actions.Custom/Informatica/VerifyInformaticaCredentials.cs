@@ -16,7 +16,7 @@ namespace Microsoft.Deployment.Actions.Custom.Informatica
             string password = request.DataStore.GetValue("InformaticaPassword");
             RestClient rc = await InformaticaUtility.Initialize(username, password);
             await InformaticaUtility.Logout(rc, username, password);
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
     }
 }

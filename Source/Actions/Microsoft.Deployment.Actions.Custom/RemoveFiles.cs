@@ -37,7 +37,7 @@ namespace Microsoft.Deployment.Actions.Custom
                 }
             }
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
     }
 }

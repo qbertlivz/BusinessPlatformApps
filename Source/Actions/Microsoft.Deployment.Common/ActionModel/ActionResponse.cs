@@ -60,13 +60,13 @@ namespace Microsoft.Deployment.Common.ActionModel
             this.Body = JsonUtility.GetJObjectFromObject(response);
         }
 
-        public ActionResponse(ActionStatus status, object response, Exception exception, string friendlyMessageCode, string additionaldetails)
+        public ActionResponse(ActionStatus status, object response, Exception exception, string friendlyMessageCode, string additionalDetails)
         {
             this.Status = status;
             this.Body = response;
             this.ExceptionDetail.ExceptionCaught = exception;
             this.ExceptionDetail.FriendlyMessageCode = friendlyMessageCode;
-            this.ExceptionDetail.AdditionalDetailsErrorMessage = additionaldetails;
+            this.ExceptionDetail.AdditionalDetailsErrorMessage = additionalDetails;
         }
 
         public ActionResponse(ActionStatus status, object response, Exception exception, string friendlyMessageCode)
@@ -76,6 +76,12 @@ namespace Microsoft.Deployment.Common.ActionModel
             this.ExceptionDetail.ExceptionCaught = exception;
             this.ExceptionDetail.FriendlyMessageCode = friendlyMessageCode;
             this.ExceptionDetail.AdditionalDetailsErrorMessage = GetInnerExceptionText(exception);
+        }
+
+        public ActionResponse(ActionStatus status, ActionResponseExceptionDetail exceptionDetail)
+        {
+            this.Status = status;
+            this.ExceptionDetail = exceptionDetail;
         }
 
         private static string GetInnerExceptionText(Exception exception)
@@ -90,7 +96,7 @@ namespace Microsoft.Deployment.Common.ActionModel
             while (loopException.InnerException != null)
             {
                 loopException = loopException.InnerException;
-                str.Append(".").Append(loopException.Message);
+                str.AppendLine().Append(loopException.Message);
             }
 
             return str.ToString();

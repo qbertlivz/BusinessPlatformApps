@@ -38,7 +38,7 @@
                 "bingUrl": "placeholder",
                 "cognitiveUrl": "placeholder",
                 "displayname": "Cognitive API",
-                "name": "$SiteCommon$/pages-gallery/cognitive-terms.html"
+                "name": "$SiteCommon$/pages-gallery/cognitive-services-terms.html"
             },
             {
                 "checkSqlVersion": true,
@@ -115,12 +115,12 @@
                 "name": "Microsoft-CheckFunctionStatus"
             },
             {
-                "DeploymentName": "Deployment2",
-                "displayname": "$translate(INIT_ACTION_DEPLOYING_STORAGE_ACCOUNT)",
+                "displayname": "Deploy Storage",
                 "name": "Microsoft-CreateAzureStorageAccount",
-                "StorageAccountEncryptionEnabled": "true",
+                "DeploymentName": "Deployment2",
                 "StorageAccountName": "$save('stor' + this.MS.DataStore.getValue('uniqueId'))",
-                "StorageAccountType": "Standard_LRS"
+                "StorageAccountType": "Standard_LRS",
+                "StorageAccountEncryptionEnabled": "true"
             },
             {
                 "DeploymentName": "Deployment2",

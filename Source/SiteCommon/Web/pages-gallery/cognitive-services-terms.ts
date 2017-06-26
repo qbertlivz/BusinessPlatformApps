@@ -1,6 +1,6 @@
 ﻿import { ViewModelBase } from '../services/view-model-base';
 
-export class CognitiveText extends ViewModelBase {
+export class CognitiveServicesTerms extends ViewModelBase {
     isBingChecked: boolean = false;
 
     verifyBing() {

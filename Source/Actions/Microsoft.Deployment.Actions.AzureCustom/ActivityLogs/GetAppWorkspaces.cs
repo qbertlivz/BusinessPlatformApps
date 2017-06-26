@@ -13,21 +13,20 @@ using System.Threading.Tasks;
 namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
 {
     [Export(typeof(IAction))]
-    public class StartStreamAnalyticsJob : BaseAction
+    public class GetAppWorkspaces : BaseAction
     {
-        // Starts the specified Stream Analytics job
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             var token = request.DataStore.GetJson("AzureToken", "access_token");
             var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
-            var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
-            var apiVersion = "2015-10-01";
-            var jobName = request.DataStore.GetValue("jobName");
-            string uri = $"https://management.azure.com/subscriptions/{subscription}/resourceGroups/{resourceGroup}/providers/Microsoft.StreamAnalytics/streamingjobs/{jobName}/start?api-version={apiVersion}";
+            string uri = "https://api.powerbi.com/v1.0/myorg/groups";
             AzureHttpClient ahc = new AzureHttpClient(token, subscription);
-            HttpResponseMessage response = await ahc.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Post, uri, "{}");
-            return response.IsSuccessStatusCode ? new ActionResponse(ActionStatus.Success) : new ActionResponse(ActionStatus.Failure);
-
+            HttpResponseMessage response = await ahc.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Get, uri, "{}");
+            if (response.IsSuccessStatusCode)
+            {
+                return new ActionResponse(ActionStatus.Success);
+            }
+            return new ActionResponse(ActionStatus.Failure);
         }
     }
 }

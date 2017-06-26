@@ -15,26 +15,23 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
     [Export(typeof(IAction))]
     public class SetStreamAnalyticsQuery : BaseAction
     {
+        // Updates the default query provided by a Stream Analytics job
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             var token = request.DataStore.GetJson("AzureToken", "access_token");
             var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
-            var apiVersion = "2015-10-01";
             var jobName = request.DataStore.GetValue("jobName");
-            var transformationName = "Transformation";
+            var transformationName = request.DataStore.GetValue("Transformation");
+            var apiVersion = "2015-10-01";
             string uri = $"https://management.azure.com/subscriptions/{subscription}/resourceGroups/{resourceGroup}/providers/Microsoft.StreamAnalytics/streamingjobs/{jobName}/transformations/{transformationName}?api-version={apiVersion}";
             string input = request.DataStore.GetValue("inputAlias");
             string output = request.DataStore.GetValue("outputAlias");
             var body = "{\"properties\":{\"streamingUnits\":1,\"query\":\"select * from sampleinput;\"}}";
             AzureHttpClient ahc = new AzureHttpClient(token, subscription);
-
             HttpResponseMessage response = await ahc.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Put, uri, body);
-            if (response.IsSuccessStatusCode)
-            {
-                return new ActionResponse(ActionStatus.Success);
-            }
-            return new ActionResponse(ActionStatus.Failure);
+            return response.IsSuccessStatusCode ? new ActionResponse(ActionStatus.Success) : new ActionResponse(ActionStatus.Failure);
+
         }
     }
 }

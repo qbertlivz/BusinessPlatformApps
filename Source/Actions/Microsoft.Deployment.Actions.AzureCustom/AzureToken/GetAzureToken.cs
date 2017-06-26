@@ -47,6 +47,11 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                     request.DataStore.AddToDataStore("MsCrmToken", crmToken);
                     request.DataStore.AddToDataStore("AzureToken", token);
                     break;
+                case "powerbi":
+                    request.DataStore.AddToDataStore("PBIToken", token);
+                    request.DataStore.AddToDataStore("DirectoryName", emailAddress.Split('@').Last());
+                    request.DataStore.AddToDataStore("PowerBITenantId", AzureUtility.GetTenantFromToken(token));
+                    break;
                 default:
                     request.DataStore.AddToDataStore("AzureToken", token);
                     var tenantId = AzureUtility.GetTenantFromToken(token);

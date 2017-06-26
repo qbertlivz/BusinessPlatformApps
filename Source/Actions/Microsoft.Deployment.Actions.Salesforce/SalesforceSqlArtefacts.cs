@@ -23,14 +23,15 @@ namespace Microsoft.Deployment.Actions.Salesforce
     [Export(typeof(IAction))]
     public class SalesforceSqlArtefacts : BaseAction
     {
-        List<string> coreObjects = new List<String>() { "Opportunity", "Account", "Lead", "Product2", "OpportunityLineItem", "OpportunityStage", "User", "UserRole" };
+        List<string> coreObjects = new List<String>();
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             string schema = "dbo";
             string connString = request.DataStore.GetValue("SqlConnectionString");
-
+            coreObjects = request.DataStore.GetValue("ObjectTables").SplitByCommaSpaceTabReturnList();
             var objectMetadata = request.DataStore.GetValue("Objects");
+
             List<DescribeSObjectResult> metadataList = JsonConvert.DeserializeObject(objectMetadata, typeof(List<DescribeSObjectResult>)) as List<DescribeSObjectResult>;
             List<Tuple<string, List<ADFField>>> adfFields = new List<Tuple<string, List<ADFField>>>();
 

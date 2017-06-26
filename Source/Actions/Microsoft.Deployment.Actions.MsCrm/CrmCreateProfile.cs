@@ -13,7 +13,6 @@
     using Microsoft.Deployment.Common.Actions;
     using Microsoft.Deployment.Common.Helpers;
     using Microsoft.Deployment.Common.Enums;
-    using System.Linq;
 
     [Export(typeof(IAction))]
     public class CrmCreateProfile : BaseAction
@@ -54,13 +53,13 @@
             _orgId = request.DataStore.GetValue("OrganizationId");
             string name = request.DataStore.GetValue("ProfileName") ?? "bpst-mscrm-profile";
             string kV = request.DataStore.GetValue("KeyVault");
-            var entities = request.DataStore.GetValue("Entities").Split(new[] {',', ' ', '\t'}, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var entities = request.DataStore.GetValue("Entities").SplitByCommaSpaceTabReturnList();
 
             var additionalObjects = request.DataStore.GetValue("AdditionalObjects");
 
             if (!string.IsNullOrEmpty(additionalObjects))
             {
-                string[] add = additionalObjects.Split(',');
+                string[] add = additionalObjects.SplitByCommaSpaceTabReturnArray();
                 entities.AddRange(add);
             }
 

@@ -25,12 +25,12 @@ namespace Microsoft.Deployment.Actions.Salesforce
             string sfToken = request.DataStore.GetValue("SalesforceToken");
             string sfTestUrl = request.DataStore.GetValue("SalesforceUrl");
             var additionalObjects = request.DataStore.GetValue("AdditionalObjects");
-            
-            List<string> sfObjects = objects.Split(',').ToList();
+
+            List<string> sfObjects = objects.SplitByCommaSpaceTabReturnList();
 
             if(!string.IsNullOrEmpty(additionalObjects))
             {
-                var add = additionalObjects.Split(',').ToList();
+                var add = additionalObjects.SplitByCommaSpaceTabReturnList();
                 sfObjects.AddRange(add);
             }
 

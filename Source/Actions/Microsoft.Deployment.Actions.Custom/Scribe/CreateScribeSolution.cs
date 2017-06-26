@@ -20,7 +20,7 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
 
             string orgId = request.DataStore.GetValue("ScribeOrganizationId");
 
-            var sfObjects = request.DataStore.GetValue("Entities").Split(new[] { ',', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var sfObjects = request.DataStore.GetValue("Entities").SplitByCommaSpaceTabReturnList();
             var additionalObjects = request.DataStore.GetValue("AdditionalObjects");
 
             if (!string.IsNullOrEmpty(additionalObjects))

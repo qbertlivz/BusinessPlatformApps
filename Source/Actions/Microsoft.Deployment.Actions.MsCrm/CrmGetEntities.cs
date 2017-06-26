@@ -24,7 +24,7 @@ namespace Microsoft.Deployment.Common.Actions.MsCrm
             List<string> result = new List<string>();
             string refreshToken = request.DataStore.GetJson("MsCrmToken")["refresh_token"].ToString();
             string organizationUrl = request.DataStore.GetValue("OrganizationUrl");
-            string[] coreObjects = request.DataStore.GetValue("Entities").Split(new[] { ',', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] coreObjects = request.DataStore.GetValue("Entities").SplitByCommaSpaceTabReturnArray();
             var crmObjects = new List<string>();
 
             var crmToken = CrmTokenUtility.RetrieveCrmOnlineToken(refreshToken, request.Info.WebsiteRootUrl, request.DataStore, organizationUrl);

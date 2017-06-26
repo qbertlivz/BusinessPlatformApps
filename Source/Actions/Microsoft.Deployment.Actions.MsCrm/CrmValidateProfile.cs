@@ -53,20 +53,20 @@
             _orgId = request.DataStore.GetValue("OrganizationId");
             string name = request.DataStore.GetValue("ProfileName") ?? "bpst-mscrm-profile";
             string kV = request.DataStore.GetValue("KeyVault");
-            string[] entities = request.DataStore.GetValue("Entities").Split(new[] {',', ' ', '\t'}, StringSplitOptions.RemoveEmptyEntries);
+            var entities = request.DataStore.GetValue("Entities").SplitByCommaSpaceTabReturnList();
 
             var additionalObjects = request.DataStore.GetValue("AdditionalObjects");
 
             if (!string.IsNullOrEmpty(additionalObjects))
             {
-                string[] add = additionalObjects.Split(',');
-                entities.ToList().AddRange(add);
+                string[] add = additionalObjects.SplitByCommaSpaceTabReturnArray();
+                entities.AddRange(add);
             }
 
 
             MsCrmProfile profile = new MsCrmProfile
             {
-                Entities = new MsCrmEntity[entities.Length],
+                Entities = new MsCrmEntity[entities.ToArray().Length],
                 Name = name,
                 OrganizationId = _orgId,
                 DestinationKeyVaultUri = kV,
@@ -80,7 +80,7 @@
                 profile.Entities[i] = e;
             }
 
-            List<string> invalidEntities = await RetrieveInvalidEntities(entities);
+            List<string> invalidEntities = await RetrieveInvalidEntities(entities.ToArray());
 
             if (invalidEntities.Count > 0)
                 return new ActionResponse(ActionStatus.Failure, null,

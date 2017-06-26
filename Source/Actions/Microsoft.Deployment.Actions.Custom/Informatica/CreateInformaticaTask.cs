@@ -24,12 +24,12 @@ namespace Microsoft.Deployment.Actions.Custom.Informatica
             string username = request.DataStore.GetValue("InformaticaUsername");
             string password = request.DataStore.GetValue("InformaticaPassword");
             RestClient rc = await InformaticaUtility.Initialize(username, password);
-            List<string> sfObjects = request.DataStore.GetValue("Entities").Split(new[] { ',', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            List<string> sfObjects = request.DataStore.GetValue("Entities").SplitByCommaSpaceTabReturnList();
             var additionalObjects = request.DataStore.GetValue("AdditionalObjects");
 
             if (!string.IsNullOrEmpty(additionalObjects))
             {
-                var add = additionalObjects.Split(',').ToList();
+                var add = additionalObjects.SplitByCommaSpaceTabReturnList();
                 sfObjects.AddRange(add);
             }
 

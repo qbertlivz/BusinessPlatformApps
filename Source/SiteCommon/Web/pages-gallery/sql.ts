@@ -118,6 +118,8 @@ export class Sql extends ViewModelBase {
     }
 
     async onValidate(): Promise<boolean> {
+        let oldDatabase: string = this.database;
+
         this.onInvalidate();
 
         this.sqlServer = this.sqlServer.toLowerCase();
@@ -125,8 +127,8 @@ export class Sql extends ViewModelBase {
             let databasesResponse = await this.getDatabases();
             if (databasesResponse.IsSuccess) {
                 this.databases = databasesResponse.Body.value;
-                this.database = this.databases[0];
-                this.showDatabases = this.setValidated(false);
+                this.database = this.databases.indexOf(oldDatabase) >= 0 ? oldDatabase : this.databases[0];
+                this.showDatabases = this.setValidated();
             } else {
                 this.onInvalidate();
             }

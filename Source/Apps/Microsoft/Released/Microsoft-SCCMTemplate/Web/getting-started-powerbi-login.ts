@@ -73,7 +73,7 @@ export class Gettingstarted extends ViewModelBase {
 
                 if (token === '') {
                     this.MS.ErrorService.message = this.MS.Translate.AZURE_LOGIN_UNKNOWN_ERROR;
-                    this.MS.ErrorService.details = this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.ERRORDESCRIPTION, queryParam);
+                    this.MS.ErrorService.details = this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.ERROR_DESCRIPTION, queryParam);
                     this.MS.ErrorService.showContactUs = true;
                     return;
                 }

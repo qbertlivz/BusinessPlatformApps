@@ -96,15 +96,9 @@ export class SqlServer extends ViewModelBase {
             let databasesResponse = await this.GetDatabases();
             if (databasesResponse.IsSuccess) {
                 this.databases = databasesResponse.Body.value;
-                if (this.databases.indexOf(oldDB) >= 0 ) {
-                    this.database = oldDB;
-                    this.showDatabases = true;
-                    this.isValidated = true;
-                } else {
-                    this.database = this.databases[0];
-                    this.showDatabases = true;
-                    this.isValidated = true;
-                }
+                this.database = (this.databases.indexOf(oldDB) >= 0 ? oldDB : this.databases[0]);
+                this.showDatabases = true;
+                this.isValidated = true;
             } else {
                 this.isValidated = false;
                 this.showDatabases = false;

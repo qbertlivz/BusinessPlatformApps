@@ -1,38 +1,30 @@
-﻿using System;
+﻿using Microsoft.Deployment.Common.Actions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Dynamic;
 using System.Linq;
-using System.ServiceModel;
+using System.Text;
 using System.Threading.Tasks;
-
-using Microsoft.Deployment.Actions.Salesforce.Helpers;
-using Microsoft.Deployment.Actions.Salesforce.SalesforceSOAP;
 using Microsoft.Deployment.Common.ActionModel;
-using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
+using Microsoft.Deployment.Actions.Salesforce.SalesforceSOAP;
+using Microsoft.Deployment.Actions.Salesforce.Helpers;
+using System.Dynamic;
+using System.ServiceModel;
+using System.Diagnostics;
 
 namespace Microsoft.Deployment.Actions.Salesforce
 {
     [Export(typeof(IAction))]
-    class SalesforceGetObjectMetadata : BaseAction
+    public class SalesforceGetEntities : BaseAction
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            string objects = request.DataStore.GetValue("ObjectTables");
             string sfUsername = request.DataStore.GetValue("SalesforceUser");
             string sfPassword = request.DataStore.GetValue("SalesforcePassword");
             string sfToken = request.DataStore.GetValue("SalesforceToken");
             string sfTestUrl = request.DataStore.GetValue("SalesforceUrl");
-            var additionalObjects = request.DataStore.GetValue("AdditionalObjects");
-
-            List<string> sfObjects = objects.SplitByCommaSpaceTabReturnList();
-
-            if(!string.IsNullOrEmpty(additionalObjects))
-            {
-                var add = additionalObjects.SplitByCommaSpaceTabReturnList();
-                sfObjects.AddRange(add);
-            }
+            var requiredObjects = request.DataStore.GetValue("ObjectTables").Split(',');
 
             SoapClient binding = new SoapClient("Soap");
 
@@ -53,10 +45,9 @@ namespace Microsoft.Deployment.Actions.Salesforce
                sfUsername,
                string.Concat(sfPassword, sfToken));
 
-            dynamic metadata = new ExpandoObject();
+            var sfObjects = new List<string>();
 
             binding = new SoapClient("Soap");
-            metadata.Objects = new List<DescribeSObjectResult>();
             SessionHeader sheader = new SessionHeader();
             BasicHttpBinding bind = new BasicHttpBinding();
             bind = (BasicHttpBinding)binding.Endpoint.Binding;
@@ -80,20 +71,25 @@ namespace Microsoft.Deployment.Actions.Salesforce
 
             binding.Endpoint.ListenUri = new Uri(lr.metadataServerUrl);
 
-            foreach (var obj in sfObjects)
+            DescribeGlobalResult result;
+            try
             {
-                DescribeSObjectResult sobject;
-                
-                binding.describeSObject(sheader, null, null, null, obj, out sobject);
-
-                var trimObject = new DescribeSObjectResult();
-                trimObject.fields = sobject.fields;
-                trimObject.name = sobject.name;
-
-                metadata.Objects.Add(trimObject);
+                binding.describeGlobal(sheader, null, null, out result);
+            }
+            catch (Exception e)
+            {
+                return new ActionResponse(ActionStatus.FailureExpected, JsonUtility.GetEmptyJObject(), e, "FailedToGetAdditionalEntities");
             }
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetJObjectFromObject(metadata));
+            foreach (var obj in result.sobjects)
+            {
+                if (!requiredObjects.Contains(obj.name))
+                {
+                    sfObjects.Add(obj.name);
+                }
+            }
+
+            return new ActionResponse(ActionStatus.Success, JsonUtility.Serialize(sfObjects));
         }
     }
 }

@@ -34,6 +34,7 @@ namespace Microsoft.Deployment.Actions.Salesforce
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
             string connString = request.DataStore.GetValue("SqlConnectionString");
             string schema = "dbo";
+            var coreObjects = request.DataStore.GetValue("ObjectTables").SplitByCommaSpaceTabReturnList();
 
             string postDeploymentPipelineType = request.DataStore.GetValue("postDeploymentPipelineType");
             string pipelineFrequency = request.DataStore.GetValue("pipelineFrequency");
@@ -110,16 +111,15 @@ namespace Microsoft.Deployment.Actions.Salesforce
                 if (o.Item1 != "Opportunity" &&
                     o.Item1 != "Lead" &&
                     o.Item1 != "OpportunityLineItem" &&
-                    pipelineType == "PreDeployment")
+                    pipelineType == "PreDeployment" &&
+                    coreObjects.Contains(o.Item1))
                 {
                     query = CreateQuery(o, tableFields, true, pipelineStart, pipelineEnd);
                     armTemplate = CreateOneTimePipeline(armTemplate);
                 }
-                else
-                {
-                    query = CreateQuery(o, tableFields, false);
-                }
 
+                query = CreateQuery(o, tableFields, false);
+                
                 if (historicalOnly && pipelineType == "PostDeployment")
                 {
                     armTemplate = this.PausePipeline(armTemplate);

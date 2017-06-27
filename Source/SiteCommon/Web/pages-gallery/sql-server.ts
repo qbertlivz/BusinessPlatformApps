@@ -1,4 +1,6 @@
-﻿import { DataStoreType } from '../enums/data-store-type';
+﻿import { SqlServerValidationUtility } from '../classes/sql-server-validation-utility';
+
+import { DataStoreType } from '../enums/data-store-type';
 
 import { ActionResponse } from '../models/action-response';
 import { AzureLocation } from '../models/azure-location';
@@ -6,26 +8,30 @@ import { AzureLocation } from '../models/azure-location';
 import { ViewModelBase } from '../services/view-model-base';
 
 export class SqlServer extends ViewModelBase {
-    azureGovtSuffix: string = '.database.usgovcloudapi.net';
+    subtitle: string = '';
+    title: string = '';
+
+    auth: string = 'Windows';
     azureLocations: AzureLocation[] = [];
     azureSqlSuffix: string = '.database.windows.net';
+    azureGovtSuffix: string = '.database.usgovcloudapi.net';
     checkSqlVersion: boolean = false;
-    credentialTarget: string = '';
     database: string = null;
     databases: string[] = [];
     hideSqlAuth: boolean = false;
-    invalidUsernames: string[] = ['admin', 'administrator', 'dbmanager', 'dbo', 'guest', 'loginmanager', 'public', 'root', 'sa'];
     isAzureSql: boolean = false;
     isGovAzureSql: boolean = false;
     isWindowsAuth: boolean = true;
+
     newSqlDatabase: string = null;
     password: string = '';
     passwordConfirmation: string = '';
     showAllWriteableDatabases: boolean = true;
     showAzureSql: boolean = true;
+    showGovAzure: boolean = false;
+
     showCredsWhenWindowsAuth: boolean = false;
     showDatabases: boolean = false;
-    showGovAzure: boolean = false;
     showNewSqlOption: boolean = false;
     showSkuS1: boolean = true;
     showSqlRecoveryModeHint: boolean = false;
@@ -33,34 +39,23 @@ export class SqlServer extends ViewModelBase {
     sqlLocation: string = '';
     sqlServer: string = '';
     sqlSku: string = 'S1';
-    subtitle: string = '';
-    title: string = '';
-    useImpersonation: boolean = false;
     username: string = '';
     validateWindowsCredentials: boolean = false;
     validationTextBox: string = '';
 
-    onAuthChange(): void {
-        this.onInvalidate();
+    credentialTarget: string = '';
+    useImpersonation: boolean = false;
 
-        this.password = '';
-        this.username = '';
+    constructor() {
+        super();
     }
 
-    onInvalidate(): void {
-        super.onInvalidate();
-
-        this.database = null;
-        this.databases = [];
-        this.showDatabases = false;
-    }
-
-    async onLoaded(): Promise<void> {
-        this.onInvalidate();
+    async OnLoaded(): Promise<void> {
+        this.Invalidate();
 
         if (this.showNewSqlOption) {
             if (!this.azureLocations || this.azureLocations.length === 0) {
-                let locationsResponse: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetLocations');
+                let locationsResponse: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetLocations', {});
                 if (locationsResponse.IsSuccess) {
                     this.azureLocations = locationsResponse.Body.value;
                     if (this.azureLocations && this.azureLocations.length > 23) {
@@ -72,90 +67,117 @@ export class SqlServer extends ViewModelBase {
         }
     }
 
-    async onNavigatingNext(): Promise<boolean> {
-        let isSuccess: boolean = true;
+    Invalidate(): void {
+        super.Invalidate();
+        this.database = null;
+        this.databases = [];
+        this.showDatabases = false;
+    }
 
-        let body = this.getBody(true);
+    onAuthChange(): void {
+        this.database = null;
+        this.databases = [];
+        this.showDatabases = false;
+        if (this.auth === 'SQL Server') {
+            this.isWindowsAuth = false;
+        } else {
+            this.isWindowsAuth = true;
+        }
+        this.username = '';
+        this.password = '';
+    }
+
+    async OnValidate(): Promise<boolean> {
+        let oldDB = this.database;
+        this.Invalidate();
+
+        this.sqlServer = this.sqlServer.toLowerCase();
+        if (this.sqlInstance === 'ExistingSql') {
+            let databasesResponse = await this.GetDatabases();
+            if (databasesResponse.IsSuccess) {
+                this.databases = databasesResponse.Body.value;
+                this.database = (this.databases.indexOf(oldDB) >= 0 ? oldDB : this.databases[0]);
+                this.showDatabases = true;
+                this.isValidated = true;
+            } else {
+                this.isValidated = false;
+                this.showDatabases = false;
+            }
+        } else if (this.sqlInstance === 'NewSql') {
+            let newSqlError: string = SqlServerValidationUtility.validateAzureSQLCreate(this.sqlServer, this.username, this.password, this.passwordConfirmation);
+            if (newSqlError) {
+                this.MS.ErrorService.message = newSqlError;
+            } else {
+                let databasesResponse = await this.ValidateAzureServerIsAvailable();
+                if ((databasesResponse.IsSuccess)) {
+                    this.isValidated = true;
+                } else {
+                    this.isValidated = false;
+                }
+            }
+        }
+
+        let isInitValid: boolean = await super.OnValidate();
+        this.isValidated = this.isValidated && isInitValid;
+
+        return this.isValidated;
+    }
+
+    async NavigatingNext(): Promise<boolean> {
+        let body = this.GetBody(true);
         let response: ActionResponse = null;
 
         if (this.sqlInstance === 'ExistingSql') {
             response = await this.MS.HttpService.executeAsync('Microsoft-GetSqlConnectionString', body);
             this.MS.DataStore.addToDataStore('Database', this.database, DataStoreType.Public);
         } else if (this.sqlInstance === 'NewSql') {
-            response = await this.createDatabaseServer();
+            response = await this.CreateDatabaseServer();
             this.MS.DataStore.addToDataStore('Database', this.newSqlDatabase, DataStoreType.Public);
         }
 
-        if (response && response.IsSuccess) {
-            this.MS.DataStore.addToDataStore('SqlConnectionString', response.Body.value, DataStoreType.Private);
-            this.MS.DataStore.addToDataStore('Server', this.getSqlServer(), DataStoreType.Public);
-            this.MS.DataStore.addToDataStore('Username', this.username, DataStoreType.Public);
-            this.MS.DataStore.addToDataStore('Password', this.password, DataStoreType.Private);
-
-            if (this.sqlInstance === 'ExistingSql') {
-                this.MS.HttpService.executeAsync('Microsoft-ExistingSqlServer', { isInvisible: true });
-            }
-
-            if (this.checkSqlVersion) {
-                isSuccess = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-CheckSQLVersion', body);
-            }
-
-            if (isSuccess) {
-                if (this.useImpersonation) {
-                    this.MS.DataStore.addToDataStore('CredentialTarget', this.credentialTarget, DataStoreType.Private);
-                    this.MS.DataStore.addToDataStore('CredentialUsername', this.username, DataStoreType.Private);
-                    this.MS.DataStore.addToDataStore('CredentialPassword', this.password, DataStoreType.Private);
-                    isSuccess = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-CredentialManagerWrite', body);
-                }
-
-                this.MS.DataStore.addToDataStore('azureSqlDisabled', this.isAzureSql || this.isGovAzureSql ? 'false' : 'true', DataStoreType.Public);
-            }
-        } else {
-            isSuccess = false;
+        if (!response || !response.IsSuccess) {
+            return false;
         }
 
-        return isSuccess;
-    }
+        this.MS.DataStore.addToDataStore('SqlConnectionString', response.Body.value, DataStoreType.Private);
+        this.MS.DataStore.addToDataStore('Server', this.getSqlServer(), DataStoreType.Public);
+        this.MS.DataStore.addToDataStore('Username', this.username, DataStoreType.Public);
+        this.MS.DataStore.addToDataStore('Password', this.password, DataStoreType.Private);
 
-    async onValidate(): Promise<boolean> {
-        this.onInvalidate();
-
-        this.sqlServer = this.sqlServer.toLowerCase();
         if (this.sqlInstance === 'ExistingSql') {
-            let databasesResponse = await this.getDatabases();
-            if (databasesResponse.IsSuccess) {
-                this.databases = databasesResponse.Body.value;
-                this.database = this.databases[0];
-                this.showDatabases = this.setValidated(false);
-            } else {
-                this.onInvalidate();
-            }
-        } else if (this.sqlInstance === 'NewSql') {
-            let newSqlError: string = this.validateAzureSQLCreate(this.username, this.password, this.passwordConfirmation);
-            if (newSqlError) {
-                this.MS.ErrorService.set(newSqlError);
-            } else {
-                this.isValidated = await this.isAzureServerIsAvailable();
+            this.MS.HttpService.executeAsync('Microsoft-ExistingSqlServer', { isInvisible: true });
+        }
+
+        if (this.checkSqlVersion) {
+            let responseVersion = await this.MS.HttpService.executeAsync('Microsoft-CheckSQLVersion', body);
+            if (!responseVersion.IsSuccess) {
+                return false;
             }
         }
 
-        this.isValidated = this.isValidated && await super.onValidate();
+        if (this.useImpersonation) {
+            this.MS.DataStore.addToDataStore('CredentialTarget', this.credentialTarget, DataStoreType.Private);
+            this.MS.DataStore.addToDataStore('CredentialUsername', this.username, DataStoreType.Private);
+            this.MS.DataStore.addToDataStore('CredentialPassword', this.password, DataStoreType.Private);
+            let responseVersion = await this.MS.HttpService.executeAsync('Microsoft-CredentialManagerWrite', body);
+            if (!responseVersion.IsSuccess) {
+                return false;
+            }
+        }
 
-        return this.isValidated;
+        this.MS.DataStore.addToDataStore('azureSqlDisabled', this.isAzureSql || this.isGovAzureSql ? 'false' : 'true', DataStoreType.Public);
+
+        return true;
     }
 
-    private async createDatabaseServer(): Promise<ActionResponse> {
-        this.navigationMessage = this.MS.Translate.SQL_SERVER_CREATING_NEW;
-        let body = this.getBody(true);
-        body['SqlCredentials']['Database'] = this.newSqlDatabase;
-
-        this.MS.DataStore.addToDataStore('SqlLocation', this.sqlLocation, DataStoreType.Public);
-        this.MS.DataStore.addToDataStore('SqlSku', this.sqlSku, DataStoreType.Public);
-
-        return await this.MS.HttpService.executeAsync('Microsoft-CreateAzureSql', body);
+    private async GetDatabases(): Promise<ActionResponse> {
+        let body: any = this.GetBody(true);
+        return this.showAllWriteableDatabases
+            ? await this.MS.HttpService.executeAsync('Microsoft-ValidateAndGetWritableDatabases', body)
+            : await this.MS.HttpService.executeAsync('Microsoft-ValidateAndGetAllDatabases', body);
     }
 
-    private getBody(withDatabase: boolean): any {
+    private GetBody(withDatabase: boolean): any {
         let body: any = {};
 
         body.useImpersonation = this.useImpersonation;
@@ -176,16 +198,12 @@ export class SqlServer extends ViewModelBase {
         return body;
     }
 
-    private async getDatabases(): Promise<ActionResponse> {
-        let body: any = this.getBody(true);
-        return this.showAllWriteableDatabases
-            ? await this.MS.HttpService.executeAsync('Microsoft-ValidateAndGetWritableDatabases', body)
-            : await this.MS.HttpService.executeAsync('Microsoft-ValidateAndGetAllDatabases', body);
-    }
-
     private getSqlServer(): string {
         let sqlServer: string = this.sqlServer;
-        if (this.isAzureSql && this.isGovAzureSql && !sqlServer.includes(this.azureSqlSuffix)) {
+        if (this.isAzureSql &&
+            this.isGovAzureSql &&
+            !sqlServer.includes(this.azureSqlSuffix) &&
+            !sqlServer.includes(this.azureSqlSuffix)) {
             sqlServer += this.azureGovtSuffix;
         }
         if (this.isAzureSql && !this.isGovAzureSql && !sqlServer.includes(this.azureSqlSuffix)) {
@@ -194,41 +212,19 @@ export class SqlServer extends ViewModelBase {
         return sqlServer;
     }
 
-    private async isAzureServerIsAvailable(): Promise<boolean> {
-        return await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-ValidateAzureSqlExists', this.getBody(false));
+    private async CreateDatabaseServer(): Promise<ActionResponse> {
+        this.navigationMessage = this.MS.Translate.SQL_SERVER_CREATING_NEW;
+        let body = this.GetBody(true);
+        body['SqlCredentials']['Database'] = this.newSqlDatabase;
+
+        this.MS.DataStore.addToDataStore('SqlLocation', this.sqlLocation, DataStoreType.Public);
+        this.MS.DataStore.addToDataStore('SqlSku', this.sqlSku, DataStoreType.Public);
+
+        return await this.MS.HttpService.executeAsync('Microsoft-CreateAzureSql', body);
     }
 
-    private validateAzureSQLCreate(username: string, password: string, password2: string): string {
-        return this.validatePassword(password, password2, 8) || this.validateUsername(username, this.invalidUsernames, 'Username') || '';
-    }
-
-    private validatePassword(pwd: string, pwd2: string, length: number): string {
-        let passwordError: string = '';
-        if (pwd !== pwd2) {
-            passwordError = this.MS.Translate.SQL_ERROR_PASSWORD_MATCH;
-        } else if (length && pwd.length < length) {
-            passwordError = this.MS.Translate.SQL_ERROR_PASSWORD_LENGTH;
-        } else if ((/\s/g).test(pwd)) {
-            passwordError = this.MS.Translate.SQL_ERROR_PASSWORD_SPACES;
-        } else if (!(/[A-Z]/).test(pwd) || (/^[a-zA-Z0-9]*$/).test(pwd)) {
-            passwordError = this.MS.Translate.SQL_ERROR_PASSWORD_SPECIAL_CHARACTERS;
-        }
-        return passwordError;
-    }
-
-    private validateUsername(username: string, invalidUsernames: string[], usernameText: string): string {
-        let usernameError: string = '';
-        if ((/\s/g).test(username)) {
-            usernameError = `${usernameText} ${this.MS.Translate.SQL_ERROR_USERNAME_SPACES}`;
-        } else if (username.length > 63) {
-            usernameError = `${usernameText} ${this.MS.Translate.SQL_ERROR_USERNAME_LENGTH}`;
-        } else if (invalidUsernames.indexOf(username.toLowerCase()) > -1) {
-            usernameError = `${usernameText} ${this.MS.Translate.SQL_ERROR_USERNAME_RESERVED}`;
-        } else if (!(/^[a-zA-Z0-9\-]+$/).test(username)) {
-            usernameError = `${usernameText} ${this.MS.Translate.SQL_ERROR_USERNAME_ALPHANUMERIC}`;
-        } else if (username[0] === '-' || username[username.length - 1] === '-') {
-            usernameError = `${usernameText} ${this.MS.Translate.SQL_ERROR_USERNAME_HYPHEN}`;
-        }
-        return usernameError;
+    private async ValidateAzureServerIsAvailable(): Promise<ActionResponse> {
+        let body = this.GetBody(false);
+        return await this.MS.HttpService.executeAsync('Microsoft-ValidateAzureSqlExists', body);
     }
 }

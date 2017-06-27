@@ -88,7 +88,7 @@
                 "checkSqlVersion": true,
                 "displayname": "Target",
                 "isAzureSql": "$run(!this.MS.HttpService.isOnPremise)",
-                "name": "$SiteCommon$/pages-gallery/sql-server.html",
+                "name": "$SiteCommon$/pages-gallery/sql.html",
                 "newSqlDatabase": "$(this.MS.UtilityService.getUniqueId(10))",
                 "showAzureSql": false,
                 "showCredsWhenWindowsAuth": "$run(this.MS.HttpService.isOnPremise)",

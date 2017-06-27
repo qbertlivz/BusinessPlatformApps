@@ -28,7 +28,7 @@ export class AxLogin extends ViewModelBase {
     }
 
     async getOrganizations(): Promise<void> {
-
+        this.setValidated();
     }
     
 }

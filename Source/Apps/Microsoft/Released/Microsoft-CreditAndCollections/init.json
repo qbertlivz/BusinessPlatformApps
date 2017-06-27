@@ -33,13 +33,31 @@
                 "name": "$SiteCommon$/pages-gallery/ax-connector-login.html"
             },
             {
+                "checkSqlVersion": true,
+                "displayname": "Target",
+                "isAzureSql": true,
+                "name": "$SiteCommon$/pages-gallery/sql-server.html",
+                "newSqlDatabase": "facebook",
+                "showAzureSql": false,
+                "showNewSqlOption": "true",
+                "showSkuS1": true,
+                "sqlInstance": "NewSql",
+                "sqlSku": "S1",
+                "subtitle": "$translate(INIT_SQL_TITLE)",
+                "title": "$translate(INIT_SQL_TITLE)"
+            },
+            {
                 "displayname": "Summary",
                 "name": "$SiteCommon$/pages-gallery/summary.html",
                 "values": {
                     "Target Server": "$(this.MS.DataStore.getValue('Server'))",
                     "Target Database": "$(this.MS.DataStore.getValue('Database'))",
                     "Target Username": "$(this.MS.DataStore.getValue('Username'))"
-                }
+                },
+                "ConnectorName": "$save('dynamicsax')",
+                "AxReportName": "$save('CreditAndCollectionsManagementReport')",
+                "AxInstanceName": "$save('')",
+                "AxMeasurementName": "$save('CustCollectionsBIMeasurements')"
             },
             {
                 "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))",
@@ -54,6 +72,11 @@
         ],
 
         "Actions": [
+            {
+                "DeploymentName": "AxOdataInsert",
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_LOGIC_APP)",
+                "name": "Microsoft-UpdateAxConfigurationEntity"
+            },
             {
                 "DeploymentName": "LogicApp",
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_LOGIC_APP)",

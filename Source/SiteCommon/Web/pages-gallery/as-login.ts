@@ -8,7 +8,7 @@ export class ASLogin extends AzureLogin {
     }
 
     async onLoaded(): Promise<void> {
-        super.onLoaded();
+        this.onInvalidate();
 
         if (this.hasToken) {
             this.setValidated();

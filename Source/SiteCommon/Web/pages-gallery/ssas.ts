@@ -43,6 +43,8 @@ export class Customize extends ViewModelBase {
             }
         }
 
+        this.showValidation = this.isValidated;
+
         return this.isValidated;
     }
 }

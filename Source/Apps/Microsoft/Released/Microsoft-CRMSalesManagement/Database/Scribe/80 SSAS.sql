@@ -95,7 +95,6 @@ BEGIN
 	WHERE  ( table_schema = 'dbo' AND
 				 table_name IN (
 				 'account',
-				 'businessunit',
 				 'lead',
 				 'opportunity',
 				 'opportunityproduct',
@@ -104,7 +103,7 @@ BEGIN
 				 'systemuser',
 				 'systemusermanagermap',
 				 'territory'));
-    if(@returnValue = 13)
+    if(@returnValue = 9)
     BEGIN
     RETURN 1;
     END;

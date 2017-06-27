@@ -21,7 +21,7 @@ BEGIN
                                 INNER JOIN sys.schemas sc ON ta.schema_id = sc.schema_id
             WHERE
                 sc.name='dbo' AND ta.is_ms_shipped = 0 AND pa.index_id IN (0,1) AND
-                ta.name IN ('opportunityproduct', 'territory', 'lead', 'opportunity', 'account', 'systemusermanagermap', 'businessunit', 'systemuser', 'product')
+                ta.name IN ('opportunityproduct', 'territory', 'lead', 'opportunity', 'account', 'systemusermanagermap', 'businessunit', 'systemuser', 'product', 'team')
             GROUP BY ta.name
         ),
         LastStats(EntityName, SCRIBE_CREATEDON) AS

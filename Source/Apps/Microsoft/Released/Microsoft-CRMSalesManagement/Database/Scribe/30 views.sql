@@ -143,7 +143,7 @@ CREATE VIEW smgt.teamview
 AS
   SELECT id      AS [Team Id],
          NAME    AS [Team Name]
-  FROM   dbo.Team
+  FROM   dbo.team
   WHERE SCRIBE_DELETEDON IS NULL;
 go
 
@@ -154,7 +154,7 @@ AS
   SELECT id         AS [Owner Id],
          [Name]	    AS [Owner Name],
          'Team'	    AS [Owner Type]
-  FROM dbo.Team WHERE SCRIBE_DELETEDON IS NULL
+  FROM dbo.team WHERE SCRIBE_DELETEDON IS NULL
   UNION
   SELECT systemuserid AS [Owner Id],
          fullname     AS [Owner Name],

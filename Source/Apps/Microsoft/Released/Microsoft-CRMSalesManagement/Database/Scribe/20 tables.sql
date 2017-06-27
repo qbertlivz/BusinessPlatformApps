@@ -725,7 +725,7 @@ CREATE TABLE dbo.team
     modifiedonbehalfbyname           NVARCHAR(100) NULL,
     createdonbehalfbyname            NVARCHAR(100) NULL,
     overriddencreatedon              DATETIME NULL,
-	SCRIBE_ID                        BIGINT IDENTITY(1, 1) NOT NULL,
+    SCRIBE_ID                        BIGINT IDENTITY(1, 1) NOT NULL,
     SCRIBE_DELETEDON                 DATETIME NULL,
     SCRIBE_CREATEDON                 DATETIME NOT NULL,
     SCRIBE_MODIFIEDON                DATETIME NOT NULL

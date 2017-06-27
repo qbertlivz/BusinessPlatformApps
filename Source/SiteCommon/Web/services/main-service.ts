@@ -76,12 +76,12 @@ export class MainService {
 
         if (this.appName && this.appName !== '') {
             switch (this.experienceType) {
-                case ExperienceType.install: {
+                case ExperienceType.Install: {
                     pages = 'Pages';
                     actions = 'Actions';
                     break;
                 }
-                case ExperienceType.uninstall: {
+                case ExperienceType.Uninstall: {
                     pages = 'UninstallPages';
                     actions = 'UninstallActions';
                     this.DeploymentService.experienceType = this.experienceType;
@@ -90,7 +90,7 @@ export class MainService {
                 default: {
                     pages = 'Pages';
                     actions = 'Actions';
-                    this.DeploymentService.experienceType = ExperienceType.install;
+                    this.DeploymentService.experienceType = ExperienceType.Install;
                     break;
                 }
             }

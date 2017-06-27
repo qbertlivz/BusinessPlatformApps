@@ -1,0 +1,84 @@
+﻿{
+    "Install": {
+        "Pages": [
+            {
+                "architectureDiagram": "",
+                "displayname": "Getting Started",
+                "list1": [
+                    "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",
+                    "$translate(INIT_GETTING_STARTED_PBI_DESKTOP)",
+                    "$translate(INIT_GETTING_STARTED_PBI_PRO)"
+                ],
+                "list2": [
+                ],
+                "name": "$SiteCommon$/pages-gallery/getting-started.html",
+                "subtitle": "",
+                "templateName": ""
+            },
+            {
+                "azureProviders": [
+                    "Microsoft.Web"
+                ],
+                "displayname": "Login",
+                "name": "$SiteCommon$/pages-gallery/azure-login.html"
+            },
+            {
+                "displayname": "AX Login",
+                "name": "$SiteCommon$/pages-gallery/ax-login.html"
+            },
+            {
+                "displayname": "AX Connector",
+                "ConnectorName": "$save('dynamicsax')",
+                "RequiresConsent": "$save('true')",
+                "name": "$SiteCommon$/pages-gallery/ax-connector-login.html"
+            },
+            {
+                "displayname": "Summary",
+                "name": "$SiteCommon$/pages-gallery/summary.html",
+                "values": {
+                    "Target Server": "$(this.MS.DataStore.getValue('Server'))",
+                    "Target Database": "$(this.MS.DataStore.getValue('Database'))",
+                    "Target Username": "$(this.MS.DataStore.getValue('Username'))"
+                }
+            },
+            {
+                "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))",
+                "displayname": "Deploy",
+                "filename": "$save('TwitterTemplate.pbix')",
+                "filenameSSAS": "TwitterAS.pbix",
+                "LogicAppHostingPlan": "$save(this.uniqueId)",
+                "LogicAppName": "$save(this.uniqueId)",
+                "name": "$SiteCommon$/pages-gallery/progress.html",
+                "SiteName": "$save(this.uniqueIdFunction)"
+            }
+        ],
+
+        "Actions": [
+            {
+                "DeploymentName": "LogicApp",
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_LOGIC_APP)",
+                "name": "Microsoft-DeployTwitterHistoricalLogicApp"
+            },
+            {
+                "DeploymentName": "SqlConnectionDeployment",
+                "displayname": "$translate(NOTIFIER_CREATING_DATABASE_CONNECTION)",
+                "name": "Microsoft-CreateSqlConnector",
+                "ApiConnectionName": "$save('sqlNotifierConnection')",
+                "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+            },
+            {
+                "DeploymentName": "NotifierLogicApp",
+                "displayname": "$translate(NOTIFIER_CREATING_NOTIFIER_APP)",
+                "name": "Microsoft-DeployNotifierLogicApp",
+                "logicAppName": "notifierLogicApp",
+                "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+            },
+            {
+                "displayname": "$translate(NOTIFIER_CONFIGURE_NOTIFIER_APP)",
+                "name": "Microsoft-ConfigureNotifier",
+                "SqlConfigTable": "[pbist_twitter].[configuration]",
+                "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+            }
+        ]
+    }
+}

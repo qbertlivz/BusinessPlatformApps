@@ -28,6 +28,9 @@
         public const string WebsiteRedirectPath      = "/redirect.html";
         public const string AppInsightsKey           = "74bc59f2-6526-41b1-ab84-370532ec5d42";
 
+        public const string AxClientId = "bcf1cb1c-74d6-460c-941a-22f0110f1090";
+        public const string AxErpResource = "00000015-0000-0000-c000-000000000000";
+
         public const string MsCrmAuthority = "https://login.windows.net/common/oauth2/authorize?";
         public const string MsCrmClientId  = "fb430120-4027-46b2-8499-95e0e8a3e646";
         public const string MsCrmResource  = "b861dbcc-a7ef-4219-a005-0e4de4ea7dcf";

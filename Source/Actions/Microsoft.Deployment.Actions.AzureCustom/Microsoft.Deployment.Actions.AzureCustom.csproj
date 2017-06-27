@@ -208,9 +208,11 @@
     <Compile Include="CognitiveServices\WaitForCognitiveService.cs" />
     <Compile Include="CognitiveServices\RegisterCognitiveServices.cs" />
     <Compile Include="Common\ConfigureNotifier.cs" />
+    <Compile Include="Common\ConsentConnectionToLogicApp.cs" />
     <Compile Include="Common\ExistsResourceGroup.cs" />
     <Compile Include="Common\DeployNotifierLogicApp.cs" />
     <Compile Include="Common\GetEmail.cs" />
+    <Compile Include="Common\VerifyConnectionToLogicApp.cs" />
     <Compile Include="Functions\CheckFunctionStatus.cs" />
     <Compile Include="Functions\DeployAzureFunctionConnectionStrings.cs" />
     <Compile Include="Functions\DeployAzureFunctionAppSettings.cs" />

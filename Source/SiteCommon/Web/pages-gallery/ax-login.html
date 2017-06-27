@@ -1,0 +1,34 @@
+﻿<template>
+    <require from="../templates/bpst-link.html"></require>
+
+    <h1 class="st-title">${MS.Translate.AZURE_LOGIN_CONNECT}</h1>
+    <p class="st-subtitle">${MS.Translate.AZURE_LOGIN_SUBTITLE}</p>
+
+    <p class="st-subtitle">${MS.Translate.AZURE_LOGIN_DONT_HAVE}</p>
+    <p class="st-text">
+        <bpst-link a-description="${MS.Translate.AZURE_LOGIN_GET_STARTED}" a-link="${MS.Translate.AZURE_LOGIN_LINK}" a-link-text="${MS.Translate.AZURE_LOGIN_LINK_DESCRIPTION}"></bpst-link>
+    </p>
+
+    <p class="st-subtitle">${MS.Translate.AZURE_LOGIN_HAVE}</p>
+    <p class="st-text">${MS.Translate.AZURE_LOGIN_CONNECTION}</p>
+    <div class="st-float">
+        <select class="btn btn-default dropdown-toggle st-input" disabled.bind="MS.HttpService.isServiceBusy" value.bind="connectionType">
+            <option value.bind="azureConnection.Organizational">${MS.Translate.AZURE_LOGIN_ORGANIZATIONAL}</option>
+            <option value.bind="azureConnection.Microsoft">${MS.Translate.AZURE_LOGIN_MICROSOFT}</option>
+        </select>
+    </div>
+
+    <div class="st-float" if.bind="connectionType == azureConnection.Microsoft">
+        <p class="st-text">${MS.Translate.AZURE_LOGIN_DIRECTORY}</p>
+        <input class="st-input" placeholder="${MS.Translate.AZURE_LOGIN_DIRECTORY_ADDRESS}" type="text" change.delegate="onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="azureDirectory" />
+        <p class="st-text">
+            <bpst-link a-description="${MS.Translate.AZURE_LOGIN_DIRECTORY_TEXT}" a-link="${MS.Translate.AZURE_LOGIN_DIRECTORY_LINK}" a-link-text="${MS.Translate.AZURE_LOGIN_DIRECTORY_DESCRIPTION}"></bpst-link>
+        </p>
+    </div>
+
+    <div class="st-float">
+        <button class="primary" click.trigger="connect()" disabled.bind="MS.HttpService.isServiceBusy">${MS.Translate.AZURE_LOGIN_CONNECT}</button>
+    </div>
+
+
+</template>

@@ -69,7 +69,7 @@
                 "salesforceObjects": "Opportunity,Account,Lead,Product2,OpportunityLineItem,OpportunityStage,User,UserRole"
             },
             {
-                "name": "$SiteCommon$/pages-gallery/sql-server.html",
+                "name": "$SiteCommon$/pages-gallery/sql.html",
                 "displayname": "Target",
                 "isAzureSql": "$run(!this.MS.HttpService.isOnPremise)",
                 "newSqlDatabase": "SalesforceDB",

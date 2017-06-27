@@ -172,4 +172,27 @@ export class ViewModelBase {
             this.MS.UtilityService.reload();
         }
     }
+
+    // temporary
+
+    Invalidate(): void {
+        this.isValidated = false;
+        this.showValidation = false;
+        this.validationText = null;
+        this.MS.ErrorService.clear();
+    }
+
+    async OnValidate(): Promise<boolean> {
+        if (!this.isValidated) {
+            this.showValidation = true;
+            return false;
+        }
+
+        this.isValidated = false;
+        this.showValidation = false;
+        this.MS.ErrorService.clear();
+        this.isValidated = await InitParser.executeActions(this.onValidateActions, this);
+        this.showValidation = true;
+        return this.isValidated;
+    }
 }

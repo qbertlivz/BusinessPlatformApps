@@ -40,7 +40,7 @@
             {
                 "displayname": "Source",
                 "isAzureSql": true,
-                "name": "$SiteCommon$/pages-gallery/sql-server.html",
+                "name": "$SiteCommon$/pages-gallery/sql.html",
                 "newSqlDatabase": "twitterDB",
                 "showAzureSql": false,
                 "showNewSqlOption": "true",

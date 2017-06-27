@@ -14,7 +14,7 @@ export class LoggerService {
         this.MS = MainService;
         var snippet: any = {
             config: {
-                instrumentationKey: '74bc59f2-6526-41b1-ab84-370532ec5d42'
+                instrumentationKey: 'app_insights_key'
             }
         };
 

@@ -44,7 +44,7 @@
                 "checkSqlVersion": true,
                 "displayname": "Target",
                 "isAzureSql": true,
-                "name": "$SiteCommon$/pages-gallery/sql-server.html",
+                "name": "$SiteCommon$/pages-gallery/sql.html",
                 "newSqlDatabase": "facebook",
                 "showAzureSql": false,
                 "showNewSqlOption": "true",

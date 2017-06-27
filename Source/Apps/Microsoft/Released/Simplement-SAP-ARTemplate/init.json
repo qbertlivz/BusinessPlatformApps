@@ -62,7 +62,7 @@
             {
                 "credentialTarget": "Simplement.SolutionTemplate.AR.SQL",
                 "displayname": "Target",
-                "name": "$SiteCommon$/pages-gallery/sql-server.html",
+                "name": "$SiteCommon$/pages-gallery/sql.html",
                 "onNext": [
                     {
                         "name": "Microsoft-WriteSAPJson"

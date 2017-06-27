@@ -124,6 +124,7 @@
     COMMON_NAME: `Name:`,
     COMMON_NEW: `New`,
     COMMON_NO: `No`,
+    COMMON_OFFLINE: `There is no Internet connection`,
     COMMON_OPTIONAL: `(Optional)`,
     COMMON_PASSWORD: `password`,
     COMMON_REGISTER: `Register`,

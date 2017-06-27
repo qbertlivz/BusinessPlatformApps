@@ -93,8 +93,11 @@ export class HttpService {
                 }
             }
         } catch (e) {
-            this.MS.ErrorService.message = this.MS.Translate.COMMON_UNKNOWN_ERROR;
-            this.MS.ErrorService.showContactUs = true;
+            if (this.MS.UtilityService.isOnline() || this.isOnPremise) {
+                this.MS.ErrorService.set(this.MS.Translate.COMMON_UNKNOWN_ERROR);
+            } else {
+                this.MS.ErrorService.set(this.MS.Translate.COMMON_OFFLINE);
+            }
             throw e;
         } finally {
             if (!content.isInvisible) {

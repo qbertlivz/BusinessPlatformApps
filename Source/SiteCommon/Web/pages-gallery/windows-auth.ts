@@ -39,8 +39,8 @@ export class WindowsAuth extends ViewModelBase {
         let domain: string = this.MS.UtilityService.extractDomain(this.username);
         let usernameWithoutDomain: string = this.MS.UtilityService.extractUsername(this.username);
 
-        this.MS.DataStore.addToDataStore('ImpersonationDomain', domain, DataStoreType.Private);
-        this.MS.DataStore.addToDataStore('ImpersonationUsername', usernameWithoutDomain, DataStoreType.Private);
+        this.MS.DataStore.addToDataStore('ImpersonationDomain', domain, DataStoreType.Public);
+        this.MS.DataStore.addToDataStore('ImpersonationUsername', usernameWithoutDomain, DataStoreType.Public);
         this.MS.DataStore.addToDataStore('ImpersonationPassword', this.password, DataStoreType.Private);
 
         let response = await this.MS.HttpService.executeAsync('Microsoft-ValidateNtCredential', {});

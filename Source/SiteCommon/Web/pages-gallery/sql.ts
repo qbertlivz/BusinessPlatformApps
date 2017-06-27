@@ -5,7 +5,7 @@ import { AzureLocation } from '../models/azure-location';
 
 import { ViewModelBase } from '../services/view-model-base';
 
-export class SqlServer extends ViewModelBase {
+export class Sql extends ViewModelBase {
     azureGovtSuffix: string = '.database.usgovcloudapi.net';
     azureLocations: AzureLocation[] = [];
     azureSqlSuffix: string = '.database.windows.net';

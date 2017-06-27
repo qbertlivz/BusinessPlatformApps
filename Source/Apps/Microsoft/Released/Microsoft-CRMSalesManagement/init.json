@@ -127,7 +127,7 @@
                 "sourceApplication": "DynamicsCRM"
             },
             {
-                "displayCompletionNotification": "$run(this.MS.HttpService.isOnPremise ? false : true)",
+                "displayCompletionNotification": "$run(this.MS.DataStore.getValue('DataMovement') === 'D365')",
                 "displayname": "Summary",
                 "name": "$SiteCommon$/pages-gallery/summary.html",
                 "onNext": [
@@ -328,7 +328,6 @@
             },
             {
                 "displayname": "$translate(INIT_ACTION_CREATING_SCRIBE_SOLUTION)",
-                "Entities": "opportunityproduct,territory,lead,opportunity,account,systemusermanagermap,businessunit,systemuser,product",
                 "name": "Microsoft-CreateScribeSolution",
                 "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
             },

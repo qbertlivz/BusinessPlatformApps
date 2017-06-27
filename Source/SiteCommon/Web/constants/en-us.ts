@@ -226,6 +226,7 @@
     INIT_ACTION_COPYING_DATALOAD_SCRIPTS: `Copy dataload scripts`,
     INIT_ACTION_CREATING_D365_PROFILE: `Creating Dynamics 365 Profile`,
     INIT_ACTION_CREATING_DATA_CONNECTIONS: `Creating data connections`,
+    INIT_ACTION_CREATING_FUNCTION: `Creating function`,
     INIT_ACTION_CREATING_INFORMATICA_CONNECTION_SALESFORCE: `Creating Salesforce connection in Informatica`,
     INIT_ACTION_CREATING_INFORMATICA_CONNECTION_SQL: `Creating SQL connection in Informatica`,
     INIT_ACTION_CREATING_INFORMATICA_TASK: `Creating Informatica task`,

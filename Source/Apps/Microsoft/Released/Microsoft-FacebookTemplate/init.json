@@ -111,20 +111,16 @@
                 "name": "Microsoft-WaitForArmDeploymentStatus"
             },
             {
-                "displayname": "Create Function",
+                "displayname": "$translate(INIT_ACTION_CREATING_FUNCTION)",
                 "name": "Microsoft-CheckFunctionStatus"
             },
             {
-                "displayname": "Create Function",
-                "name": "Microsoft-CheckFunctionStatus"
-            },
-            {
-                "displayname": "Deploy Storage",
-                "name": "Microsoft-CreateAzureStorageAccount",
                 "DeploymentName": "Deployment2",
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_STORAGE_ACCOUNT)",
+                "name": "Microsoft-CreateAzureStorageAccount",
+                "StorageAccountEncryptionEnabled": "true",
                 "StorageAccountName": "$save('stor' + this.MS.DataStore.getValue('uniqueId'))",
-                "StorageAccountType": "Standard_LRS",
-                "StorageAccountEncryptionEnabled": "true"
+                "StorageAccountType": "Standard_LRS"
             },
             {
                 "DeploymentName": "Deployment2",

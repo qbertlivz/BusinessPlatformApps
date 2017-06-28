@@ -1,4 +1,8 @@
-﻿import { MainService } from './main-service';
+﻿import { QueryParameter } from '../constants/query-parameter';
+
+import { DataStoreType } from '../enums/data-store-type';
+
+import { MainService } from './main-service';
 
 export class UtilityService {
     MS: MainService;
@@ -7,72 +11,17 @@ export class UtilityService {
         this.MS = mainservice;
     }
 
-    Clone(obj: any): any {
+    clearSessionStorage(): void {
+        window.sessionStorage.clear();
+    }
+
+    clone(obj: any): any {
         return JSON.parse(JSON.stringify(obj));
     }
 
-    GenerateDailyTriggers(): string[] {
-        let dailyTriggers: string[] = [];
-        for (let i = 0; i < 24; i++) {
-            dailyTriggers.push(`${i}:00`);
-            dailyTriggers.push(`${i}:30`);
-        }
-        return dailyTriggers;
-    }
-
-    GetQueryParameter(id: any): string {
-        var regex = new RegExp('[?&]' + id.replace(/[\[\]]/g, '\\$&') + '(=([^&#]*)|&|#|$)');
-        var results = regex.exec(window.location.href);
-        return (!results || !results[2])
-            ? ''
-            : decodeURIComponent(results[2].replace(/\+/g, ' '));
-    }
-
-    GetQueryParameterFromUrl(name: any, url: any): string {
-        var regex = new RegExp('[?&]' + name.replace(/[\[\]]/g, '\\$&') + '(=([^&#]*)|&|#|$)');
-        var results = regex.exec(url);
-        return (!results || !results[2])
-            ? ''
-            : decodeURIComponent(results[2].replace(/\+/g, ' '));
-    }
-
-    GetRouteFromUrl(): string {
-        let route = '';
-        if (window.location.hash) {
-            route = window.location.hash.substring(1);
-        }
-        return route;
-    }
-
-    GetUniqueId(characters: number): string {
-        return Math.random().toString(36).substr(2, characters + 2);
-    }
-
-    GetPropertiesForTelemtry(): any {
-        let obj: any = {};
-        obj.TemplateName = this.MS.NavigationService.appName;
-        obj.FullUrl = window.location.href;
-        obj.Origin = window.location.origin;
-        obj.Host = window.location.host;
-        obj.HostName = window.location.hostname;
-        obj.PageNumber = this.MS.NavigationService.index;
-        obj.Page = JSON.stringify(this.MS.NavigationService.pages[this.MS.NavigationService.index]);
-        obj.RootSource = - this.MS.HttpService.isOnPremise ? 'MSI' : 'WEB';
-        return obj;
-    }
-
-    HasInternetAccess(): boolean {
-        let response = true;
-        if (window.navigator && window.navigator.onLine !== null && window.navigator.onLine !== undefined) {
-            response = window.navigator.onLine;
-        }
-        return response;
-    }
-
-    Reload(): void {
-        if (window && window.location && window.location.reload) {
-            window.location.reload();
-        }
+    async connectToAzure(openAuthorizationType: string, azureActiveDirectoryTenant: string = this.MS.Translate.DEFAULT_TENANT): Promise<void> {
+        this.MS.DataStore.addToDataStore('AADTenant', azureActiveDirectoryTenant, DataStoreType.Public);
+        window.location.href = await this.MS.HttpService.getExecuteResponseAsync('Microsoft-GetAzureAuthUri', 'value', { oauthType: openAuthorizationType });
     }
 
     extractDomain(username: string): string {
@@ -85,39 +34,87 @@ export class UtilityService {
         return usernameSplit[1];
     }
 
-    isEdge(): boolean {
-        return window && window.navigator && window.navigator.userAgent && /Edge\/\d./i.test(window.navigator.userAgent);
-    }
-
-    validateUsername(username: string): string {
-        if (username.includes('\\')) {
-            return '';
-        } else if (username.length > 0) {
-            return 'Username must be in <domain>\\<username> or <machinename>\\<username> format.';
+    generateDailyTriggers(): string[] {
+        let dailyTriggers: string[] = [];
+        for (let i = 0; i < 24; i++) {
+            dailyTriggers.push(`${i}:00`);
+            dailyTriggers.push(`${i}:30`);
         }
-
-        return 'Please enter your username';
+        return dailyTriggers;
     }
 
-    // Add items to the session storage - should use DataStore where possible
-    SaveItem(key: any, value: any): void {
+    getItem(key: any): any {
+        let item: any = JSON.parse(window.sessionStorage.getItem(key));
+        return item;
+    }
+
+    getQueryParameter(id: any): string {
+        var regex = new RegExp('[?&]' + id.replace(/[\[\]]/g, '\\$&') + '(=([^&#]*)|&|#|$)');
+        var results = regex.exec(window.location.href);
+        return (!results || !results[2])
+            ? ''
+            : decodeURIComponent(results[2].replace(/\+/g, ' '));
+    }
+
+    getQueryParameterFromUrl(name: any, url: any): string {
+        var regex = new RegExp('[?&]' + name.replace(/[\[\]]/g, '\\$&') + '(=([^&#]*)|&|#|$)');
+        var results = regex.exec(url);
+        return (!results || !results[2])
+            ? ''
+            : decodeURIComponent(results[2].replace(/\+/g, ' '));
+    }
+
+    async getToken(openAuthorizationType: string, callback: () => Promise<void>): Promise<void> {
+        let queryParam: any = this.getItem('queryUrl');
+        if (queryParam) {
+            let token = this.getQueryParameterFromUrl(QueryParameter.CODE, queryParam);
+            if (token === '') {
+                this.MS.ErrorService.set(this.MS.Translate.AZURE_LOGIN_UNKNOWN_ERROR, this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.ERROR_DESCRIPTION, queryParam));
+            } else {
+                if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-GetAzureToken', { code: token, oauthType: openAuthorizationType })) {
+                    await callback();
+                }
+            }
+            this.MS.UtilityService.removeItem('queryUrl');
+        }
+    }
+
+    getUniqueId(characters: number): string {
+        return Math.random().toString(36).substr(2, characters + 2);
+    }
+
+    isOnline(): boolean {
+        return window && window.navigator && window.navigator.onLine;
+    }
+
+    parseCsv(content: string): string[][] {
+        let data: string[][] = [];
+        let rows: string[] = content.split('\r\n');
+        for (let i = 0; i < rows.length; i++) {
+            data.push(rows[i].split(','));
+        }
+        return data;
+    }
+
+    readFile(file: File, callback: (result: any) => void): void {
+        if (file) {
+            let fileReader: FileReader = new FileReader();
+            fileReader.onload = (fileContent: any) => {
+                callback(fileContent.target.result);
+            };
+            fileReader.readAsText(file);
+        }
+    }
+
+    removeItem(key: any): void {
+        window.sessionStorage.removeItem(key);
+    }
+
+    saveItem(key: any, value: any): void {
         let val = JSON.stringify(value);
         if (window.sessionStorage.getItem(key)) {
             window.sessionStorage.removeItem(key);
         }
         window.sessionStorage.setItem(key, val);
-    }
-
-    ClearSessionStorage(): void {
-        window.sessionStorage.clear();
-    }
-
-    GetItem(key: any): any {
-        let item: any = JSON.parse(window.sessionStorage.getItem(key));
-        return item;
-    }
-
-    RemoveItem(key: any): void {
-        window.sessionStorage.removeItem(key);
     }
 }

@@ -40,8 +40,8 @@
     <Reference Include="Microsoft.IdentityModel.Tokens, Version=5.1.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.IdentityModel.Tokens.5.1.3\lib\net451\Microsoft.IdentityModel.Tokens.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -66,6 +66,11 @@
     <Compile Include="ActionModel\DictionaryIgnoreCase.cs" />
     <Compile Include="Enums\CreatedBy.cs" />
     <Compile Include="Enums\DeploymentResourceType.cs" />
+    <Compile Include="ErrorResources\EnglishErrorCodes.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EnglishErrorCodes.resx</DependentUpon>
+    </Compile>
     <Compile Include="Exceptions\ActionFailedException.cs" />
     <Compile Include="ActionModel\ActionRequest.cs" />
     <Compile Include="ActionModel\ActionResponse.cs" />
@@ -92,7 +97,6 @@
     <Compile Include="ErrorCode\AzureErrorCodes.cs" />
     <Compile Include="ErrorCode\DefaultErrorCodes.cs" />
     <Compile Include="ErrorCode\SqlErrorCodes.cs" />
-    <Compile Include="ErrorResources\EnglishErrorCodes.Designer.cs" />
     <Compile Include="Exceptions\ActionNotFoundException.cs" />
     <Compile Include="Exceptions\ActionResponseCode.cs" />
     <Compile Include="Helpers\AzureArmParameter.cs" />
@@ -104,6 +108,8 @@
     <Compile Include="Helpers\ImpersonateUtility.cs" />
     <Compile Include="Helpers\InformaticaUtility.cs" />
     <Compile Include="Helpers\JsonUtility.cs" />
+    <Compile Include="Helpers\JsonUtilityLowercaseSerializer.cs" />
+    <Compile Include="Helpers\ListExtension.cs" />
     <Compile Include="Helpers\NTHelper.cs" />
     <Compile Include="Helpers\NTPermissionUtility.cs" />
     <Compile Include="Helpers\PBIXUtils.cs" />
@@ -117,6 +123,7 @@
     <Compile Include="Helpers\StringEnumConverterLower.cs" />
     <Compile Include="Helpers\StringExtension.cs" />
     <Compile Include="Controller\Logger.cs" />
+    <Compile Include="Model\DataPullStatus.cs" />
     <Compile Include="Model\Informatica\InformaticaActivityLog.cs" />
     <Compile Include="Model\Informatica\InformaticaAgent.cs" />
     <Compile Include="Model\Informatica\InformaticaConnection.cs" />
@@ -137,12 +144,20 @@
     <Compile Include="Model\Informatica\InformaticaTaskEmail.cs" />
     <Compile Include="Model\Informatica\InformaticaUser.cs" />
     <Compile Include="Model\PbixConnection.cs" />
+    <Compile Include="Model\PBI\PBIClusterUri.cs" />
+    <Compile Include="Model\PBI\PBIDataset.cs" />
+    <Compile Include="Model\PBI\PBIImport.cs" />
+    <Compile Include="Model\PBI\PBIImportStatus.cs" />
+    <Compile Include="Model\PBI\PBIReport.cs" />
+    <Compile Include="Model\PBI\PBIWorkspace.cs" />
+    <Compile Include="Model\PBI\PBIWorkspaces.cs" />
     <Compile Include="Model\QDEFF.cs" />
     <Compile Include="Model\Scribe\D365Organization.cs" />
     <Compile Include="Model\Scribe\ScribeAgent.cs" />
     <Compile Include="Model\Scribe\ScribeAgentInstall.cs" />
     <Compile Include="Model\Scribe\ScribeConnection.cs" />
     <Compile Include="Model\Scribe\ScribeConnector.cs" />
+    <Compile Include="Model\Scribe\ScribeHistory.cs" />
     <Compile Include="Model\Scribe\ScribeKeyValue.cs" />
     <Compile Include="Model\Scribe\ScribeObject.cs" />
     <Compile Include="Model\Scribe\ScribeOrganization.cs" />
@@ -165,7 +180,10 @@
     <Compile Include="Tags\UninstallTagHandler.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ErrorResources\EnglishErrorCodes.resx" />
+    <EmbeddedResource Include="ErrorResources\EnglishErrorCodes.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EnglishErrorCodes.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

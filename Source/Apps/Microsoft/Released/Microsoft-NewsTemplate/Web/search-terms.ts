@@ -5,22 +5,12 @@ import { ViewModelBase } from '../../../../../SiteCommon/Web/services/view-model
 export class SearchTerms extends ViewModelBase {
     searchQuery: string = '';
 
-    constructor() {
-        super();
-        this.isValidated = false;
-    }
-
-    async OnValidate(): Promise<boolean> {
-        if (!super.OnValidate()) {
-            return false;
-        }
-
+    async onValidate(): Promise<boolean> {
         if (this.searchQuery.length > 0) {
-            this.isValidated = true;
-            this.showValidation = true;
+            this.setValidated();
             this.MS.DataStore.addToDataStore('SearchQuery', this.searchQuery, DataStoreType.Public);
         }
 
-        return true;
+        return this.isValidated;
     }
 }

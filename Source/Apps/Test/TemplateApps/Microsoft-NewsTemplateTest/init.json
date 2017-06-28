@@ -237,7 +237,7 @@
         "bingUrl": "placeholder"
       },
       {
-        "name": "$SiteCommon$/pages-gallery/sql-server.html",
+        "name": "$SiteCommon$/pages-gallery/sql.html",
         "displayname": "Source",
         "isAzureSql": true,
         "showAzureSql": false,
@@ -265,7 +265,7 @@
         "name": "$SiteCommon$/pages-gallery/progress.html",
         "displayname": "Deploy",
         "filename": "$save('BingNewsTemplate.pbix')",
-        "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(8))"
+        "uniqueId": "$save(this.MS.UtilityService.getUniqueId(8))"
       }
     ]
   }

@@ -882,81 +882,81 @@ body {
     -webkit-transform: rotate(-45deg);
 }
 
-    .pbi-glyph-pin:before {
-        content: "\E718";
-    }
+.pbi-glyph-pin:before {
+    content: "\E718";
+}
 
 .pbi-glyph-caretright {
     transform: rotate(-45deg);
     -webkit-transform: rotate(-45deg);
 }
 
-    .pbi-glyph-caretright::before {
-        content: "\E818";
-    }
+.pbi-glyph-caretright::before {
+    content: "\E818";
+}
 
 .pbi-glyph-caretdown {
     transform: rotate(45deg);
     -webkit-transform: rotate(45deg);
 }
 
-    .pbi-glyph-caretdown::before {
-        content: "\E818";
-    }
+.pbi-glyph-caretdown::before {
+    content: "\E818";
+}
 
 .pbi-glyph-caretleft {
     transform: rotate(135deg);
     -webkit-transform: rotate(135deg);
 }
 
-    .pbi-glyph-caretleft::before {
-        content: "\E818";
-    }
+.pbi-glyph-caretleft::before {
+    content: "\E818";
+}
 
 .pbi-glyph-chevronrightmedium {
     transform: rotate(-90deg);
     -webkit-transform: rotate(-90deg);
 }
 
-    .pbi-glyph-chevronrightmedium::before {
-        content: "\E972";
-    }
+.pbi-glyph-chevronrightmedium::before {
+    content: "\E972";
+}
 
 .pbi-glyph-chevronleftmedium {
     transform: rotate(90deg);
     -webkit-transform: rotate(90deg);
 }
 
-    .pbi-glyph-chevronleftmedium::before {
-        content: "\E972";
-    }
+.pbi-glyph-chevronleftmedium::before {
+    content: "\E972";
+}
 
 .pbi-glyph-uparrow {
     transform: rotate(90deg);
     -webkit-transform: rotate(90deg);
 }
 
-    .pbi-glyph-uparrow::before {
-        content: "\E72B";
-    }
+.pbi-glyph-uparrow::before {
+    content: "\E72B";
+}
 
 .pbi-glyph-rightarrow {
     transform: rotate(180deg);
     -webkit-transform: rotate(180deg);
 }
 
-    .pbi-glyph-rightarrow::before {
-        content: "\E72B";
-    }
+.pbi-glyph-rightarrow::before {
+    content: "\E72B";
+}
 
 .pbi-glyph-uprightarrow {
     transform: rotate(135deg);
     -webkit-transform: rotate(135deg);
 }
 
-    .pbi-glyph-uprightarrow::before {
-        content: "\E72B";
-    }
+.pbi-glyph-uprightarrow::before {
+    content: "\E72B";
+}
 
 .pbi-glyph-getdata {
     transform: rotate(135deg);
@@ -964,17 +964,17 @@ body {
     font-weight: bold;
 }
 
-    .pbi-glyph-getdata::before {
-        content: "\E72B";
-    }
+.pbi-glyph-getdata::before {
+    content: "\E72B";
+}
 
 .pbi-glyph-cancel {
     font-weight: bold;
 }
 
-    .pbi-glyph-cancel::before {
-        content: "\E8BB";
-    }
+.pbi-glyph-cancel::before {
+    content: "\E8BB";
+}
 
 [dir='rtl'] .pbi-glyph-caretdownright {
     transform: rotate(90deg);
@@ -1146,301 +1146,301 @@ h8,
     position: relative;
 }
 
-    .powervisuals-glyph.slicer-clear::before {
-        content: '\E100';
-    }
-
-    .powervisuals-glyph.left-nav-arrow::before {
-        content: '\E101';
-    }
-
-    .powervisuals-glyph.right-nav-arrow::before {
-        content: '\E102';
-    }
-
-    .powervisuals-glyph.empty-checkbox::before {
-        content: '\E103';
-    }
-
-    .powervisuals-glyph.arrow-up::before {
-        content: '\E107';
-    }
-
-    .powervisuals-glyph.arrow-right-up::before {
-        content: '\E108';
-    }
-
-    .powervisuals-glyph.arrow-right::before {
-        content: '\E109';
-    }
-
-    .powervisuals-glyph.arrow-right-down::before {
-        content: '\E110';
-    }
-
-    .powervisuals-glyph.arrow-down::before {
-        content: '\E111';
-    }
-
-    .powervisuals-glyph.arrow-left-down::before {
-        content: '\E112';
-    }
-
-    .powervisuals-glyph.arrow-left::before {
-        content: '\E113';
-    }
-
-    .powervisuals-glyph.arrow-left-up::before {
-        content: '\E114';
-    }
-
-    .powervisuals-glyph.caret-up::before {
-        content: '\E115';
-    }
-
-    .powervisuals-glyph.caret-down::before {
-        content: '\E116';
-    }
-
-    .powervisuals-glyph.circle::before {
-        content: '\E700';
-    }
-
-    .powervisuals-glyph.flag::before {
-        content: '\E70D';
-    }
-
-    .powervisuals-glyph.circle-x::before {
-        content: '\E70E';
-    }
-
-    .powervisuals-glyph.circle-exclamation::before {
-        content: '\E70F';
-    }
-
-    .powervisuals-glyph.circle-checkmark::before {
-        content: '\E710';
-    }
-
-    .powervisuals-glyph.circle-small::before {
-        content: '\E712';
-    }
-
-    .powervisuals-glyph.square::before {
-        content: '\E713';
-    }
-
-    .powervisuals-glyph.x::before {
-        content: '\E714';
-    }
-
-    .powervisuals-glyph.exclamation::before {
-        content: '\E715';
-    }
-
-    .powervisuals-glyph.checkmark::before {
-        content: '\E718';
-    }
-
-    .powervisuals-glyph.rhombus::before {
-        content: '\E719';
-    }
-
-    .powervisuals-glyph.triangle::before {
-        content: '\E71B';
-    }
-
-    .powervisuals-glyph.star-empty::before {
-        content: '\E71C';
-    }
-
-    .powervisuals-glyph.star-half-full::before {
-        content: '\E721';
-    }
-
-    .powervisuals-glyph.star-full::before {
-        content: '\E724';
-    }
-
-    .powervisuals-glyph.bars-one::before {
-        content: '\E725';
-    }
-
-    .powervisuals-glyph.bars-two::before {
-        content: '\E726';
-    }
-
-    .powervisuals-glyph.bars-three::before {
-        content: '\E727';
-    }
-
-    .powervisuals-glyph.bars-four::before {
-        content: '\E728';
-    }
-
-    .powervisuals-glyph.bars-five::before {
-        content: '\E729';
-    }
-
-    .powervisuals-glyph.boxes-one::before {
-        content: '\E732';
-    }
-
-    .powervisuals-glyph.boxes-two::before {
-        content: '\E733';
-    }
-
-    .powervisuals-glyph.boxes-three::before {
-        content: '\E731';
-    }
-
-    .powervisuals-glyph.boxes-four::before {
-        content: '\E730';
-    }
-
-    .powervisuals-glyph.circle-empty::before {
-        content: '\E734';
-    }
-
-    .powervisuals-glyph.circle-full::before {
-        content: '\E735';
-    }
-
-    .powervisuals-glyph.circle-three-quarters::before {
-        content: '\E736';
-    }
-
-    .powervisuals-glyph.circle-half::before {
-        content: '\E737';
-    }
-
-    .powervisuals-glyph.circle-one-quarter::before {
-        content: '\E738';
-    }
-
-    .powervisuals-glyph.link::before {
-        content: '\E8B5';
-    }
-
-    .powervisuals-glyph.bold::before {
-        content: '\E8DD';
-    }
-
-    .powervisuals-glyph.italic::before {
-        content: '\E8DB';
-    }
-
-    .powervisuals-glyph.underline::before {
-        content: '\E8DC';
-    }
-
-    .powervisuals-glyph.alignleft::before {
-        content: '\E8E4';
-    }
-
-    .powervisuals-glyph.aligncenter::before {
-        content: '\E8E3';
-    }
-
-    .powervisuals-glyph.alignright::before {
-        content: '\E8E2';
-    }
-
-    .powervisuals-glyph.boxes-stacked::before {
-        content: '\E730';
-        color: #C8C8C8;
-    }
-
-    .powervisuals-glyph.boxes-stacked::after {
-        position: absolute;
-        left: 0;
-        color: #000;
-    }
-
-    .powervisuals-glyph.boxes-stacked.boxes-zero::after {
-        content: '';
-    }
-
-    .powervisuals-glyph.boxes-stacked.boxes-one::after {
-        content: '\E732';
-    }
-
-    .powervisuals-glyph.boxes-stacked.boxes-two::after {
-        content: '\E733';
-    }
-
-    .powervisuals-glyph.boxes-stacked.boxes-three::after {
-        content: '\E731';
-    }
-
-    .powervisuals-glyph.boxes-stacked.boxes-four::before {
-        color: #000;
-    }
-
-    .powervisuals-glyph.bars-stacked::before {
-        content: '\E728';
-        color: #C8C8C8;
-    }
-
-    .powervisuals-glyph.bars-stacked::after {
-        position: absolute;
-        left: 0;
-        color: #000;
-    }
-
-    .powervisuals-glyph.bars-stacked.bars-zero::after {
-        content: '';
-    }
-
-    .powervisuals-glyph.bars-stacked.bars-one::after {
-        content: '\E725';
-    }
-
-    .powervisuals-glyph.bars-stacked.bars-two::after {
-        content: '\E726';
-    }
-
-    .powervisuals-glyph.bars-stacked.bars-three::after {
-        content: '\E727';
-    }
-
-    .powervisuals-glyph.bars-stacked.bars-four::before {
-        color: #000;
-    }
-
-    .powervisuals-glyph.star-stacked::before {
-        content: '\E724';
-        color: #C8C8C8;
-    }
-
-    .powervisuals-glyph.star-stacked::after {
-        position: absolute;
-        left: 0;
-        color: #000;
-    }
-
-    .powervisuals-glyph.star-stacked.star-empty::after {
-        content: '';
-    }
-
-    .powervisuals-glyph.star-stacked.star-half-full::after {
-        content: '\E721';
-    }
-
-    .powervisuals-glyph.star-stacked.star-full::before {
-        color: #000;
-    }
-
-    .powervisuals-glyph.traffic-light::before {
-        content: '\E713';
-        color: #000;
-    }
-
-    .powervisuals-glyph.traffic-light::after {
-        position: absolute;
-        left: 0;
-        content: '\E712';
-    }
+.powervisuals-glyph.slicer-clear::before {
+    content: '\E100';
+}
+
+.powervisuals-glyph.left-nav-arrow::before {
+    content: '\E101';
+}
+
+.powervisuals-glyph.right-nav-arrow::before {
+    content: '\E102';
+}
+
+.powervisuals-glyph.empty-checkbox::before {
+    content: '\E103';
+}
+
+.powervisuals-glyph.arrow-up::before {
+    content: '\E107';
+}
+
+.powervisuals-glyph.arrow-right-up::before {
+    content: '\E108';
+}
+
+.powervisuals-glyph.arrow-right::before {
+    content: '\E109';
+}
+
+.powervisuals-glyph.arrow-right-down::before {
+    content: '\E110';
+}
+
+.powervisuals-glyph.arrow-down::before {
+    content: '\E111';
+}
+
+.powervisuals-glyph.arrow-left-down::before {
+    content: '\E112';
+}
+
+.powervisuals-glyph.arrow-left::before {
+    content: '\E113';
+}
+
+.powervisuals-glyph.arrow-left-up::before {
+    content: '\E114';
+}
+
+.powervisuals-glyph.caret-up::before {
+    content: '\E115';
+}
+
+.powervisuals-glyph.caret-down::before {
+    content: '\E116';
+}
+
+.powervisuals-glyph.circle::before {
+    content: '\E700';
+}
+
+.powervisuals-glyph.flag::before {
+    content: '\E70D';
+}
+
+.powervisuals-glyph.circle-x::before {
+    content: '\E70E';
+}
+
+.powervisuals-glyph.circle-exclamation::before {
+    content: '\E70F';
+}
+
+.powervisuals-glyph.circle-checkmark::before {
+    content: '\E710';
+}
+
+.powervisuals-glyph.circle-small::before {
+    content: '\E712';
+}
+
+.powervisuals-glyph.square::before {
+    content: '\E713';
+}
+
+.powervisuals-glyph.x::before {
+    content: '\E714';
+}
+
+.powervisuals-glyph.exclamation::before {
+    content: '\E715';
+}
+
+.powervisuals-glyph.checkmark::before {
+    content: '\E718';
+}
+
+.powervisuals-glyph.rhombus::before {
+    content: '\E719';
+}
+
+.powervisuals-glyph.triangle::before {
+    content: '\E71B';
+}
+
+.powervisuals-glyph.star-empty::before {
+    content: '\E71C';
+}
+
+.powervisuals-glyph.star-half-full::before {
+    content: '\E721';
+}
+
+.powervisuals-glyph.star-full::before {
+    content: '\E724';
+}
+
+.powervisuals-glyph.bars-one::before {
+    content: '\E725';
+}
+
+.powervisuals-glyph.bars-two::before {
+    content: '\E726';
+}
+
+.powervisuals-glyph.bars-three::before {
+    content: '\E727';
+}
+
+.powervisuals-glyph.bars-four::before {
+    content: '\E728';
+}
+
+.powervisuals-glyph.bars-five::before {
+    content: '\E729';
+}
+
+.powervisuals-glyph.boxes-one::before {
+    content: '\E732';
+}
+
+.powervisuals-glyph.boxes-two::before {
+    content: '\E733';
+}
+
+.powervisuals-glyph.boxes-three::before {
+    content: '\E731';
+}
+
+.powervisuals-glyph.boxes-four::before {
+    content: '\E730';
+}
+
+.powervisuals-glyph.circle-empty::before {
+    content: '\E734';
+}
+
+.powervisuals-glyph.circle-full::before {
+    content: '\E735';
+}
+
+.powervisuals-glyph.circle-three-quarters::before {
+    content: '\E736';
+}
+
+.powervisuals-glyph.circle-half::before {
+    content: '\E737';
+}
+
+.powervisuals-glyph.circle-one-quarter::before {
+    content: '\E738';
+}
+
+.powervisuals-glyph.link::before {
+    content: '\E8B5';
+}
+
+.powervisuals-glyph.bold::before {
+    content: '\E8DD';
+}
+
+.powervisuals-glyph.italic::before {
+    content: '\E8DB';
+}
+
+.powervisuals-glyph.underline::before {
+    content: '\E8DC';
+}
+
+.powervisuals-glyph.alignleft::before {
+    content: '\E8E4';
+}
+
+.powervisuals-glyph.aligncenter::before {
+    content: '\E8E3';
+}
+
+.powervisuals-glyph.alignright::before {
+    content: '\E8E2';
+}
+
+.powervisuals-glyph.boxes-stacked::before {
+    content: '\E730';
+    color: #C8C8C8;
+}
+
+.powervisuals-glyph.boxes-stacked::after {
+    position: absolute;
+    left: 0;
+    color: #000;
+}
+
+.powervisuals-glyph.boxes-stacked.boxes-zero::after {
+    content: '';
+}
+
+.powervisuals-glyph.boxes-stacked.boxes-one::after {
+    content: '\E732';
+}
+
+.powervisuals-glyph.boxes-stacked.boxes-two::after {
+    content: '\E733';
+}
+
+.powervisuals-glyph.boxes-stacked.boxes-three::after {
+    content: '\E731';
+}
+
+.powervisuals-glyph.boxes-stacked.boxes-four::before {
+    color: #000;
+}
+
+.powervisuals-glyph.bars-stacked::before {
+    content: '\E728';
+    color: #C8C8C8;
+}
+
+.powervisuals-glyph.bars-stacked::after {
+    position: absolute;
+    left: 0;
+    color: #000;
+}
+
+.powervisuals-glyph.bars-stacked.bars-zero::after {
+    content: '';
+}
+
+.powervisuals-glyph.bars-stacked.bars-one::after {
+    content: '\E725';
+}
+
+.powervisuals-glyph.bars-stacked.bars-two::after {
+    content: '\E726';
+}
+
+.powervisuals-glyph.bars-stacked.bars-three::after {
+    content: '\E727';
+}
+
+.powervisuals-glyph.bars-stacked.bars-four::before {
+    color: #000;
+}
+
+.powervisuals-glyph.star-stacked::before {
+    content: '\E724';
+    color: #C8C8C8;
+}
+
+.powervisuals-glyph.star-stacked::after {
+    position: absolute;
+    left: 0;
+    color: #000;
+}
+
+.powervisuals-glyph.star-stacked.star-empty::after {
+    content: '';
+}
+
+.powervisuals-glyph.star-stacked.star-half-full::after {
+    content: '\E721';
+}
+
+.powervisuals-glyph.star-stacked.star-full::before {
+    color: #000;
+}
+
+.powervisuals-glyph.traffic-light::before {
+    content: '\E713';
+    color: #000;
+}
+
+.powervisuals-glyph.traffic-light::after {
+    position: absolute;
+    left: 0;
+    content: '\E712';
+}
 
 input[type=text],
 input[type=password],
@@ -1451,20 +1451,20 @@ textarea {
     clear: both;
 }
 
-    input[type=text]:hover,
-    input[type=password]:hover,
-    textarea:hover {
-        border-color: #777777;
-    }
+input[type=text]:hover,
+input[type=password]:hover,
+textarea:hover {
+    border-color: #777777;
+}
 
-    input[type=text]:focus,
-    input[type=password]:focus,
-    textarea:focus,
-    input[type=text]:active,
-    input[type=password]:active,
-    textarea:active {
-        border-color: #F2C811;
-    }
+input[type=text]:focus,
+input[type=password]:focus,
+textarea:focus,
+input[type=text]:active,
+input[type=password]:active,
+textarea:active {
+    border-color: #F2C811;
+}
 
 .input-field-label {
     font-family: 'Segoe UI', 'wf_segoe-ui_normal', helvetica, arial, sans-serif;
@@ -1490,14 +1490,14 @@ input[type=text] {
     clear: both;
 }
 
-    input[type=text]:hover {
-        border-color: #777777;
-    }
+input[type=text]:hover {
+    border-color: #777777;
+}
 
-    input[type=text]:focus,
-    input[type=text]:active {
-        border-color: #F2C811;
-    }
+input[type=text]:focus,
+input[type=text]:active {
+    border-color: #F2C811;
+}
 
 .input-field-label {
     font-family: 'Segoe UI', 'wf_segoe-ui_normal', helvetica, arial, sans-serif;
@@ -1568,167 +1568,167 @@ input[disabled]:active {
     /* border: 1px solid red; */
 }
 
-    .pbi-input .pbi-info {
-        display: block;
-        position: relative;
-        margin: 0;
-        margin-top: 8px;
-        padding: 8px;
-        padding-left: 32px;
-        border: 0;
-        box-sizing: border-box;
-        color: #000000;
-        background-color: #DEEBF6;
-        font-family: 'Segoe UI', 'wf_segoe-ui_normal', helvetica, arial, sans-serif;
-        font-size: 14px;
-        font-weight: normal;
-    }
+.pbi-input .pbi-info {
+    display: block;
+    position: relative;
+    margin: 0;
+    margin-top: 8px;
+    padding: 8px;
+    padding-left: 32px;
+    border: 0;
+    box-sizing: border-box;
+    color: #000000;
+    background-color: #DEEBF6;
+    font-family: 'Segoe UI', 'wf_segoe-ui_normal', helvetica, arial, sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+}
 
-        .pbi-input .pbi-info:after {
-            margin: 0;
-            padding: 0;
-            position: absolute;
-            left: 8px;
-            top: 8px;
-            font-family: 'PowrMDL2';
-            content: "\E946";
-            font-size: 16px;
-            height: 16px;
-            width: 16px;
-        }
+.pbi-input .pbi-info:after {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    font-family: 'PowrMDL2';
+    content: "\E946";
+    font-size: 16px;
+    height: 16px;
+    width: 16px;
+}
 
-    .pbi-input .pbi-alert {
-        display: block;
-        position: relative;
-        margin: 0;
-        margin-top: 8px;
-        padding: 8px;
-        padding-left: 32px;
-        border: 0;
-        color: #000000;
-        background-color: #FFF9AE;
-        font-family: 'Segoe UI', 'wf_segoe-ui_normal', helvetica, arial, sans-serif;
-        font-size: 14px;
-        font-weight: normal;
-    }
+.pbi-input .pbi-alert {
+    display: block;
+    position: relative;
+    margin: 0;
+    margin-top: 8px;
+    padding: 8px;
+    padding-left: 32px;
+    border: 0;
+    color: #000000;
+    background-color: #FFF9AE;
+    font-family: 'Segoe UI', 'wf_segoe-ui_normal', helvetica, arial, sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+}
 
-        .pbi-input .pbi-alert:after {
-            position: absolute;
-            left: 8px;
-            top: 8px;
-            font-family: 'PowrMDL2';
-            content: "\E7BA";
-            font-size: 16px;
-            height: 16px;
-            width: 16px;
-        }
+.pbi-input .pbi-alert:after {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    font-family: 'PowrMDL2';
+    content: "\E7BA";
+    font-size: 16px;
+    height: 16px;
+    width: 16px;
+}
 
-    .pbi-input .pbi-securityAlert {
-        display: block;
-        position: relative;
-        margin: 0;
-        margin-top: 8px;
-        padding: 8px;
-        padding-left: 32px;
-        border: 0;
-        color: #000000;
-        background-color: #FFF9AE;
-        font-family: 'Segoe UI', 'wf_segoe-ui_normal', helvetica, arial, sans-serif;
-        font-size: 14px;
-        font-weight: normal;
-    }
+.pbi-input .pbi-securityAlert {
+    display: block;
+    position: relative;
+    margin: 0;
+    margin-top: 8px;
+    padding: 8px;
+    padding-left: 32px;
+    border: 0;
+    color: #000000;
+    background-color: #FFF9AE;
+    font-family: 'Segoe UI', 'wf_segoe-ui_normal', helvetica, arial, sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+}
 
-        .pbi-input .pbi-securityAlert:after {
-            margin: 0;
-            padding: 0;
-            position: absolute;
-            left: 8px;
-            top: 8px;
-            font-family: 'PowrMDL2';
-            content: "\E117";
-            font-size: 16px;
-            height: 16px;
-            width: 16px;
-        }
+.pbi-input .pbi-securityAlert:after {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    font-family: 'PowrMDL2';
+    content: "\E117";
+    font-size: 16px;
+    height: 16px;
+    width: 16px;
+}
 
-    .pbi-input .pbi-critical {
-        display: block;
-        position: relative;
-        margin: 0;
-        margin-top: 8px;
-        padding: 8px;
-        padding-left: 32px;
-        border: 0;
-        color: #000000;
-        background-color: #FADBD2;
-        font-family: 'Segoe UI', 'wf_segoe-ui_normal', helvetica, arial, sans-serif;
-        font-size: 14px;
-        font-weight: normal;
-    }
+.pbi-input .pbi-critical {
+    display: block;
+    position: relative;
+    margin: 0;
+    margin-top: 8px;
+    padding: 8px;
+    padding-left: 32px;
+    border: 0;
+    color: #000000;
+    background-color: #FADBD2;
+    font-family: 'Segoe UI', 'wf_segoe-ui_normal', helvetica, arial, sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+}
 
-        .pbi-input .pbi-critical:after {
-            margin: 0;
-            padding: 0;
-            position: absolute;
-            left: 8px;
-            top: 8px;
-            font-family: 'PowrMDL2';
-            content: "\EA39";
-            font-size: 16px;
-            height: 16px;
-            width: 16px;
-        }
+.pbi-input .pbi-critical:after {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    font-family: 'PowrMDL2';
+    content: "\EA39";
+    font-size: 16px;
+    height: 16px;
+    width: 16px;
+}
 
-    .pbi-input :not(.collapsed) {
-        transition: max-height 0.25s ease-in-out, opacity 0.25s;
-    }
+.pbi-input :not(.collapsed) {
+    transition: max-height 0.25s ease-in-out, opacity 0.25s;
+}
 
-    .pbi-input .collapsed {
-        margin: 0;
-        padding: 0;
-        transition: max-height 0.25s ease-in-out, opacity 0.25s;
-        opacity: 0;
-        max-height: 0;
-        overflow: hidden;
-    }
-    /* common input label stuff */
-    .pbi-input > label {
-        position: relative;
-        display: inline-block;
-        padding: 0;
-        margin: 0;
-        min-height: 20px;
-        /*text-transform: lowercase;*/
-        font-family: 'Segoe UI', 'wf_segoe-ui_normal', helvetica, arial, sans-serif;
-        font-size: 14px;
-        font-weight: normal;
-        color: #333333;
-        line-height: 20px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        /*z-index: @inputLayerBellow;*/
-        pointer-events: none;
-    }
+.pbi-input .collapsed {
+    margin: 0;
+    padding: 0;
+    transition: max-height 0.25s ease-in-out, opacity 0.25s;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+}
+/* common input label stuff */
+.pbi-input > label {
+    position: relative;
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+    min-height: 20px;
+    /*text-transform: lowercase;*/
+    font-family: 'Segoe UI', 'wf_segoe-ui_normal', helvetica, arial, sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    color: #333333;
+    line-height: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /*z-index: @inputLayerBellow;*/
+    pointer-events: none;
+}
 
-        .pbi-input > label:first-letter {
-            text-transform: uppercase;
-        }
+.pbi-input > label:first-letter {
+    text-transform: uppercase;
+}
 
-        .pbi-input > label > .infoIcon:after {
-            display: inline;
-            padding: 0;
-            margin: 0;
-            margin-left: 4px;
-            height: 12px;
-            width: 12px;
-            font-family: 'PowrMDL2';
-            font-size: 12px;
-            content: "\E946";
-            color: #333333;
-            /*z-index: 14;*/
-            background-color: transparent;
-        }
+.pbi-input > label > .infoIcon:after {
+    display: inline;
+    padding: 0;
+    margin: 0;
+    margin-left: 4px;
+    height: 12px;
+    width: 12px;
+    font-family: 'PowrMDL2';
+    font-size: 12px;
+    content: "\E946";
+    color: #333333;
+    /*z-index: 14;*/
+    background-color: transparent;
+}
 /*  end text input fields*/
 .btn,
 button,
@@ -1750,235 +1750,235 @@ input[type=button] {
     transition: color 0.2s, background-color 0.2s, border-color 0.2s;
 }
 
-    .btn:hover,
-    button:hover,
-    .ok-btn:hover,
-    input[type=button]:hover,
-    .btn:focus,
-    button:focus,
-    .ok-btn:focus,
-    input[type=button]:focus,
-    .btn:active,
-    button:active,
-    .ok-btn:active,
-    input[type=button]:active,
-    .btn:active:hover,
-    button:active:hover,
-    .ok-btn:active:hover,
-    input[type=button]:active:hover,
-    .btn:focus:hover,
-    button:focus:hover,
-    .ok-btn:focus:hover,
-    input[type=button]:focus:hover {
-        border-color: #000000;
-        background-color: #F4F4F4;
-        color: #000000;
-        outline: none;
-    }
+.btn:hover,
+button:hover,
+.ok-btn:hover,
+input[type=button]:hover,
+.btn:focus,
+button:focus,
+.ok-btn:focus,
+input[type=button]:focus,
+.btn:active,
+button:active,
+.ok-btn:active,
+input[type=button]:active,
+.btn:active:hover,
+button:active:hover,
+.ok-btn:active:hover,
+input[type=button]:active:hover,
+.btn:focus:hover,
+button:focus:hover,
+.ok-btn:focus:hover,
+input[type=button]:focus:hover {
+    border-color: #000000;
+    background-color: #F4F4F4;
+    color: #000000;
+    outline: none;
+}
 
-    .btn:active,
-    button:active,
-    .ok-btn:active,
-    input[type=button]:active {
-        background-color: #666666;
-        border-color: #666666;
-        color: #000000;
-    }
+.btn:active,
+button:active,
+.ok-btn:active,
+input[type=button]:active {
+    background-color: #666666;
+    border-color: #666666;
+    color: #000000;
+}
 
-    .btn.primary,
-    button.primary,
-    .ok-btn.primary,
-    input[type=button].primary {
-        background-color: #F2C811;
-        border-color: #F2C811;
-        color: #000000;
-    }
+.btn.primary,
+button.primary,
+.ok-btn.primary,
+input[type=button].primary {
+    background-color: #F2C811;
+    border-color: #F2C811;
+    color: #000000;
+}
 
-        .btn.primary:hover,
-        button.primary:hover,
-        .ok-btn.primary:hover,
-        input[type=button].primary:hover,
-        .btn.primary:focus,
-        button.primary:focus,
-        .ok-btn.primary:focus,
-        input[type=button].primary:focus,
-        .btn.primary:active,
-        button.primary:active,
-        .ok-btn.primary:active,
-        input[type=button].primary:active {
-            border-color: #000000;
-            color: #000000;
-        }
+.btn.primary:hover,
+button.primary:hover,
+.ok-btn.primary:hover,
+input[type=button].primary:hover,
+.btn.primary:focus,
+button.primary:focus,
+.ok-btn.primary:focus,
+input[type=button].primary:focus,
+.btn.primary:active,
+button.primary:active,
+.ok-btn.primary:active,
+input[type=button].primary:active {
+    border-color: #000000;
+    color: #000000;
+}
 
-        .btn.primary:focus,
-        button.primary:focus,
-        .ok-btn.primary:focus,
-        input[type=button].primary:focus,
-        .btn.primary:active,
-        button.primary:active,
-        .ok-btn.primary:active,
-        input[type=button].primary:active {
-            border-color: #000000;
-            color: #000000;
-        }
+.btn.primary:focus,
+button.primary:focus,
+.ok-btn.primary:focus,
+input[type=button].primary:focus,
+.btn.primary:active,
+button.primary:active,
+.ok-btn.primary:active,
+input[type=button].primary:active {
+    border-color: #000000;
+    color: #000000;
+}
 
-            .btn.primary:focus:hover,
-            button.primary:focus:hover,
-            .ok-btn.primary:focus:hover,
-            input[type=button].primary:focus:hover,
-            .btn.primary:active:hover,
-            button.primary:active:hover,
-            .ok-btn.primary:active:hover,
-            input[type=button].primary:active:hover {
-                background-color: #957b08;
-            }
+.btn.primary:focus:hover,
+button.primary:focus:hover,
+.ok-btn.primary:focus:hover,
+input[type=button].primary:focus:hover,
+.btn.primary:active:hover,
+button.primary:active:hover,
+.ok-btn.primary:active:hover,
+input[type=button].primary:active:hover {
+    background-color: #957b08;
+}
 
-    .btn.disabled,
-    button.disabled,
-    .ok-btn.disabled,
-    input[type=button].disabled,
-    .btn[disabled],
-    button[disabled],
-    .ok-btn[disabled],
-    input[type=button][disabled],
-    .btn.disabled.primary,
-    button.disabled.primary,
-    .ok-btn.disabled.primary,
-    input[type=button].disabled.primary,
-    .btn[disabled].primary,
-    button[disabled].primary,
-    .ok-btn[disabled].primary,
-    input[type=button][disabled].primary {
-        background-color: #E4E4E4;
-        border-color: #E4E4E4;
-        color: #A6A6A6;
-        cursor: default;
-    }
+.btn.disabled,
+button.disabled,
+.ok-btn.disabled,
+input[type=button].disabled,
+.btn[disabled],
+button[disabled],
+.ok-btn[disabled],
+input[type=button][disabled],
+.btn.disabled.primary,
+button.disabled.primary,
+.ok-btn.disabled.primary,
+input[type=button].disabled.primary,
+.btn[disabled].primary,
+button[disabled].primary,
+.ok-btn[disabled].primary,
+input[type=button][disabled].primary {
+    background-color: #E4E4E4;
+    border-color: #E4E4E4;
+    color: #A6A6A6;
+    cursor: default;
+}
 
-        .btn.disabled:hover,
-        button.disabled:hover,
-        .ok-btn.disabled:hover,
-        input[type=button].disabled:hover,
-        .btn[disabled]:hover,
-        button[disabled]:hover,
-        .ok-btn[disabled]:hover,
-        input[type=button][disabled]:hover,
-        .btn.disabled.primary:hover,
-        button.disabled.primary:hover,
-        .ok-btn.disabled.primary:hover,
-        input[type=button].disabled.primary:hover,
-        .btn[disabled].primary:hover,
-        button[disabled].primary:hover,
-        .ok-btn[disabled].primary:hover,
-        input[type=button][disabled].primary:hover,
-        .btn.disabled:focus,
-        button.disabled:focus,
-        .ok-btn.disabled:focus,
-        input[type=button].disabled:focus,
-        .btn[disabled]:focus,
-        button[disabled]:focus,
-        .ok-btn[disabled]:focus,
-        input[type=button][disabled]:focus,
-        .btn.disabled.primary:focus,
-        button.disabled.primary:focus,
-        .ok-btn.disabled.primary:focus,
-        input[type=button].disabled.primary:focus,
-        .btn[disabled].primary:focus,
-        button[disabled].primary:focus,
-        .ok-btn[disabled].primary:focus,
-        input[type=button][disabled].primary:focus,
-        .btn.disabled:active,
-        button.disabled:active,
-        .ok-btn.disabled:active,
-        input[type=button].disabled:active,
-        .btn[disabled]:active,
-        button[disabled]:active,
-        .ok-btn[disabled]:active,
-        input[type=button][disabled]:active,
-        .btn.disabled.primary:active,
-        button.disabled.primary:active,
-        .ok-btn.disabled.primary:active,
-        input[type=button].disabled.primary:active,
-        .btn[disabled].primary:active,
-        button[disabled].primary:active,
-        .ok-btn[disabled].primary:active,
-        input[type=button][disabled].primary:active {
-            background-color: #E4E4E4;
-            border-color: #E4E4E4;
-            color: #A6A6A6;
-        }
+.btn.disabled:hover,
+button.disabled:hover,
+.ok-btn.disabled:hover,
+input[type=button].disabled:hover,
+.btn[disabled]:hover,
+button[disabled]:hover,
+.ok-btn[disabled]:hover,
+input[type=button][disabled]:hover,
+.btn.disabled.primary:hover,
+button.disabled.primary:hover,
+.ok-btn.disabled.primary:hover,
+input[type=button].disabled.primary:hover,
+.btn[disabled].primary:hover,
+button[disabled].primary:hover,
+.ok-btn[disabled].primary:hover,
+input[type=button][disabled].primary:hover,
+.btn.disabled:focus,
+button.disabled:focus,
+.ok-btn.disabled:focus,
+input[type=button].disabled:focus,
+.btn[disabled]:focus,
+button[disabled]:focus,
+.ok-btn[disabled]:focus,
+input[type=button][disabled]:focus,
+.btn.disabled.primary:focus,
+button.disabled.primary:focus,
+.ok-btn.disabled.primary:focus,
+input[type=button].disabled.primary:focus,
+.btn[disabled].primary:focus,
+button[disabled].primary:focus,
+.ok-btn[disabled].primary:focus,
+input[type=button][disabled].primary:focus,
+.btn.disabled:active,
+button.disabled:active,
+.ok-btn.disabled:active,
+input[type=button].disabled:active,
+.btn[disabled]:active,
+button[disabled]:active,
+.ok-btn[disabled]:active,
+input[type=button][disabled]:active,
+.btn.disabled.primary:active,
+button.disabled.primary:active,
+.ok-btn.disabled.primary:active,
+input[type=button].disabled.primary:active,
+.btn[disabled].primary:active,
+button[disabled].primary:active,
+.ok-btn[disabled].primary:active,
+input[type=button][disabled].primary:active {
+    background-color: #E4E4E4;
+    border-color: #E4E4E4;
+    color: #A6A6A6;
+}
 
-    .btn.imgButton,
-    button.imgButton,
-    .ok-btn.imgButton,
-    input[type=button].imgButton {
-        background-color: transparent;
-        border: 0px;
-        background-image: url('../images/powerbi-sprites.png');
-        width: 24px;
-        height: 24px;
-        background-repeat: no-repeat;
-        padding: 0px;
-        outline: none;
-    }
+.btn.imgButton,
+button.imgButton,
+.ok-btn.imgButton,
+input[type=button].imgButton {
+    background-color: transparent;
+    border: 0px;
+    background-image: url('../images/powerbi-sprites.png');
+    width: 24px;
+    height: 24px;
+    background-repeat: no-repeat;
+    padding: 0px;
+    outline: none;
+}
 
-        .btn.imgButton.addButton,
-        button.imgButton.addButton,
-        .ok-btn.imgButton.addButton,
-        input[type=button].imgButton.addButton {
-            width: 16px;
-            height: 16px;
-            margin: 4px;
-            background-position: -20px -103px;
-        }
+.btn.imgButton.addButton,
+button.imgButton.addButton,
+.ok-btn.imgButton.addButton,
+input[type=button].imgButton.addButton {
+    width: 16px;
+    height: 16px;
+    margin: 4px;
+    background-position: -20px -103px;
+}
 
-            .btn.imgButton.addButton:hover,
-            button.imgButton.addButton:hover,
-            .ok-btn.imgButton.addButton:hover,
-            input[type=button].imgButton.addButton:hover {
-                background-position: -2px -103px;
-            }
+.btn.imgButton.addButton:hover,
+button.imgButton.addButton:hover,
+.ok-btn.imgButton.addButton:hover,
+input[type=button].imgButton.addButton:hover {
+    background-position: -2px -103px;
+}
 
-        .btn.imgButton.resizeButton,
-        button.imgButton.resizeButton,
-        .ok-btn.imgButton.resizeButton,
-        input[type=button].imgButton.resizeButton {
-            background-position: -54px -122px;
-        }
+.btn.imgButton.resizeButton,
+button.imgButton.resizeButton,
+.ok-btn.imgButton.resizeButton,
+input[type=button].imgButton.resizeButton {
+    background-position: -54px -122px;
+}
 
-        .btn.imgButton.optionsButton,
-        button.imgButton.optionsButton,
-        .ok-btn.imgButton.optionsButton,
-        input[type=button].imgButton.optionsButton {
-            opacity: 0.7;
-            background-position: -68px -2px;
-        }
+.btn.imgButton.optionsButton,
+button.imgButton.optionsButton,
+.ok-btn.imgButton.optionsButton,
+input[type=button].imgButton.optionsButton {
+    opacity: 0.7;
+    background-position: -68px -2px;
+}
 
-            .btn.imgButton.optionsButton:focus,
-            button.imgButton.optionsButton:focus,
-            .ok-btn.imgButton.optionsButton:focus,
-            input[type=button].imgButton.optionsButton:focus {
-                opacity: 1.0;
-                background-position: -48px -2px;
-                background-color: #333333;
-            }
+.btn.imgButton.optionsButton:focus,
+button.imgButton.optionsButton:focus,
+.ok-btn.imgButton.optionsButton:focus,
+input[type=button].imgButton.optionsButton:focus {
+    opacity: 1.0;
+    background-position: -48px -2px;
+    background-color: #333333;
+}
 
-            .btn.imgButton.optionsButton:active,
-            button.imgButton.optionsButton:active,
-            .ok-btn.imgButton.optionsButton:active,
-            input[type=button].imgButton.optionsButton:active {
-                background-position: -48px -2px;
-            }
+.btn.imgButton.optionsButton:active,
+button.imgButton.optionsButton:active,
+.ok-btn.imgButton.optionsButton:active,
+input[type=button].imgButton.optionsButton:active {
+    background-position: -48px -2px;
+}
 
-        .btn.imgButton.deleteButton,
-        button.imgButton.deleteButton,
-        .ok-btn.imgButton.deleteButton,
-        input[type=button].imgButton.deleteButton {
-            width: 16px;
-            height: 16px;
-            margin: 4px;
-            background-position: -35px -24px;
-        }
+.btn.imgButton.deleteButton,
+button.imgButton.deleteButton,
+.ok-btn.imgButton.deleteButton,
+input[type=button].imgButton.deleteButton {
+    width: 16px;
+    height: 16px;
+    margin: 4px;
+    background-position: -35px -24px;
+}
 /* checkboxes */
 .pbi-input > input[type=checkbox] {
     position: absolute;
@@ -1994,70 +1994,70 @@ input[type=button] {
     transition: color 0.2s, background-color 0.2s, border-color 0.2s;
 }
 
-    .pbi-input > input[type=checkbox] + label {
-        padding-left: 28px;
-    }
+.pbi-input > input[type=checkbox] + label {
+    padding-left: 28px;
+}
 
-        .pbi-input > input[type=checkbox] + label:before {
-            /*pointer-events: none;*/
-            position: absolute;
-            box-sizing: border-box;
-            top: 0px;
-            left: 0;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #666666;
-            background-color: transparent;
-            content: "";
-            transition: all 250ms cubic-bezier(0.4, 0, 0.23, 1);
-        }
+.pbi-input > input[type=checkbox] + label:before {
+    /*pointer-events: none;*/
+    position: absolute;
+    box-sizing: border-box;
+    top: 0px;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #666666;
+    background-color: transparent;
+    content: "";
+    transition: all 250ms cubic-bezier(0.4, 0, 0.23, 1);
+}
 
-        .pbi-input > input[type=checkbox] + label:after {
-            /*pointer-events: none;*/
-            /* empty */
-        }
+.pbi-input > input[type=checkbox] + label:after {
+    /*pointer-events: none;*/
+    /* empty */
+}
 
-    .pbi-input > input[type=checkbox]:checked + label:before {
-        border: 10px solid #F2C811;
-        background-color: #F2C811;
-        /* we should abstract this to input commmon ui color some how */
-    }
+.pbi-input > input[type=checkbox]:checked + label:before {
+    border: 10px solid #F2C811;
+    background-color: #F2C811;
+    /* we should abstract this to input commmon ui color some how */
+}
 
-    .pbi-input > input[type=checkbox]:checked + label:after {
-        position: absolute;
-        box-sizing: border-box;
-        top: 4px;
-        left: 4px;
-        background-color: transparent;
-        color: #000;
-        /* we should abstract this to input commmon ui color some how */
-        font-family: 'PowrMDL2';
-        font-size: 14px;
-        font-weight: 900;
-        line-height: 1;
-        /* set static as check is a font */
-        content: "\E73E";
-        /* our check utf8 char */
-    }
+.pbi-input > input[type=checkbox]:checked + label:after {
+    position: absolute;
+    box-sizing: border-box;
+    top: 4px;
+    left: 4px;
+    background-color: transparent;
+    color: #000;
+    /* we should abstract this to input commmon ui color some how */
+    font-family: 'PowrMDL2';
+    font-size: 14px;
+    font-weight: 900;
+    line-height: 1;
+    /* set static as check is a font */
+    content: "\E73E";
+    /* our check utf8 char */
+}
 
-    .pbi-input > input[type=checkbox]:disabled + label {
-        color: #A6A6A6;
-    }
+.pbi-input > input[type=checkbox]:disabled + label {
+    color: #A6A6A6;
+}
 
-        .pbi-input > input[type=checkbox]:disabled + label:before {
-            border-color: #A6A6A6;
-            background-color: #C8C8C8;
-        }
+.pbi-input > input[type=checkbox]:disabled + label:before {
+    border-color: #A6A6A6;
+    background-color: #C8C8C8;
+}
 
-        .pbi-input > input[type=checkbox]:disabled + label:after {
-            color: #808080;
-            /* we should abstract this to input commmon ui color some how */
-        }
+.pbi-input > input[type=checkbox]:disabled + label:after {
+    color: #808080;
+    /* we should abstract this to input commmon ui color some how */
+}
 
-    .pbi-input > input[type=checkbox]:disabled:checked + label:before {
-        border-color: #C8C8C8;
-        background-color: #C8C8C8;
-    }
+.pbi-input > input[type=checkbox]:disabled:checked + label:before {
+    border-color: #C8C8C8;
+    background-color: #C8C8C8;
+}
 
 .modal-container {
     position: relative;
@@ -2066,38 +2066,38 @@ input[type=button] {
     background-color: transparent;
 }
 
-    .modal-container .dialog-layout {
-        padding: 28px;
-    }
+.modal-container .dialog-layout {
+    padding: 28px;
+}
 
-    .modal-container .modal-dialog {
-        border: 1px solid #666666;
-        background-color: #FFF;
-    }
+.modal-container .modal-dialog {
+    border: 1px solid #666666;
+    background-color: #FFF;
+}
 
-    .modal-container .dialog-actions {
-        padding-top: 28px;
-        padding-bottom: 28px;
-    }
+.modal-container .dialog-actions {
+    padding-top: 28px;
+    padding-bottom: 28px;
+}
 
-        .modal-container .dialog-actions button {
-            margin-left: 8px;
-            float: right;
-        }
+.modal-container .dialog-actions button {
+    margin-left: 8px;
+    float: right;
+}
 
-    .modal-container .dialog-title {
-        font-family: 'Segoe UI', 'wf_segoe-ui_normal', helvetica, arial, sans-serif;
-        font-size: 28px;
-        padding-bottom: 20px;
-        color: #333333;
-    }
+.modal-container .dialog-title {
+    font-family: 'Segoe UI', 'wf_segoe-ui_normal', helvetica, arial, sans-serif;
+    font-size: 28px;
+    padding-bottom: 20px;
+    color: #333333;
+}
 
-    .modal-container .dialog-close-icon {
-        display: block;
-        position: absolute;
-        right: 16px;
-        top: 12px;
-    }
+.modal-container .dialog-close-icon {
+    display: block;
+    position: absolute;
+    right: 16px;
+    top: 12px;
+}
 
 .dropdown-toggle {
     border-color: #C8C8C8;
@@ -2106,51 +2106,51 @@ input[type=button] {
     padding-right: 8px;
 }
 
-    .dropdown-toggle:hover {
-        background-color: #777777;
-        background-color: transparent;
-    }
+.dropdown-toggle:hover {
+    background-color: #777777;
+    background-color: transparent;
+}
 
-    .dropdown-toggle:focus {
-        border-color: #F2C811;
-        background-color: transparent;
-    }
+.dropdown-toggle:focus {
+    border-color: #F2C811;
+    background-color: transparent;
+}
 
-    .dropdown-toggle:active {
-        border-color: #777777;
-        background-color: #EAEAEA;
-        box-shadow: none;
-    }
+.dropdown-toggle:active {
+    border-color: #777777;
+    background-color: #EAEAEA;
+    box-shadow: none;
+}
 
-    .dropdown-toggle .disabled,
-    .dropdown-toggle .disabled:hover,
-    .dropdown-toggle .disabled:focus,
-    .dropdown-toggle .disabled:disabled {
-        background-color: #F4F4F4;
-        border-color: #F4F4F4;
-    }
+.dropdown-toggle .disabled,
+.dropdown-toggle .disabled:hover,
+.dropdown-toggle .disabled:focus,
+.dropdown-toggle .disabled:disabled {
+    background-color: #F4F4F4;
+    border-color: #F4F4F4;
+}
 
-    .dropdown-toggle .dropdown-icon {
-        margin-left: 16px;
-        margin-top: 2px;
-        font-family: 'PowrMDL2';
-        font-style: normal;
-        font-size: 32px;
-        display: inline-block;
-        font-size: 8px;
-    }
+.dropdown-toggle .dropdown-icon {
+    margin-left: 16px;
+    margin-top: 2px;
+    font-family: 'PowrMDL2';
+    font-style: normal;
+    font-size: 32px;
+    display: inline-block;
+    font-size: 8px;
+}
 
-        .dropdown-toggle .dropdown-icon::before {
-            content: "\E972";
-        }
+.dropdown-toggle .dropdown-icon::before {
+    content: "\E972";
+}
 
 .dropdown.open .dropdown-toggle {
     background-color: transparent;
 }
 
-    .dropdown.open .dropdown-toggle .dropdown-icon::before {
-        content: "\E971";
-    }
+.dropdown.open .dropdown-toggle .dropdown-icon::before {
+    content: "\E971";
+}
 
 .dropdown-menu {
     margin-top: 0;
@@ -2159,12 +2159,12 @@ input[type=button] {
     box-shadow: none;
 }
 
-    .dropdown-menu > li > a:hover,
-    .dropdown-menu > li > a:focus,
-    .dropdown-menu > li > a:active {
-        background-color: #EAEAEA;
-        background-image: none;
-    }
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus,
+.dropdown-menu > li > a:active {
+    background-color: #EAEAEA;
+    background-image: none;
+}
 /* radio */
 .pbi-input > input[type=radio] {
     /* must be even */
@@ -2181,65 +2181,65 @@ input[type=button] {
     transition: color 0.2s, background-color 0.2s, border-color 0.2s;
 }
 
-    .pbi-input > input[type=radio] + label {
-        padding-left: 28px;
-    }
+.pbi-input > input[type=radio] + label {
+    padding-left: 28px;
+}
 
-        .pbi-input > input[type=radio] + label:before {
-            position: absolute;
-            box-sizing: border-box;
-            top: 0px;
-            left: 0;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #666666;
-            /* we should abstract this to input commmon ui color some how */
-            background-color: transparent;
-            content: "";
-            /* create rounded 'radio' button */
-            border-radius: 50%;
-        }
+.pbi-input > input[type=radio] + label:before {
+    position: absolute;
+    box-sizing: border-box;
+    top: 0px;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #666666;
+    /* we should abstract this to input commmon ui color some how */
+    background-color: transparent;
+    content: "";
+    /* create rounded 'radio' button */
+    border-radius: 50%;
+}
 
-        .pbi-input > input[type=radio] + label:after {
-            /* empty */
-        }
+.pbi-input > input[type=radio] + label:after {
+    /* empty */
+}
 
-    .pbi-input > input[type=radio]:checked + label:before {
-        border-color: #666666;
-        /* we should abstract this to input commmon ui color some how */
-        background-color: transparent;
-        /* we should abstract this to input commmon ui color some how */
-        /* transparent or white */
-    }
+.pbi-input > input[type=radio]:checked + label:before {
+    border-color: #666666;
+    /* we should abstract this to input commmon ui color some how */
+    background-color: transparent;
+    /* we should abstract this to input commmon ui color some how */
+    /* transparent or white */
+}
 
-    .pbi-input > input[type=radio]:checked + label:after {
-        position: absolute;
-        box-sizing: border-box;
-        top: 5px;
-        left: 5px;
-        width: 10px;
-        height: 10px;
-        background-color: #666666;
-        /* we should abstract this to input commmon ui color some how */
-        border: 0 solid #666666;
-        /* we should abstract this to input commmon ui color some how */
-        border-radius: 50%;
-        content: "";
-    }
+.pbi-input > input[type=radio]:checked + label:after {
+    position: absolute;
+    box-sizing: border-box;
+    top: 5px;
+    left: 5px;
+    width: 10px;
+    height: 10px;
+    background-color: #666666;
+    /* we should abstract this to input commmon ui color some how */
+    border: 0 solid #666666;
+    /* we should abstract this to input commmon ui color some how */
+    border-radius: 50%;
+    content: "";
+}
 
-    .pbi-input > input[type=radio]:disabled + label {
-        color: #A6A6A6;
-    }
+.pbi-input > input[type=radio]:disabled + label {
+    color: #A6A6A6;
+}
 
-        .pbi-input > input[type=radio]:disabled + label:before {
-            border-color: #A6A6A6;
-            /* we should abstract this to input commmon ui color some how */
-        }
+.pbi-input > input[type=radio]:disabled + label:before {
+    border-color: #A6A6A6;
+    /* we should abstract this to input commmon ui color some how */
+}
 
-        .pbi-input > input[type=radio]:disabled + label:after {
-            background-color: #A6A6A6;
-            /* we should abstract this to input commmon ui color some how */
-        }
+.pbi-input > input[type=radio]:disabled + label:after {
+    background-color: #A6A6A6;
+    /* we should abstract this to input commmon ui color some how */
+}
 
 .pbi-spinner,
 .pbi-spinner-large {
@@ -2298,151 +2298,151 @@ input[type=button] {
     transition: color 0.2s, background-color 0.2s, border-color 0.2s;
 }
 
-    .pbi-input > input[type=text]::-webkit-input-placeholder,
-    .pbi-input > input[type=password]::-webkit-input-placeholder {
-        color: #A6A6A6;
-    }
+.pbi-input > input[type=text]::-webkit-input-placeholder,
+.pbi-input > input[type=password]::-webkit-input-placeholder {
+    color: #A6A6A6;
+}
 
-    .pbi-input > input[type=text]:-moz-placeholder,
-    .pbi-input > input[type=password]:-moz-placeholder {
-        color: #A6A6A6;
-    }
+.pbi-input > input[type=text]:-moz-placeholder,
+.pbi-input > input[type=password]:-moz-placeholder {
+    color: #A6A6A6;
+}
 
-    .pbi-input > input[type=text]::-moz-placeholder,
-    .pbi-input > input[type=password]::-moz-placeholder {
-        color: #A6A6A6;
-    }
+.pbi-input > input[type=text]::-moz-placeholder,
+.pbi-input > input[type=password]::-moz-placeholder {
+    color: #A6A6A6;
+}
 
-    .pbi-input > input[type=text]:-ms-input-placeholder,
-    .pbi-input > input[type=password]:-ms-input-placeholder {
-        color: #A6A6A6;
-    }
+.pbi-input > input[type=text]:-ms-input-placeholder,
+.pbi-input > input[type=password]:-ms-input-placeholder {
+    color: #A6A6A6;
+}
 
-    .pbi-input > input[type=text]::input-placeholder,
-    .pbi-input > input[type=password]::input-placeholder {
-        color: #A6A6A6;
-    }
+.pbi-input > input[type=text]::input-placeholder,
+.pbi-input > input[type=password]::input-placeholder {
+    color: #A6A6A6;
+}
 
-    .pbi-input > input[type=text]:not(:disabled):hover,
-    .pbi-input > input[type=password]:not(:disabled):hover {
-        border-color: #777777;
-    }
+.pbi-input > input[type=text]:not(:disabled):hover,
+.pbi-input > input[type=password]:not(:disabled):hover {
+    border-color: #777777;
+}
 
-    .pbi-input > input[type=text]:not(:disabled):focus,
-    .pbi-input > input[type=password]:not(:disabled):focus,
-    .pbi-input > input[type=text]:not(:disabled):active,
-    .pbi-input > input[type=password]:not(:disabled):active {
-        border-color: #F2C811;
-    }
+.pbi-input > input[type=text]:not(:disabled):focus,
+.pbi-input > input[type=password]:not(:disabled):focus,
+.pbi-input > input[type=text]:not(:disabled):active,
+.pbi-input > input[type=password]:not(:disabled):active {
+    border-color: #F2C811;
+}
 
-    .pbi-input > input[type=text]:disabled,
-    .pbi-input > input[type=password]:disabled {
-        color: #A6A6A6;
-        background-color: #F4F4F4;
-        border-color: #F4F4F4;
-    }
+.pbi-input > input[type=text]:disabled,
+.pbi-input > input[type=password]:disabled {
+    color: #A6A6A6;
+    background-color: #F4F4F4;
+    border-color: #F4F4F4;
+}
 
-        .pbi-input > input[type=text]:disabled::-webkit-input-placeholder,
-        .pbi-input > input[type=password]:disabled::-webkit-input-placeholder {
-            color: #d9d9d9;
-        }
+.pbi-input > input[type=text]:disabled::-webkit-input-placeholder,
+.pbi-input > input[type=password]:disabled::-webkit-input-placeholder {
+    color: #d9d9d9;
+}
 
-        .pbi-input > input[type=text]:disabled:-moz-placeholder,
-        .pbi-input > input[type=password]:disabled:-moz-placeholder {
-            color: #d9d9d9;
-        }
+.pbi-input > input[type=text]:disabled:-moz-placeholder,
+.pbi-input > input[type=password]:disabled:-moz-placeholder {
+    color: #d9d9d9;
+}
 
-        .pbi-input > input[type=text]:disabled::-moz-placeholder,
-        .pbi-input > input[type=password]:disabled::-moz-placeholder {
-            color: #d9d9d9;
-        }
+.pbi-input > input[type=text]:disabled::-moz-placeholder,
+.pbi-input > input[type=password]:disabled::-moz-placeholder {
+    color: #d9d9d9;
+}
 
-        .pbi-input > input[type=text]:disabled:-ms-input-placeholder,
-        .pbi-input > input[type=password]:disabled:-ms-input-placeholder {
-            color: #d9d9d9;
-        }
+.pbi-input > input[type=text]:disabled:-ms-input-placeholder,
+.pbi-input > input[type=password]:disabled:-ms-input-placeholder {
+    color: #d9d9d9;
+}
 
-        .pbi-input > input[type=text]:disabled::input-placeholder,
-        .pbi-input > input[type=password]:disabled::input-placeholder {
-            color: #d9d9d9;
-        }
+.pbi-input > input[type=text]:disabled::input-placeholder,
+.pbi-input > input[type=password]:disabled::input-placeholder {
+    color: #d9d9d9;
+}
 
-        .pbi-input > input[type=text]:disabled + label,
-        .pbi-input > input[type=password]:disabled + label {
-            color: #A6A6A6;
-        }
+.pbi-input > input[type=text]:disabled + label,
+.pbi-input > input[type=password]:disabled + label {
+    color: #A6A6A6;
+}
 
-    .pbi-input > input[type=text]:required,
-    .pbi-input > input[type=password]:required {
-        box-shadow: none;
-        /* because FF glows required */
-    }
+.pbi-input > input[type=text]:required,
+.pbi-input > input[type=password]:required {
+    box-shadow: none;
+    /* because FF glows required */
+}
 
-    .pbi-input > input[type=text]::-ms-clear,
-    .pbi-input > input[type=password]::-ms-clear {
-        display: none;
-        /* clear MS ie11/edge clear input X */
-    }
+.pbi-input > input[type=text]::-ms-clear,
+.pbi-input > input[type=password]::-ms-clear {
+    display: none;
+    /* clear MS ie11/edge clear input X */
+}
 
-    .pbi-input > input[type=text] + label,
-    .pbi-input > input[type=password] + label {
-        position: relative;
-        display: block;
-        top: -32px;
-    }
+.pbi-input > input[type=text] + label,
+.pbi-input > input[type=password] + label {
+    position: relative;
+    display: block;
+    top: -32px;
+}
 
-    .pbi-input > input[type=text].attentionRequired,
-    .pbi-input > input[type=password].attentionRequired {
-        border-color: #E81123;
-    }
+.pbi-input > input[type=text].attentionRequired,
+.pbi-input > input[type=password].attentionRequired {
+    border-color: #E81123;
+}
 
-        .pbi-input > input[type=text].attentionRequired:hover,
-        .pbi-input > input[type=password].attentionRequired:hover,
-        .pbi-input > input[type=text].attentionRequired:focus,
-        .pbi-input > input[type=password].attentionRequired:focus,
-        .pbi-input > input[type=text].attentionRequired:active,
-        .pbi-input > input[type=password].attentionRequired:active {
-            border-color: #E81123;
-        }
+.pbi-input > input[type=text].attentionRequired:hover,
+.pbi-input > input[type=password].attentionRequired:hover,
+.pbi-input > input[type=text].attentionRequired:focus,
+.pbi-input > input[type=password].attentionRequired:focus,
+.pbi-input > input[type=text].attentionRequired:active,
+.pbi-input > input[type=password].attentionRequired:active {
+    border-color: #E81123;
+}
 
-    .pbi-input > input[type=text].labelless,
-    .pbi-input > input[type=password].labelless {
-        float: none;
-        position: relative;
-        top: 0;
-        margin: 0;
-    }
+.pbi-input > input[type=text].labelless,
+.pbi-input > input[type=password].labelless {
+    float: none;
+    position: relative;
+    top: 0;
+    margin: 0;
+}
 
-        .pbi-input > input[type=text].labelless + label,
-        .pbi-input > input[type=password].labelless + label {
-            padding-bottom: 0;
-            display: none;
-        }
+.pbi-input > input[type=text].labelless + label,
+.pbi-input > input[type=password].labelless + label {
+    padding-bottom: 0;
+    display: none;
+}
 
 .pbi-with-action {
     padding-right: 50px;
 }
 
-    .pbi-with-action .pbi-action {
-        display: block;
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 45px;
-        margin-top: 24px;
-        height: 32px;
-        line-height: 32px;
-        text-align: center;
-        color: #000;
-    }
+.pbi-with-action .pbi-action {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 45px;
+    margin-top: 24px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    color: #000;
+}
 
-        .pbi-with-action .pbi-action:hover {
-            /*font-weight: bold;*/
-        }
+.pbi-with-action .pbi-action:hover {
+    /*font-weight: bold;*/
+}
 
-    .pbi-with-action > .labelless ~ .pbi-action {
-        margin-top: 0px;
-    }
+.pbi-with-action > .labelless ~ .pbi-action {
+    margin-top: 0px;
+}
 
 .pbi-input > input[type=checkbox].toggle {
     /* officaly 12px from txt baseline */
@@ -2462,66 +2462,66 @@ input[type=button] {
     /*z-index: @inputLayerAbove;*/
 }
 
-    .pbi-input > input[type=checkbox].toggle + label {
-        padding: 0;
-        margin: 0;
-        padding-bottom: 28px;
-    }
+.pbi-input > input[type=checkbox].toggle + label {
+    padding: 0;
+    margin: 0;
+    padding-bottom: 28px;
+}
 
-        .pbi-input > input[type=checkbox].toggle + label:before {
-            display: block;
-            position: absolute;
-            box-sizing: border-box;
-            top: 28px;
-            left: 0;
-            width: 44px;
-            height: 20px;
-            border: 2px solid #666666;
-            background-color: #FFF;
-            border-radius: 10px;
-            content: "";
-            transition: background-color 0.25s, border 0.25s;
-        }
+.pbi-input > input[type=checkbox].toggle + label:before {
+    display: block;
+    position: absolute;
+    box-sizing: border-box;
+    top: 28px;
+    left: 0;
+    width: 44px;
+    height: 20px;
+    border: 2px solid #666666;
+    background-color: #FFF;
+    border-radius: 10px;
+    content: "";
+    transition: background-color 0.25s, border 0.25s;
+}
 
-        .pbi-input > input[type=checkbox].toggle + label:after {
-            display: block;
-            position: absolute;
-            box-sizing: border-box;
-            top: 32px;
-            left: 4px;
-            width: 12px;
-            height: 12px;
-            border: 0;
-            background-color: #666666;
-            border-radius: 50%;
-            content: "";
-            transition: left 0.25s;
-        }
+.pbi-input > input[type=checkbox].toggle + label:after {
+    display: block;
+    position: absolute;
+    box-sizing: border-box;
+    top: 32px;
+    left: 4px;
+    width: 12px;
+    height: 12px;
+    border: 0;
+    background-color: #666666;
+    border-radius: 50%;
+    content: "";
+    transition: left 0.25s;
+}
 
-    .pbi-input > input[type=checkbox].toggle:checked + label:before {
-        border: 2px solid #F2C811;
-        background-color: #F2C811;
-    }
+.pbi-input > input[type=checkbox].toggle:checked + label:before {
+    border: 2px solid #F2C811;
+    background-color: #F2C811;
+}
 
-    .pbi-input > input[type=checkbox].toggle:checked + label:after {
-        border: 0;
-        background-color: #FFF;
-        left: 28px;
-    }
+.pbi-input > input[type=checkbox].toggle:checked + label:after {
+    border: 0;
+    background-color: #FFF;
+    left: 28px;
+}
 
-    .pbi-input > input[type=checkbox].toggle:disabled + label:before {
-        border: 2px solid #C8C8C8;
-        background-color: #FFF;
-    }
+.pbi-input > input[type=checkbox].toggle:disabled + label:before {
+    border: 2px solid #C8C8C8;
+    background-color: #FFF;
+}
 
-    .pbi-input > input[type=checkbox].toggle:disabled + label:after {
-        background-color: #F4F4F4;
-    }
+.pbi-input > input[type=checkbox].toggle:disabled + label:after {
+    background-color: #F4F4F4;
+}
 
-    .pbi-input > input[type=checkbox].toggle ~ .toggle-state,
-    .pbi-input > input[type=checkbox].toggle ~ *[ng-transclude] .toggle-state {
-        position: absolute;
-        display: block;
-        top: 28px;
-        left: 52px;
-    }
+.pbi-input > input[type=checkbox].toggle ~ .toggle-state,
+.pbi-input > input[type=checkbox].toggle ~ *[ng-transclude] .toggle-state {
+    position: absolute;
+    display: block;
+    top: 28px;
+    left: 52px;
+}

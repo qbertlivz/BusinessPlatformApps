@@ -28,6 +28,10 @@ input[type=button],
     font-family: 'Segoe UI', 'wf_segoe-ui_normal', helvetica, arial, sans-serif;
 }
 
+input[type=file] {
+    display: none;
+}
+
 input[type=password],
 input[type=text] {
     padding: 8px;
@@ -49,8 +53,13 @@ ul {
 * BPST
 ********************************************************************************************/
 
-.st-button-powerbi-login{
+.st-button-left,
+.st-button-powerbi-login {
     margin-right: 12px;
+}
+
+.st-button-right {
+    margin-left: 7px;
 }
 
 .st-buttons-back {
@@ -59,6 +68,23 @@ ul {
     clear: both;
     float: left;
     margin-right: 12px;
+}
+
+.st-byoe-preview {
+    margin-left: 500px;
+    position: fixed;
+}
+
+.st-byoe-preview-entities {
+    height: 500px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 200px;
+}
+
+.st-byoe-preview-list {
+    list-style-type: none;
+    margin-left: 1em;
 }
 
 .st-center-inner {
@@ -95,9 +121,9 @@ ul {
     top: 5px;
 }
 
-.st-contact-us-close:hover {
-    cursor: pointer;
-}
+    .st-contact-us-close:hover {
+        cursor: pointer;
+    }
 
 .st-content {
     bottom: 0;
@@ -112,37 +138,48 @@ ul {
     width: 750px;
 }
 
-.st-email-background {
-    background-color: rgba(0,0,0,.7);
-    bottom: 0;
-    height: 100%;
-    left: 0;
-    opacity: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
-    position: fixed;
-    right: 0;
-    top: 60px;
-    transition: all .25s;
-    z-index: -1;
+.st-dropdown {
+    border: 1px solid rgb(169, 169, 169);
+    display: inline-block;
+    padding: 0 5px;
+    position: relative;
 }
 
-.st-email-centered {
-    margin-left: auto;
-    margin-right: auto;
-    width: 83%;
+    .st-dropdown:hover .st-dropdown-content {
+        display: block;
+    }
+
+.st-dropdown-content {
+    background-color: #F9F9F9;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    display: none;
+    height: 200px;
+    min-width: 210px;
+    overflow: auto;
+    position: absolute;
+    z-index: 1;
+}
+
+    .st-dropdown-content i {
+        height: 24px;
+        padding: 12px 0 0 16px;
+        width: 32px;
+    }
+
+        .st-dropdown-content i:hover {
+            background-color: #F1F1F1;
+        }
+
+.st-dropdown-content-selected {
+    background-color: #F1F1F1;
+}
+
+.st-dropdown-i {
+    padding: 5px 5px;
 }
 
 .st-email-fields {
     margin-top: 20px;
-}
-
-.st-email-heading {
-    font-size: 36px;
-    font-weight: 700;
-    letter-spacing: -.01em;
-    line-height: 1.22;
-    margin-bottom: 20px;
 }
 
 .st-email-label {
@@ -154,39 +191,67 @@ ul {
     color: #0645AD;
 }
 
-.st-email-link:hover {
-    cursor: pointer;
-}
-
-.st-email-submission {
-    background-color: #FFF;
-    background-position: 50% 50%;
-    background-repeat: no-repeat;
-    background-size: cover;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-    display: block;
-    left: 50%;
-    max-height: 100vh;
-    max-width: 600px;
-    overflow: auto;
-    padding: 50px 0;
-    position: relative;
-    text-align: center;
-    top: 50%;
-    transform: translate(-50%, -50%) scale(1);
-    transition: all .25s;
-    width: 50%;
-    z-index: 99999;
-}
-
-.st-email-wrapper {
-    opacity: 1;
-    z-index: 88889;
-}
+    .st-email-link:hover {
+        cursor: pointer;
+    }
 
 .st-error {
     color: #E81123;
 }
+
+.st-file-upload {
+    background-color: #F2C811;
+    border: 2px solid #C8C8C8;
+    border-color: #F2C811;
+    border-radius: 0;
+    box-shadow: none;
+    box-sizing: border-box;
+    color: #000000;
+    cursor: default;
+    display: inline-block;
+    font-size: 14px;
+    height: 40px;
+    letter-spacing: normal;
+    line-height: 16px;
+    padding: 10px 18px 6px 18px;
+    text-align: center;
+    text-indent: 0px;
+    text-rendering: auto;
+    text-shadow: none;
+    text-transform: none;
+    transition: color 0.2s, background-color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+    width: 200px;
+    word-spacing: normal;
+}
+
+    .st-file-upload:active {
+        background-color: #666666;
+        border-color: #666666;
+        color: #000000;
+    }
+
+    .st-file-upload:disabled {
+        background-color: #E4E4E4;
+        border-color: #E4E4E4;
+        color: #A6A6A6;
+        cursor: default;
+    }
+
+        .st-file-upload:disabled:hover {
+            background-color: #E4E4E4;
+            border-color: #E4E4E4;
+            color: #A6A6A6;
+        }
+
+    .st-file-upload:focus {
+        border-color: #000000;
+    }
+
+    .st-file-upload:hover {
+        border-color: #000000;
+        outline: none;
+    }
 
 .st-float {
     clear: both;
@@ -287,17 +352,26 @@ ul {
     width: 300px;
 }
 
-.st-input[disabled] {
-    border-color: inherit;
-}
+    .st-input[disabled] {
+        border-color: inherit;
+    }
 
 .st-input-column {
     float: left;
     margin-right: 10px;
 }
 
+.st-input-float {
+    display: inline-block;
+    margin-right: 50px;
+}
+
 .st-input-small {
     width: 200px;
+}
+
+.st-input-tiny {
+    width: 6em;
 }
 
 .st-label {
@@ -399,6 +473,61 @@ ul {
     position: absolute;
     right: 0;
     top: 0;
+}
+
+.st-modal {
+    background-color: #FFF;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    display: block;
+    left: 50%;
+    max-height: 100vh;
+    max-width: 600px;
+    overflow: auto;
+    padding: 50px 0;
+    position: relative;
+    text-align: center;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    transition: all .25s;
+    width: 50%;
+    z-index: 99999;
+}
+
+.st-modal-background {
+    background-color: rgba(0,0,0,.7);
+    bottom: 0;
+    height: 100%;
+    left: 0;
+    opacity: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: fixed;
+    right: 0;
+    top: 60px;
+    transition: all .25s;
+    z-index: -1;
+}
+
+.st-modal-centered {
+    margin-left: auto;
+    margin-right: auto;
+    width: 83%;
+}
+
+.st-modal-heading {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    line-height: 1.22;
+    margin-bottom: 20px;
+}
+
+.st-modal-wrapper {
+    opacity: 1;
+    z-index: 88889;
 }
 
 .st-nav {
@@ -567,6 +696,43 @@ ul {
     height: 46px;
 }
 
+.st-grid {
+    height: 450px;
+    width: 900px;
+    margin-bottom: 50px;
+}
+
+.st-grid-row-left {
+    height: inherit;
+    width: 300px;
+    float: left;
+}
+
+.st-grid-row-right {
+    height: inherit;
+    width: 300px;
+    float: right;
+}
+
+.st-grid-row-buttons {
+    height: inherit;
+    width: 300px;
+    float: left;
+}
+
+.st-grid-row-buttons-spacing {
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 120px;
+}
+
+.st-selector-length {
+    height: inherit;
+}
+
+.st-multiple-selector {
+    background-color: #E9E9E9;
+}
 /********************************************************************************************
 * Spinner
 ********************************************************************************************/

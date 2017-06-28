@@ -9,14 +9,13 @@ export class Customize extends ViewModelBase {
     endpointComplianceTarget: string = '0.99';
     healthEvaluationTarget: string = '0.99';
 
-    constructor() {
-        super();
-        this.dailyTriggers = this.MS.UtilityService.GenerateDailyTriggers();
+    async onLoaded(): Promise<void> {
+        this.dailyTriggers = this.MS.UtilityService.generateDailyTriggers();
         this.isValidated = false;
         this.useDefaultValidateButton = true;
     }
 
-    async NavigatingNext(): Promise<boolean> {
+    async onNavigatingNext(): Promise<boolean> {
         let sourceServer = this.MS.DataStore.getAllValues('Server')[0];
         let sourceDatabase = this.MS.DataStore.getAllValues('Database')[0];
 
@@ -45,12 +44,10 @@ export class Customize extends ViewModelBase {
         this.MS.DataStore.addToDataStoreWithCustomRoute('Customize2', 'SqlEntryName', 'dataretentiondays', DataStoreType.Public);
         this.MS.DataStore.addToDataStoreWithCustomRoute('Customize2', 'SqlEntryValue', this.dataRetentionDays, DataStoreType.Public);
 
-        return super.NavigatingNext();
+        return true;
     }
 
-    async OnValidate(): Promise<boolean> {
-        super.OnValidate();
-
+    async onValidate(): Promise<boolean> {
         let dataRetentionDays: number = parseInt(this.dataRetentionDays);
         let endpointComplianceTarget: number = parseFloat(this.endpointComplianceTarget);
         let healthEvaluationTarget: number = parseFloat(this.healthEvaluationTarget);
@@ -67,16 +64,15 @@ export class Customize extends ViewModelBase {
 
         let validationError: string = dataRetentionDaysError || endpointComplianceTargetError || healthEvaluationTargetError;
         if (validationError) {
-            this.MS.ErrorService.message = validationError;
+            this.MS.ErrorService.set(validationError);
         } else {
             this.dataRetentionDays = dataRetentionDays.toString();
             this.endpointComplianceTarget = endpointComplianceTarget.toString();
             this.healthEvaluationTarget = healthEvaluationTarget.toString();
-
             this.isValidated = true;
             this.showValidation = true;
         }
 
-        return super.OnValidate();
+        return this.isValidated;
     }
 }

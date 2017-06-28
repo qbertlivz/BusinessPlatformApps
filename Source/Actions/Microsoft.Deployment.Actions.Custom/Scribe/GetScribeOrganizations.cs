@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Globalization;
 using System.Threading.Tasks;
-
-using Newtonsoft.Json;
 
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
@@ -16,20 +13,14 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
     [Export(typeof(IAction))]
     public class GetScribeOrganizations : BaseAction
     {
-        private const string REPLICATION_SERVICES = "Replication Services (RS)";
-        private const string URL_ORGANIZATIONS = "/v1/orgs";
-        private const string URL_PROVISION_CLOUD_AGENT = "/v1/orgs/{0}/agents/provision_cloud_agent";
-        private const string URL_SECURITY_RULES = "/v1/orgs/{0}/securityrules";
-        private const string URL_SUBSCRIPTIONS = "/v1/orgs/{0}/subscriptions";
-
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             RestClient rc = ScribeUtility.Initialize(request.DataStore.GetValue("ScribeUsername"), request.DataStore.GetValue("ScribePassword"));
 
-            List<ScribeOrganization> orgs = JsonConvert.DeserializeObject<List<ScribeOrganization>>(await rc.Get(URL_ORGANIZATIONS));
+            List<ScribeOrganization> orgs = JsonUtility.Deserialize<List<ScribeOrganization>>(await rc.Get(ScribeUtility.URL_ORGANIZATIONS));
             List<ScribeOrganization> configuredOrgs = new List<ScribeOrganization>();
 
-            if (orgs != null && orgs.Count > 0)
+            if (!orgs.IsNullOrEmpty())
             {
                 foreach(ScribeOrganization org in orgs)
                 {
@@ -44,8 +35,8 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
             }
 
             return configuredOrgs.Count == 0
-                ? new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), null, "Scribe_No_Organizations")
-                : new ActionResponse(ActionStatus.Success, JsonUtility.GetJObjectFromStringValue(JsonConvert.SerializeObject(configuredOrgs)));
+                ? new ActionResponse(ActionStatus.Failure, new ActionResponseExceptionDetail("Scribe_No_Organizations"))
+                : new ActionResponse(ActionStatus.Success, JsonUtility.Serialize(configuredOrgs));
         }
 
         private async Task<bool> IsConfigured(RestClient rc, ScribeOrganization org)
@@ -54,14 +45,13 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
 
             try
             {
-                string response = await rc.Get(string.Format(CultureInfo.InvariantCulture, URL_SUBSCRIPTIONS, org.Id));
-                List<ScribeSubscription> subscriptions = JsonConvert.DeserializeObject<List<ScribeSubscription>>(response);
+                List<ScribeSubscription> subscriptions = JsonUtility.Deserialize<List<ScribeSubscription>>(await rc.Get(string.Format(ScribeUtility.URL_SUBSCRIPTIONS, org.Id)));
 
                 if (subscriptions != null)
                 {
                     for (int i = 0; i < subscriptions.Count && !isConfigured; i++)
                     {
-                        isConfigured = subscriptions[i].Name.Equals(REPLICATION_SERVICES, StringComparison.OrdinalIgnoreCase) &&
+                        isConfigured = subscriptions[i].Name.EqualsIgnoreCase(ScribeUtility.REPLICATION_SERVICES) &&
                             DateTime.Now.CompareTo(Convert.ToDateTime(subscriptions[i].ExpirationDate)) < 0;
                     }
                 }
@@ -78,7 +68,7 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
         {
             try
             {
-                await rc.Post(string.Format(CultureInfo.InvariantCulture, URL_PROVISION_CLOUD_AGENT, org.Id), string.Empty);
+                await rc.Post(string.Format(ScribeUtility.URL_PROVISION_CLOUD_AGENT, org.Id), string.Empty);
             }
             catch
             {
@@ -90,7 +80,7 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
         {
             try
             {
-                await rc.Post(string.Format(CultureInfo.InvariantCulture, URL_SECURITY_RULES, org.Id), JsonUtility.GetJsonStringFromObject(new ScribeSecurityRule()));
+                await rc.Post(string.Format(ScribeUtility.URL_SECURITY_RULES, org.Id), JsonUtility.GetJsonStringFromObject(new ScribeSecurityRule()));
             }
             catch
             {

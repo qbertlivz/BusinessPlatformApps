@@ -11,62 +11,44 @@ export class Twitter extends ViewModelBase {
     selectedSubscriptionId: string;
     subscriptionsList: any[];
 
-    constructor() {
-        super();
-    }
-
-    async OnLoaded(): Promise<void> {
-        this.isAuthenticated = false;
-        this.isValidated = false;
-        this.showValidation = false;
-
-        let queryParam = this.MS.UtilityService.GetItem('queryUrl');
-        if (queryParam) {
-            let code = this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.CODE, queryParam);
-            if (code) {
-                this.MS.DataStore.addToDataStore('TwitterCode', code, DataStoreType.Private);
-
-                let response = await this.MS.HttpService.executeAsync('Microsoft-ConsentTwitterConnectionToLogicApp', {});
-                if (response.IsSuccess) {
-                    this.isAuthenticated = true;
-                    this.isValidated = true;
-                    this.showValidation = true;
-                }
-            } else {
-                // Do existing flow
-                let response = await this.MS.HttpService.executeAsync('Microsoft-VerifyTwitterConnection', {});
-                if (response.Status === ActionStatus.FailureExpected) {
-                    this.MS.ErrorService.details = '';
-                    this.MS.ErrorService.message = '';
-                }
-
-                if (response.IsSuccess) {
-                    this.isAuthenticated = true;
-                    this.isValidated = true;
-                    this.showValidation = true;
-                }
-            }
-
-            this.MS.UtilityService.RemoveItem('queryUrl');
-        } else {
-            // No redirect was present, dont bother checking
-            // We still check for now
-            let response = await this.MS.HttpService.executeAsync('Microsoft-VerifyTwitterConnection', {});
-            this.MS.ErrorService.details = '';
-            this.MS.ErrorService.message = '';
+    async connect(): Promise<void> {
+        if (!this.isAuthenticated) {
+            let response = await this.MS.HttpService.executeAsync('Microsoft-CreateTwitterConnectionToLogicApp');
             if (response.IsSuccess) {
-                this.isAuthenticated = true;
-                this.isValidated = true;
-                this.showValidation = true;
+                window.location.href = response.Body['Consent']['value'][0]['link'];
             }
         }
     }
 
-    async connect(): Promise<void> {
-        if (!this.isAuthenticated) {
-            let response = await this.MS.HttpService.executeAsync('Microsoft-CreateTwitterConnectionToLogicApp', {});
+    async onLoaded(): Promise<void> {
+        super.onLoaded();
+
+        this.isAuthenticated = false;
+
+        let queryParam = this.MS.UtilityService.getItem('queryUrl');
+        if (queryParam) {
+            let code = this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.CODE, queryParam);
+            if (code) {
+                this.MS.DataStore.addToDataStore('TwitterCode', code, DataStoreType.Private);
+
+                if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-ConsentTwitterConnectionToLogicApp')) {
+                    this.isAuthenticated = this.setValidated();
+                }
+            } else {
+                let response = await this.MS.HttpService.executeAsync('Microsoft-VerifyTwitterConnection');
+                if (response.Status === ActionStatus.FailureExpected) {
+                    this.MS.ErrorService.clear();
+                }
+                if (response.IsSuccess) {
+                    this.isAuthenticated = this.setValidated();
+                }
+            }
+            this.MS.UtilityService.removeItem('queryUrl');
+        } else {
+            let response = await this.MS.HttpService.executeAsync('Microsoft-VerifyTwitterConnection');
+            this.MS.ErrorService.clear();
             if (response.IsSuccess) {
-                window.location.href = response.Body['Consent']['value'][0]['link'];
+                this.isAuthenticated = this.setValidated();
             }
         }
     }

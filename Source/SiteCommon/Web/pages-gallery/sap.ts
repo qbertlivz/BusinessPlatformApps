@@ -7,7 +7,7 @@ export class SapSource extends ViewModelBase {
     client: number = 800;
     instanceNumber: string = '00';
     language: string = 'EN';
-    languages: string[] = [];
+    languages: string[] = ['AF', 'AR', 'BG', 'CA', 'CS', 'DA', 'DE', 'EL', 'EN', 'ES', 'ET', 'FI', 'FR', 'HE', 'HR', 'HU', 'ID', 'IS', 'IT', 'JA', 'KO', 'LT', 'LV', 'MS', 'NL', 'NO', 'PL', 'PT', 'RO', 'RU', 'SH', 'SK', 'SL', 'SR', 'SV', 'TH', 'TR', 'UK', 'Z1', 'ZF', 'ZH'];
     password: string = '';
     rowBatchSize: number = 250000;
     sapRouterString: string = '';
@@ -15,32 +15,16 @@ export class SapSource extends ViewModelBase {
     systemId: string = 'ZZZ';
     user: string = '';
 
-    constructor() {
-        super();
-    }
-
-    async OnLoaded(): Promise<void> {
-        this.languages = ['AF', 'AR', 'BG', 'CA', 'CS', 'DA', 'DE', 'EL', 'EN', 'ES', 'ET', 'FI', 'FR', 'HE', 'HR', 'HU', 'ID', 'IS', 'IT', 'JA', 'KO', 'LT', 'LV', 'MS', 'NL', 'NO', 'PL', 'PT', 'RO', 'RU', 'SH', 'SK', 'SL', 'SR', 'SV', 'TH', 'TR', 'UK', 'Z1', 'ZF', 'ZH'];
-        this.isValidated = false;
-    }
-
-    async OnValidate(): Promise<boolean> {
-        super.OnValidate();
-
-        this.isValidated = false;
-        this.showValidation = false;
+    async onValidate(): Promise<boolean> {
+        this.onInvalidate();
 
         this.storeCredentials();
 
         await this.MS.HttpService.executeAsync('Microsoft-CredentialManagerWrite');
         await this.MS.HttpService.executeAsync('Microsoft-WriteSAPJson');
 
-        let responseValidate = await this.MS.HttpService.executeAsync('Microsoft-ValidateSAP');
-        this.isValidated = responseValidate.IsSuccess;
-
-        if (this.isValidated) {
-            this.showValidation = true;
-        }
+        this.isValidated = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-ValidateSAP');
+        this.showValidation = this.isValidated;
 
         return this.isValidated;
     }

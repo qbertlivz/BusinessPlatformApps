@@ -1,12 +1,13 @@
 ﻿using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Newtonsoft.Json.Linq;
+
 using Microsoft.Deployment.Common;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.ErrorCode;
-
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
 {
@@ -18,13 +19,14 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             string code = request.DataStore.GetValue("code");
             string aadTenant = request.DataStore.GetValue("AADTenant");
             string oauthType = (request.DataStore.GetValue("oauthType") ?? string.Empty).ToLowerInvariant();
-            var token = AzureTokenUtility.GetTokenForResourceFromCode(oauthType, aadTenant, request.Info.WebsiteRootUrl, code);
+            JObject token = new JObject();
+
+            token = oauthType == "mscrm" ? AzureTokenUtility.GetTokenForResourceFromCode(Constants.AzureManagementCoreApi, Constants.MsCrmClientId, aadTenant, request.Info.WebsiteRootUrl, code) :
+                                           AzureTokenUtility.GetTokenForResourceFromCode(oauthType, aadTenant, request.Info.WebsiteRootUrl, code);
 
             if (token.SelectToken("error") != null)
             {
-                return new ActionResponse(ActionStatus.Failure, token, null,
-                    DefaultErrorCodes.DefaultLoginFailed,
-                    token.SelectToken("error_description")?.ToString());
+                return new ActionResponse(ActionStatus.Failure, token, null, DefaultErrorCodes.DefaultLoginFailed, token.SelectToken("error_description")?.ToString());
             }
 
             var emailAddress = AzureUtility.GetEmailFromToken(token);

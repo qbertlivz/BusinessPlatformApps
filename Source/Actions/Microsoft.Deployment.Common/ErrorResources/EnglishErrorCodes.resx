@@ -130,7 +130,7 @@
     <value>Credential Guard is enabled on this computer and does not yet support Windows Task Scheduler. Please choose a different computer.</value>
   </data>
   <data name="DefaultErrorCode" xml:space="preserve">
-    <value>An error has occured, see additional details to learn more</value>
+    <value>An error has occurred, see additional details to learn more</value>
   </data>
   <data name="DefaultLoginFailed" xml:space="preserve">
     <value>Login failed, please check that you have entered in the correct credentials</value>
@@ -260,5 +260,17 @@
   </data>
   <data name="ResourceGroupAlreadyExists" xml:space="preserve">
     <value>A resource group with this name already exists.  Please choose another name for a new resource group.</value>
+  </data>
+  <data name="NotPSAInstance" xml:space="preserve">
+    <value>This does not look like a PSA instance.</value>
+  </data>
+  <data name="FacebookPagesInvalid" xml:space="preserve">
+    <value>One or more of the pages you entered could not be found</value>
+  </data>
+  <data name="DefaultAdditionalDetailsMessage" xml:space="preserve">
+    <value>Please contact us using the provided email link</value>
+  </data>
+  <data name="MsCrm_No_Organizations" xml:space="preserve">
+    <value>No Dynamics 365 organizations were found, verify that your username and password are correct</value>
   </data>
 </root>

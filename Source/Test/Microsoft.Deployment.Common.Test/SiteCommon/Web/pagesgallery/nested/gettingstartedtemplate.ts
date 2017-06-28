@@ -24,7 +24,7 @@ export class GettingStartedViewModel extends ViewModelBase {
         this.templateName = '';
     }
 
-    async OnLoaded() {
+    async onLoaded() {
         if (this.isDownload && !this.isEvaluation) {
             let response = await this.MS.HttpService.Execute('Microsoft-GetMsiDownloadLink', {});
             this.downloadLink = response.response.value;

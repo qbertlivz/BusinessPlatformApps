@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
+using System;
 
 namespace Microsoft.Deployment.Actions.OnPremise.WinNT
 {
@@ -29,8 +30,9 @@ namespace Microsoft.Deployment.Actions.OnPremise.WinNT
 
             p.WaitForExit();
 
-            return p.ExitCode >= 5 ? new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject()) :
+            return p.ExitCode >= 5 ? new ActionResponse(ActionStatus.Success) :
                                      new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "LowPowerShellVersion");
+
         }
     }
 }

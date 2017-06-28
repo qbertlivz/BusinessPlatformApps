@@ -8,27 +8,59 @@ using Newtonsoft.Json.Linq;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
+using Microsoft.Deployment.Common.Model;
 
 namespace Microsoft.Deployment.Actions.OnPremise
 {
     [Export(typeof(IAction))]
     public class GetDataPullStatus : BaseAction
     {
+        private const string COUNT_NAME = "Count";
+        private const string SP_REPLICATION_COUNTS = "sp_get_replication_counts";
+
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            ActionResponse response;
+            DataTable recordCounts = GetRecordCounts(request.DataStore.GetValueAtIndex("SqlConnectionString", "SqlServerIndex"),
+                $"[{request.DataStore.GetValue("TargetSchema")}].{SP_REPLICATION_COUNTS}");
 
-            bool isWaitingForAtLeastOneRecord = request.DataStore.GetValue("IsWaiting") == null
-                ? false
-                : bool.Parse(request.DataStore.GetValue("IsWaiting"));
+            return await ConfirmStatus(request, recordCounts, request.DataStore.GetValue("FinishedActionName"));
+        }
 
-            string connectionString = request.DataStore.GetValueAtIndex("SqlConnectionString", "SqlServerIndex"); // Must specify Initial Catalog
-            string finishedActionName = request.DataStore.GetValue("FinishedActionName");
-            string targetSchema = request.DataStore.GetValue("TargetSchema"); // Specifies the schema used by the template
+        private async Task<ActionResponse> ConfirmStatus(ActionRequest request, DataTable recordCounts, string actionName)
+        {
+            ActionResponse response = new ActionResponse(IsAtLeastOneRecordComingIn(recordCounts) ? ActionStatus.Success : ActionStatus.InProgress,
+                JsonUtility.Serialize<DataPullStatus>(new DataPullStatus()
+                {
+                    IsFinished = false,
+                    Status = JsonUtility.SerializeTable(recordCounts)
+                }));
 
-            string query = $"[{targetSchema}].sp_get_replication_counts";
+            ActionResponse confirmation = await RequestUtility.CallAction(request, actionName);
 
-            DataTable recordCounts;
+            if (confirmation != null)
+            {
+                switch (confirmation.Status)
+                {
+                    case ActionStatus.Failure:
+                        response = confirmation;
+                        break;
+                    case ActionStatus.Success:
+                        response = new ActionResponse(ActionStatus.Success, JsonUtility.Serialize<DataPullStatus>(new DataPullStatus()
+                        {
+                            IsFinished = true,
+                            Slices = JObject.FromObject(confirmation.Body)["value"]?.ToString(),
+                            Status = JsonUtility.SerializeTable(recordCounts)
+                        }));
+                        break;
+                }
+            }
+
+            return response;
+        }
+
+        private DataTable GetRecordCounts(string connectionString, string query)
+        {
+            DataTable recordCounts = null;
 
             try
             {
@@ -40,80 +72,19 @@ namespace Microsoft.Deployment.Actions.OnPremise
                 recordCounts = new DataTable();
             }
 
+            return recordCounts;
+        }
+
+        private bool IsAtLeastOneRecordComingIn(DataTable recordCounts)
+        {
             bool isAtLeastOneRecordComingIn = false;
 
-            if (isWaitingForAtLeastOneRecord)
+            for (int i = 0; i < recordCounts.Rows.Count && !isAtLeastOneRecordComingIn; i++)
             {
-                foreach (DataRow row in recordCounts.Rows)
-                {
-                    isAtLeastOneRecordComingIn = Convert.ToInt64(row["Count"]) > 0;
-                    if (isAtLeastOneRecordComingIn)
-                        break;
-                }
-
-                response = isAtLeastOneRecordComingIn
-                    ? new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject())
-                    : new ActionResponse(ActionStatus.BatchNoState, JsonUtility.GetEmptyJObject());
-            }
-            else
-            {
-                response = new ActionResponse(ActionStatus.Success, JsonUtility.GetJsonObjectFromJsonString("{isFinished:false,status:" + JsonUtility.Serialize(recordCounts) + "}"));
+                isAtLeastOneRecordComingIn = Convert.ToInt64(recordCounts.Rows[i][COUNT_NAME]) > 0;
             }
 
-            if (string.IsNullOrEmpty(finishedActionName))
-                return response;
-
-            ActionResponse finishedResponse = await RequestUtility.CallAction(request, finishedActionName);
-
-            if (response.Status == ActionStatus.BatchNoState && finishedResponse.Status == ActionStatus.BatchNoState)
-                return response;
-
-            var content = JObject.FromObject(finishedResponse.Body)["value"]?.ToString();
-            if ((isAtLeastOneRecordComingIn && finishedResponse.Status != ActionStatus.Failure) || finishedResponse.Status == ActionStatus.Success)
-            {
-                var resp = new ActionResponse();
-                if (!string.IsNullOrEmpty(content))
-                {
-                    resp = new ActionResponse(ActionStatus.Success,
-                        JsonUtility.GetJsonObjectFromJsonString(
-                        "{isFinished:true,FinishedActionName:\"" +
-                        finishedActionName +
-                        "\",TargetSchema:\"" + targetSchema +
-                        "\",status:" + JsonUtility.Serialize(recordCounts) +
-                        ", slices:" + JObject.FromObject(finishedResponse.Body)["value"]?.ToString() + "}"));
-                }
-                else
-                {
-                    resp = new ActionResponse(ActionStatus.Success,
-                        JsonUtility.GetJsonObjectFromJsonString(
-                            "{isFinished:true, status:" + JsonUtility.Serialize(recordCounts) + "}"));
-                }
-                return resp;
-            }
-
-            if (finishedResponse.Status == ActionStatus.BatchNoState || finishedResponse.Status == ActionStatus.BatchWithState)
-            {
-                var resp = new ActionResponse();
-                if (!string.IsNullOrEmpty(content))
-                {
-                    resp = new ActionResponse(ActionStatus.Success,
-                        JsonUtility.GetJsonObjectFromJsonString(
-                    "{isFinished:false,FinishedActionName:\"" +
-                    finishedActionName +
-                     "\",TargetSchema:\"" + targetSchema +
-                     "\",status:" + JsonUtility.Serialize(recordCounts) +
-                    ", slices:" + JObject.FromObject(finishedResponse.Body)["value"]?.ToString() + "}"));
-                }
-                else
-                {
-                    resp = new ActionResponse(ActionStatus.Success,
-                        JsonUtility.GetJsonObjectFromJsonString(
-                        "{isFinished:false, status:" + JsonUtility.Serialize(recordCounts) + "}"));
-                }
-                return resp;
-            }
-
-            return finishedResponse;
+            return isAtLeastOneRecordComingIn;
         }
     }
 }

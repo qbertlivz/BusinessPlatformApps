@@ -34,14 +34,14 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
             string objectId = JsonUtility.GetWebToken(azureToken, "oid");
             string sqlConnectionId = request.DataStore.GetValue("PowerAppSqlConnectionId");
 
-            JObject resourceStorage = JsonUtility.GetJsonObjectFromJsonString(await client.ExecuteGenericRequestWithHeaderAndReadAsync(HttpMethod.Post, $"{BASE_POWER_APPS_URL}/objectIds/{objectId}/generateResourceStorage?api-version=2016-11-01", $"{{\"environment\":{{\"id\":\"/providers/Microsoft.PowerApps/environments/{environmentId}\",\"name\":\"{environmentId}\"}}}}}}"));
+            JObject resourceStorage = JsonUtility.GetJsonObjectFromJsonString(await client.Request(HttpMethod.Post, $"{BASE_POWER_APPS_URL}/objectIds/{objectId}/generateResourceStorage?api-version=2016-11-01", $"{{\"environment\":{{\"id\":\"/providers/Microsoft.PowerApps/environments/{environmentId}\",\"name\":\"{environmentId}\"}}}}}}"));
 
             string sharedAccessSignature = JsonUtility.GetJObjectProperty(resourceStorage, "sharedAccessSignature");
 
             string backgroundImageUri = sharedAccessSignature.Replace("?", "/logoSmallFile?");
             string documentUri = sharedAccessSignature.Replace("?", "/document.msapp?");
 
-            JObject initiateDocumentServerSession = JsonUtility.GetJsonObjectFromJsonString(await client.ExecuteGenericRequestWithHeaderAndReadAsync(HttpMethod.Post, $"{BASE_POWER_APPS_URL}/objectIds/{objectId}/initiateDocumentServerSession?api-version=2016-11-01", string.Empty));
+            JObject initiateDocumentServerSession = JsonUtility.GetJsonObjectFromJsonString(await client.Request(HttpMethod.Post, $"{BASE_POWER_APPS_URL}/objectIds/{objectId}/initiateDocumentServerSession?api-version=2016-11-01", string.Empty));
 
             AzureHttpClient clientPA = new AzureHttpClient(azureToken, new Dictionary<string, string>() { { "AuthoringSessionToken", JsonUtility.GetJObjectProperty(initiateDocumentServerSession, "sessionToken") } });
 
@@ -52,7 +52,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
             await clientPA.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Post, $"{CREATE_POWER_APPS_URL}/document/2/publishtoblobasync", $"{{\"blobURI\":\"{sharedAccessSignature}\",\"docName\":\"{applicationName}\",\"documentSienaUri\":\"/document.msapp\",\"logoSmallUri\":\"/logoSmallFile\"}}");
             await clientPA.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Post, $"{BASE_POWER_APPS_URL}/apps?api-version=2016-11-01", $"{{\"properties\":{{\"appUris\":{{\"documentUri\":{{\"value\":\"{documentUri}\"}}}},\"description\":\"\",\"backgroundColor\":\"RGBA(0,176,240,1)\",\"minClientVersion\":{{\"major\":2,\"minor\":0,\"build\":610,\"majorRevision\":0,\"minorRevision\":0,\"revision\":0}},\"createdByClientVersion\":{{\"major\":2,\"minor\":0,\"build\":610,\"majorRevision\":0,\"minorRevision\":0,\"revision\":0}},\"backgroundImageUri\":\"{backgroundImageUri}\",\"displayName\":\"{applicationName}\",\"environment\":{{\"id\":\"/providers/Microsoft.PowerApps/environments/{environmentId}\",\"name\":\"{environmentId}\"}}}},\"tags\":{{\"sienaVersion\":\"{GetNewPowerAppGuid()}\",\"deviceCapabilities\":\"\",\"supportsPortrait\":\"false\",\"supportsLandscape\":\"true\",\"primaryFormFactor\":\"Tablet\",\"primaryDeviceWidth\":\"1366\",\"primaryDeviceHeight\":\"768\",\"publisherVersion\":\"2.0.610\",\"minimumRequiredApiVersion\":\"2.1.0\"}},\"name\":\"{applicationId}\"}}");
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
 
         private string GetNewPowerAppGuid()

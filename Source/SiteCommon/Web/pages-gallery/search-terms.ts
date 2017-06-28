@@ -5,18 +5,9 @@ import { ViewModelBase } from '../services/view-model-base';
 export class SearchTerms extends ViewModelBase {
     searchQuery: string = '';
 
-    constructor() {
-        super();
-    }
-
-    async OnLoaded(): Promise<void> {
-        this.isValidated = false;
-    }
-
-    async OnValidate(): Promise<boolean> {
+    async onValidate(): Promise<boolean> {
         if (this.searchQuery.length > 0) {
-            this.isValidated = true;
-            this.showValidation = true;
+            this.setValidated();
             this.MS.DataStore.addToDataStore('SearchQuery', this.searchQuery, DataStoreType.Public);
         }
 

@@ -1,9 +1,8 @@
-﻿import { InitParser } from '../classes/init-parser';
-
-import { ActionStatus } from '../enums/action-status';
+﻿import { ActionStatus } from '../enums/action-status';
 import { DataStoreType } from '../enums/data-store-type';
 import { ExperienceType } from '../enums/experience-type';
 
+import { InitParser } from './init-parser';
 import { MainService } from './main-service';
 
 export class DeploymentService {
@@ -21,14 +20,7 @@ export class DeploymentService {
         this.MS = MainService;
     }
 
-    init(actionsJson: any): void {
-        for (let i = 0; i < actionsJson.length; i++) {
-            actionsJson[i].DisplayName = InitParser.translateInitValue(actionsJson[i].DisplayName, this.MS);
-        }
-        this.actions = actionsJson;
-    }
-
-    async ExecuteActions(): Promise<boolean> {
+    async executeActions(): Promise<boolean> {
         if (this.isFinished && !this.hasError) {
             return false;
         }
@@ -36,11 +28,11 @@ export class DeploymentService {
         this.hasError = false;
         this.isFinished = false;
 
-        if (this.experienceType === ExperienceType.uninstall) {
-            this.MS.LoggerService.TrackUninstallStart();
+        if (this.experienceType === ExperienceType.Uninstall) {
+            this.MS.LoggerService.trackUninstallStart();
         }
-        if (this.experienceType === ExperienceType.install) {
-            this.MS.LoggerService.TrackDeploymentStart();
+        if (this.experienceType === ExperienceType.Install) {
+            this.MS.LoggerService.trackDeploymentStart();
         }
 
         let lastActionStatus: ActionStatus = ActionStatus.Success;
@@ -55,7 +47,7 @@ export class DeploymentService {
 
             let param: any = {};
             if (lastActionStatus !== ActionStatus.BatchWithState) {
-                param = this.MS.UtilityService.Clone(this.actions[i].AdditionalParameters);
+                param = this.MS.UtilityService.clone(this.actions[i].AdditionalParameters);
             }
 
             InitParser.loadVariables(param, param, this.MS, this);
@@ -65,11 +57,11 @@ export class DeploymentService {
                 continue;
             }
 
-            this.MS.LoggerService.TrackDeploymentStepStartEvent(i, this.actions[i].OperationName);
+            this.MS.LoggerService.trackDeploymentStepStartEvent(i, this.actions[i].OperationName);
             let response = await this.MS.HttpService.executeAsync(this.actions[i].OperationName, param);
             this.message = '';
 
-            this.MS.LoggerService.TrackDeploymentStepStoptEvent(i, this.actions[i].OperationName, response.IsSuccess);
+            this.MS.LoggerService.trackDeploymentStepStopEvent(i, this.actions[i].OperationName, response.IsSuccess);
 
             if (!(response.IsSuccess)) {
                 this.hasError = true;
@@ -77,8 +69,7 @@ export class DeploymentService {
             }
 
             this.MS.DataStore.addObjectToDataStore(response.Body, DataStoreType.Private);
-            if (response.Status === ActionStatus.BatchWithState ||
-                response.Status === ActionStatus.BatchNoState) {
+            if (response.Status === ActionStatus.BatchWithState || response.Status === ActionStatus.InProgress) {
                 i = i - 1; // Loop again but dont add parameter back
             }
 
@@ -95,18 +86,25 @@ export class DeploymentService {
             this.progressPercentage = 100;
         }
 
-        if (this.experienceType === ExperienceType.uninstall) {
-            this.MS.LoggerService.TrackUninstallEnd(!this.hasError);
+        if (this.experienceType === ExperienceType.Uninstall) {
+            this.MS.LoggerService.trackUninstallEnd(!this.hasError);
         }
-        if (this.experienceType === ExperienceType.install) {
-            this.MS.LoggerService.TrackDeploymentEnd(!this.hasError);
+        if (this.experienceType === ExperienceType.Install) {
+            this.MS.LoggerService.trackDeploymentEnd(!this.hasError);
         }
         this.isFinished = true;
 
-        if (this.experienceType === ExperienceType.uninstall && !this.hasError) {
-            this.MS.HttpService.Close();
+        if (this.experienceType === ExperienceType.Uninstall && !this.hasError) {
+            this.MS.HttpService.close();
         }
 
         return !this.hasError;
+    }
+
+    init(actionsJson: any): void {
+        for (let i = 0; i < actionsJson.length; i++) {
+            actionsJson[i].DisplayName = InitParser.translateInitValue(actionsJson[i].DisplayName, this.MS);
+        }
+        this.actions = actionsJson;
     }
 }

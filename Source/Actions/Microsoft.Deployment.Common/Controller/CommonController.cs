@@ -32,7 +32,6 @@ namespace Microsoft.Deployment.Common.Controller
 
             var allTemplates = templateNames as IList<string> ?? templateNames.ToList();
             logger.LogRequest("GetAllApps", end - start, allTemplates.Any());
-            logger.Flush();
             return allTemplates;
         }
 
@@ -47,7 +46,6 @@ namespace Microsoft.Deployment.Common.Controller
             var end = DateTime.Now;
 
             logger.LogRequest("GetApp-" + info.AppName, end - start, app != null);
-            logger.Flush();
             return app;
         }
 
@@ -71,7 +69,7 @@ namespace Microsoft.Deployment.Common.Controller
                 ActionResponse responseToReturn = await RunActionAsync(request, logger, action, loopCount);
                 responseToReturn.DataStore = request.DataStore;
 
-                if(!responseToReturn.IsSuccess)
+                if (!responseToReturn.IsSuccess)
                 {
                     // temporary code
                 }
@@ -79,7 +77,6 @@ namespace Microsoft.Deployment.Common.Controller
                 logger.LogEvent("End-" + info.ActionName, null, request, responseToReturn);
                 logger.LogRequest(action.OperationUniqueName, DateTime.Now - start,
                     responseToReturn.Status.IsSucessfullStatus(), request, responseToReturn);
-                logger.Flush();
                 return responseToReturn;
             }
 
@@ -87,7 +84,6 @@ namespace Microsoft.Deployment.Common.Controller
             logger.LogRequest(info.ActionName, DateTime.Now - start, false, request, null);
             var ex = new ActionNotFoundException();
             logger.LogException(ex, null, request, null);
-            logger.Flush();
             throw ex;
         }
 
@@ -103,7 +99,7 @@ namespace Microsoft.Deployment.Common.Controller
                 }
                 catch (Exception exceptionFromAction)
                 {
-                    responseToReturn = await RunExceptionHandler(request,exceptionFromAction);
+                    responseToReturn = await RunExceptionHandler(request, exceptionFromAction);
                 }
 
                 loopCount += 1;
@@ -182,7 +178,7 @@ namespace Microsoft.Deployment.Common.Controller
             // This code handles all interceptors which dont affect the action execution
             // Token refreshes, db creation tasks and generally actions which need prework before they
             // can be executed
-            
+
             foreach (var requestInterceptor in actionInterceptors)
             {
                 // Check to see what happened
@@ -191,9 +187,9 @@ namespace Microsoft.Deployment.Common.Controller
 
             // Check to make sure there is only one interceptor which can handle action otherwise use default
             // This could be either (delegate/elevated/non elevated handler)
-           
+
             if (actionInterceptorHandle != null)
-            { 
+            {
                 try
                 {
                     // No need to log as it will be picked up by the caller

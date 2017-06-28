@@ -32,7 +32,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
                 {
                     request.DataStore.AddToDataStore("SkipPowerApp", "true", DataStoreType.Public);
                 }
-                return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+                return new ActionResponse(ActionStatus.Success);
             }
 
             foreach (var environment in environments["value"])
@@ -42,7 +42,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
                 if (isDefault && environment["properties"]["permissions"]["CreatePowerApp"] != null)
                 {
                     request.DataStore.AddToDataStore("PowerAppEnvironment", environment["name"].ToString(), DataStoreType.Private);
-                    return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+                    return new ActionResponse(ActionStatus.Success);
                 };
             }
 

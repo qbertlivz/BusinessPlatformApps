@@ -1,10 +1,13 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 
 namespace Microsoft.Deployment.Common.Helpers
 {
     public static class RandomGenerator
     {
+        private const string HEXADECIMALS = "0123456789abcdef";
+
         public static string GetDateStamp()
         {
             DateTime d = DateTime.Now;
@@ -15,14 +18,27 @@ namespace Microsoft.Deployment.Common.Helpers
         public static string GetRandomCharacters()
         {
             var path = Path.GetRandomFileName() + Path.GetRandomFileName();
-            return path.Replace(".", "A").Substring(0,15);
+            return path.Replace(".", "A").Substring(0, 15);
+        }
+
+        public static string GetRandomHexadecimal(int length)
+        {
+            Random randy = new Random();
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < length; i++)
+            {
+                sb.Append(HEXADECIMALS[randy.Next(HEXADECIMALS.Length)]);
+            }
+
+            return sb.ToString();
         }
 
         public static string GetRandomLowerCaseCharacters(int length)
         {
             Random random = new Random();
             string rasndomString = string.Empty;
-            for (int i=0; i< length; i++)
+            for (int i = 0; i < length; i++)
             {
                 int num = random.Next(0, 26); // Zero to 25
                 char let = (char)('a' + num);

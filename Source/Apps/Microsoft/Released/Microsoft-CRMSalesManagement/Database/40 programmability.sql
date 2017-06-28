@@ -16,7 +16,7 @@ BEGIN
                        INNER JOIN sys.schemas sc ON ta.schema_id = sc.schema_id
     WHERE
         sc.name='dbo' AND ta.is_ms_shipped = 0 AND pa.index_id IN (0,1) AND
-        ta.name IN ('opportunityproduct', 'territory', 'lead', 'opportunity', 'account', 'systemusermanagermap', /* 'businessunit', */ 'systemuser', 'product')
+        ta.name IN ('opportunityproduct', 'territory', 'lead', 'opportunity', 'account', 'systemusermanagermap', /* 'businessunit', */ 'systemuser', 'product', 'team')
     GROUP BY ta.name
     ORDER BY ta.name;
 END;
@@ -41,7 +41,7 @@ BEGIN
                        INNER JOIN sys.schemas sc ON ta.schema_id = sc.schema_id
     WHERE
         sc.name='dbo' AND ta.is_ms_shipped = 0 AND pa.index_id IN (0,1) AND
-	    ta.name IN ('opportunityproduct', 'territory', 'lead', 'opportunity', 'account', 'systemusermanagermap', /* 'businessunit', */ 'systemuser', 'product')
+	    ta.name IN ('opportunityproduct', 'territory', 'lead', 'opportunity', 'account', 'systemusermanagermap', /* 'businessunit', */ 'systemuser', 'product', 'team')
     GROUP BY ta.[name];
 
 SELECT CASE
@@ -54,7 +54,7 @@ SELECT CASE
                      ) 
             END AS [Percentage], 
             c.EntityName as EntityName INTO #percentages
-		FROM #counts c INNER JOIN smgt.entityinitialcount i ON i.entityname = c.entityname
+		FROM #counts c INNER JOIN smgt.entityinitialcount i ON i.entityname = c.entityname COLLATE Latin1_General_100_CI_AS
 
 
 
@@ -64,7 +64,7 @@ SELECT CASE
 
     IF EXISTS (SELECT *
                FROM #counts
-               WHERE [Count] > 0 AND DATEDIFF(HOUR, @DeploymentTimestamp, Sysdatetime()) > 24)
+               WHERE [Count] > 0 AND DATEDIFF(HOUR, @DeploymentTimestamp, SYSUTCDATETIME()) > 24)
 	       SET @StatusCode = 1 --Data pull is partially complete
 
 		
@@ -76,13 +76,13 @@ SELECT CASE
 	DECLARE @CountsRows INT, @CountRowsComplete INT;
 	SELECT @CountsRows = COUNT(*) FROM #counts;
 	
-	SELECT p.[Percentage], p.[EntityName], i.lasttimestamp,  DATEDIFF(MINUTE, i.lasttimestamp, Sysdatetime()) AS [TimeDifference] INTO #entitiesComplete
+	SELECT p.[Percentage], p.[EntityName], i.lasttimestamp,  DATEDIFF(MINUTE, i.lasttimestamp, SYSUTCDATETIME()) AS [TimeDifference] INTO #entitiesComplete
     FROM #percentages p
-              INNER JOIN smgt.entityinitialcount i ON i.entityName = p.EntityName
+              INNER JOIN smgt.entityinitialcount i ON i.entityName = p.EntityName COLLATE Latin1_General_100_CI_AS
               WHERE 
-			  ((p.[Percentage] >= @CompletePercentage) AND DATEDIFF(MINUTE, i.lasttimestamp, Sysdatetime()) > 5) OR
+			  ((p.[Percentage] >= @CompletePercentage) AND DATEDIFF(MINUTE, i.lasttimestamp, SYSUTCDATETIME()) > 5) OR
 			  (p.[Percentage] >= 100) OR
-			  ((p.[Percentage] >= 100) AND DATEDIFF(MINUTE, i.lasttimestamp, Sysdatetime()) > 5)
+			  ((p.[Percentage] >= 100) AND DATEDIFF(MINUTE, i.lasttimestamp, SYSUTCDATETIME()) > 5)
 
 	SELECT @CountRowsComplete = COUNT(*) FROM #entitiesComplete;
 			  
@@ -91,7 +91,7 @@ SELECT CASE
 
     DECLARE @EntitiesWithNoData INT;
     SELECT @EntitiesWithNoData = COUNT(*) FROM #counts WHERE [Count] = 0;
-    IF @EntitiesWithNoData = @CountsRows AND DATEDIFF(HOUR, @DeploymentTimestamp, Sysdatetime()) > 24
+    IF @EntitiesWithNoData = @CountsRows AND DATEDIFF(HOUR, @DeploymentTimestamp, SYSUTCDATETIME()) > 24
         SET @StatusCode = 3; --No data is present
 	
 	DECLARE @ASDeployment bit = 0;
@@ -100,7 +100,7 @@ SELECT CASE
 	SET @ASDeployment = 1;
 
     -- AS Flow
-    IF @ASDeployment=1 AND DATEDIFF(HOUR, @DeploymentTimestamp, Sysdatetime()) < 24 AND NOT EXISTS (SELECT * FROM smgt.ssas_jobs WHERE [statusMessage] = 'Success')
+    IF @ASDeployment=1 AND DATEDIFF(HOUR, @DeploymentTimestamp, SYSUTCDATETIME()) < 24 AND NOT EXISTS (SELECT * FROM smgt.ssas_jobs WHERE [statusMessage] = 'Success')
 	SET @StatusCode = -1;
 
     -- Delayed Processing Flow
@@ -117,13 +117,13 @@ SELECT CASE
 
     MERGE smgt.entityinitialcount AS target
     USING #counts AS source
-    ON (target.entityname = source.entityname)
-    WHEN MATCHED AND source.[Count] > target.lastcount
+    ON (target.entityname = source.entityname COLLATE Latin1_General_100_CI_AS)
+    WHEN MATCHED AND source.[Count] > target.lastcount 
     THEN
-        UPDATE SET target.lastcount = source.[Count], target.lasttimestamp = Sysdatetime();
+        UPDATE SET target.lastcount = source.[Count], target.lasttimestamp = SYSUTCDATETIME();
 
 END;
-GO
+go
 
 
 
@@ -133,14 +133,14 @@ BEGIN
     SET NOCOUNT ON;
 
     SELECT Count(*) AS ExistingObjectCount
-    FROM   information_schema.tables
+    FROM   INFORMATION_SCHEMA.TABLES
     WHERE  ( table_schema = 'dbo' AND
-             table_name IN ('account', 'businessunit', 'lead', 'opportunity', 'opportunityproduct', 'product', 'systemuser', 'systemusermanagermap', 'territory')
+             table_name IN ('account', 'businessunit', 'lead', 'opportunity', 'opportunityproduct', 'product', 'team', 'systemuser', 'systemusermanagermap', 'territory')
            ) OR
            ( table_schema = 'smgt' AND
-             table_name IN ('AccountView', 'ActualSales', 'ActualSalesView', 'BusinessUnitView', 'configuration', 'ConfigurationView', 'date', 'DateView',
-                            'LeadView', 'MeasuresView', 'OpportunityProductView', 'OpportunityView', 'ProductView', 'Quotas', 'QuotaView', 'Targets',
-                            'TargetView', 'TempUserView', 'TerritoryView', 'UserAscendantsView', 'userMapping', 'UserView'
+             table_name IN ('AccountView', 'BusinessUnitView', 'configuration', 'ConfigurationView', 'date', 'DateView',
+                            'LeadView', 'MeasuresView', 'OpportunityProductView', 'OpportunityView', 'ProductView', 'TeamView', 
+                            'TempUserView', 'TerritoryView', 'UserAscendantsView', 'userMapping', 'UserView'
                            )
            );
 END;

@@ -1,4 +1,4 @@
 ﻿export enum ExperienceType {
-    install,
-    uninstall
+    Install,
+    Uninstall
 }

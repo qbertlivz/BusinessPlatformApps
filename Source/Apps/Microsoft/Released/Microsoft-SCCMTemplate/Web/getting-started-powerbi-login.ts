@@ -54,7 +54,7 @@ export class Gettingstarted extends ViewModelBase {
         }
     }
 
-    async OnLoaded(): Promise<void> {
+    async onLoaded(): Promise<void> {
         if (this.MS.HttpService.isOnPremise) {
             let res = await this.MS.HttpService.executeAsync('Microsoft-CheckVersion');
             if (res.Body === true) {
@@ -67,15 +67,13 @@ export class Gettingstarted extends ViewModelBase {
             this.isAuthenticated = true;
             this.isValidated = true;
         } else {
-
-            let queryParam = this.MS.UtilityService.GetItem('queryUrl');
+            let queryParam = this.MS.UtilityService.getItem('queryUrl');
             if (queryParam) {
-
-                let token = this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.CODE, queryParam);
+                let token = this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.CODE, queryParam);
 
                 if (token === '') {
                     this.MS.ErrorService.message = this.MS.Translate.AZURE_LOGIN_UNKNOWN_ERROR;
-                    this.MS.ErrorService.details = this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.ERRORDESCRIPTION, queryParam);
+                    this.MS.ErrorService.details = this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.ERROR_DESCRIPTION, queryParam);
                     this.MS.ErrorService.showContactUs = true;
                     return;
                 }
@@ -110,7 +108,7 @@ export class Gettingstarted extends ViewModelBase {
     }
 
     async Register() {
-        this.MS.ErrorService.Clear();
+        this.MS.ErrorService.clear();
 
         this.registrationNameFirst = this.registrationNameFirst.trim();
         this.registrationNameLast = this.registrationNameLast.trim();

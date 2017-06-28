@@ -40,7 +40,7 @@
             {
                 "displayname": "Source",
                 "isAzureSql": true,
-                "name": "$SiteCommon$/pages-gallery/sql-server.html",
+                "name": "$SiteCommon$/pages-gallery/sql.html",
                 "newSqlDatabase": "twitterDB",
                 "showAzureSql": false,
                 "showNewSqlOption": "true",
@@ -87,17 +87,18 @@
                 }
             },
             {
-                "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(10))",
-                "uniqueIdFunction": "$save(this.MS.UtilityService.GetUniqueId(10))",
+                "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))",
+                "uniqueIdFunction": "$save(this.MS.UtilityService.getUniqueId(10))",
                 "asDatabase": "Twitter",
+                "enablePublishReport": true,
                 "displayname": "Deploy",
                 "filename": "$save('TwitterTemplate.pbix')",
                 "filenameSSAS": "TwitterAS.pbix",
                 "functionAppHostingPlan": "$save(this.uniqueIdFunction)",
-                "hasPowerApp": true,
+                "hasPowerApp": "$run(this.MS.DataStore.getValue('SkipPowerApp') === null)",
                 "LogicAppHostingPlan": "$save(this.uniqueId)",
                 "LogicAppName": "$save(this.uniqueId)",
-                "LogicAppNameHistorical": "$save(this.uniqueId)",
+                "LogicAppNameHistorical": "$save('historic' + this.uniqueId)",
                 "name": "$SiteCommon$/pages-gallery/progress.html",
                 "powerAppFileName": "TwitterTemplate.msapp",
                 "SiteName": "$save(this.uniqueIdFunction)"
@@ -154,7 +155,10 @@
             {
                 "DeploymentName": "Function",
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_FUNCTION)",
-                "name": "Microsoft-DeployTwitterFunction"
+                "FunctionName": "$save(this.MS.DataStore.getValue('uniqueIdFunction'))",
+                "name": "Microsoft-DeployAzureFunction",
+                "branch": "TwitterTemplate",
+                "RepoUrl": "https://github.com/juluczni/AzureFunctionsNewsTemplate"
             },
             {
                 "DeploymentName": "Function",
@@ -182,21 +186,6 @@
             {
                 "DeploymentName": "StorageAccount",
                 "displayname": "$translate(INIT_ACTION_VALIDATING_STORAGE_ACCOUNT_KEY)",
-                "name": "Microsoft-WaitForArmDeploymentStatus"
-            },
-            {
-                "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_ASSETS)",
-                "name": "Microsoft-DeployTwitterCSharpFunctionAssets",
-                "subscriptionKey": "$dsall(CognitiveServiceKey)[0]"
-            },
-            {
-                "DeploymentName": "LogicApp",
-                "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_LOGIC_APP)",
-                "name": "Microsoft-DeployTwitterHistoricalLogicApp"
-            },
-            {
-                "DeploymentName": "LogicApp",
-                "displayname": "$translate(INIT_ACTION_VALIDATING_LOGIC_APP)",
                 "name": "Microsoft-WaitForArmDeploymentStatus"
             },
             {
@@ -228,9 +217,24 @@
                 "name": "Microsoft-UpdateBlobStorageConnector"
             },
             {
+                "ConnectorDisplayName": "TextAnalytics",
+                "ConnectorName": "cognitiveservicestextanalytics",
+                "ConnectorPayload": {
+                    "apiKey": "$ds(CognitiveServiceKey)"
+                },
+                "DeploymentName": "CognitiveText",
+                "displayname": "$translate(INIT_ACTION_UPDATING_COGNITIVE_SERVICE_CONNECTOR)",
+                "name": "Microsoft-UpdateBlobStorageConnector"
+            },
+            {
                 "DeploymentName": "LogicApp",
-                "displayname": "$translate(INIT_ACTION_RUNNING_LOGIC_APP_HISTORICAL)",
-                "name": "Microsoft-RunLogicAppHistorical"
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_LOGIC_APP)",
+                "name": "Microsoft-DeployTwitterHistoricalLogicApp"
+            },
+            {
+                "DeploymentName": "LogicApp",
+                "displayname": "$translate(INIT_ACTION_VALIDATING_LOGIC_APP)",
+                "name": "Microsoft-WaitForArmDeploymentStatus"
             },
             {
                 "DeploymentName": "LogicApp",
@@ -241,6 +245,27 @@
                 "DeploymentName": "LogicApp",
                 "displayname": "$translate(INIT_ACTION_VALIDATING_LOGIC_APP)",
                 "name": "Microsoft-WaitForArmDeploymentStatus"
+            },
+            {
+                "DeploymentName": "LogicApp",
+                "displayname": "$translate(INIT_ACTION_RUNNING_LOGIC_APP_HISTORICAL)",
+                "name": "Microsoft-GetLogicAppUrl"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_ASSETS)",
+                "name": "Microsoft-DeployTwitterCSharpFunctionAssets",
+                "subscriptionKey": "$dsall(CognitiveServiceKey)[0]",
+                "RequestUri": "$(this.MS.DataStore.getValue('RequestUri'))"
+            },
+            {
+                "DeploymentName": "LogicApp",
+                "displayname": "$translate(INIT_ACTION_RUNNING_LOGIC_APP_HISTORICAL)",
+                "name": "Microsoft-RunLogicAppHistorical"
+            },
+            {
+                "DeploymentName": "LogicApp",
+                "displayname": "$translate(INIT_ACTION_RUNNING_LOGIC_APP_HISTORICAL)",
+                "name": "Microsoft-RunLogicApp"
             },
             {
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",

@@ -2,7 +2,7 @@
     "Install": {
         "Pages": [
             {
-                "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-CRMSalesManagement/Web/Images/crm-sales-management.png",
+                "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-PSA/Web/Images/psa-sales-management.png",
                 "displayname": "Getting Started",
                 "list1": [
                     "$translate(INIT_GETTING_STARTED_D365_DECEMBER)",
@@ -36,8 +36,8 @@
             {
                 "displayname": "Target",
                 "isAzureSql": true,
-                "name": "$SiteCommon$/pages-gallery/sql-server.html",
-                "newSqlDatabase": "$(this.MS.UtilityService.GetUniqueId(10))",
+                "name": "$SiteCommon$/pages-gallery/sql.html",
+                "newSqlDatabase": "$(this.MS.UtilityService.getUniqueId(10))",
                 "showAzureSql": false,
                 "showNewSqlOption": true,
                 "showSkuS1": false,
@@ -135,7 +135,6 @@
             {
                 "displayname": "$translate(INIT_ACTION_WAITING_DATA)",
                 "FinishedActionName": "Microsoft-CrmGetProfileStatus",
-                "IsWaiting": true,
                 "name": "Microsoft-GetDataPullStatus",
                 "SqlServerIndex": 0,
                 "TargetSchema": "psa"

@@ -47,8 +47,16 @@ namespace Microsoft.Deployment.Site.Web.Tests
             {
                 //if the delete DB fails, then the test probably failed to create
             }
-
-            HelperMethods.driver.Quit();
+            try
+            {
+                HelperMethods.driver.Quit();
+            }
+            catch
+            {
+                //if we can't quit the driver, probably the process started and failed.  Cleanup so the next test doesn't get messed up
+                var driver = Process.GetProcessesByName("chromedriver.exe");
+                driver[0].Kill();
+            }
         }
 
         [TestMethod]
@@ -59,12 +67,10 @@ namespace Microsoft.Deployment.Site.Web.Tests
             OpenWebBrowser();
             HelperMethods.driver = this.driver;
             HelperMethods.WaitForPage();
-            HelperMethods.CreateDatabase(Credential.Instance.Sql.Server,
-                                            Credential.Instance.Sql.Username, Credential.Instance.Sql.Password,
-                                            Credential.Instance.Sql.SCCMDatabase);
+            //Don't need to create/delete DB, since this isn't azure, and therefore not costing on our subscriptions
             try
             {
-                var background = driver.FindElementByCssSelector("div[class='st-email-background st-email-wrapper au-target']");
+                var background = driver.FindElementByCssSelector("div[class='st-modal-background st-modal-wrapper au-target']");
                 background.Click();
             }
             catch { /* If not found means s3 is behind s1, expected behaviour*/}
@@ -93,13 +99,13 @@ namespace Microsoft.Deployment.Site.Web.Tests
             HelperMethods.ClickButton("Run");
             HelperMethods.CheckDeploymentStatus();
 
-            int totalNumRows = HelperMethods.rowsInAllTables(Credential.Instance.Sql.Server,
-                            Credential.Instance.Sql.Username, Credential.Instance.Sql.Password,
-                            Credential.Instance.Sql.SCCMDatabase);
+            /*int totalNumRows = HelperMethods.rowsInAllTables(Credential.Instance.SccmSql.Server,
+                                            Credential.Instance.ServiceAccount.Username, Credential.Instance.ServiceAccount.Password,
+                                            Credential.Instance.SccmSql.Target);
             if (totalNumRows <= 0)
             {
                 Assert.Fail();
-            }
+            }*/
         }
 
         [TestMethod]
@@ -115,7 +121,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
                                             Credential.Instance.Sql.SCCMDatabase);
             try
             {
-                var background = driver.FindElementByCssSelector("div[class='st-email-background st-email-wrapper au-target']");
+                var background = driver.FindElementByCssSelector("div[class='st-modal-background st-modal-wrapper au-target']");
                 background.Click();
             }
             catch { /* If not found means s3 is behind s1, expected behaviour*/}
@@ -133,14 +139,11 @@ namespace Microsoft.Deployment.Site.Web.Tests
             HelperMethods.ClickButton("Next");
             Thread.Sleep(new TimeSpan(0, 0, 5));
             HelperMethods.WaitForPage();
-            MsiAsSelectionExperience();
-            MsiAzureExperience();
-            HelperMethods.ClickButton("Next");
             Thread.Sleep(new TimeSpan(0, 0, 5));
-            HelperMethods.WaitForPage();
-            MsiAsExperience("sccmas" + HelperMethods.resourceGroupName, Credential.Instance.ServiceAccount.Username, Credential.Instance.ServiceAccount.Password);
+            HelperMethods.MSINewAnalysisServices("sccmas" + HelperMethods.resourceGroupName, Credential.Instance.ServiceAccount.Username, Credential.Instance.ServiceAccount.Password, Credential.Instance.ServiceAccount.SubscriptionName);
             HelperMethods.ClickButton("Next");
             HelperMethods.WaitForPage();
+            Thread.Sleep(new TimeSpan(0, 0, 15));
             HelperMethods.ClickButton("Validate");
             HelperMethods.WaitForPage();
             HelperMethods.ClickButton("Next");
@@ -149,8 +152,8 @@ namespace Microsoft.Deployment.Site.Web.Tests
             HelperMethods.CheckDeploymentStatus();
 
             int totalNumRows = HelperMethods.rowsInAllTables(Credential.Instance.Sql.Server,
-                            Credential.Instance.Sql.Username, Credential.Instance.Sql.Password,
-                            Credential.Instance.Sql.SCCMDatabase);
+                                            Credential.Instance.Sql.Username, Credential.Instance.Sql.Password,
+                                            Credential.Instance.Sql.SCCMDatabase);
             if (totalNumRows <= 0)
             {
                 Assert.Fail();
@@ -187,73 +190,6 @@ namespace Microsoft.Deployment.Site.Web.Tests
             HelperMethods.ClickButton("Validate");
         }
 
-        public void MsiAzureExperience()
-        {
-            HelperMethods.AzurePage(
-               Credential.Instance.ServiceAccount.Username,
-               Credential.Instance.ServiceAccount.Password,
-               Credential.Instance.ServiceAccount.SubscriptionName);
-            var validated = driver.FindElementByClassName("st-validated");
-            Assert.IsTrue(validated.Text == "Successfully validated");
-        }
-
-        public void MsiAsSelectionExperience()
-        {
-            Thread.Sleep(new TimeSpan(0, 0, 30));
-            var button = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
-            
-            while (button.Enabled != true)
-            {
-                Thread.Sleep(new TimeSpan(0, 0, 1));
-                button = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
-            }
-
-            button.SendKeys("Yes");
-
-            HelperMethods.ClickButton("Next");
-        }
-
-        public void MsiAsExperience(string server, string username, string password)
-        {
-            Thread.Sleep(new TimeSpan(0, 0, 2));
-            var newAas = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
-
-            while (newAas.Enabled != true)
-            {
-                Thread.Sleep(new TimeSpan(0, 0, 1));
-                newAas = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
-            }
-
-            newAas.SendKeys("New");
-
-            var elements = driver.FindElementsByCssSelector("input[class='st-input au-target']");
-
-            var serverBox = elements.FirstOrDefault(e => e.GetAttribute("value.bind").Contains("server"));
-            var usernameBox = elements.FirstOrDefault(e => e.GetAttribute("value.bind").Contains("email"));
-            var passwordBox = elements.FirstOrDefault(e => e.GetAttribute("value.bind").Contains("password"));
-
-            while (usernameBox.Enabled != true && passwordBox.Enabled != true && passwordBox.Enabled != true)
-            {
-                Thread.Sleep(new TimeSpan(0, 0, 1));
-            }
-
-            passwordBox.SendKeys(password);
-            usernameBox.Clear();
-            usernameBox.SendKeys(username);
-            serverBox.SendKeys(server);
-
-            var aasSku = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
-
-            while (aasSku.Enabled != true)
-            {
-                Thread.Sleep(new TimeSpan(0, 0, 1));
-                aasSku = driver.FindElementByCssSelector("select[class='btn btn-default dropdown-toggle st-input au-target']");
-            }
-
-            aasSku.SendKeys("Developer");
-
-            HelperMethods.ClickButton("Validate");
-        }
 
         public void SelectSqlDatabase(string databaseName)
         {
@@ -335,6 +271,7 @@ namespace Microsoft.Deployment.Site.Web.Tests
             ChromeOptions options = new ChromeOptions();
             options.BinaryLocation = msiPath;
             options.AddArgument("?name=Microsoft-SCCMTemplate");
+            options.AddUserProfilePreference("profile.password_manager_enabled", false);
             driver = new ChromeDriver(options);
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(30);
         }

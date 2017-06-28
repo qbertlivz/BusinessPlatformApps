@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json.Linq;
@@ -11,7 +7,6 @@ using Newtonsoft.Json.Linq;
 using Microsoft.Deployment.Common;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
-using Microsoft.Deployment.Common.Helpers;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
 {
@@ -35,6 +30,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             }
 
             // Handle Azure token slightly diffrent - depends on client id - use mscrm client id to refresh the token
+            // Checks for both tokens in the CRMSalesManagement case
             if (request.DataStore.GetValue("MsCrmToken") != null && request.DataStore.GetValue("AzureToken") != null && request.DataStore.GetJson("AzureToken", "expires_on") != null)
             {
                 var expiryDateTime = UnixTimeStampToDateTime(request.DataStore.GetJson("AzureToken", "expires_on"));
@@ -42,7 +38,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                 {
                     var dataStoreItem = request.DataStore.GetDataStoreItem("AzureToken");
                     var meta = AzureTokenUtility.GetMetaFromOAuthType("mscrm");
-                    var newToken = AzureTokenUtility.GetTokenForResourceFromExistingToken("mscrm", request.Info.WebsiteRootUrl, dataStoreItem.Value, meta.Resource);
+                    var newToken = AzureTokenUtility.GetTokenForResourceFromExistingToken("mscrm", request.Info.WebsiteRootUrl, dataStoreItem.Value, Constants.AzureManagementCoreApi);
                     UpdateToken(dataStoreItem.Value, newToken);
                 }
             }
@@ -59,6 +55,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                 }
             }
 
+            // Checks for crmtoken expiry in CrmSalesManagement
             if (request.DataStore.GetValue("MsCrmToken") != null && request.DataStore.GetJson("MsCrmToken", "expires_on") != null)
             {
                 var expiryDateTime = UnixTimeStampToDateTime(request.DataStore.GetJson("MsCrmToken", "expires_on"));

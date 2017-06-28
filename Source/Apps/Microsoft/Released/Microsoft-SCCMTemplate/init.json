@@ -29,7 +29,7 @@
             {
                 "displayname": "Login",
                 "name": "$SiteCommon$/pages-gallery/windows-auth.html",
-                "onValidate": [
+                "onValidateActions": [
                     {
                         "name": "Microsoft-ValidateAdminPrivileges"
                     },
@@ -46,7 +46,7 @@
                 "credentialTarget": "pbi_sccm",
                 "displayname": "Source",
                 "hideSqlAuth": true,
-                "name": "$SiteCommon$/pages-gallery/sql-server.html",
+                "name": "$SiteCommon$/pages-gallery/sql.html",
                 "onNext": [
                     {
                         "name": "Microsoft-CheckSCCMVersion",
@@ -63,7 +63,7 @@
             {
                 "credentialTarget": "pbi_sccm",
                 "displayname": "Target",
-                "name": "$SiteCommon$/pages-gallery/sql-server.html",
+                "name": "$SiteCommon$/pages-gallery/sql.html",
                 "onNext": [
                     {
                         "name": "Microsoft-CheckSQLVersion",
@@ -83,7 +83,8 @@
                 "displayname": "AAS",
                 "name": "$SiteCommon$/pages-gallery/choose-analysis-server.html",
                 "showDescription": true,
-                "skip": "$dsall(azureSqlDisabled)[1]"
+                "skip": "$dsall(azureSqlDisabled)[1]",
+                "ssasEnabled": "true"
             },
             {
                 "displayname": "Login to Azure",
@@ -107,7 +108,7 @@
             },
             {
                 "displayname": "Customize",
-                "name": "customize.html"
+                "name": "$SiteCommon$/pages-gallery/customize-sccm.html"
             },
             {
                 "displayname": "Summary",
@@ -118,12 +119,7 @@
                     "Target Server": "$(this.MS.DataStore.getValue('Server'))",
                     "Target Database": "$(this.MS.DataStore.getValue('Database'))",
                     "Target Username": "$(this.MS.DataStore.getValue('Username'))"
-                },
-                "onNext": [
-                    {
-                        "name": "Microsoft-SccmGetEntityInitialCounts"
-                    }
-                ]
+                }
             },
             {
                 "asDatabase": "Sccm",
@@ -135,7 +131,7 @@
                 "showCounts": true,
                 "sqlServerIndex": 1,
                 "targetSchema": "pbist_sccm",
-                "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(10))"
+                "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
             }
         ],
 
@@ -164,6 +160,11 @@
                 "SqlGroup": "SolutionTemplate",
                 "SqlServerIndex": "1",
                 "SqlSubGroup": "SSAS",
+                "useImpersonation": true
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_GET_INITIAL_COUNTS)",
+                "name": "Microsoft-SccmGetEntityInitialCounts",
                 "useImpersonation": true
             },
             {
@@ -270,7 +271,6 @@
             {
                 "displayname": "$translate(INIT_ACTION_WAITING_DATA)",
                 "FinishedActionName": "Microsoft-GetTaskStatus",
-                "IsWaiting": true,
                 "name": "Microsoft-GetDataPullStatus",
                 "SqlServerIndex": 1,
                 "TargetSchema": "pbist_sccm",

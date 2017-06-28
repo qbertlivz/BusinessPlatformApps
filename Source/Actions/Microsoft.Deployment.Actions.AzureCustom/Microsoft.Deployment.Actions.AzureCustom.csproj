@@ -180,6 +180,7 @@
     <Compile Include="ActivityLogs\ExportActivityLogToEventHub.cs" />
     <Compile Include="ActivityLogs\GetAppWorkspaces.cs" />
     <Compile Include="ActivityLogs\GetEventHubPrimaryKey.cs" />
+    <Compile Include="ActivityLogs\GetHistoricalData.cs" />
     <Compile Include="ActivityLogs\SetOutputAsPBI.cs" />
     <Compile Include="ActivityLogs\SetOutputAsSQL.cs" />
     <Compile Include="ActivityLogs\SetStreamAnalyticsInputAsEventHub.cs" />

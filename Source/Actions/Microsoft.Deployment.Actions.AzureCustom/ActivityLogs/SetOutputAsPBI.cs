@@ -17,14 +17,30 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
     {
         public async Task<JObject> GetEncryptedPBITokens(ActionRequest request, AzureHttpClient ahc)
         {
+            var posturi = "https://ms.portal.azure.com/api/Settings/Select?SettingsPortalInstance=mpac&MigrateUserSettings=true";
+            string postbody = "[\"CrossTenant\",\"DashboardInventory\",\"Favorites\",\"FileUpload\",\"General\",\"HubsExtension\",\"Startboard\"]";
+            HttpResponseMessage postresponse = await ahc.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Post, posturi, postbody);
+
             string code = request.DataStore.GetValue("codepowerbi");
-            string state = request.DataStore.GetValue("statepowerbi");
+            //string state = request.DataStore.GetValue("statepowerbi");
             string session_state = request.DataStore.GetValue("sessionstatepowerbi");
-            var uri = $"https://main.streamanalytics.ext.azure.com/api/PowerBI/GetTokens?authUrl=https%3A%2F%2Fms.portal.azure.com%2FTokenAuthorize%3Fcode%3D{Uri.EscapeDataString(code)}%26session_state%3D{Uri.EscapeDataString(state)}";
-            HttpResponseMessage response = await ahc.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Get, uri, "{}");
+
+            var uri2 = "https://main.streamanalytics.ext.azure.com/api/PowerBI/GetOAuthUrl?portalBaseUri=https%3A%2F%2Fms.portal.azure.com&{}";
+            HttpResponseMessage response = await ahc.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Get, uri2, "{}");
             string responseString = await response.Content.ReadAsStringAsync();
-            JObject responseObj = JsonUtility.GetJObjectFromStringValue(responseString);
-            return responseObj;
+            string tempstate = responseString.Substring(responseString.IndexOf("state=") + 6);
+            string state = tempstate.Substring(0, tempstate.IndexOf("&"));
+            string tempclient = responseString.Substring(responseString.IndexOf("client_id=") + 10);
+            string clientid = tempclient.Substring(tempclient.IndexOf("&"));
+            string token = ahc.Token;
+            Dictionary<string, string> headers2 = ahc.Headers;
+            headers2.Add("x-ms-client-request-id", clientid);
+            AzureHttpClient ahc2 = new AzureHttpClient(token, headers2);
+
+            var uri = $"https://main.streamanalytics.ext.azure.com/api/PowerBI/GetTokens?authUrl=https%3A%2F%2Fms.portal.azure.com%2FTokenAuthorize%3Fcode%3D{code}%26state%3D{state}%26session_state%3D{session_state}";
+            HttpResponseMessage response2 = await ahc2.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Get, uri, "{}");
+            string response2String = await response2.Content.ReadAsStringAsync();
+            return JsonUtility.GetJObjectFromStringValue(response2String);
         }
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
@@ -40,7 +56,10 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
             string input = request.DataStore.GetValue("inputAlias");
             string output = request.DataStore.GetValue("outputAlias");
             var body = $"{{\"properties\":{{\"dataSource\":{{\"outputDocumentDatabaseSource\":{{}},\"outputTopicSource\":{{}},\"outputQueueSource\":{{}},\"outputEventHubSource\":{{}},\"outputSqlDatabaseSource\":{{}},\"outputBlobStorageSource\":{{}},\"outputTableStorageSource\":{{}},\"outputPowerBISource\":{{\"dataSet\":\"testdataset123\",\"table\":\"testtable123\",\"groupId\":\"\",\"groupName\":\"My Workspace\",\"refreshToken\":\"{pbi_refresh_token2}\",\"tokenUserDisplayName\":\"Lance LaMotte\",\"tokenUserPrincipalName\":\"t-lalamo@microsoft.com\"}},\"outputDataLakeSource\":{{}},\"outputIotGatewaySource\":{{}},\"type\":\"PowerBI\"}},\"serialization\":{{}}}},\"createType\":\"None\",\"id\":null,\"location\":\"Australia East\",\"name\":\"SHOWUP2\",\"type\":\"PowerBI\"}}";
-            AzureHttpClient ahc = new AzureHttpClient(azure_access_token, subscription);
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            string clientsessionid = "ed03adbd554a47c68d8bf796c5b5be8b";
+            headers.Add("x-ms-client-session-id", clientsessionid);
+            AzureHttpClient ahc = new AzureHttpClient(azure_access_token, headers);
             JObject encryptedTokens = await GetEncryptedPBITokens(request, ahc);
             HttpResponseMessage response = await ahc.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Put, uri2, body);
             return response.IsSuccessStatusCode ? new ActionResponse(ActionStatus.Success) : new ActionResponse(ActionStatus.Failure);

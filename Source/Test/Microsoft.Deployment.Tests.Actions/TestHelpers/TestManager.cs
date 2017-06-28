@@ -67,6 +67,7 @@ namespace Microsoft.Deployment.Tests.Actions.TestHelpers
                     dataStore.AddToDataStore(pair.Value, datastoreExtra.GetJson(pair.Value)); // {PBIToken:val}
                     dataStore.AddToDataStore("code" + pair.Key, datastoreExtra.GetValue("code"));
                     dataStore.AddToDataStore("state" + pair.Key, datastoreExtra.GetValue("state"));
+                    dataStore.AddToDataStore("sessionstate" + pair.Key, datastoreExtra.GetValue("session_state"));
                 }
             }
 

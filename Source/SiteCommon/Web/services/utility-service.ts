@@ -87,6 +87,10 @@ export class UtilityService {
         return window && window.navigator && window.navigator.userAgent && /Edge\/\d./i.test(window.navigator.userAgent);
     }
 
+    isOnline(): boolean {
+        return window && window.navigator && window.navigator.onLine;
+    }
+
     parseCsv(content: string): string[][] {
         let data: string[][] = [];
         let rows: string[] = content.split('\r\n');

@@ -231,7 +231,7 @@ FROM
 	SELECT [documentId]
       ,[phrase]
 	  ,len(convert(VARCHAR(MAX), t1.cleanedText)) totalLength
-	  ,len(replace(convert(VARCHAR(MAX), t1.cleanedText), phrase, '')) textWithoutPhrase
+	  ,len(replace(convert(VARCHAR(MAX), t1.cleanedText), LEFT(phrase, 1000), '')) textWithoutPhrase
 	  ,len(t0.phrase) phraseLength
 	FROM bpst_news.documentkeyphrases t0
 	INNER JOIN Documents t1 ON t0.documentId = t1.id

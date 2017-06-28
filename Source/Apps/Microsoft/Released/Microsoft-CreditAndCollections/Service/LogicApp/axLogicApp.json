@@ -1,0 +1,114 @@
+﻿{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workflows_axLogicApp_name": {
+            "defaultValue": "axLogicApp",
+            "type": "String"
+        },
+        "connections_dynamicsax_name": {
+            "defaultValue": "dynamicsax",
+            "type": "String"
+        },
+        "entityAreaId": {
+            "defaultValue": "dynamicsax",
+            "type": "String"
+        },
+        "entityId": {
+            "defaultValue": "dynamicsax",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "comments": "Generalized from resource: '/subscriptions/20ea4e8d-d3d9-4f1d-947c-441675acd4f7/resourceGroups/axStDev/providers/Microsoft.Logic/workflows/axLogicApp'.",
+            "type": "Microsoft.Logic/workflows",
+            "name": "[parameters('workflows_axLogicApp_name')]",
+            "apiVersion": "2016-06-01",
+            "location": "westcentralus",
+            "scale": null,
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
+                    "triggers": {
+                        "Recurrence": {
+                            "recurrence": {
+                                "frequency": "Day",
+                                "interval": 1
+                            },
+                            "type": "Recurrence"
+                        }
+                    },
+                    "actions": {
+                        "Execute_action": {
+                            "runAfter": {
+                                "Get_a_record": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": {
+                                    "Id": "@{body('Get_a_record')?['Id']}",
+                                    "dataAreaId": "@{body('Get_a_record')?['dataAreaId']}",
+                                    "measurementName": "@{body('Get_a_record')['MeasurementName']}",
+                                    "sqlConnection": "@{body('Get_a_record')['SqlConnectionString']}"
+                                },
+                                "host": {
+                                    "api": {
+                                        "runtimeUrl": "https://logic-apis-westcentralus.azure-apim.net/apim/dynamicsax"
+                                    },
+                                    "connection": {
+                                        "name": "@parameters('$connections')['dynamicsax']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "/datasets/@{encodeURIComponent(encodeURIComponent('pbistaxdevtestb6f3bba33b8283dbaos.cloudax.dynamics.com'))}/procedures/@{encodeURIComponent(encodeURIComponent('BpstConfigurationEntities/Microsoft.Dynamics.DataEntities.StartCopyJob'))}"
+                            }
+                        },
+                        "Get_a_record": {
+                            "runAfter": {},
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "api": {
+                                        "runtimeUrl": "https://logic-apis-westcentralus.azure-apim.net/apim/dynamicsax"
+                                    },
+                                    "connection": {
+                                        "name": "@parameters('$connections')['dynamicsax']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/datasets/@{encodeURIComponent(encodeURIComponent('pbistaxdevtestb6f3bba33b8283dbaos.cloudax.dynamics.com'))}/tables/@{encodeURIComponent(encodeURIComponent('BpstConfigurationEntities'))}/items/@{encodeURIComponent(encodeURIComponent('[parameters('entityAreaId')],[parameters('entityId')]'))}"
+                            }
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {
+                            "dynamicsax": {
+                                "connectionId": "[resourceId('Microsoft.Web/connections', parameters('connections_dynamicsax_name'))]",
+                                "connectionName": "dynamicsax",
+                                "id": "/subscriptions/20ea4e8d-d3d9-4f1d-947c-441675acd4f7/providers/Microsoft.Web/locations/westcentralus/managedApis/dynamicsax"
+                            }
+                        }
+                    }
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/connections', parameters('connections_dynamicsax_name'))]"
+            ]
+        }
+    ]
+}

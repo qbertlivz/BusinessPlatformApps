@@ -13,9 +13,9 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Deployment.Common.Helpers
 {
-    public static class DeploymentHelper
+    public class DeploymentHelper
     {
-        public static async Task<ActionResponse> DeployLogicApp(string subscription, string azureToken, string resourceGroup, JObject armTemplate, string deploymentName)
+        public async Task<ActionResponse> DeployLogicApp(string subscription, string azureToken, string resourceGroup, JObject armTemplate, string deploymentName)
         {
             SubscriptionCloudCredentials creds = new TokenCloudCredentials(subscription, azureToken);
             Microsoft.Azure.Management.Resources.ResourceManagementClient client = new ResourceManagementClient(creds);
@@ -41,17 +41,17 @@ namespace Microsoft.Deployment.Common.Helpers
 
             var deploymentItem = await client.Deployments.CreateOrUpdateAsync(resourceGroup, deploymentName, deployment, new CancellationToken());
 
-            var resp = await WaitForAction(client, resourceGroup, deploymentItem.Deployment.Name);
+            var resp = await WaitForDeployment(client, resourceGroup, deploymentItem.Deployment.Name);
 
             if (!resp.IsSuccess)
             {
                 return resp;
             }
 
-            return await WaitForAction(client, resourceGroup, deploymentName);
+            return await WaitForDeployment(client, resourceGroup, deploymentName);
         }
 
-        public static async Task<ActionResponse> WaitForAction(ResourceManagementClient client, string resourceGroup, string deploymentName)
+        public async Task<ActionResponse> WaitForDeployment(ResourceManagementClient client, string resourceGroup, string deploymentName)
         {
             while (true)
             {

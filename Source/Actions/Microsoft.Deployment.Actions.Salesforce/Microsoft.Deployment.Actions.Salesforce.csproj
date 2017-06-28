@@ -98,7 +98,6 @@
     <Compile Include="ADFDeployLinkedServices.cs" />
     <Compile Include="ADFDeployPipelines.cs" />
     <Compile Include="ADFSliceStatus.cs" />
-    <Compile Include="Helpers\DeploymentHelper.cs" />
     <Compile Include="Helpers\SalesforceConcurrencyMapper.cs" />
     <Compile Include="Helpers\SecurityHelper.cs" />
     <Compile Include="Helpers\SqlConfigQueries.cs" />

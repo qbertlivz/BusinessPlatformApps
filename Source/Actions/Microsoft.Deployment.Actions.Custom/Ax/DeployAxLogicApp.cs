@@ -25,6 +25,7 @@ namespace Microsoft.Deployment.Actions.Custom.Ax
             string logicAppTrigger = string.Empty;
             string areaId = request.DataStore.GetValue("AxEntityDataAreaId");
             string id = request.DataStore.GetValue("AxEntityId");
+            string connectionName = request.DataStore.GetValue("connectorName");
 
             // Read from file
             var logicAppJsonLocation = "Service/LogicApp/axLogicApp.json";
@@ -37,6 +38,7 @@ namespace Microsoft.Deployment.Actions.Custom.Ax
             var param = new AzureArmParameterGenerator();
             param.AddStringParam("resourceGroup", resourceGroup);
             param.AddStringParam("subscription", subscription);
+            param.AddStringParam("connectionName", connectionName);
 
             var armTemplate = JsonUtility.GetJObjectFromJsonString(System.IO.File.ReadAllText(Path.Combine(request.Info.App.AppFilePath, logicAppJsonLocation)));
             var armParamTemplate = JsonUtility.GetJObjectFromObject(param.GetDynamicObject());
@@ -45,7 +47,8 @@ namespace Microsoft.Deployment.Actions.Custom.Ax
             var armString = armTemplate.ToString().Replace("ENTITYID", id).Replace("ENTITYAREAID", areaId);
 
             //Deploy logic app 
-            var deploymentResponse = await DeploymentHelper.DeployLogicApp(subscription, azureToken, resourceGroup, JsonUtility.GetJObjectFromJsonString(armString), deploymentName);
+            var helper = new DeploymentHelper();
+            var deploymentResponse = await helper.DeployLogicApp(subscription, azureToken, resourceGroup, JsonUtility.GetJObjectFromJsonString(armString), deploymentName);
 
             if (!deploymentResponse.IsSuccess)
             {

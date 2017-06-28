@@ -2,10 +2,6 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "connections_dynamicsax_name": {
-            "defaultValue": "dynamicsax",
-            "type": "String"
-        },
         "resourcegroup": {
             "defaultValue": "stresourcegroup",
             "type": "string"
@@ -13,6 +9,10 @@
         "subscription": {
             "defaultValue": "idrequired",
             "type": "string"
+        },
+        "connectionName": {
+            "defaultValue": "connection",
+            "type": "String"
         }
     },
     "variables": {},
@@ -94,8 +94,8 @@
                     "$connections": {
                         "value": {
                             "dynamicsax": {
-                                "connectionId": "[concat('/subscriptions/', parameters('subscription'), '/resourceGroups/',parameters('resourcegroup'),'/providers/Microsoft.Web/connections/dynamicsax')]",
-                                "connectionName": "dynamicsax",
+                                "connectionId": "[concat('/subscriptions/', parameters('subscription'), '/resourceGroups/',parameters('resourcegroup'),'/providers/Microsoft.Web/connections/',parameters('connectionName'))]",
+                                "connectionName": "[parameters('connectionName')]",
                                 "id": "[concat('/subscriptions/', parameters('subscription'), '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/dynamicsax')]"
                             }
                         }

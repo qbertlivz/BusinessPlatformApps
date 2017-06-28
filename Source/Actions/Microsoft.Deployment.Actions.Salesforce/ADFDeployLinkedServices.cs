@@ -124,9 +124,9 @@ namespace Microsoft.Deployment.Actions.Salesforce
 
             var deploymentItem = client.Deployments.CreateOrUpdateAsync(resourceGroup, deploymentName, deployment, new CancellationToken()).Result;
 
-            var helper = new Helpers.DeploymentHelper();
+            var helper = new DeploymentHelper();
 
-            var response = helper.WaitForDeployment(resourceGroup, deploymentName, client);
+            var response = await helper.WaitForDeployment(client, resourceGroup, deploymentName);
 
             if (response.IsSuccess)
             {
@@ -135,7 +135,7 @@ namespace Microsoft.Deployment.Actions.Salesforce
                     DeployedResourceType.AzureDataFactory, CreatedBy.BPST, DateTime.UtcNow.ToString("o"));
             }
 
-            return helper.WaitForDeployment(resourceGroup, deploymentName, client);
+            return await helper.WaitForDeployment(client, resourceGroup, deploymentName);
         }
     }
 }

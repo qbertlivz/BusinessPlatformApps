@@ -55,7 +55,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             armTemplate.Add("parameters", armParamTemplate["parameters"]);
 
             //Deploy logic app 
-            var deploymentResponse = await DeploymentHelper.DeployLogicApp(subscription, azureToken, resourceGroup, armTemplate, deploymentName);
+            var helper = new DeploymentHelper();
+            var deploymentResponse = await helper.DeployLogicApp(subscription, azureToken, resourceGroup, armTemplate, deploymentName);
 
             if (!deploymentResponse.IsSuccess)
             {
@@ -86,7 +87,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             armTemplate.Remove("parameters");
             armTemplate.Add("parameters", armParamTemplate["parameters"]);
             
-            deploymentResponse = await DeploymentHelper.DeployLogicApp(subscription, azureToken, resourceGroup, armTemplate, deploymentName);
+            deploymentResponse = await helper.DeployLogicApp(subscription, azureToken, resourceGroup, armTemplate, deploymentName);
 
             if (!deploymentResponse.IsSuccess)
             {

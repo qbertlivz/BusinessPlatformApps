@@ -124,7 +124,7 @@ namespace Microsoft.Deployment.Actions.Salesforce
 
             var deploymentItem = client.Deployments.CreateOrUpdateAsync(resourceGroup, deploymentName, deployment, new CancellationToken()).Result;
 
-            var helper = new DeploymentHelper();
+            var helper = new Helpers.DeploymentHelper();
 
             var response = helper.WaitForDeployment(resourceGroup, deploymentName, client);
 

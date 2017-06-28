@@ -138,6 +138,7 @@
     <Compile Include="..\..\SharedVersion.cs">
       <Link>Properties\SharedVersion.cs</Link>
     </Compile>
+    <Compile Include="Ax\DeployAxLogicApp.cs" />
     <Compile Include="Ax\UpdateAxConfigurationEntity.cs" />
     <Compile Include="CustomerData\CustomerInfo.cs" />
     <Compile Include="CustomerData\PushToSimplement.cs" />

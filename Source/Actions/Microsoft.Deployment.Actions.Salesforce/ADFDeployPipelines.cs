@@ -150,7 +150,7 @@ namespace Microsoft.Deployment.Actions.Salesforce
                 task.Add(new Task<ActionResponse>(() =>
                 {
                     var deploymentItem = client.Deployments.CreateOrUpdateAsync(resourceGroup, deploymentName, deployment, new CancellationToken()).Result;
-                    var helper = new DeploymentHelper();
+                    var helper = new Helpers.DeploymentHelper();
                     return helper.WaitForDeployment(resourceGroup, deploymentName, client);
                 }));
             }

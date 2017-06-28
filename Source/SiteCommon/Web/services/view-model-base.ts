@@ -82,7 +82,6 @@ export class ViewModelBase {
             this.MS.NavigationService.navigateBack();
             this.MS.ErrorService.clear();
             this.MS.NavigationService.isCurrentlyNavigating = false;
-            this.verifyNavigation();
         }
     }
 
@@ -113,9 +112,6 @@ export class ViewModelBase {
             } finally {
                 this.MS.NavigationService.isCurrentlyNavigating = false;
                 this.MS.DataStore.addToDataStore('HasNavigated', true, DataStoreType.Public);
-                if (this.isValidated) {
-                    this.verifyNavigation();
-                }
             }
         }
     }
@@ -165,11 +161,5 @@ export class ViewModelBase {
         this.isValidated = true;
         this.showValidation = showValidation;
         return true;
-    }
-
-    verifyNavigation(): void {
-        if (this.MS.UtilityService.isEdge()) {
-            this.MS.UtilityService.reload();
-        }
     }
 }

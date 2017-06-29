@@ -69,7 +69,7 @@ export class UtilityService {
         if (queryParam) {
             let token = this.getQueryParameterFromUrl(QueryParameter.CODE, queryParam);
             if (token === '') {
-                this.MS.ErrorService.set(this.MS.Translate.AZURE_LOGIN_UNKNOWN_ERROR, this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.ERRORDESCRIPTION, queryParam));
+                this.MS.ErrorService.set(this.MS.Translate.AZURE_LOGIN_UNKNOWN_ERROR, this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.ERROR_DESCRIPTION, queryParam));
             } else {
                 if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-GetAzureToken', { code: token, oauthType: openAuthorizationType })) {
                     await callback();
@@ -83,8 +83,8 @@ export class UtilityService {
         return Math.random().toString(36).substr(2, characters + 2);
     }
 
-    isEdge(): boolean {
-        return window && window.navigator && window.navigator.userAgent && /Edge\/\d./i.test(window.navigator.userAgent);
+    isOnline(): boolean {
+        return window && window.navigator && window.navigator.onLine;
     }
 
     parseCsv(content: string): string[][] {
@@ -103,12 +103,6 @@ export class UtilityService {
                 callback(fileContent.target.result);
             };
             fileReader.readAsText(file);
-        }
-    }
-
-    reload(): void {
-        if (window && window.location && window.location.reload) {
-            window.location.reload();
         }
     }
 

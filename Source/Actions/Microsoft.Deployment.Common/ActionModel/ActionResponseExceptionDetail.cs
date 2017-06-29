@@ -4,7 +4,6 @@
     using Helpers;
     using System;
 
-    // TODO: rename variables since this is about error messages not codes
     public class ActionResponseExceptionDetail
     {
         public Exception ExceptionCaught = null;
@@ -15,11 +14,16 @@
         {
             get
             {
-                
                 return this.FriendlyMessageCode == null ? EnglishErrorCodes.DefaultErrorCode : ErrorUtility.GetErrorCode(this.FriendlyMessageCode);
             }
         }
 
         public string AdditionalDetailsErrorMessage { get; set; } = string.Empty;
+
+        public ActionResponseExceptionDetail(string code = "", string additionalCode = "")
+        {
+            this.FriendlyMessageCode = code;
+            if (!string.IsNullOrEmpty(additionalCode)) this.AdditionalDetailsErrorMessage = ErrorUtility.GetAdditionalDetailsMessage(additionalCode);
+        }
     }
 }

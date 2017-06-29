@@ -24,7 +24,7 @@ namespace Microsoft.Deployment.Actions.SQL
             {
                 SqlUtility.InvokeSqlCommand(connectionString, File.ReadAllText(f), new Dictionary<string, string>());
             }
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
     }
 }

@@ -46,7 +46,7 @@
                 "credentialTarget": "pbi_sccm",
                 "displayname": "Source",
                 "hideSqlAuth": true,
-                "name": "$SiteCommon$/pages-gallery/sql-server.html",
+                "name": "$SiteCommon$/pages-gallery/sql.html",
                 "onNext": [
                     {
                         "name": "Microsoft-CheckSCCMVersion",
@@ -63,7 +63,7 @@
             {
                 "credentialTarget": "pbi_sccm",
                 "displayname": "Target",
-                "name": "$SiteCommon$/pages-gallery/sql-server.html",
+                "name": "$SiteCommon$/pages-gallery/sql.html",
                 "onNext": [
                     {
                         "name": "Microsoft-CheckSQLVersion",
@@ -271,7 +271,6 @@
             {
                 "displayname": "$translate(INIT_ACTION_WAITING_DATA)",
                 "FinishedActionName": "Microsoft-GetTaskStatus",
-                "IsWaiting": true,
                 "name": "Microsoft-GetDataPullStatus",
                 "SqlServerIndex": 1,
                 "TargetSchema": "pbist_sccm",

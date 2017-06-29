@@ -267,4 +267,10 @@
   <data name="FacebookPagesInvalid" xml:space="preserve">
     <value>One or more of the pages you entered could not be found</value>
   </data>
+  <data name="DefaultAdditionalDetailsMessage" xml:space="preserve">
+    <value>Please contact us using the provided email link</value>
+  </data>
+  <data name="MsCrm_No_Organizations" xml:space="preserve">
+    <value>No Dynamics 365 organizations were found, verify that your username and password are correct</value>
+  </data>
 </root>

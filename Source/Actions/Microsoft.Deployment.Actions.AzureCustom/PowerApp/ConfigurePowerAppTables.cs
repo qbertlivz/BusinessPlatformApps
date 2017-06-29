@@ -58,7 +58,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
                 }
             }
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
 
         private string GetReadableQueryPart(string query)

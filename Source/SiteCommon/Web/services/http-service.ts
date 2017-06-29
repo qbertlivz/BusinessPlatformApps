@@ -81,8 +81,11 @@ export class HttpService {
 
             if (!content.isInvisible) {
                 if (actionResponse.Status === ActionStatus.Failure || actionResponse.Status === ActionStatus.FailureExpected) {
+                    let additionalDetails: string = actionResponse.ExceptionDetail.AdditionalDetailsErrorMessage
+                        ? `${actionResponse.ExceptionDetail.AdditionalDetailsErrorMessage} --- ${this.MS.Translate.COMMON_ACTION_FAILED}`
+                        : this.MS.Translate.COMMON_ACTION_FAILED;
                     this.MS.ErrorService.set(actionResponse.ExceptionDetail.FriendlyErrorMessage,
-                        `${actionResponse.ExceptionDetail.AdditionalDetailsErrorMessage} --- Action Failed ${method} --- Error ID:(${this.MS.LoggerService.UserGenId})`,
+                        `${additionalDetails} ${method} --- ${this.MS.Translate.COMMON_ERROR_ID}:(${this.MS.LoggerService.UserGenId})`,
                         actionResponse.Status === ActionStatus.Failure,
                         actionResponse.ExceptionDetail.LogLocation);
                 } else if (actionResponse.Status !== ActionStatus.Invisible) {
@@ -90,8 +93,11 @@ export class HttpService {
                 }
             }
         } catch (e) {
-            this.MS.ErrorService.message = this.MS.Translate.COMMON_UNKNOWN_ERROR;
-            this.MS.ErrorService.showContactUs = true;
+            if (this.MS.UtilityService.isOnline() || this.isOnPremise) {
+                this.MS.ErrorService.set(this.MS.Translate.COMMON_UNKNOWN_ERROR);
+            } else {
+                this.MS.ErrorService.set(this.MS.Translate.COMMON_OFFLINE);
+            }
             throw e;
         } finally {
             if (!content.isInvisible) {

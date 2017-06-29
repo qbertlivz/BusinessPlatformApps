@@ -1,15 +1,14 @@
-﻿using Hyak.Common.Internals;
-using Microsoft.Deployment.Common;
-using Microsoft.Deployment.Common.ActionModel;
-using Microsoft.Deployment.Common.Helpers;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
+
+using Hyak.Common.Internals;
+using Newtonsoft.Json.Linq;
+
+using Microsoft.Deployment.Common;
+using Microsoft.Deployment.Common.Helpers;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
 {
@@ -46,7 +45,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             var meta = AzureTokenUtility.GetMetaFromOAuthType(oauthType);
             return GetTokenForResourceFromCode(meta, tenantId, redirect, code);
         }
-
 
         public static JObject GetTokenForResourceFromCode(AzureTokenRequestMeta meta, string tenantId, string redirect, string code)
         {
@@ -118,6 +116,10 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                     resource = Constants.AzureManagementCoreApi;
                     clientId = Constants.ASClientId;
                     break;
+                case "o365":
+                    resource = Constants.AzureManagementCoreApi;
+                    clientId = Constants.Office365ClientId;
+                    break;
             }
 
             return new AzureTokenRequestMeta(resource, clientId);
@@ -146,6 +148,5 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
 
             return builder.ToString();
         }
-
     }
 }

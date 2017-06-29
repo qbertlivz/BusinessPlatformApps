@@ -164,6 +164,7 @@
     <Compile Include="..\..\SharedVersion.cs">
       <Link>Properties\SharedVersion.cs</Link>
     </Compile>
+    <Compile Include="CrmGetEntities.cs" />
     <Compile Include="CrmGetEntityInitialCounts.cs" />
     <Compile Include="CrmGetProfileStatus.cs" />
     <Compile Include="CrmTokenUtility.cs" />

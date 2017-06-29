@@ -17,6 +17,12 @@
         </div>
     </div>
 
+    <div if.bind="dataMovement == dataMovementType.D365">
+        <div class="st-float st-text">
+            <p>${MS.Translate.DATA_MOVEMENT_D365_DESCRIPTION}</p>
+        </div>
+    </div>
+
     <div if.bind="dataMovement != dataMovementType.ADF && dataMovement != dataMovementType.D365">
         <div if.bind="dataMovement == dataMovementType.Informatica">
             <div class="st-float st-text">

@@ -95,7 +95,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
                     null, DefaultErrorCodes.DefaultErrorCode, "Error creating appsetting");
             }
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
     }
 }

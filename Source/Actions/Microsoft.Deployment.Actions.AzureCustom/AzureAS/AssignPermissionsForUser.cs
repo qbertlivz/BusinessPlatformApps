@@ -1,12 +1,11 @@
-﻿using Microsoft.AnalysisServices.Tabular;
+﻿using System;
+using System.ComponentModel.Composition;
+using System.Threading.Tasks;
+
+using Microsoft.AnalysisServices.Tabular;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
 {
@@ -28,7 +27,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
                 server.Connect(connectionString);
 
                 Database db = server.Databases.FindByName(asDatabase);
-                if(db == null)
+                if (db == null)
                 {
                     return new ActionResponse(ActionStatus.Failure, string.Empty, null, null, "Unable to find model");
                 }
@@ -44,7 +43,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureAS
                 member.MemberName = user;
                 //AzureAD
                 role.Members.Add(member);
-              
+
                 db.Model.Roles.Add(role);
                 db.Model.SaveChanges();
                 server.Disconnect(true);

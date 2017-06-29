@@ -28,7 +28,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
 
             if (powerAppEnvironment == null)
             {
-                return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+                return new ActionResponse(ActionStatus.Success);
             }
 
             string sqlConnectionString = request.DataStore.GetValueAtIndex("SqlConnectionString", "SqlServerIndex");
@@ -42,7 +42,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
 
             request.DataStore.AddToDataStore("PowerAppSqlConnectionId", newSqlConnectionId, DataStoreType.Private);
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
     }
 }

@@ -12,6 +12,7 @@
     using Microsoft.Deployment.Common.ActionModel;
     using Microsoft.Deployment.Common.Actions;
     using Microsoft.Deployment.Common.Helpers;
+    using System.Linq;
 
     [Export(typeof(IAction))]
     public class CrmValidateProfile : BaseAction
@@ -61,7 +62,7 @@
 
             MsCrmProfile profile = new MsCrmProfile
             {
-                Entities = new MsCrmEntity[entities.Length],
+                Entities = new MsCrmEntity[entities.ToArray().Length],
                 Name = name,
                 OrganizationId = _orgId,
                 DestinationKeyVaultUri = kV,
@@ -87,7 +88,7 @@
             {
                 await _rc.Post(MsCrmEndpoints.URL_PROFILES_VALIDATE, JsonConvert.SerializeObject(profile));
                 
-                return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+                return new ActionResponse(ActionStatus.Success);
             }
             catch (Exception e)
             {

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
-
-using Newtonsoft.Json;
 
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
@@ -18,9 +14,11 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
     public class GetScribeSolutionStatus : BaseAction
     {
         private const int SOLUTION_STATUS_WAIT = 5000;
-        private const string URL_SOLUTION = "/v1/orgs/{0}/solutions/{1}";
-        private const string URL_SOLUTION_PROCESS = "v1/orgs/{0}/solutions/{1}/start";
-        private const string URL_SOLUTIONS = "/v1/orgs/{0}/solutions";
+
+        private const string SOLUTION_STATUS_IDLE = "Idle";
+        private const string SOLUTION_STATUS_IDLE_LAST_RUN_FAILED = "IdleLastRunFailed";
+        private const string SOLUTION_STATUS_ON_DEMAND = "OnDemand";
+        private const string SOLUTION_STATUS_ON_DEMAND_LAST_RUN_FAILED = "OnDemandLastRunFailed";
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
@@ -30,44 +28,38 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
 
             Thread.Sleep(SOLUTION_STATUS_WAIT);
 
-            string response = await rc.Get(string.Format(CultureInfo.InvariantCulture, URL_SOLUTION, orgId, await GetSolutionId(rc, orgId, ScribeUtility.BPST_SOLUTION_NAME)));
-            var result = JsonConvert.DeserializeObject<ScribeSolution>(response);
+            string solutionId = await ScribeUtility.GetSolutionId(rc, orgId, ScribeUtility.BPST_SOLUTION_NAME);
 
-            string status = result.status ?? string.Empty;
+            ScribeSolution solution = JsonUtility.Deserialize<ScribeSolution>(await rc.Get(string.Format(ScribeUtility.URL_SOLUTION, orgId, solutionId)));
 
-            if (status.Equals("IdleLastRunFailed", StringComparison.OrdinalIgnoreCase) || status.Equals("OnDemandLastRunFailed", StringComparison.OrdinalIgnoreCase))
+            string status = solution.status ?? string.Empty;
+
+            if (status.EqualsIgnoreCase(SOLUTION_STATUS_IDLE_LAST_RUN_FAILED) || status.EqualsIgnoreCase(SOLUTION_STATUS_ON_DEMAND_LAST_RUN_FAILED))
             {
-                return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject());
+                return new ActionResponse(ActionStatus.Failure, new ActionResponseExceptionDetail(string.Empty, await GetHistory(rc, orgId, solutionId)));
             }
-            else if (status.Equals("Idle", StringComparison.OrdinalIgnoreCase) || status.Equals("OnDemand", StringComparison.OrdinalIgnoreCase))
+            else if (status.EqualsIgnoreCase(SOLUTION_STATUS_IDLE) || status.EqualsIgnoreCase(SOLUTION_STATUS_ON_DEMAND))
             {
-                return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+                return new ActionResponse(ActionStatus.Success);
             }
             else
             {
-                return new ActionResponse(ActionStatus.BatchNoState, JsonUtility.GetEmptyJObject());
+                return new ActionResponse(ActionStatus.InProgress);
             }
         }
 
-        private async Task<string> GetSolutionId(RestClient rc, string orgId, string name)
+        private async Task<string> GetHistory(RestClient rc, string orgId, string solutionId)
         {
-            List<ScribeSolution> solutions = await GetSolutions(rc, orgId);
+            string result = string.Empty;
 
-            foreach (ScribeSolution solution in solutions)
+            List<ScribeHistory> history = JsonUtility.Deserialize<List<ScribeHistory>>(await rc.Get(string.Format(ScribeUtility.URL_HISTORY, orgId, solutionId)));
+
+            if (!history.IsNullOrEmpty())
             {
-                if (name == solution.Name)
-                {
-                    return solution.Id;
-                }
+                result = history[0].Details;
             }
 
-            return null;
-        }
-
-        private async Task<List<ScribeSolution>> GetSolutions(RestClient rc, string orgId)
-        {
-            string response = await rc.Get(string.Format(CultureInfo.InvariantCulture, URL_SOLUTIONS, orgId), null, null);
-            return JsonConvert.DeserializeObject<List<ScribeSolution>>(response);
+            return result;
         }
     }
 }

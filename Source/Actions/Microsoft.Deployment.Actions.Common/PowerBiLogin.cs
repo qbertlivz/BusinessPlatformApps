@@ -17,7 +17,7 @@ namespace Microsoft.Deployment.Actions.Common
 
             request.Logger.LogPowerBiLogin(tenantId, directory);
 
-            return new ActionResponse(ActionStatus.Invisible, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Invisible);
         }
     }
 }

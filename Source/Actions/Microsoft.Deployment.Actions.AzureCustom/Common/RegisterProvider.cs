@@ -42,7 +42,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
                 }
             }
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
     }
 }

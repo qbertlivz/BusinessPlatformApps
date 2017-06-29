@@ -7,6 +7,7 @@ using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
 
 using Trinet.Core.IO.Ntfs;
+using System.Diagnostics;
 
 namespace Microsoft.Deployment.Actions.Custom.SCCM
 {
@@ -31,6 +32,9 @@ namespace Microsoft.Deployment.Actions.Custom.SCCM
             {
                 Directory.CreateDirectory(destDirName);
             }
+
+            // Kill any running azurebcp
+            NTHelper.KillProcess("azurebcp");
 
             // Get the files in the directory and copy them to the new location.
             FileInfo[] files = dir.GetFiles();
@@ -70,7 +74,7 @@ namespace Microsoft.Deployment.Actions.Custom.SCCM
 
             DirectoryCopy(Path.Combine(request.Info.App.AppFilePath, RESOURCE_PATH), targetPath, true);
             
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
     }
 }

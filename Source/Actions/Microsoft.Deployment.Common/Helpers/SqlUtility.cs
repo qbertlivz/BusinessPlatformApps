@@ -270,7 +270,7 @@ namespace Microsoft.Deployment.Common.Helpers
             };
 
             // Add encryption if we're targeting an Azure server
-            if (credentials.Server.IndexOf(".database.windows.net", StringComparison.OrdinalIgnoreCase)>0)
+            if (credentials.Server.IndexOf(".database.windows.net", StringComparison.OrdinalIgnoreCase) > 0)
             {
                 conn.Encrypt = true;
                 conn.TrustServerCertificate = false;

@@ -36,7 +36,7 @@
             {
                 "displayname": "Target",
                 "isAzureSql": true,
-                "name": "$SiteCommon$/pages-gallery/sql-server.html",
+                "name": "$SiteCommon$/pages-gallery/sql.html",
                 "newSqlDatabase": "$(this.MS.UtilityService.getUniqueId(10))",
                 "showAzureSql": false,
                 "showNewSqlOption": true,
@@ -135,7 +135,6 @@
             {
                 "displayname": "$translate(INIT_ACTION_WAITING_DATA)",
                 "FinishedActionName": "Microsoft-CrmGetProfileStatus",
-                "IsWaiting": true,
                 "name": "Microsoft-GetDataPullStatus",
                 "SqlServerIndex": 0,
                 "TargetSchema": "psa"

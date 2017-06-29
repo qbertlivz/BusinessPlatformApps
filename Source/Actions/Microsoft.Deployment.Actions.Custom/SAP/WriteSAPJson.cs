@@ -58,7 +58,7 @@ namespace Microsoft.Deployment.Actions.Custom.SAP
                 }
             }
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
 
         private const string JSON_PATH = @"Simplement, Inc\Solution Template AR\config.json";

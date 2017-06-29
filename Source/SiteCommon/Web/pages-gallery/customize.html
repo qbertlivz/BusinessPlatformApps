@@ -44,4 +44,27 @@
             <option>${MS.Translate.RECURRENT_DAILY}</option>
         </select>
     </div>
+
+    <!--Additional Entities-->
+    <div class="st-float-clear" if.bind="addAdditionalEntities && !MS.HttpService.isServiceBusy">
+        <p class="st-text">Select additional entities that you want to be copied over during the data movement process:</p>
+        <div class="st-grid">
+            <div class="st-grid-row-left">
+                <p class="st-text">Source entities:</p>
+                <select class="st-multiple-selector btn st-input au-target st-selector-length" multiple value.bind="selectedAdd">
+                    <option repeat.for="item of additionalEntities" value.bind="item">${item}</option>
+                </select>
+            </div>
+            <div class="st-grid-row-buttons">
+                <button class="primary au-target st-grid-row-buttons-spacing" click.trigger="onAddingEntityToEntitiesToReplicate()" disabled.bind="selectedAdd.length === 0">Add</button>
+                <button class="primary au-target st-grid-row-buttons-spacing" click.trigger="onRemovingEntityFromEntitiesToReplicate()" disabled.bind="selectedRemove.length === 0">Remove</button>
+            </div>
+            <div class="st-grid-row-right">
+                <p class="st-text">Target entities:</p>
+                <select class="st-multiple-selector btn st-input au-target st-selector-length" multiple value.bind="selectedRemove">
+                    <option repeat.for="item of entitiesToReplicate" value.bind="item">${item}</option>
+                </select>
+            </div>
+        </div>
+    </div>
 </template>

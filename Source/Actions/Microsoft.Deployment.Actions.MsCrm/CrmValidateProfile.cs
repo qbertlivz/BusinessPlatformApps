@@ -52,7 +52,12 @@
             _orgId = request.DataStore.GetValue("OrganizationId");
             string name = request.DataStore.GetValue("ProfileName") ?? "bpst-mscrm-profile";
             string kV = request.DataStore.GetValue("KeyVault");
-            string[] entities = request.DataStore.GetValue("Entities").Split(new[] {',', ' ', '\t'}, StringSplitOptions.RemoveEmptyEntries);
+            //string[] entities = request.DataStore.GetValue("Entities").Split(new[] {',', ' ', '\t'}, StringSplitOptions.RemoveEmptyEntries);
+            Dictionary<string, string> entitiesDict = JsonConvert.DeserializeObject<Dictionary<string, string>>(request.DataStore.GetValue("Entities"));
+            string[] entities = new string[entitiesDict.Count];
+            int iCount = 0;
+            foreach (var entity in entitiesDict) entities[iCount++] = entity.Key;
+
 
             MsCrmProfile profile = new MsCrmProfile
             {
@@ -69,6 +74,7 @@
                 MsCrmEntity e = new MsCrmEntity {Type = entities[i]};
                 profile.Entities[i] = e;
             }
+
 
             List<string> invalidEntities = await RetrieveInvalidEntities(entities);
 

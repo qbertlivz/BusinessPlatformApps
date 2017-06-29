@@ -54,6 +54,11 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                     request.DataStore.AddToDataStore("DirectoryName", emailAddress.Split('@').Last());
                     request.DataStore.AddToDataStore("PowerBITenantId", AzureUtility.GetTenantFromToken(token));
                     break;
+                case "o365":
+                    request.DataStore.AddToDataStore("O365Token", token);
+                    request.DataStore.AddToDataStore("DirectoryName", emailAddress.Split('@').Last());
+                    request.DataStore.AddToDataStore("PowerBITenantId", AzureUtility.GetTenantFromToken(token));
+                    break;
                 default:
                     request.DataStore.AddToDataStore("AzureToken", token);
                     var tenantId = AzureUtility.GetTenantFromToken(token);

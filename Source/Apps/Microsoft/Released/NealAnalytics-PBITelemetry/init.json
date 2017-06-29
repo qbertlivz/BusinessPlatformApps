@@ -26,6 +26,10 @@
                 "pricingUrl": "$translate(INIT_PBI_TELEMETRY_PRICING_URL)"
             },
             {
+                "displayname": "Office 365 Login",
+                "name": "$SiteCommon$/pages-gallery/o365-login.html"
+            },
+            {
                 "displayname": "Target",
                 "isAzureSql": true,
                 "name": "$SiteCommon$/pages-gallery/sql.html",

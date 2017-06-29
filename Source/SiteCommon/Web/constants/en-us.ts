@@ -414,6 +414,8 @@
     NOTIFIER_CREATING_DATABASE_CONNECTION: `Creating database conection`,
     NOTIFIER_CREATING_NOTIFIER_APP: `Creating notifier app`,
     NOTIFIER_CONFIGURE_NOTIFIER_APP: `Configuring notifier app`,
+    O365_LOGIN_SUBTITLE: `Set up a connection to your Office 365 Account so we can bring in your data.`,
+    O365_LOGIN_TITLE: `Connect to your Office 365 Account`,
     POWER_BI_SIGN_IN: 'Sign In',
     POWER_BI_SIGN_UP: 'Sign up free',
     POWER_BI_LEARN_MORE: 'Learn more',

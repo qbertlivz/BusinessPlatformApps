@@ -19,12 +19,11 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
             var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
- 
+
             var functionName = request.DataStore.GetValue("FunctionName");
-           
 
             AzureHttpClient client = new AzureHttpClient(azureToken, subscription, resourceGroup);
-           
+
             HttpResponseMessage publishxml = await client.ExecuteWithSubscriptionAndResourceGroupAsync(HttpMethod.Post, "/providers/Microsoft.Web/sites/" +
                 functionName + "/publishxml", "2015-02-01", string.Empty);
             var publishxmlfile = publishxml.Content.ReadAsStringAsync().Result;
@@ -50,7 +49,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             var ftpServer = profile.Attribute("publishUrl").Value;
             var username = profile.Attribute("userName").Value;
             var password = profile.Attribute("userPWD").Value;
-            FtpUtilityTest.UploadFileToServer(ftpServer, username, password, "/ArticleExtractor/bin/Microsoft.KnowledgeMining.MainArticleExtractor.dll", 
+            FtpUtilityTest.UploadFileToServer(ftpServer, username, password, "/ArticleExtractor/bin/Microsoft.KnowledgeMining.MainArticleExtractor.dll",
             request.ControllerModel.SiteCommonFilePath + "/Assemblies/Microsoft.KnowledgeMining.MainArticleExtractor.dll");
 
             return new ActionResponse(ActionStatus.Success);

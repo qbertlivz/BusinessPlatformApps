@@ -70,8 +70,6 @@ export class ProgressViewModel extends ViewModelBase {
                     this.showPBIWorkspaces = true;
                 }
             });
-        } else if (this.MS.DataStore.getValue('HasNavigated') === null) {
-            this.MS.NavigationService.navigateHome();
         } else {
             let isDataStoreValid: boolean = true;
 

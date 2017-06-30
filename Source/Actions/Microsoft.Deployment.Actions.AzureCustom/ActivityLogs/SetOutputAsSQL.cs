@@ -31,10 +31,9 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
             var table = request.DataStore.GetValue("tableName");
             var alias = request.DataStore.GetValue("outputAlias");
             var body = $"{{\"properties\":{{\"datasource\":{{\"type\":\"Microsoft.Sql/Server/Database\",\"properties\":{{\"server\":{server},\"database\":{database},\"table\":{table},\"user\":{user},\"password\":{password}}}}}}}}}";
-            var body2 = $"{{\"properties\":{{\"dataSource\":{{\"outputDocumentDatabaseSource\":{{}},\"outputTopicSource\":{{}},\"outputQueueSource\":{{}},\"outputEventHubSource\":{{}},\"outputSqlDatabaseSource\":{{\"server\":\"pbisttest.database.windows.net\",\"database\":\"LancesSQLDB\",\"user\":\"pbiadmin\",\"password\":\"P@ss.w07d\",\"table\":\"eventHubSQL\"}},\"outputBlobStorageSource\":{{}},\"outputTableStorageSource\":{{}},\"outputPowerBISource\":{{}},\"outputDataLakeSource\":{{}},\"outputIotGatewaySource\":{{}},\"type\":\"Microsoft.Sql/Server/Database\"}},\"serialization\":{{}}}},\"createType\":\"None\",\"id\":null,\"location\":\"Australia East\",\"name\":\"POC-output\",\"type\":\"Microsoft.Sql/Server/Database\"}}";
             var body3 = $"{{\"properties\":{{\"dataSource\":{{\"outputDocumentDatabaseSource\":{{}},\"outputTopicSource\":{{}},\"outputQueueSource\":{{}},\"outputEventHubSource\":{{}},\"outputSqlDatabaseSource\":{{\"server\":{server},\"database\":{database},\"user\":{user},\"password\":{password},\"table\":{table}}},\"outputBlobStorageSource\":{{}},\"outputTableStorageSource\":{{}},\"outputPowerBISource\":{{}},\"outputDataLakeSource\":{{}},\"outputIotGatewaySource\":{{}},\"type\":\"Microsoft.Sql/Server/Database\"}},\"serialization\":{{}}}},\"createType\":\"None\",\"id\":null,\"location\":\"Australia East\",\"name\":{alias},\"type\":\"Microsoft.Sql/Server/Database\"}}";
             AzureHttpClient ahc = new AzureHttpClient(azure_access_token, subscription);
-            HttpResponseMessage response = await ahc.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Put, uri2, body2);
+            HttpResponseMessage response = await ahc.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Put, uri2, body);
             return response.IsSuccessStatusCode ? new ActionResponse(ActionStatus.Success) : new ActionResponse(ActionStatus.Failure);
         }
     }

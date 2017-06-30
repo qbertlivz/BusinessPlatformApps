@@ -102,7 +102,7 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
             dataStore.AddToDataStore("serverName", "pbisttest.database.windows.net");
             dataStore.AddToDataStore("dbName", "LancesSQLDB");
             dataStore.AddToDataStore("username", "pbiadmin@pbisttest");
-            dataStore.AddToDataStore("password", "P@ss.w07d");
+            dataStore.AddToDataStore("password", TestHelpers.Credential.Instance.Sql.Password);
             dataStore.AddToDataStore("tableName", "eventHubSQL");
             dataStore.AddToDataStore("outputAlias", "POC-sqloutput");
             var response = await TestManager.ExecuteActionAsync("Microsoft-SetOutputAsSQL", dataStore);

@@ -18,6 +18,8 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
         {
             // Tests the Action to create an Event Hub Namespace
             var dataStore = await TestManager.GetDataStore(true);
+            var password = TestHelpers.Credential.Instance.Sql.Password;
+            dataStore.AddToDataStore("SqlConnectionString", $"Data Source=pbisttest.database.windows.net;Initial Catalog=LancesSQLDB;Integrated Security=False;User ID=pbiadmin;Password={password};Connect Timeout=15;Encrypt=True;TrustServerCertificate=False");
             var response = await TestManager.ExecuteActionAsync("Microsoft-GetHistoricalData", dataStore);
             Assert.IsTrue(response.IsSuccess);
         }

@@ -74,7 +74,7 @@
                 "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'D365')"
             },
             {
-                "name": "$SiteCommon$/pages-gallery/sql-server.html",
+                "name": "$SiteCommon$/pages-gallery/sql.html",
                 "displayname": "Target",
                 "isAzureSql": "$run(!this.MS.HttpService.isOnPremise)",
                 "newSqlDatabase": "$(this.MS.UtilityService.GetUniqueId(10))",

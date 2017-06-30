@@ -1,10 +1,12 @@
-﻿using System.ComponentModel.Composition;
+﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Net.Http;
 using System.Threading.Tasks;
 
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
+using Microsoft.Deployment.Common.Model.PowerApp;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
 {
@@ -15,38 +17,38 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
-            AzureHttpClient client = new AzureHttpClient(azureToken);
+            AzureHttpClient ahc = new AzureHttpClient(request.DataStore.GetJson("AzureToken", "access_token"));
 
-            string environmentBody = "{}";
             string environmentUrl = $"{BASE_POWER_APPS_URL}/environments?api-version=2016-11-01&$filter=minimumAppPermission%20eq%20%27CanEdit%27&$expand=Permissions&_poll=true";
 
-            var environmentsResponse = await client.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Get, environmentUrl, environmentBody);
-            var environmentsString = await environmentsResponse.Content.ReadAsStringAsync();
-            var environments = JsonUtility.GetJsonObjectFromJsonString(environmentsString);
+            List<PowerAppEnvironment> environments = await ahc.RequestValue<List<PowerAppEnvironment>>(HttpMethod.Get, environmentUrl);
 
-            if (environments["value"] == null)
+            bool foundEnvironment = false;
+
+            if (environments.IsNullOrEmpty())
             {
-                var skipPowerApp = request.DataStore.GetValue("SkipPowerApp");
-                if (skipPowerApp == null)
+                if (request.DataStore.GetValue("SkipPowerApp") == null)
                 {
                     request.DataStore.AddToDataStore("SkipPowerApp", "true", DataStoreType.Public);
                 }
-                return new ActionResponse(ActionStatus.Success);
+                foundEnvironment = true;
             }
-
-            foreach (var environment in environments["value"])
+            else
             {
-                bool isDefault = false;
-                bool.TryParse(environment["properties"]["isDefault"].ToString(), out isDefault);
-                if (isDefault && environment["properties"]["permissions"]["CreatePowerApp"] != null)
+                for (int i = 0; i < environments.Count && !foundEnvironment; i++)
                 {
-                    request.DataStore.AddToDataStore("PowerAppEnvironment", environment["name"].ToString(), DataStoreType.Private);
-                    return new ActionResponse(ActionStatus.Success);
-                };
+                    PowerAppEnvironment environment = environments[i];
+                    if (environment.Properties != null && environment.Properties.IsDefault && environment.Properties.Permissions != null && environment.Properties.Permissions.CreatePowerApp != null)
+                    {
+                        request.DataStore.AddToDataStore("PowerAppEnvironment", environment.Name, DataStoreType.Private);
+                        foundEnvironment = true;
+                    }
+                }
             }
 
-            return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "PowerAppNoEnvironment");
+            return foundEnvironment
+                ? new ActionResponse(ActionStatus.Success)
+                : new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "PowerAppNoEnvironment");
         }
     }
 }

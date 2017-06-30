@@ -121,7 +121,7 @@ namespace Microsoft.Deployment.Common.Helpers
         public async Task<string> Request(HttpMethod method, string url, string body = "")
         {
             HttpResponseMessage response = await this.ExecuteGenericRequestWithHeaderAsync(method, url, body);
-            return await response.Content.ReadAsStringAsync();
+            return response.IsSuccessStatusCode ? await response.Content.ReadAsStringAsync() : null;
         }
 
         public async Task<string> Request(string url, byte[] file, string name)
@@ -152,6 +152,20 @@ namespace Microsoft.Deployment.Common.Helpers
             }
 
             return await response.Content.ReadAsStringAsync();
+        }
+
+        public async Task<T> RequestValue<T>(HttpMethod method, string url, string body = "")
+        {
+            T value = default(T);
+
+            HttpResponseMessage response = await this.ExecuteGenericRequestWithHeaderAsync(method, url, body);
+
+            if (response.IsSuccessStatusCode)
+            {
+                value = JsonUtility.DeserializeContent<T>(await response.Content.ReadAsStringAsync());
+            }
+
+            return value;
         }
 
         private string GetFormBoundary()

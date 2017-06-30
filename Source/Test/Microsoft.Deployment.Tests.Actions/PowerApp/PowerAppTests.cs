@@ -17,11 +17,19 @@ namespace Microsoft.Deployment.Tests.Actions.PowerApp
             ds.AddToDataStore("SqlConnectionString", SqlCreds.GetSqlPagePayload("ssas"));
             ds.AddToDataStore("SqlScriptsFolder", "Service/Database/LogicApps");
 
-            Assert.IsTrue((await TestManager.ExecuteActionAsync("Microsoft-DeploySQLScripts", ds, "Microsoft-TwitterTemplate")).IsSuccess);
+            Assert.IsTrue(await TestManager.IsSuccessAsync("Microsoft-DeploySQLScripts", ds, "Microsoft-TwitterTemplate"));
 
             ds.AddToDataStore("SearchQuery", "cricket rights OR english cricket OR \"Sky AND cricket\"");
 
-            Assert.IsTrue((await TestManager.ExecuteActionAsync("Microsoft-ConfigurePowerAppTables", ds)).IsSuccess);
+            Assert.IsTrue(await TestManager.IsSuccessAsync("Microsoft-ConfigurePowerAppTables", ds));
+        }
+
+        [TestMethod]
+        public async Task ValidateGetPowerAppEnvironment()
+        {
+            var ds =  await TestManager.GetDataStore();
+
+            Assert.IsTrue(await TestManager.IsSuccessAsync("Microsoft-GetPowerAppEnvironment", ds));
         }
     }
 }

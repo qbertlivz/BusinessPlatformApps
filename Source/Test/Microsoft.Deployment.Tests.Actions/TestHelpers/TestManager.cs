@@ -113,5 +113,10 @@ namespace Microsoft.Deployment.Tests.Actions.TestHelpers
             info.WebsiteRootUrl = "https://unittest";
             return await Controller.ExecuteAction(info, new ActionRequest() { DataStore = datastore });
         }
+
+        public static async Task<bool> IsSuccessAsync(string actionName, DataStore datastore, string templateName = "Microsoft-NewsTemplateTest")
+        {
+            return (await ExecuteActionAsync(actionName, datastore, templateName)).IsSuccess;
+        }
     }
 }

@@ -2,13 +2,15 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
+
 using Microsoft.Deployment.Actions.AzureCustom.AzureToken;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.AppLoad;
 using Microsoft.Deployment.Common.Controller;
 using Microsoft.Deployment.Common.Helpers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 
 namespace Microsoft.Deployment.Tests.Actions.TestHelpers
 {
@@ -28,7 +30,6 @@ namespace Microsoft.Deployment.Tests.Actions.TestHelpers
             {
                 string filecontents = File.ReadAllText("datastore.json");
                 var jsonObj = JsonConvert.DeserializeObject<DataStore>(filecontents);
-
 
                 RefreshAzureToken token = new RefreshAzureToken();
                 ActionRequest req = new ActionRequest()
@@ -53,7 +54,6 @@ namespace Microsoft.Deployment.Tests.Actions.TestHelpers
                 }
             }
 
- 
             // If not found or refresh failed prompt
             Credential.Load();
             var dataStore = await AAD.GetUserTokenFromPopup();
@@ -79,7 +79,6 @@ namespace Microsoft.Deployment.Tests.Actions.TestHelpers
             return dataStore;
         }
 
-
         [AssemblyInitialize()]
         public static void AssemblyInit(TestContext context)
         {
@@ -97,16 +96,11 @@ namespace Microsoft.Deployment.Tests.Actions.TestHelpers
             Credential.Load();
         }
 
-        //[AssemblyCleanup()]
-        //public static async void AssemblyCleanup()
-        //{
-        //}
-
-        public static ActionResponse ExecuteAction(string actionName, DataStore datastore)
+        public static ActionResponse ExecuteAction(string actionName, DataStore datastore, string templateName = "Microsoft-NewsTemplateTest")
         {
             UserInfo info = new UserInfo();
             info.ActionName = actionName;
-            info.AppName = TemplateName;
+            info.AppName = templateName;
             info.WebsiteRootUrl = "https://unittest";
             return Controller.ExecuteAction(info, new ActionRequest() { DataStore = datastore }).Result;
         }

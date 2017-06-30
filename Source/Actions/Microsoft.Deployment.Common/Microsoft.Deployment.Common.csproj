@@ -151,6 +151,7 @@
     <Compile Include="Model\PBI\PBIReport.cs" />
     <Compile Include="Model\PBI\PBIWorkspace.cs" />
     <Compile Include="Model\PBI\PBIWorkspaces.cs" />
+    <Compile Include="Model\PowerApp\ReadableQueryPart.cs" />
     <Compile Include="Model\QDEFF.cs" />
     <Compile Include="Model\Scribe\D365Organization.cs" />
     <Compile Include="Model\Scribe\ScribeAgent.cs" />

@@ -34,7 +34,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
             }
         }
 
-        public static DataTable historicalDataTable()
+        public static DataTable createHistoricalDataTable()
         {
             DataTable table = new DataTable();
             table.Columns.Add("authorizationAction");
@@ -72,30 +72,19 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
             var token = request.DataStore.GetJson("AzureToken", "access_token");
             var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             System.DateTime now = System.DateTime.UtcNow;
-            string nowString = now.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
             System.DateTime days90ago = now.Subtract(new System.TimeSpan(2160, 0, 0));
+            string nowString = now.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
             string days90agoString = days90ago.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
-            //var geturi = $"https://management.azure.com/subscriptions/{subscription}/providers/microsoft.insights/eventtypes/management/values?api-version=2015-04-01&$filter=eventTimestamp ge '{days90agoString}' and eventTimestamp le '{nowString}' and eventChannels eq 'Admin, Operation'";
-            // smaller time interval ~500 records 
-            var geturi = $"https://management.azure.com/subscriptions/{subscription}/providers/microsoft.insights/eventtypes/management/values?api-version=2015-04-01&$filter=eventTimestamp ge '2017-06-28T17:56:33.880Z' and eventTimestamp le '2017-06-29T17:56:33.880Z' and eventChannels eq 'Admin, Operation'";
+            var geturi = $"https://management.azure.com/subscriptions/{subscription}/providers/microsoft.insights/eventtypes/management/values?api-version=2015-04-01&$filter=eventTimestamp ge '{days90agoString}' and eventTimestamp le '{nowString}' and eventChannels eq 'Admin, Operation'";
+            // smaller time interval ~500 records below
+            //var geturi = $"https://management.azure.com/subscriptions/{subscription}/providers/microsoft.insights/eventtypes/management/values?api-version=2015-04-01&$filter=eventTimestamp ge '2017-06-28T17:56:33.880Z' and eventTimestamp le '2017-06-29T17:56:33.880Z' and eventChannels eq 'Admin, Operation'";
             var sqlConn = request.DataStore.GetValue("SqlConnectionString");
-
+            var historicalTable = createHistoricalDataTable();
             AzureHttpClient ahc = new AzureHttpClient(token, subscription);
-            List<ActivityLogResponse> fullActivityLog = new List<ActivityLogResponse>();
-            ActivityLogResponse response = JsonUtility.Deserialize<ActivityLogResponse>(await ahc.Request(HttpMethod.Get, geturi));
-            fullActivityLog.Add(response);
-            while (response.NextLink != null)
+            while (true)
             {
-                response = JsonUtility.Deserialize<ActivityLogResponse>(await ahc.Request(HttpMethod.Get, response.NextLink));
-                fullActivityLog.Add(response);
-            }
-
-            var historicalTable = historicalDataTable();
-
-            foreach (ActivityLogResponse activityLogResponse in fullActivityLog)
-            {
-                List<ActivityLogEntry> activityLogBatch = activityLogResponse.Value;
-                foreach (ActivityLogEntry activity in activityLogBatch)
+                ActivityLogResponse response = JsonUtility.Deserialize<ActivityLogResponse>(await ahc.Request(HttpMethod.Get, geturi));
+                foreach (ActivityLogEntry activity in response.Value)
                 {
                     DataRow historicalRow = historicalTable.NewRow();
                     if (activity.Authorization != null)
@@ -157,6 +146,11 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
                     historicalRow["subscriptionId"] = activity.SubscriptionId;
                     historicalTable.Rows.Add(historicalRow);
                 }
+                if (response.NextLink == null)
+                {
+                    break;
+                }
+                geturi = response.NextLink;
             }
             BulkInsert(sqlConn, historicalTable, "dbo.HistoricalData");
             return new ActionResponse(ActionStatus.Success);

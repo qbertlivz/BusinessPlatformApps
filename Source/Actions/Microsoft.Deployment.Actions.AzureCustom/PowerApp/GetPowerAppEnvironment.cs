@@ -13,24 +13,17 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
     [Export(typeof(IAction))]
     public class GetPowerAppEnvironment : BaseAction
     {
-        private string BASE_POWER_APPS_URL = "https://management.azure.com/providers/Microsoft.PowerApps";
-
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             AzureHttpClient ahc = new AzureHttpClient(request.DataStore.GetJson("AzureToken", "access_token"));
 
-            string environmentUrl = $"{BASE_POWER_APPS_URL}/environments?api-version=2016-11-01&$filter=minimumAppPermission%20eq%20%27CanEdit%27&$expand=Permissions&_poll=true";
-
-            List<PowerAppEnvironment> environments = await ahc.RequestValue<List<PowerAppEnvironment>>(HttpMethod.Get, environmentUrl);
+            List<PowerAppEnvironment> environments = await ahc.RequestValue<List<PowerAppEnvironment>>(HttpMethod.Get, PowerAppUtility.URL_POWERAPPS_ENVIRONMENTS);
 
             bool foundEnvironment = false;
 
             if (environments.IsNullOrEmpty())
             {
-                if (request.DataStore.GetValue("SkipPowerApp") == null)
-                {
-                    request.DataStore.AddToDataStore("SkipPowerApp", "true", DataStoreType.Public);
-                }
+                PowerAppUtility.SkipPowerApp(request.DataStore);
                 foundEnvironment = true;
             }
             else

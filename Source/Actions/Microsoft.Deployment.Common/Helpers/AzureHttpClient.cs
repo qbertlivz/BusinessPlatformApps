@@ -118,6 +118,12 @@ namespace Microsoft.Deployment.Common.Helpers
             }
         }
 
+        public async Task<bool> IsSuccess(HttpMethod method, string url, string body = "")
+        {
+            HttpResponseMessage response = await this.ExecuteGenericRequestWithHeaderAsync(method, url, body);
+            return response.IsSuccessStatusCode;
+        }
+
         public async Task<string> Request(HttpMethod method, string url, string body = "")
         {
             HttpResponseMessage response = await this.ExecuteGenericRequestWithHeaderAsync(method, url, body);

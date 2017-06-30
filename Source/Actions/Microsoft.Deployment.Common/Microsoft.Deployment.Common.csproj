@@ -113,6 +113,7 @@
     <Compile Include="Helpers\NTHelper.cs" />
     <Compile Include="Helpers\NTPermissionUtility.cs" />
     <Compile Include="Helpers\PBIXUtils.cs" />
+    <Compile Include="Helpers\PowerAppUtility.cs" />
     <Compile Include="Helpers\RandomGenerator.cs" />
     <Compile Include="Helpers\RequestUtility.cs" />
     <Compile Include="Helpers\ResponseObjectConverter.cs" />
@@ -156,6 +157,10 @@
     <Compile Include="Model\PowerApp\PowerAppEnvironmentPropertiesCreatedBy.cs" />
     <Compile Include="Model\PowerApp\PowerAppEnvironmentPropertiesPermission.cs" />
     <Compile Include="Model\PowerApp\PowerAppEnvironmentPropertiesPermissions.cs" />
+    <Compile Include="Model\PowerApp\PowerAppSqlConnection.cs" />
+    <Compile Include="Model\PowerApp\PowerAppSqlConnectionPropertiesConnectionParameters.cs" />
+    <Compile Include="Model\PowerApp\PowerAppSqlConnectionProperties.cs" />
+    <Compile Include="Model\PowerApp\PowerAppSqlConnectionPropertiesEnvironment.cs" />
     <Compile Include="Model\PowerApp\ReadableQueryPart.cs" />
     <Compile Include="Model\QDEFF.cs" />
     <Compile Include="Model\Scribe\D365Organization.cs" />

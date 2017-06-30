@@ -25,11 +25,14 @@ namespace Microsoft.Deployment.Tests.Actions.PowerApp
         }
 
         [TestMethod]
-        public async Task ValidateGetPowerAppEnvironment()
+        public async Task ValidatePowerAppDeployment()
         {
             var ds =  await TestManager.GetDataStore();
 
+            ds.AddToDataStore("SqlConnectionString", SqlCreds.GetSqlPagePayload("ssas"));
+
             Assert.IsTrue(await TestManager.IsSuccessAsync("Microsoft-GetPowerAppEnvironment", ds));
+            Assert.IsTrue(await TestManager.IsSuccessAsync("Microsoft-CreatePowerAppSqlConnection", ds));
         }
     }
 }

@@ -7,12 +7,12 @@ namespace Microsoft.Deployment.Common.Model.PowerApp
         [JsonProperty("connectionParameters")]
         public PowerAppSqlConnectionPropertiesConnectionParameters ConnectionParameters;
         [JsonProperty("environment")]
-        public PowerAppSqlConnectionPropertiesEnvironment Environment;
+        public PowerAppEnvironment Environment;
 
         public PowerAppSqlConnectionProperties(SqlCredentials sqlCredentials, string environmentId)
         {
             ConnectionParameters = new PowerAppSqlConnectionPropertiesConnectionParameters(sqlCredentials);
-            Environment = new PowerAppSqlConnectionPropertiesEnvironment(environmentId);
+            Environment = new PowerAppEnvironment(environmentId);
         }
     }
 }

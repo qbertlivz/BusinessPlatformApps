@@ -14,7 +14,7 @@ namespace Microsoft.Deployment.Tests.Actions.PowerApp
         {
             var ds = new DataStore();
 
-            ds.AddToDataStore("SqlConnectionString", SqlCreds.GetSqlPagePayload("ssas"));
+            ds.AddToDataStore("SqlConnectionString", SqlCreds.GetSqlPagePayload("yashti"));
             ds.AddToDataStore("SqlScriptsFolder", "Service/Database/LogicApps");
 
             Assert.IsTrue(await TestManager.IsSuccessAsync("Microsoft-DeploySQLScripts", ds, "Microsoft-TwitterTemplate"));
@@ -29,10 +29,11 @@ namespace Microsoft.Deployment.Tests.Actions.PowerApp
         {
             var ds =  await TestManager.GetDataStore();
 
-            ds.AddToDataStore("SqlConnectionString", SqlCreds.GetSqlPagePayload("ssas"));
+            ds.AddToDataStore("SqlConnectionString", SqlCreds.GetSqlPagePayload("yashti"));
 
             Assert.IsTrue(await TestManager.IsSuccessAsync("Microsoft-GetPowerAppEnvironment", ds));
             Assert.IsTrue(await TestManager.IsSuccessAsync("Microsoft-CreatePowerAppSqlConnection", ds));
+            Assert.IsTrue(await TestManager.IsSuccessAsync("Microsoft-DeployPowerApp", ds));
         }
     }
 }

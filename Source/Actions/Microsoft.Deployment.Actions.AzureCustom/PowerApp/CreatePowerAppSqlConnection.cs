@@ -15,12 +15,12 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            AzureHttpClient ahc = new AzureHttpClient(request.DataStore.GetJson("AzureToken", "access_token"));
-
             string powerAppEnvironmentId = request.DataStore.GetValue("PowerAppEnvironment");
 
             if (powerAppEnvironmentId != null)
             {
+                AzureHttpClient ahc = new AzureHttpClient(request.DataStore.GetJson("AzureToken", "access_token"));
+
                 string newSqlConnectionId = RandomGenerator.GetRandomHexadecimal(PowerAppUtility.SQL_CONNECTION_ID_LENGTH);
                 string sqlConnectionString = request.DataStore.GetValueAtIndex("SqlConnectionString", "SqlServerIndex");
 

@@ -14,5 +14,11 @@ namespace Microsoft.Deployment.Common.Model.PowerApp
         public PowerAppEnvironmentProperties Properties;
         [JsonProperty("type")]
         public string Type;
+
+        public PowerAppEnvironment(string environmentId)
+        {
+            Id = $"/providers/Microsoft.PowerApps/environments/{environmentId}";
+            Name = environmentId;
+        }
     }
 }

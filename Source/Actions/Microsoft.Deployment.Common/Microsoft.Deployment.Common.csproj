@@ -160,7 +160,6 @@
     <Compile Include="Model\PowerApp\PowerAppSqlConnection.cs" />
     <Compile Include="Model\PowerApp\PowerAppSqlConnectionPropertiesConnectionParameters.cs" />
     <Compile Include="Model\PowerApp\PowerAppSqlConnectionProperties.cs" />
-    <Compile Include="Model\PowerApp\PowerAppSqlConnectionPropertiesEnvironment.cs" />
     <Compile Include="Model\PowerApp\ReadableQueryPart.cs" />
     <Compile Include="Model\QDEFF.cs" />
     <Compile Include="Model\Scribe\D365Organization.cs" />

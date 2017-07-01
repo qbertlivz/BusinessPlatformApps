@@ -1,13 +1,11 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
 using System.Net.Http;
 using System.Threading.Tasks;
-
-using Newtonsoft.Json.Linq;
 
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
+using Microsoft.Deployment.Common.Model.PowerApp;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
 {
@@ -25,9 +23,9 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
             string objectId = JsonUtility.GetWebToken(azureToken, "oid");
             string sqlConnectionId = request.DataStore.GetValue("PowerAppSqlConnectionId");
 
-            //JObject resourceStorage = JsonUtility.GetJsonObjectFromJsonString(await ahc.Request(HttpMethod.Post, $"{BASE_POWER_APPS_URL}/objectIds/{objectId}/generateResourceStorage?api-version=2016-11-01", $"{{\"environment\":{{\"id\":\"/providers/Microsoft.PowerApps/environments/{environmentId}\",\"name\":\"{environmentId}\"}}}}}}"));
-
-            //string sharedAccessSignature = JsonUtility.GetJObjectProperty(resourceStorage, "sharedAccessSignature");
+            PowerAppResourceStorage resourceStorage = JsonUtility.Deserialize<PowerAppResourceStorage>(await ahc.Request(HttpMethod.Post,
+                string.Format(PowerAppUtility.URL_POWERAPPS_GENERATE_RESOURCE_STORAGE, objectId),
+                JsonUtility.Serialize<PowerAppEnvironmentWrapper>(new PowerAppEnvironmentWrapper(environmentId))));
 
             //string backgroundImageUri = sharedAccessSignature.Replace("?", "/logoSmallFile?");
             //string documentUri = sharedAccessSignature.Replace("?", "/document.msapp?");

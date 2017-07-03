@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.Composition;
+﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -27,12 +28,20 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
                 string.Format(PowerAppUtility.URL_POWERAPPS_GENERATE_RESOURCE_STORAGE, objectId),
                 JsonUtility.Serialize<PowerAppEnvironmentWrapper>(new PowerAppEnvironmentWrapper(environmentId)));
 
+            PowerAppSession session = await ahc.Request<PowerAppSession>(HttpMethod.Post,
+                string.Format(PowerAppUtility.URL_POWERAPPS_INITIATE_SESSION, objectId));
+
+            AzureHttpClient ahc2 = new AzureHttpClient(azureToken, new Dictionary<string, string>()
+            {
+                {
+                    "AuthoringSessionToken", session.SessionToken
+                }
+            });
+
+            //List<object> response = await ahc.Request<List<object>>(HttpMethod.Post, PowerAppUtility.URL_POWERAPPS_PUBLISH_TO_BLOB, string.Empty);
+
             //string backgroundImageUri = sharedAccessSignature.Replace("?", "/logoSmallFile?");
             //string documentUri = sharedAccessSignature.Replace("?", "/document.msapp?");
-
-            //JObject initiateDocumentServerSession = JsonUtility.GetJsonObjectFromJsonString(await ahc.Request(HttpMethod.Post, $"{BASE_POWER_APPS_URL}/objectIds/{objectId}/initiateDocumentServerSession?api-version=2016-11-01", string.Empty));
-
-            //AzureHttpClient clientPA = new AzureHttpClient(azureToken, new Dictionary<string, string>() { { "AuthoringSessionToken", JsonUtility.GetJObjectProperty(initiateDocumentServerSession, "sessionToken") } });
 
             //await clientPA.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Post, $"{CREATE_POWER_APPS_URL}/authoringsession/newinstance?requestedLocation=unitedstates", string.Empty);
             //await clientPA.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Get, $"{CREATE_POWER_APPS_URL}/document/util/createdocumentandloadcontext?apptype=0&locale=en-US", string.Empty);

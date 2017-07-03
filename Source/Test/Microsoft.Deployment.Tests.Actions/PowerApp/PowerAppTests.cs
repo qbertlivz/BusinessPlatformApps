@@ -34,7 +34,7 @@ namespace Microsoft.Deployment.Tests.Actions.PowerApp
 
             Assert.IsTrue(await TestManager.IsSuccessAsync("Microsoft-GetPowerAppEnvironment", ds));
             Assert.IsTrue(await TestManager.IsSuccessAsync("Microsoft-CreatePowerAppSqlConnection", ds));
-            Assert.IsTrue(await TestManager.IsSuccessAsync("Microsoft-DeployPowerApp", ds, "Microsoft-TwitterTemplate"));
+            //Assert.IsTrue(await TestManager.IsSuccessAsync("Microsoft-DeployPowerApp", ds, "Microsoft-TwitterTemplate"));
         }
     }
 }

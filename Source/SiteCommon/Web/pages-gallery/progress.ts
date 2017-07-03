@@ -124,11 +124,11 @@ export class ProgressViewModel extends ViewModelBase {
         }
 
         if (this.hasPowerApp) {
-            let responsePowerApp = await this.MS.HttpService.executeAsync('Microsoft-WranglePowerApp', { PowerAppFileName: this.powerAppFileName });
+            let powerAppUri: string = this.MS.DataStore.getValue('PowerAppUri');
 
-            if (responsePowerApp.IsSuccess && responsePowerApp.Body.value) {
+            if (powerAppUri) {
                 this.isPowerAppReady = true;
-                this.powerAppDownloadLink = responsePowerApp.Body.value;
+                this.powerAppDownloadLink = powerAppUri;
             } else {
                 this.hasPowerApp = false;
             }

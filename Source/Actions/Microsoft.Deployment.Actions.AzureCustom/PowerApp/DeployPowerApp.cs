@@ -35,7 +35,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
 
             CloudBlockBlob blob = new CloudBlockBlob(new Uri(uri));
 
-            await blob.UploadFromFileAsync(@"C:\git\Microsoft\BusinessPlatformApps\Source\Test\Microsoft.Deployment.Tests.Actions\bin\Debug" + wrangledFile.Body.ToString());
+            await blob.UploadFromFileAsync(wrangledFile.Body.ToString());
 
             PowerAppMetadata metadata = await ahc.Request<PowerAppMetadata>(HttpMethod.Post, PowerAppUtility.URL_POWERAPPS_PUBLISH_APP,
                 JsonUtility.Serialize<PowerAppPublish>(new PowerAppPublish(uri, $"TwitterTemplate{RandomGenerator.GetDateStamp()}", environmentId, sqlConnectionId)));

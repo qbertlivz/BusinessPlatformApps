@@ -57,7 +57,7 @@
                 "oauthType": "keyvault"
             },
             {
-                "name": "$SiteCommon$/pages-gallery/sql-server.html",
+                "name": "$SiteCommon$/pages-gallery/sql.html",
                 "displayname": "Target",
                 "isAzureSql": true,
                 "newSqlDatabase": "$(this.MS.UtilityService.getUniqueId(10))",

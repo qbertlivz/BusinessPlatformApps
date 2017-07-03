@@ -21,8 +21,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
         {
             var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
             string environmentId = request.DataStore.GetValue("PowerAppEnvironment");
-
-            //string fileName = $"TwitterTemplate{RandomGenerator.GetDateStamp()}.msapp";
+            string sqlConnectionId = request.DataStore.GetValue("PowerAppSqlConnectionId");
 
             ActionResponse wrangledFile = await RequestUtility.CallAction(request, "Microsoft-WranglePowerApp");
 
@@ -32,13 +31,19 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
                 string.Format(PowerAppUtility.URL_POWERAPPS_GENERATE_RESOURCE_STORAGE, JsonUtility.GetWebToken(azureToken, "oid")),
                 JsonUtility.Serialize<PowerAppEnvironmentWrapper>(new PowerAppEnvironmentWrapper(environmentId)));
 
-            string document = resourceStorage.SharedAccessSignature.Replace("?", "/document.msapp?");
+            string uri = resourceStorage.SharedAccessSignature.Replace("?", "/document.msapp?");
 
-            CloudBlockBlob blob = new CloudBlockBlob(new Uri(document));
+            CloudBlockBlob blob = new CloudBlockBlob(new Uri(uri));
 
             await blob.UploadFromFileAsync(@"C:\git\Microsoft\BusinessPlatformApps\Source\Test\Microsoft.Deployment.Tests.Actions\bin\Debug" + wrangledFile.Body.ToString());
 
+            PowerAppMetadata metadata = await ahc.Request<PowerAppMetadata>(HttpMethod.Post, PowerAppUtility.URL_POWERAPPS_PUBLISH_APP,
+                JsonUtility.Serialize<PowerAppPublish>(new PowerAppPublish(uri, $"TwitterTemplate{RandomGenerator.GetDateStamp()}", environmentId, sqlConnectionId)));
 
+            await ahc.Request(HttpMethod.Post, string.Format(PowerAppUtility.URL_POWERAPPS_SQL_CONNECTION_UPDATE, sqlConnectionId, environmentId),
+                JsonUtility.Serialize<PowerAppSqlConnectionUpdate>(new PowerAppSqlConnectionUpdate(metadata.Name)));
+
+            request.DataStore.AddToDataStore("PowerAppUri", string.Format(PowerAppUtility.URL_POWERAPPS_WEB, metadata.Name));
 
             return new ActionResponse(ActionStatus.Success);
         }

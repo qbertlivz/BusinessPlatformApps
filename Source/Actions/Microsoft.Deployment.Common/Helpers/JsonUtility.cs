@@ -23,7 +23,21 @@ namespace Microsoft.Deployment.Common.Helpers
 
         public static T Deserialize<T>(string json)
         {
-            return JsonConvert.DeserializeObject<T>(json);
+            return string.IsNullOrEmpty(json) ? default(T) : JsonConvert.DeserializeObject<T>(json);
+        }
+
+        public static T DeserializeContent<T>(string content)
+        {
+            T value = default(T);
+
+            JObject obj = GetJsonObjectFromJsonString(content);
+
+            if (obj != null && obj["value"] != null)
+            {
+                value = JsonUtility.Deserialize<T>(obj["value"].ToString());
+            }
+
+            return value;
         }
 
         public static dynamic GetDynamicFromJObject(JObject json)

@@ -23,9 +23,9 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
             string objectId = JsonUtility.GetWebToken(azureToken, "oid");
             string sqlConnectionId = request.DataStore.GetValue("PowerAppSqlConnectionId");
 
-            PowerAppResourceStorage resourceStorage = JsonUtility.Deserialize<PowerAppResourceStorage>(await ahc.Request(HttpMethod.Post,
+            PowerAppResourceStorage resourceStorage = await ahc.Request<PowerAppResourceStorage>(HttpMethod.Post,
                 string.Format(PowerAppUtility.URL_POWERAPPS_GENERATE_RESOURCE_STORAGE, objectId),
-                JsonUtility.Serialize<PowerAppEnvironmentWrapper>(new PowerAppEnvironmentWrapper(environmentId))));
+                JsonUtility.Serialize<PowerAppEnvironmentWrapper>(new PowerAppEnvironmentWrapper(environmentId)));
 
             //string backgroundImageUri = sharedAccessSignature.Replace("?", "/logoSmallFile?");
             //string documentUri = sharedAccessSignature.Replace("?", "/document.msapp?");

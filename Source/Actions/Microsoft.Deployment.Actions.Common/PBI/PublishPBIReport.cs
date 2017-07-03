@@ -22,7 +22,7 @@ namespace Microsoft.Deployment.Actions.Common.PBI
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            AzureHttpClient client = new AzureHttpClient(request.DataStore.GetJson("PBIToken", "access_token"));
+            AzureHttpClient ahc = new AzureHttpClient(request.DataStore.GetJson("PBIToken", "access_token"));
             string pbiClusterUri = request.DataStore.GetValue("PBIClusterUri");
             string pbiWorkspaceId = request.DataStore.GetValue("PBIWorkspaceId");
             string pbixLocation = request.DataStore.GetValue("PBIXLocation");
@@ -37,14 +37,14 @@ namespace Microsoft.Deployment.Actions.Common.PBI
 
             string filename = request.Info.AppName + RandomGenerator.GetDateStamp() + ".pbix";
 
-            PBIImport pbiImport = JsonUtility.Deserialize<PBIImport>(await client.Request(pbiClusterUri + string.Format(PBI_IMPORT_URI, pbiWorkspaceId, filename), file, filename));
+            PBIImport pbiImport = JsonUtility.Deserialize<PBIImport>(await ahc.Request(pbiClusterUri + string.Format(PBI_IMPORT_URI, pbiWorkspaceId, filename), file, filename));
 
             PBIImportStatus pbiImportStatus = null;
             int attempts = 0;
             bool isImportInProgress = true;
             while (isImportInProgress && attempts < MAXIMUM_IMPORT_STATUS_ATTEMPTS)
             {
-                pbiImportStatus = JsonUtility.Deserialize<PBIImportStatus>(await client.Request(HttpMethod.Get, pbiClusterUri + string.Format(PBI_IMPORT_STATUS_URI, pbiWorkspaceId, pbiImport.Id)));
+                pbiImportStatus = JsonUtility.Deserialize<PBIImportStatus>(await ahc.Request(HttpMethod.Get, pbiClusterUri + string.Format(PBI_IMPORT_STATUS_URI, pbiWorkspaceId, pbiImport.Id)));
                 switch (pbiImportStatus.ImportState)
                 {
                     case "Publishing":

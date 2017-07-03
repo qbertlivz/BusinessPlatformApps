@@ -130,6 +130,20 @@ namespace Microsoft.Deployment.Common.Helpers
             return response.IsSuccessStatusCode ? await response.Content.ReadAsStringAsync() : null;
         }
 
+        public async Task<T> Request<T>(HttpMethod method, string url, string body = "")
+        {
+            T result = default(T);
+
+            HttpResponseMessage response = await this.ExecuteGenericRequestWithHeaderAsync(method, url, body);
+
+            if (response.IsSuccessStatusCode)
+            {
+                result = JsonUtility.Deserialize<T>(await response.Content.ReadAsStringAsync());
+            }
+
+            return result;
+        }
+
         public async Task<string> Request(string url, byte[] file, string name)
         {
             HttpResponseMessage response = null;

@@ -158,13 +158,7 @@
     <Compile Include="Model\PowerApp\PowerAppEnvironmentPropertiesPermission.cs" />
     <Compile Include="Model\PowerApp\PowerAppEnvironmentPropertiesPermissions.cs" />
     <Compile Include="Model\PowerApp\PowerAppEnvironmentWrapper.cs" />
-    <Compile Include="Model\PowerApp\PowerAppInvoke.cs" />
-    <Compile Include="Model\PowerApp\PowerAppInvokeWrapper.cs" />
-    <Compile Include="Model\PowerApp\PowerAppRuleHandler.cs" />
-    <Compile Include="Model\PowerApp\PowerAppRuleWrapper.cs" />
-    <Compile Include="Model\PowerApp\PowerAppRule.cs" />
     <Compile Include="Model\PowerApp\PowerAppResourceStorage.cs" />
-    <Compile Include="Model\PowerApp\PowerAppSession.cs" />
     <Compile Include="Model\PowerApp\PowerAppSqlConnection.cs" />
     <Compile Include="Model\PowerApp\PowerAppSqlConnectionPropertiesConnectionParameters.cs" />
     <Compile Include="Model\PowerApp\PowerAppSqlConnectionProperties.cs" />

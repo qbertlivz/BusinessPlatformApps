@@ -29,11 +29,12 @@ namespace Microsoft.Deployment.Tests.Actions.PowerApp
         {
             var ds =  await TestManager.GetDataStore();
 
+            ds.AddToDataStore("PowerAppFileName", "TwitterTemplate.msapp");
             ds.AddToDataStore("SqlConnectionString", SqlCreds.GetSqlPagePayload("yashti"));
 
             Assert.IsTrue(await TestManager.IsSuccessAsync("Microsoft-GetPowerAppEnvironment", ds));
             Assert.IsTrue(await TestManager.IsSuccessAsync("Microsoft-CreatePowerAppSqlConnection", ds));
-            Assert.IsTrue(await TestManager.IsSuccessAsync("Microsoft-DeployPowerApp", ds));
+            Assert.IsTrue(await TestManager.IsSuccessAsync("Microsoft-DeployPowerApp", ds, "Microsoft-TwitterTemplate"));
         }
     }
 }

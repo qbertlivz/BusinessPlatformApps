@@ -23,27 +23,47 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
             string environmentId = request.DataStore.GetValue("PowerAppEnvironment");
             string sqlConnectionId = request.DataStore.GetValue("PowerAppSqlConnectionId");
 
-            ActionResponse wrangledFile = await RequestUtility.CallAction(request, "Microsoft-WranglePowerApp");
+            if (environmentId != null && sqlConnectionId != null)
+            {
+                ActionResponse wrangledFile = await RequestUtility.CallAction(request, "Microsoft-WranglePowerApp");
 
-            AzureHttpClient ahc = new AzureHttpClient(azureToken);
+                if (wrangledFile.IsSuccess && wrangledFile.Body != null)
+                {
+                    string path = wrangledFile.Body.ToString();
 
-            PowerAppResourceStorage resourceStorage = await ahc.Request<PowerAppResourceStorage>(HttpMethod.Post,
-                string.Format(PowerAppUtility.URL_POWERAPPS_GENERATE_RESOURCE_STORAGE, JsonUtility.GetWebToken(azureToken, "oid")),
-                JsonUtility.Serialize<PowerAppEnvironmentWrapper>(new PowerAppEnvironmentWrapper(environmentId)));
+                    AzureHttpClient ahc = new AzureHttpClient(azureToken);
 
-            string uri = resourceStorage.SharedAccessSignature.Replace("?", "/document.msapp?");
+                    PowerAppResourceStorage resourceStorage = await ahc.Request<PowerAppResourceStorage>(HttpMethod.Post,
+                        string.Format(PowerAppUtility.URL_POWERAPPS_GENERATE_RESOURCE_STORAGE, JsonUtility.GetWebToken(azureToken, "oid")),
+                        JsonUtility.Serialize<PowerAppEnvironmentWrapper>(new PowerAppEnvironmentWrapper(environmentId)));
 
-            CloudBlockBlob blob = new CloudBlockBlob(new Uri(uri));
+                    if (!string.IsNullOrEmpty(path) && resourceStorage != null && !string.IsNullOrEmpty(resourceStorage.SharedAccessSignature))
+                    {
+                        string uri = resourceStorage.SharedAccessSignature.Replace("?", "/document.msapp?");
 
-            await blob.UploadFromFileAsync(wrangledFile.Body.ToString());
+                        CloudBlockBlob blob = new CloudBlockBlob(new Uri(uri));
 
-            PowerAppMetadata metadata = await ahc.Request<PowerAppMetadata>(HttpMethod.Post, PowerAppUtility.URL_POWERAPPS_PUBLISH_APP,
-                JsonUtility.Serialize<PowerAppPublish>(new PowerAppPublish(uri, $"TwitterTemplate{RandomGenerator.GetDateStamp()}", environmentId, sqlConnectionId)));
+                        using (WebClient wc = new WebClient())
+                        {
+                            byte[] file = wc.DownloadData(path);
 
-            await ahc.Request(HttpMethod.Post, string.Format(PowerAppUtility.URL_POWERAPPS_SQL_CONNECTION_UPDATE, sqlConnectionId, environmentId),
-                JsonUtility.Serialize<PowerAppSqlConnectionUpdate>(new PowerAppSqlConnectionUpdate(metadata.Name)));
+                            await blob.UploadFromStreamAsync(new MemoryStream(file));
 
-            request.DataStore.AddToDataStore("PowerAppUri", string.Format(PowerAppUtility.URL_POWERAPPS_WEB, metadata.Name));
+                            PowerAppMetadata metadata = await ahc.Request<PowerAppMetadata>(HttpMethod.Post, PowerAppUtility.URL_POWERAPPS_PUBLISH_APP,
+                                JsonUtility.Serialize<PowerAppPublish>(new PowerAppPublish(uri, $"TwitterTemplate{RandomGenerator.GetDateStamp()}", environmentId, sqlConnectionId)));
+
+                            if (metadata != null)
+                            {
+                                if (await ahc.IsSuccess(HttpMethod.Post, string.Format(PowerAppUtility.URL_POWERAPPS_SQL_CONNECTION_UPDATE, sqlConnectionId, environmentId),
+                                    JsonUtility.Serialize<PowerAppSqlConnectionUpdate>(new PowerAppSqlConnectionUpdate(metadata.Name))))
+                                {
+                                    request.DataStore.AddToDataStore("PowerAppUri", string.Format(PowerAppUtility.URL_POWERAPPS_WEB, metadata.Name));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
             return new ActionResponse(ActionStatus.Success);
         }

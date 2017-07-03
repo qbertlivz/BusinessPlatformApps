@@ -2,8 +2,6 @@
 
 import { activationStrategy } from 'aurelia-router';
 
-import { DataStoreType } from '../enums/data-store-type';
-
 import { OpenAuthorizationType } from '../models/open-authorization-type';
 
 import { InitParser } from './init-parser';

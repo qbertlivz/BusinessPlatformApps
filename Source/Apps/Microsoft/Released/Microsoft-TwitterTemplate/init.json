@@ -100,7 +100,7 @@
                 "LogicAppName": "$save(this.uniqueId)",
                 "LogicAppNameHistorical": "$save('historic' + this.uniqueId)",
                 "name": "$SiteCommon$/pages-gallery/progress.html",
-                "PowerAppFileName": "TwitterTemplate.msapp",
+                "PowerAppFileName": "$save('TwitterTemplate.msapp')",
                 "SiteName": "$save(this.uniqueIdFunction)"
             }
         ],

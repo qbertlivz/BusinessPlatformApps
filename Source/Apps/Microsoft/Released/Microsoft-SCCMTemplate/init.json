@@ -46,7 +46,7 @@
                 "credentialTarget": "pbi_sccm",
                 "displayname": "Source",
                 "hideSqlAuth": true,
-                "name": "$SiteCommon$/pages-gallery/sql-server.html",
+                "name": "$SiteCommon$/pages-gallery/sql.html",
                 "onNext": [
                     {
                         "name": "Microsoft-CheckSCCMVersion",
@@ -63,7 +63,7 @@
             {
                 "credentialTarget": "pbi_sccm",
                 "displayname": "Target",
-                "name": "$SiteCommon$/pages-gallery/sql-server.html",
+                "name": "$SiteCommon$/pages-gallery/sql.html",
                 "onNext": [
                     {
                         "name": "Microsoft-CheckSQLVersion",
@@ -283,7 +283,6 @@
         "Pages": [
             {
                 "displayname": "Uninstall Progress",
-                "HasNavigated": "$save(true)",
                 "isUninstall": true,
                 "name": "$SiteCommon$/pages-gallery/progress.html",
                 "successMessage": "$translate(INIT_UNINSTALL_SUCCESS)"

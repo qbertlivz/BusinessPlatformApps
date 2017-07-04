@@ -120,6 +120,10 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                     resource = Constants.AzureManagementCoreApi;
                     clientId = Constants.ASClientId;
                     break;
+                case "o365":
+                    resource = Constants.AzureManagementCoreApi;
+                    clientId = Constants.Office365ClientId;
+                    break;
             }
 
             return new AzureTokenRequestMeta(resource, clientId);

@@ -34,6 +34,7 @@ namespace Microsoft.Deployment.Actions.Salesforce
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
             string connString = request.DataStore.GetValue("SqlConnectionString");
             string schema = "dbo";
+            var coreObjects = request.DataStore.GetValue("ObjectTables").SplitByCommaSpaceTabReturnList();
 
             string postDeploymentPipelineType = request.DataStore.GetValue("postDeploymentPipelineType");
             string pipelineFrequency = request.DataStore.GetValue("pipelineFrequency");
@@ -110,15 +111,14 @@ namespace Microsoft.Deployment.Actions.Salesforce
                 if (o.Item1 != "Opportunity" &&
                     o.Item1 != "Lead" &&
                     o.Item1 != "OpportunityLineItem" &&
-                    pipelineType == "PreDeployment")
+                    pipelineType == "PreDeployment" &&
+                    coreObjects.Contains(o.Item1))
                 {
                     query = CreateQuery(o, tableFields, true, pipelineStart, pipelineEnd);
                     armTemplate = CreateOneTimePipeline(armTemplate);
                 }
-                else
-                {
-                    query = CreateQuery(o, tableFields, false);
-                }
+
+                query = CreateQuery(o, tableFields, false);
 
                 if (historicalOnly && pipelineType == "PostDeployment")
                 {
@@ -283,6 +283,7 @@ namespace Microsoft.Deployment.Actions.Salesforce
         }
 
         // Create the object specific query 
+        // Needs refactor, as the methods satisfies a variety of cases
         private StringBuilder CreateQuery(Field o, string tableFields, bool oneTimePipeline, string startTime = null, string endTime = null)
         {
             StringBuilder query = new StringBuilder();
@@ -320,26 +321,54 @@ namespace Microsoft.Deployment.Actions.Salesforce
             }
             else
             {
-                if (tableFields.Contains("CreatedDate"))
+                if (!tableFields.Contains("LastModifiedDate"))
                 {
-                    if (tableFields.Contains("IsDeleted"))
+                    if (tableFields.Contains("CreatedDate"))
                     {
-                        query.Append(" FROM " + o.Item1 + " WHERE (IsDeleted = FALSE OR IsDeleted = TRUE) AND ((CreatedDate > {0:yyyy-MM-ddTHH:mm:sssZ} AND CreatedDate <= {1:yyyy-MM-ddTHH:mm:sssZ}) OR (LastModifiedDate > {0:yyyy-MM-ddTHH:mm:sssZ} AND LastModifiedDate <= {1:yyyy-MM-ddTHH:mm:sssZ}))', WindowStart,WindowEnd)\"");
+                        if (tableFields.Contains("IsDeleted"))
+                        {
+                            query.Append(" FROM " + o.Item1 + " WHERE (IsDeleted = FALSE OR IsDeleted = TRUE) AND (CreatedDate > {0:yyyy-MM-ddTHH:mm:sssZ} AND CreatedDate <= {1:yyyy-MM-ddTHH:mm:sssZ})', WindowStart,WindowEnd)\"");
+                        }
+                        else
+                        {
+                            query.Append(" FROM " + o.Item1 + " WHERE (CreatedDate > {0:yyyy-MM-ddTHH:mm:sssZ} AND CreatedDate <= {1:yyyy-MM-ddTHH:mm:sssZ})', WindowStart,WindowEnd)\"");
+                        }
                     }
                     else
                     {
-                        query.Append(" FROM " + o.Item1 + " WHERE (CreatedDate > {0:yyyy-MM-ddTHH:mm:sssZ} AND CreatedDate <= {1:yyyy-MM-ddTHH:mm:sssZ}) OR (LastModifiedDate > {0:yyyy-MM-ddTHH:mm:sssZ} AND LastModifiedDate <= {1:yyyy-MM-ddTHH:mm:sssZ})', WindowStart,WindowEnd)\"");
+                        if (tableFields.Contains("IsDeleted"))
+                        {
+                            query.Append(" FROM " + o.Item1 + " WHERE (IsDeleted = FALSE OR IsDeleted = TRUE)', WindowStart,WindowEnd)\"");
+                        }
+                        else
+                        {
+                            query.Append(" FROM " + o.Item1);
+                        }
                     }
                 }
                 else
                 {
-                    if (tableFields.Contains("IsDeleted"))
+                    if (tableFields.Contains("CreatedDate"))
                     {
-                        query.Append(" FROM " + o.Item1 + " WHERE (IsDeleted = FALSE OR IsDeleted = TRUE) AND (LastModifiedDate > {0:yyyy-MM-ddTHH:mm:sssZ} AND LastModifiedDate <= {1:yyyy-MM-ddTHH:mm:sssZ})', WindowStart,WindowEnd)\"");
+                        if (tableFields.Contains("IsDeleted"))
+                        {
+                            query.Append(" FROM " + o.Item1 + " WHERE (IsDeleted = FALSE OR IsDeleted = TRUE) AND ((CreatedDate > {0:yyyy-MM-ddTHH:mm:sssZ} AND CreatedDate <= {1:yyyy-MM-ddTHH:mm:sssZ}) OR (LastModifiedDate > {0:yyyy-MM-ddTHH:mm:sssZ} AND LastModifiedDate <= {1:yyyy-MM-ddTHH:mm:sssZ}))', WindowStart,WindowEnd)\"");
+                        }
+                        else
+                        {
+                            query.Append(" FROM " + o.Item1 + " WHERE (CreatedDate > {0:yyyy-MM-ddTHH:mm:sssZ} AND CreatedDate <= {1:yyyy-MM-ddTHH:mm:sssZ}) OR (LastModifiedDate > {0:yyyy-MM-ddTHH:mm:sssZ} AND LastModifiedDate <= {1:yyyy-MM-ddTHH:mm:sssZ})', WindowStart,WindowEnd)\"");
+                        }
                     }
                     else
                     {
-                        query.Append(" FROM " + o.Item1 + " WHERE LastModifiedDate > {0:yyyy-MM-ddTHH:mm:sssZ} AND LastModifiedDate <= {1:yyyy-MM-ddTHH:mm:sssZ}', WindowStart,WindowEnd)\"");
+                        if (tableFields.Contains("IsDeleted"))
+                        {
+                            query.Append(" FROM " + o.Item1 + " WHERE (IsDeleted = FALSE OR IsDeleted = TRUE) AND (LastModifiedDate > {0:yyyy-MM-ddTHH:mm:sssZ} AND LastModifiedDate <= {1:yyyy-MM-ddTHH:mm:sssZ})', WindowStart,WindowEnd)\"");
+                        }
+                        else
+                        {
+                            query.Append(" FROM " + o.Item1 + " WHERE LastModifiedDate > {0:yyyy-MM-ddTHH:mm:sssZ} AND LastModifiedDate <= {1:yyyy-MM-ddTHH:mm:sssZ}', WindowStart,WindowEnd)\"");
+                        }
                     }
                 }
             }

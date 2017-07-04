@@ -28,10 +28,10 @@ export class DeploymentService {
         this.hasError = false;
         this.isFinished = false;
 
-        if (this.experienceType === ExperienceType.uninstall) {
+        if (this.experienceType === ExperienceType.Uninstall) {
             this.MS.LoggerService.trackUninstallStart();
         }
-        if (this.experienceType === ExperienceType.install) {
+        if (this.experienceType === ExperienceType.Install) {
             this.MS.LoggerService.trackDeploymentStart();
         }
 
@@ -86,15 +86,15 @@ export class DeploymentService {
             this.progressPercentage = 100;
         }
 
-        if (this.experienceType === ExperienceType.uninstall) {
+        if (this.experienceType === ExperienceType.Uninstall) {
             this.MS.LoggerService.trackUninstallEnd(!this.hasError);
         }
-        if (this.experienceType === ExperienceType.install) {
+        if (this.experienceType === ExperienceType.Install) {
             this.MS.LoggerService.trackDeploymentEnd(!this.hasError);
         }
         this.isFinished = true;
 
-        if (this.experienceType === ExperienceType.uninstall && !this.hasError) {
+        if (this.experienceType === ExperienceType.Uninstall && !this.hasError) {
             this.MS.HttpService.close();
         }
 

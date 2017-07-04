@@ -150,6 +150,7 @@
     <Compile Include="NotifierTests.cs" />
     <Compile Include="AzureTests\ServicePrincipalTests.cs" />
     <Compile Include="OnPrem\VersionTests.cs" />
+    <Compile Include="PowerApp\PowerAppTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sql\DeploySqlScripts.cs" />
     <Compile Include="TestHelpers\AAD.cs" />
@@ -205,6 +206,7 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

@@ -63,7 +63,7 @@
                 "pricingCalculatorUrl": "$translate(INIT_D365_CALCULATOR)",
                 "pricingCost": "$translate(INIT_D365_PRICING_COST)",
                 "pricingUrl": "$translate(INIT_D365_PRICING_URL)",
-                "skip": "$(this.MS.HttpService.isOnPremise || this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
+                "skip": "$(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
             },
             {
                 "azureProviders": [
@@ -87,14 +87,14 @@
             {
                 "checkSqlVersion": true,
                 "displayname": "Target",
-                "isAzureSql": "$run(!this.MS.HttpService.isOnPremise)",
-                "name": "$SiteCommon$/pages-gallery/sql-server.html",
+                "isAzureSql": true,
+                "name": "$SiteCommon$/pages-gallery/sql.html",
                 "newSqlDatabase": "$(this.MS.UtilityService.getUniqueId(10))",
                 "showAzureSql": false,
-                "showCredsWhenWindowsAuth": "$run(this.MS.HttpService.isOnPremise)",
-                "showNewSqlOption": "$run(!this.MS.HttpService.isOnPremise)",
+                "showCredsWhenWindowsAuth": "$run(this.MS.DataStore.getValue('DataMovement') === 'Scribe')",
+                "showNewSqlOption": true,
                 "showSkuS1": false,
-                "sqlInstance": "$run(this.MS.HttpService.isOnPremise ? 'ExistingSql' : 'NewSql')",
+                "sqlInstance": "NewSql",
                 "sqlSku": "S2",
                 "subtitle": "$translate(INIT_SQL_SUBTITLE_D365)",
                 "title": "$translate(INIT_SQL_TITLE)"
@@ -127,8 +127,8 @@
                 "sourceApplication": "DynamicsCRM"
             },
             {
-                "sendCompletionNotification": "$run(this.MS.DataStore.getValue('DataMovement') === 'D365' && !this.MS.HttpService.isOnPremise)",
-                "displayCompletionNotification": "$run(this.MS.DataStore.getValue('DataMovement') === 'D365' && !this.MS.HttpService.isOnPremise)",
+                "sendCompletionNotification": "$run(this.MS.DataStore.getValue('DataMovement') === 'D365')",
+                "displayCompletionNotification": "$run(this.MS.DataStore.getValue('DataMovement') === 'D365')",
                 "displayname": "Summary",
                 "name": "$SiteCommon$/pages-gallery/summary.html",
                 "onNext": [
@@ -138,7 +138,7 @@
                     }
                 ],
                 "values": {
-                    "Subscription": "$(!this.MS.HttpService.isOnPremise ? this.MS.DataStore.getJson('SelectedSubscription').DisplayName : '')",
+                    "Subscription": "$(this.MS.DataStore.getJson('SelectedSubscription').DisplayName)",
                     "ResourceGroup": "$(this.MS.DataStore.getValue('SelectedResourceGroup'))",
                     "Organization URL": "$(this.MS.DataStore.getValue('OrganizationUrl'))",
                     "Target Server": "$(this.MS.DataStore.getValue('Server'))",
@@ -152,7 +152,7 @@
                     "SqlConnectionString"
                 ],
                 "displayname": "Progress",
-                "enablePublishReport": "$run(!this.MS.HttpService.isOnPremise)",
+                "enablePublishReport": true,
                 "filename": "$save('SalesManagementReport.pbix')",
                 "filenameSSAS": "SalesManagementReportAS.pbix",
                 "finishedActionName": "$run(this.MS.DataStore.getValue('DataMovement') === 'D365' ? 'Microsoft-CrmGetProfileStatus' : 'Microsoft-GetScribeSolutionStatus')",
@@ -329,7 +329,6 @@
             },
             {
                 "displayname": "$translate(INIT_ACTION_CREATING_SCRIBE_SOLUTION)",
-                "Entities": "opportunityproduct,territory,lead,opportunity,account,systemusermanagermap,businessunit,systemuser,product",
                 "name": "Microsoft-CreateScribeSolution",
                 "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
             },
@@ -353,7 +352,6 @@
         "Pages": [
             {
                 "displayname": "Uninstall Progress",
-                "HasNavigated": "$save(true)",
                 "isUninstall": true,
                 "name": "$SiteCommon$/pages-gallery/progress.html",
                 "successMessage": "$translate(INIT_UNINSTALL_SUCCESS)"

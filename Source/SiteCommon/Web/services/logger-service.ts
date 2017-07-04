@@ -14,7 +14,7 @@ export class LoggerService {
         this.MS = MainService;
         var snippet: any = {
             config: {
-                instrumentationKey: '74bc59f2-6526-41b1-ab84-370532ec5d42'
+                instrumentationKey: 'app_insights_key'
             }
         };
 
@@ -26,25 +26,6 @@ export class LoggerService {
         this.SessionId = applicationInsights.context.session.id;
         this.UserId = applicationInsights.context.user.id;
         this.OperationId = applicationInsights.context.operation.id;
-    }
-
-    getPropertiesForTelemetry(): any {
-        let obj: any = {};
-        obj.AppName = this.MS.NavigationService.appName;
-        obj.FullUrl = window.location.href;
-        obj.Origin = window.location.origin;
-        obj.Host = window.location.host;
-        obj.HostName = window.location.hostname;
-        obj.PageNumber = this.MS.NavigationService.index;
-        if (this.MS.NavigationService.getCurrentSelectedPage()) {
-            obj.Route = this.MS.NavigationService.getCurrentSelectedPage().RoutePageName;
-            obj.PageName = this.MS.NavigationService.getCurrentSelectedPage().PageName;
-            obj.PageModuleId = this.MS.NavigationService.getCurrentSelectedPage().Path.replace(/\\/g, "/");
-            obj.PageDisplayName = this.MS.NavigationService.getCurrentSelectedPage().DisplayName;
-        }
-
-        obj.RootSource = - this.MS.HttpService.isOnPremise ? 'MSI' : 'WEB';
-        return obj;
     }
 
     trackDeploymentEnd(isSucess: any): void {
@@ -158,5 +139,28 @@ export class LoggerService {
 
         properties.TemplateName = this.MS.NavigationService.appName;
         this.appInsights.trackEvent('UI-UninstallStart', properties);
+    }
+
+    private getPropertiesForTelemetry(): any {
+        this.appInsights.config.disableTelemetry = !!this.MS.UtilityService.getItem('AITR_NONUSRACT_OnError');
+
+        let obj: any = {};
+        obj.AppName = this.MS.NavigationService.appName;
+        obj.FullUrl = window.location.href;
+        obj.Origin = window.location.origin;
+        obj.Host = window.location.host;
+        obj.HostName = window.location.hostname;
+        obj.PageNumber = this.MS.NavigationService.index;
+
+        if (this.MS.NavigationService.getCurrentSelectedPage()) {
+            obj.Route = this.MS.NavigationService.getCurrentSelectedPage().RoutePageName;
+            obj.PageName = this.MS.NavigationService.getCurrentSelectedPage().PageName;
+            obj.PageModuleId = this.MS.NavigationService.getCurrentSelectedPage().Path.replace(/\\/g, "/");
+            obj.PageDisplayName = this.MS.NavigationService.getCurrentSelectedPage().DisplayName;
+        }
+
+        obj.RootSource = this.MS.HttpService.isOnPremise ? 'MSI' : 'WEB';
+
+        return obj;
     }
 }

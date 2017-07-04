@@ -12,8 +12,7 @@
                 "list2": [
                 ],
                 "name": "$SiteCommon$/pages-gallery/getting-started.html",
-                "subtitle": "",
-                "templateName": ""
+                "templateName": "Dynamics 365 for Operations - Credit and Collections"
             },
             {
                 "azureProviders": [
@@ -36,8 +35,8 @@
                 "checkSqlVersion": true,
                 "displayname": "Target",
                 "isAzureSql": true,
-                "name": "$SiteCommon$/pages-gallery/sql-server.html",
-                "newSqlDatabase": "facebook",
+                "name": "$SiteCommon$/pages-gallery/sql.html",
+                "newSqlDatabase": "CreditAndCollections",
                 "showAzureSql": false,
                 "showNewSqlOption": "true",
                 "showSkuS1": true,
@@ -45,6 +44,11 @@
                 "sqlSku": "S1",
                 "subtitle": "$translate(INIT_SQL_TITLE)",
                 "title": "$translate(INIT_SQL_TITLE)"
+            },
+            {
+                "displayname": "Customize",
+                "name": "$SiteCommon$/pages-gallery/ax-customize.html",
+                "useDefaultValidateButton": true
             },
             {
                 "displayname": "Summary",
@@ -56,22 +60,22 @@
                 },
                 "ConnectorName": "$save('dynamicsax')",
                 "AxReportName": "$save('CreditAndCollectionsManagementReport')",
-                "AxInstanceName": "$save('')",
                 "AxMeasurementName": "$save('CustCollectionsBIMeasurements')"
             },
             {
-                "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))",
                 "displayname": "Deploy",
-                "filename": "$save('TwitterTemplate.pbix')",
-                "filenameSSAS": "TwitterAS.pbix",
-                "LogicAppHostingPlan": "$save(this.uniqueId)",
-                "LogicAppName": "$save(this.uniqueId)",
-                "name": "$SiteCommon$/pages-gallery/progress.html",
-                "SiteName": "$save(this.uniqueIdFunction)"
+                "filename": "$save('CreditAndCollectionsImportMode.pbix')",
+                "name": "$SiteCommon$/pages-gallery/progress.html"
             }
         ],
 
         "Actions": [
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
+                "name": "Microsoft-DeploySQLScripts",
+                "SqlServerIndex": "0",
+                "SqlScriptsFolder": "Database"
+            },
             {
                 "DeploymentName": "AxOdataInsert",
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_LOGIC_APP)",
@@ -81,27 +85,27 @@
                 "DeploymentName": "LogicApp",
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_LOGIC_APP)",
                 "name": "Microsoft-DeployAxLogicApp"
+            },
+            {
+                "DeploymentName": "SqlConnectionDeployment",
+                "displayname": "$translate(NOTIFIER_CREATING_DATABASE_CONNECTION)",
+                "name": "Microsoft-CreateSqlConnector",
+                "ApiConnectionName": "$save('sqlNotifierConnection')",
+                "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+            },
+            {
+                "DeploymentName": "NotifierLogicApp",
+                "displayname": "$translate(NOTIFIER_CREATING_NOTIFIER_APP)",
+                "name": "Microsoft-DeployNotifierLogicApp",
+                "logicAppName": "notifierLogicApp",
+                "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+            },
+            {
+                "displayname": "$translate(NOTIFIER_CONFIGURE_NOTIFIER_APP)",
+                "name": "Microsoft-ConfigureNotifier",
+                "SqlConfigTable": "[pbist_twitter].[configuration]",
+                "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
             }
-            //{
-            //    "DeploymentName": "SqlConnectionDeployment",
-            //    "displayname": "$translate(NOTIFIER_CREATING_DATABASE_CONNECTION)",
-            //    "name": "Microsoft-CreateSqlConnector",
-            //    "ApiConnectionName": "$save('sqlNotifierConnection')",
-            //    "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
-            //},
-            //{
-            //    "DeploymentName": "NotifierLogicApp",
-            //    "displayname": "$translate(NOTIFIER_CREATING_NOTIFIER_APP)",
-            //    "name": "Microsoft-DeployNotifierLogicApp",
-            //    "logicAppName": "notifierLogicApp",
-            //    "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
-            //},
-            //{
-            //    "displayname": "$translate(NOTIFIER_CONFIGURE_NOTIFIER_APP)",
-            //    "name": "Microsoft-ConfigureNotifier",
-            //    "SqlConfigTable": "[pbist_twitter].[configuration]",
-            //    "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
-            //}
         ]
     }
 }

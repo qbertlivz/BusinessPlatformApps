@@ -3,7 +3,6 @@ import { ViewModelBase } from '../services/view-model-base';
 
 export class AxLogin extends ViewModelBase {
     authToken: any = {};
-    azureConnection = AzureConnection;
     azureDirectory: string = '';
     connectionType: AzureConnection = AzureConnection.Organizational;
     orgList: any[] = [];
@@ -19,7 +18,7 @@ export class AxLogin extends ViewModelBase {
 
     async onLoaded(): Promise<void> {
         super.onLoaded();
-
+        
         if (this.orgList.length > 0) {
             this.setValidated();
         } else {

@@ -31,11 +31,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
                 location = "brazilsouth";
             }
 
-            if(connectorName=="dynamicsax")
-            {
-                location = "westcentralus";
-            }
-
             SubscriptionCloudCredentials creds = new TokenCloudCredentials(subscription, azureToken);
             Microsoft.Azure.Management.Resources.ResourceManagementClient client = new ResourceManagementClient(creds);
             var registeration = await client.Providers.RegisterAsync("Microsoft.Web");

@@ -40,5 +40,8 @@
         public static string BpstNotifierUrl = "https://prod-27.northcentralus.logic.azure.com:443/workflows/0cdb1a801fa84af99477894c1fa202ba/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=HKNuTDXQWw5KosQlKnSxRR-yHGxiVlCr0np732KpOXQ";
 
         public const string Office365ClientId = "5a75fd0b-23ec-4e09-ac55-b2c2050286de";
+
+        //Crm Constants
+        public const string CrmProfileName = "bpst-mscrm-profile";
     }
 }

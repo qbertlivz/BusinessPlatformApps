@@ -26,6 +26,7 @@ namespace Microsoft.Deployment.Actions.Custom.Ax
             string areaId = request.DataStore.GetValue("AxEntityDataAreaId");
             string id = request.DataStore.GetValue("AxEntityId");
             string connectionName = request.DataStore.GetValue("connectorName");
+            string instanceUrl = request.DataStore.GetValue("AxInstanceName").Replace("https://", string.Empty).Replace("/", string.Empty);
 
             // Read from file
             var logicAppJsonLocation = "Service/LogicApp/axLogicApp.json";
@@ -44,7 +45,7 @@ namespace Microsoft.Deployment.Actions.Custom.Ax
             var armParamTemplate = JsonUtility.GetJObjectFromObject(param.GetDynamicObject());
             armTemplate.Remove("parameters");
             armTemplate.Add("parameters", armParamTemplate["parameters"]);
-            var armString = armTemplate.ToString().Replace("ENTITYID", id).Replace("ENTITYAREAID", areaId);
+            var armString = armTemplate.ToString().Replace("ENTITYID", id).Replace("ENTITYAREAID", areaId).Replace("AXINSTANCEURL", instanceUrl);
 
             //Deploy logic app 
             var helper = new DeploymentHelper();

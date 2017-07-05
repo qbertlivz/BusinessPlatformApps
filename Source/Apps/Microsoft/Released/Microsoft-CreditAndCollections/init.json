@@ -77,14 +77,15 @@
                 "SqlScriptsFolder": "Database"
             },
             {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+                "name": "Microsoft-SetConfigValueInSql",
+                "SqlConfigTable": "[pbst].[configuration]",
+                "SqlServerIndex": "0"
+            },
+            {
                 "DeploymentName": "AxOdataInsert",
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_LOGIC_APP)",
                 "name": "Microsoft-UpdateAxConfigurationEntity"
-            },
-            {
-                "DeploymentName": "LogicApp",
-                "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_LOGIC_APP)",
-                "name": "Microsoft-DeployAxLogicApp"
             },
             {
                 "DeploymentName": "SqlConnectionDeployment",
@@ -92,6 +93,11 @@
                 "name": "Microsoft-CreateSqlConnector",
                 "ApiConnectionName": "$save('sqlNotifierConnection')",
                 "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+            },
+            {
+                "DeploymentName": "LogicApp",
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_LOGIC_APP)",
+                "name": "Microsoft-DeployAxLogicApp"
             },
             {
                 "DeploymentName": "NotifierLogicApp",
@@ -103,8 +109,7 @@
             {
                 "displayname": "$translate(NOTIFIER_CONFIGURE_NOTIFIER_APP)",
                 "name": "Microsoft-ConfigureNotifier",
-                "SqlConfigTable": "[pbist_twitter].[configuration]",
-                "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+                "SqlConfigTable": "[pbst].[configuration]"                
             }
         ]
     }

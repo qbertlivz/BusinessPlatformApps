@@ -17,6 +17,11 @@ export class Customize extends ViewModelBase {
     }
 
     async onNavigatingNext(): Promise<boolean> {
+        this.MS.DataStore.addToDataStoreWithCustomRoute('CustomizeBaseUrl', 'SqlGroup', 'SolutionTemplate', DataStoreType.Public);
+        this.MS.DataStore.addToDataStoreWithCustomRoute('CustomizeBaseUrl', 'SqlSubGroup', 'D365', DataStoreType.Public);
+        this.MS.DataStore.addToDataStoreWithCustomRoute('CustomizeBaseUrl', 'SqlEntryName', 'Operations', DataStoreType.Public);
+        this.MS.DataStore.addToDataStoreWithCustomRoute('CustomizeBaseUrl', 'SqlEntryValue', 'CreditAndCollections', DataStoreType.Public);
+
         return true;
     }
 }

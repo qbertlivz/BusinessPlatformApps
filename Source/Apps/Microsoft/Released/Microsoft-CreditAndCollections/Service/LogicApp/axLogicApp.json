@@ -22,7 +22,7 @@
             "type": "Microsoft.Logic/workflows",
             "name": "axLogicApp",
             "apiVersion": "2016-06-01",
-            "location": "westcentralus",
+            "location": "[resourceGroup().location]",
             "scale": null,
             "properties": {
                 "state": "Enabled",
@@ -45,13 +45,71 @@
                         }
                     },
                     "actions": {
-                        "Execute_action": {
+                        "Condition": {
+                            "actions": {
+                                "For_each": {
+                                    "actions": {
+                                        "Update_row": {
+                                            "inputs": {
+                                                "body": {
+                                                    "configuration_group": "@item()?['configuration_group']",
+                                                    "configuration_subgroup": "@item()?['configuration_subgroup']",
+                                                    "name": "@item()?['name']",
+                                                    "value": "2",
+                                                    "visible": "@item()?['visible']"
+                                                },
+                                                "host": {
+                                                    "api": {
+                                                        "runtimeUrl": "https://logic-apis-westus.azure-apim.net/apim/sql"
+                                                    },
+                                                    "connection": {
+                                                        "name": "@parameters('$connections')['sql']['connectionId']"
+                                                    }
+                                                },
+                                                "method": "patch",
+                                                "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('pbst.configuration'))}/items/@{encodeURIComponent(encodeURIComponent(item()?['id']))}"
+                                            },
+                                            "runAfter": {},
+                                            "type": "ApiConnection"
+                                        }
+                                    },
+                                    "foreach": "@body('Get_DataPullStatus_row_Id')?['value']",
+                                    "runAfter": {
+                                        "Get_DataPullStatus_row_Id": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "Foreach"
+                                },
+                                "Get_DataPullStatus_row_Id": {
+                                    "inputs": {
+                                        "host": {
+                                            "api": {
+                                                "runtimeUrl": "https://logic-apis-westus.azure-apim.net/apim/sql"
+                                            },
+                                            "connection": {
+                                                "name": "@parameters('$connections')['sql']['connectionId']"
+                                            }
+                                        },
+                                        "method": "get",
+                                        "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('[pbst].[configuration]'))}/items",
+                                        "queries": {
+                                            "$filter": "name eq 'DataPullStatus'"
+                                        }
+                                    },
+                                    "runAfter": {},
+                                    "type": "ApiConnection"
+                                }
+                            },
+                            "expression": "@equals(body('Get_rows')?['value']?[0]?['value'], '1')",
                             "runAfter": {
-                                "Get_a_record": [
+                                "Get_rows": [
                                     "Succeeded"
                                 ]
                             },
-                            "type": "ApiConnection",
+                            "type": "If"
+                        },
+                        "Execute_action": {
                             "inputs": {
                                 "body": {
                                     "Id": "@{body('Get_a_record')?['Id']}",
@@ -61,31 +119,60 @@
                                 },
                                 "host": {
                                     "api": {
-                                        "runtimeUrl": "https://logic-apis-westcentralus.azure-apim.net/apim/dynamicsax"
+                                        "runtimeUrl": "https://logic-apis-westus.azure-apim.net/apim/dynamicsax"
                                     },
                                     "connection": {
                                         "name": "@parameters('$connections')['dynamicsax']['connectionId']"
                                     }
                                 },
                                 "method": "post",
-                                "path": "/datasets/@{encodeURIComponent(encodeURIComponent('pbistaxdevtestb6f3bba33b8283dbaos.cloudax.dynamics.com'))}/procedures/@{encodeURIComponent(encodeURIComponent('BpstConfigurationEntities/Microsoft.Dynamics.DataEntities.StartCopyJob'))}"
-                            }
+                                "path": "/datasets/@{encodeURIComponent(encodeURIComponent('AXINSTANCEURL'))}/procedures/@{encodeURIComponent(encodeURIComponent('BpstConfigurationEntities/Microsoft.Dynamics.DataEntities.StartCopyJob'))}"
+                            },
+                            "runAfter": {
+                                "Get_a_record": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection"
                         },
                         "Get_a_record": {
-                            "runAfter": {},
-                            "type": "ApiConnection",
                             "inputs": {
                                 "host": {
                                     "api": {
-                                        "runtimeUrl": "https://logic-apis-westcentralus.azure-apim.net/apim/dynamicsax"
+                                        "runtimeUrl": "https://logic-apis-westus.azure-apim.net/apim/dynamicsax"
                                     },
                                     "connection": {
                                         "name": "@parameters('$connections')['dynamicsax']['connectionId']"
                                     }
                                 },
                                 "method": "get",
-                                "path": "/datasets/@{encodeURIComponent(encodeURIComponent('pbistaxdevtestb6f3bba33b8283dbaos.cloudax.dynamics.com'))}/tables/@{encodeURIComponent(encodeURIComponent('BpstConfigurationEntities'))}/items/@{encodeURIComponent(encodeURIComponent('ENTITYAREAID,ENTITYID'))}"
-                            }
+                                "path": "/datasets/@{encodeURIComponent(encodeURIComponent('AXINSTANCEURL'))}/tables/@{encodeURIComponent(encodeURIComponent('BpstConfigurationEntities'))}/items/@{encodeURIComponent(encodeURIComponent('ENTITYAREAID,ENTITYID'))}"
+                            },
+                            "runAfter": {},
+                            "type": "ApiConnection"
+                        },
+                        "Get_rows": {
+                            "inputs": {
+                                "host": {
+                                    "api": {
+                                        "runtimeUrl": "https://logic-apis-westus.azure-apim.net/apim/sql"
+                                    },
+                                    "connection": {
+                                        "name": "@parameters('$connections')['sql']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('[pbst].[configuration]'))}/items",
+                                "queries": {
+                                    "$filter": "name eq 'SendCompletionNotification'"
+                                }
+                            },
+                            "runAfter": {
+                                "Execute_action": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection"
                         }
                     },
                     "outputs": {}
@@ -97,6 +184,11 @@
                                 "connectionId": "[concat('/subscriptions/', parameters('subscription'), '/resourceGroups/',parameters('resourcegroup'),'/providers/Microsoft.Web/connections/',parameters('connectionName'))]",
                                 "connectionName": "[parameters('connectionName')]",
                                 "id": "[concat('/subscriptions/', parameters('subscription'), '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/dynamicsax')]"
+                            },
+                            "sql": {
+                                "connectionId": "[concat('/subscriptions/', parameters('subscription'), '/resourceGroups/',parameters('resourcegroup'),'/providers/Microsoft.Web/connections/sqlNotifierConnection')]",
+                                "connectionName": "sqlNotifierConnection",
+                                "id": "[concat('/subscriptions/', parameters('subscription'), '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/sql')]"
                             }
                         }
                     }

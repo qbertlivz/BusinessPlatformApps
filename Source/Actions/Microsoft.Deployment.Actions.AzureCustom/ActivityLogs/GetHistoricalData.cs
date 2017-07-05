@@ -146,13 +146,13 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
                     historicalRow["subscriptionId"] = activity.SubscriptionId;
                     historicalTable.Rows.Add(historicalRow);
                 }
-                if (response.NextLink == null)
+                if ((geturi = response.NextLink) == null)
                 {
                     break;
                 }
-                geturi = response.NextLink;
             }
-            BulkInsert(sqlConn, historicalTable, "dbo.HistoricalData");
+     BulkInsert(sqlConn, historicalTable, "HistoricalData");
+
             return new ActionResponse(ActionStatus.Success);
         }
     }

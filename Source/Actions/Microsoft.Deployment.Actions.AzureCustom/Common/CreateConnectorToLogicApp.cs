@@ -53,6 +53,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
                     null, DefaultErrorCodes.DefaultErrorCode, "Failed to create connection");
             }
 
+            var redirectRoot = request.Info.WebsiteRootUrl;
+
             if (requiresConsent != null && requiresConsent.ToLowerInvariant() == "true")
             {
                 // Get Consent links for auth
@@ -62,8 +64,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
                 payload.parameters[0].objectId = null;
                 payload.parameters[0].tenantId = null;
                 payload.parameters[0].parameterName = "token";
-                //payload.parameters[0].redirectUrl = "https://bpsolutiontemplates.com" + Constants.WebsiteRedirectPath;
-                payload.parameters[0].redirectUrl = "http://localhost:1503" + Constants.WebsiteRedirectPath;
+                payload.parameters[0].redirectUrl = redirectRoot + Constants.WebsiteRedirectPath;
 
                 HttpResponseMessage consent = await new AzureHttpClient(azureToken, subscription, resourceGroup).ExecuteWithSubscriptionAndResourceGroupAsync(HttpMethod.Post,
                     $"/providers/Microsoft.Web/connections/{connectorName}/listConsentLinks", "2016-06-01", JsonUtility.GetJsonStringFromObject(payload));

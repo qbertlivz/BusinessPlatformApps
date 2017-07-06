@@ -37,7 +37,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
 
                 var resp = await RequestUtility.CallAction(request, "Microsoft-SetConfigValueInSql");
 
-                if (!resp.IsSuccess)
+                if (resp.IsSuccess)
                 {
                     return resp;
                 }

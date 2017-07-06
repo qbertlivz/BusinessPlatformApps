@@ -24,5 +24,12 @@ namespace Microsoft.Deployment.Tests.Actions.AxTests
             resp = TestManager.ExecuteAction("Microsoft-CreateConnectorToLogicApp", ds);
             Assert.IsTrue(resp.IsSuccess == true);
         }
+
+        [TestMethod]
+        public void GetAxInstances()
+        {
+            var ds = TestManager.GetDataStore(true).Result;
+            var resp = TestManager.ExecuteAction("Microsoft-GetAxInstances", ds);
+        }
     }
 }

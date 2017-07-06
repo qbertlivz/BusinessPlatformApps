@@ -5,8 +5,12 @@ import { ViewModelBase } from '../services/view-model-base';
 export class Customize extends ViewModelBase {
 
     axBaseUrl: string = '';
+    instances: string[] = [];
+    selectedInstance: string = '';
 
     async onLoaded(): Promise<void> {
+        super.onLoaded();
+        await this.getInstances();
     }
 
     async onValidate(): Promise<boolean> {
@@ -23,5 +27,15 @@ export class Customize extends ViewModelBase {
         this.MS.DataStore.addToDataStoreWithCustomRoute('CustomizeBaseUrl', 'SqlEntryValue', 'CreditAndCollections', DataStoreType.Public);
 
         return true;
+    }
+
+    async getInstances(): Promise<void> {
+        this.instances = await this.MS.HttpService.getResponseAsync('Microsoft-GetAxInstances');
+        this.axBaseUrl = this.instances[0];
+        if (!this.instances || (this.instances && this.instances.length === 0)) {
+            this.MS.ErrorService.message = 'Failed to retrieve AX instances.';
+        } else {
+            this.selectedInstance = this.instances[0];
+        }
     }
 }

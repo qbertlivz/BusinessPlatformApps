@@ -2,7 +2,7 @@
     "Install": {
         "Pages": [
             {
-                "architectureDiagram": "",
+                "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-CreditAndCollections/Web/Images/creditAndCollectionsArchDiagram.png",
                 "displayname": "Getting Started",
                 "list1": [
                     "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",
@@ -10,9 +10,11 @@
                     "$translate(INIT_GETTING_STARTED_PBI_PRO)"
                 ],
                 "list2": [
+                    "$translate(INIT_GETTING_STARTED_CLOUD_SOLUTION)",
+                    "$translate(INIT_GETTING_STARTED_CONNECT_AS_PBI)"
                 ],
                 "name": "$SiteCommon$/pages-gallery/getting-started.html",
-                "templateName": "Dynamics 365 for Operations - Credit and Collections"
+                "templateName": "$translate(AX_COLLECTIONS_TEMPLATE_TITLE)"
             },
             {
                 "azureProviders": [
@@ -95,7 +97,7 @@
             },
             {
                 "DeploymentName": "LogicApp",
-                "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_LOGIC_APP)",
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_LOGIC_APP)",
                 "name": "Microsoft-DeployAxLogicApp"
             },
             {

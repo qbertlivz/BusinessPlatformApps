@@ -112,7 +112,7 @@ BEGIN
 				 'systemuser',
 				 'task',
 				 'team'));
-    if(@returnValue = 13)
+    if(@returnValue = 18)
     BEGIN
     RETURN 1;
     END;

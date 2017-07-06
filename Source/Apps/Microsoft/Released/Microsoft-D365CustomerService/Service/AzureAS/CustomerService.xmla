@@ -2,30 +2,21 @@
   "create": {
     "database": {
       "name": "CustomerService",
-      "compatibilityLevel": 1400,
+      "compatibilityLevel": 1200,
       "model": {
         "culture": "en-US",
         "dataSources": [
-          {
-            "type": "structured",
-            "name": "SQL/PBISTTest database windows net,1433;CustomerServiceDB",
-            "connectionDetails": {
-              "protocol": "tds",
-              "address": {
-                "server": "PBISTTest.database.windows.net,1433",
-                "database": "CustomerServiceDB"
-              },
-              "authentication": null,
-              "query": null
-            },
-            "credential": {
-              "AuthenticationKind": "UsernamePassword",
-              "kind": "SQL",
-              "path": "pbisttest.database.windows.net,1433;CustomerServiceDB",
-              "Username": "pbiadmin",
-              "EncryptConnection": true
-            }
-          }
+                    {
+                        "name": "ST_DS",
+                        "connectionString": "Provider=SQLNCLI11;Data Source=tcp:a.database.windows.net;Persist Security Info=False;User ID=pbiadmin;Initial Catalog=CustomerServiceDB",
+                        "impersonationMode": "impersonateServiceAccount",
+                        "annotations": [
+                            {
+                                "name": "ConnectionEditUISource",
+                                "value": "SqlServer"
+                            }
+                        ]
+                    }
         ],
         "tables": [
           {
@@ -54,19 +45,16 @@
             ],
             "partitions": [
               {
-                "name": "Partition",
-                "dataView": "full",
-                "source": {
-                  "type": "m",
-                  "expression": [
-                    "let",
-                    "    Source = #\"SQL/PBISTTest database windows net,1433;CustomerServiceDB\",",
-                    "    csrv_activityview = Source{[Schema=\"csrv\",Item=\"activityview\"]}[Data]",
-                    "in",
-                    "    csrv_activityview"
-                  ]
-                }
-              }
+                                "name": "Partition",
+                                "dataView": "full",
+                                "source": {
+                                    "query": "SELECT [csrv].[activityview].* FROM [csrv].[activityview]",
+                                    "dataSource": "ST_DS"
+                                }
+             }
+
+
+
             ]
           },
           {
@@ -211,20 +199,15 @@
               }
             ],
             "partitions": [
-              {
-                "name": "Partition",
-                "dataView": "full",
-                "source": {
-                  "type": "m",
-                  "expression": [
-                    "let",
-                    "    Source = #\"SQL/PBISTTest database windows net,1433;CustomerServiceDB\",",
-                    "    csrv_caseview = Source{[Schema=\"csrv\",Item=\"caseview\"]}[Data]",
-                    "in",
-                    "    csrv_caseview"
-                  ]
-                }
-              }
+             {
+                                "name": "Partition",
+                                "dataView": "full",
+                                "source": {
+                                    "query": "SELECT [csrv].[caseview].* FROM [csrv].[caseview]",
+                                    "dataSource": "ST_DS"
+                                }
+             }
+
             ]
           },
           {
@@ -258,20 +241,15 @@
               }
             ],
             "partitions": [
-              {
-                "name": "Partition",
-                "dataView": "full",
-                "source": {
-                  "type": "m",
-                  "expression": [
-                    "let",
-                    "    Source = #\"SQL/PBISTTest database windows net,1433;CustomerServiceDB\",",
-                    "    csrv_configurationview = Source{[Schema=\"csrv\",Item=\"configurationview\"]}[Data]",
-                    "in",
-                    "    csrv_configurationview"
-                  ]
-                }
-              }
+                             {
+                                "name": "Partition",
+                                "dataView": "full",
+                                "source": {
+                                    "query": "SELECT [csrv].[configurationview].* FROM [csrv].[configurationview]",
+                                    "dataSource": "ST_DS"
+                                }
+                             }
+
             ]
           },
           {
@@ -315,20 +293,14 @@
               }
             ],
             "partitions": [
-              {
-                "name": "Partition",
-                "dataView": "full",
-                "source": {
-                  "type": "m",
-                  "expression": [
-                    "let",
-                    "    Source = #\"SQL/PBISTTest database windows net,1433;CustomerServiceDB\",",
-                    "    csrv_customerview = Source{[Schema=\"csrv\",Item=\"customerview\"]}[Data]",
-                    "in",
-                    "    csrv_customerview"
-                  ]
-                }
-              }
+                             {
+                                "name": "Partition",
+                                "dataView": "full",
+                                "source": {
+                                    "query": "SELECT [csrv].[customerview].* FROM [csrv].[customerview]",
+                                    "dataSource": "ST_DS"
+                                }
+                             }
             ]
           },
           {
@@ -465,21 +437,15 @@
               }
             ],
             "partitions": [
-              {
-                "name": "Partition",
-                "dataView": "full",
-                "source": {
-                  "type": "m",
-                  "expression": [
-                    "let",
-                    "    Source = #\"SQL/PBISTTest database windows net,1433;CustomerServiceDB\",",
-                    "    csrv_dateview = Source{[Schema=\"csrv\",Item=\"dateview\"]}[Data]",
-                    "in",
-                    "    csrv_dateview"
-                  ]
-                }
-              }
-            ],
+                              {
+                                "name": "Partition",
+                                "dataView": "full",
+                                "source": {
+                                    "query": "SELECT [csrv].[dateview].* FROM [csrv].[dateview]",
+                                    "dataSource": "ST_DS"
+                                }
+                             }
+           ],
             "measures": [
               {
                 "name": "CurrentDate",
@@ -497,20 +463,14 @@
               }
             ],
             "partitions": [
-              {
-                "name": "Partition",
-                "dataView": "full",
-                "source": {
-                  "type": "m",
-                  "expression": [
-                    "let",
-                    "    Source = #\"SQL/PBISTTest database windows net,1433;CustomerServiceDB\",",
-                    "    csrv_measuresview = Source{[Schema=\"csrv\",Item=\"measuresview\"]}[Data]",
-                    "in",
-                    "    csrv_measuresview"
-                  ]
-                }
-              }
+                             {
+                                "name": "Partition",
+                                "dataView": "full",
+                                "source": {
+                                    "query": "SELECT [csrv].[measuresview].* FROM [csrv].[measuresview]",
+                                    "dataSource": "ST_DS"
+                                }
+                             }
             ],
             "measures": [
               {
@@ -651,20 +611,14 @@
               }
             ],
             "partitions": [
-              {
-                "name": "Partition",
-                "dataView": "full",
-                "source": {
-                  "type": "m",
-                  "expression": [
-                    "let",
-                    "    Source = #\"SQL/PBISTTest database windows net,1433;CustomerServiceDB\",",
-                    "    csrv_ownerview = Source{[Schema=\"csrv\",Item=\"ownerview\"]}[Data]",
-                    "in",
-                    "    csrv_ownerview"
-                  ]
-                }
-              }
+                             {
+                                "name": "Partition",
+                                "dataView": "full",
+                                "source": {
+                                    "query": "SELECT [csrv].[ownerview].* FROM [csrv].[ownerview]",
+                                    "dataSource": "ST_DS"
+                                }
+                             }
             ]
           },
           {
@@ -707,20 +661,14 @@
               }
             ],
             "partitions": [
-              {
-                "name": "Partition",
-                "dataView": "full",
-                "source": {
-                  "type": "m",
-                  "expression": [
-                    "let",
-                    "    Source = #\"SQL/PBISTTest database windows net,1433;CustomerServiceDB\",",
-                    "    csrv_surveyresponseview = Source{[Schema=\"csrv\",Item=\"surveyresponseview\"]}[Data]",
-                    "in",
-                    "    csrv_surveyresponseview"
-                  ]
-                }
-              }
+                             {
+                                "name": "Partition",
+                                "dataView": "full",
+                                "source": {
+                                    "query": "SELECT [csrv].[surveyresponseview].* FROM [csrv].[surveyresponseview]",
+                                    "dataSource": "ST_DS"
+                                }
+                             }
             ]
           },
           {
@@ -776,21 +724,15 @@
               }
             ],
             "partitions": [
-              {
-                "name": "Partition",
-                "dataView": "full",
-                "source": {
-                  "type": "m",
-                  "expression": [
-                    "let",
-                    "    Source = #\"SQL/PBISTTest database windows net,1433;CustomerServiceDB\",",
-                    "    csrv_userview = Source{[Schema=\"csrv\",Item=\"userview\"]}[Data]",
-                    "in",
-                    "    csrv_userview"
-                  ]
-                }
-              }
-            ]
+                              {
+                                "name": "Partition",
+                                "dataView": "full",
+                                "source": {
+                                    "query": "SELECT [csrv].[userview].* FROM [csrv].[userview]",
+                                    "dataSource": "ST_DS"
+                                }
+                             }
+           ]
           },
           {
             "name": "Team",
@@ -807,21 +749,16 @@
               }
             ],
             "partitions": [
-              {
-                "name": "Partition",
-                "dataView": "full",
-                "source": {
-                  "type": "m",
-                  "expression": [
-                    "let",
-                    "    Source = #\"SQL/PBISTTest database windows net,1433;CustomerServiceDB\",",
-                    "    csrv_teamview = Source{[Schema=\"csrv\",Item=\"teamview\"]}[Data]",
-                    "in",
-                    "    csrv_teamview"
-                  ]
-                }
-              }
-            ]
+ 
+                             {
+                                "name": "Partition",
+                                "dataView": "full",
+                                "source": {
+                                    "query": "SELECT [csrv].[teamview].* FROM [csrv].[teamview]",
+                                    "dataSource": "ST_DS"
+                                }
+                             }
+           ]
           },
           {
             "name": "Survey",
@@ -838,20 +775,14 @@
               }
             ],
             "partitions": [
-              {
-                "name": "Partition",
-                "dataView": "full",
-                "source": {
-                  "type": "m",
-                  "expression": [
-                    "let",
-                    "    Source = #\"SQL/PBISTTest database windows net,1433;CustomerServiceDB\",",
-                    "    csrv_surveyview = Source{[Schema=\"csrv\",Item=\"surveyview\"]}[Data]",
-                    "in",
-                    "    csrv_surveyview"
-                  ]
-                }
-              }
+                             {
+                                "name": "Partition",
+                                "dataView": "full",
+                                "source": {
+                                    "query": "SELECT [csrv].[surveyview].* FROM [csrv].[surveyview]",
+                                    "dataSource": "ST_DS"
+                                }
+                             }
             ]
           }
         ],
@@ -866,9 +797,9 @@
           },
           {
             "name": "1cf46f6a-6ee5-4a97-a322-14427051e51f",
-            "fromTable": "Case",
+            "fromTable": "Activity",
             "fromColumn": "Case Id",
-            "toTable": "Activity",
+            "toTable": "Case",
             "toColumn": "Case Id"
           },
           {

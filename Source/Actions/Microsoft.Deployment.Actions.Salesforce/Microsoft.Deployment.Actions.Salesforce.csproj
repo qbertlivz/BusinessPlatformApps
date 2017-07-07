@@ -107,7 +107,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SalesforceGetEntities.cs" />
     <Compile Include="SalesforceGetEntityInitialCounts.cs" />
-    <Compile Include="SalesforceGetObjectMetadata.cs" />
+    <Compile Include="SalesforceUtility.cs" />
     <Compile Include="SalesforceSqlArtefacts.cs" />
     <Compile Include="Service References\SalesforceSOAP\Reference.cs">
       <AutoGen>True</AutoGen>

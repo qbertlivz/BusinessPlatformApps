@@ -104,13 +104,13 @@ namespace Microsoft.Deployment.Actions.Salesforce
                 t.Start();
             }
 
-            Task.WaitAll(task.ToArray());
+            var results = Task.WhenAll(task.ToArray());
 
-            foreach (var t in task)
+            foreach (var t in results.Result)
             {
-                if (t.Result.Status != ActionStatus.Success)
+                if (t.Status != ActionStatus.Success)
                 {
-                    return new ActionResponse(ActionStatus.Failure, t.Result.ExceptionDetail.FriendlyErrorMessage);
+                    return new ActionResponse(ActionStatus.Failure, t.ExceptionDetail.FriendlyErrorMessage);
                 }
             }
 

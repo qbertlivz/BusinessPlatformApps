@@ -7,9 +7,6 @@ namespace Microsoft.Deployment.Common.Model.StreamAnalytics
         [JsonProperty("action")]
         public string Action;
 
-        [JsonProperty("role")]
-        public string Role;
-
         [JsonProperty("scope")]
         public string Scope;
     }

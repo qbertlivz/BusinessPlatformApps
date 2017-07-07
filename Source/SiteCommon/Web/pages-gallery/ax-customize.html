@@ -1,0 +1,12 @@
+﻿<template>
+    <h1 class="st-title">${MS.Translate.COMMON_CUSTOMIZE}</h1>
+    <h4 class="st-subtitle">${MS.Translate.CUSTOMIZE_SPECIFIC}</h4>
+
+    <div class="st-float" if.bind="instances && instances.length > 0">
+        <p class="st-text">${MS.Translate.AX_INSTANCES}</p>
+        <select class="btn btn-default dropdown-toggle st-input" disabled.bind="MS.HttpService.isServiceBusy" if.bind="isActivated" value.bind="selectedInstance">
+            <option repeat.for="item of instances" value.bind="item">${item}</option>
+        </select>
+    </div>
+    
+</template>

@@ -1,0 +1,117 @@
+﻿{
+    "Install": {
+        "Pages": [
+            {
+                "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-CreditAndCollections/Web/Images/creditAndCollectionsArchDiagram.png",
+                "displayname": "Getting Started",
+                "list1": [
+                    "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",
+                    "$translate(INIT_GETTING_STARTED_PBI_DESKTOP)",
+                    "$translate(INIT_GETTING_STARTED_PBI_PRO)"
+                ],
+                "list2": [
+                    "$translate(INIT_GETTING_STARTED_CLOUD_SOLUTION)",
+                    "$translate(INIT_GETTING_STARTED_CONNECT_AS_PBI)"
+                ],
+                "name": "$SiteCommon$/pages-gallery/getting-started.html",
+                "templateName": "$translate(AX_COLLECTIONS_TEMPLATE_TITLE)"
+            },
+            {
+                "azureProviders": [
+                    "Microsoft.Web"
+                ],
+                "displayname": "Login",
+                "name": "$SiteCommon$/pages-gallery/azure-login.html"
+            },
+            {
+                "displayname": "AX Login",
+                "name": "$SiteCommon$/pages-gallery/ax-login.html"
+            },
+            {
+                "displayname": "AX Connector",
+                "ConnectorName": "$save('dynamicsax')",
+                "RequiresConsent": "$save('true')",
+                "name": "$SiteCommon$/pages-gallery/ax-connector-login.html"
+            },
+            {
+                "checkSqlVersion": true,
+                "displayname": "Target",
+                "isAzureSql": true,
+                "name": "$SiteCommon$/pages-gallery/sql.html",
+                "newSqlDatabase": "CreditAndCollections",
+                "showAzureSql": false,
+                "showNewSqlOption": "true",
+                "showSkuS1": true,
+                "sqlInstance": "NewSql",
+                "sqlSku": "S1",
+                "subtitle": "$translate(INIT_SQL_TITLE)",
+                "title": "$translate(INIT_SQL_TITLE)"
+            },
+            {
+                "displayname": "Customize",
+                "name": "$SiteCommon$/pages-gallery/ax-customize.html",
+                "useDefaultValidateButton": true
+            },
+            {
+                "displayname": "Summary",
+                "name": "$SiteCommon$/pages-gallery/summary.html",
+                "values": {
+                    "Target Server": "$(this.MS.DataStore.getValue('Server'))",
+                    "Target Database": "$(this.MS.DataStore.getValue('Database'))",
+                    "Target Username": "$(this.MS.DataStore.getValue('Username'))"
+                },
+                "ConnectorName": "$save('dynamicsax')",
+                "AxReportName": "$save('CreditAndCollectionsManagementReport')",
+                "AxMeasurementName": "$save('CustCollectionsBIMeasurements')"
+            },
+            {
+                "displayname": "Deploy",
+                "filename": "$save('CreditAndCollectionsImportMode.pbix')",
+                "name": "$SiteCommon$/pages-gallery/progress.html"
+            }
+        ],
+
+        "Actions": [
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
+                "name": "Microsoft-DeploySQLScripts",
+                "SqlServerIndex": "0",
+                "SqlScriptsFolder": "Database"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+                "name": "Microsoft-SetConfigValueInSql",
+                "SqlConfigTable": "[pbst].[configuration]",
+                "SqlServerIndex": "0"
+            },
+            {
+                "DeploymentName": "AxOdataInsert",
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_LOGIC_APP)",
+                "name": "Microsoft-UpdateAxConfigurationEntity"
+            },
+            {
+                "DeploymentName": "SqlConnectionDeployment",
+                "displayname": "$translate(NOTIFIER_CREATING_DATABASE_CONNECTION)",
+                "name": "Microsoft-CreateSqlConnector",
+                "ApiConnectionName": "$save('sqlNotifierConnection')"
+            },
+            {
+                "DeploymentName": "LogicApp",
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_LOGIC_APP)",
+                "name": "Microsoft-DeployAxLogicApp"
+            },
+            {
+                "DeploymentName": "NotifierLogicApp",
+                "displayname": "$translate(NOTIFIER_CREATING_NOTIFIER_APP)",
+                "name": "Microsoft-DeployNotifierLogicApp",
+                "logicAppName": "notifierLogicApp",
+                "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+            },
+            {
+                "displayname": "$translate(NOTIFIER_CONFIGURE_NOTIFIER_APP)",
+                "name": "Microsoft-ConfigureNotifier",
+                "SqlConfigTable": "[pbst].[configuration]"                
+            }
+        ]
+    }
+}

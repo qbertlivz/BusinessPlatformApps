@@ -51,7 +51,7 @@
 
             _orgUrl = request.DataStore.GetValue("OrganizationUrl");
             _orgId = request.DataStore.GetValue("OrganizationId");
-            string name = request.DataStore.GetValue("ProfileName") ?? "bpst-mscrm-profile";
+            string name = request.DataStore.GetValue("ProfileName") ?? Constants.CrmProfileName;
             string kV = request.DataStore.GetValue("KeyVault");
             //var entities = request.DataStore.GetValue("Entities").SplitByCommaSpaceTabReturnList();
             Dictionary<string, string> entities_dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(request.DataStore.GetValue("Entities"));

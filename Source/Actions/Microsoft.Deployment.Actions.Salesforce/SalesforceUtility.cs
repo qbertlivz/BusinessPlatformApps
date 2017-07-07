@@ -14,10 +14,9 @@ using Microsoft.Deployment.Common.Helpers;
 
 namespace Microsoft.Deployment.Actions.Salesforce
 {
-    [Export(typeof(IAction))]
-    class SalesforceGetObjectMetadata : BaseAction
+    public static class SalesforceUtility
     {
-        public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
+        public static async Task<List<DescribeSObjectResult>> GetMetadata(ActionRequest request)
         {
             string objects = request.DataStore.GetValue("ObjectTables");
             string sfUsername = request.DataStore.GetValue("SalesforceUser");
@@ -27,8 +26,9 @@ namespace Microsoft.Deployment.Actions.Salesforce
             var additionalObjects = request.DataStore.GetValue("AdditionalObjects");
 
             List<string> sfObjects = objects.SplitByCommaSpaceTabReturnList();
+            var metadata = new List<DescribeSObjectResult>();
 
-            if(!string.IsNullOrEmpty(additionalObjects))
+            if (!string.IsNullOrEmpty(additionalObjects))
             {
                 var add = additionalObjects.SplitByCommaSpaceTabReturnList();
                 sfObjects.AddRange(add);
@@ -53,10 +53,9 @@ namespace Microsoft.Deployment.Actions.Salesforce
                sfUsername,
                string.Concat(sfPassword, sfToken));
 
-            dynamic metadata = new ExpandoObject();
 
             binding = new SoapClient("Soap");
-            metadata.Objects = new List<DescribeSObjectResult>();
+            
             SessionHeader sheader = new SessionHeader();
             BasicHttpBinding bind = new BasicHttpBinding();
             bind = (BasicHttpBinding)binding.Endpoint.Binding;
@@ -83,17 +82,17 @@ namespace Microsoft.Deployment.Actions.Salesforce
             foreach (var obj in sfObjects)
             {
                 DescribeSObjectResult sobject;
-                
+
                 binding.describeSObject(sheader, null, null, null, obj, out sobject);
 
                 var trimObject = new DescribeSObjectResult();
                 trimObject.fields = sobject.fields;
                 trimObject.name = sobject.name;
 
-                metadata.Objects.Add(trimObject);
+                metadata.Add(trimObject);
             }
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetJObjectFromObject(metadata));
+            return metadata;
         }
     }
 }

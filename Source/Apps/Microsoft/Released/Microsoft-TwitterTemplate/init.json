@@ -138,6 +138,17 @@
                 "skip": "$run(this.MS.DataStore.getValue('SkipPowerApp') === 'true')"
             },
             {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+                "name": "Microsoft-SetConfigValueInSql",
+                "skip": "$run(this.MS.DataStore.getValue('SkipPowerApp') === 'true')",
+                "SqlConfigTable": "[pbist_twitter].[configuration]",
+                "SqlEntryName": "PowerAppUri",
+                "SqlEntryValue": "$run(this.MS.DataStore.getValue('PowerAppUri'))",
+                "SqlGroup": "SolutionTemplate",
+                "SqlServerIndex": "0",
+                "SqlSubGroup": "PowerApp"
+            },
+            {
                 "CognitiveServiceName": "TextCognitiveService",
                 "CognitiveServiceType": "TextAnalytics",
                 "CognitiveSkuName": "S1",

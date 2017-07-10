@@ -60,6 +60,7 @@
     AX_COLLECTIONS_TEMPLATE_TITLE: `Dynamics 365 for Operations - Credit and Collections`,
     AX_INSTANCES: `Select your Dynamics for Operations instance:`,
     AX_TITLE: `Confirm connection to D365`,
+    AX_UPDATE_CONFIGURATION: `Updating entities`,
     BYOE_CUSTOMIZE_ADD_ENTITY: `Add Entity`,
     BYOE_CUSTOMIZE_CSV_INVALID: `The uploaded .csv file is in an invalid state`,
     BYOE_CUSTOMIZE_EDIT_NAME: `Edit Name:`,

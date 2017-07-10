@@ -86,7 +86,7 @@
             },
             {
                 "DeploymentName": "AxOdataInsert",
-                "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_LOGIC_APP)",
+                "displayname": "$translate(AX_UPDATE_CONFIGURATION)",
                 "name": "Microsoft-UpdateAxConfigurationEntity"
             },
             {

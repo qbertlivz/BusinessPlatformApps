@@ -2,8 +2,6 @@
 
 import { NewsEntity } from '../../../../../SiteCommon/Web/models/news-entity'
 
-import { NewsEntity } from '../../../../../SiteCommon/Web/models/news-entity';
-
 import { ViewModelBase } from '../../../../../SiteCommon/Web/services/view-model-base';
 
 export class Customize extends ViewModelBase {

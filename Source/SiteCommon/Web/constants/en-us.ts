@@ -278,6 +278,7 @@
     INIT_ACTION_GET_INITIAL_COUNTS: `Retrieving entitities' counts`,
     INIT_ACTION_GETTING_COGNITIVE_KEY: `Getting Cognitive Key`,
     INIT_ACTION_GETTING_STORAGE_ACCOUNT_KEY: `Getting Storage Account Key`,
+    INIT_ACTION_POPULATE_NEWS_ENTITIES: `Populating news entities`,
     INIT_ACTION_PROCESS_SCRIBE_SOLUTION: `Processing Scribe solution`,
     INIT_ACTION_REMOVING_FILES: `Removing files`,
     INIT_ACTION_REMOVING_TASK: `Removing task`,

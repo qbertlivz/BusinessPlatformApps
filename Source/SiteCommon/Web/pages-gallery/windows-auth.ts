@@ -40,6 +40,7 @@ export class WindowsAuth extends ViewModelBase {
             this.MS.DataStore.addToDataStore('ImpersonationPassword', this.password, DataStoreType.Private);
 
             this.isValidated = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-ValidateNtCredential');
+            this.showValidation = this.isValidated;
         }
 
         return this.isValidated;

@@ -26,7 +26,7 @@
     <!-- Spinner -->
     <div class="st-float">
         <span class="st-loader st-loader-small" if.bind="viewmodel.MS.HttpService.isServiceBusy"></span>
-        <span class="st-text" if.bind="viewmodel.isCurrentlyNavigating">${viewmodel.navigationMessage}</span>
+        <span class="st-text" if.bind="viewmodel.MS.NavigationService.isCurrentlyNavigating">${viewmodel.navigationMessage}</span>
     </div>
 
     <!-- Navigation Buttons -->

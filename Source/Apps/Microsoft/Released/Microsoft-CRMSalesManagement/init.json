@@ -70,7 +70,19 @@
                     "Microsoft.AnalysisServices"
                 ],
                 "displayname": "Dynamics 365 Login",
-                "entities": "account,lead,opportunity,opportunityproduct,product,systemuser,systemusermanagermap,territory,team",
+                // Dictionary of entities and their ID columns
+                // This is used to get the counts via a FetcXML command
+                "entities": {
+                    "account": "accountid",
+                    "lead": "leadid",
+                    "opportunity": "opportunityid",
+                    "opportunityproduct": "opportunityproductid",
+                    "product": "productid",
+                    "systemuser": "systemuserid",
+                    "systemusermanagermap": "systemusermanagermapid",
+                    "territory": "territoryid",
+                    "team": "teamid"
+                },
                 "isScribe": "$run(this.MS.DataStore.getValue('DataMovement') === 'Scribe')",
                 "name": "$SiteCommon$/pages-gallery/mscrm-login.html",
                 "oauthType": "mscrm",

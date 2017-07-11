@@ -110,6 +110,7 @@ export class ViewModelBase {
                 // do nothing
             } finally {
                 this.MS.NavigationService.isCurrentlyNavigating = false;
+                this.navigationMessage = '';
             }
         }
     }

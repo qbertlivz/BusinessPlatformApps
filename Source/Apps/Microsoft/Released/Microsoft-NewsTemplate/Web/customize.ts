@@ -1,6 +1,6 @@
-﻿import { DataStoreType } from '../../../../../SiteCommon/Web/enums/data-store-type'
+﻿import { DataStoreType } from '../../../../../SiteCommon/Web/enums/data-store-type';
 
-import { NewsEntity } from '../../../../../SiteCommon/Web/models/news-entity'
+import { NewsEntity } from '../../../../../SiteCommon/Web/models/news-entity';
 
 import { ViewModelBase } from '../../../../../SiteCommon/Web/services/view-model-base';
 
@@ -89,11 +89,6 @@ export class Customize extends ViewModelBase {
 
         this.MS.DataStore.addToDataStore('UserDefinedEntities', JSON.stringify(validEntities), DataStoreType.Public);
 
-        return true;
-    }
-
-    async NavigatingNext(): Promise<boolean> {
-        this.MS.DataStore.addToDataStore("UserDefinedEntities", JSON.stringify(this.entities), DataStoreType.Public);
         return true;
     }
 }

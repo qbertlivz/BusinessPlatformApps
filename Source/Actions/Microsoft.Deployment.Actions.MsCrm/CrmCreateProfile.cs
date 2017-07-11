@@ -53,12 +53,13 @@
             _orgId = request.DataStore.GetValue("OrganizationId");
             string name = request.DataStore.GetValue("ProfileName") ?? Constants.CrmProfileName;
             string kV = request.DataStore.GetValue("KeyVault");
-            //var entities = request.DataStore.GetValue("Entities").SplitByCommaSpaceTabReturnList();
             Dictionary<string, string> entities_dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(request.DataStore.GetValue("Entities"));
+
             List<string> entities = new List<string>();
-
-            foreach (var e in entities_dict) entities.Add(e.Key);
-
+            foreach (var e in entities_dict)
+            {
+                entities.Add(e.Key);
+            }
 
             var additionalObjects = request.DataStore.GetValue("AdditionalObjects");
 
@@ -80,7 +81,7 @@
 
             for (int i = 0; i < profile.Entities.Length; i++)
             {
-                MsCrmEntity e = new MsCrmEntity {Type = entities[i]};
+                MsCrmEntity e = new MsCrmEntity { Type = entities[i] };
                 profile.Entities[i] = e;
             }
 

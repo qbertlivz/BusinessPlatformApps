@@ -15,9 +15,25 @@ export class Customize extends ViewModelBase {
 
     async onValidate(): Promise<boolean> {
 
-        this.MS.DataStore.addToDataStore('AxInstanceName', this.axBaseUrl, DataStoreType.Public);
-        this.isValidated = true;
+        if (this.axBaseUrl) {
+            this.MS.DataStore.addToDataStore('AxInstanceName', this.axBaseUrl, DataStoreType.Public);
+            this.isValidated = true;
+        }
+        if(this.selectedInstance){
+            this.MS.DataStore.addToDataStore('AxInstanceName', this.selectedInstance, DataStoreType.Public);
+            this.isValidated = true;
+        }        
         return true;
+    }
+
+    async onInvalidate(): Promise<void> {
+        super.onInvalidate();
+        if (this.selectedInstance) {
+            this.selectedInstance = '';
+        }
+        else {
+            await this.getInstances();
+        }
     }
 
     async onNavigatingNext(): Promise<boolean> {
@@ -31,7 +47,6 @@ export class Customize extends ViewModelBase {
 
     async getInstances(): Promise<void> {
         this.instances = await this.MS.HttpService.getResponseAsync('Microsoft-GetAxInstances');
-        this.axBaseUrl = this.instances[0];
         if (!this.instances || (this.instances && this.instances.length === 0)) {
             this.MS.ErrorService.message = 'Failed to retrieve AX instances.';
         } else {

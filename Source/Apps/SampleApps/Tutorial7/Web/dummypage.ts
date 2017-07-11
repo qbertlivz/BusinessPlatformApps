@@ -26,20 +26,4 @@ export class DummyPage extends ViewModelBase {
     showPrivacy: boolean = true;
     subtitle: string = '';
     templateName: string = '';
-
-    constructor() {
-        super();
-    }
-
-    async GetDownloadLink() {
-       
-    }
-
-    async OnLoaded() {
-        this.isValidated = true;
-        
-    }
-
-    async Register() {
-    }
 }

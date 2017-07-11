@@ -4,6 +4,10 @@ import { ViewModelBase } from '../services/view-model-base';
 
 export class Customize extends ViewModelBase {
     actuals: string = 'Closed opportunities';
+    additionalEntities: string[] = [];
+    selectedAdd: string[] = [];
+    selectedRemove: string[] = [];
+    entitiesToReplicate: string[] = [];
     baseUrl: string = '';
     fiscalMonth: number = 1;
     emails: string = '';
@@ -17,50 +21,60 @@ export class Customize extends ViewModelBase {
     showCrmUrl: boolean = false;
     showRefreshSchedule: boolean = false;
     showRecurrenceOptions: boolean = false;
+    addAdditionalEntities: boolean = false;
     sourceApplication: string = '';
 
-    async OnLoaded(): Promise<void> {
+    async onLoaded(): Promise<void> {
         this.emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         this.isValidated = true;
+        
+        if (this.sourceApplication === 'DynamicsCRM' && this.MS.DataStore.getValue('DataMovement') !== 'Scribe') {
+            await this.getEntities();
+            this.addAdditionalEntities = true;
+        }
+        if (this.sourceApplication === 'Salesforce') {
+            await this.getEntities();
+            this.addAdditionalEntities = true;
+        }
+
         if (this.showCrmUrl) {
             let orgUrl: string = this.MS.DataStore.getValue('OrganizationUrl');
             if (orgUrl && orgUrl[orgUrl.length - 1] === '/') {
                 orgUrl = orgUrl.substr(0, orgUrl.length - 1);
             }
             this.baseUrl = orgUrl;
-            this.isValidated = true;
         }
 
         if (this.sourceApplication === 'Salesforce' && this.showEmails && this.emails != '') {
-            this.isValidated = false;
-            this.showValidation = false;
+            this.onInvalidate();
         }
     }
 
-    async OnValidate(): Promise<boolean> {
-        this.isValidated = false;
-        this.showValidation = false;
+    async onValidate(): Promise<boolean> {
+        this.onInvalidate();
+
         this.isEmailValidated = false;
+        this.isValidated = true;
 
         if (this.emails != null && this.emails != '') {
-            let mails = this.emails.split(',');
-            for (let mail in mails) {
-                if (!this.emailRegex.test(mails[mail])) {
+            let mails: string[] = this.emails.split(',');
+            for (let i = 0; i < mails.length && this.isValidated; i++) {
+                let mail: string = mails[i];
+                if (!this.emailRegex.test(mail)) {
+                    this.MS.ErrorService.message = 'Validation failed. The email address ' + mail + ' is not valid.';
                     this.isValidated = false;
-                    this.showValidation = false;
-                    this.MS.ErrorService.message = 'Validation failed. The email address ' + mails[mail] + ' is not valid.';
-                    return false;
                 }
             }
         }
 
-        this.isValidated = true;
-        this.showValidation = true;
-        this.isEmailValidated = true;
-        return true;
+        if (this.isValidated) {
+            this.isEmailValidated = this.setValidated();
+        }
+
+        return this.isValidated;
     }
 
-    async NavigatingNext(): Promise<boolean> {
+    async onNavigatingNext(): Promise<boolean> {
         if (this.sourceApplication === 'Salesforce') {
             switch (this.recurrent) {
                 case 'Every 15 minutes':
@@ -114,6 +128,8 @@ export class Customize extends ViewModelBase {
             }
         }
 
+        this.MS.DataStore.addToDataStore("AdditionalObjects", this.entitiesToReplicate.join(), DataStoreType.Public);
+
         this.MS.DataStore.addToDataStoreWithCustomRoute('CustomizeBaseUrl', 'SqlGroup', 'SolutionTemplate', DataStoreType.Public);
         this.MS.DataStore.addToDataStoreWithCustomRoute('CustomizeBaseUrl', 'SqlSubGroup', 'SalesManagement', DataStoreType.Public);
         this.MS.DataStore.addToDataStoreWithCustomRoute('CustomizeBaseUrl', 'SqlEntryName', 'BaseURL', DataStoreType.Public);
@@ -129,6 +145,11 @@ export class Customize extends ViewModelBase {
         this.MS.DataStore.addToDataStoreWithCustomRoute('CustomizeSourceApplication', 'SqlEntryName', 'SourceApplication', DataStoreType.Public);
         this.MS.DataStore.addToDataStoreWithCustomRoute('CustomizeSourceApplication', 'SqlEntryValue', this.sourceApplication, DataStoreType.Public);
 
+        this.MS.DataStore.addToDataStoreWithCustomRoute('CustomizeSourceApplication', 'SqlGroup', 'SolutionTemplate', DataStoreType.Public);
+        this.MS.DataStore.addToDataStoreWithCustomRoute('CustomizeSourceApplication', 'SqlSubGroup', 'SalesManagement', DataStoreType.Public);
+        this.MS.DataStore.addToDataStoreWithCustomRoute('CustomizeSourceApplication', 'SqlEntryName', 'AdditionalTables', DataStoreType.Public);
+        this.MS.DataStore.addToDataStoreWithCustomRoute('CustomizeSourceApplication', 'SqlEntryValue', this.entitiesToReplicate.join(), DataStoreType.Public);
+        
         if (this.showRefreshSchedule) {
             this.MS.DataStore.addToDataStore('RefreshSchedule', this.refreshSchedule, DataStoreType.Public);
         }
@@ -137,8 +158,35 @@ export class Customize extends ViewModelBase {
     }
 
     InvalidateEmails(): void {
-        this.Invalidate();
-
+        this.onInvalidate();
         this.isValidated = this.emails.length === 0 || this.isEmailValidated;
     }
+
+    async getEntities(): Promise<void> {
+        if (this.sourceApplication === 'Salesforce') {
+            this.additionalEntities = await this.MS.HttpService.getResponseAsync('Microsoft-SalesforceGetEntities');
+        }
+
+        if (this.sourceApplication === "DynamicsCRM") {
+        this.additionalEntities = await this.MS.HttpService.getResponseAsync('Microsoft-CrmGetEntities');
+        }
+    }
+
+    onAddingEntityToEntitiesToReplicate() {
+        this.selectedAdd.map(entity => entity).forEach(e => this.entitiesToReplicate.push(e));
+        this.selectedAdd.forEach(entity => this.additionalEntities.splice(this.additionalEntities.indexOf(entity), 1));
+        this.sortArrays();
+    }
+
+    onRemovingEntityFromEntitiesToReplicate() {
+        this.selectedRemove.map(entity => entity).forEach(e => this.additionalEntities.push(e));
+        this.selectedRemove.forEach(entity => this.entitiesToReplicate.splice(this.entitiesToReplicate.indexOf(entity), 1));
+        this.sortArrays();
+    }
+
+    sortArrays() {
+        this.additionalEntities.sort((a, b) => { if (a > b) return 1; if (a < b) return -1; return 0; });
+        this.entitiesToReplicate.sort((a, b) => { if (a > b) return 1; if (a < b) return -1; return 0; });
+    }
+
 }

@@ -98,7 +98,6 @@
     <Compile Include="ADFDeployLinkedServices.cs" />
     <Compile Include="ADFDeployPipelines.cs" />
     <Compile Include="ADFSliceStatus.cs" />
-    <Compile Include="Helpers\DeploymentHelper.cs" />
     <Compile Include="Helpers\SalesforceConcurrencyMapper.cs" />
     <Compile Include="Helpers\SecurityHelper.cs" />
     <Compile Include="Helpers\SqlConfigQueries.cs" />
@@ -106,8 +105,9 @@
     <Compile Include="Models\ADFField.cs" />
     <Compile Include="Models\DeserializedADFPayload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SalesforceGetEntities.cs" />
     <Compile Include="SalesforceGetEntityInitialCounts.cs" />
-    <Compile Include="SalesforceGetObjectMetadata.cs" />
+    <Compile Include="SalesforceUtility.cs" />
     <Compile Include="SalesforceSqlArtefacts.cs" />
     <Compile Include="Service References\SalesforceSOAP\Reference.cs">
       <AutoGen>True</AutoGen>

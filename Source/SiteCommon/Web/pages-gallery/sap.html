@@ -7,7 +7,7 @@
                 <span>${MS.Translate.SAP_APPLICATION_SERVER}</span>
                 <span class="glyphicon pbi-glyph-info glyph-mini st-tooltip" title="${MS.Translate.SAP_APPLICATION_SERVER_DESCRIPTION}"></span>
             </p>
-            <input class="st-input" type="text" change.delegate="viewmodel.Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.applicationServer" />
+            <input class="st-input" type="text" change.delegate="viewmodel.onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.applicationServer" />
         </div>
 
         <div class="st-input-column">
@@ -15,17 +15,17 @@
                 <span>${MS.Translate.SAP_CLIENT}</span>
                 <span class="glyphicon pbi-glyph-info glyph-mini st-tooltip" title="${MS.Translate.SAP_CLIENT_DESCRIPTION}"></span>
             </p>
-            <input class="st-input" type="text" change.delegate="viewmodel.Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.client" />
+            <input class="st-input" type="text" change.delegate="viewmodel.onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.client" />
         </div>
 
         <div class="st-input-column">
             <p class="st-text">${MS.Translate.SAP_USER}</p>
-            <input class="st-input" type="text" change.delegate="viewmodel.Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.user" />
+            <input class="st-input" type="text" change.delegate="viewmodel.onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.user" />
         </div>
 
         <div class="st-input-column">
             <p class="st-text">${MS.Translate.SAP_PASSWORD}</p>
-            <input class="st-input" type="password" change.delegate="viewmodel.Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.password" />
+            <input class="st-input" type="password" change.delegate="viewmodel.onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.password" />
         </div>
 
         <div class="st-input-column">
@@ -33,7 +33,7 @@
                 <span>${MS.Translate.SAP_SYSTEM_ID}</span>
                 <span class="glyphicon pbi-glyph-info glyph-mini st-tooltip" title="${MS.Translate.SAP_SYSTEM_ID_DESCRIPTION}"></span>
             </p>
-            <input class="st-input" type="text" change.delegate="viewmodel.Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.systemId" />
+            <input class="st-input" type="text" change.delegate="viewmodel.onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.systemId" />
         </div>
 
         <div class="st-input-column">
@@ -41,12 +41,12 @@
                 <span>${MS.Translate.SAP_INSTANCE_NUMBER}</span>
                 <span class="glyphicon pbi-glyph-info glyph-mini st-tooltip" title="${MS.Translate.SAP_INSTANCE_NUMBER_DESCRIPTION}"></span>
             </p>
-            <input class="st-input" type="text" change.delegate="viewmodel.Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.instanceNumber" />
+            <input class="st-input" type="text" change.delegate="viewmodel.onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.instanceNumber" />
         </div>
 
         <div class="st-input-column">
             <p class="st-text">${MS.Translate.SAP_LANGUAGE}</p>
-            <select class="btn btn-default dropdown-toggle st-input" change.delegate="viewmodel.Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.language">
+            <select class="btn btn-default dropdown-toggle st-input" change.delegate="viewmodel.onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.language">
                 <option repeat.for="option of viewmodel.languages" value.bind="option">${option}</option>
             </select>
         </div>
@@ -61,13 +61,13 @@
 
     <div class="st-float" if.bind="viewmodel.showAdvanced">
         <p class="st-text">${MS.Translate.SAP_ROUTER_STRING}</p>
-        <input class="st-input" type="text" change.delegate="viewmodel.Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.sapRouterString" />
+        <input class="st-input" type="text" change.delegate="viewmodel.onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.sapRouterString" />
 
         <p class="st-text">${MS.Translate.SAP_ROW_BATCH_SIZE}</p>
-        <input class="st-input" type="text" change.delegate="viewmodel.Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.rowBatchSize" />
+        <input class="st-input" type="text" change.delegate="viewmodel.onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.rowBatchSize" />
     </div>
 
     <p class="st-float">
-        <button class="primary" click.trigger="viewmodel.OnValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_VALIDATE}</button>
+        <button class="primary" click.trigger="viewmodel.onValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_VALIDATE}</button>
     </p>
 </template>

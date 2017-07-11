@@ -4,6 +4,10 @@
     <p class="st-text">${MS.Translate.BYOE_CUSTOMIZE_SELECT_ENTITY}</p>
 
     <button class="primary" click.trigger="entityAdd()">${MS.Translate.BYOE_CUSTOMIZE_ADD_ENTITY}</button>
+    <label class="st-button-right st-file-upload">
+        <input type="file" accept=".csv" change.delegate="entityUpload()" files.bind="csv" value.bind="csvPath" />
+        <span>${MS.Translate.BYOE_CUSTOMIZE_UPLOAD_ENTITIES}</span>
+    </label>
 
     <div if.bind="selectedEntity">
         <div class="st-byoe-preview">

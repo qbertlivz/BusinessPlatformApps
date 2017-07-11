@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
 using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 
@@ -50,22 +47,20 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             string authBase = string.Format(Constants.AzureAuthUri, aadTenant);
 
             string oauthType = (request.DataStore.GetValue("oauthType") ?? string.Empty).ToLowerInvariant();
-            var meta = AzureTokenUtility.GetMetaFromOAuthType(oauthType);
 
             switch (oauthType)
             {
                 case "keyvault":
                     var registrationResponse = RegisterKeyVault(request);
-                    if(!registrationResponse.IsSuccess)
+                    if (!registrationResponse.IsSuccess)
                     {
                         return registrationResponse;
                     }
-                break;
+                    break;
             }
 
             string authUri = AzureTokenUtility.GetAzureAuthUri(oauthType, request.Info.WebsiteRootUrl + Constants.WebsiteRedirectPath, authBase);
             return new ActionResponse(ActionStatus.Success, JsonUtility.GetJObjectFromStringValue(authUri.ToString()));
-            
         }
 
         public static ActionResponse RegisterKeyVault(ActionRequest request)
@@ -73,7 +68,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             string azureToken = request.DataStore.GetJson("AzureToken", "access_token");
             string subscriptionId = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             string resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
-
 
             // Make sure the Key Vault is registered
             SubscriptionCloudCredentials creds = new TokenCloudCredentials(subscriptionId, azureToken);
@@ -132,6 +126,5 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                 return new ActionResponse(ActionStatus.Success);
             }
         }
-        
     }
 }

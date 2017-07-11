@@ -1,13 +1,11 @@
 ﻿using System.ComponentModel.Composition;
-using System.Globalization;
+using System.Net.Http;
 using System.Threading.Tasks;
+
+using Newtonsoft.Json.Linq;
 
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
-using Microsoft.Deployment.Common.Helpers;
-using System.Net.Http;
-using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
 
 namespace Microsoft.Deployment.Actions.Custom.Facebook
 {
@@ -19,7 +17,6 @@ namespace Microsoft.Deployment.Actions.Custom.Facebook
             string clientId = request.DataStore.GetValue("FacebookClientId");
             string clientSecret = request.DataStore.GetValue("FacebookClientSecret");
             string pages = request.DataStore.GetValue("FacebookPages");
-            string pageIds = "";
 
             foreach (var pageToSearch in pages.Split(','))
             {
@@ -35,9 +32,9 @@ namespace Microsoft.Deployment.Actions.Custom.Facebook
 
                 string accessToken = JObject.Parse(responseObj)["access_token"].ToString();
 
-                string pageRequestUri = $"https://graph.facebook.com/{page}?access_token={accessToken}";
+                string pageRequestUri = $"https://graph.facebook.com/{page}?access_token={accessToken}&fields=picture,name";
                 response = await client.GetAsync(pageRequestUri);
-                //responseObj = await response.Content.ReadAsStringAsync();
+                responseObj = await response.Content.ReadAsStringAsync();
                 if (!response.IsSuccessStatusCode)
                 {
                     return new ActionResponse(ActionStatus.FailureExpected, null, null, $"FacebookPagesInvalid", $"{page} not found");

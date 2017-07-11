@@ -46,7 +46,7 @@ namespace Microsoft.Deployment.Actions.Custom.CustomerData
                     request.Logger.LogException(e);
             }
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
     }
 }

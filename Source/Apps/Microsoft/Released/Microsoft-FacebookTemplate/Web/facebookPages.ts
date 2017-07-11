@@ -5,28 +5,16 @@ import { ViewModelBase } from '../../../../../SiteCommon/Web/services/view-model
 export class facebookPages extends ViewModelBase {
     searchQuery: string = '';
 
-    constructor() {
-        super();
-    }
-
-    async OnLoaded(): Promise<void> {
-        this.isValidated = false;
-    }
-
-    async OnValidate(): Promise<boolean> {
+    async onValidate(): Promise<boolean> {
         if (this.searchQuery.length > 0) {
-            let body: any = {};
-            body.FacebookPages = this.searchQuery;
-            let result = await this.MS.HttpService.executeAsync('Microsoft-ValidateFacebookPage', body);
-            if (!result.IsSuccess) {
-                return false;
+            this.isValidated = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-ValidateFacebookPage', { FacebookPages: this.searchQuery });
+            this.showValidation = this.isValidated;
+
+            if (this.isValidated) {
+                this.MS.DataStore.addToDataStore('FacebookPagesToFollow', this.searchQuery, DataStoreType.Public);
             }
-            this.MS.DataStore.addToDataStore("FacebookPagesToFollow", this.searchQuery, DataStoreType.Public);
-            this.isValidated = true;
-            this.showValidation = true;
-            return true;
         }
 
-        return false;
+        return this.isValidated;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -8,6 +9,8 @@ namespace Microsoft.Deployment.Common.Helpers
 {
     public class AzureHttpClient
     {
+        private const int FORM_BOUNDARY_SIZE = 15;
+
         public Dictionary<string, string> Headers { get; set; }
         public Task Providers { get; set; }
         public string ResourceGroup { get; }
@@ -38,6 +41,39 @@ namespace Microsoft.Deployment.Common.Helpers
             this.Token = token;
         }
 
+        public async Task<HttpResponseMessage> ExecuteGenericRequestWithHeaderAsync(HttpMethod method, string url, string body)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                string requestUri = url;
+                HttpRequestMessage message = new HttpRequestMessage(method, requestUri);
+
+                if (method == HttpMethod.Post || method == HttpMethod.Put)
+                {
+                    message.Content = new StringContent(body, Encoding.UTF8, "application/json");
+                }
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.Token);
+
+                if (this.Headers != null)
+                {
+                    foreach (KeyValuePair<string, string> header in this.Headers)
+                    {
+                        client.DefaultRequestHeaders.Add(header.Key, header.Value);
+                    }
+                }
+
+                return await client.SendAsync(message);
+            }
+        }
+
+        public async Task<HttpResponseMessage> ExecuteWebsiteAsync(HttpMethod method, string site, string relativeUrl, string body)
+        {
+            string requestUri = $"https://{site}{Constants.AzureWebSite}{relativeUrl}";
+
+            return await this.ExecuteGenericRequestWithHeaderAsync(method, requestUri, body);
+        }
+
         public async Task<HttpResponseMessage> ExecuteWithSubscriptionAndResourceGroupAsync(HttpMethod method, string relativeUrl, string apiVersion, string body, Dictionary<string, string> queryParameters)
         {
             StringBuilder parameters = new StringBuilder();
@@ -66,39 +102,6 @@ namespace Microsoft.Deployment.Common.Helpers
             return await this.ExecuteGenericRequestWithHeaderAsync(method, requestUri, body);
         }
 
-        public async Task<HttpResponseMessage> ExecuteWebsiteAsync(HttpMethod method, string site, string relativeUrl, string body)
-        {
-            string requestUri = $"https://{site}{Constants.AzureWebSite}{relativeUrl}";
-
-            return await this.ExecuteGenericRequestWithHeaderAsync(method, requestUri, body);
-        }
-
-        public async Task<HttpResponseMessage> ExecuteGenericRequestWithHeaderAsync(HttpMethod method, string url, string body)
-        {
-            using (HttpClient client = new HttpClient())
-            {
-                string requestUri = url;
-                HttpRequestMessage message = new HttpRequestMessage(method, requestUri);
-
-                if (method == HttpMethod.Post || method == HttpMethod.Put)
-                {
-                    message.Content = new StringContent(body, Encoding.UTF8, "application/json");
-                }
-
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.Token);
-
-                if (this.Headers != null)
-                {
-                    foreach(KeyValuePair<string, string> header in this.Headers)
-                    {
-                        client.DefaultRequestHeaders.Add(header.Key, header.Value);
-                    }
-                }
-
-                return await client.SendAsync(message);
-            }
-        }
-
         public async Task<HttpResponseMessage> ExecuteGenericRequestNoHeaderAsync(HttpMethod method, string url, string body)
         {
             using (HttpClient client = new HttpClient())
@@ -115,10 +118,79 @@ namespace Microsoft.Deployment.Common.Helpers
             }
         }
 
-        public async Task<string> ExecuteGenericRequestWithHeaderAndReadAsync(HttpMethod method, string url, string body)
+        public async Task<bool> IsSuccess(HttpMethod method, string url, string body = "")
         {
             HttpResponseMessage response = await this.ExecuteGenericRequestWithHeaderAsync(method, url, body);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<string> Request(HttpMethod method, string url, string body = "")
+        {
+            HttpResponseMessage response = await this.ExecuteGenericRequestWithHeaderAsync(method, url, body);
+            return response.IsSuccessStatusCode ? await response.Content.ReadAsStringAsync() : null;
+        }
+
+        public async Task<T> Request<T>(HttpMethod method, string url, string body = "")
+        {
+            T result = default(T);
+
+            HttpResponseMessage response = await this.ExecuteGenericRequestWithHeaderAsync(method, url, body);
+
+            if (response.IsSuccessStatusCode)
+            {
+                result = JsonUtility.Deserialize<T>(await response.Content.ReadAsStringAsync());
+            }
+
+            return result;
+        }
+
+        public async Task<string> Request(string url, byte[] file, string name)
+        {
+            HttpResponseMessage response = null;
+
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.Token);
+
+                using (MultipartFormDataContent content = new MultipartFormDataContent())
+                {
+                    content.Headers.ContentType.Parameters.Clear();
+                    string boundary = GetFormBoundary();
+                    content.Headers.ContentType.Parameters.Add(new NameValueHeaderValue("boundary", boundary));
+
+                    HttpContent fileContent = new StreamContent(new MemoryStream(file));
+                    fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data");
+                    fileContent.Headers.ContentDisposition.Name = "\"file0\"";
+                    fileContent.Headers.ContentDisposition.FileName = $"\"{name}\"";
+                    fileContent.Headers.ContentLength = null;
+                    fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/x-zip-compressed");
+
+                    content.Add(fileContent);
+
+                    response = await client.PostAsync(url, content);
+                }
+            }
+
             return await response.Content.ReadAsStringAsync();
+        }
+
+        public async Task<T> RequestValue<T>(HttpMethod method, string url, string body = "")
+        {
+            T value = default(T);
+
+            HttpResponseMessage response = await this.ExecuteGenericRequestWithHeaderAsync(method, url, body);
+
+            if (response.IsSuccessStatusCode)
+            {
+                value = JsonUtility.DeserializeContent<T>(await response.Content.ReadAsStringAsync());
+            }
+
+            return value;
+        }
+
+        private string GetFormBoundary()
+        {
+            return string.Format("---------------------------{0:N}", RandomGenerator.GetRandomHexadecimal(FORM_BOUNDARY_SIZE));
         }
     }
 }

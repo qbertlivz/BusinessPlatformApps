@@ -1,7 +1,8 @@
-﻿import { QueryParameter } from '../constants/query-parameter';
-import { AzureConnection } from '../enums/azure-connection';
+﻿import { AzureConnection } from '../enums/azure-connection';
 import { DataStoreType } from '../enums/data-store-type';
+
 import { ActionResponse } from '../models/action-response';
+
 import { ViewModelBase } from '../services/view-model-base';
 
 export class AzureLogin extends ViewModelBase {
@@ -10,130 +11,90 @@ export class AzureLogin extends ViewModelBase {
     azureDirectory: string = '';
     azureProviders: string[] = [];
     bapiServices: string[] = [];
+    bingUrl: string = '';
+    bingtermsofuse: string = '';
     connectionType: AzureConnection = AzureConnection.Organizational;
+    defaultLocation: number = 5;
     oauthType: string = '';
-    selectedResourceGroup: string = `SolutionTemplate-${this.MS.UtilityService.GetUniqueId(5)}`;
+    pricingCalculator: string = '';
+    pricingCalculatorUrl: string = '';
+    pricingUrl: string = '';
+    pricingCost: string = '';
+    selectedResourceGroup: string = `SolutionTemplate-${this.MS.UtilityService.getUniqueId(5)}`;
     selectedSubscriptionId: string = '';
     showAdvanced: boolean = false;
     showPricingConfirmation: boolean = false;
     subscriptionsList: any[] = [];
-    defaultLocation: number = 5;
 
-    //News Specific Variables for Azure
-    bingUrl: string = '';
-    bingtermsofuse: string = '';
-
-    // Variables to override
-    pricingUrl: string = '';
-    pricingCost: string = '';
-    pricingCalculator: string = '';
-    pricingCalculatorUrl: string = '';
-
-    constructor() {
-        super();
+    async connect(): Promise<void> {
+        this.MS.UtilityService.connectToAzure(this.oauthType, this.isConnectionMicrosoft() ? this.azureDirectory : this.MS.Translate.DEFAULT_TENANT);
     }
 
-    async OnLoaded(): Promise<void> {
-        this.isValidated = false;
-        this.showValidation = false;
-        if (this.subscriptionsList.length > 0) {
-            this.isValidated = true;
-            this.showValidation = true;
-        } else {
-            let queryParam = this.MS.UtilityService.GetItem('queryUrl');
-            if (queryParam) {
-                let token = this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.CODE, queryParam);
-                if (token === '') {
-                    this.MS.ErrorService.message = this.MS.Translate.AZURE_LOGIN_UNKNOWN_ERROR;
-                    this.MS.ErrorService.details = this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.ERRORDESCRIPTION, queryParam);
-                    this.MS.ErrorService.showContactUs = true;
-                    return;
-                }
-
-                var tokenObj: any = { code: token, oauthType: this.oauthType };
-                this.authToken = await this.MS.HttpService.executeAsync('Microsoft-GetAzureToken', tokenObj);
-                if (this.authToken.IsSuccess) {
-                    let subscriptions: ActionResponse = await this.MS.HttpService
-                        .executeAsync('Microsoft-GetAzureSubscriptions', {});
-                    if (subscriptions.IsSuccess) {
-                        this.subscriptionsList = subscriptions.Body.value;
-                        if (!this.subscriptionsList || (this.subscriptionsList && this.subscriptionsList.length === 0)) {
-                            this.MS.ErrorService.message = this.MS.Translate.AZURE_LOGIN_SUBSCRIPTION_ERROR;
-                        } else {
-                            this.selectedSubscriptionId = this.subscriptionsList[0].SubscriptionId;
-                            this.showPricingConfirmation = true;
-                            this.isValidated = true;
-                            this.showValidation = true;
-                            await this.MS.HttpService.executeAsync('Microsoft-PowerBiLogin');
-                        }
-                    }
-                }
-
-                this.MS.UtilityService.RemoveItem('queryUrl');
+    async getSubscriptions(): Promise<void> {
+        let subscriptions: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureSubscriptions');
+        if (subscriptions.IsSuccess) {
+            this.subscriptionsList = subscriptions.Body.value;
+            if (!this.subscriptionsList || (this.subscriptionsList && this.subscriptionsList.length === 0)) {
+                this.MS.ErrorService.message = this.MS.Translate.AZURE_LOGIN_SUBSCRIPTION_ERROR;
+            } else {
+                this.selectedSubscriptionId = this.subscriptionsList[0].SubscriptionId;
+                this.showPricingConfirmation = this.setValidated();
+                await this.MS.HttpService.executeAsync('Microsoft-PowerBiLogin');
             }
         }
     }
 
-    async ValidateResourceGroup(): Promise<boolean> {
-        this.Invalidate();
-        let subscriptionObject = this.subscriptionsList.find(x => x.SubscriptionId === this.selectedSubscriptionId);
-        this.MS.DataStore.addToDataStore('SelectedSubscription', subscriptionObject, DataStoreType.Public);
-        this.MS.DataStore.addToDataStore('SelectedResourceGroup', this.selectedResourceGroup, DataStoreType.Public);
-
-        let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-ExistsResourceGroup');
-
-        if (response.IsSuccess) {
-            this.isValidated = true;
-            this.showValidation = true;
-        }
-        return this.isValidated;
+    isConnectionMicrosoft(): boolean {
+        return this.connectionType.toString() === AzureConnection.Microsoft.toString();
     }
 
-    async connect(): Promise<void> {
-        var tokenObj: any = { oauthType: this.oauthType };
+    async onLoaded(): Promise<void> {
+        super.onLoaded();
 
-        if (this.connectionType.toString() === AzureConnection.Microsoft.toString()) {
-            this.MS.DataStore.addToDataStore('AADTenant', this.azureDirectory, DataStoreType.Public);
+        if (this.subscriptionsList.length > 0) {
+            this.setValidated();
         } else {
-            this.MS.DataStore.addToDataStore('AADTenant', 'common', DataStoreType.Public);
+            await this.MS.UtilityService.getToken(this.oauthType, async () => {
+                await this.getSubscriptions();
+            });
         }
-
-        let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureAuthUri', tokenObj);
-        window.location.href = response.Body.value;
     }
 
-    async NavigatingNext(): Promise<boolean> {
-        let subscriptionObject = this.subscriptionsList.find(x => x.SubscriptionId === this.selectedSubscriptionId);
-        this.MS.DataStore.addToDataStore('SelectedSubscription', subscriptionObject, DataStoreType.Public);
+    async onNavigatingNext(): Promise<boolean> {
+        let isSuccess: boolean = true;
+
+        this.MS.DataStore.addToDataStore('SelectedSubscription', this.subscriptionsList.find(x => x.SubscriptionId === this.selectedSubscriptionId), DataStoreType.Public);
         this.MS.DataStore.addToDataStore('SelectedResourceGroup', this.selectedResourceGroup, DataStoreType.Public);
 
-        let locationsResponse: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetLocations', {});
+        let locationsResponse: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetLocations');
         if (locationsResponse.IsSuccess) {
             this.MS.DataStore.addToDataStore('SelectedLocation', locationsResponse.Body.value[this.defaultLocation], DataStoreType.Public);
         }
 
-        let response = await this.MS.HttpService.executeAsync('Microsoft-CreateResourceGroup', {});
+        isSuccess = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-CreateResourceGroup');
 
-        if (!response.IsSuccess) {
-            return false;
+        for (let i = 0; i < this.azureProviders.length && isSuccess; i++) {
+            isSuccess = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-RegisterProvider', { AzureProvider: this.azureProviders[i] });
         }
 
-        for (let i = 0; i < this.azureProviders.length; i++) {
-            this.MS.DataStore.addToDataStore('AzureProvider', this.azureProviders[i], DataStoreType.Public);
-            let responseRegister = await this.MS.HttpService.executeAsync('Microsoft-RegisterProvider', {});
-            if (!responseRegister.IsSuccess) {
-                return false;
-            }
+        for (let i = 0; i < this.bapiServices.length && isSuccess; i++) {
+            isSuccess = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-RegisterBapiService', { BapiService: this.bapiServices[i] });
         }
 
-        for (let i = 0; i < this.bapiServices.length; i++) {
-            this.MS.DataStore.addToDataStore('BapiService', this.bapiServices[i], DataStoreType.Public);
-            let responseRegister = await this.MS.HttpService.executeAsync('Microsoft-RegisterBapiService', {});
-            if (!responseRegister.IsSuccess) {
-                return false;
-            }
-        }
-        return await super.NavigatingNext();
+        return isSuccess;
     }
 
+    async validateResourceGroup(): Promise<boolean> {
+        this.onInvalidate();
+
+        let subscriptionObject = this.subscriptionsList.find(x => x.SubscriptionId === this.selectedSubscriptionId);
+        this.MS.DataStore.addToDataStore('SelectedSubscription', subscriptionObject, DataStoreType.Public);
+        this.MS.DataStore.addToDataStore('SelectedResourceGroup', this.selectedResourceGroup, DataStoreType.Public);
+
+        if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-ExistsResourceGroup')) {
+            this.setValidated();
+        }
+
+        return this.isValidated;
+    }
 }

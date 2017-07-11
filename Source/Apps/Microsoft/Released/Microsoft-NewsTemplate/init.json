@@ -39,7 +39,7 @@
             {
                 "displayname": "Source",
                 "isAzureSql": true,
-                "name": "$SiteCommon$/pages-gallery/sql-server.html",
+                "name": "$SiteCommon$/pages-gallery/sql.html",
                 "newSqlDatabase": "bingNews",
                 "showAzureSql": false,
                 "showNewSqlOption": "true",
@@ -77,9 +77,10 @@
                 ],
                 "displayname": "Deploy",
                 "downloadPbiText": "$translate(INIT_NEWS_DOWNLOAD)",
+                "enablePublishReport": true,
                 "filename": "$save('BingNewsTemplate.pbix')",
                 "name": "$SiteCommon$/pages-gallery/progress.html",
-                "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(8))"
+                "uniqueId": "$save(this.MS.UtilityService.getUniqueId(8))"
             }
         ],
 

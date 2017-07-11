@@ -47,14 +47,14 @@
                 "templateName": "$translate(INIT_SALESFORCE_TITLE)"
             },
             {
+                "azureProviders": [
+                    "Microsoft.AnalysisServices"
+                ],
                 "displayname": "Azure",
                 "name": "$SiteCommon$/pages-gallery/azure-login.html",
                 "pricingCalculatorUrl": "$translate(INIT_SALESFORCE_PRICING_CALCULATOR_URL)",
                 "pricingCost": "$translate(INIT_SALESFORCE_PRICING_COST)",
                 "pricingUrl": "$translate(INIT_SALESFORCE_PRICING_URL)",
-                "azureProviders": [
-                    "Microsoft.AnalysisServices"
-                ],
                 "skip": "$(this.MS.HttpService.isOnPremise)"
             },
             {
@@ -69,7 +69,7 @@
                 "salesforceObjects": "Opportunity,Account,Lead,Product2,OpportunityLineItem,OpportunityStage,User,UserRole"
             },
             {
-                "name": "$SiteCommon$/pages-gallery/sql-server.html",
+                "name": "$SiteCommon$/pages-gallery/sql.html",
                 "displayname": "Target",
                 "isAzureSql": "$run(!this.MS.HttpService.isOnPremise)",
                 "newSqlDatabase": "SalesforceDB",
@@ -134,13 +134,14 @@
                     "SqlConnectionString"
                 ],
                 "displayname": "Progress",
+                "enablePublishReport": "$run(!this.MS.HttpService.isOnPremise)",
                 "filename": "$save('SalesManagementReport.pbix')",
                 "filenameSSAS": "SalesManagementReportAS.pbix",
                 "finishedActionName": "$run(this.MS.DataStore.getValue('DataMovement') === 'ADF' ? 'Microsoft-ADFSliceStatus' : this.MS.DataStore.getValue('DataMovement') === 'Scribe' ? 'Microsoft-GetScribeSolutionStatus' : 'Microsoft-GetInformaticaTaskStatus')",
                 "name": "$SiteCommon$/pages-gallery/progress.html",
                 "showCounts": true,
                 "targetSchema": "dbo",
-                "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(10))"
+                "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
             }
         ],
 
@@ -165,11 +166,6 @@
                 "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')",
                 "SqlScriptsFolder": "Service/Database/Scribe",
                 "SqlServerIndex": "0"
-            },
-            {
-                "displayname": "$translate(INIT_ACTION_RETRIEVING_SALESFORCE_METADATA)",
-                "name": "Microsoft-SalesforceGetObjectMetadata",
-                "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
             },
             {
                 "displayname": "$translate(INIT_ACTION_CREATING_SALESFORCE_TABLES)",
@@ -307,7 +303,6 @@
             {
                 "displayname": "$translate(INIT_ACTION_CHECKING_DATA)",
                 "FinishedActionName": "Microsoft-ADFSliceStatus",
-                "IsWaiting": true,
                 "name": "Microsoft-GetDataPullStatus",
                 "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')",
                 "SqlServerIndex": 0,
@@ -342,7 +337,6 @@
             {
                 "displayname": "$translate(INIT_ACTION_CHECKING_DATA)",
                 "FinishedActionName": "Microsoft-GetInformaticaTaskStatus",
-                "IsWaiting": true,
                 "name": "Microsoft-GetDataPullStatus",
                 "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Informatica')",
                 "SqlServerIndex": 0,
@@ -377,7 +371,6 @@
             {
                 "displayname": "$translate(INIT_ACTION_CHECKING_DATA)",
                 "FinishedActionName": "Microsoft-GetScribeSolutionStatus",
-                "IsWaiting": true,
                 "name": "Microsoft-GetDataPullStatus",
                 "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')",
                 "SqlServerIndex": 0,
@@ -390,7 +383,6 @@
         "Pages": [
             {
                 "displayname": "Uninstall Progress",
-                "HasNavigated": "`(true)",
                 "isUninstall": true,
                 "name": "$SiteCommon$/pages-gallery/progress.html",
                 "successMessage": "$translate(INIT_UNINSTALL_SUCCESS)"

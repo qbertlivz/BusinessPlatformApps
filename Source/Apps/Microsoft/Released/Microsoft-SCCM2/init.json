@@ -27,7 +27,7 @@
             },
             {
                 "displayname": "Login",
-                "onValidate": [
+                "onValidateActions": [
                     {
                         "name": "Microsoft-ValidateAdminPrivileges"
                     },
@@ -45,7 +45,7 @@
                 "credentialTarget": "pbi_sccm",
                 "displayname": "Source",
                 "hideSqlAuth": true,
-                "name": "$SiteCommon$/pages-gallery/sql-server.html",
+                "name": "$SiteCommon$/pages-gallery/sql.html",
                 "onNext": [
                     {
                         "name": "Microsoft-CheckSCCMVersion",
@@ -61,7 +61,7 @@
             {
                 "credentialTarget": "pbi_sccm",
                 "displayname": "Target",
-                "name": "$SiteCommon$/pages-gallery/sql-server.html",
+                "name": "$SiteCommon$/pages-gallery/sql.html",
                 "onNext": [
                     {
                         "name": "Microsoft-CheckSQLVersion",
@@ -79,7 +79,7 @@
             },
             {
                 "displayname": "Customize",
-                "name": "customize.html"
+                "name": "$SiteCommon$/pages-gallery/customize-sccm.html"
             },
             {
                 "displayname": "Summary",
@@ -139,7 +139,6 @@
             {
                 "displayname": "$translate(INIT_ACTION_WAITING_DATA)",
                 "FinishedActionName": "Microsoft-GetTaskStatus",
-                "IsWaiting": true,
                 "name": "Microsoft-GetDataPullStatus",
                 "SqlServerIndex": 1,
                 "TargetSchema": "pbist_sccm",
@@ -152,7 +151,6 @@
         "Pages": [
             {
                 "displayname": "Uninstall Progress",
-                "HasNavigated": "$save(true)",
                 "isUninstall": true,
                 "name": "$SiteCommon$/pages-gallery/progress.html",
                 "successMessage": "$translate(INIT_UNINSTALL_SUCCESS)"

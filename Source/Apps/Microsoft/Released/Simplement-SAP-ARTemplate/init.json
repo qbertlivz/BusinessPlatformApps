@@ -41,7 +41,7 @@
             {
                 "displayname": "Login",
                 "name": "$SiteCommon$/pages-gallery/windows-auth.html",
-                "onValidate": [
+                "onValidateActions": [
                     {
                         "name": "Microsoft-ValidateAdminPrivileges"
                     },
@@ -60,10 +60,9 @@
                 "useImpersonation": true
             },
             {
-                "checkSqlVersion": true,
                 "credentialTarget": "Simplement.SolutionTemplate.AR.SQL",
                 "displayname": "Target",
-                "name": "$SiteCommon$/pages-gallery/sql-server.html",
+                "name": "$SiteCommon$/pages-gallery/sql.html",
                 "onNext": [
                     {
                         "name": "Microsoft-WriteSAPJson"
@@ -118,7 +117,6 @@
             {
                 "displayname": "$translate(INIT_ACTION_WAITING_DATA)",
                 "FinishedActionName": "Microsoft-GetTaskStatus",
-                "IsWaiting": true,
                 "name": "Microsoft-GetDataPullStatus",
                 "SqlServerIndex": 0,
                 "TargetSchema": "sap",
@@ -129,17 +127,6 @@
 
     "Uninstall": {
         "Pages": [
-            {
-                "architectureDiagram": "dist/Apps/Microsoft/Released/Simplement-SAP-ARTemplate/Web/Images/sap-accounts-receivable.png",
-                "displayname": "Uninstall",
-                "isDownload": "$(!this.MS.HttpService.isOnPremise)",
-                "name": "$SiteCommon$/pages-gallery/uninstall.html",
-                "templateName": "$translate(INIT_SAP_TITLE)",
-                "uninstallList": [
-                    "$translate(INIT_UNINSTALL_SAP)",
-                    "$translate(INIT_UNINSTALL_SQL)"
-                ]
-            },
             {
                 "displayname": "Uninstall Progress",
                 "isUninstall": true,

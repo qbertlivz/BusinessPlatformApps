@@ -1,10 +1,8 @@
 ﻿using System.ComponentModel.Composition;
-using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
-using Microsoft.Deployment.Common.ErrorCode;
 using Microsoft.Deployment.Common.Helpers;
 
 namespace Microsoft.Deployment.Actions.SQL
@@ -46,7 +44,7 @@ namespace Microsoft.Deployment.Actions.SQL
                 SqlUtility.InvokeSqlCommand(connectionString, query, null);
             }
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
 
         private const string queryTemplate = @"MERGE {0} AS t  

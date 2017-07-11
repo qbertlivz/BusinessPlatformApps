@@ -26,7 +26,7 @@ namespace Microsoft.Deployment.Actions.Custom.Informatica
 
             await InformaticaUtility.Logout(rc, username, password);
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
 
         private async Task DeleteConnection(RestClient rc, string connectionName)

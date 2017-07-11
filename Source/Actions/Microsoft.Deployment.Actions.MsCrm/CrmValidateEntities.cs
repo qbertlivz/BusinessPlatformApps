@@ -10,6 +10,7 @@ using Hyak.Common.Internals;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.WebServiceClient;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 using Microsoft.Deployment.Common.ActionModel;
@@ -28,7 +29,8 @@ namespace Microsoft.Deployment.Common.Actions.MsCrm
         {
             string refreshToken = request.DataStore.GetJson("MsCrmToken")["refresh_token"].ToString();
             string organizationUrl = request.DataStore.GetValue("OrganizationUrl");
-            string[] entities = request.DataStore.GetValue("Entities").Split(new[] { ',', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            //string[] entities = request.DataStore.GetValue("Entities").Split(new[] { ',', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            Dictionary<string, string> entities = JsonConvert.DeserializeObject<Dictionary<string, string>>(request.DataStore.GetValue("Entities"));
 
             var crmToken = CrmTokenUtility.RetrieveCrmOnlineToken(refreshToken, request.Info.WebsiteRootUrl, request.DataStore, organizationUrl);
 
@@ -44,7 +46,7 @@ namespace Microsoft.Deployment.Common.Actions.MsCrm
             {
                 try
                 {
-                    Parallel.ForEach(entities, (e) => { this.CheckAndUpdateEntity(e, proxy, request.Logger); });
+                    Parallel.ForEach(entities, (e) => { this.CheckAndUpdateEntity(e.Key, proxy, request.Logger); });
 
                     retryNeeded = false;
                 }

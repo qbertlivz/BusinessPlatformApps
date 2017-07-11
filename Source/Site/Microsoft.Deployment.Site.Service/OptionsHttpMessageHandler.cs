@@ -36,10 +36,7 @@ namespace Microsoft.Deployment.Site.Service
                     "operationid", "usergeneratedid", "templatename", "userid", "sessionid", "uniqueid" };
                 return Task.Factory.StartNew(() =>
                 {
-                    var response = new HttpResponseMessage(HttpStatusCode.OK);
-                    //response.Headers.Add("Access-Control-Allow-Methods", string.Join(",", supportedMethods));
-                    //response.Headers.Add("Access-Control-Allow-Headers", string.Join(",", supportedHeaders));
-                    return response;
+                    return new HttpResponseMessage(HttpStatusCode.OK);
                 });
             }
 

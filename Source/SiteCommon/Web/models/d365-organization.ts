@@ -1,5 +1,5 @@
 ﻿export class D365Organization {
-    ConnectorUrl: string = '';
-    Id: string = '';
-    Name: string = '';
+    connectorUrl: string = '';
+    id: string = '';
+    name: string = '';
 }

@@ -34,7 +34,7 @@ namespace Microsoft.Deployment.Actions.OnPremise.WinNT
 
             WindowsPrincipal current = new WindowsPrincipal(WindowsIdentity.GetCurrent());
             return current.IsInRole(WindowsBuiltInRole.Administrator)
-                ? new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject())
+                ? new ActionResponse(ActionStatus.Success)
                 : new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "NotAdmin");
         }
     }

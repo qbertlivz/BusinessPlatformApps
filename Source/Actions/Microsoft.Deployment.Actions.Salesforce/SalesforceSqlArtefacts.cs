@@ -23,16 +23,18 @@ namespace Microsoft.Deployment.Actions.Salesforce
     [Export(typeof(IAction))]
     public class SalesforceSqlArtefacts : BaseAction
     {
+        List<string> coreObjects = new List<String>();
+
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             string schema = "dbo";
             string connString = request.DataStore.GetValue("SqlConnectionString");
+            coreObjects = request.DataStore.GetValue("ObjectTables").SplitByCommaSpaceTabReturnList();
+            var objectMetadata = SalesforceUtility.GetMetadata(request).Result;
 
-            var objectMetadata = request.DataStore.GetValue("Objects");
-            List<DescribeSObjectResult> metadataList = JsonConvert.DeserializeObject(objectMetadata, typeof(List<DescribeSObjectResult>)) as List<DescribeSObjectResult>;
             List<Tuple<string, List<ADFField>>> adfFields = new List<Tuple<string, List<ADFField>>>();
 
-            foreach (var obj in metadataList)
+            foreach (var obj in objectMetadata)
             {
                 var simpleMetadata = ExtractSimpleMetadata(obj);
 
@@ -48,7 +50,7 @@ namespace Microsoft.Deployment.Actions.Salesforce
             dynamic resp = new ExpandoObject();
             resp.ADFPipelineJsonData = new ExpandoObject();
             resp.ADFPipelineJsonData.fields = adfFields;
-            
+
             return new ActionResponse(ActionStatus.Success, JsonUtility.GetJObjectFromObject(resp));
         }
 
@@ -146,8 +148,17 @@ namespace Microsoft.Deployment.Actions.Salesforce
 
             var existingColumns = from DataRow dr in queryResult.Rows
                                   select dr["COLUMN_NAME"];
+            string createTable;
 
-            string createTable = string.Format("ALTER TABLE [{0}] ADD", tableName.ToLowerInvariant());
+            if (coreObjects.Contains(tableName))
+            {
+                createTable = string.Format("ALTER TABLE [{0}] ADD", tableName.ToLowerInvariant());
+            }
+            else
+            {
+                createTable = string.Format("CREATE TABLE [{0}] (", tableName.ToLowerInvariant());
+            }
+
             string createTableType = string.Format("CREATE TYPE [{0}].[{1}Type] AS TABLE(", schemaName, tableName.ToLowerInvariant());
 
             sbTable.AppendLine(createTable);
@@ -167,7 +178,15 @@ namespace Microsoft.Deployment.Actions.Salesforce
             tableTypeCmd = tableTypeCmd + ")";
             SqlUtility.InvokeSqlCommand(connString, tableTypeCmd, null);
 
-            string createTableCmd = createTable + ($"CONSTRAINT [PK_{tableName}] PRIMARY KEY CLUSTERED ([Id])");
+            string createTableCmd = string.Empty;
+            if (coreObjects.Contains(tableName))
+            {
+                createTableCmd = createTable + ($"CONSTRAINT [PK_{tableName}] PRIMARY KEY CLUSTERED ([Id])");
+            }
+            else
+            {
+                createTableCmd = createTable + ($"CONSTRAINT [PK_{tableName}] PRIMARY KEY CLUSTERED ([Id]))");
+            }
             SqlUtility.InvokeSqlCommand(connString, createTableCmd, null);
         }
 
@@ -227,7 +246,14 @@ namespace Microsoft.Deployment.Actions.Salesforce
 
             sb.Remove(sb.Length - 3, 1);
 
-            sb.AppendLine(string.Format("FROM @{0}\r\n) AS SOURCE\r\n ON SOURCE.ID = TARGET.ID \r\n WHEN MATCHED AND source.[LastModifiedDate] > target.[LastModifiedDate] THEN", targetTableName));
+            if (fields.Exists(f => f.name.ToLowerInvariant() == "lastmodifieddate"))
+            {
+                sb.AppendLine(string.Format("FROM @{0}\r\n) AS SOURCE\r\n ON SOURCE.ID = TARGET.ID \r\n WHEN MATCHED AND source.[LastModifiedDate] > target.[LastModifiedDate] THEN", targetTableName));
+            }
+            else
+            {
+                sb.AppendLine(string.Format("FROM @{0}\r\n) AS SOURCE\r\n ON SOURCE.ID = TARGET.ID \r\n WHEN MATCHED THEN", targetTableName));
+            }
 
             sb.AppendLine("UPDATE \r\n SET");
 

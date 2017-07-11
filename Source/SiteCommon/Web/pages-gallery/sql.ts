@@ -124,13 +124,14 @@ export class Sql extends ViewModelBase {
 
         this.sqlServer = this.sqlServer.toLowerCase();
         if (this.sqlInstance === 'ExistingSql') {
-            let databasesResponse = await this.getDatabases();
+            let databasesResponse: ActionResponse = await this.getDatabases();
             if (databasesResponse.IsSuccess) {
                 this.databases = databasesResponse.Body.value;
                 this.database = this.databases.indexOf(oldDatabase) >= 0 ? oldDatabase : this.databases[0];
                 this.showDatabases = this.setValidated();
             } else {
                 this.onInvalidate();
+                this.MS.ErrorService.set(databasesResponse.ExceptionDetail.FriendlyErrorMessage);
             }
         } else if (this.sqlInstance === 'NewSql') {
             let newSqlError: string = this.validateAzureSQLCreate(this.username, this.password, this.passwordConfirmation);

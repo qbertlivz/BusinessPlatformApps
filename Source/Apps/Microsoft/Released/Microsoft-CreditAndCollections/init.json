@@ -85,7 +85,8 @@
             {
                 "displayname": "Deploy",
                 "filename": "$save('CreditAndCollectionsImportMode.pbix')",
-                "name": "$SiteCommon$/pages-gallery/progress.html"
+                "name": "$SiteCommon$/pages-gallery/progress.html",
+                "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
             }
         ],
 
@@ -141,7 +142,7 @@
                 "SqlSubGroup": "SSAS"
             },
             {
-                "ASDatabase": "SalesManagement",
+                "ASDatabase": "CreditAndCollections",
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_AS_MODEL)",
                 "name": "Microsoft-DeployAzureASModel",
                 "skip": "$run(this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",

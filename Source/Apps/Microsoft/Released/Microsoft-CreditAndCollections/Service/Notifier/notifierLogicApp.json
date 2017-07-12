@@ -49,7 +49,7 @@
                       }
                     },
                     "method": "get",
-                    "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('[pbst].[configuration]'))}/items",
+                    "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('[cc].[configuration]'))}/items",
                     "queries": {
                       "$filter": "configuration_subgroup eq 'Notifier' and name eq 'DeploymentId'",
                       "$select": "name,value"
@@ -94,7 +94,7 @@
                       }
                     },
                     "method": "get",
-                    "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('[pbst].[configuration]'))}/items",
+                    "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('[cc].[configuration]'))}/items",
                     "queries": {
                       "$filter": "configuration_subgroup eq 'Notifier' and name eq 'NotificationEmails'",
                       "$select": "name,value"
@@ -118,7 +118,7 @@
                       }
                     },
                     "method": "get",
-                    "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('[pbst].[configuration]'))}/items",
+                    "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('[cc].[configuration]'))}/items",
                     "queries": {
                       "$filter": "configuration_subgroup eq 'Notifier' and name eq 'NotifierUrl'",
                       "$select": "name, value"
@@ -138,7 +138,7 @@
                       }
                     },
                     "method": "get",
-                    "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('[pbst].[configuration]'))}/items",
+                    "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('[cc].[configuration]'))}/items",
                     "queries": {
                       "$filter": "configuration_subgroup eq 'Notifier' and name eq 'TemplateName'",
                       "$select": "name,value"
@@ -203,7 +203,7 @@
                   }
                 },
                 "method": "get",
-                "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('[pbst].[configuration]'))}/items",
+                "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('[cc].[configuration]'))}/items",
                 "queries": {
                   "$filter": "configuration_subgroup eq 'Notifier' and name eq 'DataPullStatus'",
                   "$select": "name,value"

@@ -85,6 +85,7 @@
             {
                 "displayname": "Deploy",
                 "filename": "$save('CreditAndCollectionsImportMode.pbix')",
+                "filenameSSAS": "$save('CreditAndCollectionsAs.pbix')",
                 "name": "$SiteCommon$/pages-gallery/progress.html",
                 "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
             }
@@ -115,6 +116,28 @@
                 "SqlSubGroup": "SSAS"
             },
             {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+                "name": "Microsoft-SetConfigValueInSql",
+                "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
+                "SqlConfigTable": "[cc].[configuration]",
+                "SqlEntryName": "FunctionName",
+                "SqlEntryValue": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
+                "SqlGroup": "SolutionTemplate",
+                "SqlServerIndex": "0",
+                "SqlSubGroup": "SSAS"
+            },
+            {
+                "displayname": "$translate(NOTIFIER_CONFIGURE_NOTIFIER_APP)",
+                "name": "Microsoft-SetConfigValueInSql",
+                "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))",
+                "SqlConfigTable": "[cc].[configuration]",
+                "SqlEntryName": "InitialPullDone",
+                "SqlEntryValue": "False",
+                "SqlGroup": "SolutionTemplate",
+                "SqlServerIndex": "0",
+                "SqlSubGroup": "Notifier"
+            },
+            {
                 "DeploymentName": "AxOdataInsert",
                 "displayname": "$translate(AX_UPDATE_CONFIGURATION)",
                 "name": "Microsoft-UpdateAxConfigurationEntity"
@@ -131,15 +154,16 @@
                 "name": "Microsoft-DeployAxLogicApp"
             },
             {
-                "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
-                "name": "Microsoft-SetConfigValueInSql",
-                "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
-                "SqlConfigTable": "[cc].[configuration]",
-                "SqlEntryName": "FunctionName",
-                "SqlEntryValue": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
-                "SqlGroup": "SolutionTemplate",
-                "SqlServerIndex": "0",
-                "SqlSubGroup": "SSAS"
+                "DeploymentName": "NotifierLogicApp",
+                "displayname": "$translate(NOTIFIER_CREATING_NOTIFIER_APP)",
+                "name": "Microsoft-DeployNotifierLogicApp",
+                "logicAppName": "notifierLogicApp",
+                "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+            },
+            {
+                "displayname": "$translate(NOTIFIER_CONFIGURE_NOTIFIER_APP)",
+                "name": "Microsoft-ConfigureNotifier",
+                "SqlConfigTable": "[cc].[configuration]"
             },
             {
                 "ASDatabase": "CreditAndCollections",
@@ -194,29 +218,6 @@
                 "displayname": "$translate(INIT_ACTION_SETTING_UP_AS_SCHEDULER)",
                 "name": "Microsoft-DeployAzureFunctionConnectionStrings",
                 "skip": "$run(this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
-            },
-            {
-                "DeploymentName": "NotifierLogicApp",
-                "displayname": "$translate(NOTIFIER_CREATING_NOTIFIER_APP)",
-                "name": "Microsoft-DeployNotifierLogicApp",
-                "logicAppName": "notifierLogicApp",
-                "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
-            },
-            {
-                "displayname": "$translate(NOTIFIER_CONFIGURE_NOTIFIER_APP)",
-                "name": "Microsoft-ConfigureNotifier",
-                "SqlConfigTable": "[cc].[configuration]"
-            },
-            {
-                "displayname": "$translate(NOTIFIER_CONFIGURE_NOTIFIER_APP)",
-                "name": "Microsoft-SetConfigValueInSql",
-                "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))",
-                "SqlConfigTable": "[cc].[configuration]",
-                "SqlEntryName": "InitialPullDone",
-                "SqlEntryValue": "False",
-                "SqlGroup": "SolutionTemplate",
-                "SqlServerIndex": "0",
-                "SqlSubGroup": "Notifier"
             }
         ]
     }

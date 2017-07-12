@@ -28,11 +28,14 @@ BEGIN
 	SELECT @InitialStatusDone = [value]
 	FROM cc.[configuration] WHERE configuration_group = 'SolutionTemplate' AND configuration_subgroup = 'Notifier' AND [name] = 'InitialPullDone';
 
-	IF EXISTS (SELECT * FROM smgt.[configuration] WHERE configuration_group = 'SolutionTemplate' AND configuration_subgroup = 'Notifier' AND [name] = 'ASDeployment' AND [value] ='true')
+	IF EXISTS (SELECT * FROM cc.[configuration] WHERE configuration_group = 'SolutionTemplate' AND configuration_subgroup = 'Notifier' AND [name] = 'ASDeployment' AND [value] ='true')
 	SET @ASDeployment = 1;
 
+	IF (@InitialStatusDone = 'True')
+		SET @StatusCode = 2; --Data pull complete
+
     -- AS Flow
-    IF @ASDeployment=1 AND DATEDIFF(HOUR, @DeploymentTimestamp, Sysdatetime()) < 24 AND NOT EXISTS (SELECT * FROM smgt.ssas_jobs WHERE [statusMessage] = 'Success')
+    IF @ASDeployment=1 AND DATEDIFF(HOUR, @DeploymentTimestamp, Sysdatetime()) < 24 AND NOT EXISTS (SELECT * FROM cc.ssas_jobs WHERE [statusMessage] = 'Success')
 		SET @StatusCode = -1;
 	ELSE 			
 	BEGIN

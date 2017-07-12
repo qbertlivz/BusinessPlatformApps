@@ -209,9 +209,29 @@
                   "$select": "name,value"
                 }
               },
+              "runAfter": {
+                "Execute_stored_procedure": [
+                    "Succeeded"
+                ]
+              },
+              "type": "ApiConnection"
+            },
+            "Execute_stored_procedure": {
+              "inputs": {
+                "host": {
+                  "api": {
+                    "runtimeUrl": "https://logic-apis-westus.azure-apim.net/apim/sql"
+                  },
+                  "connection": {
+                    "name": "@parameters('$connections')['sql']['connectionId']"
+                  }
+                },
+                "method": "post",
+                "path": "/datasets/default/procedures/@{encodeURIComponent(encodeURIComponent('[cc].[sp_get_pull_status]'))}"
+              },
               "runAfter": {},
               "type": "ApiConnection"
-            }           
+            }
           },
           "contentVersion": "1.0.0.0",
           "outputs": {},

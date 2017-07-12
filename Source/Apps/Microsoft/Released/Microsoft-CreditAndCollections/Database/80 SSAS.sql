@@ -130,41 +130,47 @@ BEGIN
 	DECLARE @returnValue INT;
        SELECT @returnValue = SUM(tableCount) FROM
         (
-			SELECT Count(*) AS tableCount FROM dbo.optionsetmetadata
+			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_BICompanyView_MATERIALIZED
 			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.statusmetadata
+			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_BIDateDimensionValue_MATERIALIZED
 			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.statemetadata
+			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBIActivitiesAverageCloseTime_MATERIALIZED
 			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.globaloptionsetmetadata
+			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBIActivitiesOpen_MATERIALIZED
 			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.account
+			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBIAgedBalances_MATERIALIZED
 			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.appointment
+			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBIBalancesDue_MATERIALIZED
 			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.contact
+			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBICaseAverageCloseTime_MATERIALIZED
 			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.email
+			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBICasesOpen_MATERIALIZED
 			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.fax
+			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBICollectionLetter_MATERIALIZED
 			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.incident
+			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBICollectionLetterAmounts_MATERIALIZED
 			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.letter
+			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBICollectionStatus_MATERIALIZED
 			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.msdyn_survey
+			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBICreditExposure_MATERIALIZED
 			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.msdyn_surveyresponse
+			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBICreditLimitExceeded_MATERIALIZED
 			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.phonecall
+			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBICustOnHold_MATERIALIZED
 			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.slakpiinstance
+			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBICustTable_MATERIALIZED
 			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.systemuser
+			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBIDSO30_MATERIALIZED
 			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.task
+			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBIExpectedPayment_MATERIALIZED
 			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.team
+			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBIInterestNotes_MATERIALIZED
+			UNION ALL
+			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBISalesOnHold_MATERIALIZED
+			UNION ALL
+			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBIWriteOff_MATERIALIZED
+			UNION ALL
+			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_SRSANALYSISENUMS_MATERIALIZED
         ) AS temp;
 		RETURN @returnValue;
 END;

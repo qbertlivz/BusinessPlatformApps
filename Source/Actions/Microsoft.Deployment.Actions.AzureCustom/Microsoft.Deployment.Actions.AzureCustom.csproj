@@ -242,6 +242,7 @@
     <Compile Include="News\DeployNewsFunctionAsset.cs" />
     <Compile Include="News\DeployNewsTemplateHistorical.cs" />
     <Compile Include="News\DeployNewsTemplateLogicApp.cs" />
+    <Compile Include="News\PopulateUserDefinedEntities.cs" />
     <Compile Include="News\RunNewsHistorical.cs" />
     <Compile Include="PowerApp\CreatePowerAppSqlConnection.cs" />
     <Compile Include="PowerApp\ConfigurePowerAppTables.cs" />

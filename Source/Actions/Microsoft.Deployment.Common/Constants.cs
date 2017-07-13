@@ -23,7 +23,6 @@
         public const string MicrosoftClientId        = "6b317a7c-0749-49bd-9e8c-d906aa43f64b";
         public const string ASClientId               = "ecbb98ca-18e7-4f63-bb90-4534267a71b7";
         public const string MicrosoftClientIdCrm     = "affab8de-076f-4b2c-b62d-29860cb41ff8";
-        //public const string MicrosoftClientIdPowerBI = "5f9d6083-686c-44ac-b3ea-1c0b8d07bfb2";
         public const string MicrosoftClientIdPowerBI = "728cc6b6-9854-4601-a95a-152077d65d58";
         public const string MicrosoftClientSecret    = "";
         public const string WebsiteRedirectPath      = "/redirect.html";

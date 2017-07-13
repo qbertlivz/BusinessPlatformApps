@@ -112,9 +112,17 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                     resource = Constants.AzureManagementCoreApi;
                     clientId = Constants.MicrosoftClientIdCrm;
                     break;
+                case "axerp":
+                    resource = Constants.AxErpResource;
+                    clientId = Constants.AxClientId;
+                    break;
                 case "as":
                     resource = Constants.AzureManagementCoreApi;
                     clientId = Constants.ASClientId;
+                    break;
+                case "o365":
+                    resource = Constants.AzureManagementCoreApi;
+                    clientId = Constants.Office365ClientId;
                     break;
             }
 

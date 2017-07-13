@@ -44,6 +44,9 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                 case "as":
                     request.DataStore.AddToDataStore("AzureTokenAS", token);
                     break;
+                case "axerp":
+                    request.DataStore.AddToDataStore("AxToken", token);
+                    break;
                 case "mscrm":
                     JObject crmToken = AzureTokenUtility.GetTokenForResourceFromExistingToken(oauthType, request.Info.WebsiteRootUrl, token, Constants.MsCrmResource);
                     request.DataStore.AddToDataStore("MsCrmToken", crmToken);
@@ -51,6 +54,11 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
                     break;
                 case "powerbi":
                     request.DataStore.AddToDataStore("PBIToken", token);
+                    request.DataStore.AddToDataStore("DirectoryName", emailAddress.Split('@').Last());
+                    request.DataStore.AddToDataStore("PowerBITenantId", AzureUtility.GetTenantFromToken(token));
+                    break;
+                case "o365":
+                    request.DataStore.AddToDataStore("O365Token", token);
                     request.DataStore.AddToDataStore("DirectoryName", emailAddress.Split('@').Last());
                     request.DataStore.AddToDataStore("PowerBITenantId", AzureUtility.GetTenantFromToken(token));
                     break;

@@ -100,7 +100,7 @@
                 "LogicAppName": "$save(this.uniqueId)",
                 "LogicAppNameHistorical": "$save('historic' + this.uniqueId)",
                 "name": "$SiteCommon$/pages-gallery/progress.html",
-                "powerAppFileName": "TwitterTemplate.msapp",
+                "PowerAppFileName": "$save('TwitterTemplate.msapp')",
                 "SiteName": "$save(this.uniqueIdFunction)"
             }
         ],
@@ -132,11 +132,22 @@
                 "name": "Microsoft-CreatePowerAppSqlConnection",
                 "skip": "$run(this.MS.DataStore.getValue('SkipPowerApp') === 'true')"
             },
-            //{
-            //    "displayname": "$translate(INIT_ACTION_DEPLOYING_POWERAPP)",
-            //    "name": "Microsoft-DeployPowerApp",
-            //    "skip": "$run(this.MS.DataStore.getValue('SkipPowerApp') === 'true')"
-            //},
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_POWERAPP)",
+                "name": "Microsoft-DeployPowerApp",
+                "skip": "$run(this.MS.DataStore.getValue('SkipPowerApp') === 'true')"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+                "name": "Microsoft-SetConfigValueInSql",
+                "skip": "$run(this.MS.DataStore.getValue('SkipPowerApp') === 'true')",
+                "SqlConfigTable": "[pbist_twitter].[configuration]",
+                "SqlEntryName": "PowerAppUri",
+                "SqlEntryValue": "$run(this.MS.DataStore.getValue('PowerAppUri'))",
+                "SqlGroup": "SolutionTemplate",
+                "SqlServerIndex": "0",
+                "SqlSubGroup": "PowerApp"
+            },
             {
                 "CognitiveServiceName": "TextCognitiveService",
                 "CognitiveServiceType": "TextAnalytics",

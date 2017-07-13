@@ -168,11 +168,6 @@
                 "SqlServerIndex": "0"
             },
             {
-                "displayname": "$translate(INIT_ACTION_RETRIEVING_SALESFORCE_METADATA)",
-                "name": "Microsoft-SalesforceGetObjectMetadata",
-                "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
-            },
-            {
                 "displayname": "$translate(INIT_ACTION_CREATING_SALESFORCE_TABLES)",
                 "name": "Microsoft-SalesforceSqlArtefacts",
                 "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
@@ -388,7 +383,6 @@
         "Pages": [
             {
                 "displayname": "Uninstall Progress",
-                "HasNavigated": "(true)",
                 "isUninstall": true,
                 "name": "$SiteCommon$/pages-gallery/progress.html",
                 "successMessage": "$translate(INIT_UNINSTALL_SUCCESS)"

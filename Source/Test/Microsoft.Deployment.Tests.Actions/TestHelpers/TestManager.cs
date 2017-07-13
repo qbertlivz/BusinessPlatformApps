@@ -2,6 +2,10 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
+
 using Microsoft.Deployment.Actions.AzureCustom.AzureToken;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.AppLoad;
@@ -17,7 +21,7 @@ namespace Microsoft.Deployment.Tests.Actions.TestHelpers
     public class TestManager
     {
         public static string RandomString = RandomGenerator.GetRandomLowerCaseCharacters(8);
-        public static string ResourceGroup = Environment.MachineName.ToLower() + "test";
+        public static string ResourceGroup = Environment.MachineName.ToLower();
 
         private static CommonController Controller { get; set; }
         public static string TemplateName = "Microsoft-NewsTemplateTest";
@@ -29,7 +33,6 @@ namespace Microsoft.Deployment.Tests.Actions.TestHelpers
             {
                 string filecontents = File.ReadAllText("datastore.json");
                 var jsonObj = JsonConvert.DeserializeObject<DataStore>(filecontents);
-
 
                 RefreshAzureToken token = new RefreshAzureToken();
                 ActionRequest req = new ActionRequest()
@@ -54,7 +57,6 @@ namespace Microsoft.Deployment.Tests.Actions.TestHelpers
                 }
             }
 
- 
             // If not found or refresh failed prompt
             Credential.Load();
             var dataStore = await AAD.GetUserTokenFromPopup();
@@ -93,7 +95,6 @@ namespace Microsoft.Deployment.Tests.Actions.TestHelpers
             return dataStore;
         }
 
-
         [AssemblyInitialize()]
         public static void AssemblyInit(TestContext context)
         {
@@ -111,16 +112,11 @@ namespace Microsoft.Deployment.Tests.Actions.TestHelpers
             Credential.Load();
         }
 
-        //[AssemblyCleanup()]
-        //public static async void AssemblyCleanup()
-        //{
-        //}
-
-        public static ActionResponse ExecuteAction(string actionName, DataStore datastore)
+        public static ActionResponse ExecuteAction(string actionName, DataStore datastore, string templateName = "Microsoft-NewsTemplateTest")
         {
             UserInfo info = new UserInfo();
             info.ActionName = actionName;
-            info.AppName = TemplateName;
+            info.AppName = templateName;
             info.WebsiteRootUrl = "https://unittest";
             return Controller.ExecuteAction(info, new ActionRequest() { DataStore = datastore }).Result;
         }
@@ -132,6 +128,11 @@ namespace Microsoft.Deployment.Tests.Actions.TestHelpers
             info.AppName = templateName;
             info.WebsiteRootUrl = "https://unittest";
             return await Controller.ExecuteAction(info, new ActionRequest() { DataStore = datastore });
+        }
+
+        public static async Task<bool> IsSuccessAsync(string actionName, DataStore datastore, string templateName = "Microsoft-NewsTemplateTest")
+        {
+            return (await ExecuteActionAsync(actionName, datastore, templateName)).IsSuccess;
         }
     }
 }

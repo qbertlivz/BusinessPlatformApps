@@ -22,9 +22,9 @@ namespace Microsoft.Deployment.Actions.Custom.Ax
         {
             List<string> axInstances = new List<string>();
             var tenantId = AzureUtility.GetTenantFromToken(request.DataStore.GetJson("AzureToken"));
-            string azToken = request.DataStore.GetJson("AxToken", "access_token");
+            string axToken = request.DataStore.GetJson("AxToken", "access_token");
 
-            var jwtToken = new JwtSecurityToken(azToken);
+            var jwtToken = new JwtSecurityToken(axToken);
             var userObjectId = jwtToken.Claims.First(e => e.Type == "oid")?.Value;
 
             if (string.IsNullOrEmpty(userObjectId))

@@ -39,8 +39,13 @@ namespace Microsoft.Deployment.Actions.Custom.Ax
 
             var entry = JsonUtility.GetJObjectFromJsonString(resp.Content.ReadAsStringAsync().Result);
 
-            var id = entry["Id"].ToString();
-            var areaId = entry["dataAreaId"].ToString();
+            if (resp.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                return new ActionResponse(ActionStatus.Failure, null, null, null, "Token expired or user not authorized. Error:" + resp.ReasonPhrase + "," + resp.Content.ReadAsStringAsync().Result);
+            }
+
+            var id = entry["Id"]?.ToString();
+            var areaId = entry["dataAreaId"]?.ToString();
 
             if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(areaId))
             {

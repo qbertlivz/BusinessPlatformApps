@@ -6,5 +6,14 @@ namespace Microsoft.Deployment.Common.Model.StreamAnalytics
     {
         [JsonProperty("statusCode")]
         public string StatusCode;
+
+        [JsonProperty("eventSource")]
+        public string EventSource;
+
+        [JsonProperty("Region")]
+        public string ImpactedRegions;
+
+        [JsonProperty("Transcript of Communication")]
+        public string Impact;
     }
 }

@@ -170,6 +170,7 @@
     <Compile Include="Model\StreamAnalytics\ActivityLogEntry.cs" />
     <Compile Include="Model\StreamAnalytics\ActivityLogResponse.cs" />
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsAuthorization.cs" />
+    <Compile Include="Model\StreamAnalytics\StreamAnalyticsCategory.cs" />
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsClaims.cs" />
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsEventName.cs" />
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsEventSource.cs" />

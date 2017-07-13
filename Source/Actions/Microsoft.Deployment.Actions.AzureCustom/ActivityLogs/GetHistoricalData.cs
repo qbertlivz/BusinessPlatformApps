@@ -37,26 +37,24 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
         public static DataTable createHistoricalDataTable()
         {
             DataTable table = new DataTable();
-            table.Columns.Add("authorizationAction");
-            table.Columns.Add("authorizationScope");
+            table.Columns.Add("id");
             table.Columns.Add("caller");
             table.Columns.Add("correlationId");
             table.Columns.Add("description");
-            table.Columns.Add("eventDataId");
-            table.Columns.Add("httpRequestClientId");
-            table.Columns.Add("httpRequestClientIpAddr");
-            table.Columns.Add("httpRequestMethod");
+            table.Columns.Add("eventCategory");
+            table.Columns.Add("impact");
+            table.Columns.Add("impactedRegions");
+            table.Columns.Add("jobFailedMessage");
             table.Columns.Add("level");
-            table.Columns.Add("resourceGroupName");
-            table.Columns.Add("resourceId");
-            table.Columns.Add("resourceProviderName");
+            table.Columns.Add("operationCategory");
             table.Columns.Add("operationId");
             table.Columns.Add("operationName");
-            table.Columns.Add("statusCode");
+            table.Columns.Add("resourceGroup");
+            table.Columns.Add("resourceId");
             table.Columns.Add("status");
-            table.Columns.Add("subStatus");
-            table.Columns.Add("timestamp");
+            table.Columns.Add("statusCode");
             table.Columns.Add("subscriptionId");
+            table.Columns.Add("timestamp");
             return table;
         }
 
@@ -80,47 +78,60 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
                 foreach (ActivityLogEntry activity in response.Value)
                 {
                     DataRow historicalRow = historicalTable.NewRow();
-                    if (activity.Authorization != null)
-                    {
-                        historicalRow["authorizationAction"] = activity.Authorization.Action;
-                        historicalRow["authorizationScope"] = activity.Authorization.Scope;
-                    }
                     if (activity.Claims != null)
                     {
                         historicalRow["caller"] = activity.Claims.Upn;
                     }
                     historicalRow["correlationId"] = activity.CorrelationId;
                     historicalRow["description"] = activity.Description;
-                    historicalRow["eventDataId"] = activity.EventDataId;
-                    if (activity.HttpRequest != null)
+                    if (activity.Category != null)
                     {
-                        historicalRow["httpRequestClientId"] = activity.HttpRequest.ClientRequestId;
-                        historicalRow["httpRequestClientIpAddr"] = activity.HttpRequest.ClientIpAddress;
-                        historicalRow["httpRequestMethod"] = activity.HttpRequest.Method;
+                        historicalRow["eventCategory"] = activity.Category.Value;
+                    }
+                    if (activity.Properties != null)
+                    {
+                        historicalRow["impact"] = activity.Properties.Impact;
+                        historicalRow["impactedRegions"] = activity.Properties.ImpactedRegions;
                     }
                     historicalRow["level"] = activity.Level;
-                    historicalRow["operationId"] = activity.OperationId;
-                    historicalRow["resourceGroupName"] = activity.ResourceGroupName;
-                    historicalRow["resourceId"] = activity.Id;
-                    if (activity.ResourceProviderName != null)
+                    if (activity.OperationName != null)
                     {
-                        historicalRow["resourceProviderName"] = activity.ResourceProviderName.LocalizedValue;
+                        string opName = activity.OperationName.Value;
+                        if (opName.Length > 5)
+                        {
+                            int startidx;
+                            if ((startidx = opName.LastIndexOf("/")) != -1)
+                            {
+                                string opCategory = opName.Substring(startidx + 1).ToLower();
+                                if (opCategory == "write")
+                                {
+                                    historicalRow["operationCategory"] = "Write";
+                                }
+                                else if (opCategory == "delete")
+                                {
+                                    historicalRow["operationCategory"] = "Delete";
+                                }
+                                else if (opCategory == "action")
+                                {
+                                    historicalRow["operationCategory"] = "Action";
+                                }
+                            }
+                        }
                     }
+                    historicalRow["operationId"] = activity.OperationId;
                     if (activity.OperationName != null)
                     {
                         historicalRow["operationName"] = activity.OperationName.LocalizedValue;
                     }
-                    if (activity.Properties != null)
-                    {
-                        historicalRow["statusCode"] = activity.Properties.StatusCode;
-                    }
+                    historicalRow["resourceGroup"] = activity.ResourceGroupName;
+                    historicalRow["resourceId"] = activity.Id;
                     if (activity.Status != null)
                     {
                         historicalRow["status"] = activity.Status.LocalizedValue;
                     }
-                    if (activity.SubStatus != null)
+                    if (activity.Properties != null)
                     {
-                        historicalRow["subStatus"] = activity.SubStatus.LocalizedValue;
+                        historicalRow["statusCode"] = activity.Properties.StatusCode;
                     }
                     historicalRow["subscriptionId"] = activity.SubscriptionId;
                     historicalRow["timestamp"] = activity.EventTimestamp;
@@ -131,7 +142,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
                     break;
                 }
             }
-            BulkInsert(sqlConn, historicalTable, "aal.HistoricalData");
+            BulkInsert(sqlConn, historicalTable, "aal.ActivityLogData");
             return new ActionResponse(ActionStatus.Success);
         }
     }

@@ -10,6 +10,9 @@ namespace Microsoft.Deployment.Common.Model.StreamAnalytics
         [JsonProperty("caller")]
         public string Caller;
 
+        [JsonProperty("category")]
+        public StreamAnalyticsCategory Category;
+
         [JsonProperty("channels")]
         public string Channels;
 
@@ -42,12 +45,6 @@ namespace Microsoft.Deployment.Common.Model.StreamAnalytics
 
         [JsonProperty("resourceGroupName")]
         public string ResourceGroupName;
-
-        [JsonProperty("resourceProviderName")]
-        public StreamAnalyticsResourceProviderName ResourceProviderName;
-
-        [JsonProperty("resourceUri")]
-        public string ResourceUri;
 
         [JsonProperty("operationId")]
         public string OperationId;

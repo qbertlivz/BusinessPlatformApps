@@ -22,12 +22,7 @@ export class AxLogin extends ViewModelBase {
         if (this.orgList.length > 0) {
             this.setValidated();
         } else {
-            await this.MS.UtilityService.getToken(this.oauthType, async () => { await this.getOrganizations(); });
+            await this.MS.UtilityService.getToken(this.oauthType, async () => { this.setValidated(); });
         }
     }
-
-    async getOrganizations(): Promise<void> {
-        this.setValidated();
-    }
-    
 }

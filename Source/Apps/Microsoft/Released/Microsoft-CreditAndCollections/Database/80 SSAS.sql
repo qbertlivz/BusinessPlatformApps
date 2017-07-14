@@ -105,8 +105,7 @@ BEGIN
 				 'CustCollectionsBIMeasurements_CustCollectionsBICollectionLetter_MATERIALIZED',
 				 'CustCollectionsBIMeasurements_CustCollectionsBICollectionLetterAmounts_MATERIALIZED',
 				 'CustCollectionsBIMeasurements_CustCollectionsBICollectionStatus_MATERIALIZED',
-				 'CustCollectionsBIMeasurements_CustCollectionsBICreditExposure_MATERIALIZED',
-				 'CustCollectionsBIMeasurements_CustCollectionsBICreditLimitExceeded_MATERIALIZED',
+				 'CustCollectionsBIMeasurements_CustCollectionsBICredit_MATERIALIZED',
 				 'CustCollectionsBIMeasurements_CustCollectionsBICustOnHold_MATERIALIZED',
 				 'CustCollectionsBIMeasurements_CustCollectionsBICustTable_MATERIALIZED',
 				 'CustCollectionsBIMeasurements_CustCollectionsBIDSO30_MATERIALIZED',
@@ -115,7 +114,7 @@ BEGIN
 				 'CustCollectionsBIMeasurements_CustCollectionsBISalesOnHold_MATERIALIZED',
 				 'CustCollectionsBIMeasurements_CustCollectionsBIWriteOff_MATERIALIZED',
 				 'CustCollectionsBIMeasurements_SRSANALYSISENUMS_MATERIALIZED'));
-    if(@returnValue = 21)
+    if(@returnValue = 20)
     BEGIN
     RETURN 1;
     END;

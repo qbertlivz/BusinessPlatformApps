@@ -6,54 +6,14 @@ SET CONCAT_NULL_YIELDS_NULL ON;
 SET QUOTED_IDENTIFIER       ON;
 go
 
-CREATE VIEW aal.VerboseView
+CREATE VIEW bpst_aal.VerboseView
 AS
 	SELECT *
-	FROM aal.ActivityLogData;
+	FROM bpst_aal.ActivityLogData;
 GO
 
-CREATE VIEW aal.FailuresView
+CREATE VIEW bpst_aal.DateView
 AS
-    SELECT eventId, [caller], [description], jobFailedMessage, operationCategory, operationName, resourceGroup, resourceId, statusCode, [timestamp]
-    FROM   aal.ActivityLogData
-    WHERE  [status] = 'Failed' OR [status] = 'Failure';
-GO
-
-CREATE VIEW aal.ServiceHealthView
-AS
-	SELECT eventId, [description], impact, impactedRegions, [level], operationName, [status], subscriptionId, [timestamp] 
-	FROM aal.ActivityLogData
-	WHERE eventCategory = 'ServiceHealth';
-GO
-
-CREATE VIEW aal.EventsByResourceGroupView
-AS
-	SELECT eventId, resourceGroup
-	FROM aal.ActivityLogData;
-GO
-
-CREATE VIEW aal.EventsByLevelView
-AS
-	SELECT eventId, [level]
-	FROM aal.ActivityLogData;
-GO
-
-CREATE VIEW aal.EventsByStatusView
-AS
-	SELECT eventId, [status]
-	FROM aal.ActivityLogData;
-GO
-
-CREATE VIEW aal.UserGeneratedEventsView
-AS
-	SELECT eventId
-	FROM aal.ActivityLogData
-	WHERE [caller] IS NOT NULL;
-GO
-
-CREATE VIEW aal.ApplicationGeneratedEventsView
-AS
-	SELECT eventId
-	FROM aal.ActivityLogData
-	WHERE [caller] = NULL;
+	SELECT * 
+	FROM bpst_aal.[date];
 GO

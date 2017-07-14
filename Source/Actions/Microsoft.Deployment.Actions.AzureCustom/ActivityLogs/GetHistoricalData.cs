@@ -142,7 +142,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
                     break;
                 }
             }
-            BulkInsert(sqlConn, historicalTable, "aal.ActivityLogData");
+            BulkInsert(sqlConn, historicalTable, "bpst_aal.ActivityLogData");
             return new ActionResponse(ActionStatus.Success);
         }
     }

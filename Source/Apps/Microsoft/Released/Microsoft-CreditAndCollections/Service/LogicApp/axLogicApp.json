@@ -55,7 +55,7 @@
                                                     "configuration_group": "@item()?['configuration_group']",
                                                     "configuration_subgroup": "@item()?['configuration_subgroup']",
                                                     "name": "@item()?['name']",
-                                                    "value": "2",
+                                                    "value": "True",
                                                     "visible": "@item()?['visible']"
                                                 },
                                                 "host": {
@@ -67,7 +67,7 @@
                                                     }
                                                 },
                                                 "method": "patch",
-                                                "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('pbst.configuration'))}/items/@{encodeURIComponent(encodeURIComponent(item()?['id']))}"
+                                                "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('cc.configuration'))}/items/@{encodeURIComponent(encodeURIComponent(item()?['id']))}"
                                             },
                                             "runAfter": {},
                                             "type": "ApiConnection"
@@ -92,9 +92,9 @@
                                             }
                                         },
                                         "method": "get",
-                                        "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('[pbst].[configuration]'))}/items",
+                                        "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('[cc].[configuration]'))}/items",
                                         "queries": {
-                                            "$filter": "name eq 'DataPullStatus'"
+                                            "$filter": "name eq 'InitialPullDone'"
                                         }
                                     },
                                     "runAfter": {},
@@ -162,7 +162,7 @@
                                     }
                                 },
                                 "method": "get",
-                                "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('[pbst].[configuration]'))}/items",
+                                "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('[cc].[configuration]'))}/items",
                                 "queries": {
                                     "$filter": "name eq 'SendCompletionNotification'"
                                 }

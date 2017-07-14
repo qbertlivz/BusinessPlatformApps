@@ -108,7 +108,7 @@ BEGIN
 				 'systemuser',
 				 'systemusermanagermap',
 				 'territory'));
-    if(@returnValue = 13)
+    if(@returnValue = 14)
     BEGIN
     RETURN 1;
     END;

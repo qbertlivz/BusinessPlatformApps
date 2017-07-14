@@ -9,10 +9,10 @@
         </select>
     </div>
 
-    <!-- CRM url -->
+    <!-- AX url -->
     <div class="st-float-clear">
         <p class="st-text" title="${MS.Translate.CUSTOMIZE_BASE_URL_DESCRIPTION}">${MS.Translate.AX_CUSTOM_URL}</p>
-        <input class="st-input" type="text" value.bind="axBaseUrl" change.delegate="onInvalidate()">
+        <input class="st-input" type="text" placeholder="https://yourinstance.cloudax.dynamics.com/" value.bind="axBaseUrl" change.delegate="onInvalidate()">
     </div>
 
 </template>

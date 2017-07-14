@@ -151,10 +151,6 @@ BEGIN
 			UNION ALL
 			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBICollectionStatus_MATERIALIZED
 			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBICreditExposure_MATERIALIZED
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBICreditLimitExceeded_MATERIALIZED
-			UNION ALL
 			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBICustOnHold_MATERIALIZED
 			UNION ALL
 			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBICustTable_MATERIALIZED

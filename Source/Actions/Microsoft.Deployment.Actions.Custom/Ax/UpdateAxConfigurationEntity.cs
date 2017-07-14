@@ -35,6 +35,12 @@ namespace Microsoft.Deployment.Actions.Custom.Ax
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", axToken.ToString());
 
             var existingEntities = await client.GetAsync($"data/BpstConfigurationEntities?$filter=ReportName eq '{reportName}' and MeasurementName eq '{measurementName}'");
+
+            if (!existingEntities.IsSuccessStatusCode)
+            {
+                return new ActionResponse(ActionStatus.Failure, JsonUtility.GetJsonObjectFromJsonString(existingEntities.Content.ReadAsStringAsync().Result), null, null, existingEntities.Content.ReadAsStringAsync().Result);
+            }
+
             var entitiesObject = JsonUtility.GetJObjectFromJsonString(existingEntities.Content.ReadAsStringAsync().Result);
             HttpResponseMessage update = new HttpResponseMessage();
 

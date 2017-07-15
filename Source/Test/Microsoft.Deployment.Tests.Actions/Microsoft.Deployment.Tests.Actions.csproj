@@ -153,6 +153,7 @@
     <Compile Include="OnPrem\VersionTests.cs" />
     <Compile Include="PowerApp\PowerAppTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScribeTests\ScribeTests.cs" />
     <Compile Include="Sql\DeploySqlScripts.cs" />
     <Compile Include="TestHelpers\AAD.cs" />
     <Compile Include="TestHelpers\Credential.cs" />

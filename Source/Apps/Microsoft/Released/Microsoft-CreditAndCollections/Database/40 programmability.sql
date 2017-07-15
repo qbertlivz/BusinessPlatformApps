@@ -31,7 +31,7 @@ BEGIN
 	IF EXISTS (SELECT * FROM cc.[configuration] WHERE configuration_group = 'SolutionTemplate' AND configuration_subgroup = 'Notifier' AND [name] = 'ASDeployment' AND [value] ='true')
 	SET @ASDeployment = 1;
 
-	IF (@InitialStatusDone = 'True')
+	IF (@InitialStatusDone = 'True' AND @ASDeployment = 0)
 		SET @StatusCode = 2; --Data pull complete
 
     -- AS Flow

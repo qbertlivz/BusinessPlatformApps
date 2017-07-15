@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Dynamic;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
+using System.Linq;
 using System.Security.Claims;
 
 using Newtonsoft.Json;
@@ -38,6 +40,28 @@ namespace Microsoft.Deployment.Common.Helpers
             }
 
             return value;
+        }
+
+        public static List<string> DeserializeEntities(string entitiesJson, string entitiesJsonAdditional = "")
+        {
+            List<string> entities = new List<string>();
+
+            Dictionary<string, string> dictionary = Deserialize<Dictionary<string, string>>(entitiesJson);
+
+            if (dictionary != null)
+            {
+                foreach (KeyValuePair<string, string> pair in dictionary)
+                {
+                    entities.Add(pair.Key);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(entitiesJsonAdditional))
+            {
+                entities.AddRange(entitiesJsonAdditional.Split(',').ToList());
+            }
+
+            return entities;
         }
 
         public static dynamic GetDynamicFromJObject(JObject json)

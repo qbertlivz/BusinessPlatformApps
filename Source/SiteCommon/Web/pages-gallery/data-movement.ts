@@ -40,6 +40,8 @@ export class DataMovement extends ViewModelBase {
         if (this.MS.HttpService.isOnPremise) {
             this.MS.DataStore.addToDataStore('ScribeOrganizationId', this.scribeOrganizationId, DataStoreType.Private);
 
+            this.scribeAgents = [];
+
             let scribeAgents: ScribeAgent[] = await this.MS.HttpService.getResponseAsync('Microsoft-GetScribeAgents');
 
             if (scribeAgents && scribeAgents.length > 0) {

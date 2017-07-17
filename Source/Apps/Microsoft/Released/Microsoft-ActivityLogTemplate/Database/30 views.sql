@@ -8,7 +8,25 @@ go
 
 CREATE VIEW bpst_aal.VerboseView
 AS
-	SELECT *
+	SELECT 
+		eventId				AS [Event ID],
+		[caller]			AS [Caller],
+		correlationId		AS [Correlation ID],
+		[description]		AS [Description],
+		eventCategory		AS [Event Category], 
+		impact				AS [Impact],
+		impactedRegions		AS [Impacted Regions],
+		jobFailedMessage	AS [Job Failed Message],
+		[level]				AS [Level],
+		operationCategory	AS [Operation Category],
+		operationId			AS [Operation ID],
+		operationName		AS [Operation Name],
+		resourceGroup		AS [Resource Group],
+		resourceId			AS [Resource ID],
+		[status]			AS [Status],
+		statusCode			AS [Status Code],
+		subscriptionId		AS [Subscription ID],
+		[timestamp]			AS [Timestamp]
 	FROM bpst_aal.ActivityLogData;
 GO
 

@@ -31,7 +31,7 @@ CREATE PROCEDURE bpst_news.sp_write_document
 	@publishedMinutePrecision datetime,
 
 	-- Ingest Timestamp
-	@ingestTimestamp datetime,
+	@ingestTimestamp NVARCHAR(100),
 	@ingestMonthPrecision datetime,
 	@ingestWeekPrecision datetime,
 	@ingestDayPrecision datetime,
@@ -73,7 +73,7 @@ BEGIN
 		INSERT INTO [bpst_news].[documentingestedtimes]
 		( id, "timestamp", monthPrecision, weekPrecision, dayPrecision, hourPrecision, minutePrecision )
 		VALUES
-		( @docId, @ingestTimestamp, @ingestMonthPrecision, @ingestWeekPrecision, @ingestDayPrecision, @ingestHourPrecision, @ingestMinutePrecision );
+		( @docId, CONVERT(DATETIME, left(@ingestTimestamp,23)), @ingestMonthPrecision, @ingestWeekPrecision, @ingestDayPrecision, @ingestHourPrecision, @ingestMinutePrecision );
 
 		DELETE FROM [bpst_news].[documentsentimentscores] WHERE id = @docid;
 		INSERT INTO [bpst_news].[documentsentimentscores] (id, score) VALUES ( @docid, @sentimentScore );

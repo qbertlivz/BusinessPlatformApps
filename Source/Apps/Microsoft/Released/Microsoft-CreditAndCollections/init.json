@@ -87,7 +87,8 @@
                 "filename": "$save('CreditAndCollectionsImportMode.pbix')",
                 "filenameSSAS": "$save('CreditAndCollectionsAs.pbix')",
                 "name": "$SiteCommon$/pages-gallery/progress.html",
-                "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
+                "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))",
+                "asDatabase": "CreditCollections"
             }
         ],
 

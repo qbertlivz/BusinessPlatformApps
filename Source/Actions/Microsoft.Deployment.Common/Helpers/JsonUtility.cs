@@ -5,7 +5,6 @@ using System.Dynamic;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
-using System.Linq;
 using System.Security.Claims;
 
 using Newtonsoft.Json;
@@ -46,19 +45,26 @@ namespace Microsoft.Deployment.Common.Helpers
         {
             List<string> entities = new List<string>();
 
-            Dictionary<string, string> dictionary = Deserialize<Dictionary<string, string>>(entitiesJson);
-
-            if (dictionary != null)
+            try
             {
-                foreach (KeyValuePair<string, string> pair in dictionary)
+                Dictionary<string, string> dictionary = Deserialize<Dictionary<string, string>>(entitiesJson);
+
+                if (dictionary != null)
                 {
-                    entities.Add(pair.Key);
+                    foreach (KeyValuePair<string, string> pair in dictionary)
+                    {
+                        entities.Add(pair.Key);
+                    }
                 }
+            }
+            catch
+            {
+                entities = entitiesJson.SplitByCommaSpaceTabReturnList();
             }
 
             if (!string.IsNullOrEmpty(entitiesJsonAdditional))
             {
-                entities.AddRange(entitiesJsonAdditional.Split(',').ToList());
+                entities.AddRange(entitiesJsonAdditional.SplitByCommaSpaceTabReturnList());
             }
 
             return entities;

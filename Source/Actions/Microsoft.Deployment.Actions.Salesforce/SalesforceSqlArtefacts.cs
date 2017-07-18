@@ -200,7 +200,7 @@ namespace Microsoft.Deployment.Actions.Salesforce
 
                 string size = string.Empty;
 
-                if (nvarcharSize > 4000)
+                if (nvarcharSize > 255)
                 {
                     size = "max";
                 }

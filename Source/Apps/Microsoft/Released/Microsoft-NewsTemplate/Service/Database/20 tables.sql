@@ -164,7 +164,7 @@ CREATE TABLE bpst_news.stg_documenttopics
     topicKeyPhrase   NVARCHAR(2000) NOT NULL
 );
 
-CREATE TABLE bpst_news.documentcompressedentities
+CREATE TABLE bpst_news.stg_documentcompressedentities
 (
     documentId				NCHAR(64) NOT NULL,
     compressedEntitiesJson	NVARCHAR(max),

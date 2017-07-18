@@ -184,6 +184,7 @@ BEGIN
     TRUNCATE TABLE bpst_news.stg_entities;
     TRUNCATE TABLE bpst_news.stg_documenttopics;
     TRUNCATE TABLE bpst_news.stg_documenttopicimages;
+    TRUNCATE TABLE bpst_news.stg_documentcompressedentities;
 END;
 go
 

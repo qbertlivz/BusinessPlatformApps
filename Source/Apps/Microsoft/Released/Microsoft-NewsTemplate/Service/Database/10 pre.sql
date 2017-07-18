@@ -72,6 +72,8 @@ IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='bpst_news
     DROP TABLE bpst_news.stg_documenttopics;
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='bpst_news' AND TABLE_NAME='stg_documenttopicimages' AND TABLE_TYPE='BASE TABLE')
     DROP TABLE bpst_news.stg_documenttopicimages;
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='bpst_news' AND TABLE_NAME='stg_documentcompressedentities' AND TABLE_TYPE='BASE TABLE')
+    DROP TABLE bpst_news.stg_documentcompressedentities;
 
 -- Bring-Your-Own Entities tables here
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='bpst_news' AND TABLE_NAME='userdefinedentities' AND TABLE_TYPE='BASE TABLE')

@@ -99,10 +99,10 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
             // Tests the Action to output from Stream Analytics to SQL
             var dataStore = await TestManager.GetDataStore(true);
             dataStore.AddToDataStore("jobName", "POC-StreamAnalyticsJob");
-            dataStore.AddToDataStore("serverName", "pbisttest.database.windows.net");
-            dataStore.AddToDataStore("dbName", "LancesSQLDB");
-            dataStore.AddToDataStore("username", "pbiadmin@pbisttest");
-            dataStore.AddToDataStore("password", TestHelpers.Credential.Instance.Sql.Password);
+            dataStore.AddToDataStore("Server", "pbisttest.database.windows.net");
+            dataStore.AddToDataStore("Database", "LancesSQLDB");
+            dataStore.AddToDataStore("Username", "pbiadmin@pbisttest");
+            dataStore.AddToDataStore("Password", TestHelpers.Credential.Instance.Sql.Password);
             dataStore.AddToDataStore("tableName", "eventHubSQL");
             dataStore.AddToDataStore("outputAlias", "POC-sqloutput");
             var response = await TestManager.ExecuteActionAsync("Microsoft-SetOutputAsSQL", dataStore);

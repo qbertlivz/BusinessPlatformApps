@@ -1,16 +1,14 @@
-﻿using System.ComponentModel.Composition;
-using System.Net.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 
-using Newtonsoft.Json;
-
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
+using Microsoft.Deployment.Common.Helpers;
 using Microsoft.Deployment.Common.Model.Custom;
-using System.Collections.Generic;
-using System;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.News
 {
@@ -19,36 +17,41 @@ namespace Microsoft.Deployment.Actions.AzureCustom.News
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var sqlConn = request.DataStore.GetValue("SqlConnectionString");
-            List<NewsEntity> userEntities = JsonConvert.DeserializeObject<List<NewsEntity>>(request.DataStore.GetValue("UserDefinedEntities"));
+            List<NewsEntity> userEntities = JsonUtility.Deserialize<List<NewsEntity>>(request.DataStore.GetValue("UserDefinedEntities"));
 
-            var entityTypes = entityTypesTable();
-            var userEntityTable = userEntitiesTable();
-
-            foreach (NewsEntity userEntity in userEntities)
+            if (userEntities != null)
             {
+                var sqlConn = request.DataStore.GetValue("SqlConnectionString");
 
-                DataRow entityTypeRow = entityTypes.NewRow();
-                entityTypeRow["icon"] = userEntity.Icon;
-                entityTypeRow["color"] = userEntity.Color;
-                entityTypeRow["entityType"] = userEntity.Name;
-                entityTypes.Rows.Add(entityTypeRow);
+                var entityTypes = entityTypesTable();
+                var userEntityTable = userEntitiesTable();
 
-                List<string> values = new List<string>(
-                           userEntity.Values.Split(new string[] { "\n" },
-                           System.StringSplitOptions.RemoveEmptyEntries));
-
-                foreach (string value in values)
+                foreach (NewsEntity userEntity in userEntities)
                 {
-                    DataRow userEntityRow = userEntityTable.NewRow();
-                    userEntityRow["regex"] = value;
-                    userEntityRow["entityValue"] = value;
-                    userEntityRow["entityType"] = userEntity.Name;
-                    userEntityTable.Rows.Add(userEntityRow);
+
+                    DataRow entityTypeRow = entityTypes.NewRow();
+                    entityTypeRow["icon"] = userEntity.Icon;
+                    entityTypeRow["color"] = userEntity.Color;
+                    entityTypeRow["entityType"] = userEntity.Name;
+                    entityTypes.Rows.Add(entityTypeRow);
+
+                    List<string> values = new List<string>(
+                               userEntity.Values.Split(new string[] { "\n" },
+                               System.StringSplitOptions.RemoveEmptyEntries));
+
+                    foreach (string value in values)
+                    {
+                        DataRow userEntityRow = userEntityTable.NewRow();
+                        userEntityRow["regex"] = value;
+                        userEntityRow["entityValue"] = value;
+                        userEntityRow["entityType"] = userEntity.Name;
+                        userEntityTable.Rows.Add(userEntityRow);
+                    }
                 }
+
+                BulkInsert(sqlConn, entityTypes, "bpst_news.typedisplayinformation");
+                BulkInsert(sqlConn, userEntityTable, "bpst_news.userdefinedentitydefinitions");
             }
-            BulkInsert(sqlConn, entityTypes, "bpst_news.typedisplayinformation");
-            BulkInsert(sqlConn, userEntityTable, "bpst_news.userdefinedentitydefinitions");
 
             return new ActionResponse(ActionStatus.Success);
         }
@@ -62,7 +65,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.News
                 {
                     bulk.BatchSize = 1000;
                     bulk.DestinationTableName = tableName;
-                    bulk.WriteToServer(table);                
+                    bulk.WriteToServer(table);
                     bulk.Close();
                 }
             }
@@ -72,9 +75,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.News
             }
         }
 
-
         public static DataTable userEntitiesTable()
-
         {
             DataTable table = new DataTable();
             table.Columns.Add("regex");
@@ -84,7 +85,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.News
         }
 
         public static DataTable entityTypesTable()
-
         {
             DataTable table = new DataTable();
             table.Columns.Add("entityType");

@@ -168,11 +168,6 @@
                 "SqlServerIndex": "0"
             },
             {
-                "displayname": "$translate(INIT_ACTION_RETRIEVING_SALESFORCE_METADATA)",
-                "name": "Microsoft-SalesforceGetObjectMetadata",
-                "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
-            },
-            {
                 "displayname": "$translate(INIT_ACTION_CREATING_SALESFORCE_TABLES)",
                 "name": "Microsoft-SalesforceSqlArtefacts",
                 "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"
@@ -330,7 +325,6 @@
             },
             {
                 "displayname": "$translate(INIT_ACTION_CREATING_INFORMATICA_TASK)",
-                "Entities": "Account,Lead,Opportunity,OpportunityLineItem,OpportunityStage,UserRole,User,Product2",
                 "name": "Microsoft-CreateInformaticaTask",
                 "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Informatica')"
             },
@@ -364,7 +358,6 @@
             },
             {
                 "displayname": "$translate(INIT_ACTION_CREATING_SCRIBE_SOLUTION)",
-                "Entities": "Account,Lead,Opportunity,OpportunityLineItem,OpportunityStage,UserRole,User,Product2",
                 "name": "Microsoft-CreateScribeSolution",
                 "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
             },

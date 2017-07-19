@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.Data;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json.Linq;
@@ -15,11 +16,15 @@ namespace Microsoft.Deployment.Actions.OnPremise
     [Export(typeof(IAction))]
     public class GetDataPullStatus : BaseAction
     {
+        private const int WAIT_INTERVAL = 10;
+
         private const string COUNT_NAME = "Count";
         private const string SP_REPLICATION_COUNTS = "sp_get_replication_counts";
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
+            Thread.Sleep(new TimeSpan(0, 0, WAIT_INTERVAL));
+
             DataTable recordCounts = GetRecordCounts(request.DataStore.GetValueAtIndex("SqlConnectionString", "SqlServerIndex"),
                 $"[{request.DataStore.GetValue("TargetSchema")}].{SP_REPLICATION_COUNTS}");
 

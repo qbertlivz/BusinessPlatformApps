@@ -92,6 +92,10 @@
                 "SqlServerIndex": "0"
             },
             {
+                "displayname": "$translate(INIT_ACTION_POPULATE_NEWS_ENTITIES)",
+                "name": "Microsoft-PopulateUserDefinedEntities"
+            },
+            {
                 "CognitiveServiceName": "TextCognitiveService",
                 "CognitiveServiceType": "TextAnalytics",
                 "CognitiveSkuName": "S1",
@@ -128,7 +132,8 @@
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_NEWS)",
                 "FunctionName": "$save('function' + this.MS.DataStore.getValue('uniqueId'))",
                 "name": "Microsoft-DeployAzureFunction",
-                "RepoUrl": "https://github.com/juluczni/AzureFunctionsNewsTemplate"
+                "RepoUrl": "https://github.com/juluczni/AzureFunctionsNewsTemplate",
+                "Branch": "newsbranch"
             },
             {
                 "DeploymentName": "Function",

@@ -6,7 +6,7 @@
     "Install": {
         "Pages": [
             {
-                "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-D365CustomerService/Web/Images/crm-sales-management.png",
+                "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-D365CustomerService/Web/Images/custservices.png",
                 "displayname": "Getting Started",
                 "list1": [
                     "$translate(INIT_GETTING_STARTED_D365_DECEMBER)",

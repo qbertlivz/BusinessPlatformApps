@@ -14,6 +14,7 @@ using Microsoft.Deployment.Common.Enums;
 using Microsoft.Deployment.Common.ErrorCode;
 using Microsoft.Deployment.Common.Helpers;
 using System.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.Common
 {
@@ -26,13 +27,23 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             string subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             string resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
             string doNotWaitString = request.DataStore.GetValue("Wait");
-
             bool doNotWait = !string.IsNullOrEmpty(doNotWaitString) && bool.Parse(doNotWaitString);
-            string deploymentName = request.DataStore.GetValue("DeploymentName");
+            string deploymentName = "EHDeployment-" + RandomGenerator.GetRandomLowerCaseCharacters(5);
+            string namespaceName = "ActivityLogNamespace-" + RandomGenerator.GetRandomLowerCaseCharacters(5);
+            string eventHubName = "ActivityLogEventHub-" + RandomGenerator.GetRandomLowerCaseCharacters(5);
+            string consumerGroupName = "ActivityLogConsumerGroup-" + RandomGenerator.GetRandomLowerCaseCharacters(5);
+            request.DataStore.AddToDataStore("EHDeployment", deploymentName);
+            request.DataStore.AddToDataStore("ActivityLogNamespace", namespaceName);
+            request.DataStore.AddToDataStore("ActivityLogEventHub", eventHubName);
+            request.DataStore.AddToDataStore("ActivityLogConsumerGroup", consumerGroupName);
 
             // Read from file
-            var armTemplatefilePath = request.DataStore.GetValue("AzureArmFile");
-            var armParamTemplateProperties = request.DataStore.GetJson("AzureArmParameters");
+            var armTemplatefilePath = "Service/ARM/EventHub.json";
+            var payload = new JObject();
+            payload.Add("namespaceName", namespaceName);
+            payload.Add("eventHubName", eventHubName);
+            payload.Add("consumerGroupName", consumerGroupName);
+            var armParamTemplateProperties = payload;
 
             if (deploymentName == null && !doNotWait)
             {

@@ -22,7 +22,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
             var token = request.DataStore.GetJson("AzureToken", "access_token");
             var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
-            var ehnamespace = request.DataStore.GetValue("namespace");
+            var ehnamespace = request.DataStore.GetValue("ActivityLogNamespace");
             var apiVersion = "2014-09-01";
             string uri = $"https://management.azure.com/subscriptions/{subscription}/resourceGroups/{resourceGroup}/providers/Microsoft.EventHub/namespaces/{ehnamespace}/AuthorizationRules/RootManageSharedAccessKey/listkeys?api-version={apiVersion}";
 

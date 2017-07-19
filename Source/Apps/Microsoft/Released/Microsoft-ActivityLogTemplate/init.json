@@ -86,12 +86,12 @@
           "name": "Microsoft-SetStreamAnalyticsInputAsEventHub"
         },
         {
-          "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_QUERY)",
-          "name": "Microsoft-SetStreamAnalyticsQuery"
-        },
-        {
           "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_OUTPUT)",
           "name": "Microsoft-SetOutputAsSQL"
+        },
+        {
+          "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_QUERY)",
+          "name": "Microsoft-SetStreamAnalyticsQuery"
         },
         {
           "displayname": "$translate(INIT_ACTION_GET_HISTORICAL_ACTIVITY_LOG_DATA)",

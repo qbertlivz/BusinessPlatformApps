@@ -22,8 +22,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
             var token = request.DataStore.GetJson("AzureToken", "access_token");
             var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
-            var jobName = request.DataStore.GetValue("jobName");
-            var transformationName = request.DataStore.GetValue("transformationName");
+            var jobName = request.DataStore.GetValue("SAJob");
+            var transformationName = "Transformation";
             var apiVersion = "2015-10-01";
             string uri = $"https://management.azure.com/subscriptions/{subscription}/resourceGroups/{resourceGroup}/providers/Microsoft.StreamAnalytics/streamingjobs/{jobName}/transformations/{transformationName}?api-version={apiVersion}";
             string input = request.DataStore.GetValue("inputAlias");

@@ -18,18 +18,20 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
         {
             // Tests the Action to create an Event Hub Namespace
             var dataStore = await TestManager.GetDataStore(true);
-            dataStore.AddToDataStore("DeploymentName", $"POC-EHDeployment3");
-            dataStore.AddToDataStore("AzureArmFile", "Service/ARM/EventHub.json");
+            dataStore.AddToDataStore("EHDeploymentName", "testaldeploy2");
             var payload = new JObject();
-            payload.Add("namespaceName", "POC-Namespace3");
-            payload.Add("eventHubName", "POC-EventHub3");
-            payload.Add("consumerGroupName", "LancesConsumerGroup3");
+            var namespaceName = "testspace4";
+            var eventHubName = "testhub";
+            var consumerGroupName = "LancesConsumerGroup3";
+            payload.Add("namespaceName", namespaceName);
+            payload.Add("eventHubName", eventHubName);
+            payload.Add("consumerGroupName", consumerGroupName);
             dataStore.AddToDataStore("AzureArmParameters", payload);
-            //var deployArmResult = await TestManager.ExecuteActionAsync(
-            //    "Microsoft-CreateEventHubNameSpace", dataStore, "Microsoft-ActivityLogTemplate");            
-            
             var deployArmResult = await TestManager.ExecuteActionAsync(
-                "Microsoft-DeployAzureArmTemplate", dataStore, "Microsoft-ActivityLogTemplate");
+                "Microsoft-CreateEventHubNameSpace", dataStore, "Microsoft-ActivityLogTemplate");
+
+            //var deployArmResult = await TestManager.ExecuteActionAsync(
+            //    "Microsoft-DeployAzureArmTemplate", dataStore, "Microsoft-ActivityLogTemplate");
             Assert.IsTrue(deployArmResult.IsSuccess);
         }
 
@@ -38,7 +40,7 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
         {
             // Tests the Action to export an Activity Log to Event Hub
             var dataStore = await TestManager.GetDataStore();
-            dataStore.AddToDataStore("namespace", "POC-Namespace3");
+            dataStore.AddToDataStore("namespaceName", "POC-Namespace3");
             var response = await TestManager.ExecuteActionAsync("Microsoft-ExportActivityLogToEventHub", dataStore);
             Assert.IsTrue(response.IsSuccess);
         }

@@ -19,16 +19,7 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
         public async Task CreateStreamAnalyticsJobTest()
         {
             // Tests the Action to create a Stream Analytics job (with no input, default query, and no output)
-            string id = RandomGenerator.GetRandomCharacters();
-            System.Diagnostics.Debug.WriteLine($"id: {id}");
             var dataStore = await TestManager.GetDataStore(true);
-            dataStore.AddToDataStore("DeploymentName", $"LanceSADeployment-{id}");
-            dataStore.AddToDataStore("AzureArmFile", "Service/ARM/StreamAnalytics.json");
-            var payload = new JObject();
-            payload.Add("name", "POC-StreamAnalyticsJob2");
-            //payload.Add("name", $"LancesStreamAnalyticsJob-{id}");
-            dataStore.AddToDataStore("AzureArmParameters", payload);
-
             var deployArmResult = await TestManager.ExecuteActionAsync(
                 "Microsoft-CreateStreamAnalyticsJob", dataStore, "Microsoft-ActivityLogTemplate");
             Assert.IsTrue(deployArmResult.IsSuccess);
@@ -64,7 +55,6 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
             dataStore.AddToDataStore("outputAlias", "POC-output");
             // Since we technically update the default query instead of creaitng one, use the deafult 
             // transformation name which is "Transformation"
-            dataStore.AddToDataStore("transformationName", "Transformation");
             dataStore.AddToDataStore("jobName", "POC-StreamAnalyticsJob");
             var response = await TestManager.ExecuteActionAsync("Microsoft-SetStreamAnalyticsQuery", dataStore);
             Assert.IsTrue(response.IsSuccess);

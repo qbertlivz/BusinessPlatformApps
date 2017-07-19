@@ -14,6 +14,7 @@ using Microsoft.Deployment.Common.Enums;
 using Microsoft.Deployment.Common.ErrorCode;
 using Microsoft.Deployment.Common.Helpers;
 using System.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.Common
 {
@@ -28,11 +29,15 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             string doNotWaitString = request.DataStore.GetValue("Wait");
 
             bool doNotWait = !string.IsNullOrEmpty(doNotWaitString) && bool.Parse(doNotWaitString);
-            string deploymentName = request.DataStore.GetValue("DeploymentName");
-
+            string deploymentName = "SADeployment-" + RandomGenerator.GetRandomLowerCaseCharacters(5);
+            string jobname = "SAJob-" + RandomGenerator.GetRandomLowerCaseCharacters(5);
+            request.DataStore.AddToDataStore("SADeployment", deploymentName);
+            request.DataStore.AddToDataStore("SAJob", jobname);
             // Read from file
-            var armTemplatefilePath = request.DataStore.GetValue("AzureArmFile");
-            var armParamTemplateProperties = request.DataStore.GetJson("AzureArmParameters");
+            var armTemplatefilePath = "Service/ARM/StreamAnalytics.json";
+            var payload = new JObject();
+            payload.Add("name", jobname);
+            var armParamTemplateProperties = payload;
 
             if (deploymentName == null && !doNotWait)
             {

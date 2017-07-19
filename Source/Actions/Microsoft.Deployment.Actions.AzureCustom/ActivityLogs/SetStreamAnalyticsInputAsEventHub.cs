@@ -8,6 +8,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
@@ -26,23 +27,55 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
             return (responseObj.GetValue("value").ToString() == "true") ? true : false;
         }
 
+        public async Task<bool> GetEventHubPrimaryKey(ActionRequest request, string token, string subscription, string resourceGroup, string ehnamespace)
+        {
+            var apiVersion = "2014-09-01";
+            string uri = $"https://management.azure.com/subscriptions/{subscription}/resourceGroups/{resourceGroup}/providers/Microsoft.EventHub/namespaces/{ehnamespace}/AuthorizationRules/RootManageSharedAccessKey/listkeys?api-version={apiVersion}";
+            AzureHttpClient ahc = new AzureHttpClient(token, subscription);
+            HttpResponseMessage response = await ahc.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Post, uri, "{}");
+            if (response.IsSuccessStatusCode)
+            {
+                string keyString = await response.Content.ReadAsStringAsync();
+                JObject keys = JsonUtility.GetJObjectFromJsonString(keyString);
+                string primaryKey = keys.GetValue("primaryKey").ToString();
+                request.DataStore.AddToDataStore("primaryKey", primaryKey);
+                return true;
+            }
+            return false;
+        }
+
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             var token = request.DataStore.GetJson("AzureToken", "access_token");
             var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
-            var ehnamespace = request.DataStore.GetValue("namespace");
+            var ehnamespace = request.DataStore.GetValue("ActivityLogNamespace");
             var apiVersion = "2015-10-01";
-            var alias = request.DataStore.GetValue("inputAlias");
-            var jobName = request.DataStore.GetValue("jobName");
+            var inputAlias = "EventHubInput-" + RandomGenerator.GetRandomLowerCaseCharacters(5);
+            request.DataStore.AddToDataStore("inputAlias", inputAlias);
+            var jobName = request.DataStore.GetValue("SAJob");
+            bool keyResponse = await GetEventHubPrimaryKey(request, token, subscription, resourceGroup, ehnamespace);
+            if (!keyResponse) { return new ActionResponse(ActionStatus.Failure); }
             string primaryKey = request.DataStore.GetValue("primaryKey");
-            string uri = $"https://management.azure.com/subscriptions/{subscription}/resourceGroups/{resourceGroup}/providers/Microsoft.StreamAnalytics/streamingjobs/{jobName}/inputs/{alias}?api-version={apiVersion}";
+            string uri = $"https://management.azure.com/subscriptions/{subscription}/resourceGroups/{resourceGroup}/providers/Microsoft.StreamAnalytics/streamingjobs/{jobName}/inputs/{inputAlias}?api-version={apiVersion}";
             var body = $"{{    \r\n   \"properties\":{{    \r\n      \"type\":\"stream\",  \r\n      \"serialization\":{{    \r\n         \"type\":\"Json\",  \r\n         \"properties\":{{    \r\n            \"fieldDelimiter\":\",\",  \r\n            \"encoding\":\"UTF8\"  \r\n         }}  \r\n      }},  \r\n      \"datasource\":{{    \r\n         \"type\":\"Microsoft.ServiceBus/EventHub\",  \r\n         \"properties\":{{    \r\n            \"serviceBusNamespace\":\"{ehnamespace}\",  \r\n            \"sharedAccessPolicyName\":\"RootManageSharedAccessKey\",  \r\n            \"sharedAccessPolicyKey\":\"{primaryKey}\",  \r\n            \"eventHubName\":\"insights-operational-logs\"  \r\n         }}  \r\n      }}  \r\n   }}  \r\n}}";
             AzureHttpClient ahc = new AzureHttpClient(token, subscription);
-            bool isValidAlias = await VerifyInputAlias(alias, subscription, resourceGroup, jobName, ahc);
+            bool isValidAlias = await VerifyInputAlias(inputAlias, subscription, resourceGroup, jobName, ahc);
             if (!isValidAlias) return new ActionResponse(ActionStatus.Failure);
             // API call to set entire input
             HttpResponseMessage response = await ahc.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Put, uri, body);
+            if (!response.IsSuccessStatusCode)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    response = await ahc.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Put, uri, body);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return new ActionResponse(ActionStatus.Success);
+                    }
+                    Thread.Sleep(4000);
+                }
+            }
             return response.IsSuccessStatusCode ? new ActionResponse(ActionStatus.Success) : new ActionResponse(ActionStatus.Failure);
         }
     }

@@ -93,7 +93,8 @@
             },
             {
                 "displayname": "$translate(INIT_ACTION_POPULATE_NEWS_ENTITIES)",
-                "name": "Microsoft-PopulateUserDefinedEntities"
+                "name": "Microsoft-PopulateUserDefinedEntities",
+                "skip": "$run(this.MS.DataStore.getValue('BringYourOwnEntities') === this.MS.Option.NO)"
             },
             {
                 "CognitiveServiceName": "TextCognitiveService",

@@ -37,7 +37,8 @@
           "showNewSqlOption": "true",
           "sqlInstance": "NewSql",
           "subtitle": "$translate(INIT_SQL_SUBTITLE_AAL)",
-          "title": "$translate(INIT_SQL_TITLE)"
+          "title": "$translate(INIT_SQL_TITLE)",
+          "Table": "$save('aal.ActivityLogData')"
         },
         {
                 "displayname": "Summary",
@@ -45,7 +46,8 @@
                 "values": {
                     "Target Server": "$(this.MS.DataStore.getValue('Server'))",
                     "Target Database": "$(this.MS.DataStore.getValue('Database'))",
-                    "Target Username": "$(this.MS.DataStore.getValue('Username'))"
+                    "Target Username": "$(this.MS.DataStore.getValue('Username'))",
+                    "Target Table": "$(this.MS.DataStore.getValue('Table'))"
                 }
             },
             {

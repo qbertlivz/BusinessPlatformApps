@@ -93,7 +93,7 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
             dataStore.AddToDataStore("Database", "LancesSQLDB");
             dataStore.AddToDataStore("Username", "pbiadmin@pbisttest");
             dataStore.AddToDataStore("Password", TestHelpers.Credential.Instance.Sql.Password);
-            dataStore.AddToDataStore("tableName", "eventHubSQL");
+            dataStore.AddToDataStore("Table", "eventHubSQL");
             dataStore.AddToDataStore("outputAlias", "POC-sqloutput");
             var response = await TestManager.ExecuteActionAsync("Microsoft-SetOutputAsSQL", dataStore);
             Assert.IsTrue(response.IsSuccess);

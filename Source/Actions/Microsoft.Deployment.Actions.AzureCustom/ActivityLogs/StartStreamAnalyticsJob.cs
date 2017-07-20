@@ -22,7 +22,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
             var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
             var apiVersion = "2015-10-01";
-            var jobName = request.DataStore.GetValue("jobName");
+            var jobName = request.DataStore.GetValue("SAJob");
             string uri = $"https://management.azure.com/subscriptions/{subscription}/resourceGroups/{resourceGroup}/providers/Microsoft.StreamAnalytics/streamingjobs/{jobName}/start?api-version={apiVersion}";
             AzureHttpClient ahc = new AzureHttpClient(token, subscription);
             HttpResponseMessage response = await ahc.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Post, uri, "{}");

@@ -8,6 +8,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
@@ -31,10 +32,22 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
             var table = request.DataStore.GetValue("tableName");
             var outputAlias = "SQLOutput-" + RandomGenerator.GetRandomLowerCaseCharacters(5);
             request.DataStore.AddToDataStore("outputAlias", outputAlias);
-            var body = $"{{\"properties\":{{\"datasource\":{{\"type\":\"Microsoft.Sql/Server/Database\",\"properties\":{{\"server\":{server},\"database\":{database},\"table\":{table},\"user\":{user},\"password\":{password}}}}}}}}}";
+            var body = $"{{\"properties\":{{\"datasource\":{{\"type\":\"Microsoft.Sql/Server/Database\",\"properties\":{{\"server\":\"{server}\",\"database\":\"{database}\",\"table\":\"{table}\",\"user\":\"{user}\",\"password\":\"{password}\"}}}}}}}}";
             var body3 = $"{{\"properties\":{{\"dataSource\":{{\"outputDocumentDatabaseSource\":{{}},\"outputTopicSource\":{{}},\"outputQueueSource\":{{}},\"outputEventHubSource\":{{}},\"outputSqlDatabaseSource\":{{\"server\":{server},\"database\":{database},\"user\":{user},\"password\":{password},\"table\":{table}}},\"outputBlobStorageSource\":{{}},\"outputTableStorageSource\":{{}},\"outputPowerBISource\":{{}},\"outputDataLakeSource\":{{}},\"outputIotGatewaySource\":{{}},\"type\":\"Microsoft.Sql/Server/Database\"}},\"serialization\":{{}}}},\"createType\":\"None\",\"id\":null,\"location\":\"Australia East\",\"name\":{outputAlias},\"type\":\"Microsoft.Sql/Server/Database\"}}";
             AzureHttpClient ahc = new AzureHttpClient(azure_access_token, subscription);
-            HttpResponseMessage response = await ahc.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Put, uri2, body);
+            HttpResponseMessage response = await ahc.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Put, uri, body);
+            if (!response.IsSuccessStatusCode)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    response = await ahc.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Put, uri, body);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return new ActionResponse(ActionStatus.Success);
+                    }
+                    Thread.Sleep(4000);
+                }
+            }
             return response.IsSuccessStatusCode ? new ActionResponse(ActionStatus.Success) : new ActionResponse(ActionStatus.Failure);
         }
     }

@@ -29,7 +29,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
             var database = request.DataStore.GetValue("Database");
             var user = request.DataStore.GetValue("Username");
             var password = request.DataStore.GetValue("Password");
-            var table = request.DataStore.GetValue("tableName");
+            var table = request.DataStore.GetValue("Table");
             var outputAlias = "SQLOutput-" + RandomGenerator.GetRandomLowerCaseCharacters(5);
             request.DataStore.AddToDataStore("outputAlias", outputAlias);
             var body = $"{{\"properties\":{{\"datasource\":{{\"type\":\"Microsoft.Sql/Server/Database\",\"properties\":{{\"server\":\"{server}\",\"database\":\"{database}\",\"table\":\"{table}\",\"user\":\"{user}\",\"password\":\"{password}\"}}}}}}}}";

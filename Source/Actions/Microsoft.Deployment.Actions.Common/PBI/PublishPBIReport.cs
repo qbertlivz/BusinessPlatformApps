@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -15,7 +16,7 @@ namespace Microsoft.Deployment.Actions.Common.PBI
     public class PublishPBIReport : BaseAction
     {
         private const int MAXIMUM_IMPORT_STATUS_ATTEMPTS = 92;
-        private const int WAIT_IMPORT_STATUS = 5000;
+        private const int WAIT_IMPORT_STATUS = 5;
 
         private const string PBI_IMPORT_STATUS_URI = "beta/myorg/{0}imports/{1}";
         private const string PBI_IMPORT_URI = "beta/myorg/{0}imports/?datasetDisplayName={1}&nameConflict=Abort";
@@ -48,7 +49,7 @@ namespace Microsoft.Deployment.Actions.Common.PBI
                 switch (pbiImportStatus.ImportState)
                 {
                     case "Publishing":
-                        Thread.Sleep(WAIT_IMPORT_STATUS);
+                        Thread.Sleep(new TimeSpan(0, 0, WAIT_IMPORT_STATUS));
                         break;
                     case "Succeeded":
                         isImportInProgress = false;

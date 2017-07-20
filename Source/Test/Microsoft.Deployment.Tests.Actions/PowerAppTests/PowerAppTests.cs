@@ -12,7 +12,7 @@ namespace Microsoft.Deployment.Tests.Actions.PowerApp
         [TestMethod]
         public async Task ValidateConfigurePowerAppTables()
         {
-            var ds = new DataStore();
+            DataStore ds = new DataStore();
 
             ds.AddToDataStore("SqlConnectionString", SqlCreds.GetSqlPagePayload("yashti"));
             ds.AddToDataStore("SqlScriptsFolder", "Service/Database/LogicApps");
@@ -28,7 +28,7 @@ namespace Microsoft.Deployment.Tests.Actions.PowerApp
         [TestMethod]
         public async Task ValidatePowerAppDeployment()
         {
-            var ds =  await TestManager.GetDataStore();
+            DataStore ds =  await TestManager.GetDataStore();
 
             ds.AddToDataStore("PowerAppFileName", "TwitterTemplate.msapp");
             ds.AddToDataStore("SqlConnectionString", SqlCreds.GetSqlPagePayload("yashti"));

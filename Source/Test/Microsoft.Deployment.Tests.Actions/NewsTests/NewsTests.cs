@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Deployment.Common.Helpers;
-using Microsoft.Deployment.Tests.Actions.TestHelpers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using Microsoft.Deployment.Common.ActionModel;
-using Newtonsoft.Json.Linq;
+using Microsoft.Deployment.Tests.Actions.TestHelpers;
 
 namespace Microsoft.Deployment.Tests.Actions.News
 {

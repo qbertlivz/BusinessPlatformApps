@@ -52,7 +52,6 @@
             },
             {
                 "displayname": "Deploy",
-                "enablePublishReport": true,
                 "filename": "PowerBITelemetry.pbix",
                 "name": "$SiteCommon$/pages-gallery/progress.html"
             }

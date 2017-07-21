@@ -134,7 +134,7 @@
                     "SqlConnectionString"
                 ],
                 "displayname": "Progress",
-                "enablePublishReport": "$run(this.MS.DataStore.getValue('ssasDisabled') === 'false')",
+                "enablePublishReport": "$run(!this.MS.HttpService.isOnPremise && this.MS.DataStore.getValue('ssasDisabled') === 'false')",
                 "filename": "$save('SalesManagementReport.pbix')",
                 "filenameSSAS": "SalesManagementReportAS.pbix",
                 "finishedActionName": "$run(this.MS.DataStore.getValue('DataMovement') === 'ADF' ? 'Microsoft-ADFSliceStatus' : this.MS.DataStore.getValue('DataMovement') === 'Scribe' ? 'Microsoft-GetScribeSolutionStatus' : 'Microsoft-GetInformaticaTaskStatus')",

@@ -106,7 +106,7 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Credential Guard is enabled on this computer and does not yet support Windows Task Scheduler. Please choose a different computer..
+        ///   Looks up the localized string 
         /// </summary>
         public static string CredentialGuardEnabled {
             get {

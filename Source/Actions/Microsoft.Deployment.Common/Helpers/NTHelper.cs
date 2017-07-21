@@ -35,6 +35,34 @@ namespace Microsoft.Deployment.Common.Helpers
             return cleanedUsername;
         }
 
+        private static bool IsCredentialGuardEnabledAtLocation(string registryKey)
+        {
+            // Guard
+            if (string.IsNullOrEmpty(registryKey))
+                return false;
+
+            bool result = false;
+            RegistryKey rk = null; // Use this pattern instead of nesting a try with using statement
+            try
+            {
+                rk = Registry.LocalMachine.OpenSubKey(registryKey);
+                if (rk != null)
+                {
+                    object v = rk.GetValue("LsaCfgFlags");
+                    int intVal = Convert.ToInt32(v); // If conversion fails, we go to the catch block
+                    result = (intVal == 1 || intVal == 2);
+                }
+            }
+            catch { /* Nothing to do */ }
+            finally
+            {
+                rk?.Dispose();
+            }
+
+            return result;
+        }
+
+
         public static bool IsCredentialGuardEnabled()
         {
             bool credentialGuardEnabled = false;
@@ -42,38 +70,8 @@ namespace Microsoft.Deployment.Common.Helpers
 
             if (osVersion[0] == 10 && osVersion[1] == 0 && osVersion[2] < 15011)
             {
-                try
-                {
-                    object o;
-                    int rv;
-
-                    // Check group policy
-                    using (RegistryKey rk = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Policies\\Microsoft\\Windows\\DeviceGuard"))
-                    {
-                        if (rk != null)
-                        {
-                            o = rk.GetValue("LsaCfgFlags");
-                            rv = Convert.ToInt32(o);
-                            credentialGuardEnabled = (rv == 1 || rv == 2);
-                        }
-                    }
-
-                    // Don't run this check if GP enabled it
-                    if (!credentialGuardEnabled)
-                    {
-                        using (RegistryKey rk = Registry.LocalMachine.OpenSubKey("SYSTEM\\CurrentControlSet\\Control\\Lsa"))
-                        {
-                            if (rk != null)
-                            {
-                                o = rk.GetValue("LsaCfgFlags");
-                                rv = Convert.ToInt32(o);
-                                credentialGuardEnabled = (rv == 1 || rv == 2);
-                            }
-                        }
-                    }
-
-                }
-                catch { /* Checking credential guard failed */ }
+                credentialGuardEnabled = IsCredentialGuardEnabledAtLocation("SOFTWARE\\Policies\\Microsoft\\Windows\\DeviceGuard")  || 
+                                         IsCredentialGuardEnabledAtLocation("SYSTEM\\CurrentControlSet\\Control\\Lsa");  // Second check won't run if GP enabled it
             }
 
             return credentialGuardEnabled;

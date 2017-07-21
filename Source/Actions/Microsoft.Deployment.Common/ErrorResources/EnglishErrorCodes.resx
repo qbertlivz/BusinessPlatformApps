@@ -127,7 +127,7 @@
     <value>Sorry, the Azure website name is already taken</value>
   </data>
   <data name="CredentialGuardEnabled" xml:space="preserve">
-    <value>Credential Guard is enabled on this computer and does not yet support Windows Task Scheduler. Please choose a different computer.</value>
+    <value>This particular version of Windows 10 has Credential Guard enabled and a known issue prevents our scheduled job from running correctly. Please disable Credential Guard (https://www.microsoft.com/en-us/download/details.aspx?id=53337) or upgrade to Windows 10 Creators Update.</value>
   </data>
   <data name="DefaultErrorCode" xml:space="preserve">
     <value>An error has occurred, see additional details to learn more</value>

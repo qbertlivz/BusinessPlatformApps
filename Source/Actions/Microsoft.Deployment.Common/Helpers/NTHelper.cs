@@ -37,27 +37,46 @@ namespace Microsoft.Deployment.Common.Helpers
 
         public static bool IsCredentialGuardEnabled()
         {
-            bool isCredentialGuardEnabled = false;
+            bool credentialGuardEnabled = false;
             int[] osVersion = NTHelper.OsVersionArray;
 
             if (osVersion[0] == 10 && osVersion[1] == 0 && osVersion[2] < 15011)
             {
                 try
                 {
-                    using (RegistryKey rk = Registry.LocalMachine.OpenSubKey("SYSTEM\\CurrentControlSet\\Control\\Lsa"))
+                    object o;
+                    int rv;
+
+                    // Check group policy
+                    using (RegistryKey rk = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Policies\\Microsoft\\Windows\\DeviceGuard"))
                     {
-                        object o = rk.GetValue("LsaCfgFlags");
-                        int rv = (int)o;
-                        isCredentialGuardEnabled = (rv == 1 || rv == 2);
+                        if (rk != null)
+                        {
+                            o = rk.GetValue("LsaCfgFlags");
+                            rv = Convert.ToInt32(o);
+                            credentialGuardEnabled = (rv == 1 || rv == 2);
+                        }
+                    }
+
+                    // Don't run this check if GP enabled it
+                    if (!credentialGuardEnabled)
+                    {
+                        using (RegistryKey rk = Registry.LocalMachine.OpenSubKey("SYSTEM\\CurrentControlSet\\Control\\Lsa"))
+                        {
+                            if (rk != null)
+                            {
+                                o = rk.GetValue("LsaCfgFlags");
+                                rv = Convert.ToInt32(o);
+                                credentialGuardEnabled = (rv == 1 || rv == 2);
+                            }
+                        }
                     }
 
                 }
-                catch
-                {
-                    // Checking credential guard failed
-                }
+                catch { /* Checking credential guard failed */ }
             }
-            return isCredentialGuardEnabled;
+
+            return credentialGuardEnabled;
         }
 
         public static int[] OsVersionArray

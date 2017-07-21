@@ -45,7 +45,7 @@ namespace Microsoft.Deployment.Actions.Common.PBI
             bool isImportInProgress = true;
             while (isImportInProgress && attempts < MAXIMUM_IMPORT_STATUS_ATTEMPTS)
             {
-                pbiImportStatus = JsonUtility.Deserialize<PBIImportStatus>(await ahc.Request(HttpMethod.Get, pbiClusterUri + string.Format(PBI_IMPORT_STATUS_URI, pbiWorkspaceId, pbiImport.Id)));
+                pbiImportStatus = await ahc.Request<PBIImportStatus>(HttpMethod.Get, pbiClusterUri + string.Format(PBI_IMPORT_STATUS_URI, pbiWorkspaceId, pbiImport.Id));
                 switch (pbiImportStatus.ImportState)
                 {
                     case "Publishing":

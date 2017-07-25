@@ -44,6 +44,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
             table.Columns.Add("eventCategory");
             table.Columns.Add("impact");
             table.Columns.Add("impactedRegions");
+            table.Columns.Add("impactedServices");
             table.Columns.Add("jobFailedMessage");
             table.Columns.Add("level");
             table.Columns.Add("operationCategory");
@@ -67,14 +68,13 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
             string nowString = now.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
             string days90agoString = days90ago.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
             var geturi = $"https://management.azure.com/subscriptions/{subscription}/providers/microsoft.insights/eventtypes/management/values?api-version=2015-04-01&$filter=eventTimestamp ge '{days90agoString}' and eventTimestamp le '{nowString}' and eventChannels eq 'Admin, Operation'";
-            // smaller time interval ~500 records below
-            //var geturi = $"https://management.azure.com/subscriptions/{subscription}/providers/microsoft.insights/eventtypes/management/values?api-version=2015-04-01&$filter=eventTimestamp ge '2017-06-28T17:56:33.880Z' and eventTimestamp le '2017-06-29T17:56:33.880Z' and eventChannels eq 'Admin, Operation'";
             var sqlConn = request.DataStore.GetValue("SqlConnectionString");
             var historicalTable = createHistoricalDataTable();
             AzureHttpClient ahc = new AzureHttpClient(token, subscription);
             while (true)
             {
-                ActivityLogResponse response = JsonUtility.Deserialize<ActivityLogResponse>(await ahc.Request(HttpMethod.Get, geturi));
+                string raw = await ahc.Request(HttpMethod.Get, geturi);
+                ActivityLogResponse response = JsonUtility.Deserialize<ActivityLogResponse>(raw);
                 foreach (ActivityLogEntry activity in response.Value)
                 {
                     DataRow historicalRow = historicalTable.NewRow();
@@ -92,6 +92,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
                     {
                         historicalRow["impact"] = activity.Properties.Impact;
                         historicalRow["impactedRegions"] = activity.Properties.ImpactedRegions;
+                        historicalRow["impactedServices"] = activity.Properties.ImpactedServices;
                     }
                     historicalRow["level"] = activity.Level;
                     if (activity.OperationName != null)

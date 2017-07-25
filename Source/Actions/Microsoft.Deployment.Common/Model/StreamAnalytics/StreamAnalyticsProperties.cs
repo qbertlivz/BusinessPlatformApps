@@ -13,7 +13,13 @@ namespace Microsoft.Deployment.Common.Model.StreamAnalytics
         [JsonProperty("Region")]
         public string ImpactedRegions;
 
+        [JsonProperty("Service")]
+        public string ImpactedServices;
+
         [JsonProperty("Transcript of Communication")]
         public string Impact;
+
+        [JsonProperty("IncidentType")]
+        public string IncidentType;
     }
 }

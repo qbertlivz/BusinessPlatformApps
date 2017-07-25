@@ -8,11 +8,12 @@ SET QUOTED_IDENTIFIER       ON;
 CREATE TABLE bpst_aal.ActivityLogData (
 	eventId INT IDENTITY(1, 1) PRIMARY KEY,
 	[caller] VARCHAR(MAX),
-	correlationId VARCHAR(MAX),
+	correlationId VARCHAR(250),
 	[description] VARCHAR(MAX),
 	eventCategory VARCHAR(MAX), 
 	impact VARCHAR(MAX),
 	impactedRegions VARCHAR(MAX),
+	impactedServices VARCHAR(MAX),
 	jobFailedMessage VARCHAR(MAX),
 	[level] VARCHAR(MAX),
 	operationCategory VARCHAR(MAX),

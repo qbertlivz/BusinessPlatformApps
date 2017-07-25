@@ -16,6 +16,7 @@ AS
 		eventCategory		AS [Event Category], 
 		impact				AS [Impact],
 		impactedRegions		AS [Impacted Regions],
+		impactedServices	AS [Impacted Services],
 		jobFailedMessage	AS [Job Failed Message],
 		[level]				AS [Level],
 		operationCategory	AS [Operation Category],

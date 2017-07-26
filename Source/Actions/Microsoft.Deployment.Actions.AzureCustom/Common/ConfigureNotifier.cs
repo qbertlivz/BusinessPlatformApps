@@ -116,17 +116,22 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
 
         private bool PostDeploymentId(string deploymentId, string accessToken, string refreshToken)
         {
-            HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri(Constants.ServiceUrl);
+            HttpResponseMessage response;
 
-            dynamic payload = new ExpandoObject();
-            payload.tokens = new ExpandoObject();
-            payload.tokens.access = accessToken;
-            payload.tokens.refresh = refreshToken;
-            payload.deploymentId = deploymentId;
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Constants.ServiceUrl);
 
-            var resp = client.PostAsync("/api/notifier", new StringContent(JsonUtility.GetJObjectFromObject(payload).ToString(), Encoding.UTF8, "application/json")).Result;
-            return resp.IsSuccessStatusCode;
+                dynamic payload = new ExpandoObject();
+                payload.tokens = new ExpandoObject();
+                payload.tokens.access = accessToken;
+                payload.tokens.refresh = refreshToken;
+                payload.deploymentId = deploymentId;
+
+                response = client.PostAsync("/api/notifier", new StringContent(JsonUtility.GetJObjectFromObject(payload).ToString(), Encoding.UTF8, "application/json")).Result;
+            }
+
+            return response.IsSuccessStatusCode;
         }
     }
 }

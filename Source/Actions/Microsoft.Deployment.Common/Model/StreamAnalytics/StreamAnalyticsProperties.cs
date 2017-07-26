@@ -21,5 +21,8 @@ namespace Microsoft.Deployment.Common.Model.StreamAnalytics
 
         [JsonProperty("IncidentType")]
         public string IncidentType;
+
+        [JsonProperty("Title")]
+        public string Title;
     }
 }

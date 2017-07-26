@@ -5,16 +5,12 @@ SET ANSI_NULL_DFLT_ON       ON;
 SET CONCAT_NULL_YIELDS_NULL ON;
 SET QUOTED_IDENTIFIER       ON;
 
-CREATE TABLE bpst_aal.ActivityLogData (
-	eventId INT IDENTITY(1, 1) PRIMARY KEY,
+CREATE TABLE bpst_aal.NonServiceHealthData (
+    eventId INT IDENTITY(1,1) PRIMARY KEY,
 	[caller] VARCHAR(MAX),
 	correlationId VARCHAR(250),
 	[description] VARCHAR(MAX),
 	eventCategory VARCHAR(MAX), 
-	impact VARCHAR(MAX),
-	impactedRegions VARCHAR(MAX),
-	impactedServices VARCHAR(MAX),
-	jobFailedMessage VARCHAR(MAX),
 	[level] VARCHAR(MAX),
 	operationCategory VARCHAR(MAX),
 	operationId VARCHAR(MAX),
@@ -23,8 +19,22 @@ CREATE TABLE bpst_aal.ActivityLogData (
 	resourceId VARCHAR(MAX),
 	[status] VARCHAR(MAX),
 	statusCode VARCHAR(MAX),
-	subscriptionId VARCHAR(MAX),
 	[timestamp] VARCHAR(MAX)
+);
+
+CREATE TABLE bpst_aal.ServiceHealthData (
+    serviceHealthId VARCHAR(MAX),
+    correlationId VARCHAR(MAX),
+    [description] VARCHAR(MAX),
+    impact VARCHAR(MAX),
+    impactedRegions VARCHAR(MAX),
+    impactedServices VARCHAR(MAX),
+    incidentType VARCHAR(MAX),
+    [level] VARCHAR(MAX),
+    operationId VARCHAR(MAX),
+    [status] VARCHAR(MAX),
+    [timestamp] VARCHAR(MAX),
+    title VARCHAR(MAX)
 );
 
 CREATE TABLE bpst_aal.[Configuration](

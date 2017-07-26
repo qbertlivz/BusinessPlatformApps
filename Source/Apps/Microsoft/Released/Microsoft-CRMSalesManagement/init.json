@@ -58,17 +58,6 @@
                 "azureProviders": [
                     "Microsoft.AnalysisServices"
                 ],
-                "displayname": "Azure",
-                "name": "$SiteCommon$/pages-gallery/azure-login.html",
-                "pricingCalculatorUrl": "$translate(INIT_D365_CALCULATOR)",
-                "pricingCost": "$translate(INIT_D365_PRICING_COST)",
-                "pricingUrl": "$translate(INIT_D365_PRICING_URL)",
-                "skip": "$(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
-            },
-            {
-                "azureProviders": [
-                    "Microsoft.AnalysisServices"
-                ],
                 "displayname": "Dynamics 365 Login",
                 // Dictionary of entities and their ID columns
                 // This is used to get the counts via a FetcXML command
@@ -104,9 +93,9 @@
                 "newSqlDatabase": "$(this.MS.UtilityService.getUniqueId(10))",
                 "showAzureSql": false,
                 "showCredsWhenWindowsAuth": "$run(this.MS.DataStore.getValue('DataMovement') === 'Scribe')",
-                "showNewSqlOption": true,
+                "showNewSqlOption": "$run(this.MS.DataStore.getValue('DataMovement') === 'D365')",
                 "showSkuS1": false,
-                "sqlInstance": "NewSql",
+                "sqlInstance": "$run(this.MS.DataStore.getValue('DataMovement') === 'D365' ? 'NewSql' : 'ExistingSql')",
                 "sqlSku": "S2",
                 "subtitle": "$translate(INIT_SQL_SUBTITLE_D365)",
                 "title": "$translate(INIT_SQL_TITLE)"
@@ -117,6 +106,17 @@
                 "showDescription": true,
                 "skip": "$dsall(azureSqlDisabled)[0]",
                 "ssasEnabled": "true"
+            },
+            {
+                "azureProviders": [
+                    "Microsoft.AnalysisServices"
+                ],
+                "displayname": "Azure",
+                "name": "$SiteCommon$/pages-gallery/azure-login.html",
+                "pricingCalculatorUrl": "$translate(INIT_D365_CALCULATOR)",
+                "pricingCost": "$translate(INIT_D365_PRICING_COST)",
+                "pricingUrl": "$translate(INIT_D365_PRICING_URL)",
+                "skip": "$(this.MS.DataStore.getValue('DataMovement') !== 'Scribe' || this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true' : 'false')"
             },
             {
                 "displayname": "Login to Analysis Services",

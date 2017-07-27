@@ -188,5 +188,4 @@ export class Customize extends ViewModelBase {
         this.additionalEntities.sort((a, b) => { if (a > b) return 1; if (a < b) return -1; return 0; });
         this.entitiesToReplicate.sort((a, b) => { if (a > b) return 1; if (a < b) return -1; return 0; });
     }
-
 }

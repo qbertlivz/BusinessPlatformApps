@@ -88,7 +88,9 @@
                 "filenameSSAS": "$save('CreditAndCollectionsAs.pbix')",
                 "name": "$SiteCommon$/pages-gallery/progress.html",
                 "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))",
-                "asDatabase": "CreditCollections"
+                "asDatabase": "CreditCollections",
+                "showCounts": true,
+                "targetSchema": "cc"
             }
         ],
 
@@ -219,6 +221,12 @@
                 "displayname": "$translate(INIT_ACTION_SETTING_UP_AS_SCHEDULER)",
                 "name": "Microsoft-DeployAzureFunctionConnectionStrings",
                 "skip": "$run(this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_WAITING_DATA)",
+                "name": "Microsoft-GetDataPullStatus",
+                "SqlServerIndex": 0,
+                "TargetSchema": "cc"
             }
         ]
     }

@@ -43,6 +43,8 @@ export class WindowsAuth extends ViewModelBase {
             this.showValidation = this.isValidated;
         }
 
+        super.onValidate();
+
         return this.isValidated;
     }
 

@@ -18,6 +18,8 @@ BEGIN
 SET @cr = CURSOR FAST_FORWARD FOR
               SELECT [value] FROM STRING_SPLIT(@additionalTables,',')
 
+IF(@additionalTables <> '')
+BEGIN
 OPEN @cr;
 FETCH NEXT FROM @cr INTO @p1;
 WHILE @@FETCH_STATUS = 0  
@@ -34,6 +36,7 @@ BEGIN
 END;
 CLOSE @cr;
 DEALLOCATE @cr;
+END;
 END;
 
 -- Regular views

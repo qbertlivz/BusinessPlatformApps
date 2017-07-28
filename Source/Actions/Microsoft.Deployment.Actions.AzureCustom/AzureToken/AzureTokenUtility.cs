@@ -51,7 +51,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             JObject tokenObj;
             using (HttpClient httpClient = new HttpClient())
             {
-
                 string tokenUrl = string.Format(Constants.AzureTokenUri, tenantId);
                 string token = AzureTokenUtility.GetTokenBodyFromCode(code, meta.Resource, redirect, meta.ClientId);
                 StringContent content = new StringContent(token);

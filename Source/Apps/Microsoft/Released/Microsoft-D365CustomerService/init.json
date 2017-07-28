@@ -24,33 +24,34 @@
                 "name": "$SiteCommon$/pages-gallery/getting-started.html",
                 "templateName": "$translate(INIT_D365_CS_TITLE)"
             },
-          {
-            "displayname": "Dynamics 365 Login",
-            "entities": {
-              "account": "accountid",
-              "appointment": "activityid",
-              "contact": "contactid",
-              "email": "activityid",
-              "fax": "activityid",
-              "incident": "incidentid",
-              "letter": "activityid",
-              "msdyn_survey": "msdyn_surveyid",
-              "msdyn_surveyresponse": "msdyn_surveyresponseid",
-              "phonecall": "activityid",
-              "slakpiinstance": "slakpiinstanceid",
-              "systemuser": "systemuserid",
-              "task": "activityid",
-              "team": "teamid"
+            {
+                "displayname": "Dynamics 365 Login",
+                "entities": {
+                    "account": "accountid",
+                    "appointment": "activityid",
+                    "contact": "contactid",
+                    "email": "activityid",
+                    "fax": "activityid",
+                    "incident": "incidentid",
+                    "letter": "activityid",
+                    "msdyn_survey": "msdyn_surveyid",
+                    "msdyn_surveyresponse": "msdyn_surveyresponseid",
+                    "phonecall": "activityid",
+                    "slakpiinstance": "slakpiinstanceid",
+                    "systemuser": "systemuserid",
+                    "task": "activityid",
+                    "team": "teamid"
+                },
+                "name": "$SiteCommon$/pages-gallery/mscrm-login.html",
+                "oauthType": "mscrm",
+                "pricingCalculatorUrl": "$translate(INIT_D365_CALCULATOR)",
+                "pricingCost": "$translate(INIT_D365_PRICING_COST)",
+                "pricingUrl": "$translate(INIT_D365_PRICING_URL)",
+                "ProfileName": "$save('bpst-custservice-profile')",
+                "azureProviders": [
+                    "Microsoft.AnalysisServices"
+                ]
             },
-            "name": "$SiteCommon$/pages-gallery/mscrm-login.html",
-            "oauthType": "mscrm",
-            "pricingCalculatorUrl": "$translate(INIT_D365_CALCULATOR)",
-            "pricingCost": "$translate(INIT_D365_PRICING_COST)",
-            "pricingUrl": "$translate(INIT_D365_PRICING_URL)",
-            "azureProviders": [
-              "Microsoft.AnalysisServices"
-            ]
-          },
             {
                 "displayname": "Login to the Key Vault",
                 "name": "$SiteCommon$/pages-gallery/keyvault-login.html",

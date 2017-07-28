@@ -38,7 +38,8 @@
           "sqlInstance": "NewSql",
           "subtitle": "$translate(INIT_SQL_SUBTITLE_AAL)",
           "title": "$translate(INIT_SQL_TITLE)",
-          "Table": "$save('aal.ActivityLogData')"
+          "ServiceHealthTable": "$save('bpst_aal.ServiceHealthData')",
+          "NonServiceHealthTable": "$save('bpst_aal.NonServiceHealthData')"
         },
         {
                 "displayname": "Summary",
@@ -46,8 +47,7 @@
                 "values": {
                     "Target Server": "$(this.MS.DataStore.getValue('Server'))",
                     "Target Database": "$(this.MS.DataStore.getValue('Database'))",
-                    "Target Username": "$(this.MS.DataStore.getValue('Username'))",
-                    "Target Table": "$(this.MS.DataStore.getValue('Table'))"
+                    "Target Username": "$(this.MS.DataStore.getValue('Username'))"
                 }
             },
             {
@@ -64,46 +64,50 @@
             }
       ],
 
-      "Actions": [
-        {
-          "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
-          "name": "Microsoft-DeploySQLScripts",
-          "SqlServerIndex": "0",
-          "SqlScriptsFolder": "Database"
-        },
-        {
-          "displayname": "$translate(INIT_ACTION_CREATING_EVENT_HUB)",
-          "name": "Microsoft-CreateEventHubNameSpace"
-        },
-        {
-          "displayname": "$translate(INIT_ACTION_EXPORT_ACTIVITY_LOG)",
-          "name": "Microsoft-ExportActivityLogToEventHub"
-        },
-        {
-          "displayname": "$translate(INIT_ACTION_CREATING_STREAM_ANALYTICS_JOB)",
-          "name": "Microsoft-CreateStreamAnalyticsJob"
-        },
-        {
-          "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_INPUT)",
-          "name": "Microsoft-SetStreamAnalyticsInputAsEventHub"
-        },
-        {
-          "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_OUTPUT)",
-          "name": "Microsoft-SetOutputAsSQL"
-        },
-        {
-          "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_QUERY)",
-          "name": "Microsoft-SetStreamAnalyticsQuery"
-        },
-        {
-          "displayname": "$translate(INIT_ACTION_GET_HISTORICAL_ACTIVITY_LOG_DATA)",
-          "name": "Microsoft-GetHistoricalData"
-        },
-        {
-          "displayname": "$translate(INIT_ACTION_DEPLOYING_STREAM_ANALYTICS)",
-          "name": "Microsoft-StartStreamAnalyticsJob"
-        }
-      ]
+        "Actions": [
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
+                "name": "Microsoft-DeploySQLScripts",
+                "SqlServerIndex": "0",
+                "SqlScriptsFolder": "Database"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_CREATING_EVENT_HUB)",
+                "name": "Microsoft-CreateEventHubNameSpace"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_EXPORT_ACTIVITY_LOG)",
+                "name": "Microsoft-ExportActivityLogToEventHub"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_CREATING_STREAM_ANALYTICS_JOB)",
+                "name": "Microsoft-CreateStreamAnalyticsJob"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_INPUT)",
+                "name": "Microsoft-SetStreamAnalyticsInputAsEventHub"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_OUTPUT)",
+                "name": "Microsoft-SetServiceHealthOutput"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_OUTPUT)",
+                "name": "Microsoft-SetNonServiceHealthOutput"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_QUERY)",
+                "name": "Microsoft-SetStreamAnalyticsQuery"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_GET_HISTORICAL_ACTIVITY_LOG_DATA)",
+                "name": "Microsoft-GetHistoricalData"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_STREAM_ANALYTICS)",
+                "name": "Microsoft-StartStreamAnalyticsJob"
+            }
+        ]
     },
 
     "Uninstall": {

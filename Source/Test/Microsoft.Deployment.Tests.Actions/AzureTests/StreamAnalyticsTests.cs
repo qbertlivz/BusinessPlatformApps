@@ -40,7 +40,7 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
             dataStore.AddToDataStore("namespace", "POC-Namespace3");
             dataStore.AddToDataStore("inputAlias", "POC-input2");
             //dataStore.AddToDataStore("jobName", "LancesStreamAnalyticsJob");
-            dataStore.AddToDataStore("jobName", "POC-StreamAnalyticsJob");
+            dataStore.AddToDataStore("SAjob", "POC-StreamAnalyticsJob");
             SetupDataStoreWithEventHubKey(dataStore); // key "primaryKey" maps to corresponding event hub's primary policy key
             var response = await TestManager.ExecuteActionAsync("Microsoft-SetStreamAnalyticsInputAsEventHub", dataStore);
             Assert.IsTrue(response.IsSuccess);
@@ -53,9 +53,9 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
             var dataStore = await TestManager.GetDataStore(true);
             dataStore.AddToDataStore("inputAlias", "POC-input");
             dataStore.AddToDataStore("outputAlias", "POC-output");
-            // Since we technically update the default query instead of creaitng one, use the deafult 
+            // Since we technically update the default query instead of creating one, use the default 
             // transformation name which is "Transformation"
-            dataStore.AddToDataStore("jobName", "POC-StreamAnalyticsJob");
+            dataStore.AddToDataStore("SAjob", "POC-StreamAnalyticsJob");
             var response = await TestManager.ExecuteActionAsync("Microsoft-SetStreamAnalyticsQuery", dataStore);
             Assert.IsTrue(response.IsSuccess);
         }
@@ -65,7 +65,7 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
         {
             // Tests the Action to start a Stream Analytics job
             var dataStore = await TestManager.GetDataStore(true);
-            dataStore.AddToDataStore("jobName", "POC-StreamAnalyticsJob");
+            dataStore.AddToDataStore("SAjob", "POC-StreamAnalyticsJob");
             var response = await TestManager.ExecuteActionAsync("Microsoft-StartStreamAnalyticsJob", dataStore);
             Assert.IsTrue(response.IsSuccess);
 
@@ -78,7 +78,7 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
             Dictionary<string, string> extraTokens = new Dictionary<string, string>();
             extraTokens.Add("powerbi", "PBIToken"); // request PBI token 
             var dataStore = await TestManager.GetDataStore(true, extraTokens);
-            dataStore.AddToDataStore("jobName", "LancesStreamAnalyticsJob");
+            dataStore.AddToDataStore("SAjob", "LancesStreamAnalyticsJob");
             var response = await TestManager.ExecuteActionAsync("Microsoft-SetOutputAsPBI", dataStore);
             Assert.IsTrue(response.IsSuccess);
         }
@@ -88,7 +88,7 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
         {
             // Tests the Action to output from Stream Analytics to SQL
             var dataStore = await TestManager.GetDataStore(true);
-            dataStore.AddToDataStore("jobName", "POC-StreamAnalyticsJob");
+            dataStore.AddToDataStore("SAjob", "POC-StreamAnalyticsJob");
             dataStore.AddToDataStore("Server", "pbisttest.database.windows.net");
             dataStore.AddToDataStore("Database", "LancesSQLDB");
             dataStore.AddToDataStore("Username", "pbiadmin@pbisttest");
@@ -96,6 +96,38 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
             dataStore.AddToDataStore("Table", "eventHubSQL");
             dataStore.AddToDataStore("outputAlias", "POC-sqloutput");
             var response = await TestManager.ExecuteActionAsync("Microsoft-SetOutputAsSQL", dataStore);
+            Assert.IsTrue(response.IsSuccess);
+        }
+
+        [TestMethod]
+        public async Task SetServiceHealthOutputTest()
+        {
+            // Tests the Action to output from Stream Analytics to SQL
+            var dataStore = await TestManager.GetDataStore(true);
+            dataStore.AddToDataStore("SAjob", "POC-StreamAnalyticsJob");
+            dataStore.AddToDataStore("Server", TestHelpers.Credential.Instance.Sql.Server);
+            dataStore.AddToDataStore("Database", "LancesSQLDB");
+            dataStore.AddToDataStore("Username", TestHelpers.Credential.Instance.Sql.Username + "@pbisttest");
+            dataStore.AddToDataStore("Password", TestHelpers.Credential.Instance.Sql.Password);
+            dataStore.AddToDataStore("ServiceHealthTable", "eventHubSQL");
+            dataStore.AddToDataStore("outputAlias", "ServiceHealth");
+            var response = await TestManager.ExecuteActionAsync("Microsoft-SetServiceHealthOutput", dataStore);
+            Assert.IsTrue(response.IsSuccess);
+        }
+
+        [TestMethod]
+        public async Task SetNonServiceHealthOutputTest()
+        {
+            // Tests the Action to output from Stream Analytics to SQL
+            var dataStore = await TestManager.GetDataStore(true);
+            dataStore.AddToDataStore("SAjob", "POC-StreamAnalyticsJob");
+            dataStore.AddToDataStore("Server", TestHelpers.Credential.Instance.Sql.Server);
+            dataStore.AddToDataStore("Database", "LancesSQLDB");
+            dataStore.AddToDataStore("Username", TestHelpers.Credential.Instance.Sql.Username + "@pbisttest");
+            dataStore.AddToDataStore("Password", TestHelpers.Credential.Instance.Sql.Password);
+            dataStore.AddToDataStore("NonServiceHealthTable", "eventHubSQL");
+            dataStore.AddToDataStore("outputAlias", "NonServiceHealth");
+            var response = await TestManager.ExecuteActionAsync("Microsoft-SetNonServiceHealthOutput", dataStore);
             Assert.IsTrue(response.IsSuccess);
         }
     }

@@ -47,9 +47,6 @@
                 "templateName": "$translate(INIT_SALESFORCE_TITLE)"
             },
             {
-                "azureProviders": [
-                    "Microsoft.AnalysisServices"
-                ],
                 "displayname": "Azure",
                 "name": "$SiteCommon$/pages-gallery/azure-login.html",
                 "pricingCalculatorUrl": "$translate(INIT_SALESFORCE_PRICING_CALCULATOR_URL)",

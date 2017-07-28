@@ -45,11 +45,12 @@
                     "bookableresourcebooking": "bookableresourcebookingid",
                     "bookableresource": "bookableresourceid",
                     "account": "accountid"
-                },                
+                },
                 "name": "$SiteCommon$/pages-gallery/mscrm-login.html",
                 "oauthType": "mscrm",
                 "pricingCost": "$translate(INIT_D365_PRICING_COST)",
-                "pricingUrl": "$translate(INIT_D365_PRICING_URL)"
+                "pricingUrl": "$translate(INIT_D365_PRICING_URL)",
+                "ProfileName": "$save('bpst-psa-profile')"
             },
             {
                 "displayname": "Login to the Key Vault",

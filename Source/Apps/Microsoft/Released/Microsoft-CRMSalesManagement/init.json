@@ -71,7 +71,7 @@
                 ],
                 "displayname": "Dynamics 365 Login",
                 // Dictionary of entities and their ID columns
-                // This is used to get the counts via a FetcXML command
+                // This is used to get the counts via a FetchXML command
                 "entities": {
                     "account": "accountid",
                     "lead": "leadid",
@@ -88,7 +88,8 @@
                 "oauthType": "mscrm",
                 "pricingCalculatorUrl": "$translate(INIT_D365_CALCULATOR)",
                 "pricingCost": "$translate(INIT_D365_PRICING_COST)",
-                "pricingUrl": "$translate(INIT_D365_PRICING_URL)"
+                "pricingUrl": "$translate(INIT_D365_PRICING_URL)",
+                "ProfileName": "$save('bpst-mscrm-profile')"
             },
             {
                 "displayname": "Login to the Key Vault",

@@ -3,10 +3,13 @@
     SELECT 
         arrayElement.ArrayValue.correlationId AS corrid, 
         arrayElement.ArrayValue.resultDescription AS description,
-        arrayElement.ArrayValue.level AS level,
+        CASE WHEN arrayElement.ArrayValue.level = 'Information'
+        THEN 'Informational'
+        ELSE arrayElement.ArrayValue.level
+        END as level,
         arrayElement.ArrayValue.resultType AS status,
         arrayElement.ArrayValue.time AS ts, 
-        udf.ConvertToJSONString(arrayElement.ArrayValue.Properties.eventProperties) AS payload
+        udf.ConvertBlobToJSON(arrayElement.ArrayValue.Properties.eventProperties) AS payload
     FROM [POC-input] AS event CROSS APPLY GetArrayElements(event.records) AS arrayElement 
     WHERE arrayElement.ArrayValue.Properties.eventCategory = 'ServiceHealth'
 ),
@@ -32,7 +35,7 @@ impactedServices AS
         obj.description,
         obj.level,
         obj.status,
-        udf.ConvertToJSONString(E.PropertyValue.impactedServices) AS iss
+        udf.ConvertBlobToJSON(E.PropertyValue.impactedServices) AS iss
     FROM convertToObj AS obj
     CROSS APPLY GetRecordProperties(obj.casted) AS E
     where E.PropertyName = 'properties'

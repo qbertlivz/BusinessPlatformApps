@@ -47,6 +47,16 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
         }
 
         [TestMethod]
+        public async Task SetStreamAnalyticsFunctionTest()
+        {
+            // Tests the Action to set Event Hub as the input for a Stream Analyitcs job
+            var dataStore = await TestManager.GetDataStore(true);
+            dataStore.AddToDataStore("SAjob", "POC-StreamAnalyticsJob");
+            var response = await TestManager.ExecuteActionAsync("Microsoft-SetStreamAnalyticsJSONFunction", dataStore);
+            Assert.IsTrue(response.IsSuccess);
+        }
+
+        [TestMethod]
         public async Task SetStreamAnalyticsQueryTest()
         {
             // Tests the Action to define the query of a Stream Analytics job
@@ -116,7 +126,7 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
         }
 
         [TestMethod]
-        public async Task SetNonServiceHealthOutputTest()
+        public async Task SetAdministrativeOutputTest()
         {
             // Tests the Action to output from Stream Analytics to SQL
             var dataStore = await TestManager.GetDataStore(true);
@@ -125,9 +135,9 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
             dataStore.AddToDataStore("Database", "LancesSQLDB");
             dataStore.AddToDataStore("Username", TestHelpers.Credential.Instance.Sql.Username + "@pbisttest");
             dataStore.AddToDataStore("Password", TestHelpers.Credential.Instance.Sql.Password);
-            dataStore.AddToDataStore("NonServiceHealthTable", "eventHubSQL");
-            dataStore.AddToDataStore("outputAlias", "NonServiceHealth");
-            var response = await TestManager.ExecuteActionAsync("Microsoft-SetNonServiceHealthOutput", dataStore);
+            dataStore.AddToDataStore("AdministrativeTable", "adminTable");
+            dataStore.AddToDataStore("outputAlias", "AdministrativeOutput");
+            var response = await TestManager.ExecuteActionAsync("Microsoft-SetAdministrativeOutput", dataStore);
             Assert.IsTrue(response.IsSuccess);
         }
     }

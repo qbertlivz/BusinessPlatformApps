@@ -6,16 +6,18 @@
     "Install": {
       "Pages": [
         {
-          "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-CRMSalesManagement/Web/Images/crm-sales-management.png",
+          "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-ActivityLogTemplate/Web/Images/azure-activity-log.png",
           "displayname": "Getting Started",
           "list1": [
             "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",
             "$translate(INIT_GETTING_STARTED_PBI_DESKTOP)",
             "$translate(INIT_GETTING_STARTED_PBI_PRO)"
           ],
-          "list2": [
-            "$translate(INIT_GETTING_STARTED_CONNECT_AS_PBI)"
-          ],
+            "list2": [
+                "$translate(INIT_GETTING_STARTED_EXPORT_ACTIVITY_LOG)",
+                "$translate(INIT_GETTING_STARTED_STREAM_ANALYTICS_EVENT_HUB)",
+                "$translate(INIT_GETTING_STARTED_CONNECT_AS_PBI)"
+            ],
           "name": "$SiteCommon$/pages-gallery/getting-started.html",
           "subtitle": "$translate(INIT_AAL_SUBTITLE)",
           "templateName": "$translate(INIT_AAL_TITLE)"
@@ -39,7 +41,7 @@
           "subtitle": "$translate(INIT_SQL_SUBTITLE_AAL)",
           "title": "$translate(INIT_SQL_TITLE)",
           "ServiceHealthTable": "$save('bpst_aal.ServiceHealthData')",
-          "NonServiceHealthTable": "$save('bpst_aal.NonServiceHealthData')"
+          "AdministrativeTable": "$save('bpst_aal.AdministrativeData')"
         },
         {
                 "displayname": "Summary",
@@ -88,12 +90,16 @@
                 "name": "Microsoft-SetStreamAnalyticsInputAsEventHub"
             },
             {
-                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_OUTPUT)",
+                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_SH_OUTPUT)",
                 "name": "Microsoft-SetServiceHealthOutput"
             },
             {
-                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_OUTPUT)",
-                "name": "Microsoft-SetNonServiceHealthOutput"
+                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_ADMIN_OUTPUT)",
+                "name": "Microsoft-SetAdministrativeOutput"
+            },
+            {
+                "displayName": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_JSON_HELPER)",
+                "name":  "Microsoft-SetStreamAnalyticsJSONFunction"
             },
             {
                 "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_QUERY)",

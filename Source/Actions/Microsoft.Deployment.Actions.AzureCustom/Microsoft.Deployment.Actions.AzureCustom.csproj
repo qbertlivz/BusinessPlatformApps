@@ -178,11 +178,12 @@
       <Link>Properties\SharedVersion.cs</Link>
     </Compile>
     <Compile Include="ActivityLogs\CreateStreamAnalyticsJob.cs" />
+    <Compile Include="ActivityLogs\SetStreamAnalyticsJSONFunction.cs" />
     <Compile Include="ActivityLogs\ExportActivityLogToEventHub.cs" />
     <Compile Include="ActivityLogs\GetAppWorkspaces.cs" />
     <Compile Include="ActivityLogs\GetEventHubPrimaryKey.cs" />
     <Compile Include="ActivityLogs\GetHistoricalData.cs" />
-    <Compile Include="ActivityLogs\SetNonServiceHealthOutput.cs" />
+    <Compile Include="ActivityLogs\SetAdministrativeOutput.cs" />
     <Compile Include="ActivityLogs\SetOutputAsPBI.cs" />
     <Compile Include="ActivityLogs\SetOutputAsSQL.cs" />
     <Compile Include="ActivityLogs\SetServiceHealthOutput.cs" />

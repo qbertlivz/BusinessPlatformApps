@@ -34,7 +34,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
             }
         }
 
-        public static DataTable createNonServiceHealthTable()
+        public static DataTable createAdministrativeTable()
         {
             DataTable table = new DataTable();
             table.Columns.Add("eventId");
@@ -83,7 +83,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
             var geturi = $"https://management.azure.com/subscriptions/{subscription}/providers/microsoft.insights/eventtypes/management/values?api-version=2015-04-01&$filter=eventTimestamp ge '{days90agoString}' and eventTimestamp le '{nowString}' and eventChannels eq 'Admin, Operation'";
             var sqlConn = request.DataStore.GetValue("SqlConnectionString");
             var shTable = createServiceHealthTable();
-            var nonShTable = createNonServiceHealthTable();
+            var adminTable = createAdministrativeTable();
             AzureHttpClient ahc = new AzureHttpClient(token, subscription);
             while (true)
             {
@@ -120,18 +120,18 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
                             shTable.Rows.Add(shRow);
                         }
                     }
-                    DataRow nonShRow = nonShTable.NewRow();
+                    DataRow adminRow = adminTable.NewRow();
                     if (activity.Claims != null)
                     {
-                        nonShRow["caller"] = activity.Claims.Upn;
+                        adminRow["caller"] = activity.Claims.Upn;
                     }
-                    nonShRow["correlationId"] = activity.CorrelationId;
-                    nonShRow["description"] = activity.Description;
+                    adminRow["correlationId"] = activity.CorrelationId;
+                    adminRow["description"] = activity.Description;
                     if (activity.Category != null)
                     {
-                        nonShRow["eventCategory"] = activity.Category.Value;
+                        adminRow["eventCategory"] = activity.Category.Value;
                     }
-                    nonShRow["level"] = activity.Level;
+                    adminRow["level"] = activity.Level;
                     if (activity.OperationName != null)
                     {
                         string opName = activity.OperationName.Value;
@@ -143,36 +143,36 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
                                 string opCategory = opName.Substring(startidx + 1).ToLower();
                                 if (opCategory == "write")
                                 {
-                                    nonShRow["operationCategory"] = "Write";
+                                    adminRow["operationCategory"] = "Write";
                                 }
                                 else if (opCategory == "delete")
                                 {
-                                    nonShRow["operationCategory"] = "Delete";
+                                    adminRow["operationCategory"] = "Delete";
                                 }
                                 else if (opCategory == "action")
                                 {
-                                    nonShRow["operationCategory"] = "Action";
+                                    adminRow["operationCategory"] = "Action";
                                 }
                             }
                         }
                     }
-                    nonShRow["operationId"] = activity.OperationId;
+                    adminRow["operationId"] = activity.OperationId;
                     if (activity.OperationName != null)
                     {
-                        nonShRow["operationName"] = activity.OperationName.LocalizedValue;
+                        adminRow["operationName"] = activity.OperationName.LocalizedValue;
                     }
-                    nonShRow["resourceGroup"] = activity.ResourceGroupName;
-                    nonShRow["resourceId"] = activity.Id;
+                    adminRow["resourceGroup"] = activity.ResourceGroupName;
+                    adminRow["resourceId"] = activity.Id;
                     if (activity.Status != null)
                     {
-                        nonShRow["status"] = activity.Status.LocalizedValue;
+                        adminRow["status"] = activity.Status.LocalizedValue;
                     }
                     if (activity.Properties != null)
                     {
-                        nonShRow["statusCode"] = activity.Properties.StatusCode;
+                        adminRow["statusCode"] = activity.Properties.StatusCode;
                     }
-                    nonShRow["timestamp"] = activity.EventTimestamp;
-                    nonShTable.Rows.Add(nonShRow);
+                    adminRow["timestamp"] = activity.EventTimestamp;
+                    adminTable.Rows.Add(adminRow);
                 }
                 if ((geturi = response.NextLink) == null)
                 {
@@ -180,7 +180,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
                 }
             }
             BulkInsert(sqlConn, shTable, "bpst_aal.ServiceHealthData");
-            BulkInsert(sqlConn, nonShTable, "bpst_aal.NonServiceHealthData");
+            BulkInsert(sqlConn, adminTable, "bpst_aal.AdministrativeData");
             return new ActionResponse(ActionStatus.Success);
         }
     }

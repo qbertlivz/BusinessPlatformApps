@@ -23,7 +23,7 @@ AS
         [status]			AS [Status],
         statusCode			AS [Status Code],
         [timestamp]			AS [Timestamp]
-    FROM bpst_aal.NonServiceHealthData;
+    FROM bpst_aal.AdministrativeData;
 GO
 
 CREATE VIEW bpst_aal.DateView

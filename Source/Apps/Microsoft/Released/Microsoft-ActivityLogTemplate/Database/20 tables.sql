@@ -5,7 +5,7 @@ SET ANSI_NULL_DFLT_ON       ON;
 SET CONCAT_NULL_YIELDS_NULL ON;
 SET QUOTED_IDENTIFIER       ON;
 
-CREATE TABLE bpst_aal.NonServiceHealthData (
+CREATE TABLE bpst_aal.AdministrativeData (
     eventId INT IDENTITY(1,1) PRIMARY KEY,
 	[caller] VARCHAR(MAX),
 	correlationId VARCHAR(250),

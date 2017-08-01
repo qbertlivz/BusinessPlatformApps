@@ -74,12 +74,16 @@ namespace Microsoft.Deployment.Site.Service.Controllers
 
         private static async Task<HttpResponseMessage> GetToken(string refreshToken, string tokenUrl, string clientId)
         {
-            HttpClient client = new HttpClient();
+            HttpResponseMessage response;
 
-            var builder = GetTokenUri(refreshToken, Constants.AzureManagementCoreApi, clientId);
-            var content = new StringContent(builder.ToString());
-            content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
-            var response = await client.PostAsync(new Uri(tokenUrl), content);
+            using (HttpClient client = new HttpClient())
+            {
+                var builder = GetTokenUri(refreshToken, Constants.AzureManagementCoreApi, clientId);
+                var content = new StringContent(builder.ToString());
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+                response = await client.PostAsync(new Uri(tokenUrl), content);
+            }
+
             return response;
         }
 

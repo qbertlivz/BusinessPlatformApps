@@ -131,7 +131,7 @@ export class Sql extends ViewModelBase {
                 this.showDatabases = this.setValidated();
             } else {
                 this.onInvalidate();
-                this.MS.ErrorService.set(databasesResponse.ExceptionDetail.FriendlyErrorMessage);
+                this.MS.ErrorService.set(databasesResponse.ExceptionDetail.FriendlyErrorMessage, databasesResponse.ExceptionDetail.AdditionalDetailsErrorMessage);
             }
         } else if (this.sqlInstance === 'NewSql') {
             let newSqlError: string = this.validateAzureSQLCreate(this.username, this.password, this.passwordConfirmation);

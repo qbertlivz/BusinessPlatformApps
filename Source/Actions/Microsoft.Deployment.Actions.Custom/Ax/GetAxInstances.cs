@@ -35,15 +35,20 @@ namespace Microsoft.Deployment.Actions.Custom.Ax
             var ctx = new AuthenticationContext(string.Format(Constants.AxLocatorLoginAuthority, tenantId));
             var token = await ctx.AcquireTokenAsync(Constants.AxErpResource, new ClientCredential(Constants.AxLocatorClientId, Constants.AxLocatorSecret));
 
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(Constants.AxLocatorBaseUrl);
+            HttpResponseMessage response;
 
-            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token.AccessToken);
-            client.DefaultRequestHeaders.Add("x-ms-discovery-client-principal-id", userObjectId);
-            client.DefaultRequestHeaders.Add("x-ms-discovery-client-tenant-id", tenantId);
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Constants.AxLocatorBaseUrl);
 
-            var res = client.GetAsync($"/tenantapi/BusinessAppDiscoveryResults(guid'{tenantId}')").Result;
-            var content = JsonUtility.GetJsonObjectFromJsonString(await res.Content.ReadAsStringAsync());
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token.AccessToken);
+                client.DefaultRequestHeaders.Add("x-ms-discovery-client-principal-id", userObjectId);
+                client.DefaultRequestHeaders.Add("x-ms-discovery-client-tenant-id", tenantId);
+
+                response = client.GetAsync($"/tenantapi/BusinessAppDiscoveryResults(guid'{tenantId}')").Result;
+            }
+
+            var content = JsonUtility.GetJsonObjectFromJsonString(await response.Content.ReadAsStringAsync());
             var apps = content["value"]?[0]?["Apps"];
 
             if (apps != null)

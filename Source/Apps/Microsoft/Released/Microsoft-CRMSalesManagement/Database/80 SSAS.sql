@@ -89,19 +89,19 @@ GO
 CREATE PROCEDURE smgt.sp_validate_schema AS
 BEGIN
     SET NOCOUNT ON;
-	DECLARE @ssasTables NVARCHAR(MAX);
-	SELECT @ssasTables = REPLACE([value],' ','')
+	DECLARE @tables NVARCHAR(MAX);
+	SELECT @tables = REPLACE([value],' ','')
 	FROM [smgt].[configuration]
 	WHERE configuration_group = 'SolutionTemplate'
-	AND	configuration_subgroup = 'SSAS' 
-	AND	name = 'SSASTables'
+	AND	configuration_subgroup = 'StandardConfiguration' 
+	AND	name = 'Tables'
 
 	DECLARE @returnValue INT;
 	SELECT @returnValue = Count(*)
 	FROM   information_schema.tables
 	WHERE  ( table_schema = 'dbo' AND
 				 table_name IN (
-				   SELECT [value] FROM STRING_SPLIT(@ssasTables,',')));
+				   SELECT [value] FROM STRING_SPLIT(@tables,',')));
     if(@returnValue = 14)
     BEGIN
     RETURN 1;
@@ -119,15 +119,15 @@ BEGIN
 	DECLARE @stmt AS NVARCHAR(500), @p1 AS VARCHAR(100)
 	DECLARE @cr CURSOR;
 
-	DECLARE @ssasTables NVARCHAR(MAX);
-	SELECT @ssasTables = REPLACE([value],' ','')
+	DECLARE @tables NVARCHAR(MAX);
+	SELECT @tables = REPLACE([value],' ','')
 	FROM [smgt].[configuration]
 	WHERE configuration_group = 'SolutionTemplate'
-	AND	configuration_subgroup = 'SSAS' 
-	AND	name = 'SSASTables'
+	AND	configuration_subgroup = 'StandardConfiguration' 
+	AND	name = 'Tables'
 
 	SET @cr = CURSOR FAST_FORWARD FOR
-              SELECT [value] FROM STRING_SPLIT(@ssasTables,',')
+              SELECT [value] FROM STRING_SPLIT(@tables,',')
 
 	OPEN @cr;
 	FETCH NEXT FROM @cr INTO @p1;

@@ -120,6 +120,9 @@
             },
             {
                 "asDatabase": "Sccm",
+                "datastoreEntriesToValidate": [
+                    "ImpersonationPassword"
+                ],
                 "displayname": "Progress",
                 "filename": "$save('SCCMSolutionTemplate.pbix')",
                 "filenameSSAS": "SCCMSolutionTemplateAS.pbix",

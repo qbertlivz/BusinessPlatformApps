@@ -202,7 +202,7 @@
                 "skip": "$run(this.MS.DataStore.getValue('DataMovement') === 'Scribe')",
                 "SqlConfigTable": "[smgt].[configuration]",
                 "SqlEntryName": "Tables",
-                "SqlEntryValue": "opportunityproduct,territory,lead,opportunity,account,systemusermanagermap,systemuser,product,team",
+                "SqlEntryValue": " optionsetmetadata,statusmetadata,statemetadata,globaloptionsetmetadata,account,businessunit,lead,opportunity,opportunityproduct,product,team,systemuser,systemusermanagermap,territory",
                 "SqlGroup": "SolutionTemplate",
                 "SqlServerIndex": "0",
                 "SqlSubGroup": "StandardConfiguration"

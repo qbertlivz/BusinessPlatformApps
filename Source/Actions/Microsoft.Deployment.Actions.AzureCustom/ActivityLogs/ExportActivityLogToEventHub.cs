@@ -23,17 +23,14 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
         // Exports an Activity Log for the given subscription to Event Hub
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var token = request.DataStore.GetJson("AzureToken", "access_token");
-            var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
-            var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
-            var ehnamespace = request.DataStore.GetValue("ActivityLogNamespace");
-            //var relativeUrl = "providers/microsoft.insights/logprofiles/default";
-            var apiVersion = "2016-03-01";
-            var uri = $"https://management.azure.com/subscriptions/{subscription}/providers/microsoft.insights/logprofiles/default?api-version={apiVersion}";
-            var body = $"{{\"id\":null,\"location\":null,\"name\":null,\"properties\":{{\"categories\":[\"Write\",\"Delete\",\"Action\"],\"storageAccountId\":null,\"locations\":[\"australiaeast\",\"australiasoutheast\",\"brazilsouth\",\"canadacentral\",\"canadaeast\",\"centralindia\",\"centralus\",\"eastasia\",\"eastus\",\"eastus2\",\"japaneast\",\"japanwest\",\"koreacentral\",\"koreasouth\",\"northcentralus\",\"northeurope\",\"southcentralus\",\"southindia\",\"southeastasia\",\"uksouth\",\"ukwest\",\"westcentralus\",\"westeurope\",\"westindia\",\"westus\",\"westus2\",\"global\"],\"retentionPolicy\":{{\"enabled\":false,\"days\":0}},\"serviceBusRuleId\":\"/subscriptions/{subscription}/resourceGroups/{resourceGroup}/providers/Microsoft.EventHub/namespaces/{ehnamespace}/authorizationrules/RootManageSharedAccessKey\"}},\"tags\":null}}";
-
+            string token = request.DataStore.GetJson("AzureToken", "access_token");
+            string subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
+            string resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
+            string ehnamespace = request.DataStore.GetValue("ActivityLogNamespace");
+            string apiVersion = "2016-03-01";
+            string uri = $"https://management.azure.com/subscriptions/{subscription}/providers/microsoft.insights/logprofiles/default?api-version={apiVersion}";
+            string body = $"{{\"id\":null,\"location\":null,\"name\":null,\"properties\":{{\"categories\":[\"Write\",\"Delete\",\"Action\"],\"storageAccountId\":null,\"locations\":[\"australiaeast\",\"australiasoutheast\",\"brazilsouth\",\"canadacentral\",\"canadaeast\",\"centralindia\",\"centralus\",\"eastasia\",\"eastus\",\"eastus2\",\"japaneast\",\"japanwest\",\"koreacentral\",\"koreasouth\",\"northcentralus\",\"northeurope\",\"southcentralus\",\"southindia\",\"southeastasia\",\"uksouth\",\"ukwest\",\"westcentralus\",\"westeurope\",\"westindia\",\"westus\",\"westus2\",\"global\"],\"retentionPolicy\":{{\"enabled\":false,\"days\":0}},\"serviceBusRuleId\":\"/subscriptions/{subscription}/resourceGroups/{resourceGroup}/providers/Microsoft.EventHub/namespaces/{ehnamespace}/authorizationrules/RootManageSharedAccessKey\"}},\"tags\":null}}";
             AzureHttpClient ahc = new AzureHttpClient(token, subscription);
-            //HttpResponseMessage response = await ahc.ExecuteWithSubscriptionAsync(HttpMethod.Put, relativeUrl, apiVersion, body);
             HttpResponseMessage response = await ahc.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Put, uri, body);
             if (!response.IsSuccessStatusCode)
             {

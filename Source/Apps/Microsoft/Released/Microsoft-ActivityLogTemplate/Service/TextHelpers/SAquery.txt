@@ -10,7 +10,7 @@
         arrayElement.ArrayValue.resultType AS status,
         arrayElement.ArrayValue.time AS ts, 
         udf.ConvertBlobToJSON(arrayElement.ArrayValue.Properties.eventProperties) AS payload
-    FROM [POC-input] AS event CROSS APPLY GetArrayElements(event.records) AS arrayElement 
+    FROM [EventHubInput] AS event CROSS APPLY GetArrayElements(event.records) AS arrayElement 
     WHERE arrayElement.ArrayValue.Properties.eventCategory = 'ServiceHealth'
 ),
 convertToObj AS
@@ -75,7 +75,7 @@ serviceid AS
     FROM finalobj AS f
 )
 
-SELECT * INTO [Service-Output] FROM serviceid
+SELECT * INTO [ServiceHealthOutput] FROM serviceid
 
 SELECT
     arrayElement.ArrayValue.[identity].claims.[http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn] as caller,
@@ -102,5 +102,5 @@ SELECT
     END as status,
     arrayElement.ArrayValue.Properties.statusCode,
     arrayElement.ArrayValue.time as [timestamp]
-INTO [POC-output]
-FROM [POC-input] event CROSS APPLY GetArrayElements(event.records) AS arrayElement 
+INTO [AdministrativeOutput]
+FROM [EventHubInput] event CROSS APPLY GetArrayElements(event.records) AS arrayElement 

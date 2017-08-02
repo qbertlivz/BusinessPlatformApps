@@ -20,11 +20,11 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
         // Updates the default query provided by a Stream Analytics job
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var token = request.DataStore.GetJson("AzureToken", "access_token");
-            var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
-            var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
-            var jobName = request.DataStore.GetValue("SAJob");
-            var apiVersion = "2015-10-01";
+            string token = request.DataStore.GetJson("AzureToken", "access_token");
+            string subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
+            string resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
+            string jobName = request.DataStore.GetValue("SAJob");
+            string apiVersion = "2015-10-01";
             string funcName = "ConvertBlobToJSON";
             string uri = $"https://management.azure.com/subscriptions/{subscription}/resourceGroups/{resourceGroup}/providers/Microsoft.StreamAnalytics/streamingjobs/{jobName}/functions/{funcName}?api-version={apiVersion}";
             string script = "function main(InputJSON) {\n    return JSON.parse(InputJSON);\n}";

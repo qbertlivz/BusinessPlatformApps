@@ -6,7 +6,7 @@ SET CONCAT_NULL_YIELDS_NULL ON;
 SET QUOTED_IDENTIFIER       ON;
 go
 
-CREATE VIEW bpst_aal.NonServiceHealthView
+CREATE VIEW bpst_aal.AdministrativeView
 AS
     SELECT 
         eventId				AS [Event ID],

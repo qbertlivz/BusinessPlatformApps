@@ -18,22 +18,19 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var azure_access_token = request.DataStore.GetJson("AzureToken", "access_token");
-            var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
-            var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
-            var jobName = request.DataStore.GetValue("SAJob");
+            string azure_access_token = request.DataStore.GetJson("AzureToken", "access_token");
+            string subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
+            string resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
+            string jobName = request.DataStore.GetValue("SAJob");
             string apiVersion = "2015-10-01";
-            var uri = $"https://management.azure.com/subscriptions/{subscription}/resourceGroups/{resourceGroup}/providers/Microsoft.StreamAnalytics/streamingjobs/{jobName}/outputs/output?api-version={apiVersion}";
-            var uri2 = $"https://main.streamanalytics.ext.azure.com/api/Outputs/PutOutput?fullResourceId=%2Fsubscriptions%2F{subscription}%2FresourceGroups%2F{resourceGroup}%2Fproviders%2FMicrosoft.StreamAnalytics%2Fstreamingjobs%2F{jobName}&subscriptionId={subscription}&resourceGroupName={resourceGroup}&jobName={jobName}&componentType=&componentName=";
-            var server = request.DataStore.GetValue("Server");
-            var database = request.DataStore.GetValue("Database");
-            var user = request.DataStore.GetValue("Username");
-            var password = request.DataStore.GetValue("Password");
-            var table = request.DataStore.GetValue("AdministrativeTable");
-            var outputAlias = "AdministrativeOutput-" + RandomGenerator.GetRandomLowerCaseCharacters(5);
-            request.DataStore.AddToDataStore("outputAlias", outputAlias);
-            var body = $"{{\"properties\":{{\"datasource\":{{\"type\":\"Microsoft.Sql/Server/Database\",\"properties\":{{\"server\":\"{server}\",\"database\":\"{database}\",\"table\":\"{table}\",\"user\":\"{user}\",\"password\":\"{password}\"}}}}}}}}";
-            var body3 = $"{{\"properties\":{{\"dataSource\":{{\"outputDocumentDatabaseSource\":{{}},\"outputTopicSource\":{{}},\"outputQueueSource\":{{}},\"outputEventHubSource\":{{}},\"outputSqlDatabaseSource\":{{\"server\":{server},\"database\":{database},\"user\":{user},\"password\":{password},\"table\":{table}}},\"outputBlobStorageSource\":{{}},\"outputTableStorageSource\":{{}},\"outputPowerBISource\":{{}},\"outputDataLakeSource\":{{}},\"outputIotGatewaySource\":{{}},\"type\":\"Microsoft.Sql/Server/Database\"}},\"serialization\":{{}}}},\"createType\":\"None\",\"id\":null,\"location\":\"Australia East\",\"name\":{outputAlias},\"type\":\"Microsoft.Sql/Server/Database\"}}";
+            string outputAlias = "AdministrativeOutput";
+            string uri = $"https://management.azure.com/subscriptions/{subscription}/resourceGroups/{resourceGroup}/providers/Microsoft.StreamAnalytics/streamingjobs/{jobName}/outputs/{outputAlias}?api-version={apiVersion}";
+            string server = request.DataStore.GetValue("Server");
+            string database = request.DataStore.GetValue("Database");
+            string user = request.DataStore.GetValue("Username");
+            string password = request.DataStore.GetValue("Password");
+            string table = request.DataStore.GetValue("AdministrativeTable");
+            string body = $"{{\"properties\":{{\"datasource\":{{\"type\":\"Microsoft.Sql/Server/Database\",\"properties\":{{\"server\":\"{server}\",\"database\":\"{database}\",\"table\":\"{table}\",\"user\":\"{user}\",\"password\":\"{password}\"}}}}}}}}";
             AzureHttpClient ahc = new AzureHttpClient(azure_access_token, subscription);
             HttpResponseMessage response = await ahc.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Put, uri, body);
             if (!response.IsSuccessStatusCode)

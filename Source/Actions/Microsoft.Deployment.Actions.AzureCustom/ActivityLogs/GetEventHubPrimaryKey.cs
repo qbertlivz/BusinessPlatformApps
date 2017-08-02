@@ -19,13 +19,12 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
         // Note/Question: A namespace can have multiple event hubs - is this/does this need to be accounted for?
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var token = request.DataStore.GetJson("AzureToken", "access_token");
-            var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
-            var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
-            var ehnamespace = request.DataStore.GetValue("ActivityLogNamespace");
-            var apiVersion = "2014-09-01";
+            string token = request.DataStore.GetJson("AzureToken", "access_token");
+            string subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
+            string resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
+            string ehnamespace = request.DataStore.GetValue("ActivityLogNamespace");
+            string apiVersion = "2014-09-01";
             string uri = $"https://management.azure.com/subscriptions/{subscription}/resourceGroups/{resourceGroup}/providers/Microsoft.EventHub/namespaces/{ehnamespace}/AuthorizationRules/RootManageSharedAccessKey/listkeys?api-version={apiVersion}";
-
             AzureHttpClient ahc = new AzureHttpClient(token, subscription);
             HttpResponseMessage response = await ahc.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Post, uri, "{}");
             if (response.IsSuccessStatusCode)

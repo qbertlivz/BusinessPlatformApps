@@ -17,8 +17,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var token = request.DataStore.GetJson("AzureToken", "access_token");
-            var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
+            string token = request.DataStore.GetJson("AzureToken", "access_token");
+            string subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             string uri = "https://api.powerbi.com/v1.0/myorg/groups";
             AzureHttpClient ahc = new AzureHttpClient(token, subscription);
             HttpResponseMessage response = await ahc.ExecuteGenericRequestWithHeaderAsync(HttpMethod.Get, uri, "{}");

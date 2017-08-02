@@ -74,16 +74,16 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var token = request.DataStore.GetJson("AzureToken", "access_token");
-            var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
+            string token = request.DataStore.GetJson("AzureToken", "access_token");
+            string subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             System.DateTime now = System.DateTime.UtcNow;
             System.DateTime days90ago = now.Subtract(new System.TimeSpan(2160, 0, 0));
             string nowString = now.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
             string days90agoString = days90ago.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
-            var geturi = $"https://management.azure.com/subscriptions/{subscription}/providers/microsoft.insights/eventtypes/management/values?api-version=2015-04-01&$filter=eventTimestamp ge '{days90agoString}' and eventTimestamp le '{nowString}' and eventChannels eq 'Admin, Operation'";
-            var sqlConn = request.DataStore.GetValue("SqlConnectionString");
-            var shTable = createServiceHealthTable();
-            var adminTable = createAdministrativeTable();
+            string geturi = $"https://management.azure.com/subscriptions/{subscription}/providers/microsoft.insights/eventtypes/management/values?api-version=2015-04-01&$filter=eventTimestamp ge '{days90agoString}' and eventTimestamp le '{nowString}' and eventChannels eq 'Admin, Operation'";
+            string sqlConn = request.DataStore.GetValue("SqlConnectionString");
+            DataTable shTable = createServiceHealthTable();
+            DataTable adminTable = createAdministrativeTable();
             AzureHttpClient ahc = new AzureHttpClient(token, subscription);
             while (true)
             {

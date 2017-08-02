@@ -34,7 +34,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             request.DataStore.AddToDataStore("SADeployment", deploymentName);
             request.DataStore.AddToDataStore("SAJob", jobname);
             // Read from file
-            var armTemplatefilePath = "Service/ARM/StreamAnalytics.json";
+            string armTemplatefilePath = "Service/ARM/StreamAnalytics.json";
             var payload = new JObject();
             payload.Add("name", jobname);
             var armParamTemplateProperties = payload;

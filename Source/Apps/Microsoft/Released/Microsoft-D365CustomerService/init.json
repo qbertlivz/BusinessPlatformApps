@@ -138,6 +138,16 @@
             {
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
                 "name": "Microsoft-SetConfigValueInSql",
+                "SqlConfigTable": "[csrv].[configuration]",
+                "SqlEntryName": "Tables",
+                "SqlEntryValue": "account,appointment,contact,email,fax,incident,letter,msdyn_survey,msdyn_surveyresponse,phonecall,slakpiinstance,systemuser,task,team",
+                "SqlGroup": "SolutionTemplate",
+                "SqlServerIndex": "0",
+                "SqlSubGroup": "StandardConfiguration"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+                "name": "Microsoft-SetConfigValueInSql",
                 "skip": "$run(this.MS.DataStore.getValue('ssasDisabled') )",
                 "SqlConfigTable": "[csrv].[configuration]",
                 "SqlEntryName": "FunctionName",
@@ -230,34 +240,34 @@
                 "SqlSchema": "$save('csrv')",
                 "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
             },
-          {
-            "DeploymentName": "SqlConnectionDeployment",
-            "displayname": "$translate(NOTIFIER_CREATING_DATABASE_CONNECTION)",
-            "name": "Microsoft-CreateSqlConnector",
-            "ApiConnectionName": "$save('sqlNotifierConnection')",
-            "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
-          },
-          {
-            "DeploymentName": "NotifierLogicApp",
-            "displayname": "$translate(NOTIFIER_CREATING_NOTIFIER_APP)",
-            "name": "Microsoft-DeployNotifierLogicApp",
-            "logicAppName": "notifierLogicApp",
-            "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
-          },
-          {
-            "displayname": "$translate(NOTIFIER_CONFIGURE_NOTIFIER_APP)",
-            "name": "Microsoft-ConfigureNotifier",
-            "SqlConfigTable": "[csrv].[configuration]",
-            "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
-          },
-          {
-            "displayname": "$translate(INIT_ACTION_WAITING_DATA)",
-            "FinishedActionName": "Microsoft-CrmGetProfileStatus",
-            "IsWaiting": true,
-            "name": "Microsoft-GetDataPullStatus",
-            "SqlServerIndex": 0,
-            "TargetSchema": "dbo"
-          }
+            {
+                "DeploymentName": "SqlConnectionDeployment",
+                "displayname": "$translate(NOTIFIER_CREATING_DATABASE_CONNECTION)",
+                "name": "Microsoft-CreateSqlConnector",
+                "ApiConnectionName": "$save('sqlNotifierConnection')",
+                "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+            },
+            {
+                "DeploymentName": "NotifierLogicApp",
+                "displayname": "$translate(NOTIFIER_CREATING_NOTIFIER_APP)",
+                "name": "Microsoft-DeployNotifierLogicApp",
+                "logicAppName": "notifierLogicApp",
+                "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+            },
+            {
+                "displayname": "$translate(NOTIFIER_CONFIGURE_NOTIFIER_APP)",
+                "name": "Microsoft-ConfigureNotifier",
+                "SqlConfigTable": "[csrv].[configuration]",
+                "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_WAITING_DATA)",
+                "FinishedActionName": "Microsoft-CrmGetProfileStatus",
+                "IsWaiting": true,
+                "name": "Microsoft-GetDataPullStatus",
+                "SqlServerIndex": 0,
+                "TargetSchema": "dbo"
+            }
         ]
     },
 

@@ -107,7 +107,7 @@ BEGIN
     RETURN 1;
     END;
     RETURN 0;
-END
+END;
 go
 
 -- Get Record Counts

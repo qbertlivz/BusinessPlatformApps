@@ -102,7 +102,7 @@ BEGIN
 	WHERE  ( table_schema = 'dbo' AND
 				 table_name IN (
 				   SELECT [value] FROM STRING_SPLIT(@tables,',')));
-    if(@returnValue = 14)
+    if(@returnValue = 9)
     BEGIN
     RETURN 1;
     END;

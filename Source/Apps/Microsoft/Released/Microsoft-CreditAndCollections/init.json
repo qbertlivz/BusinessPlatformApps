@@ -82,6 +82,9 @@
                 "AxMeasurementName": "$save('CustCollectionsBIMeasurements')"
             },
             {
+                "datastoreEntriesToValidate": [
+                    "SqlConnectionString"
+                ],
                 "displayname": "Deploy",
                 "filename": "$save('CreditAndCollectionsImportMode.pbix')",
                 "filenameSSAS": "$save('CreditAndCollectionsAs.pbix')",

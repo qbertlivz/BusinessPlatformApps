@@ -91,6 +91,9 @@
                 }
             },
             {
+                "datastoreEntriesToValidate": [
+                    "ImpersonationPassword"
+                ],
                 "displayname": "Progress",
                 "filename": "$save('SCCMSolutionTemplate2.pbix')",
                 "finishedActionName": "Microsoft-GetTaskStatus",

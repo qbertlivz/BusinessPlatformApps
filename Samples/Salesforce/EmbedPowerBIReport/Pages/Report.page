@@ -25,9 +25,6 @@ let refreshToken = '{!PBIrefresh_token}';
 let expires_on = '{!PBIexpires_on}';
 let validateResult = '{!validateResult}';
 
-let selectedGroup = '{!selectedGroup}';
-let selectedReport = 'YOURREPORTID';
-
 window.onload = function() {
 
 if(window.location.href.includes('code='))

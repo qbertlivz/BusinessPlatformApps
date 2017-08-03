@@ -193,6 +193,16 @@
             {
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
                 "name": "Microsoft-SetConfigValueInSql",
+                "SqlConfigTable": "[smgt].[configuration]",
+                "SqlEntryName": "Tables",
+                "SqlEntryValue": "account,lead,opportunity,opportunityproduct,product,team,systemuser,systemusermanagermap,territory",
+                "SqlGroup": "SolutionTemplate",
+                "SqlServerIndex": "0",
+                "SqlSubGroup": "StandardConfiguration"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+                "name": "Microsoft-SetConfigValueInSql",
                 "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
                 "SqlConfigTable": "[smgt].[configuration]",
                 "SqlEntryName": "FunctionName",

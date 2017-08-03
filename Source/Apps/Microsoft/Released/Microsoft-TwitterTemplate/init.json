@@ -118,6 +118,16 @@
                 "SqlServerIndex": "0"
             },
             {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+                "name": "Microsoft-SetConfigValueInSql",
+                "SqlConfigTable": "[pbist_twitter].[configuration]",
+                "SqlEntryName": "Tables",
+                "SqlEntryValue": "tweets_processed,tweets_normalized,hashtag_slicer,mention_slicer,authorhashtag_graph,authormention_graph,minimum_tweets,twitter_query,twitter_query_readable,twitter_query_details",
+                "SqlGroup": "SolutionTemplate",
+                "SqlServerIndex": "0",
+                "SqlSubGroup": "StandardConfiguration"
+            },
+            {
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_LOGIC_APP_DATABASE)",
                 "name": "Microsoft-ConfigurePowerAppTables"
             },

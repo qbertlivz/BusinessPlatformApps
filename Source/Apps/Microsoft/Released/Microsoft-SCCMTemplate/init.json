@@ -153,6 +153,16 @@
             {
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
                 "name": "Microsoft-SetConfigValueInSql",
+                "SqlConfigTable": "[pbist_sccm].[configuration]",
+                "SqlEntryName": "Tables",
+                "SqlEntryValue": "collection,computer,computercollection,computermalware,computerprogram,computerupdate,malware,operatingsystem,program,scanhistory,update,user,usercomputer",
+                "SqlGroup": "SolutionTemplate",
+                "SqlServerIndex": "0",
+                "SqlSubGroup": "StandardConfiguration"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+                "name": "Microsoft-SetConfigValueInSql",
                 "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true')",
                 "SqlConfigTable": "pbist_sccm.[configuration]",
                 "SqlEntryName": "FunctionName",

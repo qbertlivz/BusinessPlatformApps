@@ -134,6 +134,16 @@
             {
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
                 "name": "Microsoft-SetConfigValueInSql",
+                "SqlConfigTable": "[csrv].[configuration]",
+                "SqlEntryName": "Tables",
+                "SqlEntryValue": "account,appointment,contact,email,fax,incident,letter,msdyn_survey,msdyn_surveyresponse,phonecall,slakpiinstance,systemuser,task,team",
+                "SqlGroup": "SolutionTemplate",
+                "SqlServerIndex": "0",
+                "SqlSubGroup": "StandardConfiguration"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+                "name": "Microsoft-SetConfigValueInSql",
                 "skip": "$run(this.MS.DataStore.getValue('ssasDisabled') )",
                 "SqlConfigTable": "[csrv].[configuration]",
                 "SqlEntryName": "FunctionName",

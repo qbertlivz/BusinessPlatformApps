@@ -55,9 +55,6 @@
                 "subtitle": "$translate(DATA_MOVEMENT_SUBTITLE_D365)"
             },
             {
-                "azureProviders": [
-                    "Microsoft.AnalysisServices"
-                ],
                 "displayname": "Dynamics 365 Login",
                 // Dictionary of entities and their ID columns
                 // This is used to get the counts via a FetchXML command
@@ -109,9 +106,6 @@
                 "ssasEnabled": "true"
             },
             {
-                "azureProviders": [
-                    "Microsoft.AnalysisServices"
-                ],
                 "displayname": "Azure",
                 "name": "$SiteCommon$/pages-gallery/azure-login.html",
                 "pricingCalculatorUrl": "$translate(INIT_D365_CALCULATOR)",

@@ -90,9 +90,6 @@
                 "displayname": "Login to Azure",
                 "name": "$SiteCommon$/pages-gallery/azure-login.html",
                 "oauthType": "",
-                "azureProviders": [
-                    "Microsoft.AnalysisServices"
-                ],
                 "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true' : 'false')"
             },
             {
@@ -123,6 +120,9 @@
             },
             {
                 "asDatabase": "Sccm",
+                "datastoreEntriesToValidate": [
+                    "ImpersonationPassword"
+                ],
                 "displayname": "Progress",
                 "filename": "$save('SCCMSolutionTemplate.pbix')",
                 "filenameSSAS": "SCCMSolutionTemplateAS.pbix",

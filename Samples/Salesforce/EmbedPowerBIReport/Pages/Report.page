@@ -24,9 +24,7 @@ let accessToken = '{!PBIaccess_token}';
 let refreshToken = '{!PBIrefresh_token}';
 let expires_on = '{!PBIexpires_on}';
 let validateResult = '{!validateResult}';
-
-let selectedGroup = '{!selectedGroup}';
-let selectedReport = 'YOURREPORTID';
+let selectedReport = 'YOURREPORTID'; 
 
 window.onload = function() {
 

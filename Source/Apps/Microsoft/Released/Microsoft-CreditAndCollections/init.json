@@ -18,8 +18,7 @@
             },
             {
                 "azureProviders": [
-                    "Microsoft.Web",
-                    "Microsoft.AnalysisServices"
+                    "Microsoft.Web"
                 ],
                 "displayname": "Login",
                 "name": "$SiteCommon$/pages-gallery/azure-login.html"

@@ -21,8 +21,7 @@
             },
             {
                 "azureProviders": [
-                    "Microsoft.MachineLearning",
-                    "Microsoft.AnalysisServices"
+                    "Microsoft.MachineLearning"
                 ],
                 "bapiServices": [
                     "Microsoft.PowerApps"

@@ -47,10 +47,7 @@
                 "pricingCalculatorUrl": "$translate(INIT_D365_CALCULATOR)",
                 "pricingCost": "$translate(INIT_D365_PRICING_COST)",
                 "pricingUrl": "$translate(INIT_D365_PRICING_URL)",
-                "ProfileName": "$save('bpst-custservice-profile')",
-                "azureProviders": [
-                    "Microsoft.AnalysisServices"
-                ]
+                "ProfileName": "$save('bpst-custservice-profile')"
             },
             {
                 "displayname": "Login to the Key Vault",
@@ -75,7 +72,6 @@
                 "name": "$SiteCommon$/pages-gallery/choose-analysis-server.html",
                 "displayname": "AAS",
                 "showDescription": true,
-
                 "ssasEnabled": "true"
             },
             {

@@ -523,7 +523,7 @@
     SQL_SERVER_USING_AZURE: `Using Azure SQL?`,
     SQL_SERVER_USING_GOV_AZURE: `Government Azure`,
     SQL_SERVER_WINDOWS: `Windows Username: `,
-    SQL_SERVER_WINDOWS_DESCRIPTION: `Must be in <domain>\<username> or <machinename>\<username> format`,
+    SQL_SERVER_WINDOWS_DESCRIPTION: `Must be in <domain>\\<username> or <machinename>\\<username> format`,
     SSAS_INVALID_SERVER_NAME: `Server name must begin with a letter, be lowercase alphanumeric, and be between 3 and 63 characters in length.`,
     SSAS_SUBTITLE: `Would you like to use Azure Analysis Services?`,
     SSAS_TITLE: `Scale with Azure Analysis Services`,
@@ -545,7 +545,7 @@
     WINDOWS_AUTH_PASSWORD: `Password:`,
     WINDOWS_AUTH_TITLE: `Connect to Windows`,
     WINDOWS_AUTH_USERNAME: `Windows Username:`,
-    WINDOWS_AUTH_USERNAME_DESCRIPTION: `Must be in <domain>\<username> or <machinename>\<username> format`,
+    WINDOWS_AUTH_USERNAME_DESCRIPTION: `Must be in <domain>\\<username> or <machinename>\\<username> format`,
     WINDOWS_AUTH_USERNAME_ERROR: `Please enter your username`,
     WINDOWS_AUTH_USERNAME_ERROR_2: `Username must be in <domain>\\<username> or <machinename>\\<username> format.`
 };

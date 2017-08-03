@@ -12,6 +12,13 @@ export class Customize extends ViewModelBase {
 
     async onNavigatingNext(): Promise<boolean> {
         this.MS.DataStore.addToDataStoreWithCustomRoute('ssas', 'ssasDisabled', this.ssasEnabled === 'true' ? 'false' : 'true', DataStoreType.Public);
-        return true;
+
+        let isSuccess: boolean = true;
+
+        if (this.ssasEnabled === 'true') {
+            isSuccess = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-RegisterProvider', { AzureProvider: 'Microsoft.AnalysisServices' });
+        }
+
+        return isSuccess;
     }
 }

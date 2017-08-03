@@ -102,20 +102,20 @@
                     }
                 ]
             },
-          {
-            "datastoreEntriesToValidate": [
-              "AzureToken",
-              "SqlConnectionString"
-            ],
-            "displayname": "Progress",
-            "name": "$SiteCommon$/pages-gallery/progress.html",
-            "filename": "$save('CustomerService.pbix')",
-            "showCounts": true,
-            "finishedActionName": "$run('Microsoft-CrmGetProfileStatus')",
-            "asDatabase": "CustomerService",
-            "filenameSSAS": "CustomerServiceAS.pbix",
-            "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
-          }
+            {
+                "datastoreEntriesToValidate": [
+                    "AzureToken",
+                    "SqlConnectionString"
+                ],
+                "displayname": "Progress",
+                "name": "$SiteCommon$/pages-gallery/progress.html",
+                "filename": "$save('CustomerService.pbix')",
+                "showCounts": true,
+                "finishedActionName": "$run('Microsoft-CrmGetProfileStatus')",
+                "asDatabase": "CustomerService",
+                "filenameSSAS": "CustomerServiceAS.pbix",
+                "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
+            }
         ],
 
         "Actions": [

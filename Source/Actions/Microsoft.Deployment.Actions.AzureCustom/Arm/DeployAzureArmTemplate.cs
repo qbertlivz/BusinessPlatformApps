@@ -24,7 +24,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Arm
             string resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
             string doNotWaitString = request.DataStore.GetValue("Wait");
 
-            bool doNotWait = !string.IsNullOrEmpty(doNotWaitString) && bool.Parse(doNotWaitString) ;
+            bool doNotWait = !string.IsNullOrEmpty(doNotWaitString) && bool.Parse(doNotWaitString);
             string deploymentName = request.DataStore.GetValue("DeploymentName");
 
             // Read from file
@@ -42,9 +42,9 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Arm
                 string key = prop.Path.Split('.').Last();
                 string value = prop.First().ToString();
 
-                param.AddStringParam(key,value);
+                param.AddStringParam(key, value);
             }
-  
+
             var armTemplate = JsonUtility.GetJObjectFromJsonString(System.IO.File.ReadAllText(Path.Combine(request.Info.App.AppFilePath, armTemplatefilePath)));
             var armParamTemplate = JsonUtility.GetJObjectFromObject(param.GetDynamicObject());
             armTemplate.Remove("parameters");
@@ -52,7 +52,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Arm
 
             SubscriptionCloudCredentials creds = new TokenCloudCredentials(subscription, azureToken);
             Microsoft.Azure.Management.Resources.ResourceManagementClient client = new ResourceManagementClient(creds);
-
 
             var deployment = new Microsoft.Azure.Management.Resources.Models.Deployment()
             {
@@ -65,12 +64,10 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Arm
 
             var validate = await client.Deployments.ValidateAsync(resourceGroup, deploymentName, deployment, new CancellationToken());
             if (!validate.IsValid)
-                return new ActionResponse(
-                    ActionStatus.Failure,
-                    JsonUtility.GetJObjectFromObject(validate),
-                    null,
-                    DefaultErrorCodes.DefaultErrorCode,
+            {
+                return new ActionResponse(ActionStatus.Failure, JsonUtility.GetJObjectFromObject(validate), null, DefaultErrorCodes.DefaultErrorCode,
                     $"Azure:{validate.Error.Message} Details:{validate.Error.Details}");
+            }
 
             var deploymentItem = await client.Deployments.CreateOrUpdateAsync(resourceGroup, deploymentName, deployment, new CancellationToken());
 
@@ -88,10 +85,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Arm
             {
                 Thread.Sleep(5000);
                 var status = await client.Deployments.GetAsync(resourceGroup, deploymentName, new CancellationToken());
-                var operations =
-                    await
-                        client.DeploymentOperations.ListAsync(resourceGroup, deploymentName,
-                            new DeploymentOperationsListParameters(), new CancellationToken());
+                var operations = await client.DeploymentOperations.ListAsync(resourceGroup, deploymentName, new DeploymentOperationsListParameters(), new CancellationToken());
                 var provisioningState = status.Deployment.Properties.ProvisioningState;
 
                 if (provisioningState == "Accepted" || provisioningState == "Running")
@@ -101,10 +95,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Arm
                     return new ActionResponse(ActionStatus.Success, operations);
 
                 var operation = operations.Operations.First(p => p.Properties.ProvisioningState == ProvisioningState.Failed);
-                var operationFailed =
-                    await
-                        client.DeploymentOperations.GetAsync(resourceGroup, deploymentName, operation.OperationId,
-                            new CancellationToken());
+                var operationFailed = await client.DeploymentOperations.GetAsync(resourceGroup, deploymentName, operation.OperationId, new CancellationToken());
 
                 return new ActionResponse(ActionStatus.Failure, operationFailed);
             }

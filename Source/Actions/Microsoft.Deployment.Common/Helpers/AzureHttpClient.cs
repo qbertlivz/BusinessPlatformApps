@@ -174,6 +174,20 @@ namespace Microsoft.Deployment.Common.Helpers
             return await response.Content.ReadAsStringAsync();
         }
 
+        public async Task<T> RequestAzure<T>(HttpMethod method, string url, string apiVersion, string body = "")
+        {
+            T result = default(T);
+
+            HttpResponseMessage response = await this.ExecuteWithSubscriptionAndResourceGroupAsync(method, url, apiVersion, body);
+
+            if (response.IsSuccessStatusCode)
+            {
+                result = JsonUtility.Deserialize<T>(await response.Content.ReadAsStringAsync());
+            }
+
+            return result;
+        }
+
         public async Task<T> RequestValue<T>(HttpMethod method, string url, string body = "")
         {
             T value = default(T);

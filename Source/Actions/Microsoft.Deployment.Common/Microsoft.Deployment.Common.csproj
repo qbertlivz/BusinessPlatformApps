@@ -158,6 +158,15 @@
     <Compile Include="Helpers\StringEnumConverterLower.cs" />
     <Compile Include="Helpers\StringExtension.cs" />
     <Compile Include="Controller\Logger.cs" />
+    <Compile Include="Model\Azure\Function.cs" />
+    <Compile Include="Model\Azure\FunctionProperties.cs" />
+    <Compile Include="Model\Azure\FunctionPropertiesConfig.cs" />
+    <Compile Include="Model\Azure\FunctionPropertiesConfigBinding.cs" />
+    <Compile Include="Model\Azure\FunctionStatus.cs" />
+    <Compile Include="Model\Azure\FunctionStatusLog.cs" />
+    <Compile Include="Model\Azure\FunctionStatusProperties.cs" />
+    <Compile Include="Model\Azure\FunctionStatusWrapper.cs" />
+    <Compile Include="Model\Azure\FunctionWrapper.cs" />
     <Compile Include="Model\Custom\NewsEntity.cs" />
     <Compile Include="Model\DataPullStatus.cs" />
     <Compile Include="Model\Informatica\InformaticaActivityLog.cs" />

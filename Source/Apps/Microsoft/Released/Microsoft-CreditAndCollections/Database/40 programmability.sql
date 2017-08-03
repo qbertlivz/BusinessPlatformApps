@@ -13,7 +13,7 @@ BEGIN
 
 	DECLARE @tables NVARCHAR(MAX);
 	SELECT @tables = REPLACE([value],' ','')
-	FROM [smgt].[configuration]
+	FROM [cc].[configuration]
 	WHERE configuration_group = 'SolutionTemplate'
 	AND	configuration_subgroup = 'StandardConfiguration' 
 	AND	name = 'Tables'
@@ -63,7 +63,7 @@ BEGIN
 		SET @StatusCode = 1;
 	ELSE 			
 	BEGIN
-		IF (@InitialStatusDone = 'True' AND EXISTS (SELECT * FROM smgt.ssas_jobs WHERE [statusMessage] = 'Success'))
+		IF (@InitialStatusDone = 'True' AND EXISTS (SELECT * FROM cc.ssas_jobs WHERE [statusMessage] = 'Success'))
 		SET @StatusCode = 2; --Data pull complete
 	END;
 

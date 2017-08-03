@@ -12,7 +12,7 @@ BEGIN
 
 	DECLARE @tables NVARCHAR(MAX);
 	SELECT @tables = REPLACE([value],' ','')
-	FROM [smgt].[configuration]
+	FROM [psa].[configuration]
 	WHERE configuration_group = 'SolutionTemplate'
 	AND	configuration_subgroup = 'StandardConfiguration' 
 	AND	name = 'Tables'
@@ -50,7 +50,7 @@ BEGIN
 
 	DECLARE @tables NVARCHAR(MAX);
 	SELECT @tables = REPLACE([value],' ','')
-	FROM [smgt].[configuration]
+	FROM [psa].[configuration]
 	WHERE configuration_group = 'SolutionTemplate'
 	AND	configuration_subgroup = 'StandardConfiguration' 
 	AND	name = 'Tables'

@@ -54,3 +54,4 @@
 *js.map
 /Source/SiteCommon/Web/**/*.js
 *.pubxml
+/Source/Apps/Microsoft/Released/Microsoft-D365FieldService/Service/Notifier/notifierLogicApp.json

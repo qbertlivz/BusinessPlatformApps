@@ -73,14 +73,16 @@ namespace Microsoft.Deployment.Actions.OnPremise
             bool isAtLeastOneRecordComingIn = false;
 
             // If we don't actually received a table or the columns in that table don't have the one we want
-            if (recordCounts == null || !recordCounts.Columns.Contains(COUNT_NAME))
-                return false;
-
-            for (int i = 0; i < recordCounts.Rows.Count && !isAtLeastOneRecordComingIn; i++)
+            if (recordCounts != null && recordCounts.Columns.Contains(COUNT_NAME))
             {
-                object v = recordCounts.Rows[i][COUNT_NAME];
-                if (v != DBNull.Value)
-                    isAtLeastOneRecordComingIn = Convert.ToInt64(v) > 0;
+                for (int i = 0; i < recordCounts.Rows.Count && !isAtLeastOneRecordComingIn; i++)
+                {
+                    object v = recordCounts.Rows[i][COUNT_NAME];
+                    if (v != DBNull.Value)
+                    {
+                        isAtLeastOneRecordComingIn = Convert.ToInt64(v) > 0;
+                    }
+                }
             }
 
             return isAtLeastOneRecordComingIn;

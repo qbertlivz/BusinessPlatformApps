@@ -90,7 +90,7 @@
                 "name": "$SiteCommon$/pages-gallery/sql.html",
                 "newSqlDatabase": "$(this.MS.UtilityService.getUniqueId(10))",
                 "showAzureSql": false,
-                "showCredsWhenWindowsAuth": "$run(this.MS.DataStore.getValue('DataMovement') === 'Scribe')",
+                "showCredsWhenWindowsAuth": "$run(this.MS.HttpService.isOnPremise)",
                 "showNewSqlOption": "$run(this.MS.DataStore.getValue('DataMovement') === 'D365')",
                 "showSkuS1": false,
                 "sqlInstance": "$run(this.MS.DataStore.getValue('DataMovement') === 'D365' ? 'NewSql' : 'ExistingSql')",

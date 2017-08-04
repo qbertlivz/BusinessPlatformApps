@@ -26,7 +26,7 @@ BEGIN
                            INNER JOIN sys.schemas sc ON ta.schema_id = sc.schema_id
         WHERE
             sc.name='pbist_sccm' AND ta.is_ms_shipped = 0 AND pa.index_id IN (0,1) AND
-            ta.name IN (SELECT [value] FROM STRING_SPLIT(@tables,',') 
+            ta.name IN (SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>''  
 						UNION ALL 
 						SELECT [value] + '_staging' FROM STRING_SPLIT(@tables,','))
         GROUP BY LEFT(ta.name, CASE WHEN CHARINDEX('_', ta.name)=0 THEN 100 ELSE CHARINDEX('_', ta.name)-1 END)
@@ -60,7 +60,7 @@ BEGIN
                        INNER JOIN sys.schemas sc ON ta.schema_id = sc.schema_id
     WHERE        
 		    sc.name='pbist_sccm' AND ta.is_ms_shipped = 0 AND pa.index_id IN (0,1) AND
-		    ta.name IN (SELECT [value] FROM STRING_SPLIT(@tables,','))
+		    ta.name IN (SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' )
 	 GROUP BY ta.[name];
 
 		SELECT CASE

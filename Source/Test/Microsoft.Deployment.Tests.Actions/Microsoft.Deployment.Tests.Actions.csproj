@@ -162,6 +162,7 @@
     <Compile Include="TestHelpers\SalesforceCreds.cs" />
     <Compile Include="TestHelpers\SqlCreds.cs" />
     <Compile Include="TestHelpers\TestManager.cs" />
+    <Compile Include="TwitterTests\TwitterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Actions\Microsoft.Deployment.Actions.AzureCustom\Microsoft.Deployment.Actions.AzureCustom.csproj">

@@ -101,7 +101,7 @@ BEGIN
 	SELECT @returnValue = Count(*)
 	FROM   information_schema.tables
 	WHERE  ( table_schema = 'dbo' AND
-				 table_name IN (SELECT [value] FROM STRING_SPLIT(@tables,',')));
+				 table_name IN (SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' ));
     if(@returnValue = 14)
     BEGIN
     RETURN 1;
@@ -128,7 +128,7 @@ BEGIN
 	AND	name = 'Tables'
 
 	SET @cr = CURSOR FAST_FORWARD FOR
-              SELECT [value] FROM STRING_SPLIT(@tables,',')
+              SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' 
 
 	OPEN @cr;
 	FETCH NEXT FROM @cr INTO @p1;

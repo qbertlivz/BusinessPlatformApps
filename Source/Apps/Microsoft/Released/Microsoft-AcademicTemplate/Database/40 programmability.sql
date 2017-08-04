@@ -6,222 +6,145 @@ SET CONCAT_NULL_YIELDS_NULL ON;
 SET QUOTED_IDENTIFIER       ON;
 go
 
-CREATE PROCEDURE [fb].[Merge]
+CREATE PROCEDURE [ak].[Merge]
 AS
 BEGIN
 
----------------------Merge Users-------------------------------------
+---------------------Merge Journals-------------------------------------
 BEGIN TRAN
 
 DELETE t 
-FROM fb.[Users] as t
-INNER JOIN fb.StagingComments s 
-ON s.[From Id] = t.[Id];
-INSERT INTO fb.[Users]
-(
-     [Id]
-	,[Name]
-)
-SELECT DISTINCT
-	[From Id] AS [Id]
-	,[From Name] AS [Name]
- FROM fb.StagingComments
+FROM ak.Journal as t
+INNER JOIN ak.JournalStaging s 
+ON s.JId = t.JId;
 
- DELETE t 
-FROM fb.[Users] as t
-INNER JOIN fb.StagingPosts s 
-ON s.[From Id] = t.[Id];
-INSERT INTO fb.[Users]
+INSERT INTO ak.Journal
+    SELECT DISTINCT *
+    FROM ak.JournalStaging;
+TRUNCATE TABLE ak.JournalStaging;
+ COMMIT
+
+ ---------------------Merge Conference-------------------------------------
+BEGIN TRAN
+
+DELETE t 
+FROM ak.Conference as t
+INNER JOIN ak.ConferenceStaging s 
+ON s.CId = t.CId;
+
+INSERT INTO ak.Conference
+    SELECT DISTINCT *
+    FROM ak.ConferenceStaging;
+TRUNCATE TABLE ak.ConferenceStaging;
+ COMMIT
+
+ ---------------------Merge Authors-------------------------------------
+BEGIN TRAN
+
+DELETE t 
+FROM ak.Author as t
+INNER JOIN ak.AuthorStaging s 
+ON s.AuId = t.AuId;
+
+INSERT INTO ak.Author
+    SELECT DISTINCT *
+    FROM ak.AuthorStaging;
+
+INSERT INTO ak.Author
+SELECT
+    dAuthor.AuId,
+	dAuthor.AuthorName,
+	dAuthor.AuthorDisplayName
+FROM 
 (
-     [Id]
-	,[Name]
-)
-SELECT DISTINCT
-	[From Id] AS [Id]
-	,[From Name] AS [Name]
- FROM fb.StagingPosts
+    SELECT 
+        au.AuId, 
+        AuthorName, 
+        au.AuthorDisplayName,
+        rn = ROW_NUMBER() OVER (
+            PARTITION BY au.AuId 
+            ORDER BY au.AuId)
+    FROM ak.AuthorStaging AS au
+) AS dAuthor
+WHERE
+    dAuthor.rn = 1;
+TRUNCATE TABLE ak.AuthorStaging;
+COMMIT
+
+ ---------------------Merge Affiliation-------------------------------------
+BEGIN TRAN
+
+DELETE t 
+FROM ak.Affiliation as t
+INNER JOIN ak.AffiliationStaging s 
+ON s.AfId = t.AfId;
+
+INSERT INTO ak.Affiliation
+    SELECT DISTINCT *
+    FROM ak.AffiliationStaging;
+TRUNCATE TABLE ak.AffiliationStaging;
+ COMMIT
+
+  ---------------------Merge FieldsOfStudy-------------------------------------
+BEGIN TRAN
+
+DELETE t 
+FROM ak.FieldsOfStudy as t
+INNER JOIN ak.FieldsOfStudyStaging s 
+ON s.FId = t.FId;
+
+INSERT INTO ak.FieldsOfStudy
+    SELECT DISTINCT *
+    FROM ak.FieldsOfStudyStaging;
+TRUNCATE TABLE ak.FieldsOfStudyStaging;
+ COMMIT
+
+   ---------------------Merge PaperAuthorAffiliationRelationship-------------------------------------
+BEGIN TRAN
+
+DELETE t 
+FROM ak.PaperAuthorAffiliationRelationship as t
+INNER JOIN ak.PaperAuthorAffiliationRelationshipStaging s 
+ON s.PId = t.PId AND s.AuId = t.AuId AND s.AfId = t.AfId;
+
+INSERT INTO ak.PaperAuthorAffiliationRelationship
+    SELECT DISTINCT *
+    FROM ak.PaperAuthorAffiliationRelationshipStaging;
+TRUNCATE TABLE ak.PaperAuthorAffiliationRelationshipStaging;
+ COMMIT
+
+    ---------------------Merge PaperFieldsOfStudyRelationship-------------------------------------
+BEGIN TRAN
+
+DELETE t 
+FROM ak.PaperFieldsOfStudyRelationship as t
+INNER JOIN ak.PaperFieldsOfStudyRelationshipStaging s 
+ON s.PId = t.PId AND s.FId = t.FId;
+
+INSERT INTO ak.PaperFieldsOfStudyRelationship
+    SELECT DISTINCT *
+    FROM ak.PaperFieldsOfStudyRelationshipStaging;
+TRUNCATE TABLE ak.PaperFieldsOfStudyRelationshipStaging;
+ COMMIT
+
+
+     ---------------------Merge PaperCitationRelationshipStaging-------------------------------------
+BEGIN TRAN
+
+DELETE t 
+FROM ak.PaperCitationRelationshipStaging as t
+INNER JOIN ak.PaperCitationRelationshipStagingStaging s 
+ON s.PId = t.PId AND s.RPId = t.RPId;
+
+INSERT INTO ak.PaperCitationRelationshipStaging
+    SELECT DISTINCT *
+    FROM ak.PaperCitationRelationshipStagingStaging;
+
+TRUNCATE TABLE ak.PaperCitationRelationshipStagingStaging;
 
  COMMIT
 
----------------------Merge Comments-------------------------------------
-BEGIN TRAN
-DELETE t 
-FROM fb.[Comments] as t
-INNER JOIN fb.StagingComments s 
-ON t.Id = s.Id;
 
-
-INSERT INTO fb.[Comments]
-(
-	 [Id]
-	,[Created Date]
-	,[Message]
-	,[From Id]
-	,[From Name]
-	,[Post Id]
-	,[Page]
-    ,[PageDisplayName]
-    ,[PageId]
-)
-SELECT DISTINCT
-	[Id]
-	,[Created Date]
-	,[Message]
-	,[From Id]
-	,[From Name]
-	,[Post Id]
-	,[Page]
-    ,[PageDisplayName]
-    ,[PageId]
- FROM fb.StagingComments
-    
-TRUNCATE TABLE [fb].[StagingComments];	 
-COMMIT
----------------------Merge HashTags-------------------------------------
-
-BEGIN TRAN
-DELETE t 
-FROM fb.HashTags as t
-INNER JOIN fb.StagingHashTags s 
-ON t.Id = s.Id;
-
-INSERT INTO [fb].[HashTags] 
-(
-	[Id]
-	,[HashTags]
-)
-SELECT DISTINCT   
-	[Id]
-	,[HashTags]
-FROM [fb].[StagingHashTags];
-
-TRUNCATE TABLE [fb].[StagingHashTags];
-COMMIT
----------------------Merge KeyPhrases-------------------------------------
-
-BEGIN TRAN
-DELETE t 
-FROM fb.KeyPhrase as t
-INNER JOIN fb.StagingKeyPhrase s 
-ON t.Id = s.Id;
-INSERT INTO [fb].[KeyPhrase] 
-(
-	[Id]
-	,[KeyPhrase]
-)
-    
-SELECT DISTINCT  
-		[Id]
-		,[KeyPhrase]
-	FROM [fb].[StagingKeyPhrase];
-
-TRUNCATE TABLE [fb].[StagingKeyPhrase];	 	 
-COMMIT
----------------------Merge Posts-------------------------------------
-BEGIN TRAN
-DELETE t 
-FROM fb.Posts as t
-INNER JOIN fb.StagingPosts s 
-ON t.Id = s.Id;
-
-INSERT INTO fb.Posts
-(
-	 [Id]
-	,[Created Date]
-	,[Message]
-	,[From Id]
-	,[From Name]
-	,[Media]
-	,[Page]
-    ,[PageDisplayName]
-    ,[PageId]
-    ,[Total Comments]
-)
-SELECT DISTINCT
-	 [Id]
-	,[Created Date]
-	,[Message]
-	,[From Id]
-	,[From Name]
-	,[Media]
-	,[Page]
-    ,[PageDisplayName]
-    ,[PageId]
-	,[Total Comments]
-    FROM fb.StagingPosts
-TRUNCATE TABLE [fb].StagingPosts;
-COMMIT
-
----------------------Merge Reactions-------------------------------------
-BEGIN TRAN
-DELETE t 
-FROM [fb].[Reactions] as t
-INNER JOIN [fb].[StagingReactions] s 
-ON t.Id = s.Id;
-
-INSERT INTO [fb].[Reactions]
-(
-	[Id]
-	,[Reaction Type]
-	,[Count]
-)
-SELECT DISTINCT  
-	[Id]
-	,[Reaction Type]
-	,[Count]
-FROM [fb].[StagingReactions]
-TRUNCATE TABLE [fb].[StagingReactions];
-COMMIT
-
----------------------Merge Sentiment-------------------------------------
-BEGIN TRAN
-DELETE t 
-FROM [fb].[Sentiment] as t
-INNER JOIN [fb].[StagingSentiment] s 
-ON t.Id = s.Id;
-    
-INSERT INTO [fb].[Sentiment]
-(
-	[Id]
-	,[Sentiment]
-)
-SELECT DISTINCT
-	 [Id]
-	,[Sentiment]
-FROM [fb].[StagingSentiment]
-TRUNCATE TABLE [fb].[StagingSentiment]; 
-COMMIT
-
-END
-go
-
-CREATE PROCEDURE [fb].[UpdateEdges]
-AS
-BEGIN
-
-BEGIN TRAN
-TRUNCATE TABLE fb.[Edges];
-
-INSERT INTO fb.[Edges]
-(
-     SourceVertex
-    ,TargetVertex
-    ,EdgeWeight
-    ,PageId
-)
-(
-    SELECT 
-    tbl1.[From Id] as SourceVertex, 
-    tbl2.[From Id] as TargetVertex,
-    count(1) as EdgeWeight,
-    tbl1.[PageId]  as PageId
-    FROM [fb].Comments tbl1 join [fb].Comments tbl2 on tbl1.[Post Id] = tbl2.[Post Id]
-    WHERE tbl1.[From Id] !=  tbl1.[PageId] and tbl2.[From Id] !=  tbl2.[PageId] and tbl1.[From Id] != tbl2.[From Id] 
-    group by tbl1.[From Id], tbl2.[From Id], tbl1.[PageId]
-    having count(1) > 2 
-);
-
-COMMIT
 
 END
 GO

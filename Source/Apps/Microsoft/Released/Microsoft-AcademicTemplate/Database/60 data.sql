@@ -59,7 +59,7 @@ Begin
 	select @sameDayYearAgo = dateadd(yy,-1,@curDate)
 
 	-- Do the actual insert
-	INSERT fb.[date] ([date_key], [full_date], [day_of_week], [day_num_in_month], [day_name], [day_abbrev]
+	INSERT ak.[date] ([date_key], [full_date], [day_of_week], [day_num_in_month], [day_name], [day_abbrev]
 	,[weekday_flag], [week_num_in_year], [week_begin_date], [month], [month_name],
 	[month_abbrev], [quarter], [year],  [yearmo], same_day_year_ago_date)  
 	VALUES (@dateKey,@curDate, @dayOfWeek, @dayOfMonth, @dayName, @dayAbbrev

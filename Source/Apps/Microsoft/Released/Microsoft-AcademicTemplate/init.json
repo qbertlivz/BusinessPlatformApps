@@ -57,7 +57,7 @@
         "enablePublishReport": "$run(this.MS.DataStore.getValue('ssasDisabled') === 'false')",
         "filename": "$save('FacebookTemplate.pbix')",
         "name": "$SiteCommon$/pages-gallery/progress.html",
-        "Schema": "$save('academic')",
+        "Schema": "$save('AK')",
         "showCounts": false
       }
     ],

@@ -146,6 +146,8 @@
     <Compile Include="AzureTests\AzureMLTest.cs" />
     <Compile Include="AzureTests\CognitiveServices.cs" />
     <Compile Include="AzureTests\LogicAppTests.cs" />
+    <Compile Include="AcademicTests\AcademicTests.cs" />
+    <Compile Include="TwitterTests\TwitterTests.cs" />
     <Compile Include="FacebookTests\FacebookTests.cs" />
     <Compile Include="NewsTests\NewsTests.cs" />
     <Compile Include="NotifierTests.cs" />

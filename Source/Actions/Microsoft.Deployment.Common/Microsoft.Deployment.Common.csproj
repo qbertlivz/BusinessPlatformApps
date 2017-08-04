@@ -137,7 +137,6 @@
     <Compile Include="Helpers\ErrorUtility.cs" />
     <Compile Include="Helpers\FileUtility.cs" />
     <Compile Include="Helpers\FTPUtility.cs" />
-    <Compile Include="Helpers\HttpClientUtility.cs" />
     <Compile Include="Helpers\ImpersonateUtility.cs" />
     <Compile Include="Helpers\InformaticaUtility.cs" />
     <Compile Include="Helpers\JsonUtility.cs" />

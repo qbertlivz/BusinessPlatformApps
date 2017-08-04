@@ -11,6 +11,13 @@ BEGIN
     SET NOCOUNT ON;
 
     SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; -- it's ok for these to be somewhat inaccurate
+
+	DECLARE @tables NVARCHAR(MAX);
+	SELECT @tables = REPLACE([value],' ','')
+	FROM [pbist_sccm].[configuration]
+	WHERE configuration_group = 'SolutionTemplate'
+	AND	configuration_subgroup = 'StandardConfiguration' 
+	AND	name = 'Tables'
      
     WITH TableCounts(EntityName, [Count]) AS
     (
@@ -19,8 +26,9 @@ BEGIN
                            INNER JOIN sys.schemas sc ON ta.schema_id = sc.schema_id
         WHERE
             sc.name='pbist_sccm' AND ta.is_ms_shipped = 0 AND pa.index_id IN (0,1) AND
-            ta.name IN ('computer', 'site', 'user', 'usercomputer', 'computerprogram', 'program', 'collection', 'computercollection', 'malware', 'computermalware', 'update', 'computerupdate', 'scanhistory',
-                        'computer_staging', 'site_staging', 'user_staging', 'usercomputer_staging', 'computerprogram_staging', 'program_staging', 'collection_staging', 'computercollection_staging', 'malware_staging', 'computermalware_staging', 'update_staging', 'computerupdate_staging', 'scanhistory_staging')
+            ta.name IN (SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>''  
+						UNION ALL 
+						SELECT [value] + '_staging' FROM STRING_SPLIT(@tables,','))
         GROUP BY LEFT(ta.name, CASE WHEN CHARINDEX('_', ta.name)=0 THEN 100 ELSE CHARINDEX('_', ta.name)-1 END)
     )
     SELECT UPPER(LEFT(EntityName, 1)) + LOWER(SUBSTRING(EntityName, 2, 100)) AS EntityName, [Count] FROM TableCounts;
@@ -39,13 +47,20 @@ BEGIN
 	-- 3 -> No data is present
 
    DECLARE @StatusCode INT = -1;
+   	
+	DECLARE @tables NVARCHAR(MAX);
+	SELECT @tables = REPLACE([value],' ','')
+	FROM [pbist_sccm].[configuration]
+	WHERE configuration_group = 'SolutionTemplate'
+	AND	configuration_subgroup = 'StandardConfiguration' 
+	AND	name = 'Tables'
 
     SELECT ta.[name] AS EntityName, SUM(pa.[rows]) AS [Count] INTO #counts
     FROM sys.tables ta INNER JOIN sys.partitions pa ON pa.OBJECT_ID = ta.OBJECT_ID
                        INNER JOIN sys.schemas sc ON ta.schema_id = sc.schema_id
     WHERE        
 		    sc.name='pbist_sccm' AND ta.is_ms_shipped = 0 AND pa.index_id IN (0,1) AND
-		    ta.name IN ('computer', 'user', 'usercomputer', 'computerprogram', 'program', 'collection', 'computercollection', 'malware', 'computermalware', 'update', 'computerupdate', 'scanhistory' )
+		    ta.name IN (SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' )
 	 GROUP BY ta.[name];
 
 		SELECT CASE

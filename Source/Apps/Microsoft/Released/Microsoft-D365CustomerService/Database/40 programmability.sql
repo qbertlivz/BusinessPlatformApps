@@ -11,12 +11,19 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
+	DECLARE @tables NVARCHAR(MAX);
+	SELECT @tables = REPLACE([value],' ','')
+	FROM [csrv].[configuration]
+	WHERE configuration_group = 'SolutionTemplate'
+	AND	configuration_subgroup = 'StandardConfiguration' 
+	AND	name = 'Tables'
+
     SELECT UPPER(LEFT(ta.name, 1)) + LOWER(SUBSTRING(ta.name, 2, 100)) AS EntityName, SUM(pa.rows) AS [Count]
     FROM sys.tables ta INNER JOIN sys.partitions pa ON pa.OBJECT_ID = ta.OBJECT_ID
                        INNER JOIN sys.schemas sc ON ta.schema_id = sc.schema_id
     WHERE
         sc.name='dbo' AND ta.is_ms_shipped = 0 AND pa.index_id IN (0,1) AND
-        ta.name IN ('account', 'appointment', 'contact', 'email', 'fax', 'incident', 'letter', 'msdyn_survey', 'msdyn_surveyresponse', 'phonecall', 'slakpiinstance', 'systemuser', 'task', 'team')
+        ta.name IN (SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' )
     GROUP BY ta.name
     ORDER BY ta.name;
 END;
@@ -28,6 +35,13 @@ AS
 BEGIN
     SET NOCOUNT ON;
     
+	DECLARE @tables NVARCHAR(MAX);
+	SELECT @tables = REPLACE([value],' ','')
+	FROM [csrv].[configuration]
+	WHERE configuration_group = 'SolutionTemplate'
+	AND	configuration_subgroup = 'StandardConfiguration' 
+	AND	name = 'Tables'
+
     --InitialPullComplete statuses
     -- -1 -> Initial State
     -- 1 -> Data is present but not complete
@@ -41,7 +55,7 @@ BEGIN
                        INNER JOIN sys.schemas sc ON ta.schema_id = sc.schema_id
     WHERE
         sc.name='dbo' AND ta.is_ms_shipped = 0 AND pa.index_id IN (0,1) AND
-        ta.name IN ('account', 'appointment', 'contact', 'email', 'fax', 'incident', 'letter', 'msdyn_survey', 'msdyn_surveyresponse', 'phonecall', 'slakpiinstance', 'systemuser', 'task', 'team')
+        ta.name IN (SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' )
     GROUP BY ta.[name];
 
 SELECT CASE

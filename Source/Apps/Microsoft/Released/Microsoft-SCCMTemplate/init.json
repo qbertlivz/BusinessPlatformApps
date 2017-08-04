@@ -120,6 +120,9 @@
             },
             {
                 "asDatabase": "Sccm",
+                "datastoreEntriesToValidate": [
+                    "ImpersonationPassword"
+                ],
                 "displayname": "Progress",
                 "filename": "$save('SCCMSolutionTemplate.pbix')",
                 "filenameSSAS": "SCCMSolutionTemplateAS.pbix",
@@ -146,6 +149,16 @@
                 "SqlConfigTable": "pbist_sccm.[configuration]",
                 "SqlServerIndex": "1",
                 "useImpersonation": true
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+                "name": "Microsoft-SetConfigValueInSql",
+                "SqlConfigTable": "[pbist_sccm].[configuration]",
+                "SqlEntryName": "Tables",
+                "SqlEntryValue": "collection,computer,computercollection,computermalware,computerprogram,computerupdate,malware,operatingsystem,program,scanhistory,update,user,usercomputer",
+                "SqlGroup": "SolutionTemplate",
+                "SqlServerIndex": "0",
+                "SqlSubGroup": "StandardConfiguration"
             },
             {
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",

@@ -290,7 +290,7 @@
     INIT_ACTION_DEPLOYING_TWITTER_LOGIC_APP: `Deploying Twitter logic app`,
     INIT_ACTION_EXPORT_ACTIVITY_LOG: `Exporting Activity Log from the Azure Portal to Event Hub`,
     INIT_ACTION_FINISHING_CLEANUP: `Finishing cleanup`,
-    INIT_ACTION_GET_HISTORICAL_ACTIVITY_LOG_DATA: `Pulling Activity Log data into SQL`,
+    INIT_ACTION_GET_HISTORICAL_ACTIVITY_LOG_DATA: `Pulling 90 days of Activity Log data into SQL...This may take a few minutes.`,
     INIT_ACTION_GET_INITIAL_COUNTS: `Retrieving entitities' counts`,
     INIT_ACTION_GETTING_COGNITIVE_KEY: `Getting Cognitive Key`,
     INIT_ACTION_GETTING_STORAGE_ACCOUNT_KEY: `Getting Storage Account Key`,

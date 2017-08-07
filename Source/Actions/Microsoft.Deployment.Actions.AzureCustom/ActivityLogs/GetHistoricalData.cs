@@ -174,13 +174,16 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
                     adminRow["timestamp"] = activity.EventTimestamp;
                     adminTable.Rows.Add(adminRow);
                 }
+                BulkInsert(sqlConn, shTable, "bpst_aal.ServiceHealthData");
+                shTable = createServiceHealthTable();
+                BulkInsert(sqlConn, adminTable, "bpst_aal.AdministrativeData");
+                adminTable = createAdministrativeTable();
                 if ((geturi = response.NextLink) == null)
                 {
                     break;
                 }
+
             }
-            BulkInsert(sqlConn, shTable, "bpst_aal.ServiceHealthData");
-            BulkInsert(sqlConn, adminTable, "bpst_aal.AdministrativeData");
             return new ActionResponse(ActionStatus.Success);
         }
     }

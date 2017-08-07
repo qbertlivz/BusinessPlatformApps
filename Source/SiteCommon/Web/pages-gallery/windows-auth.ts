@@ -43,6 +43,8 @@ export class WindowsAuth extends ViewModelBase {
             this.showValidation = this.isValidated;
         }
 
+        super.onValidate();
+
         return this.isValidated;
     }
 
@@ -51,7 +53,7 @@ export class WindowsAuth extends ViewModelBase {
         if (username.includes('\\')) {
             error = '';
         } else if (username.length > 0) {
-            error = this.MS.Translate.WINDOW_AUTH_USERNAME_ERROR_2;
+            error = this.MS.Translate.WINDOWS_AUTH_USERNAME_ERROR_2;
         }
         return error;
     }

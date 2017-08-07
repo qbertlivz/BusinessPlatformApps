@@ -36,26 +36,16 @@ namespace Microsoft.Deployment.Actions.OnPremise.TaskScheduler
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            const int MAX_RETRIES = 15;
-
-            // This loop tries to avoid an unknown task state, thinking it's transient
-            Task task = null;
-            for (int i = 0; i <= MAX_RETRIES; i++)
-            {
-                System.Threading.Thread.Sleep(100);
-                task = GetScheduledTask(request.DataStore.GetValue("TaskName"));
-                if (task == null)
-                    return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "SccmTaskNotFound");
-
-                if (task.State == TaskState.Unknown)
-                    continue;
-                else
-                    break;
-            }
+            Task task = GetScheduledTask(request.DataStore.GetValue("TaskName"));
+            if (task == null)
+                return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "SccmTaskNotFound");
 
             // Let it run
-            if (task.State == TaskState.Queued || task.State == TaskState.Running)
+            if (task.State == TaskState.Queued || task.State == TaskState.Running || task.State == TaskState.Unknown)
+            {
+                System.Threading.Thread.Sleep(250);
                 return new ActionResponse(ActionStatus.InProgress);
+            }
 
             // If we're here, the task completed
             if (task.LastTaskResult == 0)

@@ -20,7 +20,10 @@ namespace Microsoft.Deployment.Actions.Common.PBI
 
             PBIClusterUri pbiClusterUri = await client.Request<PBIClusterUri>(HttpMethod.Put, PBI_CLUSTER_URIS_URL);
 
-            request.DataStore.AddToDataStore("PBIClusterUri", pbiClusterUri.FixedClusterUri);
+            if (pbiClusterUri != null)
+            {
+                request.DataStore.AddToDataStore("PBIClusterUri", pbiClusterUri.FixedClusterUri);
+            }
 
             return new ActionResponse(ActionStatus.Success);
         }

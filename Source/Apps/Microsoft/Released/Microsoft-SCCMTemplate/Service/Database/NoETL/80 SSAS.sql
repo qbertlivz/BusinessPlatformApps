@@ -107,24 +107,20 @@ GO
 CREATE PROCEDURE pbist_sccm.sp_validate_schema AS
 BEGIN
     SET NOCOUNT ON;
+
+	DECLARE @tables NVARCHAR(MAX);
+	SELECT @tables = REPLACE([value],' ','')
+	FROM [pbist_sccm].[configuration]
+	WHERE configuration_group = 'SolutionTemplate'
+	AND	configuration_subgroup = 'StandardConfiguration' 
+	AND	name = 'Tables'
+
     DECLARE @returnValue INT;
     SELECT @returnValue = Count(*)
     FROM   information_schema.tables
     WHERE  ( table_schema = 'pbist_sccm' AND
                  table_name IN (
-                 'collection', 
-                 'computer', 
-                 'computercollection', 
-                 'computermalware', 
-                 'computerprogram',
-                 'computerupdate',
-                 'malware',
-                 'operatingsystem',
-                 'program',
-                 'scanhistory',
-                 'update',
-                 'user',
-                 'usercomputer'));
+                 SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' ));
     if(@returnValue = 13)
     BEGIN
     RETURN 1;
@@ -136,37 +132,36 @@ go
 -- Get Record Counts
 CREATE PROCEDURE pbist_sccm.sp_get_current_record_counts AS
 BEGIN
-    SET NOCOUNT ON;
-    DECLARE @returnValue INT;
-       SELECT @returnValue = SUM(tableCount) FROM
-        (
-            SELECT Count(*) AS tableCount FROM pbist_sccm.collection
-            UNION ALL
-            SELECT Count(*) AS tableCount FROM pbist_sccm.computer
-            UNION ALL
-            SELECT Count(*) AS tableCount FROM pbist_sccm.computercollection
-            UNION ALL
-            SELECT Count(*) AS tableCount FROM pbist_sccm.computermalware
-            UNION ALL
-            SELECT Count(*) AS tableCount FROM pbist_sccm.computerprogram
-            UNION ALL
-            SELECT Count(*) AS tableCount FROM pbist_sccm.computerupdate
-            UNION ALL
-            SELECT Count(*) AS tableCount FROM pbist_sccm.malware
-            UNION ALL
-            SELECT Count(*) AS tableCount FROM pbist_sccm.operatingsystem
-            UNION ALL
-            SELECT Count(*) AS tableCount FROM pbist_sccm.program
-            UNION ALL
-            SELECT Count(*) AS tableCount FROM pbist_sccm.scanhistory
-            UNION ALL
-            SELECT Count(*) AS tableCount FROM pbist_sccm.[update]
-            UNION ALL
-            SELECT Count(*) AS tableCount FROM pbist_sccm.[user]
-            UNION ALL
-            SELECT Count(*) AS tableCount FROM pbist_sccm.usercomputer
-        ) AS temp;
-        RETURN @returnValue;
+SET NOCOUNT ON;
+	DECLARE @returnValue INT = 0;
+	
+	DECLARE @stmt AS NVARCHAR(500), @p1 AS VARCHAR(100)
+	DECLARE @cr CURSOR;
+
+	DECLARE @tables NVARCHAR(MAX);
+	SELECT @tables = REPLACE([value],' ','')
+	FROM pbist_sccm.[configuration]
+	WHERE configuration_group = 'SolutionTemplate'
+	AND	configuration_subgroup = 'StandardConfiguration' 
+	AND	name = 'Tables'
+
+	SET @cr = CURSOR FAST_FORWARD FOR
+              SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' 
+
+	OPEN @cr;
+	FETCH NEXT FROM @cr INTO @p1;
+	WHILE @@FETCH_STATUS = 0  
+	BEGIN 
+		DECLARE @retValue INT=0;
+		SET @stmt = 'SELECT @var = COUNT(*) FROM dbo.' + QuoteName(@p1);
+		DECLARE @ParmDefinition NVARCHAR(500) = N'@var int OUTPUT';
+		EXECUTE sp_executesql @stmt, @ParmDefinition, @var = @retValue OUTPUT;
+		SET @returnValue = @returnValue + @retValue;		
+			FETCH NEXT FROM @cr INTO @p1;
+END;
+CLOSE @cr;
+DEALLOCATE @cr;
+RETURN @returnValue;
 END;
 go
 

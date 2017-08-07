@@ -106,7 +106,7 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Credential Guard is enabled on this computer and does not yet support Windows Task Scheduler. Please choose a different computer..
+        ///   Looks up the localized string 
         /// </summary>
         public static string CredentialGuardEnabled {
             get {
@@ -354,6 +354,15 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         public static string RunningTaskFailed {
             get {
                 return ResourceManager.GetString("RunningTaskFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You may not have read access to one of the following objects: Opportunity, Account, Lead, Product2, OpportunityLineItem, OpportunityStage, User, UserRole. Please check..
+        /// </summary>
+        public static string SalesforceInvalidType {
+            get {
+                return ResourceManager.GetString("SalesforceInvalidType", resourceCulture);
             }
         }
         

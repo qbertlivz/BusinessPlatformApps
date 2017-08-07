@@ -47,9 +47,6 @@
                 "templateName": "$translate(INIT_SALESFORCE_TITLE)"
             },
             {
-                "azureProviders": [
-                    "Microsoft.AnalysisServices"
-                ],
                 "displayname": "Azure",
                 "name": "$SiteCommon$/pages-gallery/azure-login.html",
                 "pricingCalculatorUrl": "$translate(INIT_SALESFORCE_PRICING_CALCULATOR_URL)",
@@ -134,7 +131,7 @@
                     "SqlConnectionString"
                 ],
                 "displayname": "Progress",
-                "enablePublishReport": "$run(!this.MS.HttpService.isOnPremise)",
+                "enablePublishReport": "$run(!this.MS.HttpService.isOnPremise && this.MS.DataStore.getValue('ssasDisabled') === 'false')",
                 "filename": "$save('SalesManagementReport.pbix')",
                 "filenameSSAS": "SalesManagementReportAS.pbix",
                 "finishedActionName": "$run(this.MS.DataStore.getValue('DataMovement') === 'ADF' ? 'Microsoft-ADFSliceStatus' : this.MS.DataStore.getValue('DataMovement') === 'Scribe' ? 'Microsoft-GetScribeSolutionStatus' : 'Microsoft-GetInformaticaTaskStatus')",
@@ -166,6 +163,16 @@
                 "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')",
                 "SqlScriptsFolder": "Service/Database/Scribe",
                 "SqlServerIndex": "0"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+                "name": "Microsoft-SetConfigValueInSql",
+                "SqlConfigTable": "[smgt].[configuration]",
+                "SqlEntryName": "Tables",
+                "SqlEntryValue": "account,opportunity,userrole,lead,opportunitylineitem,product2,user,opportunitystage",
+                "SqlGroup": "SolutionTemplate",
+                "SqlServerIndex": "0",
+                "SqlSubGroup": "StandardConfiguration"
             },
             {
                 "displayname": "$translate(INIT_ACTION_CREATING_SALESFORCE_TABLES)",
@@ -325,7 +332,6 @@
             },
             {
                 "displayname": "$translate(INIT_ACTION_CREATING_INFORMATICA_TASK)",
-                "Entities": "Account,Lead,Opportunity,OpportunityLineItem,OpportunityStage,UserRole,User,Product2",
                 "name": "Microsoft-CreateInformaticaTask",
                 "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Informatica')"
             },
@@ -359,7 +365,6 @@
             },
             {
                 "displayname": "$translate(INIT_ACTION_CREATING_SCRIBE_SOLUTION)",
-                "Entities": "Account,Lead,Opportunity,OpportunityLineItem,OpportunityStage,UserRole,User,Product2",
                 "name": "Microsoft-CreateScribeSolution",
                 "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'Scribe')"
             },

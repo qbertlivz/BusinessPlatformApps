@@ -11,12 +11,19 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
+	DECLARE @tables NVARCHAR(MAX);
+	SELECT @tables = REPLACE([value],' ','')
+	FROM [csrv].[configuration]
+	WHERE configuration_group = 'SolutionTemplate'
+	AND	configuration_subgroup = 'StandardConfiguration' 
+	AND	name = 'Tables'
+
     SELECT UPPER(LEFT(ta.name, 1)) + LOWER(SUBSTRING(ta.name, 2, 100)) AS EntityName, SUM(pa.rows) AS [Count]
     FROM sys.tables ta INNER JOIN sys.partitions pa ON pa.OBJECT_ID = ta.OBJECT_ID
                        INNER JOIN sys.schemas sc ON ta.schema_id = sc.schema_id
     WHERE
         sc.name='dbo' AND ta.is_ms_shipped = 0 AND pa.index_id IN (0,1) AND
-        ta.name IN ('account', 'appointment', 'contact', 'email', 'fax', 'incident', 'letter', 'msdyn_survey', 'msdyn_surveyresponse', 'phonecall', 'slakpiinstance', 'systemuser', 'task', 'team')
+        ta.name IN (SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' )
     GROUP BY ta.name
     ORDER BY ta.name;
 END;
@@ -28,6 +35,13 @@ AS
 BEGIN
     SET NOCOUNT ON;
     
+	DECLARE @tables NVARCHAR(MAX);
+	SELECT @tables = REPLACE([value],' ','')
+	FROM [csrv].[configuration]
+	WHERE configuration_group = 'SolutionTemplate'
+	AND	configuration_subgroup = 'StandardConfiguration' 
+	AND	name = 'Tables'
+
     --InitialPullComplete statuses
     -- -1 -> Initial State
     -- 1 -> Data is present but not complete
@@ -41,7 +55,7 @@ BEGIN
                        INNER JOIN sys.schemas sc ON ta.schema_id = sc.schema_id
     WHERE
         sc.name='dbo' AND ta.is_ms_shipped = 0 AND pa.index_id IN (0,1) AND
-        ta.name IN ('account', 'appointment', 'contact', 'email', 'fax', 'incident', 'letter', 'msdyn_survey', 'msdyn_surveyresponse', 'phonecall', 'slakpiinstance', 'systemuser', 'task', 'team')
+        ta.name IN (SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' )
     GROUP BY ta.[name];
 
 SELECT CASE
@@ -54,13 +68,13 @@ SELECT CASE
                      ) 
             END AS [Percentage], 
             c.EntityName as EntityName INTO #percentages
-		FROM #counts c INNER JOIN smgt.entityinitialcount i ON i.entityname = c.entityname
+		FROM #counts c INNER JOIN csrv.entityinitialcount i ON i.entityname = c.entityname
 
 
 
 	DECLARE @DeploymentTimestamp datetime2;
  	SELECT @DeploymentTimestamp = Convert(DATETIME2, [value], 126)
-	FROM smgt.[configuration] WHERE configuration_group = 'SolutionTemplate' AND configuration_subgroup = 'Notifier' AND [name] = 'DeploymentTimestamp';
+	FROM csrv.[configuration] WHERE configuration_group = 'SolutionTemplate' AND configuration_subgroup = 'Notifier' AND [name] = 'DeploymentTimestamp';
 
     IF EXISTS (SELECT *
                FROM #counts
@@ -71,14 +85,14 @@ SELECT CASE
 	
     DECLARE @CompletePercentage FLOAT;
     SELECT @CompletePercentage = Convert(float, [value])
-    FROM smgt.[configuration] WHERE configuration_group = 'SolutionTemplate' AND configuration_subgroup = 'Notifier' AND [name] = 'DataPullCompleteThreshold';
+    FROM csrv.[configuration] WHERE configuration_group = 'SolutionTemplate' AND configuration_subgroup = 'Notifier' AND [name] = 'DataPullCompleteThreshold';
 
 	DECLARE @CountsRows INT, @CountRowsComplete INT;
 	SELECT @CountsRows = COUNT(*) FROM #counts;
 	
 	SELECT p.[Percentage], p.[EntityName], i.lasttimestamp,  DATEDIFF(MINUTE, i.lasttimestamp, Sysdatetime()) AS [TimeDifference] INTO #entitiesComplete
     FROM #percentages p
-              INNER JOIN smgt.entityinitialcount i ON i.entityName = p.EntityName
+              INNER JOIN csrv.entityinitialcount i ON i.entityName = p.EntityName
               WHERE 
 			  ((p.[Percentage] >= @CompletePercentage) AND DATEDIFF(MINUTE, i.lasttimestamp, Sysdatetime()) > 5) OR
 			  (p.[Percentage] >= 100) OR
@@ -96,26 +110,26 @@ SELECT CASE
 	
 	DECLARE @ASDeployment bit = 0;
 
-    IF EXISTS (SELECT * FROM smgt.[configuration] WHERE configuration_group = 'SolutionTemplate' AND configuration_subgroup = 'Notifier' AND [name] = 'ASDeployment' AND [value] ='true')
+    IF EXISTS (SELECT * FROM csrv.[configuration] WHERE configuration_group = 'SolutionTemplate' AND configuration_subgroup = 'Notifier' AND [name] = 'ASDeployment' AND [value] ='true')
 	SET @ASDeployment = 1;
 
     -- AS Flow
-    IF @ASDeployment=1 AND DATEDIFF(HOUR, @DeploymentTimestamp, Sysdatetime()) < 24 AND NOT EXISTS (SELECT * FROM smgt.ssas_jobs WHERE [statusMessage] = 'Success')
+    IF @ASDeployment=1 AND DATEDIFF(HOUR, @DeploymentTimestamp, Sysdatetime()) < 24 AND NOT EXISTS (SELECT * FROM csrv.ssas_jobs WHERE [statusMessage] = 'Success')
 	SET @StatusCode = -1;
 
     -- Delayed Processing Flow
     DECLARE @c1 INT, @c2 INT;
     SELECT @c1 = COUNT(*) FROM #counts;
-    SELECT @c2 = COUNT(*) from smgt.entityinitialcount;
+    SELECT @c2 = COUNT(*) from csrv.entityinitialcount;
     IF @c1<>@c2 
     SET @StatusCode = -1;
 
 
-	UPDATE smgt.[configuration] 
+	UPDATE csrv.[configuration] 
 	SET [configuration].[value] = @StatusCode
 	WHERE [configuration].configuration_group = 'SolutionTemplate' AND [configuration].configuration_subgroup = 'Notifier' AND [configuration].[name] = 'DataPullStatus'
 
-    MERGE smgt.entityinitialcount AS target
+    MERGE csrv.entityinitialcount AS target
     USING #counts AS source
     ON (target.entityname = source.entityname)
     WHEN MATCHED AND source.[Count] > target.lastcount 

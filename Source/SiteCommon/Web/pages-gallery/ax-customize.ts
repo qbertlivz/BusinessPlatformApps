@@ -7,22 +7,29 @@ export class Customize extends ViewModelBase {
     axBaseUrl: string = '';
     instances: string[] = [];
     selectedInstance: string = '';
+    urlRegex: RegExp;
 
     async onLoaded(): Promise<void> {
         super.onLoaded();
+        this.urlRegex = /^(ht|f)tps:\/\/[a-z0-9-\.]+\.[a-z]{2,4}\/?([^\s<>\#%\,\{\}\\|\\\^\[\]]+)?\/$/;
         await this.getInstances();
     }
 
     async onValidate(): Promise<boolean> {
 
         if (this.axBaseUrl) {
-            this.MS.DataStore.addToDataStore('AxInstanceName', this.axBaseUrl, DataStoreType.Public);
-            this.isValidated = true;
+            if (this.urlRegex.test(this.axBaseUrl)) {
+                this.MS.DataStore.addToDataStore('AxInstanceName', this.axBaseUrl, DataStoreType.Public);
+                this.isValidated = true;
+            } else {
+                this.MS.ErrorService.message = 'Validation failed. The url address ' + this.axBaseUrl + ' is not valid.';
+                this.isValidated = false;
+            }
         }
-        if(this.selectedInstance){
+        if (this.selectedInstance) {
             this.MS.DataStore.addToDataStore('AxInstanceName', this.selectedInstance, DataStoreType.Public);
             this.isValidated = true;
-        }        
+        }
         return true;
     }
 

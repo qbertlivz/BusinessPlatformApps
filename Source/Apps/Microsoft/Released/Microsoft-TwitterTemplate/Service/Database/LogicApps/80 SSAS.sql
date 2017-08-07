@@ -89,22 +89,19 @@ GO
 CREATE PROCEDURE pbist_twitter.sp_validate_schema AS
 BEGIN
     SET NOCOUNT ON;
+	DECLARE @tables NVARCHAR(MAX);
+	SELECT @tables = REPLACE([value],' ','')
+	FROM [pbist_twitter].[configuration]
+	WHERE configuration_group = 'SolutionTemplate'
+	AND	configuration_subgroup = 'StandardConfiguration' 
+	AND	name = 'Tables'
+
 	DECLARE @returnValue INT;
 	SELECT @returnValue = Count(*)
 	FROM   information_schema.tables
 	WHERE  ( table_schema = 'pbist_twitter' AND
 				 table_name IN (
-				 'tweets_processed', 
-				 'tweets_normalized', 
-				 'hashtag_slicer', 
-				 'mention_slicer', 
-				 'authorhashtag_graph',
-				 'authormention_graph',
-				 'minimum_tweets',
-				 'twitter_query',
-				 'twitter_query_readable',
-				 'twitter_query_details'
-				 ));
+				 SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' ));
     if(@returnValue = 10)
     BEGIN
     RETURN 1;
@@ -117,30 +114,35 @@ go
 CREATE PROCEDURE pbist_twitter.sp_get_current_record_counts AS
 BEGIN
     SET NOCOUNT ON;
-	DECLARE @returnValue INT;
-       SELECT @returnValue = SUM(tableCount) FROM
-        (
-			SELECT Count(*) AS tableCount FROM pbist_twitter.tweets_processed
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM pbist_twitter.tweets_normalized
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM pbist_twitter.hashtag_slicer
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM pbist_twitter.mention_slicer
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM pbist_twitter.authorhashtag_graph
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM pbist_twitter.authormention_graph
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM pbist_twitter.minimum_tweets
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM pbist_twitter.twitter_query
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM pbist_twitter.twitter_query_readable
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM pbist_twitter.twitter_query_details
-        ) AS temp;
-		RETURN @returnValue;
+	DECLARE @returnValue INT = 0;
+	
+	DECLARE @stmt AS NVARCHAR(500), @p1 AS VARCHAR(100)
+	DECLARE @cr CURSOR;
+
+	DECLARE @tables NVARCHAR(MAX);
+	SELECT @tables = REPLACE([value],' ','')
+	FROM pbist_twitter.[configuration]
+	WHERE configuration_group = 'SolutionTemplate'
+	AND	configuration_subgroup = 'StandardConfiguration' 
+	AND	name = 'Tables'
+
+	SET @cr = CURSOR FAST_FORWARD FOR
+              SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' 
+
+	OPEN @cr;
+	FETCH NEXT FROM @cr INTO @p1;
+	WHILE @@FETCH_STATUS = 0  
+	BEGIN 
+		DECLARE @retValue INT=0;
+		SET @stmt = 'SELECT @var = COUNT(*) FROM dbo.' + QuoteName(@p1);
+		DECLARE @ParmDefinition NVARCHAR(500) = N'@var int OUTPUT';
+		EXECUTE sp_executesql @stmt, @ParmDefinition, @var = @retValue OUTPUT;
+		SET @returnValue = @returnValue + @retValue;		
+			FETCH NEXT FROM @cr INTO @p1;
+END;
+CLOSE @cr;
+DEALLOCATE @cr;
+RETURN @returnValue;
 END;
 go
 

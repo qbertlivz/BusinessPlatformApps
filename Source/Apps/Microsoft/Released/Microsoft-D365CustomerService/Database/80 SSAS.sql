@@ -89,30 +89,20 @@ GO
 CREATE PROCEDURE csrv.sp_validate_schema AS
 BEGIN
     SET NOCOUNT ON;
+
+	DECLARE @tables NVARCHAR(MAX);
+	SELECT @tables = REPLACE([value],' ','')
+	FROM [csrv].[configuration]
+	WHERE configuration_group = 'SolutionTemplate'
+	AND	configuration_subgroup = 'StandardConfiguration' 
+	AND	name = 'Tables'
+
 	DECLARE @returnValue INT;
 	SELECT @returnValue = Count(*)
 	FROM   information_schema.tables
 	WHERE  ( table_schema = 'dbo' AND
-				 table_name IN (
-				 'optionsetmetadata', 
-				 'statusmetadata', 
-				 'statemetadata', 
-				 'globaloptionsetmetadata', 
-                 'account',
-                 'appointment',
-				 'contact',
-				 'email',
-				 'fax',
-				 'incident',
-				 'letter',
-				 'msdyn_survey',
-				 'msdyn_surveyresponse',
-				 'phonecall',
-				 'slakpiinstance',
-				 'systemuser',
-				 'task',
-				 'team'));
-    if(@returnValue = 18)
+				 table_name IN (SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' ));
+    if(@returnValue = 14)
     BEGIN
     RETURN 1;
     END;
@@ -124,46 +114,36 @@ go
 CREATE PROCEDURE csrv.sp_get_current_record_counts AS
 BEGIN
     SET NOCOUNT ON;
-	DECLARE @returnValue INT;
-       SELECT @returnValue = SUM(tableCount) FROM
-        (
-			SELECT Count(*) AS tableCount FROM dbo.optionsetmetadata
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.statusmetadata
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.statemetadata
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.globaloptionsetmetadata
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.account
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.appointment
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.contact
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.email
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.fax
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.incident
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.letter
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.msdyn_survey
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.msdyn_surveyresponse
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.phonecall
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.slakpiinstance
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.systemuser
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.task
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.team
-        ) AS temp;
-		RETURN @returnValue;
+
+	DECLARE @returnValue INT = 0;
+	
+	DECLARE @stmt AS NVARCHAR(500), @p1 AS VARCHAR(100)
+	DECLARE @cr CURSOR;
+
+	DECLARE @tables NVARCHAR(MAX);
+	SELECT @tables = REPLACE([value],' ','')
+	FROM [csrv].[configuration]
+	WHERE configuration_group = 'SolutionTemplate'
+	AND	configuration_subgroup = 'StandardConfiguration' 
+	AND	name = 'Tables'
+
+	SET @cr = CURSOR FAST_FORWARD FOR
+              SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' 
+
+	OPEN @cr;
+	FETCH NEXT FROM @cr INTO @p1;
+	WHILE @@FETCH_STATUS = 0  
+	BEGIN 
+		DECLARE @retValue INT=0;
+		SET @stmt = 'SELECT @var = COUNT(*) FROM dbo.' + QuoteName(@p1);
+		DECLARE @ParmDefinition NVARCHAR(500) = N'@var int OUTPUT';
+		EXECUTE sp_executesql @stmt, @ParmDefinition, @var = @retValue OUTPUT;
+		SET @returnValue = @returnValue + @retValue;		
+			FETCH NEXT FROM @cr INTO @p1;
+END;
+CLOSE @cr;
+DEALLOCATE @cr;
+RETURN @returnValue;
 END;
 go
 

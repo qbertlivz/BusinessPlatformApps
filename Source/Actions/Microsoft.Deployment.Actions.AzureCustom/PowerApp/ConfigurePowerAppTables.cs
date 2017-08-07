@@ -28,6 +28,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
             string searchQuery = request.DataStore.GetValue("SearchQuery") ?? string.Empty;
             string sqlConnectionString = request.DataStore.GetValueAtIndex("SqlConnectionString", "SqlServerIndex");
 
+            searchQuery = searchQuery.Replace("'", "''");
+
             bool isAdvanced = IsAdvancedTwitterQuery(searchQuery);
 
             SqlUtility.InvokeSqlCommand(sqlConnectionString, string.Format(INSERT_INTO_TWITTER_QUERY, 1, isAdvanced ? 1 : 0, searchQuery), null);

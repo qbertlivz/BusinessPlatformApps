@@ -117,8 +117,10 @@ namespace Microsoft.Deployment.Actions.Salesforce
                     query = CreateQuery(o, tableFields, true, pipelineStart, pipelineEnd);
                     armTemplate = CreateOneTimePipeline(armTemplate);
                 }
-
-                query = CreateQuery(o, tableFields, false);
+                else
+                {
+                    query = CreateQuery(o, tableFields, false);
+                }
 
                 if (historicalOnly && pipelineType == "PostDeployment")
                 {
@@ -342,7 +344,7 @@ namespace Microsoft.Deployment.Actions.Salesforce
                         }
                         else
                         {
-                            query.Append(" FROM " + o.Item1 + "')");
+                            query.Append(" FROM " + o.Item1 + "')\"");
                         }
                     }
                 }

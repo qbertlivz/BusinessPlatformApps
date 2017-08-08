@@ -20,8 +20,8 @@ AS
         operationName		AS [Operation Name],
         resourceGroup		AS [Resource Group],
         resourceId			AS [Resource ID],
+        resourceProvider    AS [Resource Provider],
         [status]			AS [Status],
-        statusCode			AS [Status Code],
         [timestamp]			AS [Timestamp]
     FROM bpst_aal.AdministrativeData;
 GO

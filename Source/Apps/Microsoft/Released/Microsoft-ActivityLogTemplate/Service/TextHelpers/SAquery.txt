@@ -94,13 +94,16 @@ SELECT
      ELSE SUBSTRING(arrayElement.ArrayValue.resourceId, 68, CHARINDEX('/', SUBSTRING(arrayElement.ArrayValue.resourceId, 68, 1000))-1)  
     END as resourceGroup,
     arrayElement.ArrayValue.resourceId,
+    CASE WHEN CHARINDEX('/PROVIDERS', arrayElement.ArrayValue.resourceId) = 0
+      THEN null
+      ELSE SUBSTRING(arrayElement.ArrayValue.resourceId, CHARINDEX('/PROVIDERS', arrayElement.ArrayValue.resourceId) + 11, CHARINDEX('/', SUBSTRING(arrayElement.ArrayValue.resourceId, CHARINDEX('/PROVIDERS', arrayElement.ArrayValue.resourceId) + 11, 1000)) - 1)
+    END as resourceProvider,
     CASE WHEN arrayElement.ArrayValue.resultType = 'Start'
         THEN 'Started'
         WHEN arrayElement.ArrayValue.resultType = 'Accept'
         THEN 'Accepted'
         ELSE arrayElement.ArrayValue.resultType
     END as status,
-    arrayElement.ArrayValue.Properties.statusCode,
     arrayElement.ArrayValue.time as [timestamp]
 INTO [AdministrativeOutput]
 FROM [EventHubInput] event CROSS APPLY GetArrayElements(event.records) AS arrayElement 

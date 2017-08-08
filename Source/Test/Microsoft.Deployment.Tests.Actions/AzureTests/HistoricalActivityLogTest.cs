@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Microsoft.Deployment.Tests.Actions.AzureTests
 {
     [TestClass]
-    public class ActivityLogTests
+    public class HistoricalActivityLogTest
     {
         [TestMethod]
         public async Task GetHistoricalDataTest()

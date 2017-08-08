@@ -46,6 +46,9 @@ namespace Microsoft.Deployment.Common.Model.StreamAnalytics
         [JsonProperty("resourceGroupName")]
         public string ResourceGroupName;
 
+        [JsonProperty("resourceProviderName")]
+        public StreamAnalyticsResourceProviderName ResourceProviderName;
+
         [JsonProperty("operationId")]
         public string OperationId;
 

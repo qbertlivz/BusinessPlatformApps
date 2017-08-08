@@ -7,18 +7,18 @@ SET QUOTED_IDENTIFIER       ON;
 
 CREATE TABLE bpst_aal.AdministrativeData (
     eventId INT IDENTITY(1,1) PRIMARY KEY,
-	[caller] VARCHAR(MAX),
-	correlationId VARCHAR(250),
+	[caller] VARCHAR(50),
+	correlationId VARCHAR(MAX),
 	[description] VARCHAR(MAX),
-	eventCategory VARCHAR(MAX), 
-	[level] VARCHAR(MAX),
-	operationCategory VARCHAR(MAX),
+	eventCategory VARCHAR(20), 
+	[level] VARCHAR(25),
+	operationCategory VARCHAR(20),
 	operationId VARCHAR(MAX),
 	operationName VARCHAR(MAX),
-	resourceGroup VARCHAR(MAX),
+	resourceGroup VARCHAR(50),
 	resourceId VARCHAR(MAX),
-	[status] VARCHAR(MAX),
-	statusCode VARCHAR(MAX),
+    resourceProvider VARCHAR(50),
+	[status] VARCHAR(25),
 	[timestamp] VARCHAR(MAX)
 );
 

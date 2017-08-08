@@ -48,8 +48,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
             table.Columns.Add("operationName");
             table.Columns.Add("resourceGroup");
             table.Columns.Add("resourceId");
+            table.Columns.Add("resourceProvider");
             table.Columns.Add("status");
-            table.Columns.Add("statusCode");
             table.Columns.Add("timestamp");
             return table;
         }
@@ -163,13 +163,13 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
                     }
                     adminRow["resourceGroup"] = activity.ResourceGroupName;
                     adminRow["resourceId"] = activity.Id;
+                    if (activity.ResourceProviderName != null)
+                    {
+                        adminRow["resourceProvider"] = activity.ResourceProviderName.Value.ToUpper();
+                    }
                     if (activity.Status != null)
                     {
                         adminRow["status"] = activity.Status.LocalizedValue;
-                    }
-                    if (activity.Properties != null)
-                    {
-                        adminRow["statusCode"] = activity.Properties.StatusCode;
                     }
                     adminRow["timestamp"] = activity.EventTimestamp;
                     adminTable.Rows.Add(adminRow);

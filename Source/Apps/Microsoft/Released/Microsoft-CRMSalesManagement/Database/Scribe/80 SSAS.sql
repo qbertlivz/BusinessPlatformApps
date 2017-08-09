@@ -88,21 +88,20 @@ GO
 -- SSAS validate schema
 CREATE PROCEDURE smgt.sp_validate_schema AS
 BEGIN
-    SET NOCOUNT ON;
+SET NOCOUNT ON;
+	DECLARE @tables NVARCHAR(MAX);
+	SELECT @tables = REPLACE([value],' ','')
+	FROM [smgt].[configuration]
+	WHERE configuration_group = 'SolutionTemplate'
+	AND	configuration_subgroup = 'StandardConfiguration' 
+	AND	name = 'Tables'
+
 	DECLARE @returnValue INT;
 	SELECT @returnValue = Count(*)
 	FROM   information_schema.tables
 	WHERE  ( table_schema = 'dbo' AND
 				 table_name IN (
-				 'account',
-				 'lead',
-				 'opportunity',
-				 'opportunityproduct',
-				 'product',
-				 'team',
-				 'systemuser',
-				 'systemusermanagermap',
-				 'territory'));
+				   SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' ));
     if(@returnValue = 9)
     BEGIN
     RETURN 1;
@@ -114,31 +113,36 @@ go
 -- Get Record Counts
 CREATE PROCEDURE smgt.sp_get_current_record_counts AS
 BEGIN
-    SET NOCOUNT ON;
-	DECLARE @returnValue INT;
-       SELECT @returnValue = SUM(tableCount) FROM
-        (
-			SELECT Count(*) AS tableCount FROM dbo.account
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.businessunit
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.lead
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.opportunity
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.opportunityproduct
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.product
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.team
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.systemuser
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.systemusermanagermap
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.territory
-        ) AS temp;
-		RETURN @returnValue;
+        SET NOCOUNT ON;
+	DECLARE @returnValue INT = 0;
+	
+	DECLARE @stmt AS NVARCHAR(500), @p1 AS VARCHAR(100)
+	DECLARE @cr CURSOR;
+
+	DECLARE @tables NVARCHAR(MAX);
+	SELECT @tables = REPLACE([value],' ','')
+	FROM [smgt].[configuration]
+	WHERE configuration_group = 'SolutionTemplate'
+	AND	configuration_subgroup = 'StandardConfiguration' 
+	AND	name = 'Tables'
+
+	SET @cr = CURSOR FAST_FORWARD FOR
+              SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' 
+
+	OPEN @cr;
+	FETCH NEXT FROM @cr INTO @p1;
+	WHILE @@FETCH_STATUS = 0  
+	BEGIN 
+		DECLARE @retValue INT=0;
+		SET @stmt = 'SELECT @var = COUNT(*) FROM dbo.' + QuoteName(@p1);
+		DECLARE @ParmDefinition NVARCHAR(500) = N'@var int OUTPUT';
+		EXECUTE sp_executesql @stmt, @ParmDefinition, @var = @retValue OUTPUT;
+		SET @returnValue = @returnValue + @retValue;		
+			FETCH NEXT FROM @cr INTO @p1;
+END;
+CLOSE @cr;
+DEALLOCATE @cr;
+RETURN @returnValue;
 END;
 go
 

@@ -137,7 +137,6 @@
     <Compile Include="Helpers\ErrorUtility.cs" />
     <Compile Include="Helpers\FileUtility.cs" />
     <Compile Include="Helpers\FTPUtility.cs" />
-    <Compile Include="Helpers\HttpClientUtility.cs" />
     <Compile Include="Helpers\ImpersonateUtility.cs" />
     <Compile Include="Helpers\InformaticaUtility.cs" />
     <Compile Include="Helpers\JsonUtility.cs" />
@@ -158,8 +157,18 @@
     <Compile Include="Helpers\StringEnumConverterLower.cs" />
     <Compile Include="Helpers\StringExtension.cs" />
     <Compile Include="Controller\Logger.cs" />
+    <Compile Include="Model\Azure\Function.cs" />
+    <Compile Include="Model\Azure\FunctionProperties.cs" />
+    <Compile Include="Model\Azure\FunctionPropertiesConfig.cs" />
+    <Compile Include="Model\Azure\FunctionPropertiesConfigBinding.cs" />
+    <Compile Include="Model\Azure\FunctionStatus.cs" />
+    <Compile Include="Model\Azure\FunctionStatusLog.cs" />
+    <Compile Include="Model\Azure\FunctionStatusProperties.cs" />
+    <Compile Include="Model\Azure\FunctionStatusWrapper.cs" />
+    <Compile Include="Model\Azure\FunctionWrapper.cs" />
     <Compile Include="Model\Custom\NewsEntity.cs" />
     <Compile Include="Model\DataPullStatus.cs" />
+    <Compile Include="Model\Http\HttpResponseDetails.cs" />
     <Compile Include="Model\Informatica\InformaticaActivityLog.cs" />
     <Compile Include="Model\Informatica\InformaticaAgent.cs" />
     <Compile Include="Model\Informatica\InformaticaConnection.cs" />

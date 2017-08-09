@@ -145,7 +145,13 @@
     <Compile Include="AzureTests\ConnectorTest.cs" />
     <Compile Include="AzureTests\AzureMLTest.cs" />
     <Compile Include="AzureTests\CognitiveServices.cs" />
+    <Compile Include="AzureTests\HelperStringsJson.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HelperStringsJson.resx</DependentUpon>
+    </Compile>
     <Compile Include="AzureTests\LogicAppTests.cs" />
+    <Compile Include="AcademicTests\AcademicTests.cs" />
     <Compile Include="FacebookTests\FacebookTests.cs" />
     <Compile Include="NewsTests\NewsTests.cs" />
     <Compile Include="NotifierTests.cs" />
@@ -162,6 +168,7 @@
     <Compile Include="TestHelpers\SalesforceCreds.cs" />
     <Compile Include="TestHelpers\SqlCreds.cs" />
     <Compile Include="TestHelpers\TestManager.cs" />
+    <Compile Include="TwitterTests\TwitterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Actions\Microsoft.Deployment.Actions.AzureCustom\Microsoft.Deployment.Actions.AzureCustom.csproj">
@@ -209,7 +216,12 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="AzureTests\HelperStringsJson.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>HelperStringsJson.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

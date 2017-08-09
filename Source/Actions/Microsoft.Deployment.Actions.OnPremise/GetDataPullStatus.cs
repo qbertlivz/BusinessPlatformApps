@@ -65,28 +65,24 @@ namespace Microsoft.Deployment.Actions.OnPremise
 
         private DataTable GetRecordCounts(string connectionString, string query)
         {
-            DataTable recordCounts = null;
-
-            try
-            {
-                recordCounts = SqlUtility.InvokeStoredProcedure(connectionString, query, null);
-            }
-            catch
-            {
-                // It's ok for this to fail, we'll just return an empty table
-                recordCounts = new DataTable();
-            }
-
-            return recordCounts;
+            return SqlUtility.InvokeStoredProcedure(connectionString, query, null);
         }
 
         private bool IsAtLeastOneRecordComingIn(DataTable recordCounts)
         {
             bool isAtLeastOneRecordComingIn = false;
 
-            for (int i = 0; i < recordCounts.Rows.Count && !isAtLeastOneRecordComingIn; i++)
+            // If we don't actually received a table or the columns in that table don't have the one we want
+            if (recordCounts != null && recordCounts.Columns.Contains(COUNT_NAME))
             {
-                isAtLeastOneRecordComingIn = Convert.ToInt64(recordCounts.Rows[i][COUNT_NAME]) > 0;
+                for (int i = 0; i < recordCounts.Rows.Count && !isAtLeastOneRecordComingIn; i++)
+                {
+                    object v = recordCounts.Rows[i][COUNT_NAME];
+                    if (v != DBNull.Value)
+                    {
+                        isAtLeastOneRecordComingIn = Convert.ToInt64(v) > 0;
+                    }
+                }
             }
 
             return isAtLeastOneRecordComingIn;

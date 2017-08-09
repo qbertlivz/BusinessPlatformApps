@@ -210,6 +210,7 @@
     <Compile Include="AzureSql\RestoreAzureSQLDB.cs" />
     <Compile Include="AzureToken\AzureTokenRequestMeta.cs" />
     <Compile Include="AzureToken\AzureTokenUtility.cs" />
+    <Compile Include="AzureToken\CreateADApplication.cs" />
     <Compile Include="AzureToken\CreateSpn.cs" />
     <Compile Include="AzureToken\GetAzureAuthUri.cs" />
     <Compile Include="AzureToken\GetAzureToken.cs" />

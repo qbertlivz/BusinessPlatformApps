@@ -5,54 +5,9 @@ SET ANSI_NULL_DFLT_ON       ON;
 SET CONCAT_NULL_YIELDS_NULL ON;
 SET QUOTED_IDENTIFIER       ON;
 
-CREATE TABLE [fb].[HashTags](
-	[Id] [nvarchar](50) NULL,
-	[HashTags] [nvarchar](100) NULL
-)
-
-CREATE TABLE [fb].[KeyPhrase](
-	[Id] [nvarchar](50) NULL,
-	[KeyPhrase] [nvarchar](100) NULL
-)
-
-CREATE TABLE [fb].[Sentiment](
-	[Id] [nvarchar](50) NULL,
-	[Sentiment] [float] NULL
-)
 
 
-CREATE TABLE [fb].[Reactions](
-	[Id] [nvarchar](50) NULL,
-	[Reaction Type] [nvarchar](30) NULL,
-	[Count] [bigint] NULL,
-)
-
-CREATE TABLE [fb].[Comments](
-	[Id] [nvarchar](50) NULL,
-	[Created Date] [datetime] NULL,
-	[Message] [nvarchar](max) NULL,
-	[From Id] [nvarchar](50) NULL,
-	[From Name] [nvarchar](100) NULL,
-	[Post Id] [nvarchar](50) NULL,
-	[Page] [nvarchar](100) NULL,
-    [PageDisplayName] [nvarchar](200) NULL,
-    [PageId] [nvarchar](50) NULL
-)
-
-CREATE TABLE [fb].[Posts](
-	[Id] [nvarchar](50) NULL,
-	[Created Date] [datetime] NULL,
-	[Message] [nvarchar](max) NULL,
-	[From Id] [nvarchar](50) NULL,
-	[From Name] [nvarchar](200) NULL,
-	[Media] [nvarchar](1000) NULL,
-    [Page] [nvarchar](100) NULL,
-    [PageDisplayName] [nvarchar](200) NULL,
-    [PageId] [nvarchar](50) NULL,
-	[Total Comments] [int] NULL
-)
-
-CREATE TABLE [fb].[Configuration](
+CREATE TABLE [ak].[Configuration](
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[configuration_group] [varchar](150) NOT NULL,
 	[configuration_subgroup] [varchar](150) NOT NULL,
@@ -61,7 +16,7 @@ CREATE TABLE [fb].[Configuration](
 	[visible] [bit] NOT NULL
 )
 
-CREATE TABLE [fb].[Date](
+CREATE TABLE ak.[Date](
 	[date_key] [int] NOT NULL,
 	[full_date] [date] NOT NULL,
 	[day_of_week] [tinyint] NOT NULL,
@@ -84,213 +39,305 @@ CREATE TABLE [fb].[Date](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
 )
 
-CREATE TABLE [fb].[StagingComments](
-	[Id] [nvarchar](50) NULL,
-	[Created Date] [datetime] NULL,
-	[Message] [nvarchar](max) NULL,
-	[From Id] [nvarchar](50) NULL,
-	[From Name] [nvarchar](100) NULL,
-	[Post Id] [nvarchar](50) NULL,
-    [Page] [nvarchar](100) NULL,
-    [PageDisplayName] [nvarchar](200) NULL,
-    [PageId] [nvarchar](50) NULL
-)
-
-CREATE TABLE [fb].[StagingError](
-	[Date] [datetime] NULL,
-	[Error] [nvarchar](max) NULL,
-	[Posts] [nvarchar](max) NULL
-)
-
-CREATE TABLE [fb].[StagingHashTags](
-	[Id] [nvarchar](50) NULL,
-	[HashTags] [nvarchar](100) NULL
-)
-
-CREATE TABLE [fb].[StagingKeyPhrase](
-	[Id] [nvarchar](50) NULL,
-	[KeyPhrase] [nvarchar](100) NULL
-)
-
-CREATE TABLE [fb].[StagingPosts](
-	[Id] [nvarchar](50) NULL,
-	[Created Date] [datetime] NULL,
-	[Message] [nvarchar](max) NULL,
-	[From Id] [nvarchar](50) NULL,
-	[From Name] [nvarchar](200) NULL,
-	[Media] [nvarchar](1000) NULL,
-	[Page] [nvarchar](100) NULL,
-    [PageDisplayName] [nvarchar](200) NULL,
-    [PageId] [nvarchar](50) NULL,
-	[Total Comments] [int] NULL,
-)
-
-CREATE TABLE [fb].[StagingReactions](
-	[Id] [nvarchar](50) NULL,
-	[Reaction Type] [nvarchar](30) NULL,
-	[Count] [bigint] NULL,
-)
+ALTER TABLE [ak].[configuration] ADD  DEFAULT ((0)) FOR [visible]
 
 
-CREATE TABLE [fb].[StagingSentiment](
-	[Id] [nvarchar](50) NULL,
-	[Sentiment] [float] NULL
-)
+-- Stage Tables
+Create Table ak.PaperStaging
+(
+	PId bigint,
+	Title nvarchar(511),
+	CId bigint,
+	JId bigint,
+	StaticRank float,
+	CitationCount bigint,
+	Year int,
+	Date datetime
+);
 
-GO
-
-CREATE TABLE [fb].[Users](
-	[Id] [bigint] NULL,
-	[Name] [nvarchar](100) NULL,
-)
-
-CREATE TABLE [fb].[Edges](
-	[SourceVertex] [bigint] NULL,
-    [TargetVertex] [bigint] NULL,
-    [EdgeWeight] [int] NULL,
-	[PageId] [nvarchar](50) NULL,
+CREATE NONCLUSTERED INDEX [key_PaperStaging] ON ak.PaperStaging
+(
+	PId ASC
 )
 GO
 
-CREATE NONCLUSTERED INDEX [SourceVertedId] ON [fb].[Edges]
+Create Table ak.AuthorStaging
 (
-	[SourceVertex] ASC
-)
+	AuId bigint,
+	AuthorName nvarchar(255),
+	AuthorDisplayName nvarchar(max)
+);
 
-CREATE NONCLUSTERED INDEX [UserId] ON [fb].[Users]
-(
-	[Id] ASC
-)
 
-CREATE NONCLUSTERED INDEX [StagingCommentsId1] ON [fb].[Comments]
+CREATE NONCLUSTERED INDEX [key_AuthorStaging] ON ak.AuthorStaging
 (
-	[Id] ASC
-)
-GO
-
-CREATE NONCLUSTERED INDEX [StagingCommentsPid1] ON [fb].[Comments]
-(
-	[Post Id] ASC
-)
-GO
-
-CREATE NONCLUSTERED INDEX [IX_HashTags] ON [fb].[HashTags]
-(
-	[Id] ASC
-)
-GO
-
-CREATE NONCLUSTERED INDEX [IX_KeyPhrase] ON [fb].[KeyPhrase]
-(
-	[Id] ASC
+	AuId ASC
 )
 GO
 
 
-CREATE NONCLUSTERED INDEX [PostsDate] ON [fb].[Posts]
+Create Table ak.JournalStaging
 (
-	[Created Date] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
-GO
+	JId bigint,
+	JournalName nvarchar(255),
+	JournalDisplayName nvarchar(255)
+);
 
-
-CREATE NONCLUSTERED INDEX [PostsId1] ON [fb].[Posts]
+CREATE NONCLUSTERED INDEX [key_JournalStaging] ON ak.JournalStaging
 (
-	[Id] ASC
+	JId ASC
 )
 GO
 
 
-CREATE NONCLUSTERED INDEX [IX_Reactions] ON [fb].[Reactions]
+Create Table ak.FieldsOfStudyStaging
 (
-	[Id] ASC
+	FId bigint,
+	FieldLevel int,
+	FieldName nvarchar(255),
+	FieldDisplayName nvarchar(255)
+);
+
+CREATE NONCLUSTERED INDEX [key_FieldsOfStudyStaging] ON ak.FieldsOfStudyStaging
+(
+	FId ASC
+)
+GO
+
+Create Table ak.ConferenceStaging
+(
+	CId bigint,
+	ConferenceName nvarchar(255),
+	ConferenceDisplayName nvarchar(255)
+);
+
+CREATE NONCLUSTERED INDEX [key_ConferenceStaging] ON ak.ConferenceStaging
+(
+	CId ASC
+)
+GO
+
+Create Table ak.AffiliationStaging
+(
+	AfId bigint,
+	AffiliationName nvarchar(255),
+	AffiliationDisplayName nvarchar(255)
+);
+
+CREATE NONCLUSTERED INDEX [key_AffiliationStaging] ON ak.AffiliationStaging
+(
+	AfId ASC
+)
+GO
+
+Create Table ak.PaperAuthorAffiliationRelationshipStaging
+(
+	PId bigint,
+	AuId bigint,
+	AfId bigint,
+	AuS int
+);
+
+CREATE NONCLUSTERED INDEX [key_PaperAuthorAffiliationRelationshipStaging] ON ak.PaperAuthorAffiliationRelationshipStaging
+(
+	PId ASC
+)
+GO
+
+CREATE NONCLUSTERED INDEX [keyi_PaperAuthorAffiliationRelationshipStaging] ON ak.PaperAuthorAffiliationRelationshipStaging
+(
+	AuId ASC
+)
+GO
+
+CREATE NONCLUSTERED INDEX [keyii_PaperAuthorAffiliationRelationshipStaging] ON ak.PaperAuthorAffiliationRelationshipStaging
+(
+	AfId ASC
+)
+GO
+
+Create Table ak.PaperFieldsOfStudyRelationshipStaging
+(
+	PId bigint,
+	FId bigint
+);
+
+CREATE NONCLUSTERED INDEX [key_PaperFieldsOfStudyRelationshipStaging] ON ak.PaperFieldsOfStudyRelationshipStaging
+(
+	PId ASC
+)
+GO
+
+CREATE NONCLUSTERED INDEX [keyi_PaperFieldsOfStudyRelationshipStaging] ON ak.PaperFieldsOfStudyRelationshipStaging
+(
+	FId ASC
+)
+GO
+
+Create Table ak.PaperCitationRelationshipStaging
+(
+	PId bigint,
+	RPId bigint
+)
+
+CREATE NONCLUSTERED INDEX [key_PaperCitationRelationshipStaging] ON ak.PaperCitationRelationshipStaging
+(
+	PId ASC
+)
+GO
+
+CREATE NONCLUSTERED INDEX [keyi_PaperCitationRelationshipStaging] ON ak.PaperCitationRelationshipStaging
+(
+	RPId ASC
+)
+GO
+
+-- Prod Tables
+Create Table ak.Paper
+(
+	PId bigint,
+	Title nvarchar(511),
+	CId bigint,
+	JId bigint,
+	StaticRank float,
+	CitationCount bigint,
+	Year int,
+	Date datetime
+);
+
+CREATE NONCLUSTERED INDEX [key_Paper] ON ak.Paper
+(
+	PId ASC
+)
+GO
+
+Create Table ak.Author
+(
+	AuId bigint,
+	AuthorName nvarchar(255),
+	AuthorDisplayName nvarchar(max)
+);
+
+
+CREATE NONCLUSTERED INDEX [key_Author] ON ak.Author
+(
+	AuId ASC
 )
 GO
 
 
-CREATE NONCLUSTERED INDEX [IX_Sentiment] ON [fb].[Sentiment]
+Create Table ak.Journal
 (
-	[Id] ASC
-)
-GO
+	JId bigint,
+	JournalName nvarchar(255),
+	JournalDisplayName nvarchar(255)
+);
 
-CREATE NONCLUSTERED INDEX [StagingCommentsId1] ON [fb].[StagingComments]
+CREATE NONCLUSTERED INDEX [key_Journal] ON ak.Journal
 (
-	[Id] ASC
-)
-GO
-
-
-CREATE NONCLUSTERED INDEX [StagingCommentsPid1] ON [fb].[StagingComments]
-(
-	[Post Id] ASC
+	JId ASC
 )
 GO
 
 
-CREATE NONCLUSTERED INDEX [IX_StagingHashTags] ON [fb].[StagingHashTags]
+Create Table ak.FieldsOfStudy
 (
-	[Id] ASC
+	FId bigint,
+	FieldLevel int,
+	FieldName nvarchar(255),
+	FieldDisplayName nvarchar(255)
+);
+
+CREATE NONCLUSTERED INDEX [key_FieldsOfStudy] ON ak.FieldsOfStudy
+(
+	FId ASC
 )
 GO
 
-
-CREATE NONCLUSTERED INDEX [IX_StagingKeyPhrase] ON [fb].[StagingKeyPhrase]
+Create Table ak.Conference
 (
-	[Id] ASC
+	CId bigint,
+	ConferenceName nvarchar(255),
+	ConferenceDisplayName nvarchar(255)
+);
+
+CREATE NONCLUSTERED INDEX [key_Conference] ON ak.Conference
+(
+	CId ASC
 )
 GO
 
-CREATE NONCLUSTERED INDEX [StagingPostsDate] ON [fb].[StagingPosts]
+Create Table ak.Affiliation
 (
-	[Created Date] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
-GO
+	AfId bigint,
+	AffiliationName nvarchar(255),
+	AffiliationDisplayName nvarchar(255)
+);
 
-
-CREATE NONCLUSTERED INDEX [StagingPostsId1] ON [fb].[StagingPosts]
+CREATE NONCLUSTERED INDEX [key_Affiliation] ON ak.Affiliation
 (
-	[Id] ASC
+	AfId ASC
 )
 GO
 
-
-CREATE NONCLUSTERED INDEX [IX_StagingReactions] ON [fb].[StagingReactions]
+Create Table ak.PaperAuthorAffiliationRelationship
 (
-	[Id] ASC
+	PId bigint,
+	AuId bigint,
+	AfId bigint,
+	AuS int
+);
+
+CREATE NONCLUSTERED INDEX [key_PaperAuthorAffiliationRelationship] ON ak.PaperAuthorAffiliationRelationship
+(
+	PId ASC
 )
 GO
 
-
-CREATE NONCLUSTERED INDEX [IX_StagingSentiment] ON [fb].[StagingSentiment]
+CREATE NONCLUSTERED INDEX [keyi_PaperAuthorAffiliationRelationship] ON ak.PaperAuthorAffiliationRelationship
 (
-	[Id] ASC
+	AuId ASC
 )
 GO
 
-
-CREATE NONCLUSTERED INDEX [UserId1] ON [fb].[StagingComments]
+CREATE NONCLUSTERED INDEX [keyii_PaperAuthorAffiliationRelationship] ON ak.PaperAuthorAffiliationRelationship
 (
-	[From Id] ASC
+	AfId ASC
 )
 GO
 
-CREATE NONCLUSTERED INDEX [UserId1] ON [fb].[StagingPosts]
+Create Table ak.PaperFieldsOfStudyRelationship
 (
-	[From Id] ASC
-)
+	PId bigint,
+	FId bigint
+);
 
-CREATE NONCLUSTERED INDEX [UserId1] ON [fb].[Comments]
+CREATE NONCLUSTERED INDEX [key_PaperFieldsOfStudyRelationship] ON ak.PaperFieldsOfStudyRelationship
 (
-	[From Id] ASC
+	PId ASC
 )
 GO
 
-CREATE NONCLUSTERED INDEX [UserId1] ON [fb].[Posts]
+CREATE NONCLUSTERED INDEX [keyi_PaperFieldsOfStudyRelationship] ON ak.PaperFieldsOfStudyRelationship
 (
-	[From Id] ASC
+	FId ASC
+)
+GO
+
+Create Table ak.PaperCitationRelationship
+(
+	PId bigint,
+	RPId bigint
 )
 
+CREATE NONCLUSTERED INDEX [key_PaperCitationRelationship] ON ak.PaperCitationRelationship
+(
+	PId ASC
+)
+GO
 
-ALTER TABLE [fb].[configuration] ADD  DEFAULT ((0)) FOR [visible]
-
+CREATE NONCLUSTERED INDEX [keyi_PaperCitationRelationship] ON ak.PaperCitationRelationship
+(
+	RPId ASC
+)
+GO

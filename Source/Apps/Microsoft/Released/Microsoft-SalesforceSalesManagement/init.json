@@ -165,6 +165,16 @@
                 "SqlServerIndex": "0"
             },
             {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+                "name": "Microsoft-SetConfigValueInSql",
+                "SqlConfigTable": "[smgt].[configuration]",
+                "SqlEntryName": "Tables",
+                "SqlEntryValue": "account,opportunity,userrole,lead,opportunitylineitem,product2,user,opportunitystage",
+                "SqlGroup": "SolutionTemplate",
+                "SqlServerIndex": "0",
+                "SqlSubGroup": "StandardConfiguration"
+            },
+            {
                 "displayname": "$translate(INIT_ACTION_CREATING_SALESFORCE_TABLES)",
                 "name": "Microsoft-SalesforceSqlArtefacts",
                 "skip": "$run(this.MS.DataStore.getValue('DataMovement') !== 'ADF')"

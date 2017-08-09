@@ -23,7 +23,10 @@ namespace Microsoft.Deployment.Actions.OnPremise
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            Thread.Sleep(new TimeSpan(0, 0, WAIT_INTERVAL));
+            if (string.IsNullOrEmpty(request.DataStore.GetValue("DoNotWait")))
+            {
+                Thread.Sleep(new TimeSpan(0, 0, WAIT_INTERVAL));
+            }
 
             DataTable recordCounts = GetRecordCounts(request.DataStore.GetValueAtIndex("SqlConnectionString", "SqlServerIndex"),
                 $"[{request.DataStore.GetValue("TargetSchema")}].{SP_REPLICATION_COUNTS}");

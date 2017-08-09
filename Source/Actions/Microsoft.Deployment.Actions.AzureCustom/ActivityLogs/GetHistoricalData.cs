@@ -80,111 +80,104 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
             System.DateTime days90ago = now.Subtract(new System.TimeSpan(2160, 0, 0));
             string nowString = now.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
             string days90agoString = days90ago.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
-            string geturi = $"https://management.azure.com/subscriptions/{subscription}/providers/microsoft.insights/eventtypes/management/values?api-version=2015-04-01&$filter=eventTimestamp ge '{days90agoString}' and eventTimestamp le '{nowString}' and eventChannels eq 'Admin, Operation'";
+            string geturi = string.IsNullOrEmpty(request.DataStore.GetValue("NextLink")) 
+                ? $"https://management.azure.com/subscriptions/{subscription}/providers/microsoft.insights/eventtypes/management/values?api-version=2015-04-01&$filter=eventTimestamp ge '{days90agoString}' and eventTimestamp le '{nowString}' and eventChannels eq 'Admin, Operation'" 
+                : request.DataStore.GetValue("NextLink");
             string sqlConn = request.DataStore.GetValue("SqlConnectionString");
             DataTable shTable = createServiceHealthTable();
             DataTable adminTable = createAdministrativeTable();
             AzureHttpClient ahc = new AzureHttpClient(token, subscription);
-            while (true)
+            string raw = await ahc.Request(HttpMethod.Get, geturi);
+            ActivityLogResponse response = JsonUtility.Deserialize<ActivityLogResponse>(raw);
+            foreach (ActivityLogEntry activity in response.Value)
             {
-                string raw = await ahc.Request(HttpMethod.Get, geturi);
-                ActivityLogResponse response = JsonUtility.Deserialize<ActivityLogResponse>(raw);
-                foreach (ActivityLogEntry activity in response.Value)
+                if (activity.Category != null)
                 {
-                    if (activity.Category != null)
+                    if (activity.Category.Value == "ServiceHealth")
                     {
-                        if (activity.Category.Value == "ServiceHealth")
+                        DataRow shRow = shTable.NewRow();
+                        shRow["serviceHealthId"] = activity.EventDataId;
+                        shRow["correlationId"] = activity.CorrelationId;
+                        shRow["description"] = activity.Description;
+                        if (activity.Properties != null)
                         {
-                            DataRow shRow = shTable.NewRow();
-                            shRow["serviceHealthId"] = activity.EventDataId;
-                            shRow["correlationId"] = activity.CorrelationId;
-                            shRow["description"] = activity.Description;
-                            if (activity.Properties != null)
-                            {
-                                shRow["impact"] = activity.Properties.Impact;
-                                shRow["impactedRegions"] = activity.Properties.ImpactedRegions;
-                                shRow["impactedServices"] = activity.Properties.ImpactedServices;
-                                shRow["incidentType"] = activity.Properties.IncidentType;
-                            }
-                            shRow["level"] = activity.Level;
-                            shRow["operationId"] = activity.OperationId;
-                            if (activity.Status != null)
-                            {
-                                shRow["status"] = activity.Status.LocalizedValue;
-                            }
-                            shRow["timestamp"] = activity.EventTimestamp;
-                            if (activity.Properties != null)
-                            {
-                                shRow["title"] = activity.Properties.Title;
-                            }
-                            shTable.Rows.Add(shRow);
+                            shRow["impact"] = activity.Properties.Impact;
+                            shRow["impactedRegions"] = activity.Properties.ImpactedRegions;
+                            shRow["impactedServices"] = activity.Properties.ImpactedServices;
+                            shRow["incidentType"] = activity.Properties.IncidentType;
                         }
-                    }
-                    DataRow adminRow = adminTable.NewRow();
-                    if (activity.Claims != null)
-                    {
-                        adminRow["caller"] = activity.Claims.Upn;
-                    }
-                    adminRow["correlationId"] = activity.CorrelationId;
-                    adminRow["description"] = activity.Description;
-                    if (activity.Category != null)
-                    {
-                        adminRow["eventCategory"] = activity.Category.Value;
-                    }
-                    adminRow["level"] = activity.Level;
-                    if (activity.OperationName != null)
-                    {
-                        string opName = activity.OperationName.Value;
-                        if (opName.Length > 5)
+                        shRow["level"] = activity.Level;
+                        shRow["operationId"] = activity.OperationId;
+                        if (activity.Status != null)
                         {
-                            int startidx;
-                            if ((startidx = opName.LastIndexOf("/")) != -1)
+                            shRow["status"] = activity.Status.LocalizedValue;
+                        }
+                        shRow["timestamp"] = activity.EventTimestamp;
+                        if (activity.Properties != null)
+                        {
+                            shRow["title"] = activity.Properties.Title;
+                        }
+                        shTable.Rows.Add(shRow);
+                    }
+                }
+                DataRow adminRow = adminTable.NewRow();
+                if (activity.Claims != null)
+                {
+                    adminRow["caller"] = activity.Claims.Upn;
+                }
+                adminRow["correlationId"] = activity.CorrelationId;
+                adminRow["description"] = activity.Description;
+                if (activity.Category != null)
+                {
+                    adminRow["eventCategory"] = activity.Category.Value;
+                }
+                adminRow["level"] = activity.Level;
+                if (activity.OperationName != null)
+                {
+                    string opName = activity.OperationName.Value;
+                    if (opName.Length > 5)
+                    {
+                        int startidx;
+                        if ((startidx = opName.LastIndexOf("/")) != -1)
+                        {
+                            string opCategory = opName.Substring(startidx + 1).ToLower();
+                            if (opCategory == "write")
                             {
-                                string opCategory = opName.Substring(startidx + 1).ToLower();
-                                if (opCategory == "write")
-                                {
-                                    adminRow["operationCategory"] = "Write";
-                                }
-                                else if (opCategory == "delete")
-                                {
-                                    adminRow["operationCategory"] = "Delete";
-                                }
-                                else if (opCategory == "action")
-                                {
-                                    adminRow["operationCategory"] = "Action";
-                                }
+                                adminRow["operationCategory"] = "Write";
+                            }
+                            else if (opCategory == "delete")
+                            {
+                                adminRow["operationCategory"] = "Delete";
+                            }
+                            else if (opCategory == "action")
+                            {
+                                adminRow["operationCategory"] = "Action";
                             }
                         }
                     }
-                    adminRow["operationId"] = activity.OperationId;
-                    if (activity.OperationName != null)
-                    {
-                        adminRow["operationName"] = activity.OperationName.LocalizedValue;
-                    }
-                    adminRow["resourceGroup"] = activity.ResourceGroupName;
-                    adminRow["resourceId"] = activity.Id;
-                    if (activity.ResourceProviderName != null)
-                    {
-                        adminRow["resourceProvider"] = activity.ResourceProviderName.Value.ToUpper();
-                    }
-                    if (activity.Status != null)
-                    {
-                        adminRow["status"] = activity.Status.LocalizedValue;
-                    }
-                    adminRow["timestamp"] = activity.EventTimestamp;
-                    adminTable.Rows.Add(adminRow);
                 }
-                BulkInsert(sqlConn, shTable, "bpst_aal.ServiceHealthData");
-                shTable = createServiceHealthTable();
-                BulkInsert(sqlConn, adminTable, "bpst_aal.AdministrativeData");
-                adminTable = createAdministrativeTable();
-                if ((geturi = response.NextLink) == null)
+                adminRow["operationId"] = activity.OperationId;
+                if (activity.OperationName != null)
                 {
-                    break;
+                    adminRow["operationName"] = activity.OperationName.LocalizedValue;
                 }
-
+                adminRow["resourceGroup"] = activity.ResourceGroupName;
+                adminRow["resourceId"] = activity.Id;
+                if (activity.ResourceProviderName != null)
+                {
+                    adminRow["resourceProvider"] = activity.ResourceProviderName.Value.ToUpper();
+                }
+                if (activity.Status != null)
+                {
+                    adminRow["status"] = activity.Status.LocalizedValue;
+                }
+                adminRow["timestamp"] = activity.EventTimestamp;
+                adminTable.Rows.Add(adminRow);
             }
-            return new ActionResponse(ActionStatus.Success);
+            BulkInsert(sqlConn, shTable, "bpst_aal.ServiceHealthData");
+            BulkInsert(sqlConn, adminTable, "bpst_aal.AdministrativeData");
+            request.DataStore.AddToDataStore("NextLink", response.NextLink, DataStoreType.Public);
+            return response.NextLink == null ? new ActionResponse(ActionStatus.Success) : new ActionResponse(ActionStatus.InProgress);
         }
     }
 }

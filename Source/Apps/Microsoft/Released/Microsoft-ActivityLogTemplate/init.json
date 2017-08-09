@@ -44,26 +44,31 @@
           "AdministrativeTable": "$save('bpst_aal.AdministrativeData')"
         },
         {
-                "displayname": "Summary",
-                "name": "$SiteCommon$/pages-gallery/summary.html",
-                "values": {
-                    "Target Server": "$(this.MS.DataStore.getValue('Server'))",
-                    "Target Database": "$(this.MS.DataStore.getValue('Database'))",
-                    "Target Username": "$(this.MS.DataStore.getValue('Username'))"
-                }
+            "displayname": "Summary",
+            "name": "$SiteCommon$/pages-gallery/summary.html",
+            "values": {
+                "Target Server": "$(this.MS.DataStore.getValue('Server'))",
+                "Target Database": "$(this.MS.DataStore.getValue('Database'))",
+                "Target Username": "$(this.MS.DataStore.getValue('Username'))"
             },
-            {
-                "datastoreEntriesToValidate": [
-                    "AzureToken",
-                    "SqlConnectionString"
-                ],
-                "displayname": "Deploy",
-                "downloadPbiText": "$translate(INIT_AAL_DOWNLOAD)",
-                "enablePublishReport": true,
-                "filename": "$save('ActivityLogTemplate.pbix')",
-                "name": "$SiteCommon$/pages-gallery/progress.html",
-                "uniqueId": "$save(this.MS.UtilityService.getUniqueId(8))"
-            }
+            "displayCompletionNotification": false,
+            "sendCompletionNotification": false
+        },
+        {
+            "datastoreEntriesToValidate": [
+                "AzureToken",
+                "SqlConnectionString"
+            ],
+            "displayname": "Deploy",
+            "downloadPbiText": "$translate(INIT_AAL_DOWNLOAD)",
+            "filename": "$save('ActivityLogTemplate.pbix')",
+            "name": "$SiteCommon$/pages-gallery/progress.html",
+            "finishedActionName": "Microsoft-GetHistoricalData",
+            "showCounts": true,
+            "targetSchema": "bpst_aal",
+            "DoNotWait": "$save('1')"
+
+        }
       ],
 
         "Actions": [
@@ -98,43 +103,22 @@
                 "name": "Microsoft-SetAdministrativeOutput"
             },
             {
-                "displayName": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_JSON_HELPER)",
-                "name":  "Microsoft-SetStreamAnalyticsJSONFunction"
+                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_JSON_HELPER)",
+                "name": "Microsoft-SetStreamAnalyticsJSONFunction"
             },
             {
                 "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_QUERY)",
                 "name": "Microsoft-SetStreamAnalyticsQuery"
             },
             {
-                "displayname": "$translate(INIT_ACTION_GET_HISTORICAL_ACTIVITY_LOG_DATA)",
-                "name": "Microsoft-GetHistoricalData"
-            },
-            {
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_STREAM_ANALYTICS)",
                 "name": "Microsoft-StartStreamAnalyticsJob"
-            }
-        ]
-    },
-
-    "Uninstall": {
-        "Pages": [
-            {
-                "displayname": "Uninstall Progress",
-                "HasNavigated": "$save(true)",
-                "isUninstall": true,
-                "name": "$SiteCommon$/pages-gallery/progress.html",
-                "successMessage": "$translate(INIT_UNINSTALL_SUCCESS)"
-            }
-        ],
-        "Actions": [
-            {
-                "displayname": "$translate(INIT_ACTION_REMOVING_FILES)",
-                "name": "Microsoft-RemoveFiles"
             },
             {
-                "displayname": "$translate(INIT_ACTION_FINISHING_CLEANUP)",
-                "name": "Microsoft-RemoveFiles",
-                "TargetPath": "C:\\Program Files\\Microsoft Templates\\Microsoft-CRMSalesManagement\\Apps\\Microsoft\\Released\\Microsoft-CRMSalesManagement\\Temp"
+                "displayname": "$translate(INIT_ACTION_GET_HISTORICAL_ACTIVITY_LOG_DATA)",
+                "name": "Microsoft-GetDataPullStatus",
+                "FinishedActionName": "Microsoft-GetHistoricalData",
+                "TargetSchema": "bpst_aal"
             }
         ]
     }

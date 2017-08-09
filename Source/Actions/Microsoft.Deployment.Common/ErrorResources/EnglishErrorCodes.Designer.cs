@@ -61,6 +61,15 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to It seems you&apos;re not running the correct platform version of Dynamics 365 for Finance and Operations. The template requires at least Platform Update 8..
+        /// </summary>
+        public static string AxWrongPlatform {
+            get {
+                return ResourceManager.GetString("AxWrongPlatform", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sorry, there was an error signing you in.
         /// </summary>
         public static string AzureLoginFailed {
@@ -106,7 +115,7 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         }
         
         /// <summary>
-        ///   Looks up the localized string 
+        ///   Looks up a localized string similar to This particular version of Windows 10 has Credential Guard enabled and a known issue prevents our scheduled job from running correctly. Please disable Credential Guard (https://www.microsoft.com/en-us/download/details.aspx?id=53337) or upgrade to Windows 10 Creators Update..
         /// </summary>
         public static string CredentialGuardEnabled {
             get {

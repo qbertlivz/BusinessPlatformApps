@@ -54,3 +54,4 @@
 *js.map
 /Source/SiteCommon/Web/**/*.js
 *.pubxml
+/Function/FacebookOAuth/obj/Debug

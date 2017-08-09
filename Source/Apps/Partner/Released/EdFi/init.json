@@ -1,0 +1,113 @@
+﻿{
+    "Install": {
+        "Pages": [
+            {
+                "architectureDiagram": "dist/Apps/Microsoft/Released/Partner-EdFi/Web/Images/edfidiagram.png",
+                "displayname": "Getting Started",
+                "list1": [
+                    "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",
+                    "$translate(INIT_GETTING_STARTED_PBI_DESKTOP)",
+                    "$translate(INIT_GETTING_STARTED_PBI_PRO)"
+                ],
+                "list2": [
+                    "$translate(INIT_GETTING_STARTED_CLOUD_SOLUTION)",
+                    "$translate(INIT_GETTING_STARTED_CONNECT_AS_PBI)"
+                ],
+                "name": "$SiteCommon$/pages-gallery/getting-started.html",
+                "templateName": "$translate(AX_COLLECTIONS_TEMPLATE_TITLE)"
+            },
+            {
+                "azureProviders": [
+                    "Microsoft.Web"
+                ],
+                "displayname": "Login",
+                "name": "$SiteCommon$/pages-gallery/azure-login.html"
+            },
+            {
+                "checkSqlVersion": true,
+                "displayname": "Target",
+                "isAzureSql": true,
+                "name": "$SiteCommon$/pages-gallery/sql.html",
+                "newSqlDatabase": "Edfi",
+                "showAzureSql": false,
+                "showNewSqlOption": "true",
+                "showSkuS1": true,
+                "sqlInstance": "NewSql",
+                "sqlSku": "S1",
+                "subtitle": "$translate(INIT_SQL_TITLE)",
+                "title": "$translate(INIT_SQL_TITLE)"
+            },
+            {
+                "displayname": "Customize",
+                "name": "$SiteCommon$/pages-gallery/ax-customize.html",
+                "useDefaultValidateButton": true
+            },
+            {
+                "name": "$SiteCommon$/pages-gallery/choose-analysis-server.html",
+                "displayname": "AAS",
+                "showDescription": true,
+                "ssasEnabled": "true"
+            },
+  
+            {
+                "displayname": "Summary",
+                "name": "$SiteCommon$/pages-gallery/summary.html",
+                "values": {
+                    "Target Server": "$(this.MS.DataStore.getValue('Server'))",
+                    "Target Database": "$(this.MS.DataStore.getValue('Database'))",
+                    "Target Username": "$(this.MS.DataStore.getValue('Username'))"
+                },
+                "ConnectorName": "$save('dynamicsax')",
+                "AxReportName": "$save('CreditAndCollectionsManagementReport')",
+                "AxMeasurementName": "$save('CustCollectionsBIMeasurements')"
+            },
+            {
+                "displayname": "Deploy",
+                "filename": "$save('CreditAndCollectionsImportMode.pbix')",
+                "filenameSSAS": "$save('CreditAndCollectionsAs.pbix')",
+                "name": "$SiteCommon$/pages-gallery/progress.html",
+                "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))",
+                "asDatabase": "Edfi",
+                "showCounts": true,
+                "targetSchema": "cc"
+            }
+        ],
+
+        "Actions": [
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
+                "name": "Microsoft-RestoreAzureSQLDB",
+                "SqlServerIndex": "0",
+                "odsAssetsStorageBaseUrl": "https://odsassets.blob.core.windows.net/public/release",
+                "odsLatestVersionUrl": "\"https://odsassets.blob.core.windows.net/public/release/LatestVersion.txt\".",
+                "odsSqlBacPack": "EdFi_Ods_Populated_Template.bacpac"
+            },
+            {
+                "ASDatabase": "Edfi",
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_AS_MODEL)",
+                "name": "Microsoft-DeployAzureASModel",
+                "skip": "$run(this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
+                "SqlConnectionString": "$dsall(SqlConnectionString)[0]",
+                "xmlaFilePath": "Service/AzureAS/edfi.xmla"
+            },
+            {
+                "displayname": "Create Service Principal",
+                "name": "Microsoft-CreateSpn",
+                "skip": "$run(this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
+            },
+            {
+                "displayname": "Assign Service Principal Permission",
+                "name": "Microsoft-AssignPermissionsForUser",
+                "skip": "$run(this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
+                "UserToAdd": "$ds(SPNUser)",
+                "ASDatabase": "Edfi"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_WAITING_DATA)",
+                "name": "Microsoft-GetDataPullStatus",
+                "SqlServerIndex": 0,
+                "TargetSchema": "edfi"
+            }
+        ]
+    }
+}

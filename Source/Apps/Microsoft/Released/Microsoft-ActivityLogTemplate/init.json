@@ -23,12 +23,12 @@
           "templateName": "$translate(INIT_AAL_TITLE)"
         },
         {
-          "defaultLocation": "5",
-          "displayname": "Login",
-          "name": "$SiteCommon$/pages-gallery/azure-login.html",
-          "pricingCalculatorUrl": "$translate(INIT_NEWS_PRICING_CALCULATOR)",
-          "pricingCost": "$translate(INIT_AAL_PRICING_COST)",
-          "pricingUrl": "$translate(INIT_NEWS_PRICING_URL)"
+            "defaultLocation": "5",
+            "displayname": "Login",
+            "name": "$SiteCommon$/pages-gallery/azure-login.html",
+            "pricingCalculatorUrl": "$translate(INIT_NEWS_PRICING_CALCULATOR)",
+            "pricingCost": "$translate(INIT_AAL_PRICING_COST)",
+            "pricingUrl": "$translate(INIT_AAL_PRICING_URL)"
         },
         {
           "displayname": "Source",

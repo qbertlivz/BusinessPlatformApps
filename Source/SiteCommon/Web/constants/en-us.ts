@@ -231,6 +231,7 @@
     GETTING_STARTED_TITLE: `Get started with`,
     INIT_AAL_DOWNLOAD: `Open the Power BI report (.pbix file) to analyze your Azure Activity Log. Publish the report for others to see in your Power BI workspace. You will need Power BI Desktop to open this file - download it`,
     INIT_AAL_PRICING_COST: `By clicking next and deploying the template, you authorize Microsoft to create Azure resources on your subscription and bill based on their respective pricing rates.  The approximate base cost of the Azure resources used by this template is $3.27 a day.  These costs are estimates only and subject to change.`,
+    INIT_AAL_PRICING_URL: `https://github.com/Microsoft/BusinessPlatformApps/blob/lance-stream/README.md`,
     INIT_AAL_SUBTITLE: `Welcome to the Azure Activity Log solution template.`,
     INIT_AAL_TITLE: `Azure Activity Log Analytics`,
     INIT_ACTION_BATCH_PERMISSION: `Granting permission for logging as a batch job`,

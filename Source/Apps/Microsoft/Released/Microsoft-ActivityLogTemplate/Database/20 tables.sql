@@ -27,12 +27,12 @@ CREATE TABLE bpst_aal.ServiceHealthData (
     correlationId VARCHAR(MAX),
     [description] VARCHAR(MAX),
     impact VARCHAR(MAX),
-    impactedRegions VARCHAR(MAX),
+    impactedRegions VARCHAR(50),
     impactedServices VARCHAR(MAX),
-    incidentType VARCHAR(MAX),
-    [level] VARCHAR(MAX),
+    incidentType VARCHAR(50),
+    [level] VARCHAR(50),
     operationId VARCHAR(MAX),
-    [status] VARCHAR(MAX),
+    [status] VARCHAR(50),
     [timestamp] VARCHAR(MAX),
     title VARCHAR(MAX)
 );

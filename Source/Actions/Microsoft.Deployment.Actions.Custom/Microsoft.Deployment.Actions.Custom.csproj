@@ -156,6 +156,7 @@
     <Compile Include="Ax\DeployAxLogicApp.cs" />
     <Compile Include="Ax\GetAxInstances.cs" />
     <Compile Include="Ax\UpdateAxConfigurationEntity.cs" />
+    <Compile Include="Ax\ValidateAxInstance.cs" />
     <Compile Include="CustomerData\CustomerInfo.cs" />
     <Compile Include="CustomerData\PushToSimplement.cs" />
     <Compile Include="Facebook\ValidateFacebookDeveloperAccount.cs" />

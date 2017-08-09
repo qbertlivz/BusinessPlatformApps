@@ -169,7 +169,8 @@
                             },
                             "runAfter": {
                                 "Execute_action": [
-                                    "Succeeded"
+                                    "Succeeded",
+                                    "Failed"
                                 ]
                             },
                             "type": "ApiConnection"

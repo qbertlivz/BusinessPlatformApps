@@ -147,6 +147,11 @@
     <Compile Include="AzureTests\ConnectorTest.cs" />
     <Compile Include="AzureTests\AzureMLTest.cs" />
     <Compile Include="AzureTests\CognitiveServices.cs" />
+    <Compile Include="AzureTests\HelperStringsJson.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HelperStringsJson.resx</DependentUpon>
+    </Compile>
     <Compile Include="AzureTests\EventHubTests.cs" />
     <Compile Include="AzureTests\StreamAnalyticsTests.cs" />
     <Compile Include="AzureTests\LogicAppTests.cs" />
@@ -215,7 +220,12 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="AzureTests\HelperStringsJson.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>HelperStringsJson.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

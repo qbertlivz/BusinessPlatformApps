@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace Microsoft.Deployment.Tests.Actions.TestHelpers
         private static CommonController Controller { get; set; }
         public static string TemplateName = "Microsoft-NewsTemplateTest";
 
-        private static async Task<DataStore> GetDataStoreWithToken(bool force = false)
+        private static async Task<DataStore> GetDataStoreWithToken(bool force = false, Dictionary<string, string> extraTokens = null)
         {
             // Read from file DataStore
             if (File.Exists("datastore.json") && !force)
@@ -57,6 +58,19 @@ namespace Microsoft.Deployment.Tests.Actions.TestHelpers
             // If not found or refresh failed prompt
             Credential.Load();
             var dataStore = await AAD.GetUserTokenFromPopup();
+
+            if (extraTokens != null)
+            {
+                foreach (KeyValuePair<string, string> pair in extraTokens)
+                {
+                    var datastoreExtra = await AAD.GetUserTokenFromPopup(pair.Key); // see AAD case 'powerbi'
+                    dataStore.AddToDataStore(pair.Value, datastoreExtra.GetJson(pair.Value)); // {PBIToken:val}
+                    dataStore.AddToDataStore("code" + pair.Key, datastoreExtra.GetValue("code"));
+                    dataStore.AddToDataStore("state" + pair.Key, datastoreExtra.GetValue("state"));
+                    dataStore.AddToDataStore("sessionstate" + pair.Key, datastoreExtra.GetValue("session_state"));
+                }
+            }
+
             var subscriptionResult = await TestManager.ExecuteActionAsync("Microsoft-GetAzureSubscriptions", dataStore);
             Assert.IsTrue(subscriptionResult.IsSuccess);
             var subscriptionId = subscriptionResult.Body.GetJObject()["value"].SingleOrDefault(p => p["DisplayName"].ToString().StartsWith("PBI_"));
@@ -73,9 +87,9 @@ namespace Microsoft.Deployment.Tests.Actions.TestHelpers
             return dataStore;
         }
 
-        public static async Task<DataStore> GetDataStore(bool force = false)
+        public static async Task<DataStore> GetDataStore(bool force = false, Dictionary<string, string> extraTokens = null)
         {
-            var dataStore = await GetDataStoreWithToken(force);
+            var dataStore = await GetDataStoreWithToken(force, extraTokens);
             return dataStore;
         }
 

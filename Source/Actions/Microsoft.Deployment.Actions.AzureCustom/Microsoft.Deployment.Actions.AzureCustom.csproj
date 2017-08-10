@@ -177,6 +177,17 @@
     <Compile Include="..\..\SharedVersion.cs">
       <Link>Properties\SharedVersion.cs</Link>
     </Compile>
+    <Compile Include="ActivityLogs\CreateStreamAnalyticsJob.cs" />
+    <Compile Include="ActivityLogs\SetStreamAnalyticsJSONFunction.cs" />
+    <Compile Include="ActivityLogs\ExportActivityLogToEventHub.cs" />
+    <Compile Include="ActivityLogs\GetAppWorkspaces.cs" />
+    <Compile Include="ActivityLogs\GetEventHubPrimaryKey.cs" />
+    <Compile Include="ActivityLogs\GetHistoricalData.cs" />
+    <Compile Include="ActivityLogs\SetAdministrativeOutput.cs" />
+    <Compile Include="ActivityLogs\SetServiceHealthOutput.cs" />
+    <Compile Include="ActivityLogs\SetStreamAnalyticsInputAsEventHub.cs" />
+    <Compile Include="ActivityLogs\SetStreamAnalyticsQuery.cs" />
+    <Compile Include="ActivityLogs\StartStreamAnalyticsJob.cs" />
     <Compile Include="Arm\DeployAzureArmTemplate.cs" />
     <Compile Include="Arm\WaitForArmDeploymentStatus.cs" />
     <Compile Include="AzureAS\AssignPermissionsForUser.cs" />
@@ -236,6 +247,7 @@
     <Compile Include="AzureAS\DeployAzureAnalysisServices.cs" />
     <Compile Include="Common\GetStorageAccountKey.cs" />
     <Compile Include="CreateSqlConnector.cs" />
+    <Compile Include="ActivityLogs\CreateEventHubNameSpace.cs" />
     <Compile Include="FTPUtilityTest.cs" />
     <Compile Include="LogicApp\LogicAppConnector.cs" />
     <Compile Include="LogicApp\ForceRunLogicApp.cs" />

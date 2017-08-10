@@ -24,9 +24,8 @@ export class UtilityService {
         window.location.href = await this.MS.HttpService.getExecuteResponseAsync('Microsoft-GetAzureAuthUri', 'value', { oauthType: openAuthorizationType });
     }
 
-    async connectToFacebook(clientId: string): Promise<void> {
-        let redirectUri: string = "http://localhost:1503/redirect.html";
-        window.location.href = "https://www.facebook.com/v2.10/dialog/oauth?client_id=" + clientId + "&redirect_uri=" + redirectUri + "&response_type=code&granted_scopes=manage_pages,publish_pages";
+    async connectToFacebook(): Promise<void> {
+        window.location.href = await this.MS.HttpService.getExecuteResponseAsync('Microsoft-GetFacebookAuthUri');
     }
 
     extractDomain(username: string): string {
@@ -77,10 +76,10 @@ export class UtilityService {
                 this.MS.ErrorService.set(this.MS.Translate.AZURE_LOGIN_UNKNOWN_ERROR, this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.ERROR_DESCRIPTION, queryParam));
             } else {
                 if (openAuthorizationType === 'Facebook') {
-                    await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-GetFacebookToken', { code: token, oauthType: openAuthorizationType })
+                    await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-GetPermanentPageToken', { code: token, oauthType: openAuthorizationType })
                     await callback();
                 }
-                if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-GetAzureToken', { code: token, oauthType: openAuthorizationType })) {
+                else if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-GetAzureToken', { code: token, oauthType: openAuthorizationType })) {
                     await callback();
                 }
             }

@@ -51,5 +51,7 @@
 
         //Facebook constants
         public const string FacebookGraphUrl = "https://graph.facebook.com";
+        public const string FacebookClientId = "1631359040270051";
+        public static string FacebookClientSecret = string.Empty;
     }
 }

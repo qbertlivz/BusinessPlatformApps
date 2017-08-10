@@ -19,7 +19,7 @@ CREATE TABLE bpst_aal.AdministrativeData (
 	resourceId VARCHAR(MAX),
     resourceProvider VARCHAR(50),
 	[status] VARCHAR(25),
-	[timestamp] VARCHAR(MAX)
+	[timestamp] VARCHAR(50)
 );
 
 CREATE TABLE bpst_aal.ServiceHealthData (
@@ -33,7 +33,7 @@ CREATE TABLE bpst_aal.ServiceHealthData (
     [level] VARCHAR(50),
     operationId VARCHAR(MAX),
     [status] VARCHAR(50),
-    [timestamp] VARCHAR(MAX),
+    [timestamp] VARCHAR(50),
     title VARCHAR(MAX)
 );
 

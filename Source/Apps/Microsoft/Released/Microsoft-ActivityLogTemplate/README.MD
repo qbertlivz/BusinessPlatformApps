@@ -18,7 +18,7 @@ For any questions not covered in this document, please contact the team at <PBIS
 
 ### Architecture
 
-![Image](dist/Apps/Microsoft/Released/Microsoft-ActivityLogTemplate/Web/Images/azure-activity-log.png)
+![Image](Web/Images/azure-activity-log.png)
 
 The Azure Activity Log pipeline consists of the following resources:
 

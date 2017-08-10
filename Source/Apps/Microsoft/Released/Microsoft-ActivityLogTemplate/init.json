@@ -6,7 +6,7 @@
     "Install": {
       "Pages": [
         {
-          "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-ActivityLogTemplate/Web/Images/azure-activity-log.png",
+          "architectureDiagram": "/Web/Images/azure-activity-log.png",
           "displayname": "Getting Started",
           "list1": [
             "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",

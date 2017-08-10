@@ -9,4 +9,11 @@
         <button class="primary" click.trigger="connect()" disabled.bind="MS.HttpService.isServiceBusy">${MS.Translate.AZURE_LOGIN_CONNECT}</button>
     </div>
 
+    <div class="st-float" if.bind="pages && pages.length > 0">
+        <p class="st-text">${MS.Translate.AZURE_LOGIN_SUBSCRIPTION}</p>
+        <select class="btn btn-default dropdown-toggle st-input" disabled.bind="MS.HttpService.isServiceBusy" value.bind="selectedPage">
+            <option repeat.for="item of pages" value.bind="item.name">${item.name}</option>
+        </select>
+    </div>
+
 </template>

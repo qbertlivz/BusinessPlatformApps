@@ -22,7 +22,7 @@ namespace Microsoft.Deployment.Actions.Custom.Facebook
             string clientId = Constants.FacebookClientId;
             string clientSecret = Constants.FacebookClientSecret;
             string redirectUri = request.Info.WebsiteRootUrl + Constants.WebsiteRedirectPath;
-            string pageToken = string.Empty;
+            JObject pages = new JObject();
 
             try
             {
@@ -32,15 +32,14 @@ namespace Microsoft.Deployment.Actions.Custom.Facebook
                     var longLivedAccessToken = await GetToken($"https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id={clientId}&client_secret={clientSecret}&fb_exchange_token={shortLivedAccessToken}&granted_scopes=manage_pages,publish_pages", "access_token");
                     var id = await GetUserId($"https://graph.facebook.com/v2.10/me?access_token={longLivedAccessToken}");
                     var pagePayload = await GetToken($"https://graph.facebook.com/v2.10/{id}/accounts?access_token={longLivedAccessToken}");
-                    pageToken = JsonUtility.GetJObjectFromJsonString(pagePayload)["data"][0]["access_token"].ToString();
-                }
-                 
-                if (!string.IsNullOrEmpty(pageToken))
-                {
-                    request.DataStore.AddObjectDataStore("PermanentFbPageToken", JsonUtility.GetJObjectFromStringValue(pageToken), DataStoreType.Private);
-                    return new ActionResponse(ActionStatus.Success);
+                    pages = JsonUtility.GetJObjectFromJsonString(pagePayload);
+                    request.DataStore.AddObjectDataStore("FacebookPages", JsonUtility.GetJObjectFromObject(pages), DataStoreType.Private);
                 }
 
+                if (pages["data"].Count() > 0)
+                {
+                    return new ActionResponse(ActionStatus.Success);
+                }
                 return new ActionResponse(ActionStatus.Failure);
             }
             catch

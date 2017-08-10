@@ -215,6 +215,8 @@
     FACEBOOK_PAGES_FOLLOW: `Facebook Pages to follow:`,
     FACEBOOK_PAGES_SUBTITLE: `Enter in the pages you wish to follow`,
     FACEBOOK_PAGES_TITLE: `Facebook Pages`,
+    FACEBOOK_LOGIN_CONNECT: `Connect to Facebook`,
+    FACEBOOK_LOGIN_PAGES_SUBTITLE: `To create the solution we require you to sign in to your Facebook account`,
     GETTING_STARTED_COMPANY: `Company:`,
     GETTING_STARTED_EMAIL: `Email:`,
     GETTING_STARTED_EMAIL_CONFIRMATION: `Email Confirmation:`,

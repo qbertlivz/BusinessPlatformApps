@@ -134,7 +134,7 @@ BEGIN
 	WHILE @@FETCH_STATUS = 0  
 	BEGIN 
 		DECLARE @retValue INT=0;
-		SET @stmt = 'SELECT @var = COUNT(*) FROM dbo.' + QuoteName(@p1);
+		SET @stmt = 'SELECT @var = COUNT(*) FROM pbist_twitter.' + QuoteName(@p1);
 		DECLARE @ParmDefinition NVARCHAR(500) = N'@var int OUTPUT';
 		EXECUTE sp_executesql @stmt, @ParmDefinition, @var = @retValue OUTPUT;
 		SET @returnValue = @returnValue + @retValue;		

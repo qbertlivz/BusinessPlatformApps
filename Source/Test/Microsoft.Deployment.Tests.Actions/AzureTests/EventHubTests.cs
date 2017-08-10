@@ -18,18 +18,10 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
         {
             // Tests the Action to create an Event Hub Namespace
             var dataStore = await TestManager.GetDataStore(true);
-            dataStore.AddToDataStore("EHDeploymentName", "testaldeploy2");
-            var payload = new JObject();
-            var namespaceName = "testspace4";
-            var eventHubName = "testhub";
-            var consumerGroupName = "LancesConsumerGroup3";
-            payload.Add("namespaceName", namespaceName);
-            payload.Add("eventHubName", eventHubName);
-            payload.Add("consumerGroupName", consumerGroupName);
-            dataStore.AddToDataStore("AzureArmParameters", payload);
+
             var deployArmResult = await TestManager.ExecuteActionAsync(
                 "Microsoft-CreateEventHubNameSpace", dataStore, "Microsoft-ActivityLogTemplate");
-
+        
             //var deployArmResult = await TestManager.ExecuteActionAsync(
             //    "Microsoft-DeployAzureArmTemplate", dataStore, "Microsoft-ActivityLogTemplate");
             Assert.IsTrue(deployArmResult.IsSuccess);
@@ -52,6 +44,21 @@ namespace Microsoft.Deployment.Tests.Actions.AzureTests
             var dataStore = await TestManager.GetDataStore();
             dataStore.AddToDataStore("namespace", "POC-Namespace3");
             var response = await TestManager.ExecuteActionAsync("Microsoft-GetEventHubPrimaryKey", dataStore);
+            Assert.IsTrue(response.IsSuccess);
+        }
+
+        [TestMethod]
+        public async Task VerifyLogProfileEventHub()
+        {
+            // Tests the Action to verify that the insights-operational-logs event hub that is created
+            // when configuring the Log Profile actually exists
+            var dataStore = await TestManager.GetDataStore();
+           
+            var deployArmResult = await TestManager.ExecuteActionAsync(
+                "Microsoft-CreateEventHubNameSpace", dataStore, "Microsoft-ActivityLogTemplate");
+            Assert.IsTrue(deployArmResult.IsSuccess);
+
+            var response = await TestManager.ExecuteActionAsync("Microsoft-VerifyLogProfileEventHub", dataStore);
             Assert.IsTrue(response.IsSuccess);
         }
     }

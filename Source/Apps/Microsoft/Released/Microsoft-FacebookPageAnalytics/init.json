@@ -1,0 +1,32 @@
+﻿{
+    "Install": {
+        "Pages": [
+            {
+                "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-FacebookTemplate/Web/images/ArchitectureDiagram.png",
+                "displayname": "Getting Started",
+                "list1": [
+                    "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",
+                    "$translate(INIT_GETTING_STARTED_PBI_DESKTOP)",
+                    "$translate(INIT_GETTING_STARTED_PBI_PRO)",
+                    "$translate(INIT_GETTING_STARTED_FACEBOOK)"
+                ],
+                "list2": [
+                    "$translate(INIT_GETTING_STARTED_CLOUD_SOLUTION)",
+                    "$translate(INIT_GETTING_STARTED_CONNECT_AS_PBI)"
+                ],
+                "name": "$SiteCommon$/pages-gallery/getting-started.html",
+                "templateName": "Brand And Campaign Management For Facebook",
+                "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
+            },
+            {
+                "displayname": "Facebook Login",
+                "name": "$SiteCommon$/pages-gallery/facebook-login.html"
+            }
+            
+        ],
+
+        "Actions": [
+           
+        ]
+    }
+}

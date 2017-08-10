@@ -159,6 +159,7 @@
     <Compile Include="Ax\ValidateAxInstance.cs" />
     <Compile Include="CustomerData\CustomerInfo.cs" />
     <Compile Include="CustomerData\PushToSimplement.cs" />
+    <Compile Include="Facebook\GetPermanantPageToken.cs" />
     <Compile Include="Facebook\ValidateFacebookDeveloperAccount.cs" />
     <Compile Include="Facebook\SearchFacebookPage.cs" />
     <Compile Include="Facebook\ValidateFacebookPage.cs" />

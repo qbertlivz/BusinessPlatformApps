@@ -28,7 +28,7 @@ The following document provides a walkthrough of the architecture, a deep dive i
 
 ### Architecture
 
-![Image](Resources/Media/azure-activity-log.png)
+![Image](Resources/media/azure-activity-log.png)
 
 The flow of the Azure Activity Log solution template consists of the following resources:
 
@@ -86,14 +86,14 @@ As a user navigates away from this page a new resource group gets spun up on the
 
 The following section will break down how the template works by going through all the components of the solution.
 
-![Image](Resources/Media/azure-activity-log.png)
+![Image](Resources/media/azure-activity-log.png)
 
 Azure Resources:
 ----------------
 
 You can access all of the resources that have been spun up by logging into the Azure portal. Everything should be under one resource group (unless a user was using an existing SQL server. In this case the SQL Server will appear in whatever resource group it already existed in).
 
-![Image](Resources/Media/resources.png)
+![Image](Resources/media/resources.PNG)
 
 
 ### Model Schema

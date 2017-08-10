@@ -111,6 +111,10 @@
                 "name": "Microsoft-SetStreamAnalyticsQuery"
             },
             {
+                "displayname": "$translate(INIT_ACTION_VERIFY_EVENT_HUB)",
+                "name": "Microsoft-VerifyLogProfileEventHub"
+            },
+            {
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_STREAM_ANALYTICS)",
                 "name": "Microsoft-StartStreamAnalyticsJob"
             },

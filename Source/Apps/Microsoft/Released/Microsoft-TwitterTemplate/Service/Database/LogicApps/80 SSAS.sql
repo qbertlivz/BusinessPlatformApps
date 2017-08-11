@@ -187,6 +187,21 @@ BEGIN
 END;
 GO
 
+-- timeout jobs
+CREATE PROCEDURE [pbist_twitter].[sp_reset_job] 
+AS
+BEGIN
+    SET NOCOUNT ON;
+    UPDATE pbist_twitter.[ssas_jobs] SET [statusMessage]='Timed Out', [endTime]=GetDate()
+    WHERE endTime is NULL AND
+          DATEPART(HOUR, getdate() - startTime) >= (SELECT [value] FROM pbist_twitter.[configuration] WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS' AND [name]='Timeout')
+    
+    DELETE 
+    FROM pbist_twitter.[ssas_jobs] 
+    WHERE DATEPART(DAY, getdate() - startTime) >= 30
+END;
+GO
+
 
 -- start job
 CREATE PROCEDURE [pbist_twitter].[sp_start_job]
@@ -276,21 +291,5 @@ BEGIN
     EXEC [pbist_twitter].[sp_set_process_flag] @process_flag = '0'
 
     return @id;
-    END
-GO
-
-
--- timeout jobs
-CREATE PROCEDURE [pbist_twitter].[sp_reset_job] 
-AS
-BEGIN
-    SET NOCOUNT ON;
-    UPDATE pbist_twitter.[ssas_jobs] SET [statusMessage]='Timed Out', [endTime]=GetDate()
-    WHERE endTime is NULL AND
-          DATEPART(HOUR, getdate() - startTime) >= (SELECT [value] FROM pbist_twitter.[configuration] WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS' AND [name]='Timeout')
-    
-    DELETE 
-    FROM pbist_twitter.[ssas_jobs] 
-    WHERE DATEPART(DAY, getdate() - startTime) >= 30
-END
+    END;
 GO

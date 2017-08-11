@@ -30,7 +30,7 @@ IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='bpst_aal'
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='bpst_aal' AND ROUTINE_NAME='sp_get_replication_counts' AND ROUTINE_TYPE='PROCEDURE')
     DROP PROCEDURE bpst_aal.sp_get_replication_counts;
 
-IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name='bpst_aal')
+IF NOT EXISTS (SELECT * FROM sys.schemas WHERE [name]='bpst_aal')
 BEGIN
     EXEC ('CREATE SCHEMA bpst_aal AUTHORIZATION dbo'); -- Avoid batch error
 END;

@@ -12,7 +12,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     SELECT UPPER(LEFT(ta.name, 1)) + LOWER(SUBSTRING(ta.name, 2, 100)) AS EntityName, SUM(pa.rows) AS [Count], '' As [Status]
-    FROM sys.tables ta INNER JOIN sys.partitions pa ON pa.OBJECT_ID = ta.OBJECT_ID
+    FROM sys.tables ta INNER JOIN sys.partitions pa ON pa.object_id = ta.object_id
 				       INNER JOIN sys.schemas sc ON ta.schema_id = sc.schema_id
     WHERE
 	    sc.name='dbo' AND ta.is_ms_shipped = 0 AND pa.index_id IN (0,1) AND
@@ -29,7 +29,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     SELECT Count(*) AS ExistingObjectCount
-    FROM   information_schema.tables
+    FROM   INFORMATION_SCHEMA.TABLES
     WHERE  ( table_schema = 'dbo' AND
              table_name IN ('account', 'lead', 'opportunity', 'opportunitylineitem', 'opportunitystage', 'product2', 'user', 'userrole')
            ) OR

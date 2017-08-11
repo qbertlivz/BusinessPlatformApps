@@ -96,7 +96,7 @@ BEGIN
 
     DECLARE @returnValue INT;
     SELECT @returnValue = Count(*)
-    FROM   information_schema.tables
+    FROM   INFORMATION_SCHEMA.TABLES
     WHERE  ( table_schema = 'dbo' AND
                  table_name COLLATE SQL_Latin1_General_CP1_CI_AS IN (
                    SELECT [value] COLLATE SQL_Latin1_General_CP1_CI_AS FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' ));
@@ -185,6 +185,19 @@ BEGIN
 END;
 GO
 
+-- timeout jobs
+CREATE PROCEDURE [smgt].[sp_reset_job] 
+AS
+BEGIN
+    SET NOCOUNT ON;
+    UPDATE smgt.[ssas_jobs] SET [statusMessage]='Timed Out', [endTime]=GetDate()
+    WHERE endTime is NULL AND
+          DATEPART(HOUR, getdate() - startTime) >= (SELECT [value] FROM smgt.[configuration] WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS' AND [name]='Timeout');
+    
+    DELETE FROM smgt.[ssas_jobs] 
+    WHERE DATEPART(DAY, getdate() - startTime) >= 30;
+END;
+GO
 
 -- start job
 CREATE PROCEDURE [smgt].[sp_start_job]
@@ -273,20 +286,5 @@ BEGIN
     EXEC [smgt].[sp_set_process_flag] @process_flag = '0';
 
     return @id;
-    END
-GO
-
-
--- timeout jobs
-CREATE PROCEDURE [smgt].[sp_reset_job] 
-AS
-BEGIN
-    SET NOCOUNT ON;
-    UPDATE smgt.[ssas_jobs] SET [statusMessage]='Timed Out', [endTime]=GetDate()
-    WHERE endTime is NULL AND
-          DATEPART(HOUR, getdate() - startTime) >= (SELECT [value] FROM smgt.[configuration] WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS' AND [name]='Timeout');
-    
-    DELETE FROM smgt.[ssas_jobs] 
-    WHERE DATEPART(DAY, getdate() - startTime) >= 30;
-END
+    END;
 GO

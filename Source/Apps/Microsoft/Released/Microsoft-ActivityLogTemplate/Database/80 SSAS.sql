@@ -10,60 +10,60 @@ go
 -- =============================================
 -- Pre Setup - Remove table from previous installation
 -- =============================================
-IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='cc' AND TABLE_NAME='ssas_jobs' AND TABLE_TYPE='BASE TABLE')
-    DROP TABLE cc.ssas_jobs;
-    
-IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='cc' AND ROUTINE_NAME='sp_set_process_flag' AND ROUTINE_TYPE='PROCEDURE')
-    DROP PROCEDURE [cc].sp_set_process_flag;
-    
-IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='cc' AND ROUTINE_NAME='sp_validate_schema' AND ROUTINE_TYPE='PROCEDURE')
-    DROP PROCEDURE [cc].sp_validate_schema;
-    
-IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='cc' AND ROUTINE_NAME='sp_get_current_record_counts' AND ROUTINE_TYPE='PROCEDURE')
-    DROP PROCEDURE [cc].sp_get_current_record_counts;
-    
-IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='cc' AND ROUTINE_NAME='sp_check_record_counts_changed' AND ROUTINE_TYPE='PROCEDURE')
-    DROP PROCEDURE [cc].sp_check_record_counts_changed;
-    
-IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='cc' AND ROUTINE_NAME='sp_finish_job' AND ROUTINE_TYPE='PROCEDURE')
-    DROP PROCEDURE [cc].sp_finish_job;
-    
-IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='cc' AND ROUTINE_NAME='sp_start_job' AND ROUTINE_TYPE='PROCEDURE')
-    DROP PROCEDURE [cc].sp_start_job;
-    
-IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='cc' AND ROUTINE_NAME='sp_reset_job' AND ROUTINE_TYPE='PROCEDURE')
-    DROP PROCEDURE [cc].sp_reset_job;
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='bpst_aal' AND TABLE_NAME='ssas_jobs' AND TABLE_TYPE='BASE TABLE')
+    DROP TABLE bpst_aal.ssas_jobs;
+	
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='bpst_aal' AND ROUTINE_NAME='sp_set_process_flag' AND ROUTINE_TYPE='PROCEDURE')
+    DROP PROCEDURE [bpst_aal].sp_set_process_flag;
+	
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='bpst_aal' AND ROUTINE_NAME='sp_validate_schema' AND ROUTINE_TYPE='PROCEDURE')
+    DROP PROCEDURE [bpst_aal].sp_validate_schema;
+	
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='bpst_aal' AND ROUTINE_NAME='sp_get_current_record_counts' AND ROUTINE_TYPE='PROCEDURE')
+    DROP PROCEDURE [bpst_aal].sp_get_current_record_counts;
+	
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='bpst_aal' AND ROUTINE_NAME='sp_check_record_counts_changed' AND ROUTINE_TYPE='PROCEDURE')
+    DROP PROCEDURE [bpst_aal].sp_check_record_counts_changed;
+	
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='bpst_aal' AND ROUTINE_NAME='sp_finish_job' AND ROUTINE_TYPE='PROCEDURE')
+    DROP PROCEDURE [bpst_aal].sp_finish_job;
+	
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='bpst_aal' AND ROUTINE_NAME='sp_start_job' AND ROUTINE_TYPE='PROCEDURE')
+    DROP PROCEDURE [bpst_aal].sp_start_job;
+	
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='bpst_aal' AND ROUTINE_NAME='sp_reset_job' AND ROUTINE_TYPE='PROCEDURE')
+    DROP PROCEDURE [bpst_aal].sp_reset_job;
 
 GO
-    
+	
 -- =============================================
 -- Pre Setup - Insert Configuration Values
 -- =============================================
 DELETE 
-FROM cc.[configuration]
+FROM bpst_aal.[configuration]
 WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS'
 GO
 
-INSERT cc.[configuration] (configuration_group, configuration_subgroup, [name], [value], [visible])
+INSERT bpst_aal.[configuration] (configuration_group, configuration_subgroup, [name], [value], [visible])
     VALUES ( N'SolutionTemplate', N'SSAS', N'ProcessOnNextSchedule', N'0', 0),
-           ( N'SolutionTemplate', N'SSAS', N'Timeout', N'4', 0),
-           ( N'SolutionTemplate', N'SSAS', N'ValidateSchema', N'1', 0),
-           ( N'SolutionTemplate', N'SSAS', N'CheckRowCounts', N'1', 0),
-           ( N'SolutionTemplate', N'SSAS', N'CheckProcessFlag', N'0', 0);
+		   ( N'SolutionTemplate', N'SSAS', N'Timeout', N'4', 0),
+		   ( N'SolutionTemplate', N'SSAS', N'ValidateSchema', N'1', 0),
+		   ( N'SolutionTemplate', N'SSAS', N'CheckRowCounts', N'1', 0),
+		   ( N'SolutionTemplate', N'SSAS', N'CheckProcessFlag', N'0', 0);
 GO
 
 
 -- =============================================
 -- SSAS tables
 -- =============================================
-CREATE  TABLE  cc.ssas_jobs
+CREATE  TABLE  [bpst_aal].ssas_jobs
 ( 
-    id                  INT IDENTITY(1, 1) NOT NULL,
+	id                  INT IDENTITY(1, 1) NOT NULL,
     startTime           DateTime NOT NULL, 
     endTime             DateTime NULL,
     statusMessage       nvarchar(MAX),
-    lastCount			INT,
-    CONSTRAINT id_pk PRIMARY KEY (id)
+	lastCount			INT,
+	CONSTRAINT id_pk PRIMARY KEY (id)
 );
 go
 
@@ -72,28 +72,28 @@ go
 -- SSAS stored procs
 -- =============================================
 -- set process flag
-CREATE PROCEDURE cc.sp_set_process_flag
-    @process_flag nvarchar = '1'
+CREATE PROCEDURE [bpst_aal].sp_set_process_flag
+	@process_flag nvarchar = '1'
 AS
 BEGIN
 
-    SET NOCOUNT ON;
-    UPDATE [cc].[configuration] 
-    SET [value]=@process_flag
-    WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS' AND [name]='ProcessOnNextSchedule';
+	SET NOCOUNT ON;
+    UPDATE [bpst_aal].[configuration] 
+	SET [value]=@process_flag
+	WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS' AND [name]='ProcessOnNextSchedule';
 END
 GO
 
 
 -- SSAS validate schema
-CREATE PROCEDURE cc.sp_validate_schema AS
+CREATE PROCEDURE [bpst_aal].sp_validate_schema AS
 BEGIN
     SET NOCOUNT ON;
 	
 	SET NOCOUNT ON;
 	DECLARE @tables NVARCHAR(MAX);
 	SELECT @tables = REPLACE([value],' ','')
-	FROM [cc].[configuration]
+	FROM [bpst_aal].[configuration]
 	WHERE configuration_group = 'SolutionTemplate'
 	AND	configuration_subgroup = 'StandardConfiguration' 
 	AND	name = 'Tables'
@@ -101,7 +101,7 @@ BEGIN
 	DECLARE @returnValue INT;
 	SELECT @returnValue = Count(*)
 	FROM   information_schema.tables
-	WHERE  ( table_schema = 'pbist_twitter' AND
+	WHERE  ( table_schema = 'bpst_aal' AND
 				 table_name IN (SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' ));
     if(@returnValue = 20)
     BEGIN
@@ -112,7 +112,7 @@ END
 go
 
 -- Get Record Counts
-CREATE PROCEDURE cc.sp_get_current_record_counts AS
+CREATE PROCEDURE bpst_aal.sp_get_current_record_counts AS
 BEGIN
         SET NOCOUNT ON;
 	DECLARE @returnValue INT = 0;
@@ -122,7 +122,7 @@ BEGIN
 
 	DECLARE @tables NVARCHAR(MAX);
 	SELECT @tables = REPLACE([value],' ','')
-	FROM [cc].[configuration]
+	FROM [bpst_aal].[configuration]
 	WHERE configuration_group = 'SolutionTemplate'
 	AND	configuration_subgroup = 'StandardConfiguration' 
 	AND	name = 'Tables'
@@ -135,7 +135,7 @@ BEGIN
 	WHILE @@FETCH_STATUS = 0  
 	BEGIN 
 		DECLARE @retValue INT=0;
-		SET @stmt = 'SELECT @var = COUNT(*) FROM pbist_twitter.' + QuoteName(@p1);
+		SET @stmt = 'SELECT @var = COUNT(*) FROM bpst_aal.' + QuoteName(@p1);
 		DECLARE @ParmDefinition NVARCHAR(500) = N'@var int OUTPUT';
 		EXECUTE sp_executesql @stmt, @ParmDefinition, @var = @retValue OUTPUT;
 		SET @returnValue = @returnValue + @retValue;		
@@ -148,15 +148,15 @@ END;
 go
 
 -- get record counts
-CREATE PROCEDURE cc.sp_check_record_counts_changed AS
+CREATE PROCEDURE bpst_aal.sp_check_record_counts_changed AS
 BEGIN
     SET NOCOUNT ON;
 	DECLARE @newRowCount INT;
 	DECLARE @oldRowCount INT;
-	EXECUTE @newRowCount = cc.sp_get_current_record_counts;
+	EXECUTE @newRowCount = bpst_aal.sp_get_current_record_counts;
 
 	SELECT TOP 1 @oldRowCount  = [lastCount]
-	FROM cc.[ssas_jobs]
+	FROM bpst_aal.[ssas_jobs]
 	WHERE [statusMessage] = 'Success'
 	ORDER BY startTime DESC;
 
@@ -168,47 +168,47 @@ END;
 go
 
 -- finish job
-CREATE PROCEDURE [cc].[sp_finish_job]
+CREATE PROCEDURE [bpst_aal].[sp_finish_job]
 	@jobid INT,
 	@jobMessage NVARCHAR(MAX)
 AS
 BEGIN
 	SET NOCOUNT ON;
 	DECLARE @newRowCount INT;
-	EXECUTE @newRowCount = cc.sp_get_current_record_counts;
+	EXECUTE @newRowCount = bpst_aal.sp_get_current_record_counts;
 
 	IF @jobMessage = 'Success' 
-		UPDATE [cc].[ssas_jobs] 
+		UPDATE [bpst_aal].[ssas_jobs] 
 		SET [endTime]=GETDATE(), [statusMessage]=@jobMessage, [lastCount]=@newRowCount
 		WHERE [id] = @jobid;
 	ELSE
-		UPDATE [cc].[ssas_jobs] 
+		UPDATE [bpst_aal].[ssas_jobs] 
 		SET [endTime]=GETDATE(), [statusMessage]=@jobMessage
 		WHERE [id] = @jobid;
 END;
 GO
 
 -- timeout jobs
-CREATE PROCEDURE cc.sp_reset_job
+CREATE PROCEDURE bpst_aal.sp_reset_job
 AS
 BEGIN
 	SET NOCOUNT ON;
-	UPDATE cc.[ssas_jobs] 
+	UPDATE bpst_aal.[ssas_jobs] 
 	
 	SET [statusMessage]='Timed Out',
 	[endTime]=GetDate()
 	WHERE endTime is NULL AND
 	DATEPART(HOUR, getdate() - startTime) >= 
-	(SELECT [value] FROM cc.[configuration] WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS' AND [name]='Timeout')
+	(SELECT [value] FROM bpst_aal.[configuration] WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS' AND [name]='Timeout')
 	
 	DELETE 
-	FROM cc.[ssas_jobs] 
+	FROM bpst_aal.[ssas_jobs] 
 	WHERE DATEPART(DAY, getdate() - startTime) >= 30
 END;
 GO
 
 -- start job
-CREATE PROCEDURE cc.sp_start_job
+CREATE PROCEDURE bpst_aal.sp_start_job
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -222,20 +222,20 @@ BEGIN
 	SET @checksPassed = 1;
 
 	SELECT @validateSchema  = [value]
-	FROM cc.[configuration]
+	FROM bpst_aal.[configuration]
 	WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS' AND [name]='ValidateSchema'; 
 	
 	SELECT @checkRowCounts  = [value]
-	FROM cc.[configuration]
+	FROM bpst_aal.[configuration]
 	WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS' AND [name]='CheckRowCounts'; 
 	
 	SELECT @checkProcessFlag  = [value]
-	FROM cc.[configuration]
+	FROM bpst_aal.[configuration]
 	WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS' AND [name]='CheckProcessFlag'; 
 	
-	EXEC cc.sp_reset_job
+	EXEC bpst_aal.sp_reset_job
 	
-	INSERT cc.[ssas_jobs] (startTime, statusMessage)
+	INSERT bpst_aal.[ssas_jobs] (startTime, statusMessage)
     VALUES ( GETDATE(), 'Running');
 	
 	SELECT @id = SCOPE_IDENTITY();
@@ -243,7 +243,7 @@ BEGIN
     DECLARE @validateSchemaResult INT = 0;
 	if(@validateSchema = 1)
 	BEGIN		
-		EXECUTE @validateSchemaResult = cc.sp_validate_schema;
+		EXECUTE @validateSchemaResult = bpst_aal.sp_validate_schema;
 		if(@validateSchemaResult = 0)
 		BEGIN
 			SET @errorMessage = @errorMessage + 'Validate Schema unsuccessful. ';
@@ -254,7 +254,7 @@ BEGIN
 	if(@validateSchema = 1 AND @validateSchemaResult = 1 AND @checkRowCounts = 1)
 	BEGIN
 		DECLARE @checkRowCountsResult INT;
-		EXECUTE @checkRowCountsResult = cc.sp_check_record_counts_changed;
+		EXECUTE @checkRowCountsResult = bpst_aal.sp_check_record_counts_changed;
 		if(@checkRowCountsResult = 0)
 		BEGIN
 			SET @errorMessage = @errorMessage + 'Record Counts unchanged. ';
@@ -266,7 +266,7 @@ BEGIN
 	BEGIN
 		DECLARE @checkProcessFlagResult INT;
 		SELECT @checkProcessFlagResult = [value]
-		FROM cc.[configuration]
+		FROM bpst_aal.[configuration]
 		WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS' AND [name]='ProcessOnNextSchedule'
 		if(@checkProcessFlagResult = 0)
 		BEGIN
@@ -277,7 +277,7 @@ BEGIN
 	
 	DECLARE @getLastJobs INT;
 	SELECT @checkProcessFlagResult = count(*)
-		FROM cc.[ssas_jobs]
+		FROM bpst_aal.[ssas_jobs]
 		WHERE [endTime] is NULL
 		if(@checkProcessFlagResult > 1)
 		BEGIN
@@ -288,11 +288,11 @@ BEGIN
 
 	IF(@checksPassed = 0)
 	BEGIN
-		EXEC [cc].[sp_finish_job] @jobid= @id, @jobMessage= @errorMessage
+		EXEC [bpst_aal].[sp_finish_job] @jobid= @id, @jobMessage= @errorMessage
         return 0;
 	END
 
-    EXEC [cc].[sp_set_process_flag] @process_flag = '0'
+    EXEC [bpst_aal].[sp_set_process_flag] @process_flag = '0'
 
 	RETURN @id;
 	END;

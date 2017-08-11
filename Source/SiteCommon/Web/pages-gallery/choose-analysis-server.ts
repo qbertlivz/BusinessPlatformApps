@@ -3,6 +3,7 @@ import { DataStoreType } from '../enums/data-store-type';
 import { ViewModelBase } from '../services/view-model-base';
 
 export class Customize extends ViewModelBase {
+    registerAnalysisServices: boolean = true;
     showDescription: boolean = false;
     ssasEnabled: string = 'false';
    
@@ -15,7 +16,7 @@ export class Customize extends ViewModelBase {
 
         let isSuccess: boolean = true;
 
-        if (this.ssasEnabled === 'true') {
+        if (this.registerAnalysisServices && this.ssasEnabled === 'true') {
             isSuccess = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-RegisterProvider', { AzureProvider: 'Microsoft.AnalysisServices' });
         }
 

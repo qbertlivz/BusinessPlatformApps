@@ -8,7 +8,7 @@ go
 
 /* PBST specific schemas */
 
-CREATE TABLE cc.configuration
+CREATE TABLE cc.[configuration]
 (
   id                     INT IDENTITY(1, 1) NOT NULL,
   configuration_group    VARCHAR(150) NOT NULL,

@@ -117,7 +117,7 @@ BEGIN
 
     DECLARE @returnValue INT;
     SELECT @returnValue = Count(*)
-    FROM   information_schema.tables
+    FROM   INFORMATION_SCHEMA.TABLES
     WHERE  ( table_schema = 'pbist_sccm' AND
                  table_name IN (
                  SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' ));

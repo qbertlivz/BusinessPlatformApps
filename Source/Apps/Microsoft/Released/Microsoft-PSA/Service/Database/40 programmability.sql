@@ -56,7 +56,7 @@ BEGIN
     AND	name = 'Tables';
 
     SELECT ta.[name] AS EntityName, SUM(pa.[rows]) AS [Count] INTO #counts
-    FROM sys.tables ta INNER JOIN sys.partitions pa ON pa.OBJECT_ID = ta.OBJECT_ID    
+    FROM sys.tables ta INNER JOIN sys.partitions pa ON pa.object_id = ta.object_id    
                        INNER JOIN sys.schemas sc ON ta.schema_id = sc.schema_id
     WHERE
         sc.name='dbo' AND ta.is_ms_shipped = 0 AND pa.index_id IN (0,1) AND
@@ -137,7 +137,7 @@ BEGIN
     SET NOCOUNT ON;
 
     SELECT Count(*) AS ExistingObjectCount
-    FROM   information_schema.tables
+    FROM   INFORMATION_SCHEMA.TABLES
     WHERE  table_schema = 'dbo' AND
            table_name IN ('account', 'bookableresource', 'bookableresourcebooking', 'bookableresourcecategory', 'bookableresourcecategoryassn', 'bookingstatus', 
                           'msdyn_actual', 'msdyn_estimateline', 'msdyn_orderlineresourcecategory', 'msdyn_organizationalunit', 'msdyn_project', 'msdyn_resourcerequest', 'msdyn_resourcerequirement', 'msdyn_resourcerequirementdetail',

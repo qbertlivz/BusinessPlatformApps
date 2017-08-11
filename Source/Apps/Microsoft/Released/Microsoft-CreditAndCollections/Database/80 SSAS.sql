@@ -33,15 +33,13 @@ IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='cc' A
     
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='cc' AND ROUTINE_NAME='sp_reset_job' AND ROUTINE_TYPE='PROCEDURE')
     DROP PROCEDURE [cc].sp_reset_job;
-
 GO
     
 -- =============================================
 -- Pre Setup - Insert Configuration Values
 -- =============================================
-DELETE 
-FROM cc.[configuration]
-WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS'
+DELETE FROM cc.[configuration]
+WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS';
 GO
 
 INSERT cc.[configuration] (configuration_group, configuration_subgroup, [name], [value], [visible])
@@ -100,9 +98,9 @@ BEGIN
 
     DECLARE @returnValue INT;
     SELECT @returnValue = Count(*)
-    FROM   information_schema.tables
+    FROM   INFORMATION_SCHEMA.TABLES
     WHERE  ( table_schema = 'dbo' AND
-                 table_name IN (SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' ));
+                 table_name COLLATE SQL_Latin1_General_CP1_CI_AS IN (SELECT [value] COLLATE SQL_Latin1_General_CP1_CI_AS FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' ));
     if(@returnValue = 20)
     BEGIN
     RETURN 1;

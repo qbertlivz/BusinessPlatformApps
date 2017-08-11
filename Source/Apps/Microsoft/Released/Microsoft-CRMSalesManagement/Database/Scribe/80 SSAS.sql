@@ -98,10 +98,10 @@ SET NOCOUNT ON;
 
     DECLARE @returnValue INT;
     SELECT @returnValue = Count(*)
-    FROM   information_schema.tables
+    FROM   INFORMATION_SCHEMA.TABLES
     WHERE  ( table_schema = 'dbo' AND
-                 table_name IN (
-                   SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' ));
+                 table_name COLLATE SQL_Latin1_General_CP1_CI_AS IN (
+                   SELECT [value] COLLATE SQL_Latin1_General_CP1_CI_AS FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' ));
     if(@returnValue = 9)
     BEGIN
     RETURN 1;
@@ -127,7 +127,7 @@ BEGIN
     AND	name = 'Tables';
 
     SET @cr = CURSOR FAST_FORWARD FOR
-              SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' 
+              SELECT [value] COLLATE SQL_Latin1_General_CP1_CI_AS FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>''
 
     OPEN @cr;
     FETCH NEXT FROM @cr INTO @p1;

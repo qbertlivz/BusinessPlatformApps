@@ -98,10 +98,10 @@ BEGIN
 
     DECLARE @returnValue INT;
     SELECT @returnValue = Count(*)
-    FROM   information_schema.tables
+    FROM   INFORMATION_SCHEMA.TABLES
     WHERE  ( table_schema = 'pbist_twitter' AND
-                 table_name IN (
-                 SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' ));
+                 table_name COLLATE SQL_Latin1_General_CP1_CI_AS IN (
+                 SELECT [value] COLLATE SQL_Latin1_General_CP1_CI_AS FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>''));
     if(@returnValue = 10)
     BEGIN
     RETURN 1;
@@ -127,7 +127,7 @@ BEGIN
     AND	name = 'Tables';
 
     SET @cr = CURSOR FAST_FORWARD FOR
-              SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' 
+              SELECT [value] COLLATE SQL_Latin1_General_CP1_CI_AS FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>''
 
     OPEN @cr;
     FETCH NEXT FROM @cr INTO @p1;
@@ -184,6 +184,21 @@ BEGIN
         UPDATE [pbist_twitter].[ssas_jobs] 
         SET [endTime]=GETDATE(), [statusMessage]=@jobMessage
         WHERE [id] = @jobid;
+END;
+GO
+
+-- timeout jobs
+CREATE PROCEDURE [pbist_twitter].[sp_reset_job] 
+AS
+BEGIN
+    SET NOCOUNT ON;
+    UPDATE pbist_twitter.[ssas_jobs] SET [statusMessage]='Timed Out', [endTime]=GetDate()
+    WHERE endTime is NULL AND
+          DATEPART(HOUR, getdate() - startTime) >= (SELECT [value] FROM pbist_twitter.[configuration] WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS' AND [name]='Timeout')
+    
+    DELETE 
+    FROM pbist_twitter.[ssas_jobs] 
+    WHERE DATEPART(DAY, getdate() - startTime) >= 30
 END;
 GO
 
@@ -276,21 +291,5 @@ BEGIN
     EXEC [pbist_twitter].[sp_set_process_flag] @process_flag = '0'
 
     return @id;
-    END
-GO
-
-
--- timeout jobs
-CREATE PROCEDURE [pbist_twitter].[sp_reset_job] 
-AS
-BEGIN
-    SET NOCOUNT ON;
-    UPDATE pbist_twitter.[ssas_jobs] SET [statusMessage]='Timed Out', [endTime]=GetDate()
-    WHERE endTime is NULL AND
-          DATEPART(HOUR, getdate() - startTime) >= (SELECT [value] FROM pbist_twitter.[configuration] WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS' AND [name]='Timeout')
-    
-    DELETE 
-    FROM pbist_twitter.[ssas_jobs] 
-    WHERE DATEPART(DAY, getdate() - startTime) >= 30
-END
+    END;
 GO

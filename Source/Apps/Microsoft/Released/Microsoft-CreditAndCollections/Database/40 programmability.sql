@@ -11,12 +11,12 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-	DECLARE @tables NVARCHAR(MAX);
-	SELECT @tables = REPLACE([value],' ','')
-	FROM [cc].[configuration]
-	WHERE configuration_group = 'SolutionTemplate'
-	AND	configuration_subgroup = 'StandardConfiguration' 
-	AND	name = 'Tables'
+    DECLARE @tables NVARCHAR(MAX);
+    SELECT @tables = REPLACE([value],' ','')
+    FROM [cc].[configuration]
+    WHERE configuration_group = 'SolutionTemplate'
+    AND	configuration_subgroup = 'StandardConfiguration' 
+    AND	name = 'Tables';
 
     SELECT SUBSTRING(ta.name, CHARINDEX('_',ta.name)+1, CHARINDEX('_M',ta.name)-CHARINDEX('_',ta.name)-1) AS EntityName, SUM(pa.rows) AS [Count]
     FROM sys.tables ta INNER JOIN sys.partitions pa ON pa.OBJECT_ID = ta.OBJECT_ID
@@ -42,30 +42,30 @@ BEGIN
     -- 3 -> No data is present
 
     DECLARE @StatusCode INT = -1;		
-	DECLARE @ASDeployment bit = 0;
-	DECLARE @DeploymentTimestamp datetime2;
- 	SELECT @DeploymentTimestamp = Convert(DATETIME2, [value], 126)
-	FROM cc.[configuration] WHERE configuration_group = 'SolutionTemplate' AND configuration_subgroup = 'Notifier' AND [name] = 'DeploymentTimestamp';
+    DECLARE @ASDeployment bit = 0;
+    DECLARE @DeploymentTimestamp datetime2;
+    SELECT @DeploymentTimestamp = Convert(DATETIME2, [value], 126)
+    FROM cc.[configuration] WHERE configuration_group = 'SolutionTemplate' AND configuration_subgroup = 'Notifier' AND [name] = 'DeploymentTimestamp';
 
     DECLARE @InitialStatusDone NVARCHAR(4);
 
-	SELECT @InitialStatusDone = [value]
-	FROM cc.[configuration] WHERE configuration_group = 'SolutionTemplate' AND configuration_subgroup = 'Notifier' AND [name] = 'InitialPullDone';
+    SELECT @InitialStatusDone = [value]
+    FROM cc.[configuration] WHERE configuration_group = 'SolutionTemplate' AND configuration_subgroup = 'Notifier' AND [name] = 'InitialPullDone';
 
-	IF EXISTS (SELECT * FROM cc.[configuration] WHERE configuration_group = 'SolutionTemplate' AND configuration_subgroup = 'Notifier' AND [name] = 'ASDeployment' AND [value] ='true')
-	SET @ASDeployment = 1;
+    IF EXISTS (SELECT * FROM cc.[configuration] WHERE configuration_group = 'SolutionTemplate' AND configuration_subgroup = 'Notifier' AND [name] = 'ASDeployment' AND [value] ='true')
+    SET @ASDeployment = 1;
 
-	IF (@InitialStatusDone = 'True' AND @ASDeployment = 0)
-		SET @StatusCode = 2; --Data pull complete
+    IF (@InitialStatusDone = 'True' AND @ASDeployment = 0)
+        SET @StatusCode = 2; --Data pull complete
 
     -- AS Flow
     IF @ASDeployment=1 AND DATEDIFF(HOUR, @DeploymentTimestamp, Sysdatetime()) > 24 AND NOT EXISTS (SELECT * FROM cc.ssas_jobs WHERE [statusMessage] = 'Success')
-		SET @StatusCode = 1;
-	ELSE 			
-	BEGIN
-		IF (@InitialStatusDone = 'True' AND EXISTS (SELECT * FROM cc.ssas_jobs WHERE [statusMessage] = 'Success'))
-		SET @StatusCode = 2; --Data pull complete
-	END;
+        SET @StatusCode = 1;
+    ELSE 			
+    BEGIN
+        IF (@InitialStatusDone = 'True' AND EXISTS (SELECT * FROM cc.ssas_jobs WHERE [statusMessage] = 'Success'))
+        SET @StatusCode = 2; --Data pull complete
+    END;
 
     UPDATE cc.[configuration] 
     SET [configuration].[value] = @StatusCode

@@ -9,21 +9,21 @@ go
 CREATE PROCEDURE dbo.sp_get_replication_counts
 AS
 BEGIN
-	SET NOCOUNT ON;
+    SET NOCOUNT ON;
 
-	DECLARE @tables NVARCHAR(MAX);
-	SELECT @tables = REPLACE([value],' ','')
-	FROM [smgt].[configuration]
-	WHERE configuration_group = 'SolutionTemplate'
-	AND	configuration_subgroup = 'StandardConfiguration' 
-	AND	name = 'Tables'
+    DECLARE @tables NVARCHAR(MAX);
+    SELECT @tables = REPLACE([value],' ','')
+    FROM [smgt].[configuration]
+    WHERE configuration_group = 'SolutionTemplate'
+    AND	configuration_subgroup = 'StandardConfiguration' 
+    AND	name = 'Tables';
 
     SELECT UPPER(LEFT(ta.name, 1)) + LOWER(SUBSTRING(ta.name, 2, 100)) AS EntityName, SUM(pa.rows) AS [Count], '' As [Status]
     FROM sys.tables ta INNER JOIN sys.partitions pa ON pa.OBJECT_ID = ta.OBJECT_ID
-				       INNER JOIN sys.schemas sc ON ta.schema_id = sc.schema_id
+                       INNER JOIN sys.schemas sc ON ta.schema_id = sc.schema_id
     WHERE
-	    sc.name='dbo' AND ta.is_ms_shipped = 0 AND pa.index_id IN (0,1) AND
-	    ta.name IN (SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' )
+        sc.name='dbo' AND ta.is_ms_shipped = 0 AND pa.index_id IN (0,1) AND
+        ta.name IN (SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' )
     GROUP BY ta.name
     ORDER BY ta.name
 END;
@@ -42,12 +42,12 @@ BEGIN
 
     DECLARE @StatusCode INT = -1;
 
-	DECLARE @tables NVARCHAR(MAX);
-	SELECT @tables = REPLACE([value],' ','')
-	FROM [smgt].[configuration]
-	WHERE configuration_group = 'SolutionTemplate'
-	AND	configuration_subgroup = 'StandardConfiguration' 
-	AND	name = 'Tables'
+    DECLARE @tables NVARCHAR(MAX);
+    SELECT @tables = REPLACE([value],' ','')
+    FROM [smgt].[configuration]
+    WHERE configuration_group = 'SolutionTemplate'
+    AND	configuration_subgroup = 'StandardConfiguration' 
+    AND	name = 'Tables';
 
     SELECT ta.[name] AS EntityName, SUM(pa.[rows]) AS [Count] INTO #counts
     FROM sys.tables ta INNER JOIN sys.partitions pa ON pa.OBJECT_ID = ta.OBJECT_ID
@@ -84,19 +84,19 @@ BEGIN
     SELECT @CompletePercentage = Convert(float, [value])
     FROM smgt.[configuration] WHERE configuration_group = 'SolutionTemplate' AND configuration_subgroup = 'Notifier' AND [name] = 'DataPullCompleteThreshold';
 
-	DECLARE @CountsRows INT, @CountRowsComplete INT;
-	SELECT @CountsRows = COUNT(*) FROM #counts;
-	
-	SELECT p.[Percentage], p.[EntityName], i.lasttimestamp,  DATEDIFF(MINUTE, i.lasttimestamp, Sysdatetime()) AS [TimeDifference] INTO #entitiesComplete
+    DECLARE @CountsRows INT, @CountRowsComplete INT;
+    SELECT @CountsRows = COUNT(*) FROM #counts;
+    
+    SELECT p.[Percentage], p.[EntityName], i.lasttimestamp,  DATEDIFF(MINUTE, i.lasttimestamp, Sysdatetime()) AS [TimeDifference] INTO #entitiesComplete
     FROM #percentages p
               INNER JOIN smgt.entityinitialcount i ON i.entityName = p.EntityName
               WHERE 
-			  ((p.[Percentage] >= @CompletePercentage) AND DATEDIFF(MINUTE, i.lasttimestamp, Sysdatetime()) > 5) OR
-			  (p.[Percentage] >= 100) OR
-			  ((p.[Percentage] >= 100) AND DATEDIFF(MINUTE, i.lasttimestamp, Sysdatetime()) > 5)
+              ((p.[Percentage] >= @CompletePercentage) AND DATEDIFF(MINUTE, i.lasttimestamp, Sysdatetime()) > 5) OR
+              (p.[Percentage] >= 100) OR
+              ((p.[Percentage] >= 100) AND DATEDIFF(MINUTE, i.lasttimestamp, Sysdatetime()) > 5)
 
-	SELECT @CountRowsComplete = COUNT(*) FROM #entitiesComplete;
-			  
+    SELECT @CountRowsComplete = COUNT(*) FROM #entitiesComplete;
+              
     IF (@CountRowsComplete = @CountsRows)
         SET @StatusCode = 2 --Data pull complete
 
@@ -138,7 +138,7 @@ go
 CREATE PROCEDURE dbo.sp_get_prior_content
 AS
 BEGIN
-	SET NOCOUNT ON;
+    SET NOCOUNT ON;
 
     SELECT Count(*) AS ExistingObjectCount
     FROM   information_schema.tables

@@ -168,6 +168,8 @@
     <Compile Include="Model\Azure\FunctionWrapper.cs" />
     <Compile Include="Model\Custom\NewsEntity.cs" />
     <Compile Include="Model\DataPullStatus.cs" />
+    <Compile Include="Model\EventHub\EventHub.cs" />
+    <Compile Include="Model\EventHub\EventHubProperties.cs" />
     <Compile Include="Model\Http\HttpResponseDetails.cs" />
     <Compile Include="Model\Informatica\InformaticaActivityLog.cs" />
     <Compile Include="Model\Informatica\InformaticaAgent.cs" />

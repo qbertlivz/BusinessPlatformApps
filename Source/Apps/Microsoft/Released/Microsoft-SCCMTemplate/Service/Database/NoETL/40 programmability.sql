@@ -17,7 +17,7 @@ BEGIN
 	FROM [pbist_sccm].[configuration]
 	WHERE configuration_group = 'SolutionTemplate'
 	AND	configuration_subgroup = 'StandardConfiguration' 
-	AND	name = 'Tables'
+	AND	name = 'Tables';
      
     WITH TableCounts(EntityName, [Count]) AS
     (
@@ -51,9 +51,9 @@ BEGIN
 	DECLARE @tables NVARCHAR(MAX);
 	SELECT @tables = REPLACE([value],' ','')
 	FROM [pbist_sccm].[configuration]
-	WHERE configuration_group = 'SolutionTemplate'
-	AND	configuration_subgroup = 'StandardConfiguration' 
-	AND	name = 'Tables'
+	WHERE configuration_group = 'SolutionTemplate' AND
+          configuration_subgroup = 'StandardConfiguration' AND
+          [name] = 'Tables';
 
     SELECT ta.[name] AS EntityName, SUM(pa.[rows]) AS [Count] INTO #counts
     FROM sys.tables ta INNER JOIN sys.partitions pa ON pa.OBJECT_ID = ta.OBJECT_ID

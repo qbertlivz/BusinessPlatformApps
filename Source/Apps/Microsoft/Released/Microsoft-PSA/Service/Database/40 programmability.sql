@@ -10,12 +10,12 @@ CREATE PROCEDURE psa.sp_get_replication_counts AS
 BEGIN
     SET NOCOUNT ON;
 
-	DECLARE @tables NVARCHAR(MAX);
-	SELECT @tables = REPLACE([value],' ','')
-	FROM [psa].[configuration]
-	WHERE configuration_group = 'SolutionTemplate'
-	AND	configuration_subgroup = 'StandardConfiguration' 
-	AND	name = 'Tables'
+    DECLARE @tables NVARCHAR(MAX);
+    SELECT @tables = REPLACE([value],' ','')
+    FROM [psa].[configuration]
+    WHERE configuration_group = 'SolutionTemplate'
+    AND	configuration_subgroup = 'StandardConfiguration' 
+    AND	name = 'Tables';
 
     SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; -- it's ok for these to be somewhat inaccurate
      
@@ -37,7 +37,7 @@ go
 CREATE PROCEDURE [psa].[sp_get_pull_status]
 AS
 BEGIN
-		
+        
  SET NOCOUNT ON;
     
     --InitialPullComplete statuses
@@ -48,22 +48,22 @@ BEGIN
 
     DECLARE @StatusCode INT = -1;
 
-	DECLARE @tables NVARCHAR(MAX);
-	SELECT @tables = REPLACE([value],' ','')
-	FROM [psa].[configuration]
-	WHERE configuration_group = 'SolutionTemplate'
-	AND	configuration_subgroup = 'StandardConfiguration' 
-	AND	name = 'Tables'
+    DECLARE @tables NVARCHAR(MAX);
+    SELECT @tables = REPLACE([value],' ','')
+    FROM [psa].[configuration]
+    WHERE configuration_group = 'SolutionTemplate'
+    AND	configuration_subgroup = 'StandardConfiguration' 
+    AND	name = 'Tables';
 
-	SELECT ta.[name] AS EntityName, SUM(pa.[rows]) AS [Count] INTO #counts
+    SELECT ta.[name] AS EntityName, SUM(pa.[rows]) AS [Count] INTO #counts
     FROM sys.tables ta INNER JOIN sys.partitions pa ON pa.OBJECT_ID = ta.OBJECT_ID    
                        INNER JOIN sys.schemas sc ON ta.schema_id = sc.schema_id
     WHERE
-	    sc.name='dbo' AND ta.is_ms_shipped = 0 AND pa.index_id IN (0,1) AND
-	      ta.[name] IN (SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' )
+        sc.name='dbo' AND ta.is_ms_shipped = 0 AND pa.index_id IN (0,1) AND
+          ta.[name] IN (SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' )
     GROUP BY ta.[name];
 
-		SELECT CASE
+        SELECT CASE
                 WHEN c.[Count] = 0 AND i.initialcount = 0 THEN 100 
                 ELSE (
                         CASE
@@ -73,37 +73,37 @@ BEGIN
                      ) 
             END AS [Percentage], 
             c.EntityName as EntityName INTO #percentages
-		FROM #counts c INNER JOIN psa.entityinitialcount i ON i.entityname = c.entityname COLLATE Latin1_General_100_CI_AS
+        FROM #counts c INNER JOIN psa.entityinitialcount i ON i.entityname = c.entityname COLLATE Latin1_General_100_CI_AS
 
 
 
-	DECLARE @DeploymentTimestamp datetime2;
- 	SELECT @DeploymentTimestamp = Convert(DATETIME2, [value], 126)
-	FROM psa.[configuration] WHERE configuration_group = 'SolutionTemplate' AND configuration_subgroup = 'Notifier' AND [name] = 'DeploymentTimestamp';
+    DECLARE @DeploymentTimestamp datetime2;
+    SELECT @DeploymentTimestamp = Convert(DATETIME2, [value], 126)
+    FROM psa.[configuration] WHERE configuration_group = 'SolutionTemplate' AND configuration_subgroup = 'Notifier' AND [name] = 'DeploymentTimestamp';
 
-	IF EXISTS (SELECT *
-			   FROM #counts
-			   WHERE [Count] > 0 AND DATEDIFF(HOUR, @DeploymentTimestamp, SYSUTCDATETIME()) > 24)
-	SET @StatusCode = 1 --Data pull is partially complete
+    IF EXISTS (SELECT *
+               FROM #counts
+               WHERE [Count] > 0 AND DATEDIFF(HOUR, @DeploymentTimestamp, SYSUTCDATETIME()) > 24)
+    SET @StatusCode = 1 --Data pull is partially complete
 
-	
+    
     DECLARE @CompletePercentage FLOAT;
     SELECT @CompletePercentage = Convert(float, [value])
     FROM psa.[configuration] WHERE configuration_group = 'SolutionTemplate' AND configuration_subgroup = 'Notifier' AND [name] = 'DataPullCompleteThreshold';
 
-	DECLARE @CountsRows INT, @CountRowsComplete INT;
-	SELECT @CountsRows = COUNT(*) FROM #counts;
-	
-	SELECT p.[Percentage], p.[EntityName], i.lasttimestamp,  DATEDIFF(MINUTE, i.lasttimestamp, SYSUTCDATETIME()) AS [TimeDifference] INTO #entitiesComplete
+    DECLARE @CountsRows INT, @CountRowsComplete INT;
+    SELECT @CountsRows = COUNT(*) FROM #counts;
+    
+    SELECT p.[Percentage], p.[EntityName], i.lasttimestamp,  DATEDIFF(MINUTE, i.lasttimestamp, SYSUTCDATETIME()) AS [TimeDifference] INTO #entitiesComplete
     FROM #percentages p
               INNER JOIN psa.entityinitialcount i ON i.entityName = p.EntityName COLLATE Latin1_General_100_CI_AS
               WHERE 
-			  ((p.[Percentage] >= @CompletePercentage) AND DATEDIFF(MINUTE, i.lasttimestamp, SYSUTCDATETIME()) > 5) OR
-			  (p.[Percentage] >= 100) OR
-			  ((p.[Percentage] >= 100) AND DATEDIFF(MINUTE, i.lasttimestamp, SYSUTCDATETIME()) > 5)
+              ((p.[Percentage] >= @CompletePercentage) AND DATEDIFF(MINUTE, i.lasttimestamp, SYSUTCDATETIME()) > 5) OR
+              (p.[Percentage] >= 100) OR
+              ((p.[Percentage] >= 100) AND DATEDIFF(MINUTE, i.lasttimestamp, SYSUTCDATETIME()) > 5)
 
-	SELECT @CountRowsComplete = COUNT(*) FROM #entitiesComplete;
-			  
+    SELECT @CountRowsComplete = COUNT(*) FROM #entitiesComplete;
+              
     IF (@CountRowsComplete = @CountsRows)
         SET @StatusCode = 2 --Data pull complete
 
@@ -112,22 +112,22 @@ BEGIN
     IF @EntitiesWithNoData = @CountsRows AND DATEDIFF(HOUR, @DeploymentTimestamp, SYSUTCDATETIME()) > 24
         SET @StatusCode = 3; --No data is present
 
-	  -- Delayed Processing Flow
+      -- Delayed Processing Flow
     DECLARE @c1 INT, @c2 INT;
     SELECT @c1 = COUNT(*) FROM #counts;
     SELECT @c2 = COUNT(*) from psa.entityinitialcount;
     IF @c1<>@c2 
     SET @StatusCode = -1;
 
-	UPDATE psa.[configuration] 
-	SET [configuration].[value] = @StatusCode
-	WHERE [configuration].configuration_group = 'SolutionTemplate' AND [configuration].configuration_subgroup = 'Notifier' AND [configuration].[name] = 'DataPullStatus'
+    UPDATE psa.[configuration] 
+    SET [configuration].[value] = @StatusCode
+    WHERE [configuration].configuration_group = 'SolutionTemplate' AND [configuration].configuration_subgroup = 'Notifier' AND [configuration].[name] = 'DataPullStatus'
 
-	MERGE psa.entityinitialcount AS TARGET
-	USING #counts AS SOURCE
-	ON (TARGET.entityname = SOURCE.entityname COLLATE Latin1_General_100_CI_AS)
-	WHEN MATCHED AND SOURCE.[Count] > TARGET.lastcount
-	THEN
+    MERGE psa.entityinitialcount AS TARGET
+    USING #counts AS SOURCE
+    ON (TARGET.entityname = SOURCE.entityname COLLATE Latin1_General_100_CI_AS)
+    WHEN MATCHED AND SOURCE.[Count] > TARGET.lastcount
+    THEN
         UPDATE SET target.lastcount = source.[Count], target.lasttimestamp = SYSUTCDATETIME();
 END;
 GO

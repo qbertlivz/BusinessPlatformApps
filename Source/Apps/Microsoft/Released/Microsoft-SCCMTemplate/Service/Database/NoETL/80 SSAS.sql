@@ -60,7 +60,7 @@ CREATE  TABLE  pbist_sccm.ssas_jobs
     startTime           DateTime NOT NULL, 
     endTime             DateTime NULL,
     statusMessage       nvarchar(MAX),
-	lastCount			INT,
+    lastCount			INT,
     CONSTRAINT id_pk PRIMARY KEY (id)
 );
 go
@@ -108,12 +108,12 @@ CREATE PROCEDURE pbist_sccm.sp_validate_schema AS
 BEGIN
     SET NOCOUNT ON;
 
-	DECLARE @tables NVARCHAR(MAX);
-	SELECT @tables = REPLACE([value],' ','')
-	FROM [pbist_sccm].[configuration]
-	WHERE configuration_group = 'SolutionTemplate'
-	AND	configuration_subgroup = 'StandardConfiguration' 
-	AND	name = 'Tables'
+    DECLARE @tables NVARCHAR(MAX);
+    SELECT @tables = REPLACE([value],' ','')
+    FROM [pbist_sccm].[configuration]
+    WHERE configuration_group = 'SolutionTemplate'
+    AND	configuration_subgroup = 'StandardConfiguration' 
+    AND	name = 'Tables';
 
     DECLARE @returnValue INT;
     SELECT @returnValue = Count(*)
@@ -133,31 +133,31 @@ go
 CREATE PROCEDURE pbist_sccm.sp_get_current_record_counts AS
 BEGIN
 SET NOCOUNT ON;
-	DECLARE @returnValue INT = 0;
-	
-	DECLARE @stmt AS NVARCHAR(500), @p1 AS VARCHAR(100)
-	DECLARE @cr CURSOR;
+    DECLARE @returnValue INT = 0;
+    
+    DECLARE @stmt AS NVARCHAR(500), @p1 AS VARCHAR(100)
+    DECLARE @cr CURSOR;
 
-	DECLARE @tables NVARCHAR(MAX);
-	SELECT @tables = REPLACE([value],' ','')
-	FROM pbist_sccm.[configuration]
-	WHERE configuration_group = 'SolutionTemplate'
-	AND	configuration_subgroup = 'StandardConfiguration' 
-	AND	name = 'Tables'
+    DECLARE @tables NVARCHAR(MAX);
+    SELECT @tables = REPLACE([value],' ','')
+    FROM pbist_sccm.[configuration]
+    WHERE configuration_group = 'SolutionTemplate'
+    AND	configuration_subgroup = 'StandardConfiguration' 
+    AND	name = 'Tables';
 
-	SET @cr = CURSOR FAST_FORWARD FOR
+    SET @cr = CURSOR FAST_FORWARD FOR
               SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' 
 
-	OPEN @cr;
-	FETCH NEXT FROM @cr INTO @p1;
-	WHILE @@FETCH_STATUS = 0  
-	BEGIN 
-		DECLARE @retValue INT=0;
-		SET @stmt = 'SELECT @var = COUNT(*) FROM dbo.' + QuoteName(@p1);
-		DECLARE @ParmDefinition NVARCHAR(500) = N'@var int OUTPUT';
-		EXECUTE sp_executesql @stmt, @ParmDefinition, @var = @retValue OUTPUT;
-		SET @returnValue = @returnValue + @retValue;		
-			FETCH NEXT FROM @cr INTO @p1;
+    OPEN @cr;
+    FETCH NEXT FROM @cr INTO @p1;
+    WHILE @@FETCH_STATUS = 0  
+    BEGIN 
+        DECLARE @retValue INT=0;
+        SET @stmt = 'SELECT @var = COUNT(*) FROM dbo.' + QuoteName(@p1);
+        DECLARE @ParmDefinition NVARCHAR(500) = N'@var int OUTPUT';
+        EXECUTE sp_executesql @stmt, @ParmDefinition, @var = @retValue OUTPUT;
+        SET @returnValue = @returnValue + @retValue;		
+            FETCH NEXT FROM @cr INTO @p1;
 END;
 CLOSE @cr;
 DEALLOCATE @cr;
@@ -172,16 +172,16 @@ BEGIN
     DECLARE @newRowCount INT;
     DECLARE @oldRowCount INT;
     EXECUTE @newRowCount = pbist_sccm.sp_get_current_record_counts;
-	
-	SELECT TOP 1 @oldRowCount  = [lastCount]
-	FROM pbist_sccm.[ssas_jobs]
-	WHERE [statusMessage] = 'Success'
-	ORDER BY startTime DESC;
     
-	IF @newRowCount = @oldRowCount
-		RETURN 0;
-	ELSE
-		RETURN 1;
+    SELECT TOP 1 @oldRowCount  = [lastCount]
+    FROM pbist_sccm.[ssas_jobs]
+    WHERE [statusMessage] = 'Success'
+    ORDER BY startTime DESC;
+    
+    IF @newRowCount = @oldRowCount
+        RETURN 0;
+    ELSE
+        RETURN 1;
 END;
 go
 
@@ -192,17 +192,17 @@ CREATE PROCEDURE [pbist_sccm].[sp_finish_job]
 AS
 BEGIN
   SET NOCOUNT ON;
-	DECLARE @newRowCount INT;
-	EXECUTE @newRowCount = [pbist_sccm].sp_get_current_record_counts;
+    DECLARE @newRowCount INT;
+    EXECUTE @newRowCount = [pbist_sccm].sp_get_current_record_counts;
 
-	IF @jobMessage = 'Success'
-		UPDATE [pbist_sccm].[ssas_jobs] 
-		SET [endTime]=GETDATE(), [statusMessage]=@jobMessage, [lastCount]=@newRowCount
-		WHERE [id] = @jobid;
-	ELSE
-		UPDATE [pbist_sccm].[ssas_jobs] 
-		SET [endTime]=GETDATE(), [statusMessage]=@jobMessage
-		WHERE [id] = @jobid;
+    IF @jobMessage = 'Success'
+        UPDATE [pbist_sccm].[ssas_jobs] 
+        SET [endTime]=GETDATE(), [statusMessage]=@jobMessage, [lastCount]=@newRowCount
+        WHERE [id] = @jobid;
+    ELSE
+        UPDATE [pbist_sccm].[ssas_jobs] 
+        SET [endTime]=GETDATE(), [statusMessage]=@jobMessage
+        WHERE [id] = @jobid;
 END;
 GO
 

@@ -82,11 +82,15 @@
             {
                 "displayname": "AAS",
                 "name": "$SiteCommon$/pages-gallery/choose-analysis-server.html",
+                "registerAnalysisServices": false,
                 "showDescription": true,
                 "skip": "$dsall(azureSqlDisabled)[1]",
                 "ssasEnabled": "true"
             },
             {
+                "azureProviders": [
+                    "Microsoft.AnalysisServices"
+                ],
                 "displayname": "Login to Azure",
                 "name": "$SiteCommon$/pages-gallery/azure-login.html",
                 "oauthType": "",

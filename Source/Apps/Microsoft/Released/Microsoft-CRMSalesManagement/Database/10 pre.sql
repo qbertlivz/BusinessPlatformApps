@@ -12,9 +12,9 @@ DECLARE @cr CURSOR;
 
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='smgt' AND TABLE_NAME='configuration' AND TABLE_TYPE='BASE TABLE')
 BEGIN
-	DECLARE @additionalTables NVARCHAR(MAX);
-	SELECT @additionalTables = [value]
-	FROM smgt.[configuration] WHERE configuration_group = 'SolutionTemplate' AND configuration_subgroup = 'SalesManagement' AND [name] = 'AdditionalTables';
+    DECLARE @additionalTables NVARCHAR(MAX);
+    SELECT @additionalTables = [value]
+    FROM smgt.[configuration] WHERE configuration_group = 'SolutionTemplate' AND configuration_subgroup = 'SalesManagement' AND [name] = 'AdditionalTables';
 SET @cr = CURSOR FAST_FORWARD FOR
               SELECT [value] FROM STRING_SPLIT(@additionalTables,',')
 
@@ -25,14 +25,14 @@ FETCH NEXT FROM @cr INTO @p1;
 WHILE @@FETCH_STATUS = 0  
 BEGIN 
     SET @stmt = 'IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA=''dbo'' AND TABLE_NAME='''+REPLACE(REPLACE(QuoteName(@p1),'[',''),']','')+''' AND TABLE_TYPE=''BASE TABLE'') DROP TABLE dbo.' + QuoteName(@p1);
-	EXEC (@stmt);
-	SET @stmt = 'IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA=''dbo'' AND ROUTINE_NAME=''spMerge'+REPLACE(REPLACE(QuoteName(@p1),'[',''),']','')+''' AND ROUTINE_TYPE=''PROCEDURE'')   DROP PROCEDURE dbo.spMerge'+ REPLACE(REPLACE(QuoteName(@p1),'[',''),']','');
-	EXEC (@stmt);
-	SET @stmt = 'IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.DOMAINS WHERE DOMAIN_SCHEMA=''dbo'' AND DOMAIN_NAME='''+REPLACE(REPLACE(QuoteName(@p1),'[',''),']','')+'Idtype'' ) DROP TYPE dbo.'+ REPLACE(REPLACE(QuoteName(@p1),'[',''),']','')+'Idtype';
-	EXEC (@stmt);
-	SET @stmt = 'IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.DOMAINS WHERE DOMAIN_SCHEMA=''dbo'' AND DOMAIN_NAME='''+REPLACE(REPLACE(QuoteName(@p1),'[',''),']','')+'type'' ) DROP TYPE dbo.'+ REPLACE(REPLACE(QuoteName(@p1),'[',''),']','')+'type';
-	EXEC (@stmt);
-	FETCH NEXT FROM @cr INTO @p1;
+    EXEC (@stmt);
+    SET @stmt = 'IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA=''dbo'' AND ROUTINE_NAME=''spMerge'+REPLACE(REPLACE(QuoteName(@p1),'[',''),']','')+''' AND ROUTINE_TYPE=''PROCEDURE'')   DROP PROCEDURE dbo.spMerge'+ REPLACE(REPLACE(QuoteName(@p1),'[',''),']','');
+    EXEC (@stmt);
+    SET @stmt = 'IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.DOMAINS WHERE DOMAIN_SCHEMA=''dbo'' AND DOMAIN_NAME='''+REPLACE(REPLACE(QuoteName(@p1),'[',''),']','')+'Idtype'' ) DROP TYPE dbo.'+ REPLACE(REPLACE(QuoteName(@p1),'[',''),']','')+'Idtype';
+    EXEC (@stmt);
+    SET @stmt = 'IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.DOMAINS WHERE DOMAIN_SCHEMA=''dbo'' AND DOMAIN_NAME='''+REPLACE(REPLACE(QuoteName(@p1),'[',''),']','')+'type'' ) DROP TYPE dbo.'+ REPLACE(REPLACE(QuoteName(@p1),'[',''),']','')+'type';
+    EXEC (@stmt);
+    FETCH NEXT FROM @cr INTO @p1;
 END;
 CLOSE @cr;
 DEALLOCATE @cr;
@@ -79,7 +79,7 @@ IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='smgt' AND
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='smgt' AND TABLE_NAME='userMapping' AND TABLE_TYPE='BASE TABLE')
     DROP TABLE smgt.userMapping;
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='smgt' AND TABLE_NAME='entityinitialcount' AND TABLE_TYPE='BASE TABLE')
-	DROP TABLE smgt.entityinitialcount;
+    DROP TABLE smgt.entityinitialcount;
 
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='dbo' AND TABLE_NAME='account' AND TABLE_TYPE='BASE TABLE')
     DROP TABLE dbo.account;
@@ -183,7 +183,7 @@ IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 A
     DROP TYPE dbo.teamType;
 IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='teamIdType')
     DROP TYPE dbo.teamIdType;
-	
+    
 IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name='smgt')
 BEGIN
     EXEC ('CREATE SCHEMA smgt AUTHORIZATION dbo'); -- Avoid batch error

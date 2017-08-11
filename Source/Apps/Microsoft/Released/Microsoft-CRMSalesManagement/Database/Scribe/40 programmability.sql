@@ -11,12 +11,12 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-	DECLARE @tables NVARCHAR(MAX);
-	SELECT @tables = REPLACE([value],' ','')
-	FROM [smgt].[configuration]
-	WHERE configuration_group = 'SolutionTemplate'
-	AND	configuration_subgroup = 'StandardConfiguration' 
-	AND	name = 'Tables'
+    DECLARE @tables NVARCHAR(MAX);
+    SELECT @tables = REPLACE([value],' ','')
+    FROM [smgt].[configuration]
+    WHERE configuration_group = 'SolutionTemplate'
+    AND	configuration_subgroup = 'StandardConfiguration' 
+    AND	name = 'Tables';
 
     IF OBJECT_ID('dbo.Scribe_ReplicationStatus') IS NULL
        SELECT TOP 0 '' AS EntityName, 0 AS [COUNT], '' AS [Status];
@@ -63,12 +63,12 @@ BEGIN
 
     DECLARE @StatusCode INT = -1;
 
-	DECLARE @tables NVARCHAR(MAX);
-	SELECT @tables = REPLACE([value],' ','')
-	FROM [smgt].[configuration]
-	WHERE configuration_group = 'SolutionTemplate'
-	AND	configuration_subgroup = 'StandardConfiguration' 
-	AND	name = 'Tables'
+    DECLARE @tables NVARCHAR(MAX);
+    SELECT @tables = REPLACE([value],' ','')
+    FROM [smgt].[configuration]
+    WHERE configuration_group = 'SolutionTemplate'
+    AND	configuration_subgroup = 'StandardConfiguration' 
+    AND	name = 'Tables';
 
     SELECT ta.[name] AS EntityName, SUM(pa.[rows]) AS [Count] INTO #counts
     FROM sys.tables ta INNER JOIN sys.partitions pa ON pa.OBJECT_ID = ta.OBJECT_ID

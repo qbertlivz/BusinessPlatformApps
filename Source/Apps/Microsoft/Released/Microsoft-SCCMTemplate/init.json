@@ -157,7 +157,7 @@
                 "SqlEntryName": "Tables",
                 "SqlEntryValue": "collection,computer,computercollection,computermalware,computerprogram,computerupdate,malware,operatingsystem,program,scanhistory,update,user,usercomputer",
                 "SqlGroup": "SolutionTemplate",
-                "SqlServerIndex": "0",
+                "SqlServerIndex": "1",
                 "SqlSubGroup": "StandardConfiguration",
                 "useImpersonation": true
             },

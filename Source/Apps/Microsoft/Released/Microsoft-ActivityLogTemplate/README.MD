@@ -126,6 +126,7 @@ How to set up real time streaming from the solution template to Power BI:
 4.	Update your Stream Analytics Query
     1.	Navigate to the “Query” pane. 
     2.	Paste the query given below on a new line in the query window. NOTE: If you used a different output alias than “PBIOutput”, use that alias in the INTO clause at the bottom of this query:
+    3.	Press “Save” to update the query
 
 ```sql
 SELECT
@@ -161,7 +162,6 @@ INTO [PBIOutput]
 FROM [EventHubInput] event CROSS APPLY GetArrayElements(event.records) AS arrayElement
 ```
 
-    3.	Press “Save” to update the query
 5.	Start the Stream Analytics job
     1.	In the “Overview” pane, start the Stream Analytics job. This restarts the pipeline we initially created for you, but now you are additionally sending data to a real-time data set. You are now just a few steps away from real-time analytics!
 6.	Publish your existing .pbix

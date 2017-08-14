@@ -130,7 +130,7 @@ DEALLOCATE @cr;
 
 -- drop known (to this solution) user defined types 
 SET @cr = CURSOR FAST_FORWARD FOR
-   SELECT [name] FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name] IN ('accountIdType', 'accountType', 'AttributeMetadataList', 'bookableresourcebookingIdType',
+   SELECT [name] FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name] IN ('accountIdType', 'accountType', 'AttributeMetadataList', 'bookableresourcebookingIdType',
                                                                                            'bookableresourcebookingType', 'bookableresourcecategoryassnIdType', 'bookableresourcecategoryassnType',
                                                                                            'bookableresourcecategoryIdType', 'bookableresourcecategoryType', 'bookableresourceIdType', 'bookableresourceType',
                                                                                            'bookingstatusIdType', 'bookingstatusType', 'msdyn_actualIdType', 'msdyn_actualType', 'msdyn_estimatelineIdType',

@@ -102,71 +102,71 @@ IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='dbo' 
     DROP PROCEDURE dbo.sp_get_pull_status;
 
 
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='StateMetadataList')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='StateMetadataList')
     DROP TYPE dbo.StateMetadataList;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='StatusMetadataList')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='StatusMetadataList')
     DROP TYPE dbo.StatusMetadataList;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='OptionSetMetadataList')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='OptionSetMetadataList')
     DROP TYPE dbo.OptionSetMetadataList;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='TargetMetadataList')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='TargetMetadataList')
     DROP TYPE dbo.TargetMetadataList;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='AttributeMetadataList')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='AttributeMetadataList')
     DROP TYPE dbo.AttributeMetadataList;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='AccountType')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='AccountType')
     DROP TYPE dbo.AccountType;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='AccountIdType')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='AccountIdType')
     DROP TYPE dbo.AccountIdType;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='AppointmentType')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='AppointmentType')
     DROP TYPE dbo.AppointmentType;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='AppointmentIdType')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='AppointmentIdType')
     DROP TYPE dbo.AppointmentIdType;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='contactType')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='contactType')
     DROP TYPE dbo.contactType;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='contactIdType')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='contactIdType')
     DROP TYPE dbo.contactIdType;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='emailType')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='emailType')
     DROP TYPE dbo.emailType;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='emailIdType')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='emailIdType')
     DROP TYPE dbo.emailIdType;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='faxType')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='faxType')
     DROP TYPE dbo.faxType;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='faxIdType')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='faxIdType')
     DROP TYPE dbo.faxIdType;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='incidentType')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='incidentType')
     DROP TYPE dbo.incidentType;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='incidentIdType')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='incidentIdType')
     DROP TYPE dbo.incidentIdType;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='letterType')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='letterType')
     DROP TYPE dbo.letterType;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='letterIdType')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='letterIdType')
     DROP TYPE dbo.letterIdType;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='msdyn_surveyType')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='msdyn_surveyType')
     DROP TYPE dbo.msdyn_surveyType;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='msdyn_surveyIdType')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='msdyn_surveyIdType')
     DROP TYPE dbo.msdyn_surveyIdType;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='msdyn_surveyresponseType')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='msdyn_surveyresponseType')
     DROP TYPE dbo.msdyn_surveyresponseType;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='msdyn_surveyresponseIdType')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='msdyn_surveyresponseIdType')
     DROP TYPE dbo.msdyn_surveyresponseIdType;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='phonecallType')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='phonecallType')
     DROP TYPE dbo.phonecallType;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='phonecallIdType')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='phonecallIdType')
     DROP TYPE dbo.phonecallIdType;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='slakpiinstanceType')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='slakpiinstanceType')
     DROP TYPE dbo.slakpiinstanceType;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='slakpiinstanceIdType')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='slakpiinstanceIdType')
     DROP TYPE dbo.slakpiinstanceIdType;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='systemuserType')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='systemuserType')
     DROP TYPE dbo.systemuserType;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='systemuserIdType')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='systemuserIdType')
     DROP TYPE dbo.systemuserIdType;
-	IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='taskType')
+	IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='taskType')
     DROP TYPE dbo.taskType;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='taskIdType')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='taskIdType')
     DROP TYPE dbo.taskIdType;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='teamType')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='teamType')
     DROP TYPE dbo.teamType;
-IF EXISTS (SELECT * FROM sys.Types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='teamIdType')
+IF EXISTS (SELECT * FROM sys.types WHERE is_user_defined=1 AND is_table_type=1 AND [name]='teamIdType')
     DROP TYPE dbo.teamIdType;
 
 	

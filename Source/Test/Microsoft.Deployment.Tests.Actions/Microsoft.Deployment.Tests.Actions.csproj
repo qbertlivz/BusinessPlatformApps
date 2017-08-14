@@ -138,6 +138,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AzureTests\HistoricalActivityLogTest.cs" />
+    <Compile Include="AzureTests\GetAppWorkspacesTest.cs" />
     <Compile Include="AxTests\AxConnectorTests.cs" />
     <Compile Include="AzureTests\AzureAnalysisServicesTest.cs" />
     <Compile Include="AzureTests\AzureStorageTests.cs" />
@@ -150,6 +152,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>HelperStringsJson.resx</DependentUpon>
     </Compile>
+    <Compile Include="AzureTests\EventHubTests.cs" />
+    <Compile Include="AzureTests\StreamAnalyticsTests.cs" />
     <Compile Include="AzureTests\LogicAppTests.cs" />
     <Compile Include="AcademicTests\AcademicTests.cs" />
     <Compile Include="FacebookTests\FacebookTests.cs" />

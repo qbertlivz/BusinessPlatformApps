@@ -14,7 +14,7 @@ DECLARE @cr CURSOR;
 -- drop views
 SET @cr = CURSOR FAST_FORWARD FOR
               SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES
-              WHERE TABLE_TYPE='View' AND
+              WHERE TABLE_TYPE='VIEW' AND
                     TABLE_SCHEMA='psa' AND
                     TABLE_NAME IN ('ZResourceCapacityView', 'TransactionCategoryView', 'TimeEntryView', 'ResourceView', 'ResourceRequirementView', 'ResourceRequirementDetailView', 'ResourceRequestView',
                                    'ResourceBookingView', 'QuoteView', 'QuoteLineView', 'ProjectView', 'ProjectContractView', 'OrganizationalUnitView', 'OpportunityView', 'NamedResourceWorkCapacityView',
@@ -51,7 +51,7 @@ DEALLOCATE @cr;
 --- DROP DBO VIEWS---
 SET @cr = CURSOR FAST_FORWARD FOR
               SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES
-              WHERE TABLE_TYPE='View' AND
+              WHERE TABLE_TYPE='VIEW' AND
                     TABLE_SCHEMA='dbo' AND
                     TABLE_NAME IN ('timeline_os_opportunity', 'territorycode_os_account', 'status_os_bookingstatus', 'shipto_freighttermscode_os_salesorderdetail', 'shipto_freighttermscode_os_salesorder',
                                    'shipto_freighttermscode_os_quotedetail', 'shipto_freighttermscode_os_quote', 'shippingmethodcode_os_salesorder', 'shippingmethodcode_os_quote', 'shippingmethodcode_os_account',

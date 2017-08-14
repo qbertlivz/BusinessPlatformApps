@@ -17,19 +17,19 @@ export class Customize extends ViewModelBase {
     }
 
     async onValidate(): Promise<boolean> {
-            if (this.axBaseUrl) {
-                if (this.urlRegex.test(this.axBaseUrl)) {
-                    this.MS.DataStore.addToDataStore('AxInstanceName', this.axBaseUrl, DataStoreType.Public);
-                    this.isValidated = await this.validateAxInstance();                  
-                } else {
-                    this.MS.ErrorService.message = 'Validation failed. The url address ' + this.axBaseUrl + ' is not valid.';                    
-                }
-            }
-            if (this.selectedInstance) {
-                this.MS.DataStore.addToDataStore('AxInstanceName', this.selectedInstance, DataStoreType.Public);
+        if (this.axBaseUrl) {
+            if (this.urlRegex.test(this.axBaseUrl)) {
+                this.MS.DataStore.addToDataStore('AxInstanceName', this.axBaseUrl, DataStoreType.Public);
                 this.isValidated = await this.validateAxInstance();
+            } else {
+                this.MS.ErrorService.message = 'Validation failed. The url address ' + this.axBaseUrl + ' is not valid.';
             }
-            return true;
+        }
+        if (this.selectedInstance) {
+            this.MS.DataStore.addToDataStore('AxInstanceName', this.selectedInstance, DataStoreType.Public);
+            this.isValidated = await this.validateAxInstance();
+        }
+        return true;
     }
 
     async validateAxInstance(): Promise<boolean> {
@@ -38,7 +38,7 @@ export class Customize extends ViewModelBase {
             return true;
         return false;
     }
-    
+
     async onInvalidate(): Promise<void> {
         super.onInvalidate();
         if (this.selectedInstance) {

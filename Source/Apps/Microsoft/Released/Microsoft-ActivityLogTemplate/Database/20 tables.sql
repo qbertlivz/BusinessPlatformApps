@@ -43,7 +43,7 @@ CREATE TABLE bpst_aal.[Configuration](
 	[configuration_subgroup] [varchar](150) NOT NULL,
 	[name] [varchar](150) NOT NULL,
 	[value] [varchar](max) NULL,
-	[visible] [bit] NOT NULL
+	[visible] [bit]  NOT NULL DEFAULT 0
 );
 
 CREATE TABLE bpst_aal.[date](

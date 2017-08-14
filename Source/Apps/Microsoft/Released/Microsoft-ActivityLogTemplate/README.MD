@@ -160,7 +160,6 @@ SELECT
 INTO [PBIOutput] 
 FROM [EventHubInput] event CROSS APPLY GetArrayElements(event.records) AS arrayElement
 ```
-```
 
 c.	Press “Save” to update the query
 5.	Start the Stream Analytics job
@@ -190,6 +189,7 @@ Here’s a checklist you can use to troubleshoot issues connecting Stream Analyt
 6. Can you look into the Azure Stream Analytics logs to see if there are any warnings or errors?
 
 For more details on using Power BI as a real-time data streaming service, see https://powerbi.microsoft.com/en-us/documentation/powerbi-service-real-time-streaming/ 
+
 
 ### Estimated Costs
 

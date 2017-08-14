@@ -127,6 +127,7 @@ g.	Press “Save” at the bottom to save the new output
 a.	Navigate to the “Query” pane. 
 b.	Paste the query given below on a new line in the query window. NOTE: If you used a different output alias than “PBIOutput”, use that alias in the INTO clause at the bottom of this query:
 
+```sql
 SELECT
     arrayElement.ArrayValue.[identity].claims.[http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn] as caller,
     arrayElement.ArrayValue.correlationId, 
@@ -158,6 +159,7 @@ SELECT
     arrayElement.ArrayValue.time as [timestamp]
 INTO [PBIOutput] 
 FROM [EventHubInput] event CROSS APPLY GetArrayElements(event.records) AS arrayElement
+```
 
 c.	Press “Save” to update the query
 5.	Start the Stream Analytics job

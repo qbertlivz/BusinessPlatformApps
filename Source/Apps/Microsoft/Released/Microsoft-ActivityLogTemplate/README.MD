@@ -160,6 +160,7 @@ SELECT
 INTO [PBIOutput] 
 FROM [EventHubInput] event CROSS APPLY GetArrayElements(event.records) AS arrayElement
 ```
+```
 
 c.	Press “Save” to update the query
 5.	Start the Stream Analytics job

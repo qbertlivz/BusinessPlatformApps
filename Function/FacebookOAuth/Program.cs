@@ -16,6 +16,7 @@ namespace FacebookOAuth
         public const string clientSecret = "";
         public const string redirectUri = "https://localhost/";
         public static string code = string.Empty;
+        public string devCode = "";
 
         [STAThread]
         static void Main(string[] args)

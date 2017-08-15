@@ -47,6 +47,7 @@
     <Compile Include="CognitiveUtility.cs" />
     <Compile Include="DataTableUtility.cs" />
     <Compile Include="DateUtility.cs" />
+    <Compile Include="FacebookPageAnalyticsMetricGroups.cs" />
     <Compile Include="FacebookUtility.cs" />
     <Compile Include="MainETL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

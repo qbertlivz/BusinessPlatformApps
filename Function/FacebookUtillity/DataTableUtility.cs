@@ -82,5 +82,108 @@ namespace FacebookUtillity
             table.Columns.Add("Posts");
             return table;
         }
+
+        #region Page Analytics Tables
+        public static DataTable GetClicksDataTable()
+        {
+            DataTable table = new DataTable();
+            table.Columns.Add("EndTime", typeof(DateTime));
+            table.Columns.Add("Name");
+            table.Columns.Add("Value");
+            table.Columns.Add("Period");
+            table.Columns.Add("Title");
+            table.Columns.Add("Id");
+            return table;
+        }
+
+        public static DataTable GetEngagementTable()
+        {
+            DataTable table = new DataTable();
+            table.Columns.Add("EndTime", typeof(DateTime));
+            table.Columns.Add("Name");
+            table.Columns.Add("Entry Name");
+            table.Columns.Add("Value");
+            table.Columns.Add("Period");
+            table.Columns.Add("Title");
+            table.Columns.Add("Id");
+            return table;
+        }
+
+        public static DataTable GetImpressionsTable()
+        {
+            DataTable table = new DataTable();
+            table.Columns.Add("EndTime", typeof(DateTime));
+            table.Columns.Add("Name");
+            table.Columns.Add("Entry Name");
+            table.Columns.Add("Value");
+            table.Columns.Add("Period");
+            table.Columns.Add("Title");
+            table.Columns.Add("Id");
+            return table;
+        }
+
+        public static DataTable GetPagePostsTable()
+        {
+            DataTable table = new DataTable();
+            table.Columns.Add("EndTime", typeof(DateTime));
+            table.Columns.Add("Name");
+            table.Columns.Add("Value");
+            table.Columns.Add("Period");
+            table.Columns.Add("Title");
+            table.Columns.Add("Id");
+            return table;
+        }
+
+        public static DataTable GetPagePostStoriesTable()
+        {
+            DataTable table = new DataTable();
+            table.Columns.Add("EndTime", typeof(DateTime));
+            table.Columns.Add("Name");
+            table.Columns.Add("Entry Name");
+            table.Columns.Add("Value");
+            table.Columns.Add("Period");
+            table.Columns.Add("Title");
+            table.Columns.Add("Id");
+            return table;
+        }
+
+        public static DataTable GetPageReactionsTable()
+        {
+            DataTable table = new DataTable();
+            table.Columns.Add("EndTime", typeof(DateTime));
+            table.Columns.Add("Name");
+            table.Columns.Add("Entry Name");
+            table.Columns.Add("Value");
+            table.Columns.Add("Period");
+            table.Columns.Add("Title");
+            table.Columns.Add("Id");
+            return table;
+        }
+
+        public static DataTable GetPageUserDemographicsTable()
+        {
+            DataTable table = new DataTable();
+            table.Columns.Add("EndTime", typeof(DateTime));
+            table.Columns.Add("Name");
+            table.Columns.Add("Value");
+            table.Columns.Add("Period");
+            table.Columns.Add("Title");
+            table.Columns.Add("Id");
+            return table;
+        }
+
+        public static DataTable GetPageViewsTable()
+        {
+            DataTable table = new DataTable();
+            table.Columns.Add("EndTime", typeof(DateTime));
+            table.Columns.Add("Name");
+            table.Columns.Add("Entry Name");
+            table.Columns.Add("Value");
+            table.Columns.Add("Period");
+            table.Columns.Add("Title");
+            table.Columns.Add("Id");
+            return table;
+        }
+        #endregion
     }
 }

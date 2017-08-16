@@ -43,7 +43,7 @@ namespace FacebookUtillity
                 if (post?["paging"] != null && post["paging"]?["cursors"] != null && post["paging"]["cursors"]?["after"] != null)
                 {
                     string after = post["paging"]["cursors"]["after"].ToString();
-                    requestUri = GetRequestUrlForPage(page, accessToken, until, since,after);
+                    requestUri = GetRequestUrlForPage(page, accessToken, until, since, after);
 
                 }
                 else if (post?["paging"] != null && post["paging"]?["next"] != null)
@@ -95,6 +95,7 @@ namespace FacebookUtillity
             return $"https://graph.facebook.com/v2.9/{page}/feed?" + GetQueryParameters(param);
         }
 
+        #region Page Analytics
         public static async Task<List<JObject>> GetPageMetricAnalytics(string page, string untilDateTime, string accessToken, string metricsGroup)
         {
             List<JObject> posts = new List<JObject>();
@@ -141,13 +142,18 @@ namespace FacebookUtillity
                 {
                     var response = await client.GetAsync(requestUri);
                     string responseObj = await response.Content.ReadAsStringAsync();
+
                     if (!response.IsSuccessStatusCode)
                     {
                         throw new Exception();
                     }
 
                     post = JObject.Parse(responseObj);
-                    posts.Add(post);
+
+                    if (!posts.Contains(post) && (post?["data"] as JArray).Count > 0)
+                    {
+                        posts.Add(post);
+                    }
 
                     if (post?["paging"] != null && post["paging"]?["cursors"] != null && post["paging"]["cursors"]?["after"] != null)
                     {
@@ -157,8 +163,22 @@ namespace FacebookUtillity
                     }
                     else if (post?["paging"] != null && post["paging"]?["next"] != null)
                     {
-
                         requestUri = post["paging"]?["next"].ToString();
+                    }
+                }
+
+                if (post?["data"] != null && (post?["data"] as JArray).Count > 0)
+                {
+                    var endTime = post?["data"]?[0]?["values"]?[0]?["end_time"];
+
+                    if (endTime != null)
+                    {
+                        var et = DateTime.Parse(endTime.ToString());
+                        var untilTime = DateTime.Parse(untilDateTime);
+                        if (untilTime.Subtract(et).TotalDays < 1)
+                        {
+                            break;
+                        }
                     }
                 }
             }
@@ -320,6 +340,7 @@ namespace FacebookUtillity
 
             return $"https://graph.facebook.com/v2.10/{page}/insights?" + GetQueryParameters(param);
         }
+        #endregion
 
         private static string GetQueryParameters(Dictionary<string, string> queryParams)
         {
@@ -332,7 +353,7 @@ namespace FacebookUtillity
                     str += "&";
                 }
 
-                str += queryParam.Key + "="  + HttpUtility.UrlEncode(queryParam.Value);
+                str += queryParam.Key + "=" + HttpUtility.UrlEncode(queryParam.Value);
             }
 
             return str;

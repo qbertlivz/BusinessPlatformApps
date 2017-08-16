@@ -6,7 +6,7 @@
     "Install": {
         "Pages": [
             {
-                "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-D365CustomerService/Web/Images/custservices.png",
+                "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-D365FieldService/Web/Images/fieldservices.png",
                 "displayname": "Getting Started",
                 "list1": [
                     "$translate(INIT_GETTING_STARTED_D365_DECEMBER)",
@@ -22,7 +22,7 @@
                     "$translate(INIT_GETTING_STARTED_CONNECT_AS_PBI)"
                 ],
                 "name": "$SiteCommon$/pages-gallery/getting-started.html",
-                "templateName": "$translate(INIT_D365_CS_TITLE)"
+                "templateName": "$translate(INIT_D365_FS_TITLE)"
             },
           {
             "displayname": "Dynamics 365 Login",

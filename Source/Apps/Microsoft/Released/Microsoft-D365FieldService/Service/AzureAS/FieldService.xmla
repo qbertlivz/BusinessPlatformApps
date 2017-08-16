@@ -7,14 +7,13 @@
 "culture": "en-US",
 "dataSources": [
 {
-"name": "FieldServiceDC",
-"connectionString": "Data Source=FieldServiceDC;Persist Security Info=true;User ID=pbiadmin;Encrypt=true;TrustServerCertificate=false;Initial Catalog=FieldServiceDB",
+"name": "ST_DS",
+"connectionString": "Provider=SQLNCLI11;Data Source=tcp:a.database.windows.net;Persist Security Info=False;User ID=pbiadmin;Initial Catalog=FieldServiceDB",
 "impersonationMode": "impersonateServiceAccount",
-"provider": "System.Data.SqlClient",
 "annotations": [
 {
 "name": "ConnectionEditUISource",
-"value": "SqlAzure"
+"value": "SqlServer"
 }
 ]
 }
@@ -60,7 +59,7 @@
 "dataView": "full",
 "source": {
 "query": " SELECT [fso].[BookingStatusView].* FROM [fso].[BookingStatusView] ",
-"dataSource": "FieldServiceDC"
+"dataSource": "ST_DS"
 }
 }
 ],
@@ -126,7 +125,7 @@
 "dataView": "full",
 "source": {
 "query": " SELECT [fso].[configuration].* FROM [fso].[configuration] ",
-"dataSource": "FieldServiceDC"
+"dataSource": "ST_DS"
 }
 }
 ],
@@ -217,7 +216,7 @@
 "dataView": "full",
 "source": {
 "query": " SELECT [fso].[CustomerEquipmentView].* FROM [fso].[CustomerEquipmentView] ",
-"dataSource": "FieldServiceDC"
+"dataSource": "ST_DS"
 }
 }
 ],
@@ -321,7 +320,7 @@
 "dataView": "full",
 "source": {
 "query": " SELECT [fso].[CustomerView].* FROM [fso].[CustomerView] ",
-"dataSource": "FieldServiceDC"
+"dataSource": "ST_DS"
 }
 }
 ],
@@ -473,7 +472,7 @@
 "dataView": "full",
 "source": {
 "query": " SELECT [fso].[DateView].* FROM [fso].[DateView] ",
-"dataSource": "FieldServiceDC"
+"dataSource": "ST_DS"
 }
 }
 ],
@@ -526,7 +525,7 @@
 "dataView": "full",
 "source": {
 "query": " SELECT [fso].[IncidentTypeView].* FROM [fso].[IncidentTypeView] ",
-"dataSource": "FieldServiceDC"
+"dataSource": "ST_DS"
 }
 }
 ],
@@ -561,7 +560,7 @@
 "dataView": "full",
 "source": {
 "query": " SELECT [fso].[MeasuresView].* FROM [fso].[MeasuresView] ",
-"dataSource": "FieldServiceDC"
+"dataSource": "ST_DS"
 }
 }
 ],
@@ -638,7 +637,7 @@
 "dataView": "full",
 "source": {
 "query": " SELECT [fso].[ProductView].* FROM [fso].[ProductView] ",
-"dataSource": "FieldServiceDC"
+"dataSource": "ST_DS"
 }
 }
 ],
@@ -792,7 +791,7 @@
 "dataView": "full",
 "source": {
 "query": " SELECT [fso].[ResourceBookingView].* FROM [fso].[ResourceBookingView] ",
-"dataSource": "FieldServiceDC"
+"dataSource": "ST_DS"
 }
 }
 ],
@@ -863,7 +862,7 @@
 "dataView": "full",
 "source": {
 "query": " SELECT [fso].[ResourceView].* FROM [fso].[ResourceView] ",
-"dataSource": "FieldServiceDC"
+"dataSource": "ST_DS"
 }
 }
 ],
@@ -934,7 +933,7 @@
 "dataView": "full",
 "source": {
 "query": " SELECT [fso].[ServiceView].* FROM [fso].[ServiceView] ",
-"dataSource": "FieldServiceDC"
+"dataSource": "ST_DS"
 }
 }
 ],
@@ -975,7 +974,7 @@
 "dataView": "full",
 "source": {
 "query": " SELECT [fso].[TerritoryView].* FROM [fso].[TerritoryView] ",
-"dataSource": "FieldServiceDC"
+"dataSource": "ST_DS"
 }
 }
 ],
@@ -1052,7 +1051,7 @@
 "dataView": "full",
 "source": {
 "query": " SELECT [fso].[WorkOrderProductsView].* FROM [fso].[WorkOrderProductsView] ",
-"dataSource": "FieldServiceDC"
+"dataSource": "ST_DS"
 }
 }
 ],
@@ -1166,7 +1165,7 @@
 "dataView": "full",
 "source": {
 "query": " SELECT [fso].[WorkOrderServiceView].* FROM [fso].[WorkOrderServiceView] ",
-"dataSource": "FieldServiceDC"
+"dataSource": "ST_DS"
 }
 }
 ],
@@ -1213,7 +1212,7 @@
 "dataView": "full",
 "source": {
 "query": " SELECT [fso].[WorkOrderTypeView].* FROM [fso].[WorkOrderTypeView] ",
-"dataSource": "FieldServiceDC"
+"dataSource": "ST_DS"
 }
 }
 ],
@@ -1393,7 +1392,7 @@
 "dataView": "full",
 "source": {
 "query": " SELECT [fso].[WorkOrderView].* FROM [fso].[WorkOrderView] ",
-"dataSource": "FieldServiceDC"
+"dataSource": "ST_DS"
 }
 }
 ],
@@ -1516,7 +1515,7 @@
 "dataView": "full",
 "source": {
 "query": " SELECT [fso].[DateView].* FROM [fso].[DateView] ",
-"dataSource": "FieldServiceDC"
+"dataSource": "ST_DS"
 }
 }
 ],
@@ -1660,7 +1659,7 @@
 "dataView": "full",
 "source": {
 "query": " SELECT [fso].[DateView].* FROM [fso].[DateView] ",
-"dataSource": "FieldServiceDC"
+"dataSource": "ST_DS"
 }
 }
 ],

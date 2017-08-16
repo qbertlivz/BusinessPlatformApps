@@ -95,7 +95,8 @@
                 "name": "$SiteCommon$/pages-gallery/progress.html",
                 "filename": "$save('PSA_AccountManager.pbix|PSA_PracticeManager.pbix|PSA_ResourceManager.pbix')",
                 "showCounts": true,
-                "finishedActionName": "Microsoft-CrmGetProfileStatus"
+                "finishedActionName": "Microsoft-CrmGetProfileStatus",
+                "targetSchema": "psa"
             }
         ],
 

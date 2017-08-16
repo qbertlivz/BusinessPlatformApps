@@ -46,9 +46,9 @@ CREATE TABLE pbist_sccm.malware
 CREATE  TABLE  pbist_sccm.computerprogram
 (
     machineid       INT NOT NULL,
-    [program name]  NVARCHAR(255)  NOT NULL,
-    publisher       NVARCHAR(255)  NULL,
-    [version]       NVARCHAR(255)  NULL,
+    [program name]  NVARCHAR(max)  NOT NULL,
+    publisher       NVARCHAR(max)  NULL,
+    [version]       NVARCHAR(250)  NULL,
     [timestamp]     DATETIME NULL
 );
 
@@ -70,9 +70,9 @@ CREATE  TABLE  pbist_sccm.operatingsystem
 
 CREATE  TABLE  pbist_sccm.program
 (
-      [program name]  NVARCHAR(255)  NOT NULL,
-      publisher       NVARCHAR(255)  NULL,
-      [version]       NVARCHAR(255)  NULL,
+      [program name]  NVARCHAR(max)  NOT NULL,
+      publisher       NVARCHAR(max)  NULL,
+      [version]       NVARCHAR(250)  NULL,
 );
 
 CREATE  TABLE  pbist_sccm.scanhistory 
@@ -229,9 +229,9 @@ CREATE TABLE pbist_sccm.computer_staging
 CREATE TABLE pbist_sccm.computerprogram_staging
 (
     machineid       INT NOT NULL,
-    [program name]  NVARCHAR(255) NOT NULL,
-    publisher       NVARCHAR(255)  NULL,
-    [version]       NVARCHAR(255)  NULL,
+    [program name]  NVARCHAR(max) NOT NULL,
+    publisher       NVARCHAR(max)  NULL,
+    [version]       NVARCHAR(250)  NULL,
     [timestamp]     DATETIME NULL
 );
 
@@ -254,9 +254,9 @@ CREATE TABLE pbist_sccm.malware_staging
 
 CREATE TABLE pbist_sccm.program_staging
 (
-      [program name]  NVARCHAR(255)  NOT NULL,
-      publisher       NVARCHAR(255)  NULL,
-      [version]       NVARCHAR(255)  NULL
+      [program name]  NVARCHAR(max)  NOT NULL,
+      publisher       NVARCHAR(max)  NULL,
+      [version]       NVARCHAR(250)  NULL
 );
 
 

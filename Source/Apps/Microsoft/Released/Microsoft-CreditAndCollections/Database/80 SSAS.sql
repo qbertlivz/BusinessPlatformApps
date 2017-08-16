@@ -12,30 +12,30 @@ go
 -- =============================================
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='cc' AND TABLE_NAME='ssas_jobs' AND TABLE_TYPE='BASE TABLE')
     DROP TABLE cc.ssas_jobs;
-	
+    
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='cc' AND ROUTINE_NAME='sp_set_process_flag' AND ROUTINE_TYPE='PROCEDURE')
     DROP PROCEDURE [cc].sp_set_process_flag;
-	
+    
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='cc' AND ROUTINE_NAME='sp_validate_schema' AND ROUTINE_TYPE='PROCEDURE')
     DROP PROCEDURE [cc].sp_validate_schema;
-	
+    
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='cc' AND ROUTINE_NAME='sp_get_current_record_counts' AND ROUTINE_TYPE='PROCEDURE')
     DROP PROCEDURE [cc].sp_get_current_record_counts;
-	
+    
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='cc' AND ROUTINE_NAME='sp_check_record_counts_changed' AND ROUTINE_TYPE='PROCEDURE')
     DROP PROCEDURE [cc].sp_check_record_counts_changed;
-	
+    
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='cc' AND ROUTINE_NAME='sp_finish_job' AND ROUTINE_TYPE='PROCEDURE')
     DROP PROCEDURE [cc].sp_finish_job;
-	
+    
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='cc' AND ROUTINE_NAME='sp_start_job' AND ROUTINE_TYPE='PROCEDURE')
     DROP PROCEDURE [cc].sp_start_job;
-	
+    
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='cc' AND ROUTINE_NAME='sp_reset_job' AND ROUTINE_TYPE='PROCEDURE')
     DROP PROCEDURE [cc].sp_reset_job;
 
 GO
-	
+    
 -- =============================================
 -- Pre Setup - Insert Configuration Values
 -- =============================================
@@ -46,10 +46,10 @@ GO
 
 INSERT cc.[configuration] (configuration_group, configuration_subgroup, [name], [value], [visible])
     VALUES ( N'SolutionTemplate', N'SSAS', N'ProcessOnNextSchedule', N'0', 0),
-		   ( N'SolutionTemplate', N'SSAS', N'Timeout', N'4', 0),
-		   ( N'SolutionTemplate', N'SSAS', N'ValidateSchema', N'1', 0),
-		   ( N'SolutionTemplate', N'SSAS', N'CheckRowCounts', N'1', 0),
-		   ( N'SolutionTemplate', N'SSAS', N'CheckProcessFlag', N'0', 0);
+           ( N'SolutionTemplate', N'SSAS', N'Timeout', N'4', 0),
+           ( N'SolutionTemplate', N'SSAS', N'ValidateSchema', N'1', 0),
+           ( N'SolutionTemplate', N'SSAS', N'CheckRowCounts', N'1', 0),
+           ( N'SolutionTemplate', N'SSAS', N'CheckProcessFlag', N'0', 0);
 GO
 
 
@@ -58,12 +58,12 @@ GO
 -- =============================================
 CREATE  TABLE  cc.ssas_jobs
 ( 
-	id                  INT IDENTITY(1, 1) NOT NULL,
+    id                  INT IDENTITY(1, 1) NOT NULL,
     startTime           DateTime NOT NULL, 
     endTime             DateTime NULL,
     statusMessage       nvarchar(MAX),
-	lastCount			INT,
-	CONSTRAINT id_pk PRIMARY KEY (id)
+    lastCount			INT,
+    CONSTRAINT id_pk PRIMARY KEY (id)
 );
 go
 
@@ -73,14 +73,14 @@ go
 -- =============================================
 -- set process flag
 CREATE PROCEDURE cc.sp_set_process_flag
-	@process_flag nvarchar = '1'
+    @process_flag nvarchar = '1'
 AS
 BEGIN
 
-	SET NOCOUNT ON;
+    SET NOCOUNT ON;
     UPDATE [cc].[configuration] 
-	SET [value]=@process_flag
-	WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS' AND [name]='ProcessOnNextSchedule';
+    SET [value]=@process_flag
+    WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS' AND [name]='ProcessOnNextSchedule';
 END
 GO
 
@@ -101,7 +101,7 @@ BEGIN
 	DECLARE @returnValue INT;
 	SELECT @returnValue = Count(*)
 	FROM   information_schema.tables
-	WHERE  ( table_schema = 'dbo' AND
+	WHERE  ( table_schema = 'pbist_twitter' AND
 				 table_name IN (SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' ));
     if(@returnValue = 20)
     BEGIN
@@ -135,7 +135,7 @@ BEGIN
 	WHILE @@FETCH_STATUS = 0  
 	BEGIN 
 		DECLARE @retValue INT=0;
-		SET @stmt = 'SELECT @var = COUNT(*) FROM dbo.' + QuoteName(@p1);
+		SET @stmt = 'SELECT @var = COUNT(*) FROM pbist_twitter.' + QuoteName(@p1);
 		DECLARE @ParmDefinition NVARCHAR(500) = N'@var int OUTPUT';
 		EXECUTE sp_executesql @stmt, @ParmDefinition, @var = @retValue OUTPUT;
 		SET @returnValue = @returnValue + @retValue;		

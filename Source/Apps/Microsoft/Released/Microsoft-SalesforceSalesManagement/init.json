@@ -52,7 +52,7 @@
                 "pricingCalculatorUrl": "$translate(INIT_SALESFORCE_PRICING_CALCULATOR_URL)",
                 "pricingCost": "$translate(INIT_SALESFORCE_PRICING_COST)",
                 "pricingUrl": "$translate(INIT_SALESFORCE_PRICING_URL)",
-                "skip": "$(this.MS.HttpService.isOnPremise)"
+                "skip": "$run(this.MS.HttpService.isOnPremise)"
             },
             {
                 "dataMovement": "$run(this.MS.HttpService.isOnPremise ? 'Informatica' : 'ADF')",

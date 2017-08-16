@@ -12,30 +12,30 @@ go
 -- =============================================
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='cc' AND TABLE_NAME='ssas_jobs' AND TABLE_TYPE='BASE TABLE')
     DROP TABLE cc.ssas_jobs;
-	
+    
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='cc' AND ROUTINE_NAME='sp_set_process_flag' AND ROUTINE_TYPE='PROCEDURE')
     DROP PROCEDURE [cc].sp_set_process_flag;
-	
+    
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='cc' AND ROUTINE_NAME='sp_validate_schema' AND ROUTINE_TYPE='PROCEDURE')
     DROP PROCEDURE [cc].sp_validate_schema;
-	
+    
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='cc' AND ROUTINE_NAME='sp_get_current_record_counts' AND ROUTINE_TYPE='PROCEDURE')
     DROP PROCEDURE [cc].sp_get_current_record_counts;
-	
+    
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='cc' AND ROUTINE_NAME='sp_check_record_counts_changed' AND ROUTINE_TYPE='PROCEDURE')
     DROP PROCEDURE [cc].sp_check_record_counts_changed;
-	
+    
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='cc' AND ROUTINE_NAME='sp_finish_job' AND ROUTINE_TYPE='PROCEDURE')
     DROP PROCEDURE [cc].sp_finish_job;
-	
+    
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='cc' AND ROUTINE_NAME='sp_start_job' AND ROUTINE_TYPE='PROCEDURE')
     DROP PROCEDURE [cc].sp_start_job;
-	
+    
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='cc' AND ROUTINE_NAME='sp_reset_job' AND ROUTINE_TYPE='PROCEDURE')
     DROP PROCEDURE [cc].sp_reset_job;
 
 GO
-	
+    
 -- =============================================
 -- Pre Setup - Insert Configuration Values
 -- =============================================
@@ -46,10 +46,10 @@ GO
 
 INSERT cc.[configuration] (configuration_group, configuration_subgroup, [name], [value], [visible])
     VALUES ( N'SolutionTemplate', N'SSAS', N'ProcessOnNextSchedule', N'0', 0),
-		   ( N'SolutionTemplate', N'SSAS', N'Timeout', N'4', 0),
-		   ( N'SolutionTemplate', N'SSAS', N'ValidateSchema', N'1', 0),
-		   ( N'SolutionTemplate', N'SSAS', N'CheckRowCounts', N'1', 0),
-		   ( N'SolutionTemplate', N'SSAS', N'CheckProcessFlag', N'0', 0);
+           ( N'SolutionTemplate', N'SSAS', N'Timeout', N'4', 0),
+           ( N'SolutionTemplate', N'SSAS', N'ValidateSchema', N'1', 0),
+           ( N'SolutionTemplate', N'SSAS', N'CheckRowCounts', N'1', 0),
+           ( N'SolutionTemplate', N'SSAS', N'CheckProcessFlag', N'0', 0);
 GO
 
 
@@ -58,12 +58,12 @@ GO
 -- =============================================
 CREATE  TABLE  cc.ssas_jobs
 ( 
-	id                  INT IDENTITY(1, 1) NOT NULL,
+    id                  INT IDENTITY(1, 1) NOT NULL,
     startTime           DateTime NOT NULL, 
     endTime             DateTime NULL,
     statusMessage       nvarchar(MAX),
-	lastCount			INT,
-	CONSTRAINT id_pk PRIMARY KEY (id)
+    lastCount			INT,
+    CONSTRAINT id_pk PRIMARY KEY (id)
 );
 go
 
@@ -73,14 +73,14 @@ go
 -- =============================================
 -- set process flag
 CREATE PROCEDURE cc.sp_set_process_flag
-	@process_flag nvarchar = '1'
+    @process_flag nvarchar = '1'
 AS
 BEGIN
 
-	SET NOCOUNT ON;
+    SET NOCOUNT ON;
     UPDATE [cc].[configuration] 
-	SET [value]=@process_flag
-	WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS' AND [name]='ProcessOnNextSchedule';
+    SET [value]=@process_flag
+    WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup]='SSAS' AND [name]='ProcessOnNextSchedule';
 END
 GO
 
@@ -89,31 +89,20 @@ GO
 CREATE PROCEDURE cc.sp_validate_schema AS
 BEGIN
     SET NOCOUNT ON;
+	
+	SET NOCOUNT ON;
+	DECLARE @tables NVARCHAR(MAX);
+	SELECT @tables = REPLACE([value],' ','')
+	FROM [cc].[configuration]
+	WHERE configuration_group = 'SolutionTemplate'
+	AND	configuration_subgroup = 'StandardConfiguration' 
+	AND	name = 'Tables'
+
 	DECLARE @returnValue INT;
 	SELECT @returnValue = Count(*)
 	FROM   information_schema.tables
-	WHERE  ( table_schema = 'dbo' AND
-				 table_name IN (
-				 'CustCollectionsBIMeasurements_BICompanyView_MATERIALIZED',
-				 'CustCollectionsBIMeasurements_BIDateDimensionValue_MATERIALIZED',
-				 'CustCollectionsBIMeasurements_CustCollectionsBIActivitiesAverageCloseTime_MATERIALIZED',
-				 'CustCollectionsBIMeasurements_CustCollectionsBIActivitiesOpen_MATERIALIZED',
-				 'CustCollectionsBIMeasurements_CustCollectionsBIAgedBalances_MATERIALIZED',
-				 'CustCollectionsBIMeasurements_CustCollectionsBIBalancesDue_MATERIALIZED',
-				 'CustCollectionsBIMeasurements_CustCollectionsBICaseAverageCloseTime_MATERIALIZED',
-				 'CustCollectionsBIMeasurements_CustCollectionsBICasesOpen_MATERIALIZED',
-				 'CustCollectionsBIMeasurements_CustCollectionsBICollectionLetter_MATERIALIZED',
-				 'CustCollectionsBIMeasurements_CustCollectionsBICollectionLetterAmounts_MATERIALIZED',
-				 'CustCollectionsBIMeasurements_CustCollectionsBICollectionStatus_MATERIALIZED',
-				 'CustCollectionsBIMeasurements_CustCollectionsBICredit_MATERIALIZED',
-				 'CustCollectionsBIMeasurements_CustCollectionsBICustOnHold_MATERIALIZED',
-				 'CustCollectionsBIMeasurements_CustCollectionsBICustTable_MATERIALIZED',
-				 'CustCollectionsBIMeasurements_CustCollectionsBIDSO30_MATERIALIZED',
-				 'CustCollectionsBIMeasurements_CustCollectionsBIExpectedPayment_MATERIALIZED',
-				 'CustCollectionsBIMeasurements_CustCollectionsBIInterestNotes_MATERIALIZED',
-				 'CustCollectionsBIMeasurements_CustCollectionsBISalesOnHold_MATERIALIZED',
-				 'CustCollectionsBIMeasurements_CustCollectionsBIWriteOff_MATERIALIZED',
-				 'CustCollectionsBIMeasurements_SRSANALYSISENUMS_MATERIALIZED'));
+	WHERE  ( table_schema = 'pbist_twitter' AND
+				 table_name IN (SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' ));
     if(@returnValue = 20)
     BEGIN
     RETURN 1;
@@ -125,49 +114,36 @@ go
 -- Get Record Counts
 CREATE PROCEDURE cc.sp_get_current_record_counts AS
 BEGIN
-    SET NOCOUNT ON;
-	DECLARE @returnValue INT;
-       SELECT @returnValue = SUM(tableCount) FROM
-        (
-			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_BICompanyView_MATERIALIZED
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_BIDateDimensionValue_MATERIALIZED
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBIActivitiesAverageCloseTime_MATERIALIZED
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBIActivitiesOpen_MATERIALIZED
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBIAgedBalances_MATERIALIZED
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBIBalancesDue_MATERIALIZED
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBICaseAverageCloseTime_MATERIALIZED
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBICasesOpen_MATERIALIZED
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBICollectionLetter_MATERIALIZED
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBICollectionLetterAmounts_MATERIALIZED
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBICollectionStatus_MATERIALIZED
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBICustOnHold_MATERIALIZED
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBICustTable_MATERIALIZED
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBIDSO30_MATERIALIZED
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBIExpectedPayment_MATERIALIZED
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBIInterestNotes_MATERIALIZED
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBISalesOnHold_MATERIALIZED
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_CustCollectionsBIWriteOff_MATERIALIZED
-			UNION ALL
-			SELECT Count(*) AS tableCount FROM dbo.CustCollectionsBIMeasurements_SRSANALYSISENUMS_MATERIALIZED
-        ) AS temp;
-		RETURN @returnValue;
+        SET NOCOUNT ON;
+	DECLARE @returnValue INT = 0;
+	
+	DECLARE @stmt AS NVARCHAR(500), @p1 AS VARCHAR(100)
+	DECLARE @cr CURSOR;
+
+	DECLARE @tables NVARCHAR(MAX);
+	SELECT @tables = REPLACE([value],' ','')
+	FROM [cc].[configuration]
+	WHERE configuration_group = 'SolutionTemplate'
+	AND	configuration_subgroup = 'StandardConfiguration' 
+	AND	name = 'Tables'
+
+	SET @cr = CURSOR FAST_FORWARD FOR
+              SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' 
+
+	OPEN @cr;
+	FETCH NEXT FROM @cr INTO @p1;
+	WHILE @@FETCH_STATUS = 0  
+	BEGIN 
+		DECLARE @retValue INT=0;
+		SET @stmt = 'SELECT @var = COUNT(*) FROM pbist_twitter.' + QuoteName(@p1);
+		DECLARE @ParmDefinition NVARCHAR(500) = N'@var int OUTPUT';
+		EXECUTE sp_executesql @stmt, @ParmDefinition, @var = @retValue OUTPUT;
+		SET @returnValue = @returnValue + @retValue;		
+			FETCH NEXT FROM @cr INTO @p1;
+END;
+CLOSE @cr;
+DEALLOCATE @cr;
+RETURN @returnValue;
 END;
 go
 

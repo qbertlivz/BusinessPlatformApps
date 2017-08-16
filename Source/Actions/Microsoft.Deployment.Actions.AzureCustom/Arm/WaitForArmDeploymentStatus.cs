@@ -1,11 +1,14 @@
-﻿using System.Threading.Tasks;
-using Microsoft.Deployment.Common.ActionModel;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
+
 using Microsoft.Azure;
 using Microsoft.Azure.Management.Resources.Models;
+
+using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
+
 using ResourceManagementClient = Microsoft.Azure.Management.Resources.ResourceManagementClient;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.Arm
@@ -23,12 +26,12 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Arm
 
             SubscriptionCloudCredentials creds = new TokenCloudCredentials(subscription, azureToken);
             ResourceManagementClient client = new ResourceManagementClient(creds);
-            
+
             while (true)
             {
                 Thread.Sleep(5000);
                 var status = await client.Deployments.GetAsync(resourceGroup, deploymentName, new CancellationToken());
-                var operations = await client.DeploymentOperations.ListAsync(resourceGroup, deploymentName, new DeploymentOperationsListParameters(),new CancellationToken());
+                var operations = await client.DeploymentOperations.ListAsync(resourceGroup, deploymentName, new DeploymentOperationsListParameters(), new CancellationToken());
                 var provisioningState = status.Deployment.Properties.ProvisioningState;
 
                 if (provisioningState == "Accepted" || provisioningState == "Running")

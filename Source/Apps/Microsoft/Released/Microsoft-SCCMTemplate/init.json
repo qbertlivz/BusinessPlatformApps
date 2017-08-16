@@ -82,17 +82,18 @@
             {
                 "displayname": "AAS",
                 "name": "$SiteCommon$/pages-gallery/choose-analysis-server.html",
+                "registerAnalysisServices": false,
                 "showDescription": true,
                 "skip": "$dsall(azureSqlDisabled)[1]",
                 "ssasEnabled": "true"
             },
             {
-                "displayname": "Login to Azure",
-                "name": "$SiteCommon$/pages-gallery/azure-login.html",
-                "oauthType": "",
                 "azureProviders": [
                     "Microsoft.AnalysisServices"
                 ],
+                "displayname": "Login to Azure",
+                "name": "$SiteCommon$/pages-gallery/azure-login.html",
+                "oauthType": "",
                 "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true' : 'false')"
             },
             {
@@ -123,6 +124,9 @@
             },
             {
                 "asDatabase": "Sccm",
+                "datastoreEntriesToValidate": [
+                    "ImpersonationPassword"
+                ],
                 "displayname": "Progress",
                 "filename": "$save('SCCMSolutionTemplate.pbix')",
                 "filenameSSAS": "SCCMSolutionTemplateAS.pbix",
@@ -148,6 +152,17 @@
                 "name": "Microsoft-SetConfigValueInSql",
                 "SqlConfigTable": "pbist_sccm.[configuration]",
                 "SqlServerIndex": "1",
+                "useImpersonation": true
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+                "name": "Microsoft-SetConfigValueInSql",
+                "SqlConfigTable": "pbist_sccm.[configuration]",
+                "SqlEntryName": "Tables",
+                "SqlEntryValue": "collection,computer,computercollection,computermalware,computerprogram,computerupdate,malware,operatingsystem,program,scanhistory,update,user,usercomputer",
+                "SqlGroup": "SolutionTemplate",
+                "SqlServerIndex": "1",
+                "SqlSubGroup": "StandardConfiguration",
                 "useImpersonation": true
             },
             {

@@ -45,11 +45,12 @@
                     "bookableresourcebooking": "bookableresourcebookingid",
                     "bookableresource": "bookableresourceid",
                     "account": "accountid"
-                },                
+                },
                 "name": "$SiteCommon$/pages-gallery/mscrm-login.html",
                 "oauthType": "mscrm",
                 "pricingCost": "$translate(INIT_D365_PRICING_COST)",
-                "pricingUrl": "$translate(INIT_D365_PRICING_URL)"
+                "pricingUrl": "$translate(INIT_D365_PRICING_URL)",
+                "ProfileName": "$save('bpst-psa-profile')"
             },
             {
                 "displayname": "Login to the Key Vault",
@@ -94,7 +95,8 @@
                 "name": "$SiteCommon$/pages-gallery/progress.html",
                 "filename": "$save('PSA_AccountManager.pbix|PSA_PracticeManager.pbix|PSA_ResourceManager.pbix')",
                 "showCounts": true,
-                "finishedActionName": "Microsoft-CrmGetProfileStatus"
+                "finishedActionName": "Microsoft-CrmGetProfileStatus",
+                "targetSchema": "psa"
             }
         ],
 
@@ -104,6 +106,16 @@
                 "name": "Microsoft-DeploySQLScripts",
                 "SqlScriptsFolder": "Service/Database",
                 "SqlServerIndex": "0"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+                "name": "Microsoft-SetConfigValueInSql",
+                "SqlConfigTable": "[psa].[configuration]",
+                "SqlEntryName": "Tables",
+                "SqlEntryValue": "account, bookableresource, bookableresourcebooking, bookableresourcecategory, bookableresourcecategoryassn, bookingstatus, msdyn_actual, msdyn_estimateline, msdyn_orderlineresourcecategory, msdyn_organizationalunit, msdyn_project, msdyn_resourcerequest, msdyn_resourcerequirement, msdyn_resourcerequirementdetail, msdyn_timeentry, msdyn_transactioncategory, opportunity, quote, quotedetail, salesorder, salesorderdetail, systemuser",
+                "SqlGroup": "SolutionTemplate",
+                "SqlServerIndex": "0",
+                "SqlSubGroup": "StandardConfiguration"
             },
             {
                 "displayname": "$translate(INIT_ACTION_CONFIGURING_KEY_VAULT)",

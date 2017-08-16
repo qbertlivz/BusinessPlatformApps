@@ -276,4 +276,7 @@
   <data name="SalesforceInvalidType" xml:space="preserve">
     <value>You may not have read access to one of the following objects: Opportunity, Account, Lead, Product2, OpportunityLineItem, OpportunityStage, User, UserRole. Please check.</value>
   </data>
+  <data name="AxWrongPlatform" xml:space="preserve">
+    <value>It seems you're not running the correct platform version of Dynamics 365 for Finance and Operations. The template requires at least Platform Update 8.</value>
+  </data>
 </root>

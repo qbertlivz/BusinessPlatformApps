@@ -42,7 +42,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.News
                     foreach (string value in values)
                     {
                         DataRow userEntityRow = userEntityTable.NewRow();
-                        userEntityRow["regex"] = value;
+                        userEntityRow["regex"] = value ;
                         userEntityRow["entityValue"] = value;
                         userEntityRow["entityType"] = userEntity.Name;
                         userEntityTable.Rows.Add(userEntityRow);

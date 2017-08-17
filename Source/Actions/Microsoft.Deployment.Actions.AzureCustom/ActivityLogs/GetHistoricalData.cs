@@ -1,15 +1,14 @@
-﻿using Microsoft.Deployment.Common.ActionModel;
+﻿using System;
+using System.ComponentModel.Composition;
+using System.Data;
+using System.Data.SqlClient;
+using System.Net.Http;
+using System.Threading.Tasks;
+
+using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Model.StreamAnalytics;
 using Microsoft.Deployment.Common.Helpers;
-using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Data.SqlClient;
-using System.Data;
-using System;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
 {

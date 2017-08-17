@@ -1,18 +1,14 @@
-﻿using System;
+﻿using Microsoft.Deployment.Common;
+using Microsoft.Deployment.Common.Helpers;
+using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
+using System.Data.SqlClient;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
-
-using Newtonsoft.Json.Linq;
-
-using Microsoft.Deployment.Common;
-using Microsoft.Deployment.Common.Helpers;
 
 namespace Microsoft.Deployment.Site.Service.Controllers
 {
@@ -58,8 +54,10 @@ namespace Microsoft.Deployment.Site.Service.Controllers
                 }
 
                 string deploymentIdsConnection = Constants.BpstDeploymentIdDatabase;
-                var cmd = $"INSERT INTO deploymentids VALUES('{deploymentId}','{DateTime.UtcNow.ToString("o")}')";
-                SqlUtility.InvokeSqlCommand(deploymentIdsConnection, cmd, new Dictionary<string, string>());
+                // '{deploymentId}','{DateTime.UtcNow.ToString("o")}'
+                string statement = "INSERT INTO deploymentids VALUES(?, ?)";
+                SqlParameter[] parameters = SqlUtility.MapValuesToSqlParameters(deploymentId, DateTime.UtcNow);
+                SqlUtility.ExecuteQueryWithParameters(deploymentIdsConnection, statement, parameters);
 
                 resp = new HttpResponseMessage(HttpStatusCode.OK);
                 return resp;

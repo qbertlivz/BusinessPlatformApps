@@ -54,8 +54,7 @@ namespace Microsoft.Deployment.Site.Service.Controllers
                 }
 
                 string deploymentIdsConnection = Constants.BpstDeploymentIdDatabase;
-                // '{deploymentId}','{DateTime.UtcNow.ToString("o")}'
-                string statement = "INSERT INTO deploymentids VALUES(?, ?)";
+                string statement = "INSERT INTO dbo.deploymentids VALUES(@p1, @p2)";
                 SqlParameter[] parameters = SqlUtility.MapValuesToSqlParameters(deploymentId, DateTime.UtcNow);
                 SqlUtility.ExecuteQueryWithParameters(deploymentIdsConnection, statement, parameters);
 

@@ -16,9 +16,9 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
     {
         private char[] TERMINATORS = new char[] { ' ', '(', ')', '"' };
 
-        private const string INSERT_INTO_TWITTER_QUERY = "INSERT INTO pbist_twitter.twitter_query ([Id], [IsAdvanced], [QueryString]) VALUES (?, ?, ?)";
-        private const string INSERT_INTO_TWITTER_QUERY_DETAILS = "INSERT INTO pbist_twitter.twitter_query_details ([Id], [ReadableId], [Operator], [Operand]) VALUES (?, ?, ?, ?)";
-        private const string INSERT_INTO_TWITTER_QUERY_READABLE = "INSERT INTO pbist_twitter.twitter_query_readable ([Id], [QueryId], [QueryReadable], [Query]) VALUES (?, ?, ?, ?)";
+        private const string INSERT_INTO_TWITTER_QUERY = "INSERT INTO pbist_twitter.twitter_query ([Id], [IsAdvanced], [QueryString]) VALUES (@p1, @p2, @p3)";
+        private const string INSERT_INTO_TWITTER_QUERY_DETAILS = "INSERT INTO pbist_twitter.twitter_query_details ([Id], [ReadableId], [Operator], [Operand]) VALUES (@p1, @p2, @p3, @p4)";
+        private const string INSERT_INTO_TWITTER_QUERY_READABLE = "INSERT INTO pbist_twitter.twitter_query_readable ([Id], [QueryId], [QueryReadable], [Query]) VALUES (@p1, @p2, @p3, @p4)";
 
         private const string TWITTER_OPERATOR_AND = " AND ";
         private const string TWITTER_OPERATOR_CONTAINS = "Contains";

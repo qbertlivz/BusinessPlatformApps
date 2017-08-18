@@ -5,3 +5,10 @@ SET ANSI_NULL_DFLT_ON       ON;
 SET CONCAT_NULL_YIELDS_NULL ON;
 SET QUOTED_IDENTIFIER       ON;
 go
+
+CREATE VIEW [adtlog].[vwaudit_data_powerbi] as 
+	SELECT *
+	FROM [adtlog].[audit_data]
+    --WHERE [JSONPayload] LIKE '%Workload":"PowerBI%'
+GO
+

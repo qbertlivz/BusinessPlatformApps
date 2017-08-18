@@ -161,6 +161,7 @@
     <Compile Include="NotifierTests.cs" />
     <Compile Include="AzureTests\ServicePrincipalTests.cs" />
     <Compile Include="OnPrem\VersionTests.cs" />
+    <Compile Include="PartnerTests\NealTests.cs" />
     <Compile Include="PowerAppTests\PowerAppTests.cs" />
     <Compile Include="PBITests\PBITests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

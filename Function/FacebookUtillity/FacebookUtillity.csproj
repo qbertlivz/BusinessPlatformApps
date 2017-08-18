@@ -50,6 +50,7 @@
     <Compile Include="FacebookPageAnalyticsMetricGroups.cs" />
     <Compile Include="FacebookUtility.cs" />
     <Compile Include="MainETL.cs" />
+    <Compile Include="PageAnalyticsETL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlUtility.cs" />
     <Compile Include="Utility.cs" />

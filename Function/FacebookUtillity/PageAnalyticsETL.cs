@@ -11,35 +11,35 @@ namespace FacebookUtillity
 {
     public class PageAnalyticsETL
     {
-        public static void PopulateSingleValues(DataTable table, List<JObject> objects)
+        public static void PopulateSingleValues(DataTable table, List<JObject> objects, string pageId)
         {
-            foreach (var postPayload in objects)
+            foreach (var obj in objects)
             {
-                foreach (var post in postPayload["data"])
+                foreach (var entry in obj["data"])
                 {
-                    foreach (var val in post["values"])
+                    foreach (var val in entry["values"])
                     {
-                        DataRow postRow = table.NewRow();
-                        postRow["EndTime"] = val["end_time"];
-                        postRow["Name"] = post["name"];
-                        postRow["Value"] = val["value"];
-                        postRow["Period"] = post["period"];
-                        postRow["Title"] = post["title"];
-                        postRow["Id"] = post["id"];
-
-                        table.Rows.Add(postRow);
+                        DataRow row = table.NewRow();
+                        row["EndTime"] = val["end_time"];
+                        row["Name"] = entry["name"];
+                        row["Value"] = val["value"];
+                        row["Period"] = entry["period"];
+                        row["Title"] = entry["title"];
+                        row["Id"] = entry["id"];
+                        row["PageId"] = pageId;
+                        table.Rows.Add(row);
                     }
                 }
             }
         }
 
-        public static void PopulateNestedValues(DataTable table, List<JObject> objects)
+        public static void PopulateNestedValues(DataTable table, List<JObject> objects, string pageId)
         {
-            foreach (var postPayload in objects)
+            foreach (var obj in objects)
             {
-                foreach (var post in postPayload["data"])
+                foreach (var entry in obj["data"])
                 {
-                    foreach (var val in post["values"])
+                    foreach (var val in entry["values"])
                     {
                         if (val?["value"] != null &&val["value"].Children().Count() > 1)
                         {
@@ -47,29 +47,29 @@ namespace FacebookUtillity
                             {
                                 var att = child as JProperty;
 
-                                DataRow postRow = table.NewRow();
-                                postRow["EndTime"] = val["end_time"];
-                                postRow["Name"] = post["name"];
-                                postRow["Entry Name"] = att.Name;
-                                postRow["Value"] = att.Value;
-                                postRow["Period"] = post["period"];
-                                postRow["Title"] = post["title"];
-                                postRow["Id"] = post["id"];
-
-                                table.Rows.Add(postRow);
+                                DataRow row = table.NewRow();
+                                row["EndTime"] = val["end_time"];
+                                row["Name"] = entry["name"];
+                                row["Entry Name"] = att.Name;
+                                row["Value"] = att.Value;
+                                row["Period"] = entry["period"];
+                                row["Title"] = entry["title"];
+                                row["Id"] = entry["id"];
+                                row["PageId"] = pageId;
+                                table.Rows.Add(row);
                             }
                         }
                         else
                         {
-                            DataRow postRow = table.NewRow();
-                            postRow["EndTime"] = val["end_time"];
-                            postRow["Name"] = post["name"];
-                            postRow["Value"] = val["value"];
-                            postRow["Period"] = post["period"];
-                            postRow["Title"] = post["title"];
-                            postRow["Id"] = post["id"];
-
-                            table.Rows.Add(postRow);
+                            DataRow row = table.NewRow();
+                            row["EndTime"] = val["end_time"];
+                            row["Name"] = entry["name"];
+                            row["Value"] = val["value"];
+                            row["Period"] = entry["period"];
+                            row["Title"] = entry["title"];
+                            row["Id"] = entry["id"];
+                            row["PageId"] = pageId;
+                            table.Rows.Add(row);
                         }
                     }
                 }

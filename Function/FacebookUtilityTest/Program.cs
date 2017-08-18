@@ -23,31 +23,31 @@ namespace FacebookUtilityTest
             string until = DateTime.UtcNow.AddDays(-2).ToString();
 
             var clicks = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PageCtaClicks).Result;
-            PageAnalyticsETL.PopulateSingleValues(DataTableUtility.GetClicksDataTable(), clicks);
+            PageAnalyticsETL.PopulateSingleValues(DataTableUtility.GetClicksDataTable(), clicks, page);
 
             var engagement = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PageEngagement).Result;
-            PageAnalyticsETL.PopulateNestedValues(DataTableUtility.GetEngagementTable(), engagement);
+            PageAnalyticsETL.PopulateNestedValues(DataTableUtility.GetEngagementTable(), engagement, page);
 
             var impressions = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PageImpressions).Result;
-            PageAnalyticsETL.PopulateNestedValues(DataTableUtility.GetImpressionsTable(), impressions);
+            PageAnalyticsETL.PopulateNestedValues(DataTableUtility.GetImpressionsTable(), impressions, page);
 
-            //var pagePostReactions = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PagePostReactions).Result;
+            var pagePostReactions = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PagePostReactions).Result;
             //PageAnalyticsETL.PopulateNestedValues(DataTableUtility.GetPagePost(), impressions);
 
             var pagePosts = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PagePosts).Result;
-            PageAnalyticsETL.PopulateSingleValues(DataTableUtility.GetPagePostsTable(), pagePosts);
+            PageAnalyticsETL.PopulateSingleValues(DataTableUtility.GetPagePostsTable(), pagePosts, page);
 
             var pagePostStories = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PagePostStoriesAndPeopleTalkingAboutThis).Result;
-            PageAnalyticsETL.PopulateSingleValues(DataTableUtility.GetPagePostStoriesTable(), pagePostStories);
+            PageAnalyticsETL.PopulateSingleValues(DataTableUtility.GetPagePostStoriesTable(), pagePostStories, page);
 
             var pageReactions = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PageReactions).Result;
-            PageAnalyticsETL.PopulateNestedValues(DataTableUtility.GetPageReactionsTable(), pageReactions);
+            PageAnalyticsETL.PopulateNestedValues(DataTableUtility.GetPageReactionsTable(), pageReactions, page);
 
             var pageUserDemographics = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PageUserDemographics).Result;
-            PageAnalyticsETL.PopulateSingleValues(DataTableUtility.GetPageUserDemographicsTable(), pageUserDemographics);
+            PageAnalyticsETL.PopulateSingleValues(DataTableUtility.GetPageUserDemographicsTable(), pageUserDemographics, page);
 
             var pageViews = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PageViews).Result;
-            PageAnalyticsETL.PopulateNestedValues(DataTableUtility.GetPageViewsTable(), pageViews);
+            PageAnalyticsETL.PopulateNestedValues(DataTableUtility.GetPageViewsTable(), pageViews, page);
         }
     }
 }

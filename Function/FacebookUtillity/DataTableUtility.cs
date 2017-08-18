@@ -93,6 +93,7 @@ namespace FacebookUtillity
             table.Columns.Add("Period");
             table.Columns.Add("Title");
             table.Columns.Add("Id");
+            table.Columns.Add("PageId");
             return table;
         }
 
@@ -106,6 +107,7 @@ namespace FacebookUtillity
             table.Columns.Add("Period");
             table.Columns.Add("Title");
             table.Columns.Add("Id");
+            table.Columns.Add("PageId");
             return table;
         }
 
@@ -119,6 +121,7 @@ namespace FacebookUtillity
             table.Columns.Add("Period");
             table.Columns.Add("Title");
             table.Columns.Add("Id");
+            table.Columns.Add("PageId");
             return table;
         }
 
@@ -131,6 +134,7 @@ namespace FacebookUtillity
             table.Columns.Add("Period");
             table.Columns.Add("Title");
             table.Columns.Add("Id");
+            table.Columns.Add("PageId");
             return table;
         }
 
@@ -144,6 +148,7 @@ namespace FacebookUtillity
             table.Columns.Add("Period");
             table.Columns.Add("Title");
             table.Columns.Add("Id");
+            table.Columns.Add("PageId");
             return table;
         }
 
@@ -157,6 +162,7 @@ namespace FacebookUtillity
             table.Columns.Add("Period");
             table.Columns.Add("Title");
             table.Columns.Add("Id");
+            table.Columns.Add("PageId");
             return table;
         }
 
@@ -169,6 +175,7 @@ namespace FacebookUtillity
             table.Columns.Add("Period");
             table.Columns.Add("Title");
             table.Columns.Add("Id");
+            table.Columns.Add("PageId");
             return table;
         }
 
@@ -182,6 +189,7 @@ namespace FacebookUtillity
             table.Columns.Add("Period");
             table.Columns.Add("Title");
             table.Columns.Add("Id");
+            table.Columns.Add("PageId");
             return table;
         }
         #endregion

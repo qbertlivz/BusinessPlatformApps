@@ -191,7 +191,7 @@ namespace FacebookUtillity
         {
             Dictionary<string, string> param = new Dictionary<string, string>();
             param.Add("access_token", accessToken);
-            param.Add("metric", "post_reactions_like_total, post_reactions_love_total, post_reactions_wow_total, post_reactions_haha_total, post_reactions_sorry_total, post_reactions_anger_total, post_reactions_by_type_total");
+            param.Add("fields", "message,updated_time,created_time,from,picture,reactions.type(LOVE).limit(0).summary(total_count).as(reactions_love),reactions.type(WOW).limit(0).summary(total_count).as(reactions_wow),reactions.type(HAHA).limit(0).summary(total_count).as(reactions_haha),reactions.type(SAD).limit(0).summary(total_count).as(reactions_sad),reactions.type(ANGRY).limit(0).summary(total_count).as(reactions_angry),reactions.type(LIKE).limit(0).summary(total_count).as(reactions_like)");
             param.Add("period", "day");
             param.Add("until", until);
             param.Add("since", since);
@@ -201,7 +201,7 @@ namespace FacebookUtillity
                 param.Add("after", after);
             }
 
-            return $"https://graph.facebook.com/v2.10/{page}/insights?" + GetQueryParameters(param);
+            return $"https://graph.facebook.com/v2.10/{page}/posts?" + GetQueryParameters(param);
         }
 
         private static string GetPagePosts(string page, string accessToken, string until, string since, string after = "")

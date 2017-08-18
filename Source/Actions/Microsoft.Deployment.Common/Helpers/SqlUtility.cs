@@ -61,6 +61,7 @@ namespace Microsoft.Deployment.Common.Helpers
                     throw new Exception("Unexpected data type"); // OUR code should not use other types
                 
                 result[i].Value = list[i];
+                result[i].ParameterName = $"@p{i+1}"; // SqlClient doesn't accept anonymous parameters (expecting queries to use 1 based numbering for parameter names: @p1, @p2, etc...)
             }
 
 

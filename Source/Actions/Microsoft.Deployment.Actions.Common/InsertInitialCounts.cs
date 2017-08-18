@@ -13,7 +13,7 @@ namespace Microsoft.Deployment.Actions.Common
     [Export(typeof(IAction))]
     public class InsertInitialCounts : BaseAction
     {
-        private const string commandTemplate = "INSERT INTO {0}.entityinitialcount VALUES(?, ?, ?, ?)";
+        private const string commandTemplate = "INSERT INTO {0}.entityinitialcount VALUES(@p1, @p2, @p3, @p4)";
 
         public async override Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {

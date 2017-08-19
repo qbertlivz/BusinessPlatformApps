@@ -1,4 +1,4 @@
-# Power BI Dynamics 365 Customer Service Solution Template Documentation
+# Power BI Dynamics 365 Field Service Solution Template Documentation
 # Table of Contents
 1. [Introduction](#introduction)
 2. [Architecture](#architecture)
@@ -7,13 +7,13 @@
 5. [Technical Description](#technical-description)
 
 # Introduction
-Create a scalable, secure and flexible PowerBI dashboard on Dynamics 365 with the Power BI Customer Service solution template for Dynamics 365. The template creates everything required for an end-to-end analytics solution on your Dynamics 365 org including the data extraction, database constructs, and a Power BI report bound to the database. You can extend or customize the result to accommodate your own business requirements.
-The Customer Service solution template for Dynamics 365 is intended for customers who:
+Create a scalable, secure and flexible PowerBI dashboard on Dynamics 365 with the Power BI Field Service solution template for Dynamics 365. The template creates everything required for an end-to-end analytics solution on your Dynamics 365 org including the data extraction, database constructs, and a Power BI report bound to the database. You can extend or customize the result to accommodate your own business requirements.
+The Field Service solution template for Dynamics 365 is intended for customers who:
 -	Want to provision an analytics solution for tens or even thousands of users
 -	Want to deploy an analytics solution that scales with any size of Dynamics 365 instance from small to very large
 -	Want to be able to create data mashups on Dynamics 365 with data from their ERP, marketing, inventory management or other any other application
-The Customer Service solution template for Dynamics 365 is targeted at sales executives, managers and salespeople to forecast revenue, compare sales to the same period in the prior month, quarter or year, track sales against goals and monitor their pipeline .
-This document describes how to provision the Customer Service solution template for Dynamics 365, the architecture, and how to extend or customize the template. The audience for this document is intended to be the IT professional or administrator who implements and manages the solution template and/or the developer who extends or customizes the solution template.
+The Field Service solution template for Dynamics 365 is targeted at sales executives, managers and salespeople to forecast revenue, compare sales to the same period in the prior month, quarter or year, track sales against goals and monitor their pipeline .
+This document describes how to provision the Field Service solution template for Dynamics 365, the architecture, and how to extend or customize the template. The audience for this document is intended to be the IT professional or administrator who implements and manages the solution template and/or the developer who extends or customizes the solution template.
 Please contact <PBISolnTemplates@microsoft.com> for any questions or issues with this document.
 
 # Architecture
@@ -29,19 +29,20 @@ Data Export Services pushes new and changed records from Dynamics 365 to populat
 ![ImportDataOption](Resources/Images/ImportDataOption.png)
 
 
+
 # System Requirements
 Setting up the template requires the following:
 -	an Azure Subscription
 -	Power BI Desktop (latest version)
 -	Power BI Pro (to share the template with others)
--	Customer Service for Dynamics 365 2015 or later.
+-	Field Service for Dynamics 365 2015 or later.
 
-**You must have administrative permissions on your Dynamics 365 for Customer Service instance**. You can check whether you are a system administrator
+**You must have administrative permissions on your Dynamics 365 for Field Service instance**. You can check whether you are a system administrator
  [here](https://www.microsoft.com/en-us/dynamics/crm-customer-center/find-your-dynamics-365-administrator-or-support-person.aspx). 
 
 
 # How to Install
-Installing the Customer Service solution template for Dynamics 365 configures the following:
+Installing the Field Service solution template for Dynamics 365 configures the following:
 -	Data extraction
 -	Azure SQL Database
 -	Power BI Desktop file
@@ -49,7 +50,7 @@ The detailed description of each component of the architecture is below. To get 
 
 ![SolutionsMenu](Resources/Images/SolutionsMenu.png)
 
-From there, select the Customer Service for Dynamics 365 solution template and click the “Install now” button.
+From there, select the Field Service for Dynamics 365 solution template and click the “Install now” button.
 
 ## Step 1: Connect to Dynamics 365 Online
 
@@ -101,7 +102,7 @@ Review your selections. Enter a valid email address to receive a notification wh
 
 ![Customize](Resources/Images/Customize.png)
 
-The base Dynamics 365 URL is provided for links for each Customer Service object in the power BI reports.
+The base Dynamics 365 URL is provided for links for each Field Service object in the power BI reports.
 
 Provide an email to be contacted when the initial data publication is complete. There is no schedule to refresh data - it is replicated in realtime.
 
@@ -146,27 +147,25 @@ You can repeat the provisioning process or find the pbix files [here](https://gi
 This section describes each component of the solution template in detail.
 
 ## Data Extraction and Load
-The Customer Service solution template utilizes Data Export Services to replicate the following tables::
+The Field Service solution template utilizes Data Export Services to replicate the following tables:
+
 -	account
--	appointment
--   AttributeMetadata
--	contact
--	email
--	fax
--   GlobalOptionSetMetadata
--	incident
--	letter
--	msdyn_survey
--	msdyn_surveyresponse
--   msdyn_OptionSetMetadata
--   phonecall
--   slakpiinstance
--   StateMetadata
--   StatusMetadata
--   systeuser
--   TargetMetadata
+-	bookableresource
+-	bookableresourcebooking
+-	bookingstatus
+-	msdyn_customerasset
+-   msdyn_incidenttype
+-	msdyn_workorder
+-	msdyn_workorderproduct
+-	msdyn_workorderservice
+-	msdyn_workordertype
+-   msdyn_workordertype
+-   product
+-   resource
+-   service
+-   serviceappointment
 -   task
--   team
+-   territory
 
 The tables are replicated with custom fields already included.
 
@@ -206,7 +205,7 @@ The Date table is autogenerated with the installation of the solution template f
 </sub>
 
 
-# Customer Service for Dynamics 365 Pricing
+# Field Service for Dynamics 365 Pricing
 
 For a detailed breakdown of Azure Key Vault costs you can refer to the [Key Vault Pricing Calculator](https://azure.microsoft.com/en-us/pricing/details/key-vault/)
 

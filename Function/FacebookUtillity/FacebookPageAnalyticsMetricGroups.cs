@@ -17,5 +17,6 @@ namespace FacebookUtillity
         public const string PageReactions = "pageReactions";
         public const string PagePosts = "pagePosts";
         public const string PagePostReactions = "pagePostReactions";
+        public const string PagePostIds = "pagePostIds";
     }
 }

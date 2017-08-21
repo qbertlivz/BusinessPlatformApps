@@ -48,7 +48,7 @@ namespace FacebookUtillity
                                 var att = child as JProperty;
 
                                 DataRow row = table.NewRow();
-                                row["EndTime"] = val["end_time"];
+                                if(table.Columns.Contains("EndTime")) { row["EndTime"] = val["end_time"]; }                                
                                 row["Name"] = entry["name"];
                                 row["Entry Name"] = att.Name;
                                 row["Value"] = att.Value;

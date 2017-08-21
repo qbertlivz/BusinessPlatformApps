@@ -133,6 +133,9 @@ namespace FacebookUtillity
                 case FacebookPageAnalyticsMetricGroups.PagePostReactions:
                     requestUri = GetPagePostReactions(page, accessToken, until, since);
                     break;
+                case FacebookPageAnalyticsMetricGroups.PagePostIds:
+                    requestUri = GetPagePostIds(page, accessToken, untilDateTime);
+                    break;
                 default: break;
             }
 
@@ -181,19 +184,26 @@ namespace FacebookUtillity
                         }
                     }
                 }
+
+                if (post?["data"]?[0]?["period"] != null && post?["data"]?[0]?["period"].ToString().ToLower() == "lifetime")
+                {
+                    break;
+                }
             }
             while (post != null && post?["paging"] != null && post["paging"]?["next"] != null);
 
             return posts;
         }
 
-        private static string GetPagePostReactions(string page, string accessToken, string until, string since, string after = "")
+        private static string GetPagePostIds(string page, string accessToken, string untilDateTime, string after = "")
         {
+            string until = DateUtility.GetUnixFromDate(untilDateTime);
+            string since = DateUtility.GetUnixFromDate(DateUtility.GetDateTimeRelativeFromNow(untilDateTime, -2));
             Dictionary<string, string> param = new Dictionary<string, string>();
             param.Add("access_token", accessToken);
-            param.Add("fields", "message,updated_time,created_time,from,picture,reactions.type(LOVE).limit(0).summary(total_count).as(reactions_love),reactions.type(WOW).limit(0).summary(total_count).as(reactions_wow),reactions.type(HAHA).limit(0).summary(total_count).as(reactions_haha),reactions.type(SAD).limit(0).summary(total_count).as(reactions_sad),reactions.type(ANGRY).limit(0).summary(total_count).as(reactions_angry),reactions.type(LIKE).limit(0).summary(total_count).as(reactions_like)");
-            param.Add("period", "day");
+            param.Add("fields", "id");
             param.Add("until", until);
+
             param.Add("since", since);
 
             if (!string.IsNullOrEmpty(after))
@@ -202,6 +212,22 @@ namespace FacebookUtillity
             }
 
             return $"https://graph.facebook.com/v2.10/{page}/posts?" + GetQueryParameters(param);
+        }
+
+        private static string GetPagePostReactions(string page_postId, string accessToken, string until, string since, string after = "")
+        {
+            Dictionary<string, string> param = new Dictionary<string, string>();
+            param.Add("access_token", accessToken);
+            param.Add("metric", "post_reactions_by_type_total");
+            param.Add("until", until);
+            param.Add("since", since);
+
+            if (!string.IsNullOrEmpty(after))
+            {
+                param.Add("after", after);
+            }
+
+            return $"https://graph.facebook.com/v2.10/{page_postId}/insights?" + GetQueryParameters(param);
         }
 
         private static string GetPagePosts(string page, string accessToken, string until, string since, string after = "")
@@ -328,7 +354,6 @@ namespace FacebookUtillity
             Dictionary<string, string> param = new Dictionary<string, string>();
             param.Add("access_token", accessToken);
             param.Add("metric", "page_fans,page_fan_adds_unique,page_fan_removes_unique,page_fans_by_like_source_unique, page_fans_by_unlike_source_unique");
-            param.Add("period", "day");
 
             param.Add("until", until);
             param.Add("since", since);

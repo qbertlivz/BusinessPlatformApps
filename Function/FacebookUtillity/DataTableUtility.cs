@@ -129,6 +129,7 @@ namespace FacebookUtillity
         {
             DataTable table = new DataTable();
             table.Columns.Add("EndTime", typeof(DateTime));
+            table.Columns.Add("Entry Name");
             table.Columns.Add("Name");
             table.Columns.Add("Value");
             table.Columns.Add("Period");
@@ -170,6 +171,7 @@ namespace FacebookUtillity
         {
             DataTable table = new DataTable();
             table.Columns.Add("EndTime", typeof(DateTime));
+            table.Columns.Add("Entry Name");
             table.Columns.Add("Name");
             table.Columns.Add("Value");
             table.Columns.Add("Period");
@@ -183,6 +185,19 @@ namespace FacebookUtillity
         {
             DataTable table = new DataTable();
             table.Columns.Add("EndTime", typeof(DateTime));
+            table.Columns.Add("Name");
+            table.Columns.Add("Entry Name");
+            table.Columns.Add("Value");
+            table.Columns.Add("Period");
+            table.Columns.Add("Title");
+            table.Columns.Add("Id");
+            table.Columns.Add("PageId");
+            return table;
+        }
+
+        public static DataTable GetPagePostReactionsTable()
+        {
+            DataTable table = new DataTable();
             table.Columns.Add("Name");
             table.Columns.Add("Entry Name");
             table.Columns.Add("Value");

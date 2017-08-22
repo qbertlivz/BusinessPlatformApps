@@ -65,7 +65,7 @@ If you select a Microsoft account, you will need to provide the application with
 ![Image](Resources/media/login.PNG)
 Logging into Azure gives the application access to your Azure subscription and permits spinning up Azure services on your behalf. If you want a more granular breakdown of the costs, please scroll down to the Estimated Costs section.
 
-As a user navigates away from this page a new resource group gets spun up on their Azure subscription (the name is random but always prefixed by �SolutionTemplate-�). This name can be changed under the advanced settings tab. All newly created resources go into this container.
+As a user navigates away from this page a new resource group gets spun up on their Azure subscription (the name is random but always prefixed by �SolutionTemplate-�). This name can be changed under the advanced settings tab. All newly created resources go into this container.
 
 **Target:** Connect to an existing SQL Server or provide details which the application will use to spin up an Azure SQL on your behalf. Only Azure SQL is supported for this template. If a user chooses to spin up a new Azure SQL, this will get deployed in their Azure subscription inside the newly created resource group.
 
@@ -104,6 +104,92 @@ The Azure Activity Logs team has published documentation on the Activity Log eve
 
 
 ### Customizations
+
+How to set up real time streaming from the solution template to Power BI:
+
+1.	Navigate to the Stream Analytics job through Azure Portal
+    1.	In the Azure Portal, select “Resource groups” from the left pane
+    2.	Locate “SolutionTemplate-xxxxxxx”, the resource group we created for you
+    3.	Inside the resource group, navigate to “SAJob-xxxxx”, the Stream Analytics job
+2.	Stop the Stream Analytics job
+    1.	In the “Overview” pane ensure the job is stopped, which enables editing.
+3.	Add a PowerBI output
+    1.	In the “Outputs” pane, add a new output with the “Sink” parameter set to PowerBI.
+    2.	Authenticate with PowerBI
+    3.	Output alias: PBIOutput
+        1.	Note: If you use a different output alias, you will have to use that same output alias in the SELECT … INTO [<output alias here>] when defining the query in the next step
+    4.	Group Workspace: Select the workspace where you would like to set up the real-time streaming dataset 
+    5.	Dataset Name: Enter a new name for the streaming dataset. 
+        1.	Take note of this dataset name, as you must reference it in PowerBI when setting up real-time analytics.
+    6.	Table Name: Enter a new name for the table, no need to take note.
+    7.	Press “Save” at the bottom to save the new output
+4.	Update your Stream Analytics Query
+    1.	Navigate to the “Query” pane. 
+    2.	Paste the query given below on a new line in the query window. NOTE: If you used a different output alias than “PBIOutput”, use that alias in the INTO clause at the bottom of this query:
+    3.	Press “Save” to update the query
+
+```sql
+SELECT
+    arrayElement.ArrayValue.[identity].claims.[http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn] as caller,
+    arrayElement.ArrayValue.correlationId, 
+    arrayElement.ArrayValue.resultDescription as description,
+    arrayElement.ArrayValue.Properties.eventCategory,
+    CASE WHEN arrayElement.ArrayValue.level = 'Information'
+    THEN 'Informational'
+    ELSE arrayElement.ArrayValue.level
+    END as level,
+    arrayElement.ArrayValue.category as operationCategory,
+    arrayElement.ArrayValue.Properties.operationId,
+    arrayElement.ArrayValue.operationName,
+    CASE WHEN CHARINDEX('/', SUBSTRING(arrayElement.ArrayValue.resourceId, 68, 1000)) = 0   
+     THEN SUBSTRING(arrayElement.ArrayValue.resourceId, 68, 1000)  
+     ELSE SUBSTRING(arrayElement.ArrayValue.resourceId, 68, CHARINDEX('/', SUBSTRING(arrayElement.ArrayValue.resourceId, 68, 1000))-1)  
+    END as resourceGroup,
+    arrayElement.ArrayValue.resourceId,
+    CASE WHEN CHARINDEX('/PROVIDERS', arrayElement.ArrayValue.resourceId) = 0
+      THEN null
+      ELSE SUBSTRING(arrayElement.ArrayValue.resourceId, CHARINDEX('/PROVIDERS', arrayElement.ArrayValue.resourceId) + 11, CHARINDEX('/', SUBSTRING(arrayElement.ArrayValue.resourceId, CHARINDEX('/PROVIDERS', arrayElement.ArrayValue.resourceId) + 11, 1000)) - 1)
+    END as resourceProvider,
+    CASE WHEN arrayElement.ArrayValue.resultType = 'Start'
+        THEN 'Started'
+        WHEN arrayElement.ArrayValue.resultType = 'Accept'
+        THEN 'Accepted'
+        ELSE arrayElement.ArrayValue.resultType
+    END as status,
+    arrayElement.ArrayValue.Properties.statusCode,
+    arrayElement.ArrayValue.time as [timestamp]
+INTO [PBIOutput] 
+FROM [EventHubInput] event CROSS APPLY GetArrayElements(event.records) AS arrayElement
+```
+
+5.	Start the Stream Analytics job
+    1.	In the “Overview” pane, start the Stream Analytics job. This restarts the pipeline we initially created for you, but now you are additionally sending data to a real-time data set. You are now just a few steps away from real-time analytics!
+6.	Publish your existing .pbix
+    1.	In Power BI Desktop, open your ActivityLogTemplate.pbix that you received after completing the solution template installation wizard 
+    2.	In the “Home” tab press “Publish” to send the file to the web version of PowerBI 
+    3.	When prompted, choose the same workspace that you provided in Step 3 when setting up a Power BI output for your Stream Analytics job
+7.	Pin to a dashboard
+    1.	After publishing from Power BI Desktop, refresh the web version of PowerBI and ensure that there is now a report listed under “Reports” on the left pane that matches the name of the Power BI Desktop file. 
+    2.	Select a page from this report that you would like to place next to your real-time visualization, and press “Pin Live Page” at the top.
+    3.	When prompted, opt to pin to a new dashboard and provide a name. 
+8.	Create a report
+    1.	Navigate to powerbi.microsoft.com and sign in. 
+    2.	Expand your selected workspace, and select the dataset you created in Step 3 when setting up a Power BI output for your Stream Analytics job. 
+        1.	Note: The dataset will only appear if data has flowed through Stream Analytics since starting the job in Step 5. If there has been no data transmitted, the dataset will not appear. If you believe your issue is unrelated, check the troubleshooting checklist at the bottom of this guide. 
+    3.	Create your visual(s). In the top right corner of the visual, select the pin to pin the visual. 
+    4.	When prompted, provide a new name for the report 
+    5.	When prompted, choose to pin to an existing dashboard, the same one created in Step 7 above.
+9.	Enjoy real-time streaming!
+
+Here’s a checklist you can use to troubleshoot issues connecting Stream Analytics and Power BI: 
+1. Restart the Azure Stream Analytics job (jobs created before the streaming GA release will require a restart) 
+2. Try re-authorizing your Power BI connection in Azure Stream Analytics 
+3. Which workspace did you specify in the Azure Stream Analytics output? In the Power BI service, are you checking in that (same) workspace? 
+4. Does the Azure Stream Analytics query explicitly output to the Power BI output? (using the INTO keyword) 
+5. Does the Azure Stream Analytics job have data flowing through it? The dataset will only get created when there is data being transmitted. 
+6. Can you look into the Azure Stream Analytics logs to see if there are any warnings or errors?
+
+For more details on using Power BI as a real-time data streaming service, see https://powerbi.microsoft.com/en-us/documentation/powerbi-service-real-time-streaming/ 
 
 
 ### Estimated Costs

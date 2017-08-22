@@ -16,7 +16,7 @@ using System.Net.Http.Headers;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using System.Web;
-
+using System.Data;
 
 public static async Task<object> Run(HttpRequestMessage req, TraceWriter log)
 {
@@ -43,6 +43,48 @@ public static async Task<object> Run(HttpRequestMessage req, TraceWriter log)
 
 public class TweetHandler
 {
+    private static SqlParameter[] MapValuesToSqlParameters(params object[] list)
+    {
+        if (list == null)
+            return null;
+
+        SqlParameter[] result = new SqlParameter[list.Length];
+        for (int i = 0; i < list.Length; i++)
+        {
+            if (list[i] is int)
+                result[i].DbType = DbType.Int32;
+            else if (list[i] is uint)
+                result[i].DbType = DbType.UInt32;
+            else if (list[i] is long)
+                result[i].DbType = DbType.Int64;
+            else if (list[i] is ulong)
+                result[i].DbType = DbType.UInt64;
+            else if (list[i] is short)
+                result[i].DbType = DbType.Int16;
+            else if (list[i] is ushort)
+                result[i].DbType = DbType.UInt16;
+            else if (list[i] is byte)
+                result[i].DbType = DbType.Byte;
+            else if (list[i] is float)                     // Floating types
+                result[i].DbType = DbType.Single;
+            else if (list[i] is double)
+                result[i].DbType = DbType.Double;
+            else if (list[i] is DateTime)                  // Date and time
+                result[i].DbType = DbType.DateTime;
+            else if (list[i] is bool)                      // Boolean
+                result[i].DbType = DbType.Boolean;
+            else if (list[i] is char || list[i] is string) // Character type
+                result[i].DbType = DbType.String;
+            else
+                throw new Exception("Unexpected data type"); // OUR code should not use other types
+
+            result[i].Value = list[i];
+            result[i].ParameterName = $"@p{i + 1}"; // SqlClient doesn't accept anonymous parameters (expecting queries to use 1 based numbering for parameter names: @p1, @p2, etc...)
+        }
+
+
+        return result;
+    }
     public TweetHandler(string connection)
     {
         if (string.IsNullOrEmpty(connection))
@@ -125,18 +167,15 @@ public class TweetHandler
         tweet = tweetObj;
 
         //Connect to Azure SQL Database & bring in Twitter Handles & IDs
-        string twitterHandles =
-            ExecuteSqlQuery("select value FROM pbist_twitter.configuration where name = \'twitterHandle\'", "value");
-        string twitterHandleId =
-            ExecuteSqlQuery("select value FROM pbist_twitter.configuration where name = \'twitterHandleId\'",
-                "value");
+        string twitterHandles  = ExecuteSqlQuery("select value FROM pbist_twitter.configuration where name = \'twitterHandle\'", "value");
+        string twitterHandleId = ExecuteSqlQuery("select value FROM pbist_twitter.configuration where name = \'twitterHandleId\'", "value");
 
         // Split out all the handles & create dictionary
-        String[] handle = null;
-        String[] handleId = null;
+        string[] handle = null;
+        string[] handleId = null;
         var dictionary = new Dictionary<string, string>();
 
-        if (twitterHandles != String.Empty)
+        if (!string.IsNullOrEmpty(twitterHandles))
         {
             handle = SplitHandles(twitterHandles, ',');
             handleId = SplitHandles(twitterHandleId, ',');
@@ -252,8 +291,10 @@ public class TweetHandler
 
         //Save processed tweets into SQL
         int response = 0;
-        response = ExecuteSqlScalar(
-            $"Select count(1) FROM pbist_twitter.tweets_processed WHERE tweetid = '{processedTweets["tweetid"]}'");
+        string tweetId = processedTweets["tweetid"].ToString();
+        string statement = "SELECT Count(*) FROM pbist_twitter.tweets_processed WHERE tweetid = @p1";
+        
+        response = ExecuteSqlScalar(statement, MapValuesToSqlParameters(tweetId));
         if (response == 0)
         {
             try
@@ -309,13 +350,19 @@ public class TweetHandler
     }
 
     //Execute SQL query returning something 
-    private int ExecuteSqlScalar(string sqlQuery)
+    private int ExecuteSqlScalar(string sqlQuery, SqlParameter[] parameters = null)
     {
         using (SqlConnection connection = new SqlConnection(connectionString.ToString()))
         {
             connection.Open();
-            var command = new SqlCommand(sqlQuery, connection);
-            return (int)command.ExecuteScalar();
+            using (SqlCommand command = new SqlCommand(sqlQuery, connection) { CommandTimeout = 0 })
+            {
+                if (parameters != null)
+                    command.Parameters.AddRange(parameters);
+
+                object v = command.ExecuteScalar();
+                return v == DBNull.Value ? 0 : Convert.ToInt32(v);
+            }               
         }
     }
 

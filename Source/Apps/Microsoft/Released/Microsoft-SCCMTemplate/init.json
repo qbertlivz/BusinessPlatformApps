@@ -21,8 +21,7 @@
                     "$translate(INIT_GETTING_STARTED_DATA_PULL_SCCM)",
                     "$translate(INIT_GETTING_STARTED_IMPORT_DATA_PBI)"
                 ],
-                "name": "getting-started-powerbi-login.html",
-                "oauthType": "powerbi",
+                "name": "$SiteCommon$/pages-gallery/getting-started.html",
                 "subtitle": "$translate(INIT_SCCM_SUBTITLE)",
                 "templateName": "$translate(INIT_SCCM_TITLE)"
             },

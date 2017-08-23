@@ -102,42 +102,9 @@ namespace FacebookUtillity
             JObject post = null;
             string until = DateUtility.GetUnixFromDate(untilDateTime);
             string since = DateUtility.GetUnixFromDate(DateUtility.GetDateTimeRelativeFromNow(untilDateTime, -1));
-            string requestUri = string.Empty;
-
-            switch (metricsGroup)
-            {
-                case FacebookPageAnalyticsMetricGroups.PageUserDemographics:
-                    requestUri = GetPageUserDemographics(page, accessToken, until, since);
-                    break;
-                case FacebookPageAnalyticsMetricGroups.PageEngagement:
-                    requestUri = GetPageEngagement(page, accessToken, until, since);
-                    break;
-                case FacebookPageAnalyticsMetricGroups.PageImpressions:
-                    requestUri = GetPageImpressions(page, accessToken, until, since);
-                    break;
-                case FacebookPageAnalyticsMetricGroups.PageViews:
-                    requestUri = GetPageViews(page, accessToken, until, since);
-                    break;
-                case FacebookPageAnalyticsMetricGroups.PageCtaClicks:
-                    requestUri = GetPageCtaClicks(page, accessToken, until, since);
-                    break;
-                case FacebookPageAnalyticsMetricGroups.PagePostStoriesAndPeopleTalkingAboutThis:
-                    requestUri = GetPagePostStoriesAndPeopleTalkingAboutThis(page, accessToken, until, since);
-                    break;
-                case FacebookPageAnalyticsMetricGroups.PageReactions:
-                    requestUri = GetPageReactions(page, accessToken, until, since);
-                    break;
-                case FacebookPageAnalyticsMetricGroups.PagePosts:
-                    requestUri = GetPagePosts(page, accessToken, until, since);
-                    break;
-                case FacebookPageAnalyticsMetricGroups.PagePostReactions:
-                    requestUri = GetPagePostReactions(page, accessToken, until, since);
-                    break;
-                case FacebookPageAnalyticsMetricGroups.PagePostIds:
-                    requestUri = GetPagePostIds(page, accessToken, untilDateTime);
-                    break;
-                default: break;
-            }
+            string requestUri = metricsGroup == FacebookPageAnalyticsMetricGroups.PagePostIds ?
+                GetPagePostIds(page, accessToken, untilDateTime, since) :
+                GetPageAnalyticsRequestUrl(page, accessToken, until, since, metricsGroup);
 
             do
             {
@@ -185,7 +152,10 @@ namespace FacebookUtillity
                     }
                 }
 
-                if (post?["data"]?[0]?["period"] != null && post?["data"]?[0]?["period"].ToString().ToLower() == "lifetime")
+                if (post?["data"] != null && 
+                    (post["data"] as JArray).Count > 0 && 
+                    post?["data"]?[0]?["period"] != null && 
+                    post?["data"]?[0]?["period"].ToString().ToLower() == "lifetime")
                 {
                     break;
                 }
@@ -206,36 +176,14 @@ namespace FacebookUtillity
 
             param.Add("since", since);
 
-            if (!string.IsNullOrEmpty(after))
-            {
-                param.Add("after", after);
-            }
-
             return $"https://graph.facebook.com/v2.10/{page}/posts?" + GetQueryParameters(param);
         }
 
-        private static string GetPagePostReactions(string page_postId, string accessToken, string until, string since, string after = "")
+        private static string GetPageAnalyticsRequestUrl(string page, string accessToken, string until, string since, string metricsGroup, string after = "")
         {
             Dictionary<string, string> param = new Dictionary<string, string>();
             param.Add("access_token", accessToken);
-            param.Add("metric", "post_reactions_by_type_total");
-            param.Add("until", until);
-            param.Add("since", since);
-
-            if (!string.IsNullOrEmpty(after))
-            {
-                param.Add("after", after);
-            }
-
-            return $"https://graph.facebook.com/v2.10/{page_postId}/insights?" + GetQueryParameters(param);
-        }
-
-        private static string GetPagePosts(string page, string accessToken, string until, string since, string after = "")
-        {
-            Dictionary<string, string> param = new Dictionary<string, string>();
-            param.Add("access_token", accessToken);
-            param.Add("metric", "page_stories, page_storytellers, page_impressions_frequency_distribution, page_impressions_unique, page_fan_adds_unique, page_consumptions_unique");
-
+            param.Add("metric", FacebookPageAnalyticsMetricGroups.Metrics[metricsGroup]);
             param.Add("until", until);
             param.Add("since", since);
 
@@ -247,124 +195,6 @@ namespace FacebookUtillity
             return $"https://graph.facebook.com/v2.10/{page}/insights?" + GetQueryParameters(param);
         }
 
-        private static string GetPageReactions(string page, string accessToken, string until, string since, string after = "")
-        {
-            Dictionary<string, string> param = new Dictionary<string, string>();
-            param.Add("access_token", accessToken);
-            param.Add("metric", "page_actions_post_reactions_total");
-
-            param.Add("until", until);
-            param.Add("since", since);
-
-            if (!string.IsNullOrEmpty(after))
-            {
-                param.Add("after", after);
-            }
-
-            return $"https://graph.facebook.com/v2.10/{page}/insights?" + GetQueryParameters(param);
-        }
-
-        private static string GetPagePostStoriesAndPeopleTalkingAboutThis(string page, string accessToken, string until, string since, string after = "")
-        {
-            Dictionary<string, string> param = new Dictionary<string, string>();
-            param.Add("access_token", accessToken);
-            param.Add("metric", "page_stories, page_storytellers, page_stories_by_story_type, page_storytellers_by_story_type");
-
-            param.Add("until", until);
-            param.Add("since", since);
-
-            if (!string.IsNullOrEmpty(after))
-            {
-                param.Add("after", after);
-            }
-
-            return $"https://graph.facebook.com/v2.10/{page}/insights?" + GetQueryParameters(param);
-        }
-
-        private static string GetPageCtaClicks(string page, string accessToken, string until, string since, string after = "")
-        {
-            Dictionary<string, string> param = new Dictionary<string, string>();
-            param.Add("access_token", accessToken);
-            param.Add("metric", "page_total_actions, page_call_phone_clicks_logged_in_unique, page_get_directions_clicks_logged_in_unique, page_website_clicks_logged_in_unique");
-
-            param.Add("until", until);
-            param.Add("since", since);
-
-            if (!string.IsNullOrEmpty(after))
-            {
-                param.Add("after", after);
-            }
-
-            return $"https://graph.facebook.com/v2.10/{page}/insights?" + GetQueryParameters(param);
-        }
-
-        private static string GetPageViews(string page, string accessToken, string until, string since, string after = "")
-        {
-            Dictionary<string, string> param = new Dictionary<string, string>();
-            param.Add("access_token", accessToken);
-            param.Add("metric", "page_views_total, page_views_external_referrals, page_views_by_profile_tab_total, page_views_logged_in_unique, page_views_by_profile_tab_logged_in_unique, page_views_by_site_logged_in_unique, page_views_logout");
-
-            param.Add("until", until);
-            param.Add("since", since);
-
-            if (!string.IsNullOrEmpty(after))
-            {
-                param.Add("after", after);
-            }
-
-            return $"https://graph.facebook.com/v2.10/{page}/insights?" + GetQueryParameters(param);
-        }
-
-        private static string GetPageImpressions(string page, string accessToken, string until, string since, string after = "")
-        {
-            Dictionary<string, string> param = new Dictionary<string, string>();
-            param.Add("access_token", accessToken);
-            param.Add("metric", "page_impressions_unique, page_impressions_paid_unique, page_impressions_organic_unique, page_impressions_viral_unique, page_impressions_by_story_type_unique, page_impressions_viral_frequency_distribution, page_impressions_by_paid_non_paid_unique, page_impressions_frequency_distribution");
-
-            param.Add("until", until);
-            param.Add("since", since);
-
-            if (!string.IsNullOrEmpty(after))
-            {
-                param.Add("after", after);
-            }
-
-            return $"https://graph.facebook.com/v2.10/{page}/insights?" + GetQueryParameters(param);
-        }
-
-        private static string GetPageEngagement(string page, string accessToken, string until, string since, string after = "")
-        {
-            Dictionary<string, string> param = new Dictionary<string, string>();
-            param.Add("access_token", accessToken);
-            param.Add("metric", "page_engaged_users,page_fans_online,page_consumptions_by_consumption_type_unique,page_consumptions_unique,page_positive_feedback_by_type_unique,page_negative_feedback_unique,page_negative_feedback_by_type_unique,page_places_checkin_total_unique,page_places_checkin_mobile_unique");
-
-            param.Add("until", until);
-            param.Add("since", since);
-
-            if (!string.IsNullOrEmpty(after))
-            {
-                param.Add("after", after);
-            }
-
-            return $"https://graph.facebook.com/v2.10/{page}/insights?" + GetQueryParameters(param);
-        }
-
-        public static string GetPageUserDemographics(string page, string accessToken, string until, string since, string after = "")
-        {
-            Dictionary<string, string> param = new Dictionary<string, string>();
-            param.Add("access_token", accessToken);
-            param.Add("metric", "page_fans,page_fan_adds_unique,page_fan_removes_unique,page_fans_by_like_source_unique, page_fans_by_unlike_source_unique");
-
-            param.Add("until", until);
-            param.Add("since", since);
-
-            if (!string.IsNullOrEmpty(after))
-            {
-                param.Add("after", after);
-            }
-
-            return $"https://graph.facebook.com/v2.10/{page}/insights?" + GetQueryParameters(param);
-        }
         #endregion
 
         private static string GetQueryParameters(Dictionary<string, string> queryParams)

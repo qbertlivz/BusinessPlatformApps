@@ -62,7 +62,7 @@ namespace FacebookUtillity
                         else
                         {
                             DataRow row = table.NewRow();
-                            row["EndTime"] = val["end_time"];
+                            if (table.Columns.Contains("EndTime")) { row["EndTime"] = val["end_time"]; }
                             row["Name"] = entry["name"];
                             row["Value"] = val["value"];
                             row["Period"] = entry["period"];

@@ -9,6 +9,7 @@ namespace FacebookUtillity
 {
     public class DataTableUtility
     {
+        #region Standard FB Tables
         public static DataTable GetCommentsDataTable()
         {
             DataTable table = new DataTable();
@@ -82,22 +83,10 @@ namespace FacebookUtillity
             table.Columns.Add("Posts");
             return table;
         }
+        #endregion
 
         #region Page Analytics Tables
-        public static DataTable GetClicksDataTable()
-        {
-            DataTable table = new DataTable();
-            table.Columns.Add("EndTime", typeof(DateTime));
-            table.Columns.Add("Name");
-            table.Columns.Add("Value");
-            table.Columns.Add("Period");
-            table.Columns.Add("Title");
-            table.Columns.Add("Id");
-            table.Columns.Add("PageId");
-            return table;
-        }
-
-        public static DataTable GetEngagementTable()
+        public static DataTable GetPagePostStoriesAndPeopleTalkingAboutThisTable()
         {
             DataTable table = new DataTable();
             table.Columns.Add("EndTime", typeof(DateTime));
@@ -111,7 +100,7 @@ namespace FacebookUtillity
             return table;
         }
 
-        public static DataTable GetImpressionsTable()
+        public static DataTable GePageImpressionsTable()
         {
             DataTable table = new DataTable();
             table.Columns.Add("EndTime", typeof(DateTime));
@@ -125,21 +114,7 @@ namespace FacebookUtillity
             return table;
         }
 
-        public static DataTable GetPagePostsTable()
-        {
-            DataTable table = new DataTable();
-            table.Columns.Add("EndTime", typeof(DateTime));
-            table.Columns.Add("Entry Name");
-            table.Columns.Add("Name");
-            table.Columns.Add("Value");
-            table.Columns.Add("Period");
-            table.Columns.Add("Title");
-            table.Columns.Add("Id");
-            table.Columns.Add("PageId");
-            return table;
-        }
-
-        public static DataTable GetPagePostStoriesTable()
+        public static DataTable GetPageEngagementTable()
         {
             DataTable table = new DataTable();
             table.Columns.Add("EndTime", typeof(DateTime));
@@ -167,12 +142,39 @@ namespace FacebookUtillity
             return table;
         }
 
+        public static DataTable GetPageClicksDataTable()
+        {
+            DataTable table = new DataTable();
+            table.Columns.Add("EndTime", typeof(DateTime));
+            table.Columns.Add("Name");
+            table.Columns.Add("Value");
+            table.Columns.Add("Period");
+            table.Columns.Add("Title");
+            table.Columns.Add("Id");
+            table.Columns.Add("PageId");
+            return table;
+        }
+
         public static DataTable GetPageUserDemographicsTable()
         {
             DataTable table = new DataTable();
             table.Columns.Add("EndTime", typeof(DateTime));
-            table.Columns.Add("Entry Name");
             table.Columns.Add("Name");
+            table.Columns.Add("Entry Name");
+            table.Columns.Add("Value");
+            table.Columns.Add("Period");
+            table.Columns.Add("Title");
+            table.Columns.Add("Id");
+            table.Columns.Add("PageId");
+            return table;
+        }
+
+        public static DataTable GetPageContentTable()
+        {
+            DataTable table = new DataTable();
+            table.Columns.Add("EndTime", typeof(DateTime));
+            table.Columns.Add("Name");
+            table.Columns.Add("Entry Name");
             table.Columns.Add("Value");
             table.Columns.Add("Period");
             table.Columns.Add("Title");
@@ -195,7 +197,75 @@ namespace FacebookUtillity
             return table;
         }
 
+        public static DataTable GetPageVideoViewsTable()
+        {
+            DataTable table = new DataTable();
+            table.Columns.Add("EndTime", typeof(DateTime));
+            table.Columns.Add("Name");
+            table.Columns.Add("Entry Name");
+            table.Columns.Add("Value");
+            table.Columns.Add("Period");
+            table.Columns.Add("Title");
+            table.Columns.Add("Id");
+            table.Columns.Add("PageId");
+            return table;
+        }
+
+        public static DataTable GetPagePostsTable()
+        {
+            DataTable table = new DataTable();
+            table.Columns.Add("EndTime", typeof(DateTime));
+            table.Columns.Add("Name");
+            table.Columns.Add("Entry Name");
+            table.Columns.Add("Value");
+            table.Columns.Add("Period");
+            table.Columns.Add("Title");
+            table.Columns.Add("Id");
+            table.Columns.Add("PageId");
+            return table;
+        }
+
+        public static DataTable GetPagePostImpressionsTable()
+        {
+            DataTable table = new DataTable();
+            table.Columns.Add("Name");
+            table.Columns.Add("Entry Name");
+            table.Columns.Add("Value");
+            table.Columns.Add("Period");
+            table.Columns.Add("Title");
+            table.Columns.Add("Id");
+            table.Columns.Add("PageId");
+            return table;
+        }
+
+        public static DataTable GetPagePostEngagementTable()
+        {
+            DataTable table = new DataTable();
+            table.Columns.Add("EndTime", typeof(DateTime));
+            table.Columns.Add("Name");
+            table.Columns.Add("Entry Name");
+            table.Columns.Add("Value");
+            table.Columns.Add("Period");
+            table.Columns.Add("Title");
+            table.Columns.Add("Id");
+            table.Columns.Add("PageId");
+            return table;
+        }
+
         public static DataTable GetPagePostReactionsTable()
+        {
+            DataTable table = new DataTable();
+            table.Columns.Add("Name");
+            table.Columns.Add("Entry Name");
+            table.Columns.Add("Value");
+            table.Columns.Add("Period");
+            table.Columns.Add("Title");
+            table.Columns.Add("Id");
+            table.Columns.Add("PageId");
+            return table;
+        }
+
+        public static DataTable GetPageVideoPostsTable()
         {
             DataTable table = new DataTable();
             table.Columns.Add("Name");

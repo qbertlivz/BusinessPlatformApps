@@ -25,7 +25,7 @@
             {
                 "azureProviders": [
                     "Microsoft.EventHub",
-                    "Microsoft.Insights",
+                    "microsoft.insights",
                     "Microsoft.StreamAnalytics"
                 ],
                 "defaultLocation": "5",

@@ -19,24 +19,9 @@ namespace FacebookUtillity
                 {
                     foreach (var val in entry["values"])
                     {
-                        if (val?["value"] != null && val["value"].Children().Count() > 1)
+                        if (val?["value"] != null && val["value"].Children().Count() >= 1)
                         {
-                            foreach (var child in val["value"])
-                            {
-                                var att = child as JProperty;
-
-                                DataRow row = table.NewRow();
-                                if (table.Columns.Contains("EndTime")) { row["EndTime"] = val["end_time"]; }
-                                row["Name"] = entry["name"];
-                                row["Entry Name"] = att.Name;
-                                row["Value"] = att.Value;
-                                row["Period"] = entry["period"];
-                                row["Title"] = entry["title"];
-                                row["Description"] = entry["description"];
-                                row["Id"] = entry["id"];
-                                row["PageId"] = pageId;
-                                table.Rows.Add(row);
-                            }
+                            Extract(table, pageId, entry, val);
                         }
                         else
                         {
@@ -53,6 +38,67 @@ namespace FacebookUtillity
                         }
                     }
                 }
+            }
+        }
+
+        private static void Extract(DataTable table, string pageId, JToken entry, JToken val)
+        {
+            foreach (var child in val["value"])
+            {
+                if (child.GetType() != typeof(JProperty) &&
+                    child?["value"] != null &&
+                    child["value"].Children().Count() >= 1)
+                {
+                    Extract(table, pageId, entry, child);
+                }
+                else
+                {
+                    var att = child as JProperty;
+
+                    if (att.Value.Children().Count() >= 1)
+                    {
+                        ExtractChildren(table, pageId, entry, val, att);
+                    }
+                    else
+                    {
+                        DataRow row = table.NewRow();
+                        if (table.Columns.Contains("EndTime")) { row["EndTime"] = val["end_time"]; }
+                        row["Name"] = entry["name"];
+                        row["Entry Name"] = att.Name;
+                        row["Value"] = att.Value;
+                        row["Period"] = entry["period"];
+                        row["Title"] = entry["title"];
+                        row["Description"] = entry["description"];
+                        row["Id"] = entry["id"];
+                        row["PageId"] = pageId;
+                        table.Rows.Add(row);
+                    }
+                }
+            }
+        }
+
+        private static void ExtractChildren(DataTable table, string pageId, JToken entry, JToken val, JProperty att)
+        {
+            if (att.Value.Children().Count() >= 1)
+            {
+                foreach (var c in att.Value.Children())
+                {
+                    ExtractChildren(table, pageId, entry, val, c as JProperty);
+                }
+            }
+            else
+            {
+                DataRow row = table.NewRow();
+                if (table.Columns.Contains("EndTime")) { row["EndTime"] = val["end_time"]; }
+                row["Name"] = entry["name"];
+                row["Entry Name"] = (att.Parent.Parent as JProperty).Name + " " + att.Name;
+                row["Value"] = att.Value;
+                row["Period"] = entry["period"];
+                row["Title"] = entry["title"];
+                row["Description"] = entry["description"];
+                row["Id"] = entry["id"];
+                row["PageId"] = pageId;
+                table.Rows.Add(row);
             }
         }
 

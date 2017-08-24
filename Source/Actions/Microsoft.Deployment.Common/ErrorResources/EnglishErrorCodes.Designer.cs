@@ -79,6 +79,15 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your account has insufficient permissions to export activity logs to Event Hub in this subscription.
+        /// </summary>
+        public static string ActivityLogsInsufficientPermissions {
+            get {
+                return ResourceManager.GetString("ActivityLogsInsufficientPermissions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to It seems you&apos;re not running the correct platform version of Dynamics 365 for Finance and Operations. The template requires at least Platform Update 8..
         /// </summary>
         public static string AxWrongPlatform {

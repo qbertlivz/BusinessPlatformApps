@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
-using Microsoft.Deployment.Common.Model.EventHub;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.Common
 {
@@ -25,11 +24,11 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
 
             AzureHttpClient ahc = new AzureHttpClient(token, subscription);
 
-            LogProfile logProfile = await ahc.Request<LogProfile>(HttpMethod.Get, uri);
+            string logProfileError = await ahc.Test(HttpMethod.Get, uri);
 
-            return logProfile != null
+            return string.IsNullOrEmpty(logProfileError)
                 ? new ActionResponse(ActionStatus.Success) 
-                : new ActionResponse(ActionStatus.Failure, new ActionResponseExceptionDetail("ActivityLogsInsufficientPermissions"));
+                : new ActionResponse(ActionStatus.Failure, new ActionResponseExceptionDetail("ActivityLogsInsufficientPermissions", logProfileError));
         }
     }
 }

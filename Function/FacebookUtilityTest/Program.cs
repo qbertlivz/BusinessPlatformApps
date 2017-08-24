@@ -40,6 +40,7 @@ namespace FacebookUtilityTest
             var pageVideoViews = DataTableUtility.GetPageVideoViewsTable();
             var pageViewsTable = DataTableUtility.GetPageViewsTable();
             var clicksTable = DataTableUtility.GetPageClicksDataTable();
+            var postsInfoTable = DataTableUtility.GetPostsInfoTable();
 
             var content = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PageContent).Result;
             PageAnalyticsETL.PopulateNestedValues(pageContentTable, content, page);
@@ -67,7 +68,7 @@ namespace FacebookUtilityTest
 
             var pageUserDemographics = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PageUserDemographics).Result;
             PageAnalyticsETL.PopulateNestedValues(pageUserDemographicsTable, pageUserDemographics, page);
-                        
+
             var pageVideoViewsObj = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PageVideoViews).Result;
             PageAnalyticsETL.PopulateNestedValues(pageVideoViews, pageVideoViewsObj, page);
 
@@ -75,11 +76,11 @@ namespace FacebookUtilityTest
             PageAnalyticsETL.PopulateNestedValues(pageViewsTable, pageViews, page);
 
             var clicks = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PageCtaClicks).Result;
-            PageAnalyticsETL.PopulateSingleValues(clicksTable, clicks, page);
+            PageAnalyticsETL.PopulateNestedValues(clicksTable, clicks, page);
 
             var pagePostIds = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PagePostIds).Result;
-
-            //var pagePostsImpressions = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PagePostImpressions).Result;
+            PageAnalyticsETL.PopulatePostsInfo(postsInfoTable, pagePostIds, page);
+                        
             List<JObject> pagePostReactions = new List<JObject>();
             List<JObject> pageVideoPostsObj = new List<JObject>();
             List<JObject> pagePostsImpressions = new List<JObject>();
@@ -116,6 +117,7 @@ namespace FacebookUtilityTest
             SqlUtility.BulkInsert(sqlConn, pageVideoViews, schema + "." + "PageVideoViews");
             SqlUtility.BulkInsert(sqlConn, pageViewsTable, schema + "." + "PageViews");
             SqlUtility.BulkInsert(sqlConn, clicksTable, schema + "." + "Clicks");
+            SqlUtility.BulkInsert(sqlConn, postsInfoTable, schema + "." + "PagePostsInfo");
         }
     }
 }

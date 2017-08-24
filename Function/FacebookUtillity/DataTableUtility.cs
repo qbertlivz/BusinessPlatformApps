@@ -95,6 +95,7 @@ namespace FacebookUtillity
             table.Columns.Add("Value");
             table.Columns.Add("Period");
             table.Columns.Add("Title");
+            table.Columns.Add("Description");
             table.Columns.Add("Id");
             table.Columns.Add("PageId");
             return table;
@@ -109,6 +110,7 @@ namespace FacebookUtillity
             table.Columns.Add("Value");
             table.Columns.Add("Period");
             table.Columns.Add("Title");
+            table.Columns.Add("Description");
             table.Columns.Add("Id");
             table.Columns.Add("PageId");
             return table;
@@ -123,6 +125,7 @@ namespace FacebookUtillity
             table.Columns.Add("Value");
             table.Columns.Add("Period");
             table.Columns.Add("Title");
+            table.Columns.Add("Description");
             table.Columns.Add("Id");
             table.Columns.Add("PageId");
             return table;
@@ -137,6 +140,7 @@ namespace FacebookUtillity
             table.Columns.Add("Value");
             table.Columns.Add("Period");
             table.Columns.Add("Title");
+            table.Columns.Add("Description");
             table.Columns.Add("Id");
             table.Columns.Add("PageId");
             return table;
@@ -147,9 +151,11 @@ namespace FacebookUtillity
             DataTable table = new DataTable();
             table.Columns.Add("EndTime", typeof(DateTime));
             table.Columns.Add("Name");
+            table.Columns.Add("Entry Name");
             table.Columns.Add("Value");
             table.Columns.Add("Period");
             table.Columns.Add("Title");
+            table.Columns.Add("Description");
             table.Columns.Add("Id");
             table.Columns.Add("PageId");
             return table;
@@ -164,6 +170,7 @@ namespace FacebookUtillity
             table.Columns.Add("Value");
             table.Columns.Add("Period");
             table.Columns.Add("Title");
+            table.Columns.Add("Description");
             table.Columns.Add("Id");
             table.Columns.Add("PageId");
             return table;
@@ -178,6 +185,7 @@ namespace FacebookUtillity
             table.Columns.Add("Value");
             table.Columns.Add("Period");
             table.Columns.Add("Title");
+            table.Columns.Add("Description");
             table.Columns.Add("Id");
             table.Columns.Add("PageId");
             return table;
@@ -192,6 +200,7 @@ namespace FacebookUtillity
             table.Columns.Add("Value");
             table.Columns.Add("Period");
             table.Columns.Add("Title");
+            table.Columns.Add("Description");
             table.Columns.Add("Id");
             table.Columns.Add("PageId");
             return table;
@@ -206,6 +215,7 @@ namespace FacebookUtillity
             table.Columns.Add("Value");
             table.Columns.Add("Period");
             table.Columns.Add("Title");
+            table.Columns.Add("Description");
             table.Columns.Add("Id");
             table.Columns.Add("PageId");
             return table;
@@ -220,6 +230,7 @@ namespace FacebookUtillity
             table.Columns.Add("Value");
             table.Columns.Add("Period");
             table.Columns.Add("Title");
+            table.Columns.Add("Description");
             table.Columns.Add("Id");
             table.Columns.Add("PageId");
             return table;
@@ -233,6 +244,7 @@ namespace FacebookUtillity
             table.Columns.Add("Value");
             table.Columns.Add("Period");
             table.Columns.Add("Title");
+            table.Columns.Add("Description");
             table.Columns.Add("Id");
             table.Columns.Add("PageId");
             return table;
@@ -247,6 +259,7 @@ namespace FacebookUtillity
             table.Columns.Add("Value");
             table.Columns.Add("Period");
             table.Columns.Add("Title");
+            table.Columns.Add("Description");
             table.Columns.Add("Id");
             table.Columns.Add("PageId");
             return table;
@@ -260,6 +273,7 @@ namespace FacebookUtillity
             table.Columns.Add("Value");
             table.Columns.Add("Period");
             table.Columns.Add("Title");
+            table.Columns.Add("Description");
             table.Columns.Add("Id");
             table.Columns.Add("PageId");
             return table;
@@ -273,8 +287,34 @@ namespace FacebookUtillity
             table.Columns.Add("Value");
             table.Columns.Add("Period");
             table.Columns.Add("Title");
+            table.Columns.Add("Description");
             table.Columns.Add("Id");
             table.Columns.Add("PageId");
+            return table;
+        }
+
+        public static DataTable GetPostsInfoTable()
+        {
+            DataTable table = new DataTable();
+            table.Columns.Add("Id");
+            table.Columns.Add("Message");
+            table.Columns.Add("Created Time", typeof(DateTime));
+            table.Columns.Add("Updated Time", typeof(DateTime));
+            table.Columns.Add("Icon");
+            table.Columns.Add("Story");
+            table.Columns.Add("Link");
+            table.Columns.Add("Status Type");
+            table.Columns.Add("Is Hidden");
+            table.Columns.Add("Is Published");
+            table.Columns.Add("Name");
+            table.Columns.Add("Object");
+            table.Columns.Add("Permalink URL");
+            table.Columns.Add("Picture");
+            table.Columns.Add("Source");
+            table.Columns.Add("Shares");
+            table.Columns.Add("To Id");
+            table.Columns.Add("To Name");
+            table.Columns.Add("Type");
             return table;
         }
         #endregion

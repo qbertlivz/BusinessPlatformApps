@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
+using System.Threading;
 
 namespace FacebookUtillity
 {
@@ -115,7 +116,13 @@ namespace FacebookUtillity
 
                     if (!response.IsSuccessStatusCode)
                     {
-                        throw new Exception();
+                        Thread.Sleep(new TimeSpan(0, 0, 3));
+                        response = await client.GetAsync(requestUri);
+                        responseObj = await response.Content.ReadAsStringAsync();
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            throw new Exception();
+                        }
                     }
 
                     post = JObject.Parse(responseObj);
@@ -152,9 +159,9 @@ namespace FacebookUtillity
                     }
                 }
 
-                if (post?["data"] != null && 
-                    (post["data"] as JArray).Count > 0 && 
-                    post?["data"]?[0]?["period"] != null && 
+                if (post?["data"] != null &&
+                    (post["data"] as JArray).Count > 0 &&
+                    post?["data"]?[0]?["period"] != null &&
                     post?["data"]?[0]?["period"].ToString().ToLower() == "lifetime")
                 {
                     break;
@@ -171,7 +178,7 @@ namespace FacebookUtillity
             string since = DateUtility.GetUnixFromDate(DateUtility.GetDateTimeRelativeFromNow(untilDateTime, -2));
             Dictionary<string, string> param = new Dictionary<string, string>();
             param.Add("access_token", accessToken);
-            param.Add("fields", "id");
+            param.Add("fields", "id,message,updated_time,created_time,icon,link,name,object_id,permalink_url,picture,source,shares,to,type,story,status_type,is_hidden,is_published");
             param.Add("until", until);
 
             param.Add("since", since);

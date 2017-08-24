@@ -22,7 +22,7 @@ export class ProgressViewModel extends ViewModelBase {
         this.showNext = false;
     }
 
-    async OnLoaded() {
+    async onLoaded() {
         if (!this.MS.DeploymentService.isFinished) {
             await this.MS.DeploymentService.ExecuteActions();
             this.finishedActionName = this.MS.DataService.GetDataStore()['FinishedActionName'][0];

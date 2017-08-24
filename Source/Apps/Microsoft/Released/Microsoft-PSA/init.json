@@ -22,11 +22,35 @@
             },
             {
                 "displayname": "Dynamics 365 Login",
-                "entities": "systemuser, salesorderdetail, salesorder, quotedetail, quote, opportunity, msdyn_transactioncategory, msdyn_timeentry, msdyn_resourcerequirementdetail, msdyn_resourcerequirement, msdyn_resourcerequest, msdyn_project, msdyn_organizationalunit, msdyn_orderlineresourcecategory, msdyn_estimateline, msdyn_actual, bookingstatus, bookableresourcecategoryassn, bookableresourcecategory, bookableresourcebooking, bookableresource, account",
+                "entities": {
+                    "systemuser": "systemuserid",
+                    "salesorderdetail": "salesorderdetailid",
+                    "salesorder": "salesorderid",
+                    "quotedetail": "quotedetailid",
+                    "quote": "quoteid",
+                    "opportunity": "opportunityid",
+                    "msdyn_transactioncategory": "msdyn_transactioncategoryid",
+                    "msdyn_timeentry": "msdyn_timeentryid",
+                    "msdyn_resourcerequirementdetail": "msdyn_resourcerequirementdetailid",
+                    "msdyn_resourcerequirement": "msdyn_resourcerequirementid",
+                    "msdyn_resourcerequest": "msdyn_resourcerequestid",
+                    "msdyn_project": "msdyn_projectid",
+                    "msdyn_organizationalunit": "msdyn_organizationalunitid",
+                    "msdyn_orderlineresourcecategory": "msdyn_orderlineresourcecategoryid",
+                    "msdyn_estimateline": "msdyn_estimatelineid",
+                    "msdyn_actual": "msdyn_actualid",
+                    "bookingstatus": "bookingstatusid",
+                    "bookableresourcecategoryassn": "bookableresourcecategoryassnid",
+                    "bookableresourcecategory": "bookableresourcecategoryid",
+                    "bookableresourcebooking": "bookableresourcebookingid",
+                    "bookableresource": "bookableresourceid",
+                    "account": "accountid"
+                },
                 "name": "$SiteCommon$/pages-gallery/mscrm-login.html",
                 "oauthType": "mscrm",
                 "pricingCost": "$translate(INIT_D365_PRICING_COST)",
-                "pricingUrl": "$translate(INIT_D365_PRICING_URL)"
+                "pricingUrl": "$translate(INIT_D365_PRICING_URL)",
+                "ProfileName": "$save('bpst-psa-profile')"
             },
             {
                 "displayname": "Login to the Key Vault",
@@ -36,8 +60,8 @@
             {
                 "displayname": "Target",
                 "isAzureSql": true,
-                "name": "$SiteCommon$/pages-gallery/sql-server.html",
-                "newSqlDatabase": "$(this.MS.UtilityService.GetUniqueId(10))",
+                "name": "$SiteCommon$/pages-gallery/sql.html",
+                "newSqlDatabase": "$(this.MS.UtilityService.getUniqueId(10))",
                 "showAzureSql": false,
                 "showNewSqlOption": true,
                 "showSkuS1": false,
@@ -71,7 +95,8 @@
                 "name": "$SiteCommon$/pages-gallery/progress.html",
                 "filename": "$save('PSA_AccountManager.pbix|PSA_PracticeManager.pbix|PSA_ResourceManager.pbix')",
                 "showCounts": true,
-                "finishedActionName": "Microsoft-CrmGetProfileStatus"
+                "finishedActionName": "Microsoft-CrmGetProfileStatus",
+                "targetSchema": "psa"
             }
         ],
 
@@ -81,6 +106,16 @@
                 "name": "Microsoft-DeploySQLScripts",
                 "SqlScriptsFolder": "Service/Database",
                 "SqlServerIndex": "0"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+                "name": "Microsoft-SetConfigValueInSql",
+                "SqlConfigTable": "[psa].[configuration]",
+                "SqlEntryName": "Tables",
+                "SqlEntryValue": "account, bookableresource, bookableresourcebooking, bookableresourcecategory, bookableresourcecategoryassn, bookingstatus, msdyn_actual, msdyn_estimateline, msdyn_orderlineresourcecategory, msdyn_organizationalunit, msdyn_project, msdyn_resourcerequest, msdyn_resourcerequirement, msdyn_resourcerequirementdetail, msdyn_timeentry, msdyn_transactioncategory, opportunity, quote, quotedetail, salesorder, salesorderdetail, systemuser",
+                "SqlGroup": "SolutionTemplate",
+                "SqlServerIndex": "0",
+                "SqlSubGroup": "StandardConfiguration"
             },
             {
                 "displayname": "$translate(INIT_ACTION_CONFIGURING_KEY_VAULT)",
@@ -135,7 +170,6 @@
             {
                 "displayname": "$translate(INIT_ACTION_WAITING_DATA)",
                 "FinishedActionName": "Microsoft-CrmGetProfileStatus",
-                "IsWaiting": true,
                 "name": "Microsoft-GetDataPullStatus",
                 "SqlServerIndex": 0,
                 "TargetSchema": "psa"

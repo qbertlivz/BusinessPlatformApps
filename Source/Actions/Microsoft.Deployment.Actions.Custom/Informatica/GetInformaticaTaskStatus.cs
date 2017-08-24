@@ -33,7 +33,7 @@ namespace Microsoft.Deployment.Actions.Custom.Informatica
                 {
                     if (tasks[i].State.EqualsIgnoreCase("1") || tasks[i].State.EqualsIgnoreCase("2"))
                     {
-                        result = new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+                        result = new ActionResponse(ActionStatus.Success);
                     }
                     else if (tasks[i].ExecutionState.EqualsIgnoreCase("3"))
                     {
@@ -41,12 +41,12 @@ namespace Microsoft.Deployment.Actions.Custom.Informatica
                     }
                     else
                     {
-                        result = new ActionResponse(ActionStatus.BatchNoState, JsonUtility.GetEmptyJObject());
+                        result = new ActionResponse(ActionStatus.InProgress);
                     }
                 }
             }
 
-            if (result == null) result = new ActionResponse(ActionStatus.BatchNoState, JsonUtility.GetEmptyJObject());
+            if (result == null) result = new ActionResponse(ActionStatus.InProgress);
 
             await InformaticaUtility.Logout(rc, username, password);
 

@@ -51,13 +51,27 @@
 
             _orgUrl = request.DataStore.GetValue("OrganizationUrl");
             _orgId = request.DataStore.GetValue("OrganizationId");
-            string name = request.DataStore.GetValue("ProfileName") ?? "bpst-mscrm-profile";
+            string name = request.DataStore.GetValue("ProfileName") ?? Constants.CrmProfileName;
             string kV = request.DataStore.GetValue("KeyVault");
-            string[] entities = request.DataStore.GetValue("Entities").Split(new[] {',', ' ', '\t'}, StringSplitOptions.RemoveEmptyEntries);
+            Dictionary<string, string> entities_dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(request.DataStore.GetValue("Entities"));
+
+            List<string> entities = new List<string>();
+            foreach (var e in entities_dict)
+            {
+                entities.Add(e.Key);
+            }
+
+            var additionalObjects = request.DataStore.GetValue("AdditionalObjects");
+
+            if (!string.IsNullOrEmpty(additionalObjects))
+            {
+                string[] add = additionalObjects.SplitByCommaSpaceTabReturnArray();
+                entities.AddRange(add);
+            }
 
             MsCrmProfile profile = new MsCrmProfile
             {
-                Entities = new MsCrmEntity[entities.Length],
+                Entities = new MsCrmEntity[entities.ToArray().Length],
                 Name = name,
                 OrganizationId = _orgId,
                 DestinationKeyVaultUri = kV,
@@ -67,11 +81,11 @@
 
             for (int i = 0; i < profile.Entities.Length; i++)
             {
-                MsCrmEntity e = new MsCrmEntity {Type = entities[i]};
+                MsCrmEntity e = new MsCrmEntity { Type = entities[i] };
                 profile.Entities[i] = e;
             }
 
-            List<string> invalidEntities = await RetrieveInvalidEntities(entities);
+            List<string> invalidEntities = await RetrieveInvalidEntities(entities.ToArray());
 
             if (invalidEntities.Count > 0)
                 return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(),

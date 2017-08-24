@@ -11,6 +11,7 @@ using Microsoft.Azure.Subscriptions.Models;
 
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
+using Microsoft.Deployment.Common.Helpers;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.Common
 {
@@ -32,7 +33,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
 
                 foreach (Subscription s in subscriptionList.Subscriptions)
                 {
-                    if (s.State.Equals("Disabled", System.StringComparison.OrdinalIgnoreCase) || s.State.Equals("Deleted", System.StringComparison.OrdinalIgnoreCase))
+                    if (s.State.EqualsIgnoreCase("Disabled") || s.State.EqualsIgnoreCase("Deleted"))
                         continue;
 
                     validSubscriptions.Add(s);

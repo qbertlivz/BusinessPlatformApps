@@ -5,11 +5,11 @@ import { ViewModelBase } from '../../../../../SiteCommon/Web/services/view-model
 export class BringYourOwnEntities extends ViewModelBase {
     bringYourOwnEntities: string = this.MS.Option.NO;
 
-    async OnLoaded(): Promise<void> {
+    async onLoaded(): Promise<void> {
         this.isValidated = true;
     }
 
-    async NavigatingNext(): Promise<boolean> {
+    async onNavigatingNext(): Promise<boolean> {
         this.MS.DataStore.addToDataStore('BringYourOwnEntities', this.bringYourOwnEntities, DataStoreType.Public);
         return true;
     }

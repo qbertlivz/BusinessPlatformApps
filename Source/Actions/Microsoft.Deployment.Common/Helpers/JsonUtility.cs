@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Dynamic;
 using System.Globalization;
@@ -14,15 +15,85 @@ namespace Microsoft.Deployment.Common.Helpers
 {
     public static class JsonUtility
     {
-        public static JObject GetJsonObjectFromJsonString(string json)
+        public static JObject CreateJObjectWithValueFromObject(object response)
         {
-            var obj = JObject.Parse(json);
+            dynamic obj = new ExpandoObject();
+            obj.value = response;
+            return JObject.FromObject(obj);
+        }
+
+        public static T Deserialize<T>(string json)
+        {
+            return string.IsNullOrEmpty(json) ? default(T) : JsonConvert.DeserializeObject<T>(json);
+        }
+
+        public static T DeserializeContent<T>(string content)
+        {
+            T value = default(T);
+
+            JObject obj = GetJsonObjectFromJsonString(content);
+
+            if (obj != null && obj["value"] != null)
+            {
+                value = JsonUtility.Deserialize<T>(obj["value"].ToString());
+            }
+
+            return value;
+        }
+
+        public static List<string> DeserializeEntities(string entitiesJson, string entitiesJsonAdditional = "")
+        {
+            List<string> entities = new List<string>();
+
+            try
+            {
+                Dictionary<string, string> dictionary = Deserialize<Dictionary<string, string>>(entitiesJson);
+
+                if (dictionary != null)
+                {
+                    foreach (KeyValuePair<string, string> pair in dictionary)
+                    {
+                        entities.Add(pair.Key);
+                    }
+                }
+            }
+            catch
+            {
+                entities = entitiesJson.SplitByCommaSpaceTabReturnList();
+            }
+
+            if (!string.IsNullOrEmpty(entitiesJsonAdditional))
+            {
+                entities.AddRange(entitiesJsonAdditional.SplitByCommaSpaceTabReturnList());
+            }
+
+            return entities;
+        }
+
+        public static dynamic GetDynamicFromJObject(JObject json)
+        {
+            var jsonString = json.Root.ToString();
+            var converter = new ExpandoObjectConverter();
+            dynamic obj = JsonConvert.DeserializeObject<ExpandoObject>(jsonString, converter);
             return obj;
         }
 
         public static JObject GetEmptyJObject()
         {
             return GetJsonObjectFromJsonString("{}");
+        }
+
+        public static JObject GetJObjectFromJsonString(string json)
+        {
+            JObject templatefileContent = new JObject();
+
+            if (string.IsNullOrEmpty(json) || json.EqualsIgnoreCase("null"))
+            {
+                json = GetEmptyJObject().ToString();
+            }
+
+            templatefileContent = (JObject)JToken.Parse(json);
+            return templatefileContent;
         }
 
         public static JObject GetJObjectFromObject(object json)
@@ -37,11 +108,19 @@ namespace Microsoft.Deployment.Common.Helpers
             return obj;
         }
 
-        public static dynamic GetDynamicFromJObject(JObject json)
+        public static JObject GetJObjectFromStringValue(string value)
         {
-            var jsonString = json.Root.ToString();
-            var converter = new ExpandoObjectConverter();
-            dynamic obj = JsonConvert.DeserializeObject<ExpandoObject>(jsonString, converter);
+            return GetJsonObjectFromJsonString("{\"value\":" + JsonConvert.ToString(value) + "}");
+        }
+
+        public static string GetJObjectProperty(JObject obj, string property)
+        {
+            return obj[property] == null ? null : obj[property].ToString();
+        }
+
+        public static JObject GetJsonObjectFromJsonString(string json)
+        {
+            var obj = JObject.Parse(json);
             return obj;
         }
 
@@ -52,34 +131,27 @@ namespace Microsoft.Deployment.Common.Helpers
                 return JsonUtility.GetEmptyJObject().ToString();
             }
 
-            JsonSerializerSettings settings = new JsonSerializerSettings();
             var obj = JObject.FromObject(json);
             return obj.Root.ToString();
         }
 
-        public static JObject GetJObjectFromStringValue(string value)
+        public static string GetWebToken(string token, string property)
         {
-            return GetJsonObjectFromJsonString("{\"value\":" + JsonConvert.ToString(value) + "}");
-        }
+            string webToken = null;
 
-        public static JObject GetJObjectFromJsonString(string json)
-        {
-            JObject templatefileContent = new JObject();
-
-            if (string.IsNullOrEmpty(json) || json.Equals("null", StringComparison.OrdinalIgnoreCase))
+            if (token != null)
             {
-                json = GetEmptyJObject().ToString();
+                foreach (Claim c in new JwtSecurityToken(token).Claims)
+                {
+                    if (c.Type.ToLowerInvariant().EqualsIgnoreCase(property))
+                    {
+                        webToken = c.Value;
+                        break;
+                    }
+                }
             }
 
-            templatefileContent = (JObject)JToken.Parse(json);
-            return templatefileContent;
-        }
-
-        public static JObject CreateJObjectWithValueFromObject(object response)
-        {
-            dynamic obj = new ExpandoObject();
-            obj.value = response;
-            return JObject.FromObject(obj);
+            return webToken;
         }
 
         public static bool IsNullOrEmpty(this JToken token)
@@ -91,7 +163,14 @@ namespace Microsoft.Deployment.Common.Helpers
                 || token.Type == JTokenType.Null;
         }
 
-        public static string Serialize(DataTable table)
+        public static string Serialize<T>(T value)
+        {
+            var settings = new JsonSerializerSettings();
+            settings.ContractResolver = new JsonUtilityLowercaseSerializer();
+            return JsonConvert.SerializeObject(value, settings);
+        }
+
+        public static string SerializeTable(DataTable table)
         {
             string result;
 
@@ -122,30 +201,6 @@ namespace Microsoft.Deployment.Common.Helpers
             }
 
             return result;
-        }
-
-        public static string GetJObjectProperty(JObject obj, string property)
-        {
-            return obj[property] == null ? null : obj[property].ToString();
-        }
-
-        public static string GetWebToken(string token, string property)
-        {
-            string webToken = null;
-
-            if (token != null)
-            {
-                foreach (Claim c in new JwtSecurityToken(token).Claims)
-                {
-                    if (c.Type.ToLowerInvariant().EqualsIgnoreCase(property))
-                    {
-                        webToken = c.Value;
-                        break;
-                    }
-                }
-            }
-
-            return webToken;
         }
     }
 }

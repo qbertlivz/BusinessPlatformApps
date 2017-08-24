@@ -53,3 +53,7 @@
 *.user
 *js.map
 /Source/SiteCommon/Web/**/*.js
+*.pubxml
+/Function/FacebookOAuth/obj/Debug
+/Function
+/Source/Apps/Microsoft/Released/Microsoft-D365FieldService/Service/Notifier/notifierLogicApp.json

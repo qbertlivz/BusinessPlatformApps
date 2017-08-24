@@ -1,6 +1,4 @@
-﻿import { QueryParameter } from '../constants/query-parameter';
-
-import { DataStoreType } from '../enums/data-store-type';
+﻿import { DataStoreType } from '../enums/data-store-type';
 
 import { ActionResponse } from '../models/action-response';
 import { D365Organization } from '../models/d365-organization';
@@ -21,162 +19,115 @@ export class MsCrmLogin extends AzureLogin {
     msCrmOrganizations: MsCrmOrganization[] = [];
     showAzureTrial: boolean = false;
 
-    constructor() {
-        super();
+    async connect(): Promise<void> {
+        this.MS.UtilityService.connectToAzure(this.oauthType);
     }
 
-    async OnLoaded(): Promise<void> {
-        this.Invalidate();
+    async d365Login(): Promise<void> {
+        this.msCrmOrganizations = await this.MS.HttpService.getResponseAsync('Microsoft-CrmGetOrgs');
+
+        if (this.msCrmOrganizations && this.msCrmOrganizations.length > 0) {
+            this.msCrmOrganizationId = this.msCrmOrganizations[0].organizationId;
+
+            let subscriptions: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureSubscriptions');
+            if (subscriptions.IsSuccess) {
+                this.subscriptionsList = subscriptions.Body.value;
+                if (!this.subscriptionsList || (this.subscriptionsList && this.subscriptionsList.length === 0)) {
+                    this.MS.ErrorService.message = this.MS.Translate.AZURE_LOGIN_SUBSCRIPTION_ERROR_CRM;
+                    this.showAzureTrial = true;
+                } else {
+                    this.selectedSubscriptionId = this.subscriptionsList[0].SubscriptionId;
+                    this.showPricingConfirmation = this.setValidated();
+                }
+            } else {
+                this.showAzureTrial = true;
+            }
+        } else {
+            this.MS.ErrorService.message = this.MS.Translate.MSCRM_LOGIN_NO_AUTHORIZATION;
+        }
+    }
+
+    async onLoaded(): Promise<void> {
+        this.onInvalidate();
 
         this.showAzureTrial = false;
-        this.showValidation = false;
 
         if (!this.isScribe) {
             if (this.subscriptionsList.length > 0 && this.msCrmOrganizations.length > 0) {
-                this.isValidated = true;
-                this.showValidation = true;
+                this.setValidated();
             } else {
-                let queryParam = this.MS.UtilityService.GetItem('queryUrl');
-                if (queryParam) {
-                    let token = this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.CODE, queryParam);
-                    if (token === '') {
-                        this.MS.ErrorService.message = this.MS.Translate.MSCRM_LOGIN_ERROR;
-                        this.MS.ErrorService.details = this.MS.UtilityService.GetQueryParameterFromUrl(QueryParameter.ERRORDESCRIPTION, queryParam);
-                        this.MS.ErrorService.showContactUs = true;
-                        return;
-                    }
-                    var tokenObj = {
-                        code: token,
-                        oauthType: this.oauthType
-                    };
-                    this.authToken = await this.MS.HttpService.executeAsync('Microsoft-GetAzureToken', tokenObj);
-                    if (this.authToken.IsSuccess) {
-                        var response = await this.MS.HttpService.executeAsync('Microsoft-CrmGetOrgs', {});
-                        if (response.IsSuccess) {
-                            this.msCrmOrganizations = JSON.parse(response.Body.value);
-
-                            if (this.msCrmOrganizations.length > 0) {
-                                this.msCrmOrganizationId = this.msCrmOrganizations[0].OrganizationId;
-
-                                let subscriptions: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureSubscriptions', {});
-                                if (subscriptions.IsSuccess) {
-                                    this.subscriptionsList = subscriptions.Body.value;
-                                    if (!this.subscriptionsList ||
-                                        (this.subscriptionsList && this.subscriptionsList.length === 0)) {
-                                        this.MS.ErrorService.message = this.MS.Translate.AZURE_LOGIN_SUBSCRIPTION_ERROR_CRM;
-                                        this.showAzureTrial = true;
-                                    } else {
-                                        this.selectedSubscriptionId = this.subscriptionsList[0].SubscriptionId;
-                                        this.showPricingConfirmation = true;
-                                        this.isValidated = true;
-                                        this.showValidation = true;
-                                    }
-                                }
-                            } else {
-                                this.MS.ErrorService.message = this.MS.Translate.MSCRM_LOGIN_NO_AUTHORIZATION;
-                            }
-                        } else {
-                            this.MS.ErrorService.message = this.MS.Translate.MSCRM_LOGIN_NO_ORGANIZATIONS;
-                        }
-                    }
-                }
-                this.MS.UtilityService.RemoveItem('queryUrl');
+                this.MS.UtilityService.getToken(this.oauthType, async () => {
+                    await this.d365Login();
+                });
             }
         }
     }
 
-    async OnValidate(): Promise<boolean> {
-        this.Invalidate();
+    async onNavigatingNext(): Promise<boolean> {
+        let isSuccess: boolean = true;
 
-        this.MS.DataStore.addToDataStore('D365Username', this.d365Username, DataStoreType.Private);
-        this.MS.DataStore.addToDataStore('D365Password', this.d365Password, DataStoreType.Private);
-
-        if (!this.d365OnPremiseOrganizationName && !this.d365OnPremiseUrl) {
-            let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetD365Organizations');
-
-            if (response.IsSuccess) {
-                this.d365Organizations = JSON.parse(response.Body.value);
-
-                if (this.d365Organizations && this.d365Organizations.length > 0) {
-                    this.d365OrganizationId = this.d365Organizations[0].Id;
-
-                    this.isValidated = true;
-                    this.showValidation = true;
-                }
-            }
-        } else {
-            this.isValidated = true;
-            this.showValidation = true;
-        }
-
-        return this.isValidated;
-    }
-
-    async connect(): Promise<void> {
-        var tokenObj: any = { oauthType: this.oauthType };
-        this.MS.DataStore.addToDataStore('AADTenant', 'common', DataStoreType.Public);
-        let response: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureAuthUri', tokenObj);
-        window.location.href = response.Body.value;
-    }
-     
-    public async NavigatingNext(): Promise<boolean> {
         this.MS.DataStore.addToDataStore('Entities', this.entities, DataStoreType.Public);
 
         if (this.isScribe) {
             if (!this.d365OnPremiseOrganizationName && !this.d365OnPremiseUrl) {
-                let d365Organization: D365Organization = this.d365Organizations.find(x => x.Id === this.d365OrganizationId);
-                this.MS.DataStore.addToDataStore('ConnectorUrl', d365Organization.ConnectorUrl, DataStoreType.Private);
-                this.MS.DataStore.addToDataStore('OrganizationName', d365Organization.Name, DataStoreType.Private);
+                let d365Organization: D365Organization = this.d365Organizations.find(x => x.id === this.d365OrganizationId);
+                this.MS.DataStore.addToDataStore('ConnectorUrl', d365Organization.connectorUrl, DataStoreType.Private);
+                this.MS.DataStore.addToDataStore('OrganizationName', d365Organization.name, DataStoreType.Private);
                 this.MS.DataStore.addToDataStore('ScribeDeploymentType', 'Online', DataStoreType.Private);
             } else {
                 this.MS.DataStore.addToDataStore('ConnectorUrl', this.d365OnPremiseUrl, DataStoreType.Private);
                 this.MS.DataStore.addToDataStore('OrganizationName', this.d365OnPremiseOrganizationName, DataStoreType.Private);
                 this.MS.DataStore.addToDataStore('ScribeDeploymentType', 'OnPremise', DataStoreType.Private);
             }
-            return true;
         } else {
-            let msCrmOrganization: MsCrmOrganization = this.msCrmOrganizations.find(o => o.OrganizationId === this.msCrmOrganizationId);
+            let msCrmOrganization: MsCrmOrganization = this.msCrmOrganizations.find(o => o.organizationId === this.msCrmOrganizationId);
 
             if (msCrmOrganization) {
-                this.MS.DataStore.addToDataStore('OrganizationId', msCrmOrganization.OrganizationId, DataStoreType.Public);
-                this.MS.DataStore.addToDataStore('OrganizationName', msCrmOrganization.OrganizationName, DataStoreType.Public);
-                this.MS.DataStore.addToDataStore('OrganizationUrl', msCrmOrganization.OrganizationUrl, DataStoreType.Public);
+                this.MS.DataStore.addToDataStore('OrganizationId', msCrmOrganization.organizationId, DataStoreType.Public);
+                this.MS.DataStore.addToDataStore('OrganizationName', msCrmOrganization.organizationName, DataStoreType.Public);
+                this.MS.DataStore.addToDataStore('OrganizationUrl', msCrmOrganization.organizationUrl, DataStoreType.Public);
 
-                let response2 = await this.MS.HttpService.executeAsync('Microsoft-CrmGetOrganization', {});
+                isSuccess = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-CrmGetOrganization');
 
-                if (!response2.IsSuccess) {
-                    return false;
-                }
+                if (isSuccess) {
+                    let subscriptionObject = this.subscriptionsList.find(x => x.SubscriptionId === this.selectedSubscriptionId);
+                    this.MS.DataStore.addToDataStore('SelectedSubscription', subscriptionObject, DataStoreType.Public);
+                    this.MS.DataStore.addToDataStore('SelectedResourceGroup', this.selectedResourceGroup, DataStoreType.Public);
 
-                let subscriptionObject = this.subscriptionsList.find(x => x.SubscriptionId === this.selectedSubscriptionId);
-                this.MS.DataStore.addToDataStore('SelectedSubscription', subscriptionObject, DataStoreType.Public);
-                this.MS.DataStore.addToDataStore('SelectedResourceGroup', this.selectedResourceGroup, DataStoreType.Public);
+                    let locationsResponse: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetLocations');
+                    if (locationsResponse.IsSuccess) {
+                        this.MS.DataStore.addToDataStore('SelectedLocation', locationsResponse.Body.value[5], DataStoreType.Public);
+                    }
 
-                let locationsResponse: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetLocations', {});
-                if (locationsResponse.IsSuccess) {
-                    this.MS.DataStore.addToDataStore('SelectedLocation', locationsResponse.Body.value[5], DataStoreType.Public);
-                }
+                    isSuccess = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-CreateResourceGroup');
 
-                let response = await this.MS.HttpService.executeAsync('Microsoft-CreateResourceGroup', {});
-
-                for (let i = 0; i < this.azureProviders.length; i++) {
-                    this.MS.DataStore.addToDataStore('AzureProvider', this.azureProviders[i], DataStoreType.Public);
-                    let responseRegister = await this.MS.HttpService.executeAsync('Microsoft-RegisterProvider', {});
-                    if (!responseRegister.IsSuccess) {
-                        return false;
+                    for (let i = 0; i < this.azureProviders.length && isSuccess; i++) {
+                        isSuccess = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-RegisterProvider', { AzureProvider: this.azureProviders[i] });
                     }
                 }
-
-                if (!response.IsSuccess) {
-                    return false;
-                }
-
-                return true;
-            } else {
-                return false;
             }
         }
+
+        return isSuccess;
     }
 
+    async onValidate(): Promise<boolean> {
+        this.onInvalidate();
 
+        this.MS.DataStore.addToDataStore('D365Username', this.d365Username, DataStoreType.Private);
+        this.MS.DataStore.addToDataStore('D365Password', this.d365Password, DataStoreType.Private);
+
+        if (!this.d365OnPremiseOrganizationName && !this.d365OnPremiseUrl) {
+            this.d365Organizations = await this.MS.HttpService.getResponseAsync('Microsoft-GetD365Organizations');
+
+            if (this.d365Organizations && this.d365Organizations.length > 0) {
+                this.d365OrganizationId = this.d365Organizations[0].id;
+                this.setValidated();
+            }
+        } else {
+            this.setValidated();
+        }
+
+        return this.isValidated;
+    }
 }

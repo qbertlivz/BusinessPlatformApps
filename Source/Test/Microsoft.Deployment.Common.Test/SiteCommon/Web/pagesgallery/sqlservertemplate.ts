@@ -37,8 +37,8 @@ export class SqlServerViewModel extends ViewModelBase {
         this.isValidated = false;
     }
 
-    Invalidate() {
-        super.Invalidate();
+    onInvalidate() {
+        super.onInvalidate();
         this.database = null;
         this.databases = [];
         this.onAuthChange();
@@ -52,8 +52,8 @@ export class SqlServerViewModel extends ViewModelBase {
     onDatabaseChange() {
     }
 
-    async OnValidate() {
-        super.OnValidate();
+    async onValidate() {
+        super.onValidate();
 
         this.sqlServer = this.sqlServer.toLowerCase();
 
@@ -109,7 +109,7 @@ export class SqlServerViewModel extends ViewModelBase {
         }
     }
 
-    async NavigatingNext(): Promise<boolean> {
+    async onNavigatingNext(): Promise<boolean> {
         let body = this.GetBody(true);
         let response = null;
         if (this.sqlInstance === 'ExistingSql') {
@@ -169,7 +169,7 @@ export class SqlServerViewModel extends ViewModelBase {
     }
 
     private GetBody(withDatabase: boolean) {
-        super.OnValidate();
+        super.onValidate();
         let body = {};
         body['SqlCredentials'] = {};
         body['SqlCredentials']['Server'] = this.getSqlServer();

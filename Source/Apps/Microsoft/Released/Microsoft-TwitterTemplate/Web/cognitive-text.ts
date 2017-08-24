@@ -7,7 +7,7 @@ export class CognitiveText extends ViewModelBase {
         this.isValidated = this.isTermsChecked;
     }
 
-    async OnLoaded(): Promise<void> {
-        this.isValidated = false;
+    async onLoaded(): Promise<void> {
+        this.isValidated = this.isTermsChecked;
     }
 }

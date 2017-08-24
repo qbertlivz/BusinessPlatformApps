@@ -24,41 +24,8 @@ export class Gettingstarted extends ViewModelBase {
     templateName: string = '';
     upgrade: boolean = false;
 
-    constructor() {
-        super();
-    }
-
-    async GetDownloadLink(): Promise<void> {
-        let response = await this.MS.HttpService.executeAsync('Microsoft-GetMsiDownloadLink');
-        if (this.registration.text) {
-            this.registration.download = response.Body.value;
-        } else {
-            this.downloadLink = response.Body.value;
-        }
-    }
-
-    async OnLoaded(): Promise<void> {
-        this.isValidated = true;
-
-        if (this.MS.HttpService.isOnPremise) {
-            this.selection.label = '';
-            this.selection.choice = this.selection.choiceDownload;
-            this.SelectionChanged();
-            let res = await this.MS.HttpService.executeAsync('Microsoft-CheckVersion');
-            if (res.Body === true) {
-                this.upgrade = res.Body;
-            }
-        }
-
-        if (this.isDownload) {
-            this.GetDownloadLink();
-        } else {
-            this.registration.text = '';
-        }
-    }
-
-    async Register(): Promise<void> {
-        this.MS.ErrorService.Clear();
+    async clickRegister(): Promise<void> {
+        this.MS.ErrorService.clear();
 
         this.registration.nameFirst = this.registration.nameFirst.trim();
         this.registration.nameLast = this.registration.nameLast.trim();
@@ -98,7 +65,37 @@ export class Gettingstarted extends ViewModelBase {
         }
     }
 
-    SelectionChanged(): void {
+    async getDownloadLink(): Promise<void> {
+        let response: any = await this.MS.HttpService.getExecuteResponseAsync('Microsoft-GetMsiDownloadLink');
+        if (this.registration.text) {
+            this.registration.download = response;
+        } else {
+            this.downloadLink = response;
+        }
+    }
+
+    async onLoaded(): Promise<void> {
+        this.isValidated = true;
+
+        if (this.MS.HttpService.isOnPremise) {
+            this.selection.label = '';
+            this.selection.choice = this.selection.choiceDownload;
+            this.selectionChanged();
+            this.upgrade = !!(await this.MS.HttpService.executeAsync('Microsoft-CheckVersion')).Body;
+        }
+
+        if (this.isDownload) {
+            this.getDownloadLink();
+        } else {
+            this.registration.text = '';
+        }
+    }
+
+    openNewMSILink(): void {
+        window.open("https://bpsolutiontemplates.com/?name=Microsoft-SCCMTemplate");
+    }
+
+    selectionChanged(): void {
         if (this.selection.choice === this.selection.choiceDownload) {
             this.isDownload = !this.MS.HttpService.isOnPremise;
             this.selection.list1Previous = this.list1;
@@ -106,16 +103,12 @@ export class Gettingstarted extends ViewModelBase {
             this.list1 = this.selection.list1;
             this.list2 = this.selection.list2;
             if (this.isDownload && !this.downloadLink) {
-                this.GetDownloadLink();
+                this.getDownloadLink();
             }
         } else {
             this.isDownload = false;
             this.list1 = this.selection.list1Previous;
             this.list2 = this.selection.list2Previous;
         }
-    }
-
-    OpenNewMSILink(): void {
-        window.open("https://bpsolutiontemplates.com/?name=Microsoft-SCCMTemplate");
     }
 }

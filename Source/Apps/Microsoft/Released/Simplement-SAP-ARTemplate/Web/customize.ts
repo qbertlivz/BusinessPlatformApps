@@ -6,7 +6,14 @@ export class Customize extends ViewModelBase {
     dailyTrigger: string = '2:00';
     dailyTriggers: string[] = [];
 
-    async NavigatingNext(): Promise<boolean> {
+    async onLoaded(): Promise<void> {
+        super.onLoaded();
+
+        this.dailyTriggers = this.MS.UtilityService.generateDailyTriggers();
+        this.useDefaultValidateButton = true;
+    }
+
+    async onNavigatingNext(): Promise<boolean> {
         this.MS.DataStore.addToDataStore('TaskDescription', 'Power BI Solution Template - Simplement SAP AR', DataStoreType.Public);
         this.MS.DataStore.addToDataStore('TaskDirectory', 'Simplement, Inc\\Solution Template AR', DataStoreType.Public);
         this.MS.DataStore.addToDataStore('TaskFile', 'Simplement.SolutionTemplate.AR.exe', DataStoreType.Public);
@@ -15,19 +22,11 @@ export class Customize extends ViewModelBase {
         this.MS.DataStore.addToDataStore('TaskProgram', 'cmd', DataStoreType.Public);
         this.MS.DataStore.addToDataStore('TaskStartTime', this.dailyTrigger, DataStoreType.Public);
 
-        return super.NavigatingNext();
+        return true;
     }
 
-    async OnLoaded(): Promise<void> {
-        this.dailyTriggers = this.MS.UtilityService.GenerateDailyTriggers();
-        this.isValidated = false;
-        this.useDefaultValidateButton = true;
-    }
-
-    async OnValidate(): Promise<boolean> {
-        super.OnValidate();
-        this.isValidated = true;
-        this.showValidation = true;
+    async onValidate(): Promise<boolean> {
+        this.setValidated();
         return this.isValidated;
     }
 }

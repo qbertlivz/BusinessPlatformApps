@@ -1,7 +1,7 @@
 ﻿<template bindable="viewmodel">
     <!-- Validation -->
     <p class="st-float" if.bind="viewmodel.useDefaultValidateButton">
-        <button class="primary" click.delegate="viewmodel.OnValidate()" disabled.bind="viewmodel.MS.HttpService.isServiceBusy" if.bind="!MS.HttpService.isServiceBusy">Validate</button>
+        <button class="primary" click.delegate="viewmodel.onValidate()" disabled.bind="viewmodel.MS.HttpService.isServiceBusy" if.bind="!MS.HttpService.isServiceBusy">Validate</button>
     </p>
 
     <p class="st-validated" if.bind="viewmodel.showValidation || viewmodel.MS.ErrorService.message">
@@ -29,8 +29,8 @@
 
     <!-- Navigation Buttons -->
     <p class="st-nav-buttons" if.bind="viewmodel && viewmodel.DeploymentService.NavigationService.templateName !== ''">
-        <button class="default st-buttons-back" click.delegate="viewmodel.NavigateBack()" disabled.bind="viewmodel.MS.HttpService.isServiceBusy" if.bind="viewmodel.showBack">Back</button>
-        <button class="primary" click.delegate="viewmodel.NavigateNext()" disabled.bind="!viewmodel.isValidated || viewmodel.MS.HttpService.isServiceBusy" if.bind="viewmodel.showNext && !viewmodel.isDownload">${viewmodel.textNext}</button>
+        <button class="default st-buttons-back" click.delegate="viewmodel.navigateBack()" disabled.bind="viewmodel.MS.HttpService.isServiceBusy" if.bind="viewmodel.showBack">Back</button>
+        <button class="primary" click.delegate="viewmodel.navigateNext()" disabled.bind="!viewmodel.isValidated || viewmodel.MS.HttpService.isServiceBusy" if.bind="viewmodel.showNext && !viewmodel.isDownload">${viewmodel.textNext}</button>
         <a target="_blank" href.bind="viewmodel.downloadLink" if.bind="viewmodel.isDownload && viewmodel.downloadLink">
             <button class="primary" disabled.bind="viewmodel.MS.HttpService.isServiceBusy">Download</button>
         </a>

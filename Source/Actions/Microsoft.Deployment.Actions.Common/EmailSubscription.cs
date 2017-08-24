@@ -18,7 +18,7 @@ namespace Microsoft.Deployment.Actions.Common
                 JsonUtility.GetWebToken(azureToken, "given_name"),
                 JsonUtility.GetWebToken(azureToken, "family_name"));
 
-            return new ActionResponse(ActionStatus.Invisible, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Invisible);
         }
     }
 }

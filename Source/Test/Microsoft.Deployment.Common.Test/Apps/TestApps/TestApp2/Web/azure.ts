@@ -10,7 +10,7 @@ export class Azure extends ViewModelBase {
     azureConnection = AzureConnection;
     azureDirectory: string = '';
     connectionType: AzureConnection = AzureConnection.Organizational;
-    selectedResourceGroup: string = `SolutionTemplate-${this.MS.UtilityService.GetUniqueId(5)}`;
+    selectedResourceGroup: string = `SolutionTemplate-${this.MS.UtilityService.getUniqueId(5)}`;
     selectedSubscriptionId: string = '';
     showAdvanced: boolean = false;
     subscriptionsList: any[] = [];
@@ -20,7 +20,7 @@ export class Azure extends ViewModelBase {
         this.isValidated = false;
     }
 
-    async OnLoaded() {
+    async onLoaded() {
         this.isValidated = false;
         this.showValidation = false;
         if (this.subscriptionsList.length > 0) {
@@ -29,7 +29,7 @@ export class Azure extends ViewModelBase {
         } else {
             let queryParam = this.MS.DataService.GetItem('queryUrl');
             if (queryParam) {
-                let token = this.MS.UtilityService.GetQueryParameterFromUrl('code', queryParam);
+                let token = this.MS.UtilityService.getQueryParameterFromUrl('code', queryParam);
                 var tokenObj = { code: token };
                 this.authToken = await this.MS.HttpService.Execute('Microsoft-GetAzureToken', tokenObj);
                 if (this.authToken.isSuccess) {
@@ -70,12 +70,12 @@ export class Azure extends ViewModelBase {
         window.location.href = response.response.value;
     }
 
-    async NavigatingNext(): Promise<boolean> {
+    async onNavigatingNext(): Promise<boolean> {
         let subscriptionObject = this.subscriptionsList.find(x => x.SubscriptionId === this.selectedSubscriptionId);
         this.MS.DataService.AddToDataStore('Azure', 'SelectedSubscription', subscriptionObject);
 
-        var uniqueId = this.MS.UtilityService.GetUniqueId(18);
-        var uniqueIdFunction = this.MS.UtilityService.GetUniqueId(18);
+        var uniqueId = this.MS.UtilityService.getUniqueId(18);
+        var uniqueIdFunction = this.MS.UtilityService.getUniqueId(18);
 
         this.MS.DataService.AddToDataStore('Azure', 'SelectedResourceGroup', this.selectedResourceGroup);
         this.MS.DataService.AddToDataStore('Azure', 'LogicAppHostingPlan', uniqueId);
@@ -94,6 +94,6 @@ export class Azure extends ViewModelBase {
             return false;
         }
 
-        return super.NavigatingNext();
+        return super.onNavigatingNext();
     }
 }

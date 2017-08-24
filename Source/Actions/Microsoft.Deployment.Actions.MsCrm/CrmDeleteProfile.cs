@@ -23,7 +23,7 @@
             string orgId = request.DataStore.GetValue("OrganizationId");
             string connectorUrl = request.DataStore.GetValue("ConnectorUrl");
 
-            string name = request.DataStore.GetValue("ProfileName") ?? "bpst-mscrm-profile";
+            string name = request.DataStore.GetValue("ProfileName") ?? Constants.CrmProfileName;
 
             AuthenticationHeaderValue bearer = new AuthenticationHeaderValue("Bearer", token);
             if (string.IsNullOrEmpty(connectorUrl))
@@ -40,7 +40,7 @@
                     await rc.Delete(MsCrmEndpoints.URL_PROFILES + "/" + p.Id);
             }
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
     }
 }

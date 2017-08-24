@@ -2,7 +2,7 @@
     "Install": {
         "Pages": [
             {
-                "architectureDiagram": "dist/Apps/Test/TemplateApps/Microsoft-NewsTemplateTest/Web/Images/newsarchdiagram.png",
+                "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-NewsTemplate/Web/Images/newsarchdiagram.png",
                 "displayname": "Getting Started",
                 "list1": [
                     "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",
@@ -39,7 +39,7 @@
             {
                 "displayname": "Source",
                 "isAzureSql": true,
-                "name": "$SiteCommon$/pages-gallery/sql-server.html",
+                "name": "$SiteCommon$/pages-gallery/sql.html",
                 "newSqlDatabase": "bingNews",
                 "showAzureSql": false,
                 "showNewSqlOption": "true",
@@ -51,15 +51,15 @@
                 "displayname": "Search Terms",
                 "name": "search-terms.html"
             },
-            //{
-            //    "displayname": "Bring Your Own Entities",
-            //    "name": "bring-your-own-entities.html"
-            //},
-            //{
-            //    "displayname": "Customize",
-            //    "name": "customize.html",
-            //    "skip": "$run(this.MS.DataStore.getValue('BringYourOwnEntities') === this.MS.Option.NO)"
-            //},
+            {
+                "displayname": "Bring Your Own Entities",
+                "name": "bring-your-own-entities.html"
+            },
+            {
+                "displayname": "Customize",
+                "name": "customize.html",
+                "skip": "$run(this.MS.DataStore.getValue('BringYourOwnEntities') === this.MS.Option.NO)"
+            },
             {
                 "displayname": "Summary",
                 "name": "$SiteCommon$/pages-gallery/summary.html",
@@ -77,9 +77,10 @@
                 ],
                 "displayname": "Deploy",
                 "downloadPbiText": "$translate(INIT_NEWS_DOWNLOAD)",
+                "enablePublishReport": "$run(this.MS.DataStore.getValue('ssasDisabled') === 'false')",
                 "filename": "$save('BingNewsTemplate.pbix')",
                 "name": "$SiteCommon$/pages-gallery/progress.html",
-                "uniqueId": "$save(this.MS.UtilityService.GetUniqueId(8))"
+                "uniqueId": "$save(this.MS.UtilityService.getUniqueId(8))"
             }
         ],
 
@@ -89,6 +90,11 @@
                 "name": "Microsoft-DeploySQLScripts",
                 "SqlScriptsFolder": "Service/Database/",
                 "SqlServerIndex": "0"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_POPULATE_NEWS_ENTITIES)",
+                "name": "Microsoft-PopulateUserDefinedEntities",
+                "skip": "$run(this.MS.DataStore.getValue('BringYourOwnEntities') === this.MS.Option.NO)"
             },
             {
                 "CognitiveServiceName": "TextCognitiveService",
@@ -127,7 +133,8 @@
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_NEWS)",
                 "FunctionName": "$save('function' + this.MS.DataStore.getValue('uniqueId'))",
                 "name": "Microsoft-DeployAzureFunction",
-                "RepoUrl": "https://github.com/juluczni/AzureFunctionsNewsTemplate"
+                "RepoUrl": "https://github.com/juluczni/AzureFunctionsNewsTemplate",
+                "Branch": "newsbranch"
             },
             {
                 "DeploymentName": "Function",

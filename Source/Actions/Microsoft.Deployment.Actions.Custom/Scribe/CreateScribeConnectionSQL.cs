@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Globalization;
 using System.Threading.Tasks;
-
-using Newtonsoft.Json;
 
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
@@ -16,7 +13,6 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
     public class CreateScribeConnectionSql : BaseAction
     {
         private const string CONNECTOR_ID = "AC103458-FCB6-41D3-94A0-43D25B4F4FF4";
-        private const string URL_CONNECTIONS = "/v1/orgs/{0}/connections";
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
@@ -55,9 +51,9 @@ namespace Microsoft.Deployment.Actions.Custom.Scribe
             kvp = new ScribeKeyValue { Key = "Password", Value = ScribeUtility.AesEncrypt(apiToken, request.DataStore.GetValue("Password")) };
             connection.Properties.Add(kvp);
 
-            await rc.Post(string.Format(CultureInfo.InvariantCulture, URL_CONNECTIONS, orgId), JsonConvert.SerializeObject(connection, Formatting.Indented), null);
+            await rc.Post(string.Format(ScribeUtility.URL_CONNECTIONS, orgId), JsonUtility.Serialize(connection), null);
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
     }
 }

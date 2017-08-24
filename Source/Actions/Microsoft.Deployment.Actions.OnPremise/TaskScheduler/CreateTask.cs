@@ -50,6 +50,11 @@ namespace Microsoft.Deployment.Actions.OnPremise.TaskScheduler
                 {
                     if (task.Name.EqualsIgnoreCase(taskName))
                     {
+                        if (task.State == TaskState.Running || task.State == TaskState.Queued)
+                        {
+                            task.Stop();
+                            NTHelper.KillProcess("azurebcp");
+                        }
                         ts.RootFolder.DeleteTask(taskName);
                     }
                 }
@@ -91,7 +96,7 @@ namespace Microsoft.Deployment.Actions.OnPremise.TaskScheduler
                 ts.RootFolder.RegisterTaskDefinition(taskName, td, TaskCreation.CreateOrUpdate, taskUsername, taskPassword, TaskLogonType.Password, null);
             }
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
     }
 }

@@ -11,16 +11,31 @@ go
 *************************************/
 
 -- Scribe needs to recreate these tables, however the fields we needed in the views will still be present
-DROP TABLE dbo.account;
-DROP TABLE dbo.businessunit;
-DROP TABLE dbo.lead;
-DROP TABLE dbo.opportunity;
-DROP TABLE dbo.opportunityproduct;
-DROP TABLE dbo.systemuser;
-DROP TABLE dbo.systemusermanagermap;
-DROP TABLE dbo.territory;
-DROP TABLE dbo.scribe_replicationstatus;
-DROP TABLE dbo.product;
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='dbo' AND TABLE_NAME='account' AND TABLE_TYPE='BASE TABLE')
+    DROP TABLE dbo.account;
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='dbo' AND TABLE_NAME='businessunit' AND TABLE_TYPE='BASE TABLE')
+    DROP TABLE dbo.businessunit;
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='dbo' AND TABLE_NAME='lead' AND TABLE_TYPE='BASE TABLE')
+    DROP TABLE dbo.lead;
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='dbo' AND TABLE_NAME='opportunity' AND TABLE_TYPE='BASE TABLE')
+    DROP TABLE dbo.opportunity;
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='dbo' AND TABLE_NAME='opportunityproduct' AND TABLE_TYPE='BASE TABLE')
+    DROP TABLE dbo.opportunityproduct;
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='dbo' AND TABLE_NAME='product' AND TABLE_TYPE='BASE TABLE')
+    DROP TABLE dbo.product;
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='dbo' AND TABLE_NAME='team' AND TABLE_TYPE='BASE TABLE')
+    DROP TABLE dbo.team;
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='dbo' AND TABLE_NAME='systemuser' AND TABLE_TYPE='BASE TABLE')
+    DROP TABLE dbo.systemuser;
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='dbo' AND TABLE_NAME='systemusermanagermap' AND TABLE_TYPE='BASE TABLE')
+    DROP TABLE dbo.systemusermanagermap;
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='dbo' AND TABLE_NAME='territory' AND TABLE_TYPE='BASE TABLE')
+    DROP TABLE dbo.territory;
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='dbo' AND TABLE_NAME='scribe_replicationstatus' AND TABLE_TYPE='BASE TABLE')
+    DROP TABLE dbo.scribe_replicationstatus;
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='dbo' AND TABLE_NAME='DeleteLog' AND TABLE_TYPE='BASE TABLE')
+    DROP TABLE dbo.DeleteLog;
+
 /************************************
 * Tables to truncate                *
 *************************************/

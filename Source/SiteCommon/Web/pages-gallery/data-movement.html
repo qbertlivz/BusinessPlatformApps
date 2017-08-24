@@ -17,6 +17,12 @@
         </div>
     </div>
 
+    <div if.bind="dataMovement == dataMovementType.D365">
+        <div class="st-float st-text">
+            <p>${MS.Translate.DATA_MOVEMENT_D365_DESCRIPTION}</p>
+        </div>
+    </div>
+
     <div if.bind="dataMovement != dataMovementType.ADF && dataMovement != dataMovementType.D365">
         <div if.bind="dataMovement == dataMovementType.Informatica">
             <div class="st-float st-text">
@@ -35,13 +41,13 @@
 
         <div class="st-float">
             <p class="st-text">${MS.Translate.DATA_MOVEMENT_USERNAME}</p>
-            <input class="st-input" type="text" change.delegate="Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="username" />
+            <input class="st-input" type="text" change.delegate="onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="username" />
 
             <p class="st-text">${MS.Translate.DATA_MOVEMENT_PASSWORD}</p>
-            <input class="st-input" type="password" change.delegate="Invalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="password" />
+            <input class="st-input" type="password" change.delegate="onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="password" />
         </div>
 
-        <button class="primary st-float" click.trigger="OnValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_LOGIN}</button>
+        <button class="primary st-float" click.trigger="onValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_LOGIN}</button>
 
         <div class="st-float" if.bind="informaticaAgents && informaticaAgents.length > 0">
             <p class="st-text">${MS.Translate.DATA_MOVEMENT_INFORMATICA_AGENT}</p>

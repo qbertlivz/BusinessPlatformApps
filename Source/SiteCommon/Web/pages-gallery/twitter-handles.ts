@@ -7,39 +7,15 @@ export class TwitterHandles extends ViewModelBase {
     twitterHandleId: string = '';
     twitterHandleName: string = '';
 
-    constructor() {
-        super();
+    async onInvalidate(): Promise<void> {
+        this.isValidated = !this.accounts;
     }
 
-    async OnLoaded(): Promise<void> {
-        this.isValidated = true;
-        this.showValidation = false;
+    async onLoaded(): Promise<void> {
+        this.setValidated(false);
     }
 
-    async OnValidate(): Promise<boolean> {
-        let body: any = {};
-        body.Accounts = this.accounts;
-        let response = await this.MS.HttpService.executeAsync('Microsoft-ValidateTwitterAccount', body);
-        if (response.IsSuccess) {
-            this.isValidated = true;
-            this.showValidation = true;
-            this.twitterHandleName = response.Body.twitterHandle;
-            this.twitterHandleId = response.Body.twitterHandleId;
-        }
-
-        this.MS.DataStore.addToDataStore('TwitterHandles', this.accounts, DataStoreType.Public);
-
-        return response.IsSuccess;
-    }
-
-    async Invalidate(): Promise<void> {
-        super.Invalidate();
-        if (!this.accounts) {
-            this.isValidated = true;
-        }
-    }
-
-    async NavigatingNext(): Promise<boolean> {
+    async onNavigatingNext(): Promise<boolean> {
         this.MS.DataStore.addToDataStoreWithCustomRoute('c1', 'SqlGroup', 'SolutionTemplate', DataStoreType.Public);
         this.MS.DataStore.addToDataStoreWithCustomRoute('c1', 'SqlSubGroup', 'Twitter', DataStoreType.Public);
         this.MS.DataStore.addToDataStoreWithCustomRoute('c1', 'SqlEntryName', 'twitterHandle', DataStoreType.Public);
@@ -50,6 +26,20 @@ export class TwitterHandles extends ViewModelBase {
         this.MS.DataStore.addToDataStoreWithCustomRoute('c2', 'SqlEntryName', 'twitterHandleId', DataStoreType.Public);
         this.MS.DataStore.addToDataStoreWithCustomRoute('c2', 'SqlEntryValue', this.twitterHandleId, DataStoreType.Public);
 
-        return super.NavigatingNext();
+        return true;
+    }
+
+    async onValidate(): Promise<boolean> {
+        let response = await this.MS.HttpService.executeAsync('Microsoft-ValidateTwitterAccount', { Accounts: this.accounts });
+        if (response.IsSuccess) {
+            this.isValidated = true;
+            this.showValidation = true;
+            this.twitterHandleName = response.Body.twitterHandle;
+            this.twitterHandleId = response.Body.twitterHandleId;
+        }
+
+        this.MS.DataStore.addToDataStore('TwitterHandles', this.accounts, DataStoreType.Public);
+
+        return this.isValidated;
     }
 }

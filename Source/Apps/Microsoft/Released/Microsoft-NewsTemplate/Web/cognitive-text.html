@@ -1,4 +1,6 @@
 ﻿<template>
+    <require from="../../../../../SiteCommon/Web/templates/bpst-link.html"></require>
+
     <h1 class="st-title">${MS.Translate.COGNITIVE_SERVICES_TITLE}</h1>
     <p class="st-subtitle">${MS.Translate.COGNITIVE_SERVICES_SUBTITLE}</p>
 
@@ -10,12 +12,12 @@
     </p>
 
     <p class="st-privacy smallFontSize">
-        <span>${MS.Translate.COGNITIVE_SERVICES_PRIVACY_1_A}</span>
-        <a href.bind="MS.Translate.COGNITIVE_SERVICES_TERMS_LINK" target="_blank">${MS.Translate.COGNITIVE_SERVICES_TERMS}</a>
-        <span>${MS.Translate.COGNITIVE_SERVICES_PRIVACY_1_B}</span>
-        <a href="https://aka.ms/r1j7jq" target="_blank">${MS.Translate.COMMON_HERE}</a>
+        <bpst-link a-description="${MS.Translate.COGNITIVE_SERVICES_PRIVACY_1_A}" a-link="${MS.Translate.COGNITIVE_SERVICES_TERMS_LINK}" a-link-text="${MS.Translate.COGNITIVE_SERVICES_TERMS}"></bpst-link>
+        <bpst-link a-description="${MS.Translate.COGNITIVE_SERVICES_PRIVACY_1_B}" a-link="${MS.Translate.COGNITIVE_SERVICES_TERMS_LINK2}" a-link-text="${MS.Translate.COMMON_HERE}"></bpst-link>
         <span>${MS.Translate.COGNITIVE_SERVICES_PRIVACY_1_C}</span>
     </p>
 
-    <p class="st-privacy smallFontSize">${MS.Translate.COGNITIVE_SERVICES_PRIVACY_2}</p>
+    <p class="st-privacy smallFontSize">
+        <bpst-link a-description="${MS.Translate.COGNITIVE_SERVICES_PRIVACY_2_A}" a-link="${MS.Translate.COGNITIVE_SERVICES_TERMS_LINK}" a-link-text="${MS.Translate.COMMON_HERE}" a-description2="${MS.Translate.COGNITIVE_SERVICES_PRIVACY_2_B}"></bpst-link>
+    </p>
 </template>

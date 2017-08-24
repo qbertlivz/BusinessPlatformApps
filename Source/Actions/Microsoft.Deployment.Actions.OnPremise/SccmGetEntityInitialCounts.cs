@@ -54,7 +54,7 @@ namespace Microsoft.Deployment.Actions.OnPremise
 
             SqlParameter[] parameters = new SqlParameter[] { new SqlParameter("retention", GetRetentionDays()) };
 
-            DataTable count = SqlUtility.RunCommand(connectionStringSrc, cmd, SqlCommandType.ExecuteWithData);
+            DataTable count = SqlUtility.RunCommand(connectionStringSrc, cmd, SqlCommandType.ExecuteWithData, parameters);
 
             return Convert.ToInt32(count.Rows[0][0]);
         }

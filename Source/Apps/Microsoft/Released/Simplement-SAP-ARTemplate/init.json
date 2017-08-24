@@ -41,7 +41,7 @@
             {
                 "displayname": "Login",
                 "name": "$SiteCommon$/pages-gallery/windows-auth.html",
-                "onValidate": [
+                "onValidateActions": [
                     {
                         "name": "Microsoft-ValidateAdminPrivileges"
                     },
@@ -62,14 +62,10 @@
             {
                 "credentialTarget": "Simplement.SolutionTemplate.AR.SQL",
                 "displayname": "Target",
-                "name": "$SiteCommon$/pages-gallery/sql-server.html",
+                "name": "$SiteCommon$/pages-gallery/sql.html",
                 "onNext": [
                     {
                         "name": "Microsoft-WriteSAPJson"
-                    },
-                    {
-                        "name": "Microsoft-CheckSQLVersion",
-                        "useImpersonation": true
                     }
                 ],
                 "subtitle": "$translate(INIT_SQL_SUBTITLE)",
@@ -81,8 +77,10 @@
                 "name": "customize.html"
             },
             {
+                "displayCompletionNotification": false,
                 "displayname": "Summary",
                 "name": "$SiteCommon$/pages-gallery/summary.html",
+                "sendCompletionNotification": false,
                 "values": {
                     "Target Server": "$(this.MS.DataStore.getValue('Server'))",
                     "Target Database": "$(this.MS.DataStore.getValue('Database'))",
@@ -90,6 +88,9 @@
                 }
             },
             {
+                "datastoreEntriesToValidate": [
+                    "ImpersonationPassword"
+                ],
                 "displayname": "Progress",
                 "filename": "$save('SAPSolutionTemplate.pbix')",
                 "finishedActionName": "Microsoft-GetTaskStatus",
@@ -121,7 +122,6 @@
             {
                 "displayname": "$translate(INIT_ACTION_WAITING_DATA)",
                 "FinishedActionName": "Microsoft-GetTaskStatus",
-                "IsWaiting": true,
                 "name": "Microsoft-GetDataPullStatus",
                 "SqlServerIndex": 0,
                 "TargetSchema": "sap",
@@ -132,17 +132,6 @@
 
     "Uninstall": {
         "Pages": [
-            {
-                "architectureDiagram": "dist/Apps/Microsoft/Released/Simplement-SAP-ARTemplate/Web/Images/sap-accounts-receivable.png",
-                "displayname": "Uninstall",
-                "isDownload": "$(!this.MS.HttpService.isOnPremise)",
-                "name": "$SiteCommon$/pages-gallery/uninstall.html",
-                "templateName": "$translate(INIT_SAP_TITLE)",
-                "uninstallList": [
-                    "$translate(INIT_UNINSTALL_SAP)",
-                    "$translate(INIT_UNINSTALL_SQL)"
-                ]
-            },
             {
                 "displayname": "Uninstall Progress",
                 "isUninstall": true,

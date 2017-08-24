@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
 
@@ -23,6 +24,8 @@ namespace Microsoft.Deployment.Actions.Custom.Informatica
             string password = request.DataStore.GetValue("InformaticaPassword");
             RestClient rc = await InformaticaUtility.Initialize(username, password);
 
+            List<string> entities = JsonUtility.DeserializeEntities(request.DataStore.GetValue("Entities"), request.DataStore.GetValue("AdditionalObjects"));
+
             InformaticaTask task = new InformaticaTask
             {
                 BulkApi = true,
@@ -30,7 +33,7 @@ namespace Microsoft.Deployment.Actions.Custom.Informatica
                 TargetConnectionId = await InformaticaUtility.GetConnectionId(rc, InformaticaUtility.BPST_TARGET_NAME),
                 Name = InformaticaUtility.BPST_TASK_NAME,
                 OrgId = rc.ID,
-                ReplicationObjects = request.DataStore.GetValue("Entities").Split(new[] { ',', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries),
+                ReplicationObjects = entities.ToArray(),
                 ScheduleId = await CreateSchedule(rc, "PBI_" + Guid.NewGuid().ToString("N"))
             };
 
@@ -38,7 +41,7 @@ namespace Microsoft.Deployment.Actions.Custom.Informatica
 
             await InformaticaUtility.Logout(rc, username, password);
 
-            return new ActionResponse(ActionStatus.Success, JsonUtility.GetEmptyJObject());
+            return new ActionResponse(ActionStatus.Success);
         }
 
         private async Task<string> CreateSchedule(RestClient rc, string name)

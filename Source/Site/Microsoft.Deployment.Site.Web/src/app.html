@@ -7,7 +7,7 @@
         <span>${MS.Translate.APP_MICROSOFT}</span>
         <span class="st-header-bar">|</span>
         <span>${MS.Translate.APP_POWER_BI}</span>
-        <span class="glyphicon pbi-glyph-close glyph-small st-close" click.trigger="MS.HttpService.Close()" if.bind="MS.HttpService.isOnPremise"></span>
+        <span class="glyphicon pbi-glyph-close glyph-small st-close" click.trigger="MS.HttpService.close()" if.bind="MS.HttpService.isOnPremise"></span>
     </div>
     <div class="st-content regularFont">
         <nav-bar router.bind="MS.NavigationService" viewmodel.bind="MS.NavigationService.currentViewModel"></nav-bar>

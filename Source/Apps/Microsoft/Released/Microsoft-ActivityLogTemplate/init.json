@@ -31,6 +31,11 @@
                 "defaultLocation": "5",
                 "displayname": "Login",
                 "name": "$SiteCommon$/pages-gallery/azure-login.html",
+                "onNext": [
+                    {
+                        "name": "Microsoft-ValidateLogProfile"
+                    }
+                ],
                 "pricingCalculatorUrl": "$translate(INIT_NEWS_PRICING_CALCULATOR)",
                 "pricingCost": "$translate(INIT_AAL_PRICING_COST)",
                 "pricingUrl": "$translate(INIT_AAL_PRICING_URL)"

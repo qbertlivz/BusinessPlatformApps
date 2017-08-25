@@ -10,6 +10,7 @@ using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 
 using ResourceManagementClient = Microsoft.Azure.Management.Resources.ResourceManagementClient;
+using Microsoft.Deployment.Common;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.Arm
 {
@@ -27,9 +28,9 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Arm
             SubscriptionCloudCredentials creds = new TokenCloudCredentials(subscription, azureToken);
             ResourceManagementClient client = new ResourceManagementClient(creds);
 
-            while (true)
+            for(;;)
             {
-                Thread.Sleep(5000);
+                Thread.Sleep(Constants.ACTION_WAIT_INTERVAL);
                 var status = await client.Deployments.GetAsync(resourceGroup, deploymentName, new CancellationToken());
                 var operations = await client.DeploymentOperations.ListAsync(resourceGroup, deploymentName, new DeploymentOperationsListParameters(), new CancellationToken());
                 var provisioningState = status.Deployment.Properties.ProvisioningState;

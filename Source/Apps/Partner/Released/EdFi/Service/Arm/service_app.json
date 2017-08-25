@@ -15,13 +15,6 @@
         "sqlServerProductionApiPassword": {
             "type": "securestring"
         },
-        "sqlServerSandboxApiLogin": {
-            "type": "string",
-            "defaultValue": "EdFiOdsSandboxApi"
-        },
-        "sqlServerSandboxApiPassword": {
-            "type": "securestring"
-        },
         "version": {
             "type": "string"
         },
@@ -48,42 +41,21 @@
         },
         "adminDatabaseSettings": {
             "name": "EdFi_Admin",
-            "collation": "SQL_Latin1_General_CP1_CI_AS",
+            "collation": "Latin1_General_100_CI_AS",
             "maxSizeBytes": "[variables('sqlMaxSizeBytes_Standard')]",
             "edition": "Standard",
             "requestedServiceObjectiveName": "S2"
         },
         "securityDatabaseSettings": {
             "name": "EdFi_Security",
-            "collation": "SQL_Latin1_General_CP1_CI_AS",
+            "collation": "Latin1_General_100_CI_AS",
             "maxSizeBytes": "[variables('sqlMaxSizeBytes_Standard')]",
             "edition": "Standard",
             "requestedServiceObjectiveName": "S2"
         },
         "productionOdsDatabaseSettings": {
             "name": "EdFi_Ods_Production",
-            "collation": "SQL_Latin1_General_CP1_CI_AS",
-            "maxSizeBytes": "[variables('sqlMaxSizeBytes_Standard')]",
-            "edition": "Standard",
-            "requestedServiceObjectiveName": "S1"
-        },
-        "sandboxOdsDatabaseSettings": {
-            "name": "EdFi_Ods_Sandbox",
-            "collation": "SQL_Latin1_General_CP1_CI_AS",
-            "maxSizeBytes": "[variables('sqlMaxSizeBytes_Standard')]",
-            "edition": "Standard",
-            "requestedServiceObjectiveName": "S2"
-        },
-        "minimalTemplateDatabaseSettings": {
-            "name": "EdFi_Ods_Minimal_Template",
-            "collation": "SQL_Latin1_General_CP1_CI_AS",
-            "maxSizeBytes": "[variables('sqlMaxSizeBytes_Standard')]",
-            "edition": "Standard",
-            "requestedServiceObjectiveName": "S1"
-        },
-        "populatedTemplateDatabaseSettings": {
-            "name": "EdFi_Ods_Populated_Template",
-            "collation": "SQL_Latin1_General_CP1_CI_AS",
+            "collation": "Latin1_General_100_CI_AS",
             "maxSizeBytes": "[variables('sqlMaxSizeBytes_Standard')]",
             "edition": "Standard",
             "requestedServiceObjectiveName": "S1"
@@ -94,14 +66,6 @@
             "apiWebsiteName": "[concat('EdFiOdsApiWebSite-Production-', uniqueString(resourceGroup().id))]",
             "sqlLogin": "[parameters('sqlServerProductionApiLogin')]",
             "sqlPassword": "[parameters('sqlServerProductionApiPassword')]"
-        },
-        "sandboxWebsiteSettings": {
-            "hostingPlanName": "Ed-Fi-Sandbox-Websites",
-            "pricingTier": "S1",
-            "apiWebsiteName": "[concat('EdFiOdsApiWebSite-Sandbox-', uniqueString(resourceGroup().id))]",
-            "swaggerWebsiteName": "[concat('EdFiOdsSwaggerWebSite-Sandbox-', uniqueString(resourceGroup().id))]",
-            "sqlLogin": "[parameters('sqlServerSandboxApiLogin')]",
-            "sqlPassword": "[parameters('sqlServerSandboxApiPassword')]"
         },
         "odsEmptyBacpacUrl": "[concat(variables('odsAssetsBaseurl'), 'EdFi_Ods.bacpac')]",
         "odsMinimalBacpacUrl": "[concat(variables('odsAssetsBaseurl'), 'EdFi_Ods_Minimal_Template.bacpac')]",
@@ -239,150 +203,6 @@
                     ]
                 },
                 {
-                    "name": "[variables('sandboxOdsDatabaseSettings').name]",
-                    "type": "databases",
-                    "location": "[resourceGroup().location]",
-                    "tags": {
-                        "displayName": "EdFi ODS Sandbox Database"
-                    },
-                    "apiVersion": "2014-04-01-preview",
-                    "dependsOn": [
-                        "[variables('sqlServerSettings').name]"
-                    ],
-                    "properties": {
-                        "edition": "[variables('sandboxOdsDatabaseSettings').edition]",
-                        "collation": "[variables('sandboxOdsDatabaseSettings').collation]",
-                        "maxSizeBytes": "[variables('sandboxOdsDatabaseSettings').maxSizeBytes]",
-                        "requestedServiceObjectiveName": "[variables('sandboxOdsDatabaseSettings').requestedServiceObjectiveName]"
-                    },
-                    "resources": [
-                        {
-                            "name": "Import",
-                            "type": "extensions",
-                            "apiVersion": "2014-04-01-preview",
-                            "dependsOn": [
-                                "[concat('Microsoft.Sql/servers/', variables('sqlServerSettings').name, '/databases/', variables('sandboxOdsDatabaseSettings').name)]"
-                            ],
-                            "properties": {
-                                "storageUri": "[variables('odsPopulatedBacpacUrl')]",
-                                "administratorLogin": "[variables('sqlServerSettings').administratorLogin]",
-                                "administratorLoginPassword": "[variables('sqlServerSettings').administratorLoginPassword]",
-                                "operationMode": "Import",
-                                "storageKey": "?",
-                                "storageKeyType": "SharedAccessKey"
-                            }
-                        },
-                        {
-                            "name": "current",
-                            "type": "transparentDataEncryption",
-                            "dependsOn": [
-                                "[variables('sandboxOdsDatabaseSettings').name]"
-                            ],
-                            "location": null,
-                            "apiVersion": "2014-04-01",
-                            "properties": {
-                                "status": "Enabled"
-                            }
-                        }
-                    ]
-                },
-                {
-                    "name": "[variables('minimalTemplateDatabaseSettings').name]",
-                    "type": "databases",
-                    "location": "[resourceGroup().location]",
-                    "tags": {
-                        "displayName": "Minimal Template Database"
-                    },
-                    "apiVersion": "2014-04-01-preview",
-                    "dependsOn": [
-                        "[variables('sqlServerSettings').name]"
-                    ],
-                    "properties": {
-                        "collation": "[variables('minimalTemplateDatabaseSettings').collation]",
-                        "edition": "[variables('minimalTemplateDatabaseSettings').edition]",
-                        "maxSizeBytes": "[variables('minimalTemplateDatabaseSettings').maxSizeBytes]",
-                        "requestedServiceObjectiveName": "[variables('minimalTemplateDatabaseSettings').requestedServiceObjectiveName]"
-                    },
-                    "resources": [
-                        {
-                            "name": "Import",
-                            "type": "extensions",
-                            "apiVersion": "2014-04-01-preview",
-                            "dependsOn": [
-                                "[concat('Microsoft.Sql/servers/', variables('sqlServerSettings').name, '/databases/', variables('minimalTemplateDatabaseSettings').name)]"
-                            ],
-                            "properties": {
-                                "storageUri": "[variables('odsMinimalBacpacUrl')]",
-                                "administratorLogin": "[variables('sqlServerSettings').administratorLogin]",
-                                "administratorLoginPassword": "[variables('sqlServerSettings').administratorLoginPassword]",
-                                "operationMode": "Import",
-                                "storageKey": "?",
-                                "storageKeyType": "SharedAccessKey"
-                            }
-                        },
-                        {
-                            "name": "current",
-                            "type": "transparentDataEncryption",
-                            "dependsOn": [
-                                "[variables('minimalTemplateDatabaseSettings').name]"
-                            ],
-                            "location": null,
-                            "apiVersion": "2014-04-01",
-                            "properties": {
-                                "status": "Enabled"
-                            }
-                        }
-                    ]
-                },
-                {
-                    "name": "[variables('populatedTemplateDatabaseSettings').name]",
-                    "type": "databases",
-                    "location": "[resourceGroup().location]",
-                    "tags": {
-                        "displayName": "Populated Template Database"
-                    },
-                    "apiVersion": "2014-04-01-preview",
-                    "dependsOn": [
-                        "[variables('sqlServerSettings').name]"
-                    ],
-                    "properties": {
-                        "collation": "[variables('populatedTemplateDatabaseSettings').collation]",
-                        "edition": "[variables('populatedTemplateDatabaseSettings').edition]",
-                        "maxSizeBytes": "[variables('populatedTemplateDatabaseSettings').maxSizeBytes]",
-                        "requestedServiceObjectiveName": "[variables('populatedTemplateDatabaseSettings').requestedServiceObjectiveName]"
-                    },
-                    "resources": [
-                        {
-                            "name": "Import",
-                            "type": "extensions",
-                            "apiVersion": "2014-04-01-preview",
-                            "dependsOn": [
-                                "[concat('Microsoft.Sql/servers/', variables('sqlServerSettings').name, '/databases/', variables('populatedTemplateDatabaseSettings').name)]"
-                            ],
-                            "properties": {
-                                "storageUri": "[variables('odspopulatedBacpacUrl')]",
-                                "administratorLogin": "[variables('sqlServerSettings').administratorLogin]",
-                                "administratorLoginPassword": "[variables('sqlServerSettings').administratorLoginPassword]",
-                                "operationMode": "Import",
-                                "storageKey": "?",
-                                "storageKeyType": "SharedAccessKey"
-                            }
-                        },
-                        {
-                            "name": "current",
-                            "type": "transparentDataEncryption",
-                            "dependsOn": [
-                                "[variables('populatedTemplateDatabaseSettings').name]"
-                            ],
-                            "location": null,
-                            "apiVersion": "2014-04-01",
-                            "properties": {
-                                "status": "Enabled"
-                            }
-                        }
-                    ]
-                },
-                {
                     "type": "firewallrules",
                     "apiVersion": "2014-04-01-preview",
                     "dependsOn": [
@@ -504,169 +324,6 @@
             ]
         },
         {
-            "apiVersion": "2015-08-01",
-            "name": "[variables('sandboxWebsiteSettings').hostingPlanName]",
-            "type": "Microsoft.Web/serverfarms",
-            "location": "[resourceGroup().location]",
-            "tags": {
-                "displayName": "Sandbox Web Hosting Plan"
-            },
-            "sku": {
-                "name": "[variables('sandboxWebsiteSettings').pricingTier]",
-                "capacity": 1
-            },
-            "properties": {
-                "name": "[variables('sandboxWebsiteSettings').hostingPlanName]"
-            },
-            "dependsOn": [
-                "[concat('Microsoft.Web/serverFarms/', variables('productionWebsiteSettings').hostingPlanName)]"
-            ]
-        },
-        {
-            "apiVersion": "2015-08-01",
-            "name": "[variables('sandboxWebsiteSettings').apiWebsiteName]",
-            "type": "Microsoft.Web/sites",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[concat('Microsoft.Web/serverFarms/', variables('sandboxWebsiteSettings').hostingPlanName)]"
-            ],
-            "tags": {
-                "[concat('hidden-related:', resourceId('Microsoft.Web/serverfarms/', variables('sandboxWebsiteSettings').hostingPlanName))]": "empty",
-                "displayName": "Sandbox API Website",
-                "Cloud-Ods-Role": "Api",
-                "Cloud-Ods-Environment": "Sandbox"
-            },
-            "properties": {
-                "name": "[variables('sandboxWebsiteSettings').apiWebsiteName]",
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('sandboxWebsiteSettings').hostingPlanName)]",
-                "siteConfig": {
-                    "AlwaysOn": true
-                }
-            },
-            "resources": [
-                {
-                    "apiVersion": "2015-08-01",
-                    "type": "config",
-                    "name": "connectionstrings",
-                    "dependsOn": [
-                        "[concat('Microsoft.Web/sites/', variables('sandboxWebsiteSettings').apiWebsiteName)]",
-                        "[concat('Microsoft.Web/sites/', variables('sandboxWebsiteSettings').apiWebsiteName, '/extensions/MSDeploy')]",
-                        "[concat('Microsoft.Sql/servers/', variables('sqlServerSettings').name)]"
-                    ],
-                    "properties": {
-                        "EdFi_Ods": {
-                            "value": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', variables('sqlServerSettings').name)).fullyQualifiedDomainName, ',1433;Initial Catalog=', variables('sandboxOdsDatabaseSettings').name,';User Id=\"', variables('sandboxWebsiteSettings').sqlLogin, '@', variables('sqlServerSettings').name, '\";Password=\"', variables('sandboxWebsiteSettings').sqlPassword, '\";')]",
-                            "type": "SQLServer"
-                        },
-                        "EdFi_Admin": {
-                            "value": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', variables('sqlServerSettings').name)).fullyQualifiedDomainName, ',1433;Initial Catalog=EdFi_Admin;User Id=\"', variables('sandboxWebsiteSettings').sqlLogin, '@', variables('sqlServerSettings').name, '\";Password=\"', variables('sandboxWebsiteSettings').sqlPassword, '\";')]",
-                            "type": "SQLServer"
-                        },
-                        "EdFi_Security": {
-                            "value": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', variables('sqlServerSettings').name)).fullyQualifiedDomainName, ',1433;Initial Catalog=EdFi_Security;User Id=\"', variables('sandboxWebsiteSettings').sqlLogin, '@', variables('sqlServerSettings').name, '\";Password=\"', variables('sandboxWebsiteSettings').sqlPassword, '\";')]",
-                            "type": "SQLServer"
-                        },
-                        "EdFi_Master": {
-                            "value": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', variables('sqlServerSettings').name)).fullyQualifiedDomainName, ',1433;Initial Catalog=master;User Id=\"', variables('sandboxWebsiteSettings').sqlLogin, '@', variables('sqlServerSettings').name, '\";Password=\"', variables('sandboxWebsiteSettings').sqlPassword, '\";')]",
-                            "type": "SQLServer"
-                        }
-                    }
-                },
-                {
-                    "apiVersion": "2015-08-01",
-                    "type": "config",
-                    "name": "appsettings",
-                    "dependsOn": [
-                        "[concat('Microsoft.Web/sites/', variables('sandboxWebsiteSettings').apiWebsiteName)]",
-                        "[concat('Microsoft.Web/sites/', variables('sandboxWebsiteSettings').apiWebsiteName, '/extensions/MSDeploy')]"
-                    ],
-                    "properties": {
-                        "owin:appStartup": "AzureCloudOds",
-                        "PreserveLoginUrl": "true",
-                        "DescriptorNamespacePrefix": "http://ed-fi.org",
-                        "BearerTokenTimeoutInMinutes": "15",
-                        "LogLevelOverride": "INFO"
-                    }
-                },
-                {
-                    "apiVersion": "2015-08-01",
-                    "dependsOn": [
-                        "[concat('Microsoft.Web/sites/', variables('sandboxWebsiteSettings').apiWebsiteName)]"
-                    ],
-                    "location": "[resourceGroup().location]",
-                    "name": "MSDeploy",
-                    "properties": {
-                        "connectionString": "",
-                        "dbType": "None",
-                        "packageUri": "[variables('odsApiAssetsUrl')]",
-                        "setParameters": {
-                            "IIS Web Application Name": "[variables('sandboxWebsiteSettings').apiWebsiteName]"
-                        }
-                    },
-                    "tags": {
-                        "displayName": "deployment"
-                    },
-                    "type": "extensions"
-                }
-            ]
-        },
-        {
-            "apiVersion": "2015-08-01",
-            "name": "[variables('sandboxWebsiteSettings').swaggerWebsiteName]",
-            "type": "Microsoft.Web/sites",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[concat('Microsoft.Web/serverFarms/', variables('sandboxWebsiteSettings').hostingPlanName)]"
-            ],
-            "tags": {
-                "[concat('hidden-related:', resourceId('Microsoft.Web/serverfarms/', variables('sandboxWebsiteSettings').hostingPlanName))]": "empty",
-                "displayName": "Sandbox Swagger Website",
-                "Cloud-Ods-Role": "Swagger",
-                "Cloud-Ods-Environment": "Sandbox"
-            },
-            "properties": {
-                "name": "[variables('sandboxWebsiteSettings').swaggerWebsiteName]",
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('sandboxWebsiteSettings').hostingPlanName)]"
-            },
-            "resources": [
-                {
-                    "apiVersion": "2015-08-01",
-                    "type": "config",
-                    "name": "appsettings",
-                    "dependsOn": [
-                        "[concat('Microsoft.Web/sites/', variables('sandboxWebsiteSettings').swaggerWebsiteName)]",
-                        "[concat('Microsoft.Web/sites/', variables('sandboxWebsiteSettings').apiWebsiteName)]",
-                        "[concat('Microsoft.Web/sites/', variables('sandboxWebsiteSettings').swaggerWebsiteName, '/extensions/MSDeploy')]"
-                    ],
-                    "properties": {
-                        "swagger.webApi": "[concat('https://', reference(resourceId('Microsoft.Web/sites', variables('sandboxWebsiteSettings').apiWebsiteName)).hostNames[0], '/api/v2.0')]",
-                        "swagger.webApiMetadataUrl": "[concat('https://', reference(resourceId('Microsoft.Web/sites', variables('sandboxWebsiteSettings').apiWebsiteName)).hostNames[0], '/metadata/{section}/api-docs')]",
-                        "swagger.adminUrl": "[concat('https://', reference(resourceId('Microsoft.Web/sites', variables('sandboxWebsiteSettings').apiWebsiteName)).hostNames[0], '/oauth/')]"
-                    }
-                },
-                {
-                    "apiVersion": "2015-08-01",
-                    "dependsOn": [
-                        "[concat('Microsoft.Web/sites/', variables('sandboxWebsiteSettings').swaggerWebsiteName)]"
-                    ],
-                    "location": "[resourceGroup().location]",
-                    "name": "MSDeploy",
-                    "properties": {
-                        "connectionString": "",
-                        "dbType": "None",
-                        "packageUri": "[variables('swaggerAssetsUrl')]",
-                        "setParameters": {
-                            "IIS Web Application Name": "[variables('sandboxWebsiteSettings').swaggerWebsiteName]"
-                        }
-                    },
-                    "tags": {
-                        "displayName": "deployment"
-                    },
-                    "type": "extensions"
-                }
-            ]
-        },
-        {
             "name": "[variables('odsstorageName')]",
             "type": "Microsoft.Storage/storageAccounts",
             "location": "[resourceGroup().location]",
@@ -697,17 +354,9 @@
         }
     ],
     "outputs": {
-        "swaggerUrl": {
-            "type": "string",
-            "value": "[concat('https://', reference(resourceId('Microsoft.Web/sites', variables('sandboxWebsiteSettings').swaggerWebsiteName)).hostNames[0])]"
-        },
         "productionApiUrl": {
             "type": "string",
             "value": "[concat('https://', reference(resourceId('Microsoft.Web/sites', variables('productionWebsiteSettings').apiWebsiteName)).hostNames[0])]"
-        },
-        "sandboxApiUrl": {
-            "type": "string",
-            "value": "[concat('https://', reference(resourceId('Microsoft.Web/sites', variables('sandboxWebsiteSettings').apiWebsiteName)).hostNames[0])]"
         },
         "resourceGroupUniqueString": {
             "type": "string",

@@ -172,6 +172,10 @@
     <Compile Include="Model\DataPullStatus.cs" />
     <Compile Include="Model\EventHub\EventHub.cs" />
     <Compile Include="Model\EventHub\EventHubProperties.cs" />
+    <Compile Include="Model\EventHub\LogProfile.cs" />
+    <Compile Include="Model\EventHub\LogProfileProperties.cs" />
+    <Compile Include="Model\Http\HttpErrorResponse.cs" />
+    <Compile Include="Model\Http\HttpErrorResponseWrapper.cs" />
     <Compile Include="Model\Http\HttpResponseDetails.cs" />
     <Compile Include="Model\Informatica\InformaticaActivityLog.cs" />
     <Compile Include="Model\Informatica\InformaticaAgent.cs" />

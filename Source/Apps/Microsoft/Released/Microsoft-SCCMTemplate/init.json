@@ -55,9 +55,16 @@
                 ],
                 "showAllWriteableDatabases": false,
                 "showAzureSql": false,
+                "showCreateAzureSqlPrompt": true,
                 "subtitle": "$translate(INIT_SOURCE_SCCM_SUBTITLE)",
                 "title": "$translate(INIT_SOURCE_SCCM_TITLE)",
                 "useImpersonation": true
+            },
+            {
+                "displayname": "Login to Azure",
+                "name": "$SiteCommon$/pages-gallery/azure-login.html",
+                "oauthType": "",
+                "skip": "$isfalse(CreateAzureSql)"
             },
             {
                 "credentialTarget": "pbi_sccm",

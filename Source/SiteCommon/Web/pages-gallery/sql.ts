@@ -16,6 +16,7 @@ export class Sql extends ViewModelBase {
     hideSqlAuth: boolean = false;
     invalidUsernames: string[] = ['admin', 'administrator', 'dbmanager', 'dbo', 'guest', 'loginmanager', 'public', 'root', 'sa'];
     isAzureSql: boolean = false;
+    isCreateAzureSqlSelected: boolean = false;
     isGovAzureSql: boolean = false;
     isWindowsAuth: boolean = true;
     newSqlDatabase: string = null;
@@ -23,6 +24,7 @@ export class Sql extends ViewModelBase {
     passwordConfirmation: string = '';
     showAllWriteableDatabases: boolean = true;
     showAzureSql: boolean = true;
+    showCreateAzureSqlPrompt: boolean = false;
     showCredsWhenWindowsAuth: boolean = false;
     showDatabases: boolean = false;
     showGovAzure: boolean = false;
@@ -109,6 +111,8 @@ export class Sql extends ViewModelBase {
                 }
 
                 this.MS.DataStore.addToDataStore('azureSqlDisabled', this.isAzureSql || this.isGovAzureSql ? 'false' : 'true', DataStoreType.Public);
+
+                this.MS.DataStore.addTestToDataStore('CreateAzureSql', this.showCreateAzureSqlPrompt && this.isCreateAzureSqlSelected, DataStoreType.Public);
             }
         } else {
             isSuccess = false;

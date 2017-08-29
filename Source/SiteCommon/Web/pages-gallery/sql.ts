@@ -112,7 +112,9 @@ export class Sql extends ViewModelBase {
 
                 this.MS.DataStore.addToDataStore('azureSqlDisabled', this.isAzureSql || this.isGovAzureSql ? 'false' : 'true', DataStoreType.Public);
 
-                this.MS.DataStore.addTestToDataStore('CreateAzureSql', this.showCreateAzureSqlPrompt && this.isCreateAzureSqlSelected, DataStoreType.Public);
+                if (this.showCreateAzureSqlPrompt) {
+                    this.MS.DataStore.addTestToDataStore('CreateAzureSql', this.isCreateAzureSqlSelected);
+                }
             }
         } else {
             isSuccess = false;

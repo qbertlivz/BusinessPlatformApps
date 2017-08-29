@@ -92,7 +92,10 @@ export class InitParser {
             case VariableType.RunAndSaveOld:
                 command = variable.value;
                 break;
-            case VariableType.RunAndTest:
+            case VariableType.RunAndTestFalse:
+                command = variable.value
+                break;
+            case VariableType.RunAndTestTrue:
                 command = variable.value
                 break;
             case VariableType.RunAndTranslate:

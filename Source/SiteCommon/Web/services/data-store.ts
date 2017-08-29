@@ -33,11 +33,11 @@ export class DataStore {
         this.cacheDataStores();
     }
 
-    addTestToDataStore(key: string, value: boolean, dataStoreType: DataStoreType): void {
+    addTestToDataStore(key: string, value: boolean): void {
         if (value === null || value === undefined) {
             value = false;
         }
-        this.updateValue(dataStoreType, this.currentRoute(), key, value.toString());
+        this.updateValue(DataStoreType.Public, this.currentRoute(), key, value.toString());
         this.cacheDataStores();
     }
 

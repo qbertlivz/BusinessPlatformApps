@@ -61,7 +61,7 @@
                 "useImpersonation": true
             },
             {
-                "displayname": "Login to Azure",
+                "displayname": "Azure SQL Login",
                 "name": "$SiteCommon$/pages-gallery/azure-login.html",
                 "oauthType": "",
                 "skip": "$isfalse(CreateAzureSql)"

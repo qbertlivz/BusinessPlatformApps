@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace FacebookUtillity
 {
@@ -28,7 +29,8 @@ namespace FacebookUtillity
                             DataRow row = table.NewRow();
                             if (table.Columns.Contains("EndTime")) { row["EndTime"] = val["end_time"]; }
                             row["Name"] = entry["name"];
-                            row["Value"] = val["value"];
+                            
+                            row["Value"] = val["value"] != null && val["value"].ToString() == "{}" ? DBNull.Value : (object)val["value"];
                             row["Period"] = entry["period"];
                             row["Title"] = entry["title"];
                             row["Description"] = entry["description"];
@@ -65,7 +67,7 @@ namespace FacebookUtillity
                         if (table.Columns.Contains("EndTime")) { row["EndTime"] = val["end_time"]; }
                         row["Name"] = entry["name"];
                         row["Entry Name"] = att.Name;
-                        row["Value"] = att.Value;
+                        row["Value"] = att.Value != null && att.Value.ToString() == "{}" ? DBNull.Value : (object)att.Value;
                         row["Period"] = entry["period"];
                         row["Title"] = entry["title"];
                         row["Description"] = entry["description"];
@@ -91,8 +93,16 @@ namespace FacebookUtillity
                 DataRow row = table.NewRow();
                 if (table.Columns.Contains("EndTime")) { row["EndTime"] = val["end_time"]; }
                 row["Name"] = entry["name"];
-                row["Entry Name"] = (att.Parent.Parent as JProperty).Name + " " + att.Name;
-                row["Value"] = att.Value;
+                // Only merge names for age/gender
+                if (entry["name"].ToString().ToLower().Contains("page_cta_clicks_by_age_gender_logged_in_unique"))
+                {
+                    row["Entry Name"] = att.Name + " " + (att.Parent.Parent as JProperty).Name;
+                }
+                else
+                {
+                    row["Entry Name"] = att.Name;
+                }
+                row["Value"] = att.Value != null && att.Value.ToString() == "{}" ? DBNull.Value : (object)att.Value;
                 row["Period"] = entry["period"];
                 row["Title"] = entry["title"];
                 row["Description"] = entry["description"];
@@ -115,6 +125,7 @@ namespace FacebookUtillity
                         {
                             DataRow row = table.NewRow();
                             row["Id"] = val["id"];
+                            row["PageId"] = pageId;
                             row["Message"] = val["message"];
                             row["Created Time"] = val["created_time"];
                             row["Updated Time"] = val["updated_time"];
@@ -124,7 +135,7 @@ namespace FacebookUtillity
                             row["Object"] = val["object_id"];
                             row["Permalink URL"] = val["permalink_url"];
                             row["Picture"] = val["picture"];
-                            row["Source"] = val["source"] == null ? null : val["source"];
+                            row["Source"] = val["source"];
                             row["Shares"] = val["shares"]["count"];
                             row["To Id"] = t["id"];
                             row["To Name"] = t["name"];

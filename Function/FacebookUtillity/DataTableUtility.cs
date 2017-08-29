@@ -46,7 +46,7 @@ namespace FacebookUtillity
             table.Columns.Add("Page");
             table.Columns.Add("PageDisplayName");
             table.Columns.Add("PageId");
-            table.Columns.Add("Total Comments", typeof(int));
+            table.Columns.Add("Total Comments", typeof(double));
             return table;
         }
 
@@ -297,6 +297,7 @@ namespace FacebookUtillity
         {
             DataTable table = new DataTable();
             table.Columns.Add("Id");
+            table.Columns.Add("PageId");
             table.Columns.Add("Message");
             table.Columns.Add("Created Time", typeof(DateTime));
             table.Columns.Add("Updated Time", typeof(DateTime));

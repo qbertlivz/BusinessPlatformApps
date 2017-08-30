@@ -37,7 +37,8 @@
                     "Subscription": "$(this.MS.DataStore.getJson('SelectedSubscription').DisplayName)",
                     "Resource Group": "$(this.MS.DataStore.getValue('SelectedResourceGroup'))",
                     "Target Server": "put_server_here",
-                    "Target Username": "$(this.MS.DataStore.getValue('sqlUserAdmin'))"
+                    "Target Username": "$(this.MS.DataStore.getValue('sqlServerAdminLogin'))",
+                    "API Username": "$(this.MS.DataStore.getValue('sqlServerProductionApiLogin'))"
 
                 }
             },
@@ -51,7 +52,7 @@
 
         "Actions": [
             {
-                "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
+                "displayname": "$translate(INIT_ACTION_GET_EDFI_VERSION)",
                 "name": "Microsoft-GetTextBlob",
                 "SqlServerIndex": "0",
                 "storageBaseUrl": "https://odsassets.blob.core.windows.net/public/release",
@@ -59,30 +60,21 @@
                 "blobContentName": "edfiLatestVersion"
             },
             {
-                "ASDatabase": "Edfi",
-                "displayname": "$translate(INIT_ACTION_DEPLOYING_AS_MODEL)",
-                "name": "Microsoft-DeployAzureASModel",
-                "skip": "$run(this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
-                "SqlConnectionString": "$dsall(SqlConnectionString)[0]",
-                "xmlaFilePath": "Service/AzureAS/edfi.xmla"
-            },
-            {
-                "displayname": "Create Service Principal",
-                "name": "Microsoft-CreateSpn",
-                "skip": "$run(this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')"
-            },
-            {
-                "displayname": "Assign Service Principal Permission",
-                "name": "Microsoft-AssignPermissionsForUser",
-                "skip": "$run(this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
-                "UserToAdd": "$ds(SPNUser)",
-                "ASDatabase": "Edfi"
-            },
-            {
-                "displayname": "$translate(INIT_ACTION_WAITING_DATA)",
-                "name": "Microsoft-GetDataPullStatus",
-                "SqlServerIndex": 0,
-                "TargetSchema": "edfi"
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_EDFI_CLOUD_RESOURCES)",
+                "name": "Microsoft-DeployAzureArmTemplate",
+                "AzureArmFile": "Service/Arm/service_app.json",
+                "Wait":  false,
+                "AzureArmParameters": {
+                    "appInsightsLocation": "South Central US",
+                    "edition": "release",
+                    "sqlServerAdminLogin": "$(this.MS.DataStore.getValue('sqlServerAdminLogin'))",
+                    "sqlServerAdminPassword": "$(this.MS.DataStore.getValue('sqlServerAdminPassword'))",
+                    "sqlServerProductionApiLogin": "$(this.MS.DataStore.getValue('sqlServerProductionApiLogin'))",
+                    "sqlServerProductionApiPassword": "$(this.MS.DataStore.getValue('sqlServerProductionApiPassword'))",
+                    "version": "$(this.MS.DataStore.getValue('edfiLatestVersion'))",
+                    "subscription": "$(this.MS.DataStore.getJson('SelectedSubscription').SubscriptionId)",
+                    "resourceGroup": "$(this.MS.DataStore.getValue('SelectedResourceGroup'))"
+                }
             }
         ]
     }

@@ -42,16 +42,16 @@
         "adminDatabaseSettings": {
             "name": "EdFi_Admin",
             "collation": "Latin1_General_100_CI_AS",
-            "maxSizeBytes": "[variables('sqlMaxSizeBytes_Standard')]",
+            "maxSizeBytes": "[variables('sqlMaxSizeBytes_Basic')]",
             "edition": "Standard",
-            "requestedServiceObjectiveName": "S2"
+            "requestedServiceObjectiveName": "S1"
         },
         "securityDatabaseSettings": {
             "name": "EdFi_Security",
             "collation": "Latin1_General_100_CI_AS",
-            "maxSizeBytes": "[variables('sqlMaxSizeBytes_Standard')]",
+            "maxSizeBytes": "[variables('sqlMaxSizeBytes_Basic')]",
             "edition": "Standard",
-            "requestedServiceObjectiveName": "S2"
+            "requestedServiceObjectiveName": "S1"
         },
         "productionOdsDatabaseSettings": {
             "name": "EdFi_Ods_Production",

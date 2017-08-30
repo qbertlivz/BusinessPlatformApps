@@ -78,8 +78,12 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Arm
                 return new ActionResponse(ActionStatus.Success, deploymentItem);
             }
 
-            return await WaitForAction(client, resourceGroup, deploymentName);
+            ActionResponse r = await WaitForAction(client, resourceGroup, deploymentName);
+            request.DataStore.AddToDataStore("ArmOutput", r.DataStore.GetValue("ArmOutput"), DataStoreType.Public);
+            return r;
         }
+
+        private static string m_ArmOutput;
 
         private static async Task<ActionResponse> WaitForAction(ResourceManagementClient client, string resourceGroup, string deploymentName)
         {
@@ -94,7 +98,16 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Arm
                     continue;
 
                 if (provisioningState == "Succeeded")
-                    return new ActionResponse(ActionStatus.Success, operations);
+                {
+                    ActionResponse r = new ActionResponse(ActionStatus.Success, operations) { DataStore = new DataStore() };
+                    string outputs = status.Deployment.Properties.Outputs;
+                    if (!string.IsNullOrEmpty(outputs))
+                        r.DataStore.AddToDataStore("ArmOutput", outputs, DataStoreType.Public);
+
+                    return r;
+                }
+                    
+
 
                 var operation = operations.Operations.First(p => p.Properties.ProvisioningState == ProvisioningState.Failed);
                 var operationFailed = await client.DeploymentOperations.GetAsync(resourceGroup, deploymentName, operation.OperationId, new CancellationToken());

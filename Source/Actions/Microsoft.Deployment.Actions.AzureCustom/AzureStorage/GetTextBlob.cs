@@ -25,7 +25,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureSql
                 content = sr.ReadLine();
             }
 
-            request.DataStore.AddToDataStore(contentName, content);
+            request.DataStore.AddToDataStore(contentName, content, DataStoreType.Public);
 
             return new ActionResponse(ActionStatus.Success);
         }

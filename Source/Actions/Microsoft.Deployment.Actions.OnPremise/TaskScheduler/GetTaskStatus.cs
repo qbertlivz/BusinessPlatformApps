@@ -36,16 +36,17 @@ namespace Microsoft.Deployment.Actions.OnPremise.TaskScheduler
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
+            // The status could change if we're patient
+            System.Threading.Thread.Sleep(250);
+
             Task task = GetScheduledTask(request.DataStore.GetValue("TaskName"));
             if (task == null)
                 return new ActionResponse(ActionStatus.Failure, JsonUtility.GetEmptyJObject(), "SccmTaskNotFound");
 
             // Let it run
             if (task.State == TaskState.Queued || task.State == TaskState.Running || task.State == TaskState.Unknown)
-            {
-                System.Threading.Thread.Sleep(250);
                 return new ActionResponse(ActionStatus.InProgress);
-            }
+
 
             // If we're here, the task completed
             if (task.LastTaskResult == 0)

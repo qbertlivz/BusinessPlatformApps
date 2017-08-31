@@ -16,7 +16,7 @@ INSERT pbist_twitter.[configuration] (configuration_group, configuration_subgrou
            ( N'SolutionTemplate', N'SSAS', N'ProcessOnNextSchedule', N'1', 0),
            ( N'SolutionTemplate', N'SSAS', N'LastProcessedDateTime', N'', 0),
            ( N'SolutionTemplate', N'SSAS', N'LastProcessedStatus', N'', 0),
-           ( N'SolutionTemplate', N'SSAS', N'CurrentStatus', N'', 0);
+           ( N'SolutionTemplate', N'SSAS', N'CurrentStatus', N'', 0),
 GO
 
 

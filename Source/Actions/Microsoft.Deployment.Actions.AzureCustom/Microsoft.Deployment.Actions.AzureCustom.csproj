@@ -276,6 +276,7 @@
     <Compile Include="Twitter\GetTwitterConnection.cs" />
     <Compile Include="Twitter\RunLogicApp.cs" />
     <Compile Include="Twitter\RunLogicAppHistorical.cs" />
+    <Compile Include="Twitter\UpdateTwitterLogicApp.cs" />
     <Compile Include="Twitter\ValidateCognitiveKey.cs" />
     <Compile Include="Twitter\ValidateTwitterAccount.cs" />
     <Compile Include="Twitter\VerifyTwitterConnection.cs" />

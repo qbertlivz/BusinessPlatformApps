@@ -98,21 +98,21 @@ namespace FacebookUtillity
             PopulateNestedValues(pageVideoPosts, pageVideoPostsObj, page);
             PopulateNestedValues(pagePostImpressions, pagePostsImpressions, page);
 
-            SqlUtility.BulkInsert(sqlConn, pageContentTable, schema + "." + "PageContent");
-            SqlUtility.BulkInsert(sqlConn, pageEngagementTable, schema + "." + "PageEngagement");
-            SqlUtility.BulkInsert(sqlConn, pageImpressionsTable, schema + "." + "PageImpressions");
-            SqlUtility.BulkInsert(sqlConn, pagePostsTable, schema + "." + "PagePost");
-            SqlUtility.BulkInsert(sqlConn, pagePostEngagement, schema + "." + "PagePostEngagement");
-            SqlUtility.BulkInsert(sqlConn, pagePostImpressions, schema + "." + "PagePostImpressions");
-            SqlUtility.BulkInsert(sqlConn, pagePostReactionsTable, schema + "." + "PagePostReactions");
-            SqlUtility.BulkInsert(sqlConn, pagePostStoriesAndPeopleTalkingAboutThisTable, schema + "." + "PagePostStoriesAndPeopleTalkingAboutThis");
-            SqlUtility.BulkInsert(sqlConn, pageReactionsTable, schema + "." + "PageReactions");
-            SqlUtility.BulkInsert(sqlConn, pageUserDemographicsTable, schema + "." + "PageUserDemographics");
-            SqlUtility.BulkInsert(sqlConn, pageVideoPosts, schema + "." + "PageVideoPosts");
-            SqlUtility.BulkInsert(sqlConn, pageVideoViews, schema + "." + "PageVideoViews");
-            SqlUtility.BulkInsert(sqlConn, pageViewsTable, schema + "." + "PageViews");
-            SqlUtility.BulkInsert(sqlConn, clicksTable, schema + "." + "Clicks");
-            SqlUtility.BulkInsert(sqlConn, postsInfoTable, schema + "." + "PagePostsInfo");
+            SqlUtility.BulkInsert(sqlConn, pageContentTable, schema + "." + "STAGING_PageContent");
+            SqlUtility.BulkInsert(sqlConn, pageEngagementTable, schema + "." + "STAGING_PageEngagement");
+            SqlUtility.BulkInsert(sqlConn, pageImpressionsTable, schema + "." + "STAGING_PageImpressions");
+            SqlUtility.BulkInsert(sqlConn, pagePostsTable, schema + "." + "STAGING_PagePost");
+            SqlUtility.BulkInsert(sqlConn, pagePostEngagement, schema + "." + "STAGING_PagePostEngagement");
+            SqlUtility.BulkInsert(sqlConn, pagePostImpressions, schema + "." + "STAGING_PagePostImpressions");
+            SqlUtility.BulkInsert(sqlConn, pagePostReactionsTable, schema + "." + "STAGING_PagePostReactions");
+            SqlUtility.BulkInsert(sqlConn, pagePostStoriesAndPeopleTalkingAboutThisTable, schema + "." + "STAGING_PagePostStoriesAndPeopleTalkingAboutThis");
+            SqlUtility.BulkInsert(sqlConn, pageReactionsTable, schema + "." + "STAGING_PageReactions");
+            SqlUtility.BulkInsert(sqlConn, pageUserDemographicsTable, schema + "." + "STAGING_PageUserDemographics");
+            SqlUtility.BulkInsert(sqlConn, pageVideoPosts, schema + "." + "STAGING_PageVideoPosts");
+            SqlUtility.BulkInsert(sqlConn, pageVideoViews, schema + "." + "STAGING_PageVideoViews");
+            SqlUtility.BulkInsert(sqlConn, pageViewsTable, schema + "." + "STAGING_PageViews");
+            SqlUtility.BulkInsert(sqlConn, clicksTable, schema + "." + "STAGING_Clicks");
+            SqlUtility.BulkInsert(sqlConn, postsInfoTable, schema + "." + "STAGING_PagePostsInfo");
         }
 
         public static void PopulateNestedValues(DataTable table, List<JObject> objects, string pageId)

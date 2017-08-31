@@ -24,7 +24,7 @@ namespace FacebookUtilityTest
             string accessToken = "";
             string sqlConn = "";
             string schema = "";
-            string until = DateTime.UtcNow.ToString();
+            string until = DateTime.UtcNow.AddDays(-2).ToString();
 
             PageAnalyticsETL.PopulateMeasures(page, accessToken, sqlConn, schema, until);
         }

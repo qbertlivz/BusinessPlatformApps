@@ -11,6 +11,8 @@ namespace FacebookUtillity
 {
     public class FacebookUtility
     {
+        const int daysToGoBack = 0;
+
         public static async Task<JObject> GetPage(string page, string accessToken)
         {
             string requestUri = $"https://graph.facebook.com/{page}?access_token={accessToken}";
@@ -102,7 +104,7 @@ namespace FacebookUtillity
             List<JObject> posts = new List<JObject>();
             JObject post = null;
             string until = DateUtility.GetUnixFromDate(untilDateTime);
-            string since = DateUtility.GetUnixFromDate(DateUtility.GetDateTimeRelativeFromNow(untilDateTime, -1));
+            string since = DateUtility.GetUnixFromDate(DateUtility.GetDateTimeRelativeFromNow(untilDateTime, daysToGoBack));
             string requestUri = metricsGroup == FacebookPageAnalyticsMetricGroups.PagePostIds ?
                 GetPagePostIds(page, accessToken, untilDateTime, since) :
                 GetPageAnalyticsRequestUrl(page, accessToken, until, since, metricsGroup);
@@ -175,7 +177,7 @@ namespace FacebookUtillity
         private static string GetPagePostIds(string page, string accessToken, string untilDateTime, string after = "")
         {
             string until = DateUtility.GetUnixFromDate(untilDateTime);
-            string since = DateUtility.GetUnixFromDate(DateUtility.GetDateTimeRelativeFromNow(untilDateTime, -2));
+            string since = DateUtility.GetUnixFromDate(DateUtility.GetDateTimeRelativeFromNow(untilDateTime, daysToGoBack -2));
             Dictionary<string, string> param = new Dictionary<string, string>();
             param.Add("access_token", accessToken);
             param.Add("fields", "id,message,updated_time,created_time,icon,link,name,object_id,permalink_url,picture,source,shares,to,type,story,status_type,is_hidden,is_published");

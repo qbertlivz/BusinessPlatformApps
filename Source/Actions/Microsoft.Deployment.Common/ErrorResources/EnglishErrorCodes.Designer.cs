@@ -19,7 +19,7 @@ namespace Microsoft.Deployment.Common.ErrorResources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class EnglishErrorCodes {
@@ -57,6 +57,33 @@ namespace Microsoft.Deployment.Common.ErrorResources {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time out occurred while exporting the Activity Log to Event Hub.
+        /// </summary>
+        public static string ActivityLogsExportEventHubTimeout {
+            get {
+                return ResourceManager.GetString("ActivityLogsExportEventHubTimeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred while pulling historical Activity Log data.
+        /// </summary>
+        public static string ActivityLogsGetHistoricalDataError {
+            get {
+                return ResourceManager.GetString("ActivityLogsGetHistoricalDataError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your account has insufficient permissions to export activity logs to Event Hub in this subscription.
+        /// </summary>
+        public static string ActivityLogsInsufficientPermissions {
+            get {
+                return ResourceManager.GetString("ActivityLogsInsufficientPermissions", resourceCulture);
             }
         }
         

@@ -96,36 +96,36 @@ CREATE TABLE pbist_twitter.authormention_graph
 ALTER TABLE pbist_twitter.authormention_graph ADD CONSTRAINT ck_tweetmentiongraph FOREIGN KEY(tweetid) REFERENCES pbist_twitter.tweets_processed(tweetid);
 
 
-CREATE TABLE pbist_twitter.search_terms
-(
-    tweetid      NCHAR(20),
-    searchterm   NCHAR(200),
-    accountid    NCHAR(200),
-    direction	 NCHAR(100),
-	PRIMARY KEY(tweetid, searchterm, direction)
-);
+--CREATE TABLE pbist_twitter.search_terms
+--(
+--    tweetid      NCHAR(20),
+--    searchterm   NCHAR(200),
+--    accountid    NCHAR(200),
+--    direction	 NCHAR(100),
+--	PRIMARY KEY(tweetid, searchterm, direction)
+--);
 
-CREATE TABLE pbist_twitter.accounts
-(
-    accountname NCHAR(200) PRIMARY KEY,
-    accountid   NCHAR(200)
-);
+--CREATE TABLE pbist_twitter.accounts
+--(
+--    accountname NCHAR(200) PRIMARY KEY,
+--    accountid   NCHAR(200)
+--);
 
-CREATE TABLE pbist_twitter.account_details
-(
-    accountname			NCHAR(200),
-    accountid			NCHAR(200),
-	dateHour			datetime,
-	accountofficialname NCHAR(200),
-	accountdescription	NCHAR(200),
-	followercount		NCHAR(10),
-	statuscount			NCHAR(10),
-	friendscount		NCHAR(10),
-	favouritescount		NCHAR(10),
-	image_url			NCHAR(200),
-	PRIMARY KEY(accountname, dateHour)
-);
-ALTER TABLE pbist_twitter.account_details ADD CONSTRAINT ck_account_details FOREIGN KEY(accountname) REFERENCES pbist_twitter.accounts(accountname);
+--CREATE TABLE pbist_twitter.account_details
+--(
+--    accountname			NCHAR(200),
+--    accountid			NCHAR(200),
+--	dateHour			datetime,
+--	accountofficialname NCHAR(200),
+--	accountdescription	NCHAR(200),
+--	followercount		NCHAR(10),
+--	statuscount			NCHAR(10),
+--	friendscount		NCHAR(10),
+--	favouritescount		NCHAR(10),
+--	image_url			NCHAR(200),
+--	PRIMARY KEY(accountname, dateHour)
+--);
+--ALTER TABLE pbist_twitter.account_details ADD CONSTRAINT ck_account_details FOREIGN KEY(accountname) REFERENCES pbist_twitter.accounts(accountname);
 
 
 CREATE TABLE pbist_twitter.minimum_tweets

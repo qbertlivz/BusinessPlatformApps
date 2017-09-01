@@ -133,8 +133,9 @@
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_NEWS)",
                 "FunctionName": "$save('function' + this.MS.DataStore.getValue('uniqueId'))",
                 "name": "Microsoft-DeployAzureFunction",
-                "RepoUrl": "https://github.com/juluczni/AzureFunctionsNewsTemplate",
-                "Branch": "newsbranch"
+                "RepoUrl": "https://github.com/Microsoft/BusinessPlatformApps",
+                "ProjectPath": "Functions\\FunctionCode\\News",
+                "Branch": "dev-facebook"
             },
             {
                 "DeploymentName": "Function",

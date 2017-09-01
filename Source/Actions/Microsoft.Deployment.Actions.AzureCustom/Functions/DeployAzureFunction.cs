@@ -35,7 +35,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             var skuCode = request.DataStore.GetValue("skuCode") ?? "S1";
             var workerSize = request.DataStore.GetValue("workerSize") ?? "0";
             var branch = request.DataStore.GetValue("branch") ?? "master";
-            var projectPath = request.DataStore.GetValue("projectPath") ?? string.Empty;
+            var projectPath = request.DataStore.GetValue("ProjectPath") ?? string.Empty;
 
 
             string functionArmDeploymentRelativePath = sku.ToLower() == "standard"
@@ -56,7 +56,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             param.AddStringParam("skuCode", skuCode);
             param.AddStringParam("workerSize", workerSize);
             param.AddStringParam("branch", branch);
-            param.AddStringParam("project", projectPath);
+            param.AddStringParam("projectPath", projectPath);
 
             var armTemplate = JsonUtility.GetJObjectFromJsonString(System.IO.File.ReadAllText(Path.Combine(request.ControllerModel.SiteCommonFilePath, functionArmDeploymentRelativePath)));
             var armParamTemplate = JsonUtility.GetJObjectFromObject(param.GetDynamicObject());

@@ -32,6 +32,10 @@
     "LogicAppName": {
       "defaultValue": "LogicApp",
       "type": "string"
+    },
+    "logicAppUri": {
+      "defaultValue": "logicAppUri",
+      "type": "string"
     }
   },
   "variables": {},
@@ -72,7 +76,7 @@
                   "PreviousCount": "10"
                 },
                 "method": "POST",
-                "uri": "https://prod-47.westus.logic.azure.com:443/workflows/571148025a8f4af28c9e01f761adfc89/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=RKlnTftuZDl23sXysPW1RZqMRPeBTUqMIzsyoLOiUeo"
+                "uri": "[parameters('logicAppUri')]"
               },
               "runAfter": {
                 "Scope": [
@@ -167,11 +171,11 @@
                   },
                   "type": "Function"
                 }
-              }
-            },
-                "runAfter": {},
-                "type": "Scope"
-            },
+              },
+              "runAfter": {},
+              "type": "Scope"
+            }
+          },
               "outputs": {}
             },
             "parameters": {

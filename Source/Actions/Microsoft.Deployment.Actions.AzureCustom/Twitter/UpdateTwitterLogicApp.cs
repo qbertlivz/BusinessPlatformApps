@@ -39,6 +39,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
 
             // Deploy logic app with updated trigger URL for last action
 
+            var armTemplate = JsonUtility.GetJObjectFromJsonString(System.IO.File.ReadAllText(Path.Combine(request.Info.App.AppFilePath, "Service/AzureArm/logicapp.json")));
+
             var param = new AzureArmParameterGenerator();
 
             param.AddStringParam("logicAppUri", requestUri);
@@ -49,20 +51,34 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
             param.AddStringParam("LogicAppName", logicAppName);
 
             var armParamTemplate = JsonUtility.GetJObjectFromObject(param.GetDynamicObject());
-            armParamTemplate.Remove("parameters");
-            armParamTemplate.Add("parameters", armParamTemplate["parameters"]);
+            armTemplate.Remove("parameters");
+            armTemplate.Add("parameters", armParamTemplate["parameters"]);
 
-            var helper = new DeploymentHelper();
-            var deploymentResponse = await helper.DeployLogicApp(subscription, azureToken, resourceGroup, armParamTemplate, deploymentName);
+            SubscriptionCloudCredentials creds = new TokenCloudCredentials(subscription, azureToken);
+            Microsoft.Azure.Management.Resources.ResourceManagementClient client = new ResourceManagementClient(creds);
 
-            if (!deploymentResponse.IsSuccess)
+            var deployment = new Microsoft.Azure.Management.Resources.Models.Deployment()
             {
-                return deploymentResponse;
+                Properties = new DeploymentPropertiesExtended()
+                {
+                    Template = armTemplate.ToString(),
+                    Parameters = JsonUtility.GetEmptyJObject().ToString()
+                }
+            };
+
+            var validate = await client.Deployments.ValidateAsync(resourceGroup, deploymentName, deployment, new CancellationToken());
+            if (!validate.IsValid)
+            {
+                return new ActionResponse(ActionStatus.Failure, JsonUtility.GetJObjectFromObject(validate), null,
+                     DefaultErrorCodes.DefaultErrorCode, $"Azure:{validate.Error.Message} Details:{validate.Error.Details}");
             }
+
+            var deploymentItem = await client.Deployments.CreateOrUpdateAsync(resourceGroup, deploymentName, deployment, new CancellationToken());
 
             //Log logic app
             request.Logger.LogResource(request.DataStore, logicAppName,
-            DeployedResourceType.LogicApp, CreatedBy.BPST, DateTime.UtcNow.ToString("o"));
+                DeployedResourceType.LogicApp, CreatedBy.BPST, DateTime.UtcNow.ToString("o"));
+
 
             return new ActionResponse(ActionStatus.Success);
 

@@ -63,7 +63,7 @@
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_EDFI_CLOUD_RESOURCES)",
                 "name": "Microsoft-DeployAzureArmTemplate",
                 "AzureArmFile": "Service/Arm/service_app.json",
-                "Wait":  false,
+                "Wait": false,
                 "AzureArmParameters": {
                     "appInsightsLocation": "South Central US",
                     "edition": "release",
@@ -75,6 +75,17 @@
                     "subscription": "$(this.MS.DataStore.getJson('SelectedSubscription').SubscriptionId)",
                     "resourceGroup": "$(this.MS.DataStore.getValue('SelectedResourceGroup'))"
                 }
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
+                "name": "Microsoft-CreateSqlUser",
+                "server": "$(this.MS.DataStore.getJson('ArmOutput').SubscriptionId)",
+                "databasename": "EdFi_Ods_Production",
+                "newUser": "$(this.MS.DataStore.getValue('sqlServerProductionApiLogin'))",
+                "newPassword": "$(this.MS.DataStore.getValue('sqlServerProductionApiPassword'))",
+                "sqlServerAdminLogin": "$(this.MS.DataStore.getValue('sqlServerAdminLogin'))",
+                "sqlServerAdminPassword": "$(this.MS.DataStore.getValue('sqlServerAdminPassword'))",
+                "additionalSchemas":  "edfi"
             }
         ]
     }

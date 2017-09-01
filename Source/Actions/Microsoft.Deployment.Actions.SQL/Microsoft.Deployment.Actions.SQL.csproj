@@ -101,6 +101,7 @@
     </Compile>
     <Compile Include="CompareSqlLCIDs.cs" />
     <Compile Include="CheckSQLVersion.cs" />
+    <Compile Include="CreateSqlUser.cs" />
     <Compile Include="DeploySqlScripts.cs" />
     <Compile Include="GetSqlConnectionString.cs" />
     <Compile Include="InstallSqlTools.cs" />

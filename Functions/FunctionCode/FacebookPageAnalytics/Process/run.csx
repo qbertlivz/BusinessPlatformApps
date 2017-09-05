@@ -12,7 +12,9 @@ public static async Task Run(string myQueueItem, TraceWriter log)
     string schema = System.Configuration.ConfigurationManager.ConnectionStrings["Schema"].ConnectionString;
     string facebookClientId = System.Configuration.ConfigurationManager.ConnectionStrings["FacebookClientId"].ConnectionString;
     string facebookClientSecret = System.Configuration.ConfigurationManager.ConnectionStrings["FacebookClientSecret"].ConnectionString;
+	string facebookPageId = System.Configuration.ConfigurationManager.ConnectionStrings["FacebookPageId"].ConnectionString;
+	string facebookPageToken = System.Configuration.ConfigurationManager.ConnectionStrings["FacebookPageToken"].ConnectionString;
     string date = myQueueItem;
 
-    await MainETL.PopulateAll(sqlConnectionString, schema, cognitiveKey, facebookClientId, facebookClientSecret, date);
+    await PageAnalyticsETL.PopulateMeasures(facebookPageId, facebookPageToken, sqlConnectionString, schema, date);
 }

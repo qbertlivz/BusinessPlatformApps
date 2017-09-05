@@ -66,10 +66,9 @@
                 "enablePublishReport": "$run(this.MS.DataStore.getValue('ssasDisabled') === 'false')",
                 "filename": "$save('FacebookTemplate.pbix')",
                 "name": "$SiteCommon$/pages-gallery/progress.html",
-                "Schema": "$save('fb')",
+                "Schema": "$save('fbpa')",
                 "showCounts": false
             }
-
         ],
 
         "Actions": [
@@ -94,7 +93,9 @@
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_AZURE_FUNCTION)",
                 "FunctionName": "$save('solutiontemplatefunc' + this.MS.DataStore.getValue('uniqueId'))",
                 "name": "Microsoft-DeployAzureFunction",
-                "RepoUrl": "https://github.com/MohaaliMicrosoft/FacebookETL",
+                "RepoUrl": "https://github.com/Microsoft/BusinessPlatformApps",
+                "ProjectPath": "Functions\\FunctionCode\\FacebookPageAnalytics",
+                "Branch": "dev-facebook",
                 "sku": "Standard"
             },
             {
@@ -142,8 +143,10 @@
             {
                 "AppSettingKeys": {
                     "CognitiveKey": "$ds(CognitiveServiceKey)",
-                    "FacebookClientId": "$ds(FacebookClientId)",
-                    "FacebookClientSecret": "$ds(FacebookClientSecret)",
+                    "FacebookClientId": "",
+                    "FacebookClientSecret": "",
+                    "FacebookPageToken": "$ds(FacebookPageToken)",
+                    "FacebookPageId": "$ds(FacebookPageId)",
                     "Schema": "$ds(Schema)",
                     "SqlConnectionString": "$ds(SqlConnectionString)"
                 },

@@ -17,10 +17,11 @@ using Microsoft.Deployment.Common.Helpers;
 namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
 {
     [Export(typeof(IAction))]
-    public class DeployTwitterLogicApp : BaseAction
+    public class UpdateTwitterLogicApp : BaseAction
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
+
             var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
             var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
@@ -32,19 +33,23 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
 
             var search = request.DataStore.GetValue("SearchQuery");
             var logicAppName = request.DataStore.GetValue("LogicAppName");
-            var requestUri = string.Empty;
+            var requestUri = request.DataStore.GetValue("RequestUri");
 
             search = search.StartsWith("@") ? "@" + search : search;
 
+            // Deploy logic app with updated trigger URL for last action
+
+            var armTemplate = JsonUtility.GetJObjectFromJsonString(System.IO.File.ReadAllText(Path.Combine(request.Info.App.AppFilePath, "Service/AzureArm/logicapp.json")));
+
             var param = new AzureArmParameterGenerator();
+
+            param.AddStringParam("logicAppUri", requestUri);
             param.AddStringParam("sitename", sitename);
             param.AddStringParam("resourcegroup", resourceGroup);
             param.AddStringParam("subscription", subscription);
             param.AddStringParam("search", search);
             param.AddStringParam("LogicAppName", logicAppName);
-            param.AddStringParam("logicAppUri", string.Empty);
 
-            var armTemplate = JsonUtility.GetJObjectFromJsonString(System.IO.File.ReadAllText(Path.Combine(request.Info.App.AppFilePath, "Service/AzureArm/logicapp.json")));
             var armParamTemplate = JsonUtility.GetJObjectFromObject(param.GetDynamicObject());
             armTemplate.Remove("parameters");
             armTemplate.Add("parameters", armParamTemplate["parameters"]);
@@ -74,7 +79,10 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
             request.Logger.LogResource(request.DataStore, logicAppName,
                 DeployedResourceType.LogicApp, CreatedBy.BPST, DateTime.UtcNow.ToString("o"));
 
-            return new ActionResponse(ActionStatus.Success, deploymentItem);
+
+            return new ActionResponse(ActionStatus.Success);
+
         }
     }
 }
+

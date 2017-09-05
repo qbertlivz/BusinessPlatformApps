@@ -17,7 +17,7 @@ using Microsoft.Deployment.Common.Helpers;
 namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
 {
     [Export(typeof(IAction))]
-    public class DeployTwitterLogicApp : BaseAction
+    public class DeployUserLogicApp : BaseAction
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
@@ -25,26 +25,16 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Twitter
             var subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             var resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
             var location = request.DataStore.GetJson("SelectedLocation", "Name");
-
             var deploymentName = request.DataStore.GetValue("DeploymentName");
-            var functionAppHostingPlan = request.DataStore.GetValue("functionAppHostingPlan");
-            var sitename = request.DataStore.GetValue("SiteName");
+            var logicAppName = request.DataStore.GetValue("LogicAppNameUsers");
 
-            var search = request.DataStore.GetValue("SearchQuery");
-            var logicAppName = request.DataStore.GetValue("LogicAppName");
-            var requestUri = string.Empty;
-
-            search = search.StartsWith("@") ? "@" + search : search;
 
             var param = new AzureArmParameterGenerator();
-            param.AddStringParam("sitename", sitename);
             param.AddStringParam("resourcegroup", resourceGroup);
             param.AddStringParam("subscription", subscription);
-            param.AddStringParam("search", search);
             param.AddStringParam("LogicAppName", logicAppName);
-            param.AddStringParam("logicAppUri", string.Empty);
 
-            var armTemplate = JsonUtility.GetJObjectFromJsonString(System.IO.File.ReadAllText(Path.Combine(request.Info.App.AppFilePath, "Service/AzureArm/logicapp.json")));
+            var armTemplate = JsonUtility.GetJObjectFromJsonString(System.IO.File.ReadAllText(Path.Combine(request.Info.App.AppFilePath, "Service/AzureArm/logicappUsers.json")));
             var armParamTemplate = JsonUtility.GetJObjectFromObject(param.GetDynamicObject());
             armTemplate.Remove("parameters");
             armTemplate.Add("parameters", armParamTemplate["parameters"]);

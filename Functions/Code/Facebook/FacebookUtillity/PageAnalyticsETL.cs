@@ -13,106 +13,121 @@ namespace FacebookUtillity
 {
     public class PageAnalyticsETL
     {
-        public static void PopulateMeasures(string pageId, string pageAccessToken, string sqlConnection, string sqlSchema, string getDataUntil)
+        public static async Task<bool> PopulateMeasures(string pageId, string pageAccessToken, string sqlConnection, string sqlSchema, string getDataUntil)
         {
             string page = pageId;
             string accessToken = pageAccessToken;
             string sqlConn = sqlConnection;
             string schema = sqlSchema;
             string until = getDataUntil;
-
-            var pageContentTable = DataTableUtility.GetPageContentTable();
-            var pageEngagementTable = DataTableUtility.GetPageEngagementTable();
-            var pageImpressionsTable = DataTableUtility.GePageImpressionsTable();
-            var pagePostsTable = DataTableUtility.GetPagePostsTable();
-            var pagePostEngagement = DataTableUtility.GetPagePostEngagementTable();
-            var pagePostImpressions = DataTableUtility.GetPagePostImpressionsTable();
-            var pagePostReactionsTable = DataTableUtility.GetPagePostReactionsTable();
-            var pagePostStoriesAndPeopleTalkingAboutThisTable = DataTableUtility.GetPagePostStoriesAndPeopleTalkingAboutThisTable();
-            var pageReactionsTable = DataTableUtility.GetPageReactionsTable();
-            var pageUserDemographicsTable = DataTableUtility.GetPageUserDemographicsTable();
-            var pageVideoPosts = DataTableUtility.GetPageVideoPostsTable();
-            var pageVideoViews = DataTableUtility.GetPageVideoViewsTable();
-            var pageViewsTable = DataTableUtility.GetPageViewsTable();
-            var clicksTable = DataTableUtility.GetPageClicksDataTable();
-            var postsInfoTable = DataTableUtility.GetPostsInfoTable();
-
-            var content = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PageContent).Result;
-            PopulateNestedValues(pageContentTable, content, page);
-
-            var engagement = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PageEngagement).Result;
-            PopulateNestedValues(pageEngagementTable, engagement, page);
-
-            var impressions = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PageImpressions).Result;
-            PopulateNestedValues(pageImpressionsTable, impressions, page);
-
-            var pagePosts = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PagePosts).Result;
-            PopulateNestedValues(pagePostsTable, pagePosts, page);
-
-            var pagePostsEngagement = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PagePostEngagement).Result;
-            PopulateNestedValues(pagePostEngagement, pagePostsEngagement, page);
-
-            var pagePostsReactions = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PagePostReactions).Result;
-            PopulateNestedValues(pagePostReactionsTable, pagePostsReactions, page);
-
-            var pageReactions = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PageReactions).Result;
-            PopulateNestedValues(pageReactionsTable, pageReactions, page);
-
-            var pagePostStories = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PagePostStoriesAndPeopleTalkingAboutThis).Result;
-            PopulateNestedValues(pagePostStoriesAndPeopleTalkingAboutThisTable, pagePostStories, page);
-
-            var pageUserDemographics = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PageUserDemographics).Result;
-            PopulateNestedValues(pageUserDemographicsTable, pageUserDemographics, page);
-
-            var pageVideoViewsObj = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PageVideoViews).Result;
-            PopulateNestedValues(pageVideoViews, pageVideoViewsObj, page);
-
-            var pageViews = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PageViews).Result;
-            PopulateNestedValues(pageViewsTable, pageViews, page);
-
-            var clicks = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PageCtaClicks).Result;
-            PopulateNestedValues(clicksTable, clicks, page);
-
-            var pagePostIds = FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PagePostIds).Result;
-            PopulatePostsInfo(postsInfoTable, pagePostIds, page);
-
-            List<JObject> pagePostReactions = new List<JObject>();
-            List<JObject> pageVideoPostsObj = new List<JObject>();
-            List<JObject> pagePostsImpressions = new List<JObject>();
-            if (pagePostIds != null)
+            try
             {
-                foreach (var entry in pagePostIds)
+                var pageContentTable = DataTableUtility.GetPageContentTable();
+                var pageEngagementTable = DataTableUtility.GetPageEngagementTable();
+                var pageImpressionsTable = DataTableUtility.GePageImpressionsTable();
+                var pagePostsTable = DataTableUtility.GetPagePostsTable();
+                var pagePostEngagement = DataTableUtility.GetPagePostEngagementTable();
+                var pagePostImpressions = DataTableUtility.GetPagePostImpressionsTable();
+                var pagePostReactionsTable = DataTableUtility.GetPagePostReactionsTable();
+                var pagePostStoriesAndPeopleTalkingAboutThisTable = DataTableUtility.GetPagePostStoriesAndPeopleTalkingAboutThisTable();
+                var pageReactionsTable = DataTableUtility.GetPageReactionsTable();
+                var pageUserDemographicsTable = DataTableUtility.GetPageUserDemographicsTable();
+                var pageVideoPosts = DataTableUtility.GetPageVideoPostsTable();
+                var pageVideoViews = DataTableUtility.GetPageVideoViewsTable();
+                var pageViewsTable = DataTableUtility.GetPageViewsTable();
+                var clicksTable = DataTableUtility.GetPageClicksDataTable();
+                var postsInfoTable = DataTableUtility.GetPostsInfoTable();
+
+                var content = await FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PageContent);
+                PopulateNestedValues(pageContentTable, content, page);
+
+                var engagement = await FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PageEngagement);
+                PopulateNestedValues(pageEngagementTable, engagement, page);
+
+                var impressions = await FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PageImpressions);
+                PopulateNestedValues(pageImpressionsTable, impressions, page);
+
+                var pagePosts = await FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PagePosts);
+                PopulateNestedValues(pagePostsTable, pagePosts, page);
+
+                var pagePostsEngagement = await FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PagePostEngagement);
+                PopulateNestedValues(pagePostEngagement, pagePostsEngagement, page);
+
+                var pagePostsReactions = await FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PagePostReactions);
+                PopulateNestedValues(pagePostReactionsTable, pagePostsReactions, page);
+
+                var pageReactions = await FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PageReactions);
+                PopulateNestedValues(pageReactionsTable, pageReactions, page);
+
+                var pagePostStories = await FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PagePostStoriesAndPeopleTalkingAboutThis);
+                PopulateNestedValues(pagePostStoriesAndPeopleTalkingAboutThisTable, pagePostStories, page);
+
+                var pageUserDemographics = await FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PageUserDemographics);
+                PopulateNestedValues(pageUserDemographicsTable, pageUserDemographics, page);
+
+                var pageVideoViewsObj = await FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PageVideoViews);
+                PopulateNestedValues(pageVideoViews, pageVideoViewsObj, page);
+
+                var pageViews = await FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PageViews);
+                PopulateNestedValues(pageViewsTable, pageViews, page);
+
+                var clicks = await FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PageCtaClicks);
+                PopulateNestedValues(clicksTable, clicks, page);
+
+                var pagePostIds = await FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PagePostIds);
+                PopulatePostsInfo(postsInfoTable, pagePostIds, page);
+
+                List<JObject> pagePostReactions = new List<JObject>();
+                List<JObject> pageVideoPostsObj = new List<JObject>();
+                List<JObject> pagePostsImpressions = new List<JObject>();
+                if (pagePostIds != null)
                 {
-                    if (entry?["data"] != null)
+                    foreach (var entry in pagePostIds)
                     {
-                        foreach (var obj in entry["data"])
+                        if (entry?["data"] != null)
                         {
-                            pagePostsImpressions.AddRange(FacebookUtility.GetPageMetricAnalytics(obj["id"].ToString(), until, accessToken, FacebookPageAnalyticsMetricGroups.PagePostImpressions).Result);
-                            pageVideoPostsObj.AddRange(FacebookUtility.GetPageMetricAnalytics(obj["id"].ToString(), until, accessToken, FacebookPageAnalyticsMetricGroups.PageVideoPosts).Result);
-                            pagePostReactions.AddRange(FacebookUtility.GetPageMetricAnalytics(obj["id"].ToString(), until, accessToken, FacebookPageAnalyticsMetricGroups.PagePostReactions).Result);
+                            foreach (var obj in entry["data"])
+                            {
+                                pagePostsImpressions.AddRange(await FacebookUtility.GetPageMetricAnalytics(obj["id"].ToString(), until, accessToken, FacebookPageAnalyticsMetricGroups.PagePostImpressions));
+                                pageVideoPostsObj.AddRange(await FacebookUtility.GetPageMetricAnalytics(obj["id"].ToString(), until, accessToken, FacebookPageAnalyticsMetricGroups.PageVideoPosts));
+                                pagePostReactions.AddRange(await FacebookUtility.GetPageMetricAnalytics(obj["id"].ToString(), until, accessToken, FacebookPageAnalyticsMetricGroups.PagePostReactions));
+                            }
                         }
                     }
                 }
-            }
-            PopulateNestedValues(pagePostReactionsTable, pagePostReactions, page);
-            PopulateNestedValues(pageVideoPosts, pageVideoPostsObj, page);
-            PopulateNestedValues(pagePostImpressions, pagePostsImpressions, page);
+                PopulateNestedValues(pagePostReactionsTable, pagePostReactions, page);
+                PopulateNestedValues(pageVideoPosts, pageVideoPostsObj, page);
+                PopulateNestedValues(pagePostImpressions, pagePostsImpressions, page);
 
-            SqlUtility.BulkInsert(sqlConn, pageContentTable, schema + "." + "STAGING_PageContent");
-            SqlUtility.BulkInsert(sqlConn, pageEngagementTable, schema + "." + "STAGING_PageEngagement");
-            SqlUtility.BulkInsert(sqlConn, pageImpressionsTable, schema + "." + "STAGING_PageImpressions");
-            SqlUtility.BulkInsert(sqlConn, pagePostsTable, schema + "." + "STAGING_PagePost");
-            SqlUtility.BulkInsert(sqlConn, pagePostEngagement, schema + "." + "STAGING_PagePostEngagement");
-            SqlUtility.BulkInsert(sqlConn, pagePostImpressions, schema + "." + "STAGING_PagePostImpressions");
-            SqlUtility.BulkInsert(sqlConn, pagePostReactionsTable, schema + "." + "STAGING_PagePostReactions");
-            SqlUtility.BulkInsert(sqlConn, pagePostStoriesAndPeopleTalkingAboutThisTable, schema + "." + "STAGING_PagePostStoriesAndPeopleTalkingAboutThis");
-            SqlUtility.BulkInsert(sqlConn, pageReactionsTable, schema + "." + "STAGING_PageReactions");
-            SqlUtility.BulkInsert(sqlConn, pageUserDemographicsTable, schema + "." + "STAGING_PageUserDemographics");
-            SqlUtility.BulkInsert(sqlConn, pageVideoPosts, schema + "." + "STAGING_PageVideoPosts");
-            SqlUtility.BulkInsert(sqlConn, pageVideoViews, schema + "." + "STAGING_PageVideoViews");
-            SqlUtility.BulkInsert(sqlConn, pageViewsTable, schema + "." + "STAGING_PageViews");
-            SqlUtility.BulkInsert(sqlConn, clicksTable, schema + "." + "STAGING_Clicks");
-            SqlUtility.BulkInsert(sqlConn, postsInfoTable, schema + "." + "STAGING_PagePostsInfo");
+                SqlUtility.BulkInsert(sqlConn, pageContentTable, schema + "." + "STAGING_PageContent");
+                SqlUtility.BulkInsert(sqlConn, pageEngagementTable, schema + "." + "STAGING_PageEngagement");
+                SqlUtility.BulkInsert(sqlConn, pageImpressionsTable, schema + "." + "STAGING_PageImpressions");
+                SqlUtility.BulkInsert(sqlConn, pagePostsTable, schema + "." + "STAGING_PagePost");
+                SqlUtility.BulkInsert(sqlConn, pagePostEngagement, schema + "." + "STAGING_PagePostEngagement");
+                SqlUtility.BulkInsert(sqlConn, pagePostImpressions, schema + "." + "STAGING_PagePostImpressions");
+                SqlUtility.BulkInsert(sqlConn, pagePostReactionsTable, schema + "." + "STAGING_PagePostReactions");
+                SqlUtility.BulkInsert(sqlConn, pagePostStoriesAndPeopleTalkingAboutThisTable, schema + "." + "STAGING_PagePostStoriesAndPeopleTalkingAboutThis");
+                SqlUtility.BulkInsert(sqlConn, pageReactionsTable, schema + "." + "STAGING_PageReactions");
+                SqlUtility.BulkInsert(sqlConn, pageUserDemographicsTable, schema + "." + "STAGING_PageUserDemographics");
+                SqlUtility.BulkInsert(sqlConn, pageVideoPosts, schema + "." + "STAGING_PageVideoPosts");
+                SqlUtility.BulkInsert(sqlConn, pageVideoViews, schema + "." + "STAGING_PageVideoViews");
+                SqlUtility.BulkInsert(sqlConn, pageViewsTable, schema + "." + "STAGING_PageViews");
+                SqlUtility.BulkInsert(sqlConn, clicksTable, schema + "." + "STAGING_Clicks");
+                SqlUtility.BulkInsert(sqlConn, postsInfoTable, schema + "." + "STAGING_PagePostsInfo");
+
+            }
+            catch (Exception e)
+            {
+                var errorDataTable = DataTableUtility.GetErrorDataTable();
+                DataRow errorRow = errorDataTable.NewRow();
+                errorRow["Date"] = getDataUntil;
+                errorRow["Error"] = e.ToString();
+                //errorRow["Posts"] = page + ":" + JToken.FromObject(posts).ToString();
+                errorDataTable.Rows.Add(errorRow);
+                SqlUtility.BulkInsert(sqlConn, errorDataTable, schema + "." + "StagingError");
+                throw;
+            }
+            return true;
         }
 
         public static void PopulateNestedValues(DataTable table, List<JObject> objects, string pageId)

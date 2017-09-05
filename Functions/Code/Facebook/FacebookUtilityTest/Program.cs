@@ -26,7 +26,7 @@ namespace FacebookUtilityTest
             string schema = "";
             string until = DateTime.UtcNow.AddDays(-2).ToString();
 
-            PageAnalyticsETL.PopulateMeasures(page, accessToken, sqlConn, schema, until);
+            var test = PageAnalyticsETL.PopulateMeasures(page, accessToken, sqlConn, schema, until).Result;
         }
     }
 }

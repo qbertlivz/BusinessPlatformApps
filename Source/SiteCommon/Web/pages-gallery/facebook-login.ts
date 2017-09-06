@@ -22,8 +22,10 @@ export class AzureLogin extends ViewModelBase {
     }
 
     async onNavigatingNext(): Promise<boolean> {
-        this.MS.DataStore.addToDataStore("FacebookPageId", this.selectedPage.id, DataStoreType.Private);
-        this.MS.DataStore.addToDataStore("FacebookPageToken", this.selectedPage.accessToken, DataStoreType.Private);
+        let p = this.pages.find(arg => arg.name == this.selectedPage);
+
+        this.MS.DataStore.addToDataStore("FacebookPageId", p.id, DataStoreType.Private);
+        this.MS.DataStore.addToDataStore("FacebookPageToken", p.access_token, DataStoreType.Private);
         return true;
     }
     

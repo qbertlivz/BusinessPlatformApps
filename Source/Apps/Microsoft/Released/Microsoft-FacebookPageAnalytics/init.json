@@ -83,7 +83,7 @@
                 "name": "Microsoft-SetConfigValueInSql",
                 "SqlConfigTable": "[fbpa].[configuration]",
                 "SqlEntryName": "PagesToFollow",
-                "SqlEntryValue": "$ds(FacebookPagesToFollow)",
+                "SqlEntryValue": "$ds(FacebookPageId)",
                 "SqlGroup": "SolutionTemplate",
                 "SqlServerIndex": "0",
                 "SqlSubGroup": "ETL"

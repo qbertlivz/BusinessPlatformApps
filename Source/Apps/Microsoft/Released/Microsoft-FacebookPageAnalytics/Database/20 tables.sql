@@ -418,7 +418,7 @@ CREATE TABLE fbpa.STAGING_PagePostsInfo
 )
 
 
-CREATE TABLE [fb].[Date](
+CREATE TABLE [fbpa].[Date](
 	[date_key] [int] NOT NULL,
 	[full_date] [date] NOT NULL,
 	[day_of_week] [tinyint] NOT NULL,
@@ -506,14 +506,6 @@ CREATE TABLE [fbpa].[period_page]
 	[period_last][nvarchar](50)
 )
 
-CREATE TABLE [fbpa].[period_page]
-(
-	[period][nvarchar](50),
-	[periodsort][int],
-	[period_name][nvarchar](50),
-	[period_last][nvarchar](50)
-)
-
 CREATE TABLE [fbpa].[type]
 (
 	[type][nvarchar](10),
@@ -561,4 +553,14 @@ CREATE TABLE [fbpa].[time](
 	[+10] [time](7) NULL,
 	[+11] [time](7) NULL,
 	[+12] [time](7) NULL
+)
+
+CREATE TABLE [fbpa].[configuration](
+  id                     INT IDENTITY(1, 1) NOT NULL,
+  configuration_group    VARCHAR(150) NOT NULL,
+  configuration_subgroup VARCHAR(150) NOT NULL,
+  [name]                 VARCHAR(150) NOT NULL,
+  [value]                VARCHAR(max) NULL,
+  visible                BIT NOT NULL DEFAULT 0,
+  PRIMARY KEY (id)
 )

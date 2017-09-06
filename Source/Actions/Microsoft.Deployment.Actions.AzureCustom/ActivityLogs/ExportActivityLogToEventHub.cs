@@ -37,9 +37,15 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
                 isSuccess = await ahc.IsSuccess(HttpMethod.Put, uri, body);
             }
 
+            string logProfileError = string.Empty;
+            if (!isSuccess)
+            {
+                logProfileError = await ahc.Test(HttpMethod.Put, uri);
+            }
+
             return isSuccess
                 ? new ActionResponse(ActionStatus.Success) 
-                : new ActionResponse(ActionStatus.Failure, new ActionResponseExceptionDetail("ActivityLogsExportEventHubTimeout"));
+                : new ActionResponse(ActionStatus.Failure, new ActionResponseExceptionDetail("ActivityLogsErrorExportingToEventHub", logProfileError));
         }
     }
 }

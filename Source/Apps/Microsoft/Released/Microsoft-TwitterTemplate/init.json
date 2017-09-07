@@ -80,6 +80,8 @@
                 "displayname": "Summary",
                 "name": "$SiteCommon$/pages-gallery/summary.html",
                 "values": {
+                    "Subscription": "$(this.MS.DataStore.getJson('SelectedSubscription').DisplayName)",
+                    "Resource Group": "$(this.MS.DataStore.getValue('SelectedResourceGroup'))",
                     "Target Server": "$(this.MS.DataStore.getValue('Server'))",
                     "Target Database": "$(this.MS.DataStore.getValue('Database'))",
                     "Target Username": "$(this.MS.DataStore.getValue('Username'))"

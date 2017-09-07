@@ -1,14 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Deployment.Common.ActionModel;
+using Microsoft.Deployment.Common.Actions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
+using System;
 using System.ComponentModel.Composition;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
-
-using Microsoft.Deployment.Common.ActionModel;
-using Microsoft.Deployment.Common.Actions;
-using Microsoft.Deployment.Common.Helpers;
-using System;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
 
 namespace Microsoft.Deployment.Actions.SQL
 {
@@ -17,14 +15,14 @@ namespace Microsoft.Deployment.Actions.SQL
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            const string CMD_CREATE_USER    = "CREATE LOGIN {0} WITH password='{1}'; " +
+            const string CMD_CREATE_USER = "CREATE LOGIN {0} WITH password='{1}'; " +
                                               "-- CREATE USER {0} FOR LOGIN {0} WITH DEFAULT_SCHEMA=[dbo];";
             const string CMD_ADD_USER_TO_DB = "CREATE USER {0} FOR LOGIN {0} WITH DEFAULT_SCHEMA=[dbo]; ";
             const string CMD_ADD_USER_TO_READER_ROLE = "EXEC sp_addrolemember 'db_datareader', '{0}'";
             const string CMD_ADD_USER_TO_WRITER_ROLE = "EXEC sp_addrolemember 'db_datawriter', '{0}'";
-            const string CMD_GRANT_EXEC_TO_USER      = "GRANT EXECUTE ON SCHEMA ::{1} TO {0}";
+            const string CMD_GRANT_EXEC_TO_USER = "GRANT EXECUTE ON SCHEMA ::{1} TO {0}";
 
-            JObject outputs = (JObject) JsonConvert.DeserializeObject(request.DataStore.GetValue("ArmOutput"));
+            JObject outputs = (JObject)JsonConvert.DeserializeObject(request.DataStore.GetValue("ArmOutput"));
             SqlConnectionStringBuilder cnBuilder = new SqlConnectionStringBuilder()
             {
                 DataSource = outputs["sqlServerHostname"]["value"].ToString(),
@@ -40,31 +38,37 @@ namespace Microsoft.Deployment.Actions.SQL
             using (SqlConnection cn = new SqlConnection(cnBuilder.ToString()))
             {
                 cn.Open();
-                using (SqlCommand cmd = new SqlCommand() { Connection = cn, CommandTimeout=0 })
+                using (SqlCommand cmd = new SqlCommand() { Connection = cn, CommandTimeout = 0 })
                 {
                     cmd.CommandText = string.Format(CMD_CREATE_USER, newUser, newPassword);
                     cmd.ExecuteNonQuery();
+                }
+            }
 
-                    cn.ChangeDatabase(request.DataStore.GetValue("databasename"));
+            cnBuilder.InitialCatalog = request.DataStore.GetValue("databasename");
+            using (SqlConnection cn = new SqlConnection(cnBuilder.ToString()))
+            {
+                cn.Open();
+                using (SqlCommand cmd = new SqlCommand() { Connection = cn, CommandTimeout = 0 })
+                {
                     cmd.CommandText = string.Format(CMD_ADD_USER_TO_DB, newUser);
                     cmd.ExecuteNonQuery();
                     cmd.CommandText = string.Format(CMD_ADD_USER_TO_READER_ROLE, newUser);
                     cmd.ExecuteNonQuery();
                     cmd.CommandText = string.Format(CMD_ADD_USER_TO_WRITER_ROLE, newUser);
                     cmd.ExecuteNonQuery();
-                    cmd.CommandText = string.Format(CMD_GRANT_EXEC_TO_USER, "dbo");
+                    cmd.CommandText = string.Format(CMD_GRANT_EXEC_TO_USER, newUser, "dbo");
                     cmd.ExecuteNonQuery();
 
                     foreach (string s in request.DataStore.GetValue("additionalSchemas").Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                     {
-                        cmd.CommandText = string.Format(CMD_GRANT_EXEC_TO_USER, s.Trim());
+                        cmd.CommandText = string.Format(CMD_GRANT_EXEC_TO_USER, newUser, s.Trim());
                         cmd.ExecuteNonQuery();
                     }
 
                 }
-
-
             }
+
             return new ActionResponse(ActionStatus.Success);
         }
     }

@@ -6,222 +6,909 @@ SET CONCAT_NULL_YIELDS_NULL ON;
 SET QUOTED_IDENTIFIER       ON;
 go
 
---CREATE PROCEDURE [fb].[Merge]
---AS
---BEGIN
+CREATE PROCEDURE [fbpa].[Merge]
+AS
+BEGIN
+---------------------Merge Clicks---------------------------------------
+BEGIN TRAN
 
------------------------Merge Users-------------------------------------
---BEGIN TRAN
+MERGE fbpa.Clicks AS TARGET
+USING
+( 
+SELECT DISTINCT
+EndTime,
+[Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId
+FROM fbpa.STAGING_Clicks) AS SOURCE
+ON  TARGET.EndTime = SOURCE.EndTime 
+AND TARGET.[Name] = SOURCE.[Name]
+AND (TARGET.[Entry Name] = SOURCE.[Entry Name] OR (TARGET.[Entry Name] IS NULL AND SOURCE.[Entry Name] IS NULL))
+AND (TARGET.[Value] = SOURCE.[Value] OR (TARGET.[Value] IS NULL AND SOURCE.[Value] IS NULL))
+AND TARGET.[Period] = SOURCE.[Period]
+AND TARGET.[Id] = SOURCE.[Id]
+WHEN MATCHED THEN
+UPDATE SET
+TARGET.EndTime = SOURCE.EndTime,
+TARGET.[Name] = SOURCE.[Name],
+TARGET.[Entry Name] = SOURCE.[Entry Name],
+TARGET.[Value] = SOURCE.[Value],
+TARGET.[Period] = SOURCE.[Period],
+TARGET.[Id] = SOURCE.[Id]
+WHEN NOT MATCHED BY TARGET THEN
+INSERT 
+(EndTime,
+[Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId)
+VALUES
+(SOURCE.EndTime,
+SOURCE.[Name],
+SOURCE.[Entry Name],
+SOURCE.[Value],
+SOURCE.[Period],
+SOURCE.[Title],
+SOURCE.[Description],
+SOURCE.[Id],
+SOURCE.PageId);
 
---DELETE t 
---FROM fb.[Users] as t
---INNER JOIN fb.StagingComments s 
---ON s.[From Id] = t.[Id];
---INSERT INTO fb.[Users]
---(
---     [Id]
---	,[Name]
---)
---SELECT DISTINCT
---	[From Id] AS [Id]
---	,[From Name] AS [Name]
--- FROM fb.StagingComments
+TRUNCATE TABLE fbpa.STAGING_PageContent;
 
--- DELETE t 
---FROM fb.[Users] as t
---INNER JOIN fb.StagingPosts s 
---ON s.[From Id] = t.[Id];
---INSERT INTO fb.[Users]
---(
---     [Id]
---	,[Name]
---)
---SELECT DISTINCT
---	[From Id] AS [Id]
---	,[From Name] AS [Name]
--- FROM fb.StagingPosts
+COMMIT
 
--- COMMIT
+---------------------Merge PageContent-------------------------------------
+BEGIN TRAN
+SET ANSI_NULLS              ON;
+MERGE fbpa.PageContent AS TARGET
+USING
+( 
+SELECT DISTINCT
+EndTime,
+[Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId
+FROM fbpa.STAGING_PageContent) as SOURCE
+ON  TARGET.EndTime = SOURCE.EndTime 
+AND TARGET.[Name] = SOURCE.[Name]
+AND (TARGET.[Entry Name] = SOURCE.[Entry Name] OR (TARGET.[Entry Name] IS NULL AND SOURCE.[Entry Name] IS NULL))
+AND (TARGET.[Value] = SOURCE.[Value] OR (TARGET.[Value] IS NULL AND SOURCE.[Value] IS NULL))
+AND TARGET.[Period] = SOURCE.[Period]
+AND TARGET.[Id] = SOURCE.[Id]
+WHEN MATCHED THEN
+UPDATE SET
+TARGET.EndTime = SOURCE.EndTime,
+TARGET.[Name] = SOURCE.[Name],
+TARGET.[Entry Name] = SOURCE.[Entry Name],
+TARGET.[Value] = SOURCE.[Value],
+TARGET.[Period] = SOURCE.[Period],
+TARGET.[Id] = SOURCE.[Id]
+WHEN NOT MATCHED BY TARGET THEN
+INSERT 
+(EndTime,
+[Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId)
+VALUES
+(SOURCE.EndTime,
+SOURCE.[Name],
+SOURCE.[Entry Name],
+SOURCE.[Value],
+SOURCE.[Period],
+SOURCE.[Title],
+SOURCE.[Description],
+SOURCE.[Id],
+SOURCE.PageId)
+OUTPUT($action);
 
------------------------Merge Comments-------------------------------------
---BEGIN TRAN
---DELETE t 
---FROM fb.[Comments] as t
---INNER JOIN fb.StagingComments s 
---ON t.Id = s.Id;
+TRUNCATE TABLE fbpa.STAGING_PageContent;
 
+COMMIT
 
---INSERT INTO fb.[Comments]
---(
---	 [Id]
---	,[Created Date]
---	,[Message]
---	,[From Id]
---	,[From Name]
---	,[Post Id]
---	,[Page]
---    ,[PageDisplayName]
---    ,[PageId]
---)
---SELECT DISTINCT
---	[Id]
---	,[Created Date]
---	,[Message]
---	,[From Id]
---	,[From Name]
---	,[Post Id]
---	,[Page]
---    ,[PageDisplayName]
---    ,[PageId]
--- FROM fb.StagingComments
-    
---TRUNCATE TABLE [fb].[StagingComments];	 
---COMMIT
------------------------Merge HashTags-------------------------------------
+---------------------Merge PageEngagement-------------------------------------
+BEGIN TRAN
 
---BEGIN TRAN
---DELETE t 
---FROM fb.HashTags as t
---INNER JOIN fb.StagingHashTags s 
---ON t.Id = s.Id;
+MERGE fbpa.PageEngagement AS TARGET
+USING
+( 
+SELECT DISTINCT
+EndTime,
+[Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId
+FROM fbpa.STAGING_PageEngagement) as SOURCE
+ON  TARGET.EndTime = SOURCE.EndTime 
+AND TARGET.[Name] = SOURCE.[Name]
+AND (TARGET.[Entry Name] = SOURCE.[Entry Name] OR (TARGET.[Entry Name] IS NULL AND SOURCE.[Entry Name] IS NULL))
+AND (TARGET.[Value] = SOURCE.[Value] OR (TARGET.[Value] IS NULL AND SOURCE.[Value] IS NULL))
+AND TARGET.[Period] = SOURCE.[Period]
+AND TARGET.[Id] = SOURCE.[Id]
+WHEN MATCHED THEN
+UPDATE SET
+TARGET.EndTime = SOURCE.EndTime,
+TARGET.[Name] = SOURCE.[Name],
+TARGET.[Entry Name] = SOURCE.[Entry Name],
+TARGET.[Value] = SOURCE.[Value],
+TARGET.[Period] = SOURCE.[Period],
+TARGET.[Id] = SOURCE.[Id]
+WHEN NOT MATCHED BY TARGET THEN
+INSERT 
+(EndTime,
+[Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId)
+VALUES
+(SOURCE.EndTime,
+SOURCE.[Name],
+SOURCE.[Entry Name],
+SOURCE.[Value],
+SOURCE.[Period],
+SOURCE.[Title],
+SOURCE.[Description],
+SOURCE.[Id],
+SOURCE.PageId);
 
---INSERT INTO [fb].[HashTags] 
---(
---	[Id]
---	,[HashTags]
---)
---SELECT DISTINCT   
---	[Id]
---	,[HashTags]
---FROM [fb].[StagingHashTags];
+TRUNCATE TABLE fbpa.STAGING_PageEngagement;
 
---TRUNCATE TABLE [fb].[StagingHashTags];
---COMMIT
------------------------Merge KeyPhrases-------------------------------------
+COMMIT
 
---BEGIN TRAN
---DELETE t 
---FROM fb.KeyPhrase as t
---INNER JOIN fb.StagingKeyPhrase s 
---ON t.Id = s.Id;
---INSERT INTO [fb].[KeyPhrase] 
---(
---	[Id]
---	,[KeyPhrase]
---)
-    
---SELECT DISTINCT  
---		[Id]
---		,[KeyPhrase]
---	FROM [fb].[StagingKeyPhrase];
+---------------------Merge PageImpressions-------------------------------------
+BEGIN TRAN
 
---TRUNCATE TABLE [fb].[StagingKeyPhrase];	 	 
---COMMIT
------------------------Merge Posts-------------------------------------
---BEGIN TRAN
---DELETE t 
---FROM fb.Posts as t
---INNER JOIN fb.StagingPosts s 
---ON t.Id = s.Id;
+MERGE fbpa.PageImpressions AS TARGET
+USING
+( 
+SELECT DISTINCT
+EndTime,
+[Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId
+FROM fbpa.STAGING_PageImpressions) as SOURCE
+ON  TARGET.EndTime = SOURCE.EndTime 
+AND TARGET.[Name] = SOURCE.[Name]
+AND (TARGET.[Entry Name] = SOURCE.[Entry Name] OR (TARGET.[Entry Name] IS NULL AND SOURCE.[Entry Name] IS NULL))
+AND (TARGET.[Value] = SOURCE.[Value] OR (TARGET.[Value] IS NULL AND SOURCE.[Value] IS NULL))
+AND TARGET.[Period] = SOURCE.[Period]
+AND TARGET.[Id] = SOURCE.[Id]
+WHEN MATCHED THEN
+UPDATE SET
+TARGET.EndTime = SOURCE.EndTime,
+TARGET.[Name] = SOURCE.[Name],
+TARGET.[Entry Name] = SOURCE.[Entry Name],
+TARGET.[Value] = SOURCE.[Value],
+TARGET.[Period] = SOURCE.[Period],
+TARGET.[Id] = SOURCE.[Id]
+WHEN NOT MATCHED BY TARGET THEN
+INSERT 
+(EndTime,
+[Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId)
+VALUES
+(SOURCE.EndTime,
+SOURCE.[Name],
+SOURCE.[Entry Name],
+SOURCE.[Value],
+SOURCE.[Period],
+SOURCE.[Title],
+SOURCE.[Description],
+SOURCE.[Id],
+SOURCE.PageId);
 
---INSERT INTO fb.Posts
---(
---	 [Id]
---	,[Created Date]
---	,[Message]
---	,[From Id]
---	,[From Name]
---	,[Media]
---	,[Page]
---    ,[PageDisplayName]
---    ,[PageId]
---    ,[Total Comments]
---)
---SELECT DISTINCT
---	 [Id]
---	,[Created Date]
---	,[Message]
---	,[From Id]
---	,[From Name]
---	,[Media]
---	,[Page]
---    ,[PageDisplayName]
---    ,[PageId]
---	,[Total Comments]
---    FROM fb.StagingPosts
---TRUNCATE TABLE [fb].StagingPosts;
---COMMIT
+TRUNCATE TABLE fbpa.STAGING_PageImpressions;
 
------------------------Merge Reactions-------------------------------------
---BEGIN TRAN
---DELETE t 
---FROM [fb].[Reactions] as t
---INNER JOIN [fb].[StagingReactions] s 
---ON t.Id = s.Id;
+COMMIT
 
---INSERT INTO [fb].[Reactions]
---(
---	[Id]
---	,[Reaction Type]
---	,[Count]
---)
---SELECT DISTINCT  
---	[Id]
---	,[Reaction Type]
---	,[Count]
---FROM [fb].[StagingReactions]
---TRUNCATE TABLE [fb].[StagingReactions];
---COMMIT
+---------------------Merge PagePost-------------------------------------
+BEGIN TRAN
 
------------------------Merge Sentiment-------------------------------------
---BEGIN TRAN
---DELETE t 
---FROM [fb].[Sentiment] as t
---INNER JOIN [fb].[StagingSentiment] s 
---ON t.Id = s.Id;
-    
---INSERT INTO [fb].[Sentiment]
---(
---	[Id]
---	,[Sentiment]
---)
---SELECT DISTINCT
---	 [Id]
---	,[Sentiment]
---FROM [fb].[StagingSentiment]
---TRUNCATE TABLE [fb].[StagingSentiment]; 
---COMMIT
+MERGE fbpa.PagePost AS TARGET
+USING
+( 
+SELECT DISTINCT
+EndTime,
+[Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId
+FROM fbpa.STAGING_PagePost) as SOURCE
+ON  TARGET.EndTime = SOURCE.EndTime 
+AND TARGET.[Name] = SOURCE.[Name]
+AND (TARGET.[Entry Name] = SOURCE.[Entry Name] OR (TARGET.[Entry Name] IS NULL AND SOURCE.[Entry Name] IS NULL))
+AND (TARGET.[Value] = SOURCE.[Value] OR (TARGET.[Value] IS NULL AND SOURCE.[Value] IS NULL))
+AND TARGET.[Period] = SOURCE.[Period]
+AND TARGET.[Id] = SOURCE.[Id]
+WHEN MATCHED THEN
+UPDATE SET
+TARGET.EndTime = SOURCE.EndTime,
+TARGET.[Name] = SOURCE.[Name],
+TARGET.[Entry Name] = SOURCE.[Entry Name],
+TARGET.[Value] = SOURCE.[Value],
+TARGET.[Period] = SOURCE.[Period],
+TARGET.[Id] = SOURCE.[Id]
+WHEN NOT MATCHED BY TARGET THEN
+INSERT 
+(EndTime,
+[Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId)
+VALUES
+(SOURCE.EndTime,
+SOURCE.[Name],
+SOURCE.[Entry Name],
+SOURCE.[Value],
+SOURCE.[Period],
+SOURCE.[Title],
+SOURCE.[Description],
+SOURCE.[Id],
+SOURCE.PageId);
 
---END
---go
+TRUNCATE TABLE fbpa.STAGING_PagePost;
 
---CREATE PROCEDURE [fb].[UpdateEdges]
---AS
---BEGIN
+COMMIT
 
---BEGIN TRAN
---TRUNCATE TABLE fb.[Edges];
+---------------------Merge PagePostEngagement-------------------------------------
+BEGIN TRAN
 
---INSERT INTO fb.[Edges]
---(
---     SourceVertex
---    ,TargetVertex
---    ,EdgeWeight
---    ,PageId
---)
---(
---    SELECT 
---    tbl1.[From Id] as SourceVertex, 
---    tbl2.[From Id] as TargetVertex,
---    count(1) as EdgeWeight,
---    tbl1.[PageId]  as PageId
---    FROM [fb].Comments tbl1 join [fb].Comments tbl2 on tbl1.[Post Id] = tbl2.[Post Id]
---    WHERE tbl1.[From Id] !=  tbl1.[PageId] and tbl2.[From Id] !=  tbl2.[PageId] and tbl1.[From Id] != tbl2.[From Id] 
---    group by tbl1.[From Id], tbl2.[From Id], tbl1.[PageId]
---    having count(1) > 2 
---);
+MERGE fbpa.PagePostEngagement AS TARGET
+USING
+( 
+SELECT DISTINCT
+EndTime,
+[Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId
+FROM fbpa.STAGING_PagePostEngagement) as SOURCE
+ON  TARGET.EndTime = SOURCE.EndTime 
+AND TARGET.[Name] = SOURCE.[Name]
+AND (TARGET.[Entry Name] = SOURCE.[Entry Name] OR (TARGET.[Entry Name] IS NULL AND SOURCE.[Entry Name] IS NULL))
+AND (TARGET.[Value] = SOURCE.[Value] OR (TARGET.[Value] IS NULL AND SOURCE.[Value] IS NULL))
+AND TARGET.[Period] = SOURCE.[Period]
+AND TARGET.[Id] = SOURCE.[Id]
+WHEN MATCHED THEN
+UPDATE SET
+TARGET.EndTime = SOURCE.EndTime,
+TARGET.[Name] = SOURCE.[Name],
+TARGET.[Entry Name] = SOURCE.[Entry Name],
+TARGET.[Value] = SOURCE.[Value],
+TARGET.[Period] = SOURCE.[Period],
+TARGET.[Id] = SOURCE.[Id]
+WHEN NOT MATCHED BY TARGET THEN
+INSERT 
+(EndTime,
+[Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId)
+VALUES
+(SOURCE.EndTime,
+SOURCE.[Name],
+SOURCE.[Entry Name],
+SOURCE.[Value],
+SOURCE.[Period],
+SOURCE.[Title],
+SOURCE.[Description],
+SOURCE.[Id],
+SOURCE.PageId);
 
---COMMIT
+TRUNCATE TABLE fbpa.STAGING_PagePostEngagement;
 
---END
---GO
+COMMIT
+
+---------------------Merge PagePostImpressions-------------------------------------
+BEGIN TRAN
+
+MERGE fbpa.PagePostImpressions AS TARGET
+USING
+( 
+SELECT DISTINCT
+[Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId
+FROM fbpa.STAGING_PagePostImpressions) as SOURCE
+ON TARGET.[Name] = SOURCE.[Name]
+AND (TARGET.[Entry Name] = SOURCE.[Entry Name] OR (TARGET.[Entry Name] IS NULL AND SOURCE.[Entry Name] IS NULL))
+AND (TARGET.[Value] = SOURCE.[Value] OR (TARGET.[Value] IS NULL AND SOURCE.[Value] IS NULL))
+AND TARGET.[Period] = SOURCE.[Period]
+AND TARGET.[Id] = SOURCE.[Id]
+WHEN MATCHED THEN
+UPDATE SET
+TARGET.[Name] = SOURCE.[Name],
+TARGET.[Entry Name] = SOURCE.[Entry Name],
+TARGET.[Value] = SOURCE.[Value],
+TARGET.[Period] = SOURCE.[Period],
+TARGET.[Id] = SOURCE.[Id]
+WHEN NOT MATCHED BY TARGET THEN
+INSERT 
+([Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId)
+VALUES
+(SOURCE.[Name],
+SOURCE.[Entry Name],
+SOURCE.[Value],
+SOURCE.[Period],
+SOURCE.[Title],
+SOURCE.[Description],
+SOURCE.[Id],
+SOURCE.PageId);
+
+TRUNCATE TABLE fbpa.STAGING_PagePostImpressions;
+
+COMMIT
+
+---------------------Merge PagePostReactions-------------------------------------
+BEGIN TRAN
+
+MERGE fbpa.PagePostReactions AS TARGET
+USING
+( 
+SELECT DISTINCT
+[Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId
+FROM fbpa.STAGING_PagePostReactions) as SOURCE
+ON TARGET.[Name] = SOURCE.[Name]
+AND (TARGET.[Entry Name] = SOURCE.[Entry Name] OR (TARGET.[Entry Name] IS NULL AND SOURCE.[Entry Name] IS NULL))
+AND (TARGET.[Value] = SOURCE.[Value] OR (TARGET.[Value] IS NULL AND SOURCE.[Value] IS NULL))
+AND TARGET.[Period] = SOURCE.[Period]
+AND TARGET.[Id] = SOURCE.[Id]
+WHEN MATCHED THEN
+UPDATE SET
+TARGET.[Name] = SOURCE.[Name],
+TARGET.[Entry Name] = SOURCE.[Entry Name],
+TARGET.[Value] = SOURCE.[Value],
+TARGET.[Period] = SOURCE.[Period],
+TARGET.[Id] = SOURCE.[Id]
+WHEN NOT MATCHED BY TARGET THEN
+INSERT 
+([Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId)
+VALUES
+(SOURCE.[Name],
+SOURCE.[Entry Name],
+SOURCE.[Value],
+SOURCE.[Period],
+SOURCE.[Title],
+SOURCE.[Description],
+SOURCE.[Id],
+SOURCE.PageId);
+
+TRUNCATE TABLE fbpa.STAGING_PagePostReactions;
+
+COMMIT
+
+---------------------Merge PagePostStoriesAndPeopleTalkingAboutThis-------------------------------------
+BEGIN TRAN
+
+MERGE fbpa.PagePostStoriesAndPeopleTalkingAboutThis AS TARGET
+USING
+( 
+SELECT DISTINCT
+EndTime,
+[Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId
+FROM fbpa.STAGING_PagePostStoriesAndPeopleTalkingAboutThis) as SOURCE
+ON  TARGET.EndTime = SOURCE.EndTime 
+AND TARGET.[Name] = SOURCE.[Name]
+AND (TARGET.[Entry Name] = SOURCE.[Entry Name] OR (TARGET.[Entry Name] IS NULL AND SOURCE.[Entry Name] IS NULL))
+AND (TARGET.[Value] = SOURCE.[Value] OR (TARGET.[Value] IS NULL AND SOURCE.[Value] IS NULL))
+AND TARGET.[Period] = SOURCE.[Period]
+AND TARGET.[Id] = SOURCE.[Id]
+WHEN MATCHED THEN
+UPDATE SET
+TARGET.EndTime = SOURCE.EndTime,
+TARGET.[Name] = SOURCE.[Name],
+TARGET.[Entry Name] = SOURCE.[Entry Name],
+TARGET.[Value] = SOURCE.[Value],
+TARGET.[Period] = SOURCE.[Period],
+TARGET.[Id] = SOURCE.[Id]
+WHEN NOT MATCHED BY TARGET THEN
+INSERT 
+(EndTime,
+[Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId)
+VALUES
+(SOURCE.EndTime,
+SOURCE.[Name],
+SOURCE.[Entry Name],
+SOURCE.[Value],
+SOURCE.[Period],
+SOURCE.[Title],
+SOURCE.[Description],
+SOURCE.[Id],
+SOURCE.PageId);
+
+TRUNCATE TABLE fbpa.STAGING_PagePostStoriesAndPeopleTalkingAboutThis;
+
+COMMIT
+
+---------------------Merge PageReactions-------------------------------------
+BEGIN TRAN
+
+MERGE fbpa.PageReactions AS TARGET
+USING
+( 
+SELECT DISTINCT
+EndTime,
+[Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId
+FROM fbpa.STAGING_PageReactions) as SOURCE
+ON  TARGET.EndTime = SOURCE.EndTime 
+AND TARGET.[Name] = SOURCE.[Name]
+AND (TARGET.[Entry Name] = SOURCE.[Entry Name] OR (TARGET.[Entry Name] IS NULL AND SOURCE.[Entry Name] IS NULL))
+AND (TARGET.[Value] = SOURCE.[Value] OR (TARGET.[Value] IS NULL AND SOURCE.[Value] IS NULL))
+AND TARGET.[Period] = SOURCE.[Period]
+AND TARGET.[Id] = SOURCE.[Id]
+WHEN MATCHED THEN
+UPDATE SET
+TARGET.EndTime = SOURCE.EndTime,
+TARGET.[Name] = SOURCE.[Name],
+TARGET.[Entry Name] = SOURCE.[Entry Name],
+TARGET.[Value] = SOURCE.[Value],
+TARGET.[Period] = SOURCE.[Period],
+TARGET.[Id] = SOURCE.[Id]
+WHEN NOT MATCHED BY TARGET THEN
+INSERT 
+(EndTime,
+[Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId)
+VALUES
+(SOURCE.EndTime,
+SOURCE.[Name],
+SOURCE.[Entry Name],
+SOURCE.[Value],
+SOURCE.[Period],
+SOURCE.[Title],
+SOURCE.[Description],
+SOURCE.[Id],
+SOURCE.PageId);
+
+TRUNCATE TABLE fbpa.STAGING_PageReactions;
+
+COMMIT
+
+---------------------Merge PageUserDemographics-------------------------------------
+BEGIN TRAN
+
+MERGE fbpa.PageUserDemographics AS TARGET
+USING
+( 
+SELECT DISTINCT
+EndTime,
+[Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId
+FROM fbpa.STAGING_PageUserDemographics) as SOURCE
+ON  TARGET.EndTime = SOURCE.EndTime 
+AND TARGET.[Name] = SOURCE.[Name]
+AND (TARGET.[Entry Name] = SOURCE.[Entry Name] OR (TARGET.[Entry Name] IS NULL AND SOURCE.[Entry Name] IS NULL))
+AND (TARGET.[Value] = SOURCE.[Value] OR (TARGET.[Value] IS NULL AND SOURCE.[Value] IS NULL))
+AND TARGET.[Period] = SOURCE.[Period]
+AND TARGET.[Id] = SOURCE.[Id]
+WHEN MATCHED THEN
+UPDATE SET
+TARGET.EndTime = SOURCE.EndTime,
+TARGET.[Name] = SOURCE.[Name],
+TARGET.[Entry Name] = SOURCE.[Entry Name],
+TARGET.[Value] = SOURCE.[Value],
+TARGET.[Period] = SOURCE.[Period],
+TARGET.[Id] = SOURCE.[Id]
+WHEN NOT MATCHED BY TARGET THEN
+INSERT 
+(EndTime,
+[Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId)
+VALUES
+(SOURCE.EndTime,
+SOURCE.[Name],
+SOURCE.[Entry Name],
+SOURCE.[Value],
+SOURCE.[Period],
+SOURCE.[Title],
+SOURCE.[Description],
+SOURCE.[Id],
+SOURCE.PageId);
+
+TRUNCATE TABLE fbpa.STAGING_PageUserDemographics;
+
+COMMIT
+
+---------------------Merge PageVideoPosts-------------------------------------
+BEGIN TRAN
+
+MERGE fbpa.PageVideoPosts AS TARGET
+USING
+( 
+SELECT DISTINCT
+[Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId
+FROM fbpa.STAGING_PageVideoPosts) as SOURCE
+ON  TARGET.[Name] = SOURCE.[Name]
+AND (TARGET.[Entry Name] = SOURCE.[Entry Name] OR (TARGET.[Entry Name] IS NULL AND SOURCE.[Entry Name] IS NULL))
+AND (TARGET.[Value] = SOURCE.[Value] OR (TARGET.[Value] IS NULL AND SOURCE.[Value] IS NULL))
+AND TARGET.[Period] = SOURCE.[Period]
+AND TARGET.[Id] = SOURCE.[Id]
+WHEN MATCHED THEN
+UPDATE SET
+TARGET.[Name] = SOURCE.[Name],
+TARGET.[Entry Name] = SOURCE.[Entry Name],
+TARGET.[Value] = SOURCE.[Value],
+TARGET.[Period] = SOURCE.[Period],
+TARGET.[Id] = SOURCE.[Id]
+WHEN NOT MATCHED BY TARGET THEN
+INSERT 
+([Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId)
+VALUES
+(SOURCE.[Name],
+SOURCE.[Entry Name],
+SOURCE.[Value],
+SOURCE.[Period],
+SOURCE.[Title],
+SOURCE.[Description],
+SOURCE.[Id],
+SOURCE.PageId);
+
+TRUNCATE TABLE fbpa.STAGING_PageVideoPosts;
+
+COMMIT
+
+---------------------Merge PageVideoViews-------------------------------------
+BEGIN TRAN
+
+MERGE fbpa.PageVideoViews AS TARGET
+USING
+( 
+SELECT DISTINCT
+EndTime,
+[Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId
+FROM fbpa.STAGING_PageVideoViews) as SOURCE
+ON  TARGET.EndTime = SOURCE.EndTime 
+AND TARGET.[Name] = SOURCE.[Name]
+AND (TARGET.[Entry Name] = SOURCE.[Entry Name] OR (TARGET.[Entry Name] IS NULL AND SOURCE.[Entry Name] IS NULL))
+AND (TARGET.[Value] = SOURCE.[Value] OR (TARGET.[Value] IS NULL AND SOURCE.[Value] IS NULL))
+AND TARGET.[Period] = SOURCE.[Period]
+AND TARGET.[Id] = SOURCE.[Id]
+WHEN MATCHED THEN
+UPDATE SET
+TARGET.EndTime = SOURCE.EndTime,
+TARGET.[Name] = SOURCE.[Name],
+TARGET.[Entry Name] = SOURCE.[Entry Name],
+TARGET.[Value] = SOURCE.[Value],
+TARGET.[Period] = SOURCE.[Period],
+TARGET.[Id] = SOURCE.[Id]
+WHEN NOT MATCHED BY TARGET THEN
+INSERT 
+(EndTime,
+[Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId)
+VALUES
+(SOURCE.EndTime,
+SOURCE.[Name],
+SOURCE.[Entry Name],
+SOURCE.[Value],
+SOURCE.[Period],
+SOURCE.[Title],
+SOURCE.[Description],
+SOURCE.[Id],
+SOURCE.PageId);
+
+TRUNCATE TABLE fbpa.STAGING_PageVideoViews;
+
+COMMIT
+
+---------------------Merge PageViews-------------------------------------
+BEGIN TRAN
+
+MERGE fbpa.PageViews AS TARGET
+USING
+( 
+SELECT DISTINCT
+EndTime,
+[Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId
+FROM fbpa.STAGING_PageViews) as SOURCE
+ON  TARGET.EndTime = SOURCE.EndTime 
+AND TARGET.[Name] = SOURCE.[Name]
+AND (TARGET.[Entry Name] = SOURCE.[Entry Name] OR (TARGET.[Entry Name] IS NULL AND SOURCE.[Entry Name] IS NULL))
+AND (TARGET.[Value] = SOURCE.[Value] OR (TARGET.[Value] IS NULL AND SOURCE.[Value] IS NULL))
+AND TARGET.[Period] = SOURCE.[Period]
+AND TARGET.[Id] = SOURCE.[Id]
+WHEN MATCHED THEN
+UPDATE SET
+TARGET.EndTime = SOURCE.EndTime,
+TARGET.[Name] = SOURCE.[Name],
+TARGET.[Entry Name] = SOURCE.[Entry Name],
+TARGET.[Value] = SOURCE.[Value],
+TARGET.[Period] = SOURCE.[Period],
+TARGET.[Id] = SOURCE.[Id]
+WHEN NOT MATCHED BY TARGET THEN
+INSERT 
+(EndTime,
+[Name],
+[Entry Name],
+[Value],
+[Period],
+[Title],
+[Description],
+[Id],
+PageId)
+VALUES
+(SOURCE.EndTime,
+SOURCE.[Name],
+SOURCE.[Entry Name],
+SOURCE.[Value],
+SOURCE.[Period],
+SOURCE.[Title],
+SOURCE.[Description],
+SOURCE.[Id],
+SOURCE.PageId);
+
+TRUNCATE TABLE fbpa.STAGING_PageViews;
+
+COMMIT
+
+---------------------Merge PagePostsInfo-------------------------------------
+BEGIN TRAN
+
+MERGE fbpa.PagePostsInfo AS TARGET
+USING
+( 
+SELECT DISTINCT
+	   [Id],
+       [PageId],
+       [Message],
+       [Created Time],
+       [Updated Time],
+       [Icon],
+       [Story],
+       [Link],
+       [Status Type],
+       [Is Hidden],
+       [Is Published],
+       [Name],
+       [Object],
+       [Permalink URL],
+       [Picture],
+       [Source],
+       [Shares],
+       [To Id],
+       [To Name],
+       [Type]
+FROM fbpa.STAGING_PagePostsInfo) as SOURCE
+ON  TARGET.[Id] = SOURCE.[Id] 
+AND (TARGET.[PageId] = SOURCE.[PageId] OR (TARGET.[PageId] IS NULL AND SOURCE.[PageId] IS NULL))
+AND (TARGET.[Message] = SOURCE.[Message]  OR (TARGET.[Message] IS NULL AND SOURCE.[Message] IS NULL))
+AND (TARGET.[Created Time] = SOURCE.[Created Time]  OR (TARGET.[Created Time] IS NULL AND SOURCE.[Created Time] IS NULL))
+AND (TARGET.[Icon] = SOURCE.[Icon]  OR (TARGET.[Icon] IS NULL AND SOURCE.[Icon] IS NULL))
+AND (TARGET.[Story] = SOURCE.[Story]  OR (TARGET.[Story] IS NULL AND SOURCE.[Story] IS NULL))
+AND (TARGET.[Link] = SOURCE.[Link]  OR (TARGET.[Link] IS NULL AND SOURCE.[Link] IS NULL))
+AND (TARGET.[Status Type] = SOURCE.[Status Type]  OR (TARGET.[Status Type] IS NULL AND SOURCE.[Status Type] IS NULL))
+AND (TARGET.[Is Hidden] = SOURCE.[Is Hidden]  OR (TARGET.[Is Hidden] IS NULL AND SOURCE.[Is Hidden] IS NULL))
+AND (TARGET.[Is Published] = SOURCE.[Is Published]  OR (TARGET.[Is Published] IS NULL AND SOURCE.[Is Published] IS NULL))
+AND (TARGET.[Name] = SOURCE.[Name]  OR (TARGET.[Name] IS NULL AND SOURCE.[Name] IS NULL))
+AND (TARGET.[Object] = SOURCE.[Object]  OR (TARGET.[Object] IS NULL AND SOURCE.[Object] IS NULL))
+AND (TARGET.[Permalink URL] = SOURCE.[Permalink URL]  OR (TARGET.[Permalink URL] IS NULL AND SOURCE.[Permalink URL] IS NULL))
+AND (TARGET.[Picture] = SOURCE.[Picture]  OR (TARGET.[Picture] IS NULL AND SOURCE.[Picture] IS NULL))
+AND (TARGET.[Source] = SOURCE.[Source]  OR (TARGET.[Source] IS NULL AND SOURCE.[Source] IS NULL))
+AND (TARGET.[Shares] = SOURCE.[Shares]  OR (TARGET.[Shares] IS NULL AND SOURCE.[Shares] IS NULL))
+AND (TARGET.[To Id] = SOURCE.[To Id]  OR (TARGET.[To Id] IS NULL AND SOURCE.[To Id] IS NULL))
+AND (TARGET.[To Name] = SOURCE.[To Name]  OR (TARGET.[To Name] IS NULL AND SOURCE.[To Name] IS NULL))
+AND (TARGET.[Type] = SOURCE.[Type] OR (TARGET.[Type] IS NULL AND SOURCE.[Type] IS NULL))
+WHEN MATCHED AND SOURCE.[Updated Time] > TARGET.[Updated Time] THEN
+UPDATE SET
+TARGET.[Id] = SOURCE.[Id],
+TARGET.[PageId] = SOURCE.[PageId],
+TARGET.[Message] = SOURCE.[Message],
+TARGET.[Created Time] = SOURCE.[Created Time],
+TARGET.[Updated Time] = SOURCE.[Updated Time],
+TARGET.[Icon] = SOURCE.[Icon],
+TARGET.[Story] = SOURCE.[Story],
+TARGET.[Link] = SOURCE.[Link],
+TARGET.[Status Type] = SOURCE.[Status Type],
+TARGET.[Is Hidden] = SOURCE.[Is Hidden],
+TARGET.[Is Published] = SOURCE.[Is Published],
+TARGET.[Name] = SOURCE.[Name],
+TARGET.[Object] = SOURCE.[Object],
+TARGET.[Permalink URL] = SOURCE.[Permalink URL],
+TARGET.[Picture] = SOURCE.[Picture],
+TARGET.[Source] = SOURCE.[Source],
+TARGET.[Shares] = SOURCE.[Shares],
+TARGET.[To Id] = SOURCE.[To Id],
+TARGET.[To Name] = SOURCE.[To Name],
+TARGET.[Type] = SOURCE.[Type]
+WHEN NOT MATCHED BY TARGET THEN
+INSERT 
+([Id],
+[PageId],
+[Message],
+[Created Time],
+[Updated Time],
+[Icon],
+[Story],
+[Link],
+[Status Type],
+[Is Hidden],
+[Is Published],
+[Name],
+[Object],
+[Permalink URL],
+[Picture],
+[Source],
+[Shares],
+[To Id],
+[To Name],
+[Type])
+VALUES
+(SOURCE.[Id],
+SOURCE.[PageId],
+SOURCE.[Message],
+SOURCE.[Created Time],
+SOURCE.[Updated Time],
+SOURCE.[Icon],
+SOURCE.[Story],
+SOURCE.[Link],
+SOURCE.[Status Type],
+SOURCE.[Is Hidden],
+SOURCE.[Is Published],
+SOURCE.[Name],
+SOURCE.[Object],
+SOURCE.[Permalink URL],
+SOURCE.[Picture],
+SOURCE.[Source],
+SOURCE.[Shares],
+SOURCE.[To Id],
+SOURCE.[To Name],
+SOURCE.[Type]);
+
+TRUNCATE TABLE fbpa.STAGING_PagePostsInfo;
+
+COMMIT
+
+END
+GO

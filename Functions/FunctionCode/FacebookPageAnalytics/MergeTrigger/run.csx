@@ -5,11 +5,11 @@ using System.Data.SqlClient;
 
 public static void Run(TimerInfo myTimer, TraceWriter log)
 {
-    //string sqlConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["SqlConnectionString"].ConnectionString;
-    //string cognitiveKey = System.Configuration.ConfigurationManager.ConnectionStrings["CognitiveKey"].ConnectionString;
-    //string schema = System.Configuration.ConfigurationManager.ConnectionStrings["Schema"].ConnectionString;
+    string sqlConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["SqlConnectionString"].ConnectionString;
+    string cognitiveKey = System.Configuration.ConfigurationManager.ConnectionStrings["CognitiveKey"].ConnectionString;
+    string schema = System.Configuration.ConfigurationManager.ConnectionStrings["Schema"].ConnectionString;
 
-    //RunStoredProcWithRunId(sqlConnectionString, schema + ".Merge");
+    RunStoredProcWithRunId(sqlConnectionString, schema + ".Merge");
 }
 
 public static void RunStoredProcWithRunId(string sqlConnectionString, string storedProc)

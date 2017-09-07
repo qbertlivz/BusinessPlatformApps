@@ -7,6 +7,8 @@ using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
 using System;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace Microsoft.Deployment.Actions.SQL
 {
@@ -22,11 +24,18 @@ namespace Microsoft.Deployment.Actions.SQL
             const string CMD_ADD_USER_TO_WRITER_ROLE = "EXEC sp_addrolemember 'db_datawriter', '{0}'";
             const string CMD_GRANT_EXEC_TO_USER      = "GRANT EXECUTE ON SCHEMA ::{1} TO {0}";
 
-            SqlConnectionStringBuilder cnBuilder = new SqlConnectionStringBuilder();
-            request.DataStore.GetValueAtIndex("SqlConnectionString", "SqlServerIndex");
-            string newUser = request.DataStore.GetValue("NewSqlUser");
-            string newPassword = request.DataStore.GetValue("NewSqlPassword");
-            cnBuilder.InitialCatalog = "master";
+            JObject outputs = (JObject) JsonConvert.DeserializeObject(request.DataStore.GetValue("ArmOutput"));
+            SqlConnectionStringBuilder cnBuilder = new SqlConnectionStringBuilder()
+            {
+                DataSource = outputs["sqlServerHostname"]["value"].ToString(),
+                Encrypt = true,
+                UserID = request.DataStore.GetValue("sqlServerAdminLogin"),
+                Password = request.DataStore.GetValue("sqlServerAdminPassword"),
+                InitialCatalog = "master"
+            };
+
+            string newUser = request.DataStore.GetValue("newUser");
+            string newPassword = request.DataStore.GetValue("newPassword");
 
             using (SqlConnection cn = new SqlConnection(cnBuilder.ToString()))
             {

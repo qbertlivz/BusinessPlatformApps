@@ -21,6 +21,7 @@
                     "Microsoft.Web"
                 ],
                 "displayname": "Login",
+                "showAdvanced": true,
                 "name": "$SiteCommon$/pages-gallery/azure-login.html"
             },
             {

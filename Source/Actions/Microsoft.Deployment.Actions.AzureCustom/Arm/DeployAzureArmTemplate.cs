@@ -12,6 +12,7 @@ using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.ErrorCode;
 using Microsoft.Deployment.Common.Helpers;
 using Microsoft.Deployment.Common;
+using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.Arm
 {
@@ -82,8 +83,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Arm
             request.DataStore.AddToDataStore("ArmOutput", r.DataStore.GetValue("ArmOutput"), DataStoreType.Public);
             return r;
         }
-
-        private static string m_ArmOutput;
 
         private static async Task<ActionResponse> WaitForAction(ResourceManagementClient client, string resourceGroup, string deploymentName)
         {

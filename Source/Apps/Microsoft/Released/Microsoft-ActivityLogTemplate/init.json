@@ -25,6 +25,7 @@
             {
                 "azureProviders": [
                     "Microsoft.EventHub",
+                    "microsoft.insights",
                     "Microsoft.StreamAnalytics"
                 ],
                 "defaultLocation": "5",
@@ -65,33 +66,33 @@
             //  "skip": "$run(this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true' : 'false')"
             //},
             {
+                "displayCompletionNotification": false,
                 "displayname": "Summary",
                 "name": "$SiteCommon$/pages-gallery/summary.html",
+                "sendCompletionNotification": false,
                 "values": {
                     "Target Server": "$(this.MS.DataStore.getValue('Server'))",
                     "Target Database": "$(this.MS.DataStore.getValue('Database'))",
                     "Target Username": "$(this.MS.DataStore.getValue('Username'))"
-                },
-                "displayCompletionNotification": false,
-                "sendCompletionNotification": false
+                }
             },
             {
+                "asDatabase": "ActivityLog",
                 "datastoreEntriesToValidate": [
                     "AzureToken",
                     "SqlConnectionString"
                 ],
                 "displayname": "Deploy",
-                "downloadPbiText": "$translate(INIT_AAL_DOWNLOAD)",
+                "DoNotWait": "$save('1')",
                 "filename": "$save('ActivityLogTemplate.pbix')",
                 "filenameSSAS": "$save('ActivityLogTemplateAs.pbix')",
-
-                "name": "$SiteCommon$/pages-gallery/progress.html",
                 "finishedActionName": "Microsoft-GetHistoricalData",
+                "name": "$SiteCommon$/pages-gallery/progress.html",
                 "showCounts": true,
+                "successMessage": "$translate(INIT_AAL_DOWNLOAD)",
+                "successMessage2": "$translate(INIT_AAL_DOWNLOAD_2)",
                 "targetSchema": "bpst_aal",
-                "DoNotWait": "$save('1')",
-                "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))",
-                "asDatabase": "ActivityLog"
+                "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
             }
         ],
 

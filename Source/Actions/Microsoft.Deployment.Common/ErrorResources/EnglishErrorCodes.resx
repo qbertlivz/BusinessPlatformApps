@@ -285,4 +285,10 @@
   <data name="ActivityLogsGetHistoricalDataError" xml:space="preserve">
     <value>An error occurred while pulling historical Activity Log data</value>
   </data>
+  <data name="ActivityLogsInsufficientPermissions" xml:space="preserve">
+    <value>Your account has insufficient permissions to export activity logs to Event Hub in this subscription</value>
+  </data>
+  <data name="ActivityLogsErrorExportingToEventHub" xml:space="preserve">
+    <value>An error occurred while exporting the Activity Log to EventHub</value>
+  </data>
 </root>

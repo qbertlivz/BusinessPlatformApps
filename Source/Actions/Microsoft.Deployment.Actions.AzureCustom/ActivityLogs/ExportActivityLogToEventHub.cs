@@ -12,8 +12,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
     [Export(typeof(IAction))]
     public class ExportActivityLogToEventHub : BaseAction
     {
-        private const int ATTEMPTS = 92;
-        private const int WAIT = 5000;
+        private const int ATTEMPTS = 42;
+        private const int WAIT = 2500;
 
         // Exports an Activity Log for the given subscription to Event Hub
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
@@ -37,9 +37,15 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
                 isSuccess = await ahc.IsSuccess(HttpMethod.Put, uri, body);
             }
 
+            string logProfileError = string.Empty;
+            if (!isSuccess)
+            {
+                logProfileError = await ahc.Test(HttpMethod.Put, uri);
+            }
+
             return isSuccess
                 ? new ActionResponse(ActionStatus.Success) 
-                : new ActionResponse(ActionStatus.Failure, new ActionResponseExceptionDetail("ActivityLogsExportEventHubTimeout"));
+                : new ActionResponse(ActionStatus.Failure, new ActionResponseExceptionDetail("ActivityLogsErrorExportingToEventHub", logProfileError));
         }
     }
 }

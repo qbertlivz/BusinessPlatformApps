@@ -1,22 +1,24 @@
-﻿using System.ComponentModel.Composition;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
-using Microsoft.Azure;
+﻿using Microsoft.Azure;
 using Microsoft.Azure.Management.Resources;
 using Microsoft.Azure.Management.Resources.Models;
+using Microsoft.Deployment.Common;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.ErrorCode;
 using Microsoft.Deployment.Common.Helpers;
+using System.ComponentModel.Composition;
+
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.Arm
 {
     [Export(typeof(IAction))]
     public class DeployAzureArmTemplate : BaseAction
     {
+
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             string azureToken = request.DataStore.GetJson("AzureToken", "access_token");
@@ -51,7 +53,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Arm
             armTemplate.Add("parameters", armParamTemplate["parameters"]);
 
             SubscriptionCloudCredentials creds = new TokenCloudCredentials(subscription, azureToken);
-            Microsoft.Azure.Management.Resources.ResourceManagementClient client = new ResourceManagementClient(creds);
+            ResourceManagementClient client = new ResourceManagementClient(creds);
 
             var deployment = new Microsoft.Azure.Management.Resources.Models.Deployment()
             {
@@ -76,14 +78,16 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Arm
                 return new ActionResponse(ActionStatus.Success, deploymentItem);
             }
 
-            return await WaitForAction(client, resourceGroup, deploymentName);
+            ActionResponse r = await WaitForAction(client, resourceGroup, deploymentName);
+            request.DataStore.AddToDataStore("ArmOutput", r.DataStore.GetValue("ArmOutput"), DataStoreType.Public);
+            return r;
         }
 
         private static async Task<ActionResponse> WaitForAction(ResourceManagementClient client, string resourceGroup, string deploymentName)
         {
-            while (true)
+            for (;;)
             {
-                Thread.Sleep(5000);
+                Thread.Sleep(Constants.ACTION_WAIT_INTERVAL);
                 var status = await client.Deployments.GetAsync(resourceGroup, deploymentName, new CancellationToken());
                 var operations = await client.DeploymentOperations.ListAsync(resourceGroup, deploymentName, new DeploymentOperationsListParameters(), new CancellationToken());
                 var provisioningState = status.Deployment.Properties.ProvisioningState;
@@ -92,7 +96,16 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Arm
                     continue;
 
                 if (provisioningState == "Succeeded")
-                    return new ActionResponse(ActionStatus.Success, operations);
+                {
+                    ActionResponse r = new ActionResponse(ActionStatus.Success, operations) { DataStore = new DataStore() };
+                    string outputs = status.Deployment.Properties.Outputs;
+                    if (!string.IsNullOrEmpty(outputs))
+                        r.DataStore.AddToDataStore("ArmOutput", outputs, DataStoreType.Public);
+
+                    return r;
+                }
+                    
+
 
                 var operation = operations.Operations.First(p => p.Properties.ProvisioningState == ProvisioningState.Failed);
                 var operationFailed = await client.DeploymentOperations.GetAsync(resourceGroup, deploymentName, operation.OperationId, new CancellationToken());

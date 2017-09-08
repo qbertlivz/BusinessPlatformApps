@@ -61,6 +61,15 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occurred while exporting the Activity Log to EventHub.
+        /// </summary>
+        public static string ActivityLogsErrorExportingToEventHub {
+            get {
+                return ResourceManager.GetString("ActivityLogsErrorExportingToEventHub", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Time out occurred while exporting the Activity Log to Event Hub.
         /// </summary>
         public static string ActivityLogsExportEventHubTimeout {
@@ -75,6 +84,15 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         public static string ActivityLogsGetHistoricalDataError {
             get {
                 return ResourceManager.GetString("ActivityLogsGetHistoricalDataError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your account has insufficient permissions to export activity logs to Event Hub in this subscription.
+        /// </summary>
+        public static string ActivityLogsInsufficientPermissions {
+            get {
+                return ResourceManager.GetString("ActivityLogsInsufficientPermissions", resourceCulture);
             }
         }
         

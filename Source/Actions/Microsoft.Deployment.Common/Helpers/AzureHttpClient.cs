@@ -243,6 +243,29 @@ namespace Microsoft.Deployment.Common.Helpers
             return value;
         }
 
+        public async Task<string> Test(HttpMethod method, string url, string body = "")
+        {
+            string message = null;
+
+            HttpResponseMessage result = await this.ExecuteGenericRequestWithHeaderAsync(method, url, body);
+
+            if (!result.IsSuccessStatusCode)
+            {
+                HttpErrorResponseWrapper response = JsonUtility.Deserialize<HttpErrorResponseWrapper>(await result.Content.ReadAsStringAsync());
+
+                if (response != null && response.Error != null)
+                {
+                    message = response.Error.Message;
+                }
+                else
+                {
+                    message = result.StatusCode.ToString();
+                }
+            }
+
+            return message;
+        }
+
         private string GetFormBoundary()
         {
             return string.Format("---------------------------{0:N}", RandomGenerator.GetRandomHexadecimal(FORM_BOUNDARY_SIZE));

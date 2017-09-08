@@ -120,11 +120,11 @@ namespace FacebookUtillity
             {
                 var errorDataTable = DataTableUtility.GetErrorDataTable();
                 DataRow errorRow = errorDataTable.NewRow();
-                errorRow["Date"] = getDataUntil;
+                errorRow["Date"] = getDataUntil == string.Empty ? DateTime.UtcNow.ToString("o") : getDataUntil;
                 errorRow["Error"] = e.ToString();
                 //errorRow["Posts"] = page + ":" + JToken.FromObject(posts).ToString();
                 errorDataTable.Rows.Add(errorRow);
-                SqlUtility.BulkInsert(sqlConn, errorDataTable, schema + "." + "StagingError");
+                SqlUtility.BulkInsert(sqlConn, errorDataTable, schema + "." + "Error");
                 throw;
             }
             return true;

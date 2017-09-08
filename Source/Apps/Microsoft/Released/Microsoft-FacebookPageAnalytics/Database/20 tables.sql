@@ -564,3 +564,9 @@ CREATE TABLE [fbpa].[configuration](
   visible                BIT NOT NULL DEFAULT 0,
   PRIMARY KEY (id)
 )
+
+CREATE TABLE [fbpa].[Error](
+	[Date] [datetime] NULL,
+	[Error] [nvarchar](max) NULL,
+	[Posts] [nvarchar](max) NULL
+)

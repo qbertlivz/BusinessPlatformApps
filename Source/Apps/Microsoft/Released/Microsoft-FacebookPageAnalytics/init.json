@@ -64,7 +64,7 @@
                 ],
                 "displayname": "Progress",
                 "enablePublishReport": "$run(this.MS.DataStore.getValue('ssasDisabled') === 'false')",
-                "filename": "$save('FacebookTemplate.pbix')",
+                "filename": "$save('FacebookPageAnalytics.pbix')",
                 "name": "$SiteCommon$/pages-gallery/progress.html",
                 "Schema": "$save('fbpa')",
                 "showCounts": false
@@ -87,6 +87,10 @@
                 "SqlGroup": "SolutionTemplate",
                 "SqlServerIndex": "0",
                 "SqlSubGroup": "ETL"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
+                "name": "Microsoft-PopulateFacebookPages"
             },
             {
                 "DeploymentName": "Deployment1",

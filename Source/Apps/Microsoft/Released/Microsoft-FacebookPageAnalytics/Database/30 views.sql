@@ -342,7 +342,7 @@ GO
 CREATE VIEW fbpa.[calendar] AS 
 (
 	SELECT 
-	FORMAT(full_date,'dddd, dd MMMM yyyy', 'en-US') as end_time,
+	full_date as end_time,
 	FORMAT(full_date,'M/d/yy') as [Date],
 	[year] as [Year],
 	[month] as [MonthSort],

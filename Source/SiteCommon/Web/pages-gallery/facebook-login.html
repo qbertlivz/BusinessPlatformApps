@@ -6,7 +6,7 @@
 
 
     <div class="st-float">
-        <button class="primary" click.trigger="connect()" disabled.bind="MS.HttpService.isServiceBusy">${MS.Translate.FACEBOOK_LOGIN_TITLE}</button>
+        <button class="primary" click.trigger="connect()" disabled.bind="MS.HttpService.isServiceBusy || pageId || permanentPageToken">${MS.Translate.FACEBOOK_LOGIN_TITLE}</button>
     </div>
 
     <div class="st-float" if.bind="pages && pages.length > 0">
@@ -14,6 +14,23 @@
         <select class="btn btn-default dropdown-toggle st-input" disabled.bind="MS.HttpService.isServiceBusy" value.bind="selectedPage">
             <option repeat.for="item of pages" value.bind="item.name">${item.name}</option>
         </select>
+    </div>
+
+    <p class="st-float st-text" click.trigger="viewmodel.showAdvanced = !viewmodel.showAdvanced" if.bind="!MS.HttpService.isServiceBusy">
+        <span class="glyphicon pbi-glyph-circlering glyph-small st-toggle" if.bind="viewmodel.showAdvanced"></span>
+        <span class="st-toggle-collapse" if.bind="viewmodel.showAdvanced">-</span>
+        <span class="glyphicon pbi-glyph-addcircle glyph-small st-toggle" if.bind="!viewmodel.showAdvanced"></span>
+        <span>${MS.Translate.COMMON_ADVANCED_OPTIONAL}</span>
+    </p>
+
+    <div class="st-float" if.bind="viewmodel.showAdvanced">
+        <p class="st-text">Insert page id:</p>
+        <input class="st-input" type="text" change.delegate="onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="pageId" />
+        <p class="st-text">Insert permanent page token:</p>
+        <input class="st-input" type="text" change.delegate="onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="permanentPageToken" />
+        <p class="st-float">
+            <button class="primary" click.trigger="onValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_VALIDATE}</button>
+        </p>
     </div>
 
 </template>

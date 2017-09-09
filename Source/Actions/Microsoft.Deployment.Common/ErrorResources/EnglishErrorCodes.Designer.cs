@@ -214,6 +214,15 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The page id or token provided is invalid..
+        /// </summary>
+        public static string FacebookTokenAuthFailed {
+            get {
+                return ResourceManager.GetString("FacebookTokenAuthFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login failed for user.
         /// </summary>
         public static string ImpersonationFailed {

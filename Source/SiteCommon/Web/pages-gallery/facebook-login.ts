@@ -6,9 +6,13 @@ export class AzureLogin extends ViewModelBase {
     oauthType: string = '';
     pages: any[] = [];
     selectedPage: any;
+    pageId: string = '';
+    permanentPageToken: string = '';
 
     async connect(): Promise<void> {
         this.MS.UtilityService.connectToFacebook();
+        this.pageId = '';
+        this.permanentPageToken = '';
     }
 
     async onLoaded(): Promise<void> {
@@ -22,11 +26,35 @@ export class AzureLogin extends ViewModelBase {
     }
 
     async onNavigatingNext(): Promise<boolean> {
-        let p = this.pages.find(arg => arg.name == this.selectedPage);
 
-        this.MS.DataStore.addToDataStore("FacebookPageId", p.id, DataStoreType.Private);
-        this.MS.DataStore.addToDataStore("FacebookPageToken", p.access_token, DataStoreType.Private);
+        let id: string = '';
+        let token: string = '';
+
+        if (this.pageId != '' && this.permanentPageToken != '') {
+            id = this.pageId;
+            token = this.permanentPageToken;
+        }
+        else {
+            let p = this.pages.find(arg => arg.name == this.selectedPage);
+            id = p.id;
+            token = p.access_token;
+        }
+
+        this.MS.DataStore.addToDataStore("FacebookPageId", id, DataStoreType.Private);
+        this.MS.DataStore.addToDataStore("FacebookPageToken", token, DataStoreType.Private);
         return true;
+    }
+
+    async onValidate(): Promise<boolean> {
+        this.onInvalidate();
+
+        let body: any = {};
+        body.PageId = this.pageId;
+        body.PermanentPageToken = this.permanentPageToken;
+
+        this.isValidated = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-ValidateFacebookPermanentPageToken', body);
+
+        return this.isValidated;
     }
     
 }

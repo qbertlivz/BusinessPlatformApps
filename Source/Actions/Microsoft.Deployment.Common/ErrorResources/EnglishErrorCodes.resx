@@ -288,4 +288,7 @@
   <data name="ActivityLogsInsufficientPermissions" xml:space="preserve">
     <value>Your account has insufficient permissions to export activity logs to Event Hub in this subscription</value>
   </data>
+  <data name="FacebookTokenAuthFailed" xml:space="preserve">
+    <value>The page id or token provided is invalid.</value>
+  </data>
 </root>

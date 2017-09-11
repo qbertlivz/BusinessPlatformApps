@@ -12,6 +12,8 @@
     AAS_TITLE: `Connect to Azure Analysis Services`,
     ADF_EMAILS: `Enter one or more email addresses that will be notified when the data movement process fails.`,
     ADF_EMAILS_TITLE: `Multiple email adresses need to be comma separated.`,
+    API_MANAGEMENT_SERVICE: `API Management Service:`,
+    API_MANAGEMENT_TITLE: `Connect to API Management`,
     APP_CONTACT_US: `CONTACT US`,
     APP_CONTACT_US_LINK: `mailto:PBISolnTemplates@microsoft.com`,
     APP_EXPERIENCING_AN_ERROR: `Experiencing an error? Click here to let us know.`,

@@ -18,9 +18,7 @@
             },
             {
                 "azureProviders": [
-                    "Microsoft.EventHub",
-                    "microsoft.insights",
-                    "Microsoft.StreamAnalytics"
+                    "Microsoft.ApiManagement"
                 ],
                 "defaultLocation": "5",
                 "displayname": "Login",
@@ -28,6 +26,12 @@
                 "pricingCalculatorUrl": "$translate(INIT_AZURE_PRICING_CALCULATOR_URL)",
                 "pricingCost": "$translate(INIT_API_MANAGEMENT_PRICING_COST)",
                 "pricingUrl": "$translate(INIT_API_MANAGEMENT_PRICING_URL)"
+            },
+            {
+                "displayname": "API Management",
+                "name": "$SiteCommon$/pages-gallery/api-management.html",
+                "subtitle": "$translate(INIT_API_MANAGEMENT_CONNECT_SUBTITLE)",
+                "title": "$translate(INIT_API_MANAGEMENT_CONNECT_TITLE)"
             },
             {
                 "displayname": "Target",
@@ -109,12 +113,6 @@
             //{
             //    "displayname": "$translate(INIT_ACTION_DEPLOYING_STREAM_ANALYTICS)",
             //    "name": "Microsoft-StartStreamAnalyticsJob"
-            //},
-            //{
-            //    "displayname": "$translate(INIT_ACTION_GET_HISTORICAL_ACTIVITY_LOG_DATA)",
-            //    "name": "Microsoft-GetDataPullStatus",
-            //    "FinishedActionName": "Microsoft-GetHistoricalData",
-            //    "TargetSchema": "bpst_aal"
             //}
         ]
     }

@@ -210,10 +210,10 @@ export class InitParser {
                 variable.saveToDataStore = this.isPermanentEntryIntoDataStore(dsValue);
                 break;
             case VariableType.RunAndTestFalse:
-                dsValue = `self.MS.DataStore.getValue('{dsValue}') === 'false'`;
+                dsValue = `self.MS.DataStore.getValue('${dsValue}') === 'false'`;
                 break;
             case VariableType.RunAndTestTrue:
-                dsValue = `self.MS.DataStore.getValue('{dsValue}') === 'true'`;
+                dsValue = `self.MS.DataStore.getValue('${dsValue}') === 'true'`;
                 break;
             case VariableType.RunAndTranslate:
                 dsValue = 'self.MS.Translate.' + dsValue;

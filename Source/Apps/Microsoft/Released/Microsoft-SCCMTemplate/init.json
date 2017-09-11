@@ -88,7 +88,7 @@
             {
                 "displayname": "AAS",
                 "name": "$SiteCommon$/pages-gallery/choose-analysis-server.html",
-                "registerAnalysisServices": false,
+                "registerAnalysisServices": "$istrue(CreateAzureSql)",
                 "showDescription": true,
                 "skip": "$dsall(azureSqlDisabled)[1]",
                 "ssasEnabled": "true"
@@ -100,7 +100,7 @@
                 "displayname": "Login to Azure",
                 "name": "$SiteCommon$/pages-gallery/azure-login.html",
                 "oauthType": "",
-                "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true' : 'false')"
+                "skip": "$run(this.MS.DataStore.getValue('CreateAzureSql') === 'true' || this.MS.DataStore.getAllValues('azureSqlDisabled')[1] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true' : 'false')"
             },
             {
                 "displayname": "Login to Analysis Services",

@@ -523,6 +523,7 @@
     SQL_ERROR_USERNAME_SPACES: `should not contain spaces.`,
     SQL_SERVER_AUTHENTICATION: `Authentication: `,
     SQL_SERVER_CHECK_AVAILABILITY: `Check Availability`,
+    SQL_SERVER_CREATE_AZURE_SQL: `Create a new Azure SQL instance to host the source system's data`,
     SQL_SERVER_CREATING_NEW: `Creating a new SQL database, this may take 2-3 minutes`,
     SQL_SERVER_DATABASE: `Database:`,
     SQL_SERVER_DATABASE_RECOVERY: `(Simple/bulk recovery mode is recommended)`,

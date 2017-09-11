@@ -116,9 +116,7 @@
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_AZURE_FUNCTION)",
                 "FunctionName": "$save('solutiontemplatefunc' + this.MS.DataStore.getValue('uniqueId'))",
                 "name": "Microsoft-DeployAzureFunction",
-                "RepoUrl": "https://github.com/Microsoft/BusinessPlatformApps",
-                "ProjectPath": "Functions\\FunctionCode\\FacebookBrandMangement",
-                "Branch": "dev-facebook",
+                "RepoUrl": "https://github.com/MohaaliMicrosoft/FacebookETL",
                 "sku": "Standard"
             },
             {

@@ -51,10 +51,10 @@
             "defaultValue": "",
             "type": "string"
         },
-        "projectPath": {
-            "defaultValue": ".",
-            "type": "string"
-        },
+        //"projectPath": {
+        //    "defaultValue": ".",
+        //    "type": "string"
+        //},
         "branch": {
             "defaultValue": "master",
             "type": "string"
@@ -92,11 +92,11 @@
                 {
                     "name": "WEBSITE_NODE_DEFAULT_VERSION",
                     "value": "6.5.0"
-                },
-                {
-                    "name": "PROJECT",
-                    "value": "[parameters('projectPath')]"
                 }
+                //{
+                //    "name": "PROJECT",
+                //    "value": "[parameters('projectPath')]"
+                //}
 
             ],
 			"alwaysOn": true

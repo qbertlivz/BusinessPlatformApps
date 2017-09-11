@@ -97,9 +97,7 @@
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_AZURE_FUNCTION)",
                 "FunctionName": "$save('solutiontemplatefunc' + this.MS.DataStore.getValue('uniqueId'))",
                 "name": "Microsoft-DeployAzureFunction",
-                "RepoUrl": "https://github.com/Microsoft/BusinessPlatformApps",
-                "ProjectPath": "Functions\\FunctionCode\\FacebookPageAnalytics",
-                "Branch": "dev-facebook",
+                "RepoUrl": "https://github.com/cdoroftei/FacebookPageETL",
                 "sku": "Standard"
             },
             {

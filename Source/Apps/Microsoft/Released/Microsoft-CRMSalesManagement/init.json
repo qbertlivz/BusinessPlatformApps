@@ -228,9 +228,7 @@
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_AS_SCHEDULER)",
                 "FunctionName": "$save('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
                 "name": "Microsoft-DeployAzureFunction",
-                "RepoUrl": "https://github.com/Microsoft/BusinessPlatformApps",
-                "ProjectPath": "Functions\\FunctionCode\\AnalysisServices",
-                "Branch": "dev-facebook",
+                "RepoUrl": "https://github.com/MohaaliMicrosoft/AnalysisServicesRefresh",
                 "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
                 "sku": "Standard"
             },

@@ -80,6 +80,8 @@
                 "displayname": "Summary",
                 "name": "$SiteCommon$/pages-gallery/summary.html",
                 "values": {
+                    "Subscription": "$(this.MS.DataStore.getJson('SelectedSubscription').DisplayName)",
+                    "Resource Group": "$(this.MS.DataStore.getValue('SelectedResourceGroup'))",
                     "Target Server": "$(this.MS.DataStore.getValue('Server'))",
                     "Target Database": "$(this.MS.DataStore.getValue('Database'))",
                     "Target Username": "$(this.MS.DataStore.getValue('Username'))"
@@ -101,7 +103,6 @@
                 "hasPowerApp": "$run(this.MS.DataStore.getValue('SkipPowerApp') === null)",
                 "LogicAppHostingPlan": "$save(this.uniqueId)",
                 "LogicAppName": "$save(this.uniqueId)",
-                "LogicAppNameHistorical": "$save('historic' + this.uniqueId)",
                 "name": "$SiteCommon$/pages-gallery/progress.html",
                 "PowerAppFileName": "$save('TwitterTemplate.msapp')",
                 "SiteName": "$save(this.uniqueIdFunction)"
@@ -181,9 +182,8 @@
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_FUNCTION)",
                 "FunctionName": "$save(this.MS.DataStore.getValue('uniqueIdFunction'))",
                 "name": "Microsoft-DeployAzureFunction",
-                "RepoUrl": "https://github.com/Microsoft/BusinessPlatformApps",
-                "ProjectPath": "Functions\\FunctionCode\\Twitter",
-                "Branch": "dev-facebook"
+                "branch": "TwitterTemplate-map",
+                "RepoUrl": "https://github.com/juluczni/AzureFunctionsNewsTemplate"
             },
             {
                 "DeploymentName": "Function",
@@ -254,16 +254,6 @@
             {
                 "DeploymentName": "LogicApp",
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_LOGIC_APP)",
-                "name": "Microsoft-DeployTwitterHistoricalLogicApp"
-            },
-            {
-                "DeploymentName": "LogicApp",
-                "displayname": "$translate(INIT_ACTION_VALIDATING_LOGIC_APP)",
-                "name": "Microsoft-WaitForArmDeploymentStatus"
-            },
-            {
-                "DeploymentName": "LogicApp",
-                "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_LOGIC_APP)",
                 "name": "Microsoft-DeployTwitterLogicApp"
             },
             {
@@ -277,15 +267,20 @@
                 "name": "Microsoft-GetLogicAppUrl"
             },
             {
+                "DeploymentName": "LogicApp",
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_LOGIC_APP)",
+                "name": "Microsoft-UpdateTwitterLogicApp"
+            },
+            {
+                "DeploymentName": "LogicApp",
+                "displayname": "$translate(INIT_ACTION_VALIDATING_LOGIC_APP)",
+                "name": "Microsoft-WaitForArmDeploymentStatus"
+            },
+            {
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_TWITTER_ASSETS)",
                 "name": "Microsoft-DeployTwitterCSharpFunctionAssets",
                 "subscriptionKey": "$dsall(CognitiveServiceKey)[0]",
                 "RequestUri": "$(this.MS.DataStore.getValue('RequestUri'))"
-            },
-            {
-                "DeploymentName": "LogicApp",
-                "displayname": "$translate(INIT_ACTION_RUNNING_LOGIC_APP_HISTORICAL)",
-                "name": "Microsoft-RunLogicAppHistorical"
             },
             {
                 "DeploymentName": "LogicApp",
@@ -316,9 +311,7 @@
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_AS_SCHEDULER)",
                 "FunctionName": "$save('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
                 "name": "Microsoft-DeployAzureFunction",
-                "RepoUrl": "https://github.com/Microsoft/BusinessPlatformApps",
-                "ProjectPath": "Functions\\FunctionCode\\AnalysisServices",
-                "Branch": "dev-facebook",
+                "RepoUrl": "https://github.com/MohaaliMicrosoft/AnalysisServicesRefresh",
                 "skip": "$run(this.MS.DataStore.getAllValues('azureSqlDisabled')[0] === 'true' || this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
                 "sku": "Standard"
             },

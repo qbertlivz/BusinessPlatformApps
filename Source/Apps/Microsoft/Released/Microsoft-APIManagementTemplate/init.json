@@ -2,7 +2,7 @@
     "Install": {
         "Pages": [
             {
-                "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-ActivityLogTemplate/Web/Images/azure-activity-log.png",
+                "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-APIManagementTemplate/Web/Images/api-management.png",
                 "displayname": "Getting Started",
                 "list1": [
                     "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",
@@ -10,13 +10,11 @@
                     "$translate(INIT_GETTING_STARTED_PBI_PRO)"
                 ],
                 "list2": [
-                    "$translate(INIT_GETTING_STARTED_EXPORT_ACTIVITY_LOG)",
-                    "$translate(INIT_GETTING_STARTED_STREAM_ANALYTICS_EVENT_HUB)",
                     "$translate(INIT_GETTING_STARTED_CONNECT_AS_PBI)"
                 ],
                 "name": "$SiteCommon$/pages-gallery/getting-started.html",
-                "subtitle": "$translate(INIT_AAL_SUBTITLE)",
-                "templateName": "$translate(INIT_AAL_TITLE)"
+                "subtitle": "$translate(INIT_API_MANAGEMENT_SUBTITLE)",
+                "templateName": "$translate(INIT_API_MANAGEMENT_TITLE)"
             },
             {
                 "azureProviders": [
@@ -27,40 +25,21 @@
                 "defaultLocation": "5",
                 "displayname": "Login",
                 "name": "$SiteCommon$/pages-gallery/azure-login.html",
-                "pricingCalculatorUrl": "$translate(INIT_NEWS_PRICING_CALCULATOR)",
-                "pricingCost": "$translate(INIT_AAL_PRICING_COST)",
-                "pricingUrl": "$translate(INIT_AAL_PRICING_URL)"
+                "pricingCalculatorUrl": "$translate(INIT_AZURE_PRICING_CALCULATOR_URL)",
+                "pricingCost": "$translate(INIT_API_MANAGEMENT_PRICING_COST)",
+                "pricingUrl": "$translate(INIT_API_MANAGEMENT_PRICING_URL)"
             },
             {
                 "displayname": "Target",
                 "isAzureSql": true,
                 "name": "$SiteCommon$/pages-gallery/sql.html",
-                "newSqlDatabase": "activityLogDB",
+                "newSqlDatabase": "apiManagementDB",
                 "showAzureSql": false,
                 "showNewSqlOption": true,
                 "sqlInstance": "NewSql",
-                "subtitle": "$translate(INIT_SQL_SUBTITLE_AAL)",
-                "title": "$translate(INIT_SQL_TITLE)",
-                "ServiceHealthTable": "$save('bpst_aal.ServiceHealthData')",
-                "AdministrativeTable": "$save('bpst_aal.AdministrativeData')"
+                "subtitle": "$translate(INIT_SQL_SUBTITLE)",
+                "title": "$translate(INIT_SQL_TITLE)"
             },
-            //{
-            //  "name": "$SiteCommon$/pages-gallery/choose-analysis-server.html",
-            //  "displayname": "AAS",
-            //  "showDescription": true,
-            //  "ssasEnabled": "true"
-            //},
-            //{
-            //  "displayname": "Login to Analysis Services",
-            //  "name": "$SiteCommon$/pages-gallery/as-login.html",
-            //  "oauthType": "as",
-            //  "skip": "$run(this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true' : 'false')"
-            //},
-            //{
-            //  "name": "$SiteCommon$/pages-gallery/ssas.html",
-            //  "displayname": "AAS Login",
-            //  "skip": "$run(this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true' : 'false')"
-            //},
             {
                 "displayCompletionNotification": false,
                 "displayname": "Summary",
@@ -75,22 +54,13 @@
                 }
             },
             {
-                "asDatabase": "ActivityLog",
                 "datastoreEntriesToValidate": [
                     "AzureToken",
                     "SqlConnectionString"
                 ],
                 "displayname": "Deploy",
-                "DoNotWait": "$save('1')",
-                "filename": "$save('ActivityLogTemplate.pbix')",
-                "filenameSSAS": "$save('ActivityLogTemplateAs.pbix')",
-                "finishedActionName": "Microsoft-GetHistoricalData",
-                "name": "$SiteCommon$/pages-gallery/progress.html",
-                "showCounts": true,
-                "successMessage": "$translate(INIT_AAL_DOWNLOAD)",
-                "successMessage2": "$translate(INIT_AAL_DOWNLOAD_2)",
-                "targetSchema": "bpst_aal",
-                "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
+                "filename": "$save('APIManagementTemplate.pbix')",
+                "name": "$SiteCommon$/pages-gallery/progress.html"
             }
         ],
 
@@ -98,7 +68,6 @@
             {
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
                 "name": "Microsoft-DeploySQLScripts",
-                "SqlServerIndex": "0",
                 "SqlScriptsFolder": "Database"
             },
             {

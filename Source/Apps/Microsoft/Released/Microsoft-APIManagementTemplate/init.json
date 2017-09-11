@@ -69,74 +69,53 @@
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
                 "name": "Microsoft-DeploySQLScripts",
                 "SqlScriptsFolder": "Database"
-            },
-            {
-                "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
-                "name": "Microsoft-SetConfigValueInSql",
-                "SqlConfigTable": "[bpst_aal].[configuration]",
-                "SqlEntryName": "Tables",
-                "SqlEntryValue": "AdministrativeData,ServiceHealthData",
-                "SqlGroup": "SolutionTemplate",
-                "SqlServerIndex": "0",
-                "SqlSubGroup": "StandardConfiguration"
-            },
-            {
-                "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
-                "name": "Microsoft-SetConfigValueInSql",
-                "skip": "$run(this.MS.DataStore.getValue('ssasDisabled') === 'true' ? 'true': 'false')",
-                "SqlConfigTable": "[bpst_aal].[configuration]",
-                "SqlEntryName": "FunctionName",
-                "SqlEntryValue": "$run('asscheduler' + this.MS.DataStore.getValue('uniqueId'))",
-                "SqlGroup": "SolutionTemplate",
-                "SqlServerIndex": "0",
-                "SqlSubGroup": "SSAS"
-            },
-            {
-                "displayname": "$translate(INIT_ACTION_CREATING_EVENT_HUB)",
-                "name": "Microsoft-CreateEventHubNameSpace"
-            },
-            {
-                "displayname": "$translate(INIT_ACTION_EXPORT_ACTIVITY_LOG)",
-                "name": "Microsoft-ExportActivityLogToEventHub"
-            },
-            {
-                "displayname": "$translate(INIT_ACTION_CREATING_STREAM_ANALYTICS_JOB)",
-                "name": "Microsoft-CreateStreamAnalyticsJob"
-            },
-            {
-                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_INPUT)",
-                "name": "Microsoft-SetStreamAnalyticsInputAsEventHub"
-            },
-            {
-                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_SH_OUTPUT)",
-                "name": "Microsoft-SetServiceHealthOutput"
-            },
-            {
-                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_ADMIN_OUTPUT)",
-                "name": "Microsoft-SetAdministrativeOutput"
-            },
-            {
-                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_JSON_HELPER)",
-                "name": "Microsoft-SetStreamAnalyticsJSONFunction"
-            },
-            {
-                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_QUERY)",
-                "name": "Microsoft-SetStreamAnalyticsQuery"
-            },
-            {
-                "displayname": "$translate(INIT_ACTION_VERIFY_EVENT_HUB)",
-                "name": "Microsoft-VerifyLogProfileEventHub"
-            },
-            {
-                "displayname": "$translate(INIT_ACTION_DEPLOYING_STREAM_ANALYTICS)",
-                "name": "Microsoft-StartStreamAnalyticsJob"
-            },
-            {
-                "displayname": "$translate(INIT_ACTION_GET_HISTORICAL_ACTIVITY_LOG_DATA)",
-                "name": "Microsoft-GetDataPullStatus",
-                "FinishedActionName": "Microsoft-GetHistoricalData",
-                "TargetSchema": "bpst_aal"
             }
+            //{
+            //    "displayname": "$translate(INIT_ACTION_CREATING_EVENT_HUB)",
+            //    "name": "Microsoft-CreateEventHubNameSpace"
+            //},
+            //{
+            //    "displayname": "$translate(INIT_ACTION_EXPORT_ACTIVITY_LOG)",
+            //    "name": "Microsoft-ExportActivityLogToEventHub"
+            //},
+            //{
+            //    "displayname": "$translate(INIT_ACTION_CREATING_STREAM_ANALYTICS_JOB)",
+            //    "name": "Microsoft-CreateStreamAnalyticsJob"
+            //},
+            //{
+            //    "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_INPUT)",
+            //    "name": "Microsoft-SetStreamAnalyticsInputAsEventHub"
+            //},
+            //{
+            //    "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_SH_OUTPUT)",
+            //    "name": "Microsoft-SetServiceHealthOutput"
+            //},
+            //{
+            //    "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_ADMIN_OUTPUT)",
+            //    "name": "Microsoft-SetAdministrativeOutput"
+            //},
+            //{
+            //    "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_JSON_HELPER)",
+            //    "name": "Microsoft-SetStreamAnalyticsJSONFunction"
+            //},
+            //{
+            //    "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_QUERY)",
+            //    "name": "Microsoft-SetStreamAnalyticsQuery"
+            //},
+            //{
+            //    "displayname": "$translate(INIT_ACTION_VERIFY_EVENT_HUB)",
+            //    "name": "Microsoft-VerifyLogProfileEventHub"
+            //},
+            //{
+            //    "displayname": "$translate(INIT_ACTION_DEPLOYING_STREAM_ANALYTICS)",
+            //    "name": "Microsoft-StartStreamAnalyticsJob"
+            //},
+            //{
+            //    "displayname": "$translate(INIT_ACTION_GET_HISTORICAL_ACTIVITY_LOG_DATA)",
+            //    "name": "Microsoft-GetDataPullStatus",
+            //    "FinishedActionName": "Microsoft-GetHistoricalData",
+            //    "TargetSchema": "bpst_aal"
+            //}
         ]
     }
 }

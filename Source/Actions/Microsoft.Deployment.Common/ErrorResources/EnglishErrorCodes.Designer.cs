@@ -61,6 +61,15 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occurred while exporting the Activity Log to EventHub.
+        /// </summary>
+        public static string ActivityLogsErrorExportingToEventHub {
+            get {
+                return ResourceManager.GetString("ActivityLogsErrorExportingToEventHub", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Time out occurred while exporting the Activity Log to Event Hub.
         /// </summary>
         public static string ActivityLogsExportEventHubTimeout {

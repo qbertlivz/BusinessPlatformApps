@@ -2,6 +2,10 @@
 {
     public static class Constants
     {
+        // Azure ARM
+        public const int ACTION_WAIT_INTERVAL = 5000; // in milliseconds
+        // END Azure ARM
+
         public const string AppsPath = "Apps";
         public const string AppsWebPath = "Web";
         public const string SiteCommonPath = "SiteCommon";

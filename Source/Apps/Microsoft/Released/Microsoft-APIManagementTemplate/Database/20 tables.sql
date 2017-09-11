@@ -5,48 +5,140 @@ SET ANSI_NULL_DFLT_ON       ON;
 SET CONCAT_NULL_YIELDS_NULL ON;
 SET QUOTED_IDENTIFIER       ON;
 
-CREATE TABLE bpst_aal.AdministrativeData (
-    eventId INT IDENTITY(1,1) PRIMARY KEY,
-	[caller] VARCHAR(50),
-	correlationId VARCHAR(MAX),
-	[description] VARCHAR(MAX),
-	eventCategory VARCHAR(20), 
-	[level] VARCHAR(25),
-	operationCategory VARCHAR(20),
-	operationId VARCHAR(MAX),
-	operationName VARCHAR(MAX),
-	resourceGroup VARCHAR(50),
-	resourceId VARCHAR(MAX),
-    resourceProvider VARCHAR(50),
-	[status] VARCHAR(25),
-	[timestamp] VARCHAR(50)
-);
+CREATE TABLE [dbo].[Request] (
+    [Id]          UNIQUEIDENTIFIER NOT NULL,
+    [CreatedDate] DATETIME         NULL,
+    [ServiceName] VARCHAR (200)    NULL,
+    [RequestId]   VARCHAR (50)     NULL,
+    [IPAddress]   VARCHAR (20)     NULL,
+    [Operation]   VARCHAR (200)    NULL,
+	[OperationID] VARCHAR (200)    NULL,
+    [Api]         VARCHAR (200)    NULL,
+	[ApiID]       VARCHAR (200)    NULL,
+	[Product]     VARCHAR (200)    NULL,
+	[ProductID]   VARCHAR (200)    NULL,
+	[SubscriptionName]  VARCHAR (200)    NULL,
+    [SubscriptionId]    VARCHAR (200)    NULL,
+	[Length]	  int			   NULL,	
+	[Latitude] [decimal](9, 6) NULL,
+	[Longitude] [decimal](9, 6) NULL,
+	[City] [varchar](30) NULL,
+ CONSTRAINT [PK_Request_1] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)
+)
+GO
 
-CREATE TABLE bpst_aal.ServiceHealthData (
-    serviceHealthId VARCHAR(MAX),
-    correlationId VARCHAR(MAX),
-    [description] VARCHAR(MAX),
-    impact VARCHAR(MAX),
-    impactedRegions VARCHAR(50),
-    impactedServices VARCHAR(MAX),
-    incidentType VARCHAR(50),
-    [level] VARCHAR(50),
-    operationId VARCHAR(MAX),
-    [status] VARCHAR(50),
-    [timestamp] VARCHAR(50),
-    title VARCHAR(MAX)
-);
+ALTER TABLE [dbo].[Request] ADD DEFAULT (newsequentialid()) FOR [Id]
+GO
+CREATE NONCLUSTERED INDEX [IX_Request_RequestId_1] ON [dbo].[Request]
+(
+	[RequestId] ASC
+)
+GO
+CREATE NONCLUSTERED INDEX IX_Request_ApiID_1 ON dbo.Request
+	(
+	ApiID
+	) 
+GO
+CREATE NONCLUSTERED INDEX IX_Request_OperationID_1 ON dbo.Request
+	(
+	OperationID
+	) 
+GO
+CREATE NONCLUSTERED INDEX IX_Request_ProductID_1 ON dbo.Request
+	(
+	ProductID
+	) 
+GO
+CREATE NONCLUSTERED INDEX IX_Request_SubscriptionId_1 ON dbo.Request
+	(
+	SubscriptionId
+	) 
 
-CREATE TABLE bpst_aal.[Configuration](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[configuration_group] [varchar](150) NOT NULL,
-	[configuration_subgroup] [varchar](150) NOT NULL,
-	[name] [varchar](150) NOT NULL,
-	[value] [varchar](max) NULL,
-	[visible] [bit]  NOT NULL DEFAULT 0
-);
+GO
 
-CREATE TABLE bpst_aal.[date](
+CREATE NONCLUSTERED INDEX [IX_Request_IPAddress] ON [dbo].[Request]
+(
+	[IPAddress] ASC
+)
+GO
+/****** Object:  Index [IX_Request_Latitude]    Script Date: 8/26/2017 11:11:00 AM ******/
+CREATE NONCLUSTERED INDEX [IX_Request_Latitude] ON [dbo].[Request]
+(
+	[Latitude] ASC
+)
+GO
+/****** Object:  Index [IX_Request_Longitude]    Script Date: 8/26/2017 11:12:24 AM ******/
+CREATE NONCLUSTERED INDEX [IX_Request_Longitude] ON [dbo].[Request]
+(
+	[Longitude] ASC
+)
+GO
+
+CREATE NONCLUSTERED INDEX [nci_wi_Request_IPAddressApi] ON [dbo].[Request] ([IPAddress], [Api]) INCLUDE ([CreatedDate], [Latitude], [Longitude], [Operation], [Product], [RequestId]) WITH (ONLINE = ON)
+
+
+CREATE TABLE [dbo].[Response] (
+    [Id]          UNIQUEIDENTIFIER NOT NULL,
+    [CreatedDate] DATETIME         NULL,
+    [ServiceName] VARCHAR (200)    NULL,
+    [RequestId]   VARCHAR (50)     NULL,
+    [StatusCode]  int			   NULL,
+    [StatusReason] [varchar](200)  NULL,
+	[Length]	  int			   NULL,	
+ CONSTRAINT [PK_Response_1] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)
+)
+GO
+
+ALTER TABLE [dbo].[Response] ADD  DEFAULT (newsequentialid()) FOR [Id]
+GO
+
+/****** Object:  Index [IX_Response_RequestId]    Script Date: 5/11/2017 10:50:59 AM ******/
+CREATE NONCLUSTERED INDEX [IX_Response_RequestId_1] ON [dbo].[Response]
+(
+	[RequestId] ASC
+)
+GO
+
+CREATE TABLE [dbo].[Error] (
+    [Id]          UNIQUEIDENTIFIER NOT NULL,
+    [CreatedDate] DATETIME         NULL,
+    [ServiceName] VARCHAR (200)    NULL,
+    [RequestId]   VARCHAR (50)     NULL,
+    [Source]      VARCHAR (200)    NULL,
+    [Reason]      VARCHAR (200)    NULL,
+    [Message] [varchar](200) NULL,
+ CONSTRAINT [PK_Error_1] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)
+)
+GO
+
+ALTER TABLE [dbo].[Error] ADD  DEFAULT (newsequentialid()) FOR [Id]
+GO
+
+/****** Object:  Index [IX_Error_RequestId]    Script Date: 5/11/2017 10:59:11 AM ******/
+CREATE NONCLUSTERED INDEX [IX_Error_RequestId_1] ON [dbo].[Error]
+(
+	[RequestId] ASC
+)
+GO
+
+	
+/****** Object:  Table [dbo].[date]    Script Date: 6/7/2017 2:10:04 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Date](
 	[date_key] [int] NOT NULL,
 	[full_date] [date] NOT NULL,
 	[day_of_week] [tinyint] NOT NULL,
@@ -66,5 +158,191 @@ CREATE TABLE bpst_aal.[date](
  CONSTRAINT [pk_dim_date] PRIMARY KEY CLUSTERED 
 (
 	[date_key] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
-);
+)
+)
+GO
+
+-- Table for Geo IP data
+/****** Object:  Index [IX_GeoLite2-City-Blocks-IPv4]    Script Date: 8/2/2017 5:16:21 PM ******/
+DROP INDEX [IX_GeoLite2-City-Blocks-IPv4] ON [dbo].[GeoLite2-City-Blocks-IPv4]
+GO
+
+/****** Object:  Index [IX_GeoLite2-City-Blocks-IPv4_IPPart]    Script Date: 8/2/2017 5:16:29 PM ******/
+DROP INDEX [IX_GeoLite2-City-Blocks-IPv4_IPPart] ON [dbo].[GeoLite2-City-Blocks-IPv4]
+GO
+
+SET ANSI_PADDING ON
+GO
+
+/****** Object:  Table [dbo].[GeoLite2-City-Blocks-IPv4]    Script Date: 8/2/2017 5:17:27 PM ******/
+DROP TABLE [dbo].[GeoLite2-City-Blocks-IPv4]
+GO
+
+/****** Object:  Table [dbo].[GeoLite2-City-Blocks-IPv4]    Script Date: 8/2/2017 5:17:27 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[GeoLite2-City-Blocks-IPv4](
+	[network] [varchar](50) NULL,
+	[geoname_id] [varchar](50) NULL,
+	[registered_country_geoname_id] [varchar](50) NULL,
+	[represented_country_geoname_id] [varchar](50) NULL,
+	[is_anonymous_proxy] [varchar](50) NULL,
+	[is_satellite_provider] [varchar](50) NULL,
+	[postal_code] [varchar](50) NULL,
+	[latitude] [varchar](50) NULL,
+	[longitude] [varchar](50) NULL,
+	[accuracy_radius] [varchar](50) NULL,
+	[IPpart] [nvarchar](3) NULL
+)
+GO
+
+/****** Object:  Index [IX_GeoLite2-City-Blocks-IPv4]    Script Date: 8/2/2017 5:16:22 PM ******/
+CREATE NONCLUSTERED INDEX [IX_GeoLite2-City-Blocks-IPv4] ON [dbo].[GeoLite2-City-Blocks-IPv4]
+(
+	[network] ASC
+)
+GO
+
+/****** Object:  Index [IX_GeoLite2-City-Blocks-IPv4_IPPart]    Script Date: 8/2/2017 5:16:29 PM ******/
+CREATE NONCLUSTERED INDEX [IX_GeoLite2-City-Blocks-IPv4_IPPart] ON [dbo].[GeoLite2-City-Blocks-IPv4]
+(
+	[IPPart] ASC
+)
+GO
+
+/****** Object:  Index [nci_wi_GeoLite2-City-Blocks-IPv4_58445F005250DAF33A2632E6B88C5216]    Script Date: 9/6/2017 4:20:08 PM ******/
+CREATE NONCLUSTERED INDEX [IX_GeoLite2-City-Blocks-IPv4_58445F005250DAF33A2632E6B88C5216] ON [dbo].[GeoLite2-City-Blocks-IPv4]
+(
+	[IPpart] ASC
+)
+INCLUDE ( 	[latitude],
+	[longitude],
+	[network])
+GO 
+
+/******* MORE STUFF *******/
+
+/****** Object:  Table [dbo].[CallExtendedEdgeList]    Script Date: 8/10/2017 8:24:04 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[CallExtendedEdgeList](
+	[RequestId] [varchar](50) NOT NULL,
+	[Product] [varchar](200) NOT NULL,
+	[Api] [varchar](200) NOT NULL,
+	[Operation] [varchar](200) NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[RelatedRequestId] [varchar](50) NOT NULL,
+	[RelatedProduct] [varchar](200) NOT NULL,
+	[RelatedApi] [varchar](200) NOT NULL,
+	[RelatedOperation] [varchar](200) NOT NULL,
+	[RelatedCreatedDate] [datetime] NOT NULL,
+	[IPAddress] [varchar](20) NOT NULL
+)
+GO
+
+/****** Object:  Table [dbo].[CallExtendedEdgeList_STAGE]    Script Date: 8/10/2017 8:24:04 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[CallExtendedEdgeList_STAGE](
+	[RequestId] [varchar](50) NOT NULL,
+	[Product] [varchar](200) NOT NULL,
+	[Api] [varchar](200) NOT NULL,
+	[Operation] [varchar](200) NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[RelatedRequestId] [varchar](50) NOT NULL,
+	[RelatedProduct] [varchar](200) NOT NULL,
+	[RelatedApi] [varchar](200) NOT NULL,
+	[RelatedOperation] [varchar](200) NOT NULL,
+	[RelatedCreatedDate] [datetime] NOT NULL,
+	[IPAddress] [varchar](20) NOT NULL
+)
+GO
+
+/****** Object:  Table [dbo].[CallProbabilityEdgeList]    Script Date: 8/10/2017 8:24:04 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[CallProbabilityEdgeList](
+	[Product] [varchar](200) NOT NULL,
+	[Api] [varchar](200) NOT NULL,
+	[Operation] [varchar](200) NOT NULL,
+	[RelatedProduct] [varchar](200) NOT NULL,
+	[RelatedApi] [varchar](200) NOT NULL,
+	[RelatedOperation] [varchar](200) NOT NULL,
+	[IPAddress] [varchar](20) NOT NULL,
+	[CallRelationshipCount] [int] NOT NULL,
+	[StartingCallTotalCount] [int] NOT NULL
+)
+GO
+
+/****** Object:  Table [dbo].[CallProbabilityEdgeList_STAGE]    Script Date: 8/10/2017 8:24:04 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[CallProbabilityEdgeList_STAGE](
+	[Product] [varchar](200) NOT NULL,
+	[Api] [varchar](200) NOT NULL,
+	[Operation] [varchar](200) NOT NULL,
+	[RelatedProduct] [varchar](200) NOT NULL,
+	[RelatedApi] [varchar](200) NOT NULL,
+	[RelatedOperation] [varchar](200) NOT NULL,
+	[IPAddress] [varchar](20) NOT NULL,
+	[CallRelationshipCount] [int] NOT NULL,
+	[StartingCallTotalCount] [int] NOT NULL
+)
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[FFT](
+	[Id] [uniqueidentifier] NOT NULL,
+	[IPAddress] [varchar](20) NOT NULL,
+	[TimeUnit] [varchar](50) NOT NULL,
+	[CallFreq] [decimal](18, 0) NOT NULL,
+	[Position] [int] NOT NULL
+)
+GO
+
+
+ALTER TABLE [dbo].[FFT] ADD  DEFAULT (newsequentialid()) FOR [Id]
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[FFT_STAGE](
+	[Id] [uniqueidentifier] NOT NULL,
+	[IPAddress] [varchar](20) NOT NULL,
+	[TimeUnit] [varchar](50) NOT NULL,
+	[CallFreq] [decimal](18, 0) NOT NULL,
+	[Position] [int] NOT NULL
+)
+GO
+
+ALTER TABLE [dbo].[FFT_STAGE] ADD  DEFAULT (newsequentialid()) FOR [Id]
+GO

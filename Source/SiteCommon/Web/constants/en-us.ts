@@ -251,6 +251,7 @@
     INIT_ACTION_COPYING_DATALOAD_SCRIPTS: `Copy dataload scripts`,
     INIT_ACTION_CREATING_D365_PROFILE: `Creating Dynamics 365 Profile`,
     INIT_ACTION_CREATING_DATA_CONNECTIONS: `Creating data connections`,
+    INIT_ACTION_CREATING_EVENTHUB: `Creating Event Hub`,
     INIT_ACTION_CREATING_EVENT_HUB: `Creating Event Hub service`,
     INIT_ACTION_CREATING_FUNCTION: `Creating function`,
     INIT_ACTION_CREATING_INFORMATICA_CONNECTION_SALESFORCE: `Creating Salesforce connection in Informatica`,

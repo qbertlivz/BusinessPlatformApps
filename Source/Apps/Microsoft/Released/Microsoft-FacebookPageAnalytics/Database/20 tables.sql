@@ -204,9 +204,16 @@ CREATE TABLE fbpa.PagePostsInfo
 	[Picture] [nvarchar](MAX),
 	[Source] [nvarchar](MAX),
 	[Shares] [nvarchar](MAX),
-	[To Id] [nvarchar](MAX),
-	[To Name] [nvarchar](MAX),
 	[Type] [nvarchar](MAX)
+)
+
+CREATE TABLE [fbpa].[PagePostsTo](
+	[Id] [nvarchar](max) NULL,
+	[PageId] [nvarchar](max) NULL,
+	[Created Time] [datetime] NULL,
+	[Updated Time] [datetime] NULL,
+	[To Id] [nvarchar](max) NULL,
+	[To Name] [nvarchar](max) NULL
 )
 
 CREATE TABLE fbpa.[PageTable]
@@ -412,8 +419,6 @@ CREATE TABLE fbpa.STAGING_PagePostsInfo
 	[Picture] [nvarchar](MAX),
 	[Source] [nvarchar](MAX),
 	[Shares] [nvarchar](MAX),
-	[To Id] [nvarchar](MAX),
-	[To Name] [nvarchar](MAX),
 	[Type] [nvarchar](MAX)
 )
 
@@ -553,6 +558,15 @@ CREATE TABLE [fbpa].[time](
 	[+10] [time](7) NULL,
 	[+11] [time](7) NULL,
 	[+12] [time](7) NULL
+)
+
+CREATE TABLE [fbpa].[STAGING_PagePostsTo](
+	[Id] [nvarchar](max) NULL,
+	[PageId] [nvarchar](max) NULL,
+	[Created Time] [datetime] NULL,
+	[Updated Time] [datetime] NULL,
+	[To Id] [nvarchar](max) NULL,
+	[To Name] [nvarchar](max) NULL
 )
 
 CREATE TABLE [fbpa].[configuration](

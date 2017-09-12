@@ -37,6 +37,7 @@ namespace FacebookUtillity
                 var pageViewsTable = DataTableUtility.GetPageViewsTable();
                 var clicksTable = DataTableUtility.GetPageClicksDataTable();
                 var postsInfoTable = DataTableUtility.GetPostsInfoTable();
+                var postsToTable = DataTableUtility.GetPostsToTable();
 
                 var content = await FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PageContent);
                 PopulateNestedValues(pageContentTable, content, page);
@@ -76,6 +77,7 @@ namespace FacebookUtillity
 
                 var pagePostIds = await FacebookUtility.GetPageMetricAnalytics(page, until, accessToken, FacebookPageAnalyticsMetricGroups.PagePostIds);
                 PopulatePostsInfo(postsInfoTable, pagePostIds, page);
+                PopulatePostsTo(postsToTable, pagePostIds, page);
 
                 List<JObject> pagePostReactions = new List<JObject>();
                 List<JObject> pageVideoPostsObj = new List<JObject>();
@@ -114,6 +116,7 @@ namespace FacebookUtillity
                 SqlUtility.BulkInsert(sqlConn, pageViewsTable, schema + "." + "STAGING_PageViews");
                 SqlUtility.BulkInsert(sqlConn, clicksTable, schema + "." + "STAGING_Clicks");
                 SqlUtility.BulkInsert(sqlConn, postsInfoTable, schema + "." + "STAGING_PagePostsInfo");
+                SqlUtility.BulkInsert(sqlConn, postsToTable, schema + "." + "STAGING_PagePostsTo");
 
             }
             catch (Exception e)
@@ -122,7 +125,6 @@ namespace FacebookUtillity
                 DataRow errorRow = errorDataTable.NewRow();
                 errorRow["Date"] = getDataUntil == string.Empty ? DateTime.UtcNow.ToString("o") : getDataUntil;
                 errorRow["Error"] = e.ToString();
-                //errorRow["Posts"] = page + ":" + JToken.FromObject(posts).ToString();
                 errorDataTable.Rows.Add(errorRow);
                 SqlUtility.BulkInsert(sqlConn, errorDataTable, schema + "." + "Error");
                 throw;
@@ -218,7 +220,7 @@ namespace FacebookUtillity
                 DataRow row = table.NewRow();
                 if (table.Columns.Contains("EndTime")) { row["EndTime"] = val["end_time"]; }
                 row["Name"] = entry["name"];
-                // Only merge names for age/gender
+                //Only merge names for age / gender
                 if (entry["name"].ToString().ToLower().Contains("page_cta_clicks_by_age_gender_logged_in_unique"))
                 {
                     row["Entry Name"] = att.Name + " " + (att.Parent.Parent as JProperty).Name;
@@ -247,6 +249,36 @@ namespace FacebookUtillity
             {
                 foreach (var val in obj["data"])
                 {
+                    DataRow row = table.NewRow();
+                    row["Id"] = val["id"];
+                    row["PageId"] = pageId;
+                    row["Message"] = val["message"];
+                    row["Created Time"] = val["created_time"];
+                    row["Updated Time"] = val["updated_time"];
+                    row["Icon"] = val["icon"];
+                    row["Link"] = val["link"];
+                    row["Name"] = val["name"];
+                    row["Object"] = val["object_id"];
+                    row["Permalink URL"] = val["permalink_url"];
+                    row["Picture"] = val["picture"];
+                    row["Source"] = val["source"];
+                    row["Shares"] = val["shares"]?["count"] == null ? DBNull.Value : (object)val["shares"]?["count"];
+                    row["Type"] = val["type"];
+                    row["Status Type"] = val["status_type"];
+                    row["Is Hidden"] = val["is_hidden"];
+                    row["Is Published"] = val["is_published"];
+                    row["Story"] = val["story"];
+                    table.Rows.Add(row);
+                }
+            }
+        }
+
+        public static void PopulatePostsTo(DataTable table, List<JObject> objects, string pageId)
+        {
+            foreach (var obj in objects)
+            {
+                foreach (var val in obj["data"])
+                {
                     if (val?["to"] != null &&
                         (val["to"]["data"] as JArray).Count > 0)
                     {
@@ -255,52 +287,12 @@ namespace FacebookUtillity
                             DataRow row = table.NewRow();
                             row["Id"] = val["id"];
                             row["PageId"] = pageId;
-                            row["Message"] = val["message"];
                             row["Created Time"] = val["created_time"];
                             row["Updated Time"] = val["updated_time"];
-                            row["Icon"] = val["icon"];
-                            row["Link"] = val["link"];
-                            row["Name"] = val["name"];
-                            row["Object"] = val["object_id"];
-                            row["Permalink URL"] = val["permalink_url"];
-                            row["Picture"] = val["picture"];
-                            row["Source"] = val["source"];
-                            row["Shares"] = val["shares"]["count"];
                             row["To Id"] = t["id"];
                             row["To Name"] = t["name"];
-                            row["Type"] = val["type"];
-                            row["Status Type"] = val["status_type"];
-                            row["Is Hidden"] = val["is_hidden"];
-                            row["Is Published"] = val["is_published"];
-                            row["Story"] = val["story"];
                             table.Rows.Add(row);
                         }
-
-                    }
-                    else
-                    {
-                        DataRow row = table.NewRow();
-                        row["Id"] = val["id"];
-                        row["PageId"] = pageId;
-                        row["Message"] = val["message"];
-                        row["Created Time"] = val["created_time"];
-                        row["Updated Time"] = val["updated_time"];
-                        row["Icon"] = val["icon"];
-                        row["Link"] = val["link"];
-                        row["Name"] = val["name"];
-                        row["Object"] = val["object_id"];
-                        row["Permalink URL"] = val["permalink_url"];
-                        row["Picture"] = val["picture"];
-                        row["Source"] = val["source"];
-                        row["Shares"] = val["shares"]?["count"];
-                        row["To Id"] = DBNull.Value;
-                        row["To Name"] = DBNull.Value;
-                        row["Type"] = val["type"];
-                        row["Status Type"] = val["status_type"];
-                        row["Is Hidden"] = val["is_hidden"];
-                        row["Is Published"] = val["is_published"];
-                        row["Story"] = val["story"];
-                        table.Rows.Add(row);
                     }
                 }
             }

@@ -793,6 +793,52 @@ TRUNCATE TABLE fbpa.STAGING_PageViews;
 
 COMMIT
 
+---------------------Merge PagePostsTo-------------------------------------
+BEGIN TRAN
+
+MERGE fbpa.PagePostsTo AS TARGET
+USING
+( 
+SELECT DISTINCT
+[Id]
+[PageId],
+[Created Time],
+[Updated Time],
+[To Id],
+[To Name]
+FROM fbpa.STAGING_PagePostsTo) as SOURCE
+ON  TARGET.[Created Time] = SOURCE.[Created Time] 
+AND TARGET.[PageId] = SOURCE.[PageId]
+AND TARGET.[To Id] = SOURCE.[To Id]
+AND TARGET.[To Name] = SOURCE.[To Name]
+WHEN MATCHED AND SOURCE.[Updated Time] > TARGET.[Updated Time] THEN
+UPDATE SET
+TARGET.[Id] = SOURCE.[Id],
+TARGET.[PageId] = SOURCE.[PageId],
+TARGET.[Created Time] = SOURCE.[Created Time],
+TARGET.[Updated Time] = SOURCE.[Updated Time],
+TARGET.[To Id] = SOURCE.[To Id],
+TARGET.[To Name] = SOURCE.[To Name]
+WHEN NOT MATCHED BY TARGET THEN
+INSERT 
+([Id],
+[PageId],
+[Created Time],
+[Updated Time],
+[To Id],
+[To Name])
+VALUES
+(SOURCE.[Id],
+SOURCE.[PageId],
+SOURCE.[Created Time],
+SOURCE.[Updated Time],
+SOURCE.[To Id],
+SOURCE.[To Name]);
+
+TRUNCATE TABLE fbpa.STAGING_PagePostsTo;
+
+COMMIT
+
 ---------------------Merge PagePostsInfo-------------------------------------
 BEGIN TRAN
 
@@ -817,8 +863,6 @@ SELECT DISTINCT
        [Picture],
        [Source],
        [Shares],
-       [To Id],
-       [To Name],
        [Type]
 FROM fbpa.STAGING_PagePostsInfo) as SOURCE
 ON  TARGET.[Id] = SOURCE.[Id] 
@@ -837,8 +881,6 @@ AND (TARGET.[Permalink URL] = SOURCE.[Permalink URL]  OR (TARGET.[Permalink URL]
 AND (TARGET.[Picture] = SOURCE.[Picture]  OR (TARGET.[Picture] IS NULL AND SOURCE.[Picture] IS NULL))
 AND (TARGET.[Source] = SOURCE.[Source]  OR (TARGET.[Source] IS NULL AND SOURCE.[Source] IS NULL))
 AND (TARGET.[Shares] = SOURCE.[Shares]  OR (TARGET.[Shares] IS NULL AND SOURCE.[Shares] IS NULL))
-AND (TARGET.[To Id] = SOURCE.[To Id]  OR (TARGET.[To Id] IS NULL AND SOURCE.[To Id] IS NULL))
-AND (TARGET.[To Name] = SOURCE.[To Name]  OR (TARGET.[To Name] IS NULL AND SOURCE.[To Name] IS NULL))
 AND (TARGET.[Type] = SOURCE.[Type] OR (TARGET.[Type] IS NULL AND SOURCE.[Type] IS NULL))
 WHEN MATCHED AND SOURCE.[Updated Time] > TARGET.[Updated Time] THEN
 UPDATE SET
@@ -859,8 +901,6 @@ TARGET.[Permalink URL] = SOURCE.[Permalink URL],
 TARGET.[Picture] = SOURCE.[Picture],
 TARGET.[Source] = SOURCE.[Source],
 TARGET.[Shares] = SOURCE.[Shares],
-TARGET.[To Id] = SOURCE.[To Id],
-TARGET.[To Name] = SOURCE.[To Name],
 TARGET.[Type] = SOURCE.[Type]
 WHEN NOT MATCHED BY TARGET THEN
 INSERT 
@@ -881,8 +921,6 @@ INSERT
 [Picture],
 [Source],
 [Shares],
-[To Id],
-[To Name],
 [Type])
 VALUES
 (SOURCE.[Id],
@@ -902,8 +940,6 @@ SOURCE.[Permalink URL],
 SOURCE.[Picture],
 SOURCE.[Source],
 SOURCE.[Shares],
-SOURCE.[To Id],
-SOURCE.[To Name],
 SOURCE.[Type]);
 
 TRUNCATE TABLE fbpa.STAGING_PagePostsInfo;

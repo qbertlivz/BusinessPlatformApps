@@ -313,9 +313,19 @@ namespace FacebookUtillity
             table.Columns.Add("Picture");
             table.Columns.Add("Source");
             table.Columns.Add("Shares");
+            table.Columns.Add("Type");
+            return table;
+        }
+
+        public static DataTable GetPostsToTable()
+        {
+            DataTable table = new DataTable();
+            table.Columns.Add("Id");
+            table.Columns.Add("PageId");
+            table.Columns.Add("Created Time", typeof(DateTime));
+            table.Columns.Add("Updated Time", typeof(DateTime));
             table.Columns.Add("To Id");
             table.Columns.Add("To Name");
-            table.Columns.Add("Type");
             return table;
         }
         #endregion

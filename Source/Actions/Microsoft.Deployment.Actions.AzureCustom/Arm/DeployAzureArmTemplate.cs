@@ -37,12 +37,15 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Arm
 
             var payload = new AzureArmParameterGenerator();
 
-            foreach (var prop in armParameters.Children())
+            if (armParameters != null)
             {
-                string key = prop.Path.Split('.').Last();
-                string value = prop.First().ToString();
+                foreach (var prop in armParameters.Children())
+                {
+                    string key = prop.Path.Split('.').Last();
+                    string value = prop.First().ToString();
 
-                payload.AddStringParam(key, value);
+                    payload.AddStringParam(key, value);
+                }
             }
 
             if (armParametersUnique != null)
@@ -52,7 +55,11 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Arm
                     string key = prop.Path.Split('.').Last();
                     string value = prop.First().ToString();
 
-                    payload.AddStringParam(key, RandomGenerator.GetRandomHexadecimal(SIZE_PADDING, value));
+                    string valueUnique = RandomGenerator.GetRandomHexadecimal(SIZE_PADDING, value);
+
+                    payload.AddStringParam(key, valueUnique);
+
+                    request.DataStore.AddToDataStore(key, valueUnique, DataStoreType.Private);
                 }
             }
 

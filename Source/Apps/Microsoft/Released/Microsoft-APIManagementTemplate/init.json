@@ -70,17 +70,17 @@
         ],
 
         "Actions": [
-            {
-                "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
-                "name": "Microsoft-DeploySQLScripts",
-                "SqlScriptsFolder": "Database"
-            },
+            //{
+            //    "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
+            //    "name": "Microsoft-DeploySQLScripts",
+            //    "SqlScriptsFolder": "Database"
+            //},
             {
                 "AzureArmFile": "Service/ARM/EventHub.json",
                 "AzureArmParametersUnique": {
                     "nameConsumerGroup": "bpst-apim-cg-",
                     "nameEventHub": "bpst-apim-eh-",
-                    "nameNamespace": "bpst-apim-sp-"
+                    "nameNamespace": "bpst-apim-ns-"
                 },
                 "displayname": "$translate(INIT_ACTION_CREATING_EVENTHUB)",
                 "name": "Microsoft-DeployAzureArmTemplate"

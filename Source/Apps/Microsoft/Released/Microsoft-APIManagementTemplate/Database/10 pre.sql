@@ -27,3 +27,25 @@ IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='dbo' AND 
     DROP TABLE dbo.FFT_STAGE;
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='dbo' AND TABLE_NAME='Date' AND TABLE_TYPE='BASE TABLE')
     DROP TABLE dbo.Date;
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='dbo' AND TABLE_NAME='GeoLite2-City-Blocks-IPv4' AND TABLE_TYPE='BASE TABLE')
+    DROP TABLE dbo.[GeoLite2-City-Blocks-IPv4];
+
+-- Views
+IF object_id(N'dbo.RequestResponse', 'V') IS NOT NULL
+    DROP VIEW dbo.RequestResponse;
+IF object_id(N'dbo.APIMErrorDetail', 'V') IS NOT NULL
+    DROP VIEW dbo.APIMErrorDetail;
+IF object_id(N'dbo.RequestSummary', 'V') IS NOT NULL
+    DROP VIEW dbo.RequestSummary;
+IF object_id(N'dbo.vw_date', 'V') IS NOT NULL
+    DROP VIEW dbo.vw_date;
+IF object_id(N'dbo.ApiSummary', 'V') IS NOT NULL
+    DROP VIEW dbo.ApiSummary;
+IF object_id(N'dbo.OperationSummary', 'V') IS NOT NULL
+    DROP VIEW dbo.OperationSummary;
+IF object_id(N'dbo.ProductSummary', 'V') IS NOT NULL
+    DROP VIEW dbo.ProductSummary;
+IF object_id(N'dbo.SubscriptionSummary', 'V') IS NOT NULL
+    DROP VIEW dbo.SubscriptionSummary;
+IF object_id(N'dbo.AllRequestData', 'V') IS NOT NULL
+    DROP VIEW AllRequestData;

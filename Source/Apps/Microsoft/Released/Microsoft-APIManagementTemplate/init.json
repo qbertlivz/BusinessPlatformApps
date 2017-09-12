@@ -70,11 +70,11 @@
         ],
 
         "Actions": [
-            //{
-            //    "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
-            //    "name": "Microsoft-DeploySQLScripts",
-            //    "SqlScriptsFolder": "Database"
-            //},
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
+                "name": "Microsoft-DeploySQLScripts",
+                "SqlScriptsFolder": "Database"
+            },
             {
                 "AzureArmFile": "Service/ARM/EventHub.json",
                 "AzureArmParametersUnique": {
@@ -85,10 +85,6 @@
                 "displayname": "$translate(INIT_ACTION_CREATING_EVENTHUB)",
                 "name": "Microsoft-DeployAzureArmTemplate"
             }
-            //{
-            //    "displayname": "$translate(INIT_ACTION_CREATING_EVENT_HUB)",
-            //    "name": "Microsoft-CreateEventHubNameSpace"
-            //},
             //{
             //    "displayname": "$translate(INIT_ACTION_EXPORT_ACTIVITY_LOG)",
             //    "name": "Microsoft-ExportActivityLogToEventHub"

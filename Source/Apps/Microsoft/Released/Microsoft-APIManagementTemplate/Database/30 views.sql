@@ -1,7 +1,12 @@
-﻿IF object_id(N'dbo.RequestResponse', 'V') IS NOT NULL
-	DROP VIEW dbo.RequestResponse
-GO
+﻿SET ANSI_NULLS              ON;
+SET ANSI_PADDING            ON;
+SET ANSI_WARNINGS           ON;
+SET ANSI_NULL_DFLT_ON       ON;
+SET CONCAT_NULL_YIELDS_NULL ON;
+SET QUOTED_IDENTIFIER       ON;
+go
 
+/*
 CREATE VIEW [dbo].[RequestResponse] AS
 SELECT a.RequestId,
 		a.CreatedDate,
@@ -26,15 +31,7 @@ SELECT a.RequestId,
 FROM dbo.Request a 
 LEFT OUTER JOIN dbo.Response b 
 ON A.RequestId = B.RequestId
-GO
-
--- =================================================================================
--- Create View for APIM Errors
--- =================================================================================
-
-IF object_id(N'dbo.APIMErrorDetail', 'V') IS NOT NULL
-	DROP VIEW dbo.APIMErrorDetail
-GO
+go
 
 CREATE VIEW dbo.APIMErrorDetail AS
 SELECT a.[RequestId],
@@ -55,15 +52,7 @@ SELECT a.[RequestId],
   FROM [dbo].[Error] a 
   LEFT OUTER JOIN dbo.Request b 
   ON A.RequestId = B.RequestId
-  GO
-
--- =================================================================================
--- Create View for number of requests
--- =================================================================================
-
-IF object_id(N'dbo.RequestSummary', 'V') IS NOT NULL
-	DROP VIEW dbo.RequestSummary
-GO
+go
 
 CREATE VIEW dbo.RequestSummary AS
 SELECT SubscriptionId,
@@ -74,21 +63,9 @@ SELECT SubscriptionId,
   INNER JOIN dbo.Response b 
   ON a.RequestId = b.RequestId
   GROUP BY SubscriptionId
-  GO
+go
 
-
-/****** Object:  View [dbo].[vw_date]    Script Date: 6/7/2017 2:18:40 PM ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-IF object_id(N'dbo.vw_date', 'V') IS NOT NULL
-	DROP VIEW dbo.vw_date
-GO
 CREATE VIEW [dbo].[vw_date]
-
 AS
 
     SELECT date_key,
@@ -106,74 +83,33 @@ AS
            same_day_year_ago_date,
            week_begin_date  AS [week begin date]
     FROM   dbo.date;
+go
 
-GO
-
-/* view for apis */
-
-IF object_id(N'dbo.ApiSummary', 'V') IS NOT NULL
-	DROP VIEW dbo.ApiSummary
-GO
 CREATE VIEW [dbo].ApiSummary
-
 AS
 SELECT DISTINCT ApiID, LAST_VALUE(Api) OVER (PARTITION BY OperationID ORDER BY ApiID ASC ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING) AS Api
 FROM dbo.Request
+go
 
-GO
-/* view for Operations */
-
-IF object_id(N'dbo.OperationSummary', 'V') IS NOT NULL
-	DROP VIEW dbo.OperationSummary
-GO
 CREATE VIEW [dbo].OperationSummary
-
 AS
 SELECT DISTINCT OperationID, LAST_VALUE(Operation) OVER (PARTITION BY OperationID ORDER BY OperationID ASC ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING) AS Operation
 FROM dbo.Request
+go
 
-GO
-/* view for Products */
-
-IF object_id(N'dbo.ProductSummary', 'V') IS NOT NULL
-	DROP VIEW dbo.ProductSummary
-GO
 CREATE VIEW [dbo].ProductSummary
-
 AS
 SELECT DISTINCT OperationID, LAST_VALUE(Operation) OVER (PARTITION BY OperationID ORDER BY OperationID ASC ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING) AS Operation
 FROM dbo.Request
+go
 
-GO
-/* view for Subscription */
-
-IF object_id(N'dbo.SubscriptionSummary', 'V') IS NOT NULL
-	DROP VIEW dbo.SubscriptionSummary
-GO
 CREATE VIEW [dbo].SubscriptionSummary
-
 AS
 SELECT DISTINCT SubscriptionID, LAST_VALUE(SubscriptionName) OVER (PARTITION BY SubscriptionID ORDER BY ProductID ASC ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING) AS Subscription
 FROM dbo.Request
-
-GO
-
--- All requests View
-/****** Object:  View [dbo].[AllRequestData]    Script Date: 8/1/2017 6:13:59 PM ******/
-IF object_id(N'dbo.AllRequestData', 'V') IS NOT NULL
-	DROP VIEW AllRequestData
-GO
-GO
-
-/****** Object:  View [dbo].[AllRequestData]    Script Date: 8/1/2017 6:13:59 PM ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
+go
 
 CREATE VIEW [dbo].[AllRequestData] AS
-
 SELECT a.RequestId,
 		a.CreatedDate,
 		DATEDIFF(ms, a.CreatedDate, b.CreatedDate) AS ExecutionTime,
@@ -203,14 +139,9 @@ FROM dbo.Request a
 INNER JOIN dbo.Response b 
 ON a.RequestId = b.RequestId
 WHERE a.CreatedDate > DATEADD(day, -90, SYSDATETIME())
-
 GO
 
--- These views added by Eric
-
--- Call Volume
-
-CREATE OR ALTER VIEW VisualOperationCallVolume AS
+CREATE VIEW VisualOperationCallVolume AS
 SELECT 
 	DATEADD(hour, DATEDIFF(hour, 0, CreatedDate), 0) as datetime_hour
    ,ProductID
@@ -219,12 +150,9 @@ SELECT
    ,count(1) as operation_counts
 From Request
 GROUP BY DATEADD(hour, DATEDIFF(hour, 0, CreatedDate), 0),ProductID,ApiID,OperationId;
-GO
+go
 
-
--- Edge Analysis
-
-CREATE OR ALTER VIEW VisualCallProbabilityEdgeList AS
+CREATE VIEW VisualCallProbabilityEdgeList AS
 	Select
 			el.Product
 		,	el.Api
@@ -245,12 +173,9 @@ CREATE OR ALTER VIEW VisualCallProbabilityEdgeList AS
 			GROUP BY  t1.Product, t1.Api, t1.Operation
 		) t2 on el.Product = t2.Product AND el.Api  = t2.Api AND el.Operation = t2.Operation
 	GROUP BY el.Product,el.Api,el.Operation,el.RelatedProduct,el.RelatedApi,el.RelatedOperation,t2.SourceCount;
-GO
+go
 
-
--- Edge Traversals / Call Graph
-
-CREATE OR ALTER VIEW VisualIPEdgeCounts AS
+CREATE VIEW VisualIPEdgeCounts AS
 	Select
 			Product
 		,	Api
@@ -265,35 +190,33 @@ CREATE OR ALTER VIEW VisualIPEdgeCounts AS
 	GROUP BY 
 		Product,Api,Operation,RelatedProduct,RelatedApi,RelatedOperation,
 		IPAddress, DATEADD(hour, DATEDIFF(hour, 0, CreatedDate), 0);
-GO
+go
 
-
-
--- Frequency Analysis
-
-CREATE OR ALTER VIEW VisualFreqHour AS
+CREATE VIEW VisualFreqHour AS
 	Select
 		IPAddress
 	,	Position as 'Hour'
 	,	CallFreq as SignalStrength
 	FROM FFT
 	Where TimeUnit = 'h';
-GO
+go
 
-CREATE OR ALTER VIEW VisualFreqMinute AS
+CREATE VIEW VisualFreqMinute AS
 	Select
 		IPAddress
 	,	Position as 'Minute'
 	,	CallFreq as SignalStrength
 	FROM FFT
 	Where TimeUnit = 'min';
-GO
+go
 
-CREATE OR ALTER VIEW VisualFreqSecond AS
+CREATE VIEW VisualFreqSecond AS
 	Select
 		IPAddress
 	,	Position as 'Second'
 	,	CallFreq as SignalStrength
 	FROM FFT
 	Where TimeUnit = 's';
-GO
+go
+
+*/

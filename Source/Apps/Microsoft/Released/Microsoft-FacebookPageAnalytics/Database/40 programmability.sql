@@ -800,7 +800,7 @@ MERGE fbpa.PagePostsTo AS TARGET
 USING
 ( 
 SELECT DISTINCT
-[Id]
+[Id],
 [PageId],
 [Created Time],
 [Updated Time],
@@ -845,43 +845,31 @@ BEGIN TRAN
 MERGE fbpa.PagePostsInfo AS TARGET
 USING
 ( 
-SELECT DISTINCT
-	   [Id],
+SELECT [Id],
        [PageId],
-       [Message],
+       MAX([Message]) as [Message],
        [Created Time],
-       [Updated Time],
-       [Icon],
-       [Story],
-       [Link],
-       [Status Type],
-       [Is Hidden],
-       [Is Published],
-       [Name],
-       [Object],
-       [Permalink URL],
-       [Picture],
-       [Source],
-       [Shares],
-       [Type]
-FROM fbpa.STAGING_PagePostsInfo) as SOURCE
+       MAX([Updated Time]) as [Updated Time],
+       MAX([Icon]) as [Icon],
+       MAX([Story]) as [Story] ,
+       MAX([Link]) as [Link],
+       MAX([Status Type]) as [Status Type],
+       MAX([Is Hidden]) as [Is Hidden],
+       MAX([Is Published]) as [Is Published],
+       MAX([Name]) as [Name],
+       MAX([Object]) as [Object],
+       MAX([Permalink URL]) as [Permalink URL],
+       MAX([Picture]) as [Picture],
+       MAX([Source]) as [Source],
+       MAX([Shares]) as [Shares],
+       MAX([Type]) as [Type]
+FROM fbpa.STAGING_PagePostsInfo
+GROUP BY [Id], [PageId], [Created Time]) as SOURCE
 ON  TARGET.[Id] = SOURCE.[Id] 
 AND (TARGET.[PageId] = SOURCE.[PageId] OR (TARGET.[PageId] IS NULL AND SOURCE.[PageId] IS NULL))
-AND (TARGET.[Message] = SOURCE.[Message]  OR (TARGET.[Message] IS NULL AND SOURCE.[Message] IS NULL))
 AND (TARGET.[Created Time] = SOURCE.[Created Time]  OR (TARGET.[Created Time] IS NULL AND SOURCE.[Created Time] IS NULL))
-AND (TARGET.[Icon] = SOURCE.[Icon]  OR (TARGET.[Icon] IS NULL AND SOURCE.[Icon] IS NULL))
-AND (TARGET.[Story] = SOURCE.[Story]  OR (TARGET.[Story] IS NULL AND SOURCE.[Story] IS NULL))
-AND (TARGET.[Link] = SOURCE.[Link]  OR (TARGET.[Link] IS NULL AND SOURCE.[Link] IS NULL))
-AND (TARGET.[Status Type] = SOURCE.[Status Type]  OR (TARGET.[Status Type] IS NULL AND SOURCE.[Status Type] IS NULL))
-AND (TARGET.[Is Hidden] = SOURCE.[Is Hidden]  OR (TARGET.[Is Hidden] IS NULL AND SOURCE.[Is Hidden] IS NULL))
-AND (TARGET.[Is Published] = SOURCE.[Is Published]  OR (TARGET.[Is Published] IS NULL AND SOURCE.[Is Published] IS NULL))
-AND (TARGET.[Name] = SOURCE.[Name]  OR (TARGET.[Name] IS NULL AND SOURCE.[Name] IS NULL))
 AND (TARGET.[Object] = SOURCE.[Object]  OR (TARGET.[Object] IS NULL AND SOURCE.[Object] IS NULL))
 AND (TARGET.[Permalink URL] = SOURCE.[Permalink URL]  OR (TARGET.[Permalink URL] IS NULL AND SOURCE.[Permalink URL] IS NULL))
-AND (TARGET.[Picture] = SOURCE.[Picture]  OR (TARGET.[Picture] IS NULL AND SOURCE.[Picture] IS NULL))
-AND (TARGET.[Source] = SOURCE.[Source]  OR (TARGET.[Source] IS NULL AND SOURCE.[Source] IS NULL))
-AND (TARGET.[Shares] = SOURCE.[Shares]  OR (TARGET.[Shares] IS NULL AND SOURCE.[Shares] IS NULL))
-AND (TARGET.[Type] = SOURCE.[Type] OR (TARGET.[Type] IS NULL AND SOURCE.[Type] IS NULL))
 WHEN MATCHED AND SOURCE.[Updated Time] > TARGET.[Updated Time] THEN
 UPDATE SET
 TARGET.[Id] = SOURCE.[Id],
@@ -941,6 +929,7 @@ SOURCE.[Picture],
 SOURCE.[Source],
 SOURCE.[Shares],
 SOURCE.[Type]);
+
 
 TRUNCATE TABLE fbpa.STAGING_PagePostsInfo;
 

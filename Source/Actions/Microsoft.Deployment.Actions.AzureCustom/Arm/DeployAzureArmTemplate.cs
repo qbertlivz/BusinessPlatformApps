@@ -1,59 +1,67 @@
-﻿using Microsoft.Azure;
+﻿using System.ComponentModel.Composition;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+using Microsoft.Azure;
 using Microsoft.Azure.Management.Resources;
 using Microsoft.Azure.Management.Resources.Models;
+
 using Microsoft.Deployment.Common;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.ErrorCode;
 using Microsoft.Deployment.Common.Helpers;
-using System.ComponentModel.Composition;
-
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.Arm
 {
     [Export(typeof(IAction))]
     public class DeployAzureArmTemplate : BaseAction
     {
+        private const int SIZE_PADDING = 5;
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            string azureToken = request.DataStore.GetJson("AzureToken", "access_token");
-            string subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
-            string resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
+            string idSubscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
+            string nameResourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
+            string tokenAzure = request.DataStore.GetJson("AzureToken", "access_token");
+
             string doNotWaitString = request.DataStore.GetValue("Wait");
 
             bool doNotWait = !string.IsNullOrEmpty(doNotWaitString) && bool.Parse(doNotWaitString);
-            string deploymentName = request.DataStore.GetValue("DeploymentName");
+            string deploymentName = request.DataStore.GetValue("DeploymentName") ?? request.DataStore.CurrentRoute;
 
-            // Read from file
-            var armTemplatefilePath = request.DataStore.GetValue("AzureArmFile");
-            var armParamTemplateProperties = request.DataStore.GetJson("AzureArmParameters");
+            var armParameters = request.DataStore.GetJson("AzureArmParameters");
+            var armParametersUnique = request.DataStore.GetJson("AzureArmParametersUnique");
 
-            if (deploymentName == null && !doNotWait)
-            {
-                deploymentName = request.DataStore.CurrentRoute;
-            }
+            var payload = new AzureArmParameterGenerator();
 
-            var param = new AzureArmParameterGenerator();
-            foreach (var prop in armParamTemplateProperties.Children())
+            foreach (var prop in armParameters.Children())
             {
                 string key = prop.Path.Split('.').Last();
                 string value = prop.First().ToString();
 
-                param.AddStringParam(key, value);
+                payload.AddStringParam(key, value);
             }
 
-            var armTemplate = JsonUtility.GetJObjectFromJsonString(System.IO.File.ReadAllText(Path.Combine(request.Info.App.AppFilePath, armTemplatefilePath)));
-            var armParamTemplate = JsonUtility.GetJObjectFromObject(param.GetDynamicObject());
+            if (armParametersUnique != null)
+            {
+                foreach (var prop in armParametersUnique.Children())
+                {
+                    string key = prop.Path.Split('.').Last();
+                    string value = prop.First().ToString();
+
+                    payload.AddStringParam(key, RandomGenerator.GetRandomHexadecimal(SIZE_PADDING, value));
+                }
+            }
+
+            var armTemplate = JsonUtility.GetJObjectFromJsonString(System.IO.File.ReadAllText(Path.Combine(request.Info.App.AppFilePath, request.DataStore.GetValue("AzureArmFile"))));
+            var armParamTemplate = JsonUtility.GetJObjectFromObject(payload.GetDynamicObject());
             armTemplate.Remove("parameters");
             armTemplate.Add("parameters", armParamTemplate["parameters"]);
 
-            SubscriptionCloudCredentials creds = new TokenCloudCredentials(subscription, azureToken);
-            ResourceManagementClient client = new ResourceManagementClient(creds);
+            ResourceManagementClient client = new ResourceManagementClient(new TokenCloudCredentials(idSubscription, tokenAzure));
 
             var deployment = new Microsoft.Azure.Management.Resources.Models.Deployment()
             {
@@ -64,28 +72,28 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Arm
                 }
             };
 
-            var validate = await client.Deployments.ValidateAsync(resourceGroup, deploymentName, deployment, new CancellationToken());
+            var validate = await client.Deployments.ValidateAsync(nameResourceGroup, deploymentName, deployment, new CancellationToken());
             if (!validate.IsValid)
             {
                 return new ActionResponse(ActionStatus.Failure, JsonUtility.GetJObjectFromObject(validate), null, DefaultErrorCodes.DefaultErrorCode,
                     $"Azure:{validate.Error.Message} Details:{validate.Error.Details}");
             }
 
-            var deploymentItem = await client.Deployments.CreateOrUpdateAsync(resourceGroup, deploymentName, deployment, new CancellationToken());
+            var deploymentItem = await client.Deployments.CreateOrUpdateAsync(nameResourceGroup, deploymentName, deployment, new CancellationToken());
 
             if (doNotWait)
             {
                 return new ActionResponse(ActionStatus.Success, deploymentItem);
             }
 
-            ActionResponse r = await WaitForAction(client, resourceGroup, deploymentName);
+            ActionResponse r = await WaitForAction(client, nameResourceGroup, deploymentName);
             request.DataStore.AddToDataStore("ArmOutput", r.DataStore.GetValue("ArmOutput"), DataStoreType.Public);
             return r;
         }
 
         private static async Task<ActionResponse> WaitForAction(ResourceManagementClient client, string resourceGroup, string deploymentName)
         {
-            for (;;)
+            for (; ; )
             {
                 Thread.Sleep(Constants.ACTION_WAIT_INTERVAL);
                 var status = await client.Deployments.GetAsync(resourceGroup, deploymentName, new CancellationToken());
@@ -104,8 +112,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Arm
 
                     return r;
                 }
-                    
-
 
                 var operation = operations.Operations.First(p => p.Properties.ProvisioningState == ProvisioningState.Failed);
                 var operationFailed = await client.DeploymentOperations.GetAsync(resourceGroup, deploymentName, operation.OperationId, new CancellationToken());

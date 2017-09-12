@@ -191,6 +191,7 @@
     <Compile Include="ActivityLogs\StartStreamAnalyticsJob.cs" />
     <Compile Include="ActivityLogs\ValidateLogProfile.cs" />
     <Compile Include="ActivityLogs\VerifyLogProfileEventHub.cs" />
+    <Compile Include="APIManagement\GetAPIManagementServices.cs" />
     <Compile Include="Arm\DeployAzureArmTemplate.cs" />
     <Compile Include="Arm\WaitForArmDeploymentStatus.cs" />
     <Compile Include="AzureAS\AssignPermissionsForUser.cs" />
@@ -297,6 +298,7 @@
       <Name>Microsoft.Deployment.Common</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <PropertyGroup>

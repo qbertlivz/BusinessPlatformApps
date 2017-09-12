@@ -159,6 +159,9 @@
     <Compile Include="Helpers\StringEnumConverterLower.cs" />
     <Compile Include="Helpers\StringExtension.cs" />
     <Compile Include="Controller\Logger.cs" />
+    <Compile Include="Model\APIManagement\APIManagementService.cs" />
+    <Compile Include="Model\APIManagement\APIManagementServiceProperties.cs" />
+    <Compile Include="Model\APIManagement\APIManagementServiceSku.cs" />
     <Compile Include="Model\Azure\Function.cs" />
     <Compile Include="Model\Azure\FunctionProperties.cs" />
     <Compile Include="Model\Azure\FunctionPropertiesConfig.cs" />

@@ -177,8 +177,8 @@
           "triggers": {
             "Recurrence": {
               "recurrence": {
-                "frequency": "Minute",
-                "interval": 30
+                "frequency": "hour",
+                "interval": 12
               },
               "type": "Recurrence"
             }

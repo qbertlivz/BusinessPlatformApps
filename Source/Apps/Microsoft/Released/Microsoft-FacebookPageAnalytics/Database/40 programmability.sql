@@ -62,7 +62,7 @@ SOURCE.[Description],
 SOURCE.[Id],
 SOURCE.PageId);
 
-TRUNCATE TABLE fbpa.STAGING_PageContent;
+TRUNCATE TABLE fbpa.STAGING_Clicks;
 
 COMMIT
 

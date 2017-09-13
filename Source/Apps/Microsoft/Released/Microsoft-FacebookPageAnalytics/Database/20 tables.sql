@@ -9,211 +9,212 @@ SET QUOTED_IDENTIFIER       ON;
 CREATE TABLE fbpa.PagePostStoriesAndPeopleTalkingAboutThis
 (
                EndTime [datetime],
-               [Name] [nvarchar](MAX),
-               [Entry Name] [nvarchar] (MAX),
+               [Name] [nvarchar](100),
+               [Entry Name] [nvarchar] (80),
                [Value] [decimal] NULL,
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
 
 CREATE TABLE fbpa.PageImpressions
 (
 			   EndTime [datetime],
-               [Name] [nvarchar](MAX),
-               [Entry Name] [nvarchar] (MAX),
+               [Name] [nvarchar](100),
+               [Entry Name] [nvarchar] (80),
                [Value] [decimal] NULL,
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
 
 CREATE TABLE fbpa.PageEngagement
 (
 			   EndTime [datetime],
-               [Name] [nvarchar](MAX),
-               [Entry Name] [nvarchar] (MAX),
+               [Name] [nvarchar](100),
+               [Entry Name] [nvarchar] (80),
                [Value] [decimal] NULL,
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
 
 CREATE TABLE fbpa.PageReactions
 (
-               EndTime [datetime],
-               [Name] [nvarchar](MAX),
-               [Entry Name] [nvarchar] (MAX),
+			   EndTime [datetime],
+               [Name] [nvarchar](100),
+               [Entry Name] [nvarchar] (80),
                [Value] [decimal] NULL,
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
 
 CREATE TABLE fbpa.Clicks
 (
-               EndTime [datetime],
-               [Name] [nvarchar](MAX),
-               [Entry Name] [nvarchar] (MAX),
+			   EndTime [datetime],
+               [Name] [nvarchar](100),
+               [Entry Name] [nvarchar] (80),
                [Value] [decimal] NULL,
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
 
 CREATE TABLE fbpa.PageUserDemographics
 (
-               EndTime [datetime],
-               [Name] [nvarchar](MAX),
-               [Entry Name] [nvarchar] (MAX),
+			   EndTime [datetime],
+               [Name] [nvarchar](100),
+               [Entry Name] [nvarchar] (80),
                [Value] [decimal] NULL,
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
 
 CREATE TABLE fbpa.PageContent
 (
-               EndTime [datetime],
-               [Name] [nvarchar](MAX),
-               [Entry Name] [nvarchar] (MAX),
+			   EndTime [datetime],
+               [Name] [nvarchar](100),
+               [Entry Name] [nvarchar] (80),
                [Value] [decimal] NULL,
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
 
 CREATE TABLE fbpa.PageViews
 (
-               EndTime [datetime],
-               [Name] [nvarchar](MAX),
+			   EndTime [datetime],
+               [Name] [nvarchar](100),
                [Entry Name] [nvarchar] (MAX),
                [Value] [decimal] NULL,
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
 
 CREATE TABLE fbpa.PageVideoViews
 (
-               EndTime [datetime],
-               [Name] [nvarchar](MAX),
-               [Entry Name] [nvarchar] (MAX),
-               [Value] [nvarchar](MAX),
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+			   EndTime [datetime],
+               [Name] [nvarchar](100),
+               [Entry Name] [nvarchar] (80),
+               [Value] [nvarchar] (100),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
 
 CREATE TABLE fbpa.PagePost
 (
-               EndTime [datetime],
-               [Name] [nvarchar](MAX),
-               [Entry Name] [nvarchar] (MAX),
+			   EndTime [datetime],
+               [Name] [nvarchar](100),
+               [Entry Name] [nvarchar] (80),
                [Value] [decimal] NULL,
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
 
 CREATE TABLE fbpa.PagePostImpressions
 (
-               [Name] [nvarchar](MAX),
-               [Entry Name] [nvarchar] (MAX),
+               [Name] [nvarchar](100),
+               [Entry Name] [nvarchar] (80),
                [Value] [decimal] NULL,
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
 
 CREATE TABLE fbpa.PagePostEngagement
 (
                EndTime [datetime],
-               [Name] [nvarchar](MAX),
-               [Entry Name] [nvarchar] (MAX),
+               [Name] [nvarchar](100),
+               [Entry Name] [nvarchar] (80),
                [Value] [decimal] NULL,
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
 
 CREATE TABLE fbpa.PagePostReactions
 (
-               [Name] [nvarchar](MAX),
-               [Entry Name] [nvarchar] (MAX),
+               [Name] [nvarchar](100),
+               [Entry Name] [nvarchar] (80),
                [Value] [decimal] NULL,
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
 
 CREATE TABLE fbpa.PageVideoPosts
 (
-               [Name] [nvarchar](MAX),
-               [Entry Name] [nvarchar] (MAX),
+               [Name] [nvarchar](100),
+               [Entry Name] [nvarchar] (80),
                [Value] [decimal] NULL,
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
 
 CREATE TABLE fbpa.PagePostsInfo
 (
-	[Id] [nvarchar](MAX),
-	[PageId] [nvarchar](MAX),
+	[Id] [nvarchar](50),
+	[PageId] [nvarchar](30),
 	[Message] [nvarchar](MAX),
 	[Created Time] [datetime],
 	[Updated Time] [datetime],
-	[Icon] [nvarchar](MAX),
+	[Icon] [nvarchar](100),
 	[Story] [nvarchar](MAX),
-	[Link] [nvarchar](MAX),
-	[Status Type] [nvarchar](MAX),
-	[Is Hidden] [nvarchar](MAX),
-	[Is Published] [nvarchar](MAX),
-	[Name] [nvarchar](MAX),
-	[Object] [nvarchar](MAX),
-	[Permalink URL] [nvarchar](MAX),
+	[Link] [nvarchar](255),
+	[Status Type] [nvarchar](50),
+	[Is Hidden] [nvarchar](10),
+	[Is Published] [nvarchar](10),
+	[Name] [nvarchar](255),
+	[Object] [nvarchar](255),
+	[Permalink URL] [nvarchar](255),
 	[Picture] [nvarchar](MAX),
 	[Source] [nvarchar](MAX),
-	[Shares] [nvarchar](MAX),
-	[Type] [nvarchar](MAX)
+	[Shares] [decimal] NULL,
+	[Type] [nvarchar](30)
 )
 
-CREATE TABLE [fbpa].[PagePostsTo](
-	[Id] [nvarchar](max) NULL,
-	[PageId] [nvarchar](max) NULL,
+CREATE TABLE fbpa.[PagePostsTo]
+(
+	[Id] [nvarchar](50),
+	[PageId] [nvarchar](30),
 	[Created Time] [datetime] NULL,
 	[Updated Time] [datetime] NULL,
-	[To Id] [nvarchar](max) NULL,
-	[To Name] [nvarchar](max) NULL
+	[To Id] [nvarchar](32) NULL,
+	[To Name] [nvarchar](200) NULL
 )
 
 CREATE TABLE fbpa.[PageTable]
@@ -225,205 +226,214 @@ CREATE TABLE fbpa.[PageTable]
 CREATE TABLE fbpa.STAGING_PagePostStoriesAndPeopleTalkingAboutThis
 (
                EndTime [datetime],
-               [Name] [nvarchar](MAX),
-               [Entry Name] [nvarchar] (MAX),
+               [Name] [nvarchar](100),
+               [Entry Name] [nvarchar] (80),
                [Value] [decimal] NULL,
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
 
 CREATE TABLE fbpa.STAGING_PageImpressions
 (
 			   EndTime [datetime],
-               [Name] [nvarchar](MAX),
-               [Entry Name] [nvarchar] (MAX),
+               [Name] [nvarchar](100),
+               [Entry Name] [nvarchar] (80),
                [Value] [decimal] NULL,
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
 
 CREATE TABLE fbpa.STAGING_PageEngagement
 (
 			   EndTime [datetime],
-               [Name] [nvarchar](MAX),
-               [Entry Name] [nvarchar] (MAX),
+               [Name] [nvarchar](100),
+               [Entry Name] [nvarchar] (80),
                [Value] [decimal] NULL,
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
 
 CREATE TABLE fbpa.STAGING_PageReactions
 (
-               EndTime [datetime],
-               [Name] [nvarchar](MAX),
-               [Entry Name] [nvarchar] (MAX),
+			   EndTime [datetime],
+               [Name] [nvarchar](100),
+               [Entry Name] [nvarchar] (80),
                [Value] [decimal] NULL,
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
+
 CREATE TABLE fbpa.STAGING_Clicks
 (
-               EndTime [datetime],
-               [Name] [nvarchar](MAX),
-               [Entry Name] [nvarchar] (MAX),
+			   EndTime [datetime],
+               [Name] [nvarchar](100),
+               [Entry Name] [nvarchar] (80),
                [Value] [decimal] NULL,
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
 
 CREATE TABLE fbpa.STAGING_PageUserDemographics
 (
-               EndTime [datetime],
-               [Name] [nvarchar](MAX),
-               [Entry Name] [nvarchar] (MAX),
+			   EndTime [datetime],
+               [Name] [nvarchar](100),
+               [Entry Name] [nvarchar] (80),
                [Value] [decimal] NULL,
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
 
 CREATE TABLE fbpa.STAGING_PageContent
 (
-               EndTime [datetime],
-               [Name] [nvarchar](MAX),
-               [Entry Name] [nvarchar] (MAX),
+			   EndTime [datetime],
+               [Name] [nvarchar](100),
+               [Entry Name] [nvarchar] (80),
                [Value] [decimal] NULL,
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
 
 CREATE TABLE fbpa.STAGING_PageViews
 (
-               EndTime [datetime],
-               [Name] [nvarchar](MAX),
+			   EndTime [datetime],
+               [Name] [nvarchar](100),
                [Entry Name] [nvarchar] (MAX),
                [Value] [decimal] NULL,
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
 
 CREATE TABLE fbpa.STAGING_PageVideoViews
 (
-               EndTime [datetime],
-               [Name] [nvarchar](MAX),
-               [Entry Name] [nvarchar] (MAX),
-               [Value] [nvarchar](MAX),
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+			   EndTime [datetime],
+               [Name] [nvarchar](100),
+               [Entry Name] [nvarchar] (80),
+               [Value] [nvarchar] (100),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
 
 CREATE TABLE fbpa.STAGING_PagePost
 (
-               EndTime [datetime],
-               [Name] [nvarchar](MAX),
-               [Entry Name] [nvarchar] (MAX),
+			   EndTime [datetime],
+               [Name] [nvarchar](100),
+               [Entry Name] [nvarchar] (80),
                [Value] [decimal] NULL,
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
 
 CREATE TABLE fbpa.STAGING_PagePostImpressions
 (
-               [Name] [nvarchar](MAX),
-               [Entry Name] [nvarchar] (MAX),
+               [Name] [nvarchar](100),
+               [Entry Name] [nvarchar] (80),
                [Value] [decimal] NULL,
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
 
 CREATE TABLE fbpa.STAGING_PagePostEngagement
 (
                EndTime [datetime],
-               [Name] [nvarchar](MAX),
-               [Entry Name] [nvarchar] (MAX),
+               [Name] [nvarchar](100),
+               [Entry Name] [nvarchar] (80),
                [Value] [decimal] NULL,
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
 
 CREATE TABLE fbpa.STAGING_PagePostReactions
 (
-               [Name] [nvarchar](MAX),
-               [Entry Name] [nvarchar] (MAX),
+               [Name] [nvarchar](100),
+               [Entry Name] [nvarchar] (80),
                [Value] [decimal] NULL,
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
 
 CREATE TABLE fbpa.STAGING_PageVideoPosts
 (
-               [Name] [nvarchar](MAX),
-               [Entry Name] [nvarchar] (MAX),
+               [Name] [nvarchar](100),
+               [Entry Name] [nvarchar] (80),
                [Value] [decimal] NULL,
-               [Period] [nvarchar](MAX),
-               [Title] [nvarchar](MAX),
+               [Period] [nvarchar](10),
+               [Title] [nvarchar](100),
 			   [Description][nvarchar](MAX),
-               [Id] [nvarchar](MAX),
+               [Id] [nvarchar](200),
                PageId [nvarchar](30)
 )
 
 CREATE TABLE fbpa.STAGING_PagePostsInfo
 (
-	[Id] [nvarchar](MAX),
-	[PageId] [nvarchar](MAX),
+	[Id] [nvarchar](50),
+	[PageId] [nvarchar](30),
 	[Message] [nvarchar](MAX),
 	[Created Time] [datetime],
 	[Updated Time] [datetime],
-	[Icon] [nvarchar](MAX),
+	[Icon] [nvarchar](100),
 	[Story] [nvarchar](MAX),
-	[Link] [nvarchar](MAX),
-	[Status Type] [nvarchar](MAX),
-	[Is Hidden] [nvarchar](MAX),
-	[Is Published] [nvarchar](MAX),
-	[Name] [nvarchar](MAX),
-	[Object] [nvarchar](MAX),
-	[Permalink URL] [nvarchar](MAX),
+	[Link] [nvarchar](255),
+	[Status Type] [nvarchar](50),
+	[Is Hidden] [nvarchar](10),
+	[Is Published] [nvarchar](10),
+	[Name] [nvarchar](255),
+	[Object] [nvarchar](255),
+	[Permalink URL] [nvarchar](255),
 	[Picture] [nvarchar](MAX),
 	[Source] [nvarchar](MAX),
-	[Shares] [nvarchar](MAX),
-	[Type] [nvarchar](MAX)
+	[Shares] [decimal] NULL,
+	[Type] [nvarchar](30)
 )
 
+CREATE TABLE fbpa.STAGING_PagePostsTo(
+	[Id] [nvarchar](50),
+	[PageId] [nvarchar](30),
+	[Created Time] [datetime] NULL,
+	[Updated Time] [datetime] NULL,
+	[To Id] [nvarchar](32) NULL,
+	[To Name] [nvarchar](200) NULL
+)
 
-CREATE TABLE [fbpa].[Date](
+CREATE TABLE fbpa.[Date](
 	[date_key] [int] NOT NULL,
 	[full_date] [date] NOT NULL,
 	[day_of_week] [tinyint] NOT NULL,
@@ -455,7 +465,7 @@ CREATE TABLE fbpa.page_metric_unit
 	[image][nvarchar](MAX) NULL
 )
 
-CREATE TABLE [fbpa].[post_metric_unit]
+CREATE TABLE fbpa.post_metric_unit
 (
 	[metric][nvarchar](50) NULL,
 	[name][nvarchar](50) NULL,
@@ -463,7 +473,7 @@ CREATE TABLE [fbpa].[post_metric_unit]
 	[sortname][int] NULL
 )
 
-CREATE TABLE [fbpa].[page_unit](
+CREATE TABLE fbpa.page_unit(
 	[unit] [nvarchar](30) NULL,
 	[key_id] [nvarchar](100) NOT NULL,
 	[metric] [nvarchar](45) NULL,
@@ -479,7 +489,7 @@ CREATE TABLE [fbpa].[page_unit](
 	[image_8] [nvarchar](255) NULL
 )
 
-CREATE TABLE [fbpa].[post_unit](
+CREATE TABLE fbpa.post_unit(
 	[key_id] [nvarchar](100) NOT NULL,
 	[metric] [nvarchar](45) NULL,
 	[unit] [nvarchar](30) NULL,
@@ -495,7 +505,7 @@ CREATE TABLE [fbpa].[post_unit](
 	[image_8] [nvarchar](255) NULL
 )
 
-CREATE TABLE [fbpa].[period_post]
+CREATE TABLE fbpa.period_post
 (
 	[period][nvarchar](50),
 	[periodsort][int],
@@ -503,7 +513,7 @@ CREATE TABLE [fbpa].[period_post]
 	[period_last][nvarchar](50)
 )
 
-CREATE TABLE [fbpa].[period_page]
+CREATE TABLE fbpa.period_page
 (
 	[period][nvarchar](50),
 	[periodsort][int],
@@ -511,14 +521,14 @@ CREATE TABLE [fbpa].[period_page]
 	[period_last][nvarchar](50)
 )
 
-CREATE TABLE [fbpa].[type]
+CREATE TABLE fbpa.[type]
 (
 	[type][nvarchar](10),
 	[type_sort] [int],
 	[name][nvarchar](10)
 )
 
-CREATE TABLE fbpa.[gender_age](
+CREATE TABLE fbpa.gender_age(
 	[metric] [nvarchar](50) NULL,
 	[metric_sort] [decimal](28, 0) NULL,
 	[age] [nvarchar](50) NULL,
@@ -529,7 +539,7 @@ CREATE TABLE fbpa.[gender_age](
 	[image] [nvarchar](300) NULL
 )
 
-CREATE TABLE [fbpa].[time](
+CREATE TABLE fbpa.[time](
 	[metric] [varchar](50) NULL,
 	[post_time] [varchar](50) NULL,
 	[metric_sort] [decimal](28, 0) NULL,
@@ -560,16 +570,8 @@ CREATE TABLE [fbpa].[time](
 	[+12] [time](7) NULL
 )
 
-CREATE TABLE [fbpa].[STAGING_PagePostsTo](
-	[Id] [nvarchar](max) NULL,
-	[PageId] [nvarchar](max) NULL,
-	[Created Time] [datetime] NULL,
-	[Updated Time] [datetime] NULL,
-	[To Id] [nvarchar](max) NULL,
-	[To Name] [nvarchar](max) NULL
-)
-
-CREATE TABLE [fbpa].[configuration](
+CREATE TABLE fbpa.[configuration]
+(
   id                     INT IDENTITY(1, 1) NOT NULL,
   configuration_group    VARCHAR(150) NOT NULL,
   configuration_subgroup VARCHAR(150) NOT NULL,
@@ -579,8 +581,288 @@ CREATE TABLE [fbpa].[configuration](
   PRIMARY KEY (id)
 )
 
-CREATE TABLE [fbpa].[Error](
+CREATE TABLE fbpa.Error(
 	[Date] [datetime] NULL,
 	[Error] [nvarchar](max) NULL,
 	[Posts] [nvarchar](max) NULL
 )
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.STAGING_Clicks 
+(
+	[EndTime],
+	[Name],
+	[Period]
+)
+GO
+
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.Clicks 
+(
+	[EndTime],
+	[Name],
+	[Period]
+)
+GO
+
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.STAGING_PagePostStoriesAndPeopleTalkingAboutThis 
+(
+	[EndTime],
+	[Name],
+	[Period]
+)
+GO
+
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.PagePostStoriesAndPeopleTalkingAboutThis 
+(
+	[EndTime],
+	[Name],
+	[Period]
+)
+GO
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.STAGING_PageImpressions
+(
+	[EndTime],
+	[Name],
+	[Period]
+)
+GO
+
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.PageImpressions 
+(
+	[EndTime],
+	[Name],
+	[Period]
+)
+GO
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.STAGING_PageEngagement
+(
+	[EndTime],
+	[Name],
+	[Period]
+)
+GO
+
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.PageEngagement 
+(
+	[EndTime],
+	[Name],
+	[Period]
+)
+GO
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.STAGING_PageReactions
+(
+	[EndTime],
+	[Name],
+	[Period]
+)
+GO
+
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.PageReactions 
+(
+	[EndTime],
+	[Name],
+	[Period]
+)
+GO
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.STAGING_PageUserDemographics
+(
+	[EndTime],
+	[Name],
+	[Period]
+)
+GO
+
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.PageUserDemographics 
+(
+	[EndTime],
+	[Name],
+	[Period]
+)
+GO
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.STAGING_PageContent
+(
+	[EndTime],
+	[Name],
+	[Period]
+)
+GO
+
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.PageContent 
+(
+	[EndTime],
+	[Name],
+	[Period]
+)
+GO
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.STAGING_PageViews
+(
+	[EndTime],
+	[Name],
+	[Period]
+)
+GO
+
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.PageViews 
+(
+	[EndTime],
+	[Name],
+	[Period]
+)
+GO
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.STAGING_PageVideoViews
+(
+	[EndTime],
+	[Name],
+	[Period]
+)
+GO
+
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.PageVideoViews 
+(
+	[EndTime],
+	[Name],
+	[Period]
+)
+GO
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.STAGING_PagePost
+(
+	[EndTime],
+	[Name],
+	[Period]
+)
+GO
+
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.PagePost 
+(
+	[EndTime],
+	[Name],
+	[Period]
+)
+GO
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.STAGING_PagePostImpressions
+(
+	[Name],
+	[Period]
+)
+GO
+
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.PagePostImpressions 
+(
+	[Name],
+	[Period]
+)
+GO
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.STAGING_PagePostEngagement
+(
+	[EndTime],
+	[Name],
+	[Period]
+)
+GO
+
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.PagePostEngagement 
+(
+	[EndTime],
+	[Name],
+	[Period]
+)
+GO
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.STAGING_PagePostReactions
+(
+	[Name],
+	[Period]
+)
+GO
+
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.PagePostReactions 
+(
+	[Name],
+	[Period]
+)
+GO
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.STAGING_PageVideoPosts
+(
+	[Name],
+	[Period]
+)
+GO
+
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.PageVideoPosts 
+(
+	[Name],
+	[Period]
+)
+GO
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.STAGING_PagePostsInfo
+(	
+	[Id],
+	[PageId],
+	[Created Time]
+)
+GO
+
+
+CREATE INDEX IDX_EndTime_Name_Period
+ON fbpa.PagePostsInfo 
+(
+	[Id],
+	[PageId],
+	[Created Time]
+)
+GO

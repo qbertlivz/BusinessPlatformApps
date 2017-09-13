@@ -781,8 +781,11 @@ GO
 CREATE INDEX IDX_EndTime_Name_Period
 ON fbpa.STAGING_PagePostImpressions
 (
+	[Entry Name],
+	[Id],
 	[Name],
-	[Period]
+	[Period],
+	[Value]
 )
 GO
 
@@ -790,8 +793,11 @@ GO
 CREATE INDEX IDX_EndTime_Name_Period
 ON fbpa.PagePostImpressions 
 (
+	[Entry Name],
+	[Id],
 	[Name],
-	[Period]
+	[Period],
+	[Value]
 )
 GO
 
@@ -817,25 +823,34 @@ GO
 CREATE INDEX IDX_EndTime_Name_Period
 ON fbpa.STAGING_PagePostReactions
 (
+	[Entry Name],
+	[Id],
 	[Name],
-	[Period]
+	[Period],
+	[Value]
 )
 GO
 
 
 CREATE INDEX IDX_EndTime_Name_Period
 ON fbpa.PagePostReactions 
-(
+(	
+	[Entry Name],
+	[Id],
 	[Name],
-	[Period]
+	[Period],
+	[Value]
 )
 GO
 
 CREATE INDEX IDX_EndTime_Name_Period
 ON fbpa.STAGING_PageVideoPosts
 (
+	[Entry Name],
+	[Id],
 	[Name],
-	[Period]
+	[Period],
+	[Value]
 )
 GO
 
@@ -843,8 +858,11 @@ GO
 CREATE INDEX IDX_EndTime_Name_Period
 ON fbpa.PageVideoPosts 
 (
+	[Entry Name],
+	[Id],
 	[Name],
-	[Period]
+	[Period],
+	[Value]
 )
 GO
 

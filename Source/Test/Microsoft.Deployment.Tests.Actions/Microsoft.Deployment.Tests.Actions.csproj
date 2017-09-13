@@ -134,6 +134,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="APIManagementTests\APIManagementTests.cs" />
     <Compile Include="AzureTests\HistoricalActivityLogTest.cs" />
     <Compile Include="AzureTests\GetAppWorkspacesTest.cs" />
     <Compile Include="AxTests\AxConnectorTests.cs" />

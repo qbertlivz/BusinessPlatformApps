@@ -8,6 +8,7 @@ export class AzureLogin extends ViewModelBase {
     selectedPage: any;
     pageId: string = '';
     permanentPageToken: string = '';
+    ownsPage: boolean = false;
 
     async connect(): Promise<void> {
         this.MS.UtilityService.connectToFacebook();
@@ -54,7 +55,14 @@ export class AzureLogin extends ViewModelBase {
 
         this.isValidated = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-ValidateFacebookPermanentPageToken', body);
 
+        this.showValidation = this.isValidated;
+
         return this.isValidated;
+    }
+
+    onRadioChanged(): void {
+        this.ownsPage = false;
+        //this.own
     }
     
 }

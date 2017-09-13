@@ -1,15 +1,15 @@
-﻿namespace Microsoft.Deployment.Common.Model.APIManagement
+﻿namespace Microsoft.Deployment.Common.Model.ApiManagement
 {
-    public class APIManagementLoggerProperties
+    public class ApiManagementLoggerProperties
     {
-        public APIManagementLoggerPropertiesCredentials Credentials;
+        public ApiManagementLoggerPropertiesCredentials Credentials;
         public string Description = "BPST Template Logger";
         public bool IsBuffered = true;
         public string LoggerType = "azureEventHub";
 
-        public APIManagementLoggerProperties(string nameEventHub, string connectionString)
+        public ApiManagementLoggerProperties(string nameEventHub, string connectionString)
         {
-            Credentials = new APIManagementLoggerPropertiesCredentials(nameEventHub, connectionString);
+            Credentials = new ApiManagementLoggerPropertiesCredentials(nameEventHub, connectionString);
         }
     }
 }

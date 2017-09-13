@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace Microsoft.Deployment.Common.Model.APIManagement
+namespace Microsoft.Deployment.Common.Model.ApiManagement
 {
-    public class APIManagementServiceSku
+    public class ApiManagementServiceSku
     {
         [JsonProperty("capacity")]
         public int Capacity;

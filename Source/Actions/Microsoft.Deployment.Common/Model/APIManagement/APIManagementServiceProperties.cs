@@ -2,9 +2,9 @@
 
 using Newtonsoft.Json;
 
-namespace Microsoft.Deployment.Common.Model.APIManagement
+namespace Microsoft.Deployment.Common.Model.ApiManagement
 {
-    public class APIManagementServiceProperties
+    public class ApiManagementServiceProperties
     {
         [JsonProperty("addresserEmail")]
         public string AddresserEmail;

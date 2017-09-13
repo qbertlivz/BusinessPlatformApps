@@ -91,7 +91,11 @@
             },
             {
                 "displayname": "$translate(INIT_ACTION_CREATING_APIM_LOGGER)",
-                "name": "Microsoft-CreateAPIManagementLogger"
+                "name": "Microsoft-CreateApiManagementLogger"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_UPDATING_APIM_POLICY)",
+                "name": "Microsoft-UpdateApiManagementPolicy"
             }
             //{
             //    "displayname": "$translate(INIT_ACTION_EXPORT_ACTIVITY_LOG)",

@@ -1,11 +1,11 @@
-﻿namespace Microsoft.Deployment.Common.Model.APIManagement
+﻿namespace Microsoft.Deployment.Common.Model.ApiManagement
 {
-    public class APIManagementLoggerPropertiesCredentials
+    public class ApiManagementLoggerPropertiesCredentials
     {
         public string ConnectionString;
         public string Name;
 
-        public APIManagementLoggerPropertiesCredentials(string nameEventHub, string connectionString)
+        public ApiManagementLoggerPropertiesCredentials(string nameEventHub, string connectionString)
         {
             ConnectionString = connectionString;
             Name = nameEventHub;

@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace Microsoft.Deployment.Common.Model.APIManagement
+namespace Microsoft.Deployment.Common.Model.ApiManagement
 {
-    public class APIManagementService
+    public class ApiManagementService
     {
         [JsonProperty("etag")]
         public string ETag;
@@ -13,9 +13,9 @@ namespace Microsoft.Deployment.Common.Model.APIManagement
         [JsonProperty("name")]
         public string Name;
         [JsonProperty("properties")]
-        public APIManagementServiceProperties Properties;
+        public ApiManagementServiceProperties Properties;
         [JsonProperty("sku")]
-        public APIManagementServiceSku Sku;
+        public ApiManagementServiceSku Sku;
         [JsonProperty("type")]
         public string Type;
     }

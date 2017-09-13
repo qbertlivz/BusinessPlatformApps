@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
-using Microsoft.Deployment.Common.Model.APIManagement;
+using Microsoft.Deployment.Common.Model.ApiManagement;
 using Microsoft.Deployment.Common.Model.Bpst;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.APIManagement
 {
     [Export(typeof(IAction))]
-    public class CreateAPIManagementLogger : BaseAction
+    public class CreateApiManagementLogger : BaseAction
     {
         private const int SIZE_PADDING = 5;
 
@@ -28,15 +28,15 @@ namespace Microsoft.Deployment.Actions.AzureCustom.APIManagement
 
             request.DataStore.AddToDataStore("IdApimLogger", idApimLogger, DataStoreType.Private);
 
-            APIManagementLogger logger = new APIManagementLogger(idApimService, idApimLogger, nameEventHub, connectionString);
+            ApiManagementLogger logger = new ApiManagementLogger(idApimService, idApimLogger, nameEventHub, connectionString);
 
             string url = $"https://management.azure.com{idApimService}/loggers/{idApimLogger}?api-version=2017-03-01";
 
-            bool isSuccess = await ahc.IsSuccess(HttpMethod.Put, url, JsonUtility.Serialize(logger));
+            string error = await ahc.Test(HttpMethod.Put, url, JsonUtility.Serialize(logger));
 
-            return isSuccess
+            return error == null
                 ? new ActionResponse(ActionStatus.Success)
-                : new ActionResponse(ActionStatus.Failure, new ActionResponseExceptionDetail("ApiManagementFailedToCreateLogger"));
+                : new ActionResponse(ActionStatus.Failure, new ActionResponseExceptionDetail("ApiManagementFailedToCreateLogger", error));
         }
     }
 }

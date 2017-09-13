@@ -191,8 +191,9 @@
     <Compile Include="ActivityLogs\StartStreamAnalyticsJob.cs" />
     <Compile Include="ActivityLogs\ValidateLogProfile.cs" />
     <Compile Include="ActivityLogs\VerifyLogProfileEventHub.cs" />
-    <Compile Include="APIManagement\CreateAPIManagementLogger.cs" />
-    <Compile Include="APIManagement\GetAPIManagementServices.cs" />
+    <Compile Include="ApiManagement\CreateApiManagementLogger.cs" />
+    <Compile Include="ApiManagement\GetApiManagementServices.cs" />
+    <Compile Include="ApiManagement\UpdateApiManagementPolicy.cs" />
     <Compile Include="Arm\DeployAzureArmTemplate.cs" />
     <Compile Include="Arm\WaitForArmDeploymentStatus.cs" />
     <Compile Include="AzureAS\AssignPermissionsForUser.cs" />

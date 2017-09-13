@@ -9,7 +9,7 @@ export class ApiManagement extends ViewModelBase {
     listApimServices: ApiManagementService[] = [];
 
     async onLoaded(): Promise<void> {
-        this.listApimServices = await this.MS.HttpService.getResponseAsync('Microsoft-GetAPIManagementServices');
+        this.listApimServices = await this.MS.HttpService.getResponseAsync('Microsoft-GetApiManagementServices');
 
         if (this.listApimServices && this.listApimServices.length > 0) {
             this.idApimService = this.listApimServices[0].id;

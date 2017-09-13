@@ -106,6 +106,15 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to create a new API Management Logger.
+        /// </summary>
+        public static string ApiManagementFailedToCreateLogger {
+            get {
+                return ResourceManager.GetString("ApiManagementFailedToCreateLogger", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to It seems you&apos;re not running the correct platform version of Dynamics 365 for Finance and Operations. The template requires at least Platform Update 8..
         /// </summary>
         public static string AxWrongPlatform {
@@ -219,6 +228,15 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         public static string DisabledDomainCredsEnabled {
             get {
                 return ResourceManager.GetString("DisabledDomainCredsEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred while querying Event Hub access keys.
+        /// </summary>
+        public static string EventHubFailedToQueryKeys {
+            get {
+                return ResourceManager.GetString("EventHubFailedToQueryKeys", resourceCulture);
             }
         }
         

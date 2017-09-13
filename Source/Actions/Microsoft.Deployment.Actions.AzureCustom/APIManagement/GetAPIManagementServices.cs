@@ -7,6 +7,7 @@ using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
 using Microsoft.Deployment.Common.Model.APIManagement;
+using Microsoft.Deployment.Common.Model.Bpst;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.APIManagement
 {
@@ -15,12 +16,11 @@ namespace Microsoft.Deployment.Actions.AzureCustom.APIManagement
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            string azureToken = request.DataStore.GetJson("AzureToken", "access_token");
-            string subscriptionId = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
+            BpstAzure ba = new BpstAzure(request.DataStore);
 
-            AzureHttpClient ahc = new AzureHttpClient(azureToken);
+            AzureHttpClient ahc = new AzureHttpClient(ba.TokenAzure);
 
-            string url = $"https://management.azure.com/subscriptions/{subscriptionId}/providers/Microsoft.ApiManagement/service?api-version=2016-10-10";
+            string url = $"https://management.azure.com/subscriptions/{ba.IdSubscription}/providers/Microsoft.ApiManagement/service?api-version=2016-10-10";
 
             List<APIManagementService> apiManagementServices = await ahc.RequestValue<List<APIManagementService>>(HttpMethod.Get, url);
 

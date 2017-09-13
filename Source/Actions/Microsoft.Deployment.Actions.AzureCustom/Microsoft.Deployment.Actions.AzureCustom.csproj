@@ -191,6 +191,7 @@
     <Compile Include="ActivityLogs\StartStreamAnalyticsJob.cs" />
     <Compile Include="ActivityLogs\ValidateLogProfile.cs" />
     <Compile Include="ActivityLogs\VerifyLogProfileEventHub.cs" />
+    <Compile Include="APIManagement\CreateAPIManagementLogger.cs" />
     <Compile Include="APIManagement\GetAPIManagementServices.cs" />
     <Compile Include="Arm\DeployAzureArmTemplate.cs" />
     <Compile Include="Arm\WaitForArmDeploymentStatus.cs" />
@@ -230,6 +231,7 @@
     <Compile Include="Common\DeployNotifierLogicApp.cs" />
     <Compile Include="Common\GetEmail.cs" />
     <Compile Include="Common\VerifyConnectionToLogicApp.cs" />
+    <Compile Include="EventHub\GetEventHubKeys.cs" />
     <Compile Include="Functions\CheckFunctionStatus.cs" />
     <Compile Include="Functions\DeployAzureFunctionConnectionStrings.cs" />
     <Compile Include="Functions\DeployAzureFunctionAppSettings.cs" />

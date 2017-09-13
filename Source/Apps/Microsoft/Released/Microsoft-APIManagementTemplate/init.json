@@ -84,6 +84,14 @@
                 },
                 "displayname": "$translate(INIT_ACTION_CREATING_EVENTHUB)",
                 "name": "Microsoft-DeployAzureArmTemplate"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_GETTING_EVENTHUB_KEYS)",
+                "name": "Microsoft-GetEventHubKeys"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_CREATING_APIM_LOGGER)",
+                "name": "Microsoft-CreateAPIManagementLogger"
             }
             //{
             //    "displayname": "$translate(INIT_ACTION_EXPORT_ACTIVITY_LOG)",

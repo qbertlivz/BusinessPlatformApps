@@ -3,8 +3,8 @@
 
     <div class="st-float" if.bind="listApimServices && listApimServices.length > 0">
         <p class="st-text">${MS.Translate.API_MANAGEMENT_SERVICE}</p>
-        <select class="btn btn-default dropdown-toggle st-input" disabled.bind="MS.HttpService.isServiceBusy" value.bind="nameApimService">
-            <option repeat.for="apimService of listApimServices" value.bind="apimService.name">${apimService.name}</option>
+        <select class="btn btn-default dropdown-toggle st-input" disabled.bind="MS.HttpService.isServiceBusy" value.bind="idApimService">
+            <option repeat.for="apimService of listApimServices" value.bind="apimService.id">${apimService.name}</option>
         </select>
     </div>
 </template>

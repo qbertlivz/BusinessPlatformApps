@@ -5,20 +5,20 @@ import { ApiManagementService } from '../models/api-management-service';
 import { ViewModelBase } from '../services/view-model-base';
 
 export class ApiManagement extends ViewModelBase {
+    idApimService: string = '';
     listApimServices: ApiManagementService[] = [];
-    nameApimService: string = '';
 
     async onLoaded(): Promise<void> {
         this.listApimServices = await this.MS.HttpService.getResponseAsync('Microsoft-GetAPIManagementServices');
 
         if (this.listApimServices && this.listApimServices.length > 0) {
-            this.nameApimService = this.listApimServices[0].name;
+            this.idApimService = this.listApimServices[0].id;
             this.isValidated = true;
         }
     }
 
     async onNavigatingNext(): Promise<boolean> {
-        this.MS.DataStore.addToDataStore('NameApimService', this.nameApimService, DataStoreType.Public);
+        this.MS.DataStore.addToDataStore('IdApimService', this.idApimService, DataStoreType.Public);
         return true;
     }
 }

@@ -23,14 +23,14 @@ namespace Microsoft.Deployment.Actions.AzureCustom.APIManagement
 
             string connectionString = request.DataStore.GetValue("EventHubPrimaryConnectionString");
             string idApimLogger = RandomGenerator.GetRandomHexadecimal(SIZE_PADDING, "bpst-apim-l-");
-            string nameApimService = request.DataStore.GetValue("NameApimService");
-            string nameNamespace = request.DataStore.GetValue("nameNamespace");
+            string idApimService = request.DataStore.GetValue("IdApimService");
+            string nameEventHub = request.DataStore.GetValue("nameEventHub");
 
             request.DataStore.AddToDataStore("IdApimLogger", idApimLogger, DataStoreType.Private);
 
-            APIManagementLogger logger = new APIManagementLogger(ba, nameApimService, idApimLogger, nameNamespace, connectionString);
+            APIManagementLogger logger = new APIManagementLogger(idApimService, idApimLogger, nameEventHub, connectionString);
 
-            string url = $"https://management.azure.com/subscriptions/{ba.IdSubscription}/resourceGroups/{ba.NameResourceGroup}/providers/Microsoft.ApiManagement/service/{nameApimService}/loggers/{idApimLogger}?api-version=2017-03-01";
+            string url = $"https://management.azure.com{idApimService}/loggers/{idApimLogger}?api-version=2017-03-01";
 
             bool isSuccess = await ahc.IsSuccess(HttpMethod.Put, url, JsonUtility.Serialize(logger));
 

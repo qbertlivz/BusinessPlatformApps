@@ -9,11 +9,11 @@ namespace Microsoft.Deployment.Common.Model.APIManagement
         public APIManagementLoggerProperties Properties;
         public string Type = "Microsoft.ApiManagement/service/loggers";
 
-        public APIManagementLogger(BpstAzure ba, string nameService, string id, string nameNamespace, string connectionString)
+        public APIManagementLogger(string idApimService, string id, string nameEventHub, string connectionString)
         {
-            Id = $"/subscriptions/{ba.IdSubscription}/resourceGroups/{ba.NameResourceGroup}/providers/Microsoft.ApiManagement/service/{nameService}/loggers/{id}";
+            Id = $"{idApimService}/loggers/{id}";
             Name = id;
-            Properties = new APIManagementLoggerProperties(nameNamespace, connectionString);
+            Properties = new APIManagementLoggerProperties(nameEventHub, connectionString);
         }
     }
 }

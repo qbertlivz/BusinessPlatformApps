@@ -5,10 +5,10 @@
         public string ConnectionString;
         public string Name;
 
-        public APIManagementLoggerPropertiesCredentials(string nameNamespace, string connectionString)
+        public APIManagementLoggerPropertiesCredentials(string nameEventHub, string connectionString)
         {
             ConnectionString = connectionString;
-            Name = nameNamespace;
+            Name = nameEventHub;
         }
     }
 }

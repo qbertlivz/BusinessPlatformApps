@@ -7,9 +7,9 @@
         public bool IsBuffered = true;
         public string LoggerType = "azureEventHub";
 
-        public APIManagementLoggerProperties(string nameNamespace, string connectionString)
+        public APIManagementLoggerProperties(string nameEventHub, string connectionString)
         {
-            Credentials = new APIManagementLoggerPropertiesCredentials(nameNamespace, connectionString);
+            Credentials = new APIManagementLoggerPropertiesCredentials(nameEventHub, connectionString);
         }
     }
 }

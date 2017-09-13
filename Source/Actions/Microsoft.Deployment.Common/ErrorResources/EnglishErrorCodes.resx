@@ -294,4 +294,10 @@
   <data name="ApiManagementErrorNoServicesFound" xml:space="preserve">
     <value>No API Management Services were found in your Azure Subscription</value>
   </data>
+  <data name="EventHubFailedToQueryKeys" xml:space="preserve">
+    <value>An error occurred while querying Event Hub access keys</value>
+  </data>
+  <data name="ApiManagementFailedToCreateLogger" xml:space="preserve">
+    <value>Failed to create a new API Management Logger</value>
+  </data>
 </root>

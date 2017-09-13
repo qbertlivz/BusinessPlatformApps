@@ -84,11 +84,15 @@
                 },
                 "displayname": "$translate(INIT_ACTION_CREATING_EVENTHUB)",
                 "name": "Microsoft-DeployAzureArmTemplate"
-            }
-            //{
-            //    "displayname": "$translate(INIT_ACTION_EXPORT_ACTIVITY_LOG)",
-            //    "name": "Microsoft-ExportActivityLogToEventHub"
-            //},
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_GETTING_EVENTHUB_KEYS)",
+                "name": "Microsoft-GetEventHubKeys"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_CREATING_APIM_LOGGER)",
+                "name": "Microsoft-CreateApiManagementLogger"
+            },
             //{
             //    "displayname": "$translate(INIT_ACTION_CREATING_STREAM_ANALYTICS_JOB)",
             //    "name": "Microsoft-CreateStreamAnalyticsJob"
@@ -121,6 +125,10 @@
             //    "displayname": "$translate(INIT_ACTION_DEPLOYING_STREAM_ANALYTICS)",
             //    "name": "Microsoft-StartStreamAnalyticsJob"
             //}
+            {
+                "displayname": "$translate(INIT_ACTION_UPDATING_APIM_POLICY)",
+                "name": "Microsoft-UpdateApiManagementPolicy"
+            }
         ]
     }
 }

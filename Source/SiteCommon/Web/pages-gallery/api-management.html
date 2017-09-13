@@ -1,10 +1,10 @@
 ﻿<template>
     <h1 class="st-title">${MS.Translate.API_MANAGEMENT_TITLE}</h1>
 
-    <div class="st-float" if.bind="apiManagementServices && apiManagementServices.length > 0">
+    <div class="st-float" if.bind="listApimServices && listApimServices.length > 0">
         <p class="st-text">${MS.Translate.API_MANAGEMENT_SERVICE}</p>
-        <select class="btn btn-default dropdown-toggle st-input" disabled.bind="MS.HttpService.isServiceBusy" value.bind="apiManagementServiceName">
-            <option repeat.for="apiManagementService of apiManagementServices" value.bind="apiManagementService.name">${apiManagementService.name}</option>
+        <select class="btn btn-default dropdown-toggle st-input" disabled.bind="MS.HttpService.isServiceBusy" value.bind="idApimService">
+            <option repeat.for="apimService of listApimServices" value.bind="apimService.id">${apimService.name}</option>
         </select>
     </div>
 </template>

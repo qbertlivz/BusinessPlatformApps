@@ -138,7 +138,7 @@ FROM dbo.Request a
 INNER JOIN dbo.Response b 
 ON a.RequestId = b.RequestId
 WHERE a.CreatedDate > DATEADD(day, -90, SYSDATETIME())
-GO
+go
 
 CREATE VIEW VisualOperationCallVolume AS
 SELECT 
@@ -147,7 +147,8 @@ SELECT
    ,ApiID
    ,OperationId
    ,count(1) as operation_counts
-From Request
+From Request WITH (NOLOCK)
+WHERE CreatedDate > DATEADD(day, -7, SYSDATETIME())
 GROUP BY DATEADD(hour, DATEDIFF(hour, 0, CreatedDate), 0),ProductID,ApiID,OperationId;
 go
 
@@ -216,4 +217,16 @@ CREATE VIEW VisualFreqSecond AS
     ,    CallFreq as SignalStrength
     FROM FFT
     Where TimeUnit = 's';
+go
+
+CREATE VIEW [dbo].[IPAddressSummary]
+AS
+select distinct IPAddress
+from dbo.Request
+go
+
+CREATE VIEW [dbo].[SubscriptionIPAddress]
+AS
+select distinct SubscriptionId, IPAddress
+from dbo.Request
 go

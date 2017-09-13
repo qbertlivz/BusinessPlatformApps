@@ -97,6 +97,15 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No API Management Services were found in your Azure Subscription.
+        /// </summary>
+        public static string ApiManagementErrorNoServicesFound {
+            get {
+                return ResourceManager.GetString("ApiManagementErrorNoServicesFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to It seems you&apos;re not running the correct platform version of Dynamics 365 for Finance and Operations. The template requires at least Platform Update 8..
         /// </summary>
         public static string AxWrongPlatform {

@@ -21,7 +21,7 @@ namespace Microsoft.Deployment.Common.Helpers
             return path.Replace(".", "A").Substring(0, 15);
         }
 
-        public static string GetRandomHexadecimal(int length)
+        public static string GetRandomHexadecimal(int length, string prefix = "")
         {
             Random randy = new Random();
             StringBuilder sb = new StringBuilder();
@@ -31,7 +31,7 @@ namespace Microsoft.Deployment.Common.Helpers
                 sb.Append(HEXADECIMALS[randy.Next(HEXADECIMALS.Length)]);
             }
 
-            return sb.ToString();
+            return prefix + sb.ToString();
         }
 
         public static string GetRandomLowerCaseCharacters(int length)

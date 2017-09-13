@@ -291,4 +291,7 @@
   <data name="ActivityLogsErrorExportingToEventHub" xml:space="preserve">
     <value>An error occurred while exporting the Activity Log to EventHub</value>
   </data>
+  <data name="ApiManagementErrorNoServicesFound" xml:space="preserve">
+    <value>No API Management Services were found in your Azure Subscription</value>
+  </data>
 </root>

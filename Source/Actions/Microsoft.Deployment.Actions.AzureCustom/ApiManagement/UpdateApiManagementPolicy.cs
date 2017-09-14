@@ -13,8 +13,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.APIManagement
     [Export(typeof(IAction))]
     public class UpdateApiManagementPolicy : BaseAction
     {
-        private const int SIZE_PADDING = 5;
-
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             BpstAzure ba = new BpstAzure(request.DataStore);

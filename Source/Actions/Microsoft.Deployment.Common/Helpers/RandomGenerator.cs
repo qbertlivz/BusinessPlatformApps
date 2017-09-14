@@ -6,6 +6,8 @@ namespace Microsoft.Deployment.Common.Helpers
 {
     public static class RandomGenerator
     {
+        private const int SIZE_PADDING = 5;
+
         private const string HEXADECIMALS = "0123456789abcdef";
 
         public static string GetDateStamp()
@@ -32,6 +34,11 @@ namespace Microsoft.Deployment.Common.Helpers
             }
 
             return prefix + sb.ToString();
+        }
+
+        public static string GetRandomHexadecimal(string prefix = "")
+        {
+            return GetRandomHexadecimal(SIZE_PADDING, prefix);
         }
 
         public static string GetRandomLowerCaseCharacters(int length)

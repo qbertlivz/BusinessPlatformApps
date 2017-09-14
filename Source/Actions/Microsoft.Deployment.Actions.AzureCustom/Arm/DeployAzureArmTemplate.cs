@@ -19,8 +19,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Arm
     [Export(typeof(IAction))]
     public class DeployAzureArmTemplate : BaseAction
     {
-        private const int SIZE_PADDING = 5;
-
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             string idSubscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
@@ -55,7 +53,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Arm
                     string key = prop.Path.Split('.').Last();
                     string value = prop.First().ToString();
 
-                    string valueUnique = RandomGenerator.GetRandomHexadecimal(SIZE_PADDING, value);
+                    string valueUnique = RandomGenerator.GetRandomHexadecimal(value);
 
                     payload.AddStringParam(key, valueUnique);
 

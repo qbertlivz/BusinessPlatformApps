@@ -9,6 +9,7 @@
         public StreamAnalyticsInputProperties(string nameEventHub, string nameNamespace, string key)
         {
             Datasource = new StreamAnalyticsInputDatasource(nameEventHub, nameNamespace, key);
+            Serialization = new StreamAnalyticsInputSerialization();
         }
     }
 }

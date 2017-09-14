@@ -177,6 +177,7 @@
     <Compile Include="Model\Azure\FunctionStatusWrapper.cs" />
     <Compile Include="Model\Azure\FunctionWrapper.cs" />
     <Compile Include="Model\Bpst\BpstAzure.cs" />
+    <Compile Include="Model\Bpst\BpstSql.cs" />
     <Compile Include="Model\Custom\NewsEntity.cs" />
     <Compile Include="Model\DataPullStatus.cs" />
     <Compile Include="Model\EventHub\EventHub.cs" />
@@ -267,7 +268,14 @@
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsInputSerialization.cs" />
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsInputSerializationProperties.cs" />
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsOperationName.cs" />
+    <Compile Include="Model\StreamAnalytics\StreamAnalyticsOutputSql.cs" />
+    <Compile Include="Model\StreamAnalytics\StreamAnalyticsOutputSqlProperties.cs" />
+    <Compile Include="Model\StreamAnalytics\StreamAnalyticsOutputSqlPropertiesDatasource.cs" />
+    <Compile Include="Model\StreamAnalytics\StreamAnalyticsOutputSqlPropertiesDatasourceProperties.cs" />
+    <Compile Include="Model\StreamAnalytics\StreamAnalyticsOutputSqlPropertiesWrapper.cs" />
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsProperties.cs" />
+    <Compile Include="Model\StreamAnalytics\StreamAnalyticsQueryProperties.cs" />
+    <Compile Include="Model\StreamAnalytics\StreamAnalyticsQueryPropertiesWrapper.cs" />
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsResourceProviderName.cs" />
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsStatus.cs" />
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsSubStatus.cs" />

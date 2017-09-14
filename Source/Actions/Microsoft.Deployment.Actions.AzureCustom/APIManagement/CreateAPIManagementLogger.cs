@@ -13,8 +13,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.APIManagement
     [Export(typeof(IAction))]
     public class CreateApiManagementLogger : BaseAction
     {
-        private const int SIZE_PADDING = 5;
-
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             BpstAzure ba = new BpstAzure(request.DataStore);
@@ -22,7 +20,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.APIManagement
             AzureHttpClient ahc = new AzureHttpClient(ba.TokenAzure);
 
             string connectionString = request.DataStore.GetValue("EventHubPrimaryConnectionString");
-            string idApimLogger = RandomGenerator.GetRandomHexadecimal(SIZE_PADDING, "bpst-apim-l-");
+            string idApimLogger = RandomGenerator.GetRandomHexadecimal("bpst-apim-l-");
             string idApimService = request.DataStore.GetValue("IdApimService");
             string nameEventHub = request.DataStore.GetValue("nameEventHub");
 

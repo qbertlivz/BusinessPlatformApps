@@ -4,5 +4,10 @@
     {
         public StreamAnalyticsInputSerializationProperties Properties;
         public string Type = "Json";
+
+        public StreamAnalyticsInputSerialization()
+        {
+            Properties = new StreamAnalyticsInputSerializationProperties();
+        }
     }
 }

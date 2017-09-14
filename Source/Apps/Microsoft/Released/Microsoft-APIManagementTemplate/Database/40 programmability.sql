@@ -43,7 +43,7 @@ BEGIN
 END
 go
 
-CREATE PROCEDURE [dbo].[GetDistinctIpAddressesInWindow]
+CREATE PROCEDURE GetDistinctIpAddressesInWindow
 (
     -- Add the parameters for the stored procedure here
     @Start varchar(255) = NULL,

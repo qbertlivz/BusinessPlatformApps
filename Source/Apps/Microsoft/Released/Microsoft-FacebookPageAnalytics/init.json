@@ -24,8 +24,8 @@
             },
             {
                 "displayname": "Facebook Pages",
-                "name": "$SiteCommon$/pages-gallery/facebookPages.html"
-                //"skip": "run(this.MS.DataStore.getValue('UserOwnsPage') === 'true' ? 'true': 'false')"
+                "name": "$SiteCommon$/pages-gallery/facebookPages.html",
+                "skip": "run(this.MS.DataStore.getValue('UserOwnsPage') === 'true' ? 'true': 'false')"
             },
             {
                 "defaultLocation": "5",

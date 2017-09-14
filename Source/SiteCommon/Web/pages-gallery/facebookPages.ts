@@ -1,6 +1,6 @@
-import { DataStoreType } from '../../../../../SiteCommon/Web/enums/data-store-type';
+import { DataStoreType } from '../enums/data-store-type';
 
-import { ViewModelBase } from '../../../../../SiteCommon/Web/services/view-model-base';
+import { ViewModelBase } from '../services/view-model-base';
 
 export class facebookPages extends ViewModelBase {
     searchQuery: string = '';

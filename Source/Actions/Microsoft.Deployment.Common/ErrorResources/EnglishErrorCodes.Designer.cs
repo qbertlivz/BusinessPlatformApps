@@ -610,6 +610,15 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to update the Stream Analytics Job query.
+        /// </summary>
+        public static string StreamAnalyticsUpdateQueryFailure {
+            get {
+                return ResourceManager.GetString("StreamAnalyticsUpdateQueryFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The scheduled task did not complete successfully.
         /// </summary>
         public static string TaskSchedulerRunFailed {

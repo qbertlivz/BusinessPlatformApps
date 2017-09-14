@@ -274,6 +274,8 @@
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsOutputSqlPropertiesDatasourceProperties.cs" />
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsOutputSqlPropertiesWrapper.cs" />
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsProperties.cs" />
+    <Compile Include="Model\StreamAnalytics\StreamAnalyticsQueryProperties.cs" />
+    <Compile Include="Model\StreamAnalytics\StreamAnalyticsQueryPropertiesWrapper.cs" />
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsResourceProviderName.cs" />
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsStatus.cs" />
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsSubStatus.cs" />

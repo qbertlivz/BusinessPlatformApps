@@ -104,29 +104,37 @@
             },
             {
                 "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_INPUT_EVENTHUB)",
-                "name": "Microsoft-SetStreamAnalyticsInputEventHub",
+                "name": "Microsoft-AddStreamAnalyticsInputEventHub",
                 "nameStreamAnalyticsInputEventHub": "APIMEventHub"
             },
             {
                 "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_OUTPUT_SQL)",
-                "name": "Microsoft-SetStreamAnalyticsOutputSql",
+                "name": "Microsoft-AddStreamAnalyticsOutputSql",
                 "streamAnalyticsOutputSql": {
                     "name": "TemplatesSQLRequest",
                     "table": "Request"
                 }
             },
-            //{
-            //    "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_JSON_HELPER)",
-            //    "name": "Microsoft-SetStreamAnalyticsJSONFunction"
-            //},
-            //{
-            //    "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_QUERY)",
-            //    "name": "Microsoft-SetStreamAnalyticsQuery"
-            //},
-            //{
-            //    "displayname": "$translate(INIT_ACTION_VERIFY_EVENT_HUB)",
-            //    "name": "Microsoft-VerifyLogProfileEventHub"
-            //},
+            {
+                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_OUTPUT_SQL)",
+                "name": "Microsoft-AddStreamAnalyticsOutputSql",
+                "streamAnalyticsOutputSql": {
+                    "name": "TemplatesSQLResponse",
+                    "table": "Response"
+                }
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_OUTPUT_SQL)",
+                "name": "Microsoft-AddStreamAnalyticsOutputSql",
+                "streamAnalyticsOutputSql": {
+                    "name": "TemplatesSQLError",
+                    "table": "Error"
+                }
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_QUERY)",
+                "name": "Microsoft-UpdateStreamAnalyticsQuery"
+            },
             //{
             //    "displayname": "$translate(INIT_ACTION_DEPLOYING_STREAM_ANALYTICS)",
             //    "name": "Microsoft-StartStreamAnalyticsJob"

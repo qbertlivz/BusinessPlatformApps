@@ -11,7 +11,7 @@ using Microsoft.Deployment.Common.Model.StreamAnalytics;
 namespace Microsoft.Deployment.Actions.AzureCustom.APIManagement
 {
     [Export(typeof(IAction))]
-    public class SetStreamAnalyticsInputEventHub : BaseAction
+    public class AddStreamAnalyticsInputEventHub : BaseAction
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {

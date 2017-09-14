@@ -11,7 +11,7 @@ using Microsoft.Deployment.Common.Model.StreamAnalytics;
 namespace Microsoft.Deployment.Actions.AzureCustom.StreamAnalytics
 {
     [Export(typeof(IAction))]
-    public class SetStreamAnalyticsOutputSql : BaseAction
+    public class AddStreamAnalyticsOutputSql : BaseAction
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {

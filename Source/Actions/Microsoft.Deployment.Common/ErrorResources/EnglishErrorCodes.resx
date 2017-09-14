@@ -306,4 +306,7 @@
   <data name="StreamAnalyticsSetOutputFailure" xml:space="preserve">
     <value>Failed to set Stream Analytics output</value>
   </data>
+  <data name="StreamAnalyticsUpdateQueryFailure" xml:space="preserve">
+    <value>Failed to update the Stream Analytics Job query</value>
+  </data>
 </root>

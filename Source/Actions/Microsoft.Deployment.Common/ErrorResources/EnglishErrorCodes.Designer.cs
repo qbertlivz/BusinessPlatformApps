@@ -592,6 +592,15 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to set a new Stream Analytics Input.
+        /// </summary>
+        public static string StreamAnalyticsSetInputFailure {
+            get {
+                return ResourceManager.GetString("StreamAnalyticsSetInputFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The scheduled task did not complete successfully.
         /// </summary>
         public static string TaskSchedulerRunFailed {

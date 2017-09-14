@@ -28,6 +28,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.APIManagement
             if (eventHubKeys != null)
             {
                 request.DataStore.AddToDataStore("EventHubPrimaryConnectionString", eventHubKeys.PrimaryConnectionString, DataStoreType.Private);
+                request.DataStore.AddToDataStore("EventHubPrimaryKey", eventHubKeys.PrimaryKey, DataStoreType.Private);
             }
 
             return eventHubKeys == null

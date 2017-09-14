@@ -76,23 +76,8 @@
                 ],
                 "displayname": "Progress",
                 "enablePublishReport": "$run(this.MS.DataStore.getValue('ssasDisabled') === 'false')",
-                "filename": "$save('FacebookPageAnalytics.pbix')",
                 "name": "$SiteCommon$/pages-gallery/progress.html",
-                "Schema": "$save('fbpa')",
-                "showCounts": false,
-                "skip": "$run(this.MS.DataStore.getValue('UserOwnsPage') === 'true' ? 'false': 'true')"
-            },
-            {
-                "datastoreEntriesToValidate": [
-                    "SqlConnectionString"
-                ],
-                "displayname": "Progress",
-                "enablePublishReport": "$run(this.MS.DataStore.getValue('ssasDisabled') === 'false')",
-                "filename": "$save('FacebookTemplate.pbix')",
-                "name": "$SiteCommon$/pages-gallery/progress.html",
-                "Schema": "$save('fb')",
-                "showCounts": false,
-                "skip": "$run(this.MS.DataStore.getValue('UserOwnsPage') === 'true' ? 'true': 'false')"
+                "showCounts": false
             }
         ],
         "Actions": [

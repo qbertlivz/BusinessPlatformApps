@@ -50,9 +50,13 @@ export class AzureLogin extends ViewModelBase {
 
             this.MS.DataStore.addToDataStore("FacebookPageId", id, DataStoreType.Private);
             this.MS.DataStore.addToDataStore("FacebookPageToken", token, DataStoreType.Private);
+            this.MS.DataStore.addToDataStore("Filename", "FacebookPageAnalytics.pbix", DataStoreType.Public);
+            this.MS.DataStore.addToDataStore("Schema", "fbpa", DataStoreType.Public);
         } else {
             this.MS.DataStore.addToDataStore('FacebookClientId', this.facebookClientId, DataStoreType.Private);
             this.MS.DataStore.addToDataStore('FacebookClientSecret', this.facebookClientSecret, DataStoreType.Private);
+            this.MS.DataStore.addToDataStore("Filename", "FacebookTemplate.pbix", DataStoreType.Public);
+            this.MS.DataStore.addToDataStore("Schema", "fb", DataStoreType.Public);
         }
         this.MS.DataStore.addToDataStore("UserOwnsPage", this.ownsPage, DataStoreType.Public);
         return true;

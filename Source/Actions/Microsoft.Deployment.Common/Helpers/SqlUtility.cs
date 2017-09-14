@@ -33,6 +33,7 @@ namespace Microsoft.Deployment.Common.Helpers
             SqlParameter[] result = new SqlParameter[list.Length];
             for (int i=0; i<list.Length; i++)
             {
+                result[i] = new SqlParameter();
                 if (list[i] is int)
                     result[i].DbType = DbType.Int32;
                 else if (list[i] is uint)

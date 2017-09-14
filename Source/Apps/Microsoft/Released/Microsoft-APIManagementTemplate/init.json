@@ -19,7 +19,8 @@
             {
                 "azureProviders": [
                     "Microsoft.ApiManagement",
-                    "Microsoft.EventHub"
+                    "Microsoft.EventHub",
+                    "Microsoft.StreamAnalytics"
                 ],
                 "defaultLocation": "5",
                 "displayname": "Login",
@@ -84,19 +85,27 @@
                 },
                 "displayname": "$translate(INIT_ACTION_CREATING_EVENTHUB)",
                 "name": "Microsoft-DeployAzureArmTemplate"
-            }
-            //{
-            //    "displayname": "$translate(INIT_ACTION_EXPORT_ACTIVITY_LOG)",
-            //    "name": "Microsoft-ExportActivityLogToEventHub"
-            //},
-            //{
-            //    "displayname": "$translate(INIT_ACTION_CREATING_STREAM_ANALYTICS_JOB)",
-            //    "name": "Microsoft-CreateStreamAnalyticsJob"
-            //},
-            //{
-            //    "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_INPUT)",
-            //    "name": "Microsoft-SetStreamAnalyticsInputAsEventHub"
-            //},
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_GETTING_EVENTHUB_KEYS)",
+                "name": "Microsoft-GetEventHubKeys"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_CREATING_APIM_LOGGER)",
+                "name": "Microsoft-CreateApiManagementLogger"
+            },
+            {
+                "AzureArmFile": "Service/ARM/StreamAnalytics.json",
+                "AzureArmParametersUnique": {
+                    "nameStreamAnalyticsJob": "bpst-apim-saj-"
+                },
+                "displayname": "$translate(INIT_ACTION_CREATING_STREAM_ANALYTICS_JOB)",
+                "name": "Microsoft-DeployAzureArmTemplate"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_INPUT)",
+                "name": "Microsoft-SetStreamAnalyticsInput"
+            },
             //{
             //    "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_SH_OUTPUT)",
             //    "name": "Microsoft-SetServiceHealthOutput"
@@ -121,6 +130,10 @@
             //    "displayname": "$translate(INIT_ACTION_DEPLOYING_STREAM_ANALYTICS)",
             //    "name": "Microsoft-StartStreamAnalyticsJob"
             //}
+            {
+                "displayname": "$translate(INIT_ACTION_UPDATING_APIM_POLICY)",
+                "name": "Microsoft-UpdateApiManagementPolicy"
+            }
         ]
     }
 }

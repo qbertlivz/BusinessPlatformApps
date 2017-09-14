@@ -191,7 +191,9 @@
     <Compile Include="ActivityLogs\StartStreamAnalyticsJob.cs" />
     <Compile Include="ActivityLogs\ValidateLogProfile.cs" />
     <Compile Include="ActivityLogs\VerifyLogProfileEventHub.cs" />
-    <Compile Include="APIManagement\GetAPIManagementServices.cs" />
+    <Compile Include="ApiManagement\CreateApiManagementLogger.cs" />
+    <Compile Include="ApiManagement\GetApiManagementServices.cs" />
+    <Compile Include="ApiManagement\UpdateApiManagementPolicy.cs" />
     <Compile Include="Arm\DeployAzureArmTemplate.cs" />
     <Compile Include="Arm\WaitForArmDeploymentStatus.cs" />
     <Compile Include="AzureAS\AssignPermissionsForUser.cs" />
@@ -230,6 +232,7 @@
     <Compile Include="Common\DeployNotifierLogicApp.cs" />
     <Compile Include="Common\GetEmail.cs" />
     <Compile Include="Common\VerifyConnectionToLogicApp.cs" />
+    <Compile Include="EventHub\GetEventHubKeys.cs" />
     <Compile Include="Functions\CheckFunctionStatus.cs" />
     <Compile Include="Functions\DeployAzureFunctionConnectionStrings.cs" />
     <Compile Include="Functions\DeployAzureFunctionAppSettings.cs" />
@@ -268,6 +271,7 @@
     <Compile Include="PowerApp\GetPowerAppEnvironment.cs" />
     <Compile Include="PowerApp\WranglePowerApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StreamAnalytics\SetStreamAnalyticsInput.cs" />
     <Compile Include="Twitter\ConsentTwitterConnectionToLogicApp.cs" />
     <Compile Include="Twitter\CreateTwitterConnectionToLogicApp.cs" />
     <Compile Include="Twitter\DeployTwitterCSharpFunctionAssets.cs" />

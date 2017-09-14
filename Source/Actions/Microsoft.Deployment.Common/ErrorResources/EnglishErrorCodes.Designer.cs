@@ -610,6 +610,15 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to toggle the state of the Stream Analytics job.
+        /// </summary>
+        public static string StreamAnalyticsToggleFailure {
+            get {
+                return ResourceManager.GetString("StreamAnalyticsToggleFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to update the Stream Analytics Job query.
         /// </summary>
         public static string StreamAnalyticsUpdateQueryFailure {

@@ -309,4 +309,7 @@
   <data name="StreamAnalyticsUpdateQueryFailure" xml:space="preserve">
     <value>Failed to update the Stream Analytics Job query</value>
   </data>
+  <data name="StreamAnalyticsToggleFailure" xml:space="preserve">
+    <value>Failed to toggle the state of the Stream Analytics job</value>
+  </data>
 </root>

@@ -271,6 +271,7 @@
     <Compile Include="PowerApp\GetPowerAppEnvironment.cs" />
     <Compile Include="PowerApp\WranglePowerApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StreamAnalytics\ToggleStreamAnalytics.cs" />
     <Compile Include="StreamAnalytics\AddStreamAnalyticsInputEventHub.cs" />
     <Compile Include="StreamAnalytics\AddStreamAnalyticsOutputSql.cs" />
     <Compile Include="StreamAnalytics\UpdateStreamAnalyticsQuery.cs" />

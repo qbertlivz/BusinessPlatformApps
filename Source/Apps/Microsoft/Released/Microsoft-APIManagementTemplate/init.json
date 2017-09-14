@@ -135,10 +135,10 @@
                 "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_QUERY)",
                 "name": "Microsoft-UpdateStreamAnalyticsQuery"
             },
-            //{
-            //    "displayname": "$translate(INIT_ACTION_DEPLOYING_STREAM_ANALYTICS)",
-            //    "name": "Microsoft-StartStreamAnalyticsJob"
-            //}
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_STREAM_ANALYTICS)",
+                "name": "Microsoft-ToggleStreamAnalytics"
+            },
             {
                 "displayname": "$translate(INIT_ACTION_UPDATING_APIM_POLICY)",
                 "name": "Microsoft-UpdateApiManagementPolicy"

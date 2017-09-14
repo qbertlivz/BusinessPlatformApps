@@ -267,6 +267,11 @@
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsInputSerialization.cs" />
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsInputSerializationProperties.cs" />
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsOperationName.cs" />
+    <Compile Include="Model\StreamAnalytics\StreamAnalyticsOutputSql.cs" />
+    <Compile Include="Model\StreamAnalytics\StreamAnalyticsOutputSqlProperties.cs" />
+    <Compile Include="Model\StreamAnalytics\StreamAnalyticsOutputSqlPropertiesDatasource.cs" />
+    <Compile Include="Model\StreamAnalytics\StreamAnalyticsOutputSqlPropertiesDatasourceProperties.cs" />
+    <Compile Include="Model\StreamAnalytics\StreamAnalyticsOutputSqlPropertiesWrapper.cs" />
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsProperties.cs" />
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsResourceProviderName.cs" />
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsStatus.cs" />

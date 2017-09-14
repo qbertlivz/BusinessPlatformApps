@@ -601,6 +601,15 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to set Stream Analytics output.
+        /// </summary>
+        public static string StreamAnalyticsSetOutputFailure {
+            get {
+                return ResourceManager.GetString("StreamAnalyticsSetOutputFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The scheduled task did not complete successfully.
         /// </summary>
         public static string TaskSchedulerRunFailed {

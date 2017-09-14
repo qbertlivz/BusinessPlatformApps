@@ -103,17 +103,18 @@
                 "name": "Microsoft-DeployAzureArmTemplate"
             },
             {
-                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_INPUT)",
-                "name": "Microsoft-SetStreamAnalyticsInput"
+                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_INPUT_EVENTHUB)",
+                "name": "Microsoft-SetStreamAnalyticsInputEventHub",
+                "nameStreamAnalyticsInputEventHub": "APIMEventHub"
             },
-            //{
-            //    "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_SH_OUTPUT)",
-            //    "name": "Microsoft-SetServiceHealthOutput"
-            //},
-            //{
-            //    "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_ADMIN_OUTPUT)",
-            //    "name": "Microsoft-SetAdministrativeOutput"
-            //},
+            {
+                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_OUTPUT_SQL)",
+                "name": "Microsoft-SetStreamAnalyticsOutputSql",
+                "streamAnalyticsOutputSql": {
+                    "name": "TemplatesSQLRequest",
+                    "table": "Request"
+                }
+            },
             //{
             //    "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_JSON_HELPER)",
             //    "name": "Microsoft-SetStreamAnalyticsJSONFunction"

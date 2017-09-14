@@ -11,7 +11,7 @@ using Microsoft.Deployment.Common.Model.StreamAnalytics;
 namespace Microsoft.Deployment.Actions.AzureCustom.APIManagement
 {
     [Export(typeof(IAction))]
-    public class SetStreamAnalyticsInput : BaseAction
+    public class SetStreamAnalyticsInputEventHub : BaseAction
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
@@ -19,7 +19,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.APIManagement
 
             AzureHttpClient ahc = new AzureHttpClient(ba.TokenAzure);
 
-            string aliasInput = "EventHubInput";
+            string aliasInput = request.DataStore.GetValue("nameStreamAnalyticsInputEventHub");
             string keyPrimary = request.DataStore.GetValue("EventHubPrimaryKey");
             string nameEventHub = request.DataStore.GetValue("nameEventHub");
             string nameNamespace = request.DataStore.GetValue("nameNamespace");

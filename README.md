@@ -8,7 +8,7 @@ https://powerbi.microsoft.com/en-us/solution-templates/
 
 If you have any questions about building your own solution template, you can find ways to contact us at the link above. There is also a direct Contact Us link available at the bottom right area of any solution template.
 
-## Preparing the Development Environment
+## Preparing your Development Environment
 
 Visual Studio 2017 is the required IDE. If you elect to use a different IDE most build and debug features will be unavailable.
 
@@ -95,7 +95,7 @@ At minimum each page requires two properties, a displayname and a name.
 
 A displayname is a string that appears in the tab list on the left of a solution template page to describe the intent of the currently open page.
 
-A name is a corresponds to the file path of the .html file for your page. This path assumes you have a Web folder located inside your App directory and is relative to it (the Web folder should be at the same level as the init.json file).
+A name is a string that corresponds to the file path of the .html file for your page. This path assumes you have a Web folder located inside your App directory and is relative to it (the Web folder should be at the same level as the init.json file).
 
 You can also make use of the existing pages. Here is an example of the syntax:
 

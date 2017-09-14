@@ -10,6 +10,7 @@ using Microsoft.Deployment.Common;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
+using System.Data.SqlClient;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.Common
 {
@@ -85,8 +86,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             else
             {
                 //Website scenario
-                var cmd = $"INSERT INTO deploymentids VALUES('{deploymentId}','{DateTime.UtcNow.ToString("o")}')";
-                SqlUtility.InvokeSqlCommand(deploymentIdsConnection, cmd, new Dictionary<string, string>());
+                SqlParameter[] parameters = SqlUtility.MapValuesToSqlParameters(deploymentId, DateTime.UtcNow);
+                SqlUtility.ExecuteQueryWithParameters(deploymentIdsConnection, "INSERT INTO deploymentids VALUES(@p1, @p2)", parameters);
             }
 
             AzureHttpClient azureClient = new AzureHttpClient(azureToken, subscription, resourceGroup);

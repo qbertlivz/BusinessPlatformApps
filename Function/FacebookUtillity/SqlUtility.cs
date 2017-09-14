@@ -1,25 +1,29 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 
 namespace FacebookETL
 {
     public class SqlUtility
     {
+        public static string SanitizeSchemaName(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return string.Empty;
+
+            Regex invalidCharacters = new Regex("[^a-zA-Z_0-9]");
+            return invalidCharacters.Replace(value, string.Empty);
+        }
+
         public static void RunStoredProc(string sqlConnectionString, string storedProc)
         {
             using (SqlConnection conn = new SqlConnection(sqlConnectionString))
             {
-                using (
-                    SqlCommand command = new SqlCommand(storedProc, conn)
-                    {
-                        CommandType = CommandType.StoredProcedure
-                    })
+                conn.Open();
+                using (SqlCommand command = new SqlCommand(storedProc, conn) { CommandType = CommandType.StoredProcedure, CommandTimeout = 180 })
                 {
-                    command.CommandTimeout = 180;
-                    conn.Open();
-                    var obj = command.ExecuteScalar();
-                    conn.Close();
+                    command.ExecuteScalar();
                 }
             }
         }
@@ -30,7 +34,7 @@ namespace FacebookETL
             {
                 using (SqlBulkCopy bulk = new SqlBulkCopy(connString))
                 {
-                    bulk.BatchSize = 1000;
+                    bulk.BatchSize = 5000;
                     bulk.DestinationTableName = tableName;
                     bulk.WriteToServer(table);
                     bulk.Close();
@@ -44,19 +48,25 @@ namespace FacebookETL
 
         public static string[] GetPages(string sqlConnectionString, string schema)
         {
-            string pagesCommaSeperated = null;
+            string pagesCommaSeparated = null;
+            string SQL_PAGES_TO_FOLLOW = $"SELECT [value] FROM {SanitizeSchemaName(schema)}.[configuration] WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup] = 'ETL' AND [name] = 'PagesToFollow'";
+
             using (SqlConnection conn = new SqlConnection(sqlConnectionString))
             {
                 conn.Open();
-                SqlCommand command = new SqlCommand($"SELECT TOP 1 [value] FROM {schema}.[configuration] WHERE [configuration_group] = 'SolutionTemplate' AND [configuration_subgroup] = 'ETL' AND [name] = 'PagesToFollow'");
-                command.Connection = conn;
-                var dataReader = command.ExecuteReader();
-                dataReader.Read();
-                pagesCommaSeperated = dataReader[0].ToString();
-                conn.Close();
+                using (SqlCommand command = new SqlCommand(SQL_PAGES_TO_FOLLOW, conn))
+                {
+                    SqlDataReader dr = command.ExecuteReader();
+                    if (dr.Read())
+                    {
+                        if (dr[0] != null && dr[0] != DBNull.Value)
+                            pagesCommaSeparated = dr[0].ToString();
+                    }
+                    dr.Close();
+                }
             }
 
-            return pagesCommaSeperated.Split(',');
+            return pagesCommaSeparated != null ? pagesCommaSeparated.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries) : new string[] { };
         }
     }
 }

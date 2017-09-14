@@ -9,6 +9,9 @@ export class AzureLogin extends ViewModelBase {
     pageId: string = '';
     permanentPageToken: string = '';
     ownsPage: boolean = false;
+    showOldLogin: boolean = false;
+    facebookClientId: string = '';
+    facebookClientSecret: string = '';
 
     async connect(): Promise<void> {
         this.MS.UtilityService.connectToFacebook();
@@ -21,48 +24,72 @@ export class AzureLogin extends ViewModelBase {
         this.oauthType = "Facebook";
         await this.MS.UtilityService.getToken(this.oauthType, async () => { this.setValidated(); });
         this.pages = this.MS.DataStore.getJson("data");
-        if (this.pages.length > 0) {
+        if (this.pages && this.pages.length > 0) {
             this.selectedPage = this.pages[0];
-        }        
+        }
     }
 
     async onNavigatingNext(): Promise<boolean> {
+        if (this.ownsPage) {
+            let id: string = '';
+            let token: string = '';
 
-        let id: string = '';
-        let token: string = '';
+            if (this.pageId != '' && this.permanentPageToken != '') {
+                id = this.pageId;
+                token = this.permanentPageToken;
+            }
+            else {
+                let p = this.pages.find(arg => arg.name == this.selectedPage);
+                id = p.id;
+                token = p.access_token;
+            }
 
-        if (this.pageId != '' && this.permanentPageToken != '') {
-            id = this.pageId;
-            token = this.permanentPageToken;
+            this.MS.DataStore.addToDataStore("FacebookPageId", id, DataStoreType.Private);
+            this.MS.DataStore.addToDataStore("FacebookPageToken", token, DataStoreType.Private);
+        } else {
+            this.MS.DataStore.addToDataStore('FacebookClientId', this.facebookClientId, DataStoreType.Private);
+            this.MS.DataStore.addToDataStore('FacebookClientSecret', this.facebookClientSecret, DataStoreType.Private);
         }
-        else {
-            let p = this.pages.find(arg => arg.name == this.selectedPage);
-            id = p.id;
-            token = p.access_token;
-        }
-
-        this.MS.DataStore.addToDataStore("FacebookPageId", id, DataStoreType.Private);
-        this.MS.DataStore.addToDataStore("FacebookPageToken", token, DataStoreType.Private);
+        this.MS.DataStore.addToDataStore("UserOwnsPage", this.ownsPage,DataStoreType.Public);
         return true;
     }
 
     async onValidate(): Promise<boolean> {
         this.onInvalidate();
+        if (this.ownsPage) {
+            let body: any = {};
+            body.PageId = this.pageId;
+            body.PermanentPageToken = this.permanentPageToken;
 
-        let body: any = {};
-        body.PageId = this.pageId;
-        body.PermanentPageToken = this.permanentPageToken;
-
-        this.isValidated = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-ValidateFacebookPermanentPageToken', body);
-
+            if (this.pageId.length > 0 && this.permanentPageToken.length > 0) {
+                this.isValidated = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-ValidateFacebookPermanentPageToken', body);
+            }
+        } else {
+            if (this.facebookClientId.length > 0 && this.facebookClientSecret.length > 0) {
+                this.isValidated = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-ValidateFacebookDeveloperAccount', {
+                    FacebookClientId: this.facebookClientId,
+                    FacebookClientSecret: this.facebookClientSecret
+                });
+            }
+        }
         this.showValidation = this.isValidated;
-
         return this.isValidated;
     }
 
     onRadioChanged(): void {
-        this.ownsPage = false;
-        //this.own
+        this.onInvalidate();
+        
+        if (this.ownsPage) {
+            this.ownsPage = false;
+            this.showOldLogin = true;
+            this.pageId = '';
+            this.permanentPageToken = '';
+        }
+        else {
+            this.ownsPage = true;
+            this.showOldLogin = false;
+            this.facebookClientId = '';
+            this.facebookClientSecret = '';
+        }
     }
-    
 }

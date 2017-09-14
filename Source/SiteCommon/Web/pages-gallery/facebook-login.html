@@ -11,29 +11,34 @@
         </p>
         <div>
             <label class="st-text">
-                <input type="radio" value="True" value.bind="!ownsPage" checked="!ownPage" change.delegate="onRadioChanged()" />
+                <input type="radio" value.bind="!ownsPage" name="ownsPageRadio" change.delegate="onRadioChanged()" />
                 Yes
             </label>
         </div>
         <div>
             <label class="st-text">
-                <input type="radio" value="False" value.bind="ownsPage" name="ownsPageNo" change.delegate="onRadioChanged()" />
+                <input type="radio" value.bind="ownsPage" name="ownsPageRadio" change.delegate="onRadioChanged()" />
                 No
             </label>
         </div>
     </div>
 
     <!-- Old Facebook -->
-    <div class="st-float" if.bind="!ownPage && false">
+    <div class="st-float" if.bind="!ownsPage && showOldLogin">
         <p class="st-text">${MS.Translate.FACEBOOK_LOGIN_APP_ID}</p>
         <input class="st-input" type="text" placeholder="12345678" change.delegate="onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="facebookClientId" />
 
         <p class="st-text">${MS.Translate.FACEBOOK_LOGIN_APP_SECRET}</p>
         <input class="st-input" type="password" placeholder="12345678" change.delegate="onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="facebookClientSecret" />
+        <div>
+            <p class="st-float">
+                <button class="primary" click.trigger="onValidate()" disabled.bind="!facebookClientId || !facebookClientSecret" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_VALIDATE}</button>
+            </p>
+        </div>
     </div>
 
     <!-- New Facebook -->
-    <div class="st-float" if.bind="ownPage && false">
+    <div class="st-float" if.bind="ownsPage && !showOldLogin">
         <div class="st-float">
             <button class="primary" click.trigger="connect()" disabled.bind="MS.HttpService.isServiceBusy || pageId || permanentPageToken">${MS.Translate.FACEBOOK_LOGIN_TITLE}</button>
         </div>

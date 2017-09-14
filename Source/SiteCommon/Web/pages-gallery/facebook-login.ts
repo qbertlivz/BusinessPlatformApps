@@ -8,10 +8,12 @@ export class AzureLogin extends ViewModelBase {
     selectedPage: any;
     pageId: string = '';
     permanentPageToken: string = '';
-    ownsPage: boolean = false;
+    ownsPage: boolean = null;
     showOldLogin: boolean = false;
     facebookClientId: string = '';
     facebookClientSecret: string = '';
+    firstSelection: boolean = true;
+    buttonSelection: string = '';
 
     async connect(): Promise<void> {
         this.MS.UtilityService.connectToFacebook();
@@ -21,6 +23,8 @@ export class AzureLogin extends ViewModelBase {
 
     async onLoaded(): Promise<void> {
         super.onLoaded();
+        this.ownsPage = null;
+        this.showOldLogin = false;
         this.oauthType = "Facebook";
         await this.MS.UtilityService.getToken(this.oauthType, async () => { this.setValidated(); });
         this.pages = this.MS.DataStore.getJson("data");
@@ -50,7 +54,7 @@ export class AzureLogin extends ViewModelBase {
             this.MS.DataStore.addToDataStore('FacebookClientId', this.facebookClientId, DataStoreType.Private);
             this.MS.DataStore.addToDataStore('FacebookClientSecret', this.facebookClientSecret, DataStoreType.Private);
         }
-        this.MS.DataStore.addToDataStore("UserOwnsPage", this.ownsPage,DataStoreType.Public);
+        this.MS.DataStore.addToDataStore("UserOwnsPage", this.ownsPage, DataStoreType.Public);
         return true;
     }
 
@@ -78,18 +82,19 @@ export class AzureLogin extends ViewModelBase {
 
     onRadioChanged(): void {
         this.onInvalidate();
-        
-        if (this.ownsPage) {
-            this.ownsPage = false;
+       
+        if (!this.ownsPage) {
+            //this.ownsPage = false;
             this.showOldLogin = true;
-            this.pageId = '';
-            this.permanentPageToken = '';
-        }
-        else {
-            this.ownsPage = true;
-            this.showOldLogin = false;
             this.facebookClientId = '';
             this.facebookClientSecret = '';
+        }
+       else {
+            this.ownsPage = true;
+            this.showOldLogin = false;
+            this.pageId = '';
+            this.permanentPageToken = '';
+            //this.noOwnsPage = 'off';
         }
     }
 }

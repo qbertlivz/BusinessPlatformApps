@@ -11,13 +11,13 @@
         </p>
         <div>
             <label class="st-text">
-                <input type="radio" value.bind="!ownsPage" name="ownsPageRadio" change.delegate="onRadioChanged()" />
+                <input type="radio" model.bind="true" checked.bind="ownsPage" name="ownsPageRadio" change.delegate="onRadioChanged()" />
                 Yes
             </label>
         </div>
         <div>
             <label class="st-text">
-                <input type="radio" value.bind="ownsPage" name="ownsPageRadio" change.delegate="onRadioChanged()" />
+                <input type="radio" model.bind="false" checked.bind="ownsPage" name="ownsPageRadio" change.delegate="onRadioChanged()" />
                 No
             </label>
         </div>

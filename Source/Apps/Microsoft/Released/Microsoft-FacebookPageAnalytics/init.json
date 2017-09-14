@@ -23,6 +23,11 @@
                 "name": "$SiteCommon$/pages-gallery/facebook-login.html"
             },
             {
+                "displayname": "Facebook Pages",
+                "name": "$SiteCommon$/pages-gallery/facebookPages.html"
+                //"skip": "run(this.MS.DataStore.getValue('UserOwnsPage') === 'true' ? 'true': 'false')"
+            },
+            {
                 "defaultLocation": "5",
                 "displayname": "Login",
                 "name": "$SiteCommon$/pages-gallery/azure-login.html",

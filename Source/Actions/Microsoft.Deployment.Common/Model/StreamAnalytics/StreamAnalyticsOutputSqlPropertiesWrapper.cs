@@ -1,12 +1,14 @@
-﻿namespace Microsoft.Deployment.Common.Model.StreamAnalytics
+﻿using Microsoft.Deployment.Common.Model.Bpst;
+
+namespace Microsoft.Deployment.Common.Model.StreamAnalytics
 {
     public class StreamAnalyticsOutputSqlPropertiesWrapper
     {
         public StreamAnalyticsOutputSqlProperties Properties;
 
-        public StreamAnalyticsOutputSqlPropertiesWrapper(string server, string database, string user, string password, string table)
+        public StreamAnalyticsOutputSqlPropertiesWrapper(BpstSql sql, string table)
         {
-            Properties = new StreamAnalyticsOutputSqlProperties(server, database, user, password, table);
+            Properties = new StreamAnalyticsOutputSqlProperties(sql, table);
         }
     }
 }

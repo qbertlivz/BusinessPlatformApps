@@ -16,6 +16,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.StreamAnalytics
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             BpstAzure ba = new BpstAzure(request.DataStore);
+            BpstSql sql = new BpstSql(request.DataStore);
 
             AzureHttpClient ahc = new AzureHttpClient(ba.TokenAzure);
 
@@ -24,14 +25,9 @@ namespace Microsoft.Deployment.Actions.AzureCustom.StreamAnalytics
 
             string aliasOutput = parameters.Name;
 
-            string database = request.DataStore.GetValue("Database");
-            string password = request.DataStore.GetValue("Password");
-            string server = request.DataStore.GetValue("Server");
-            string user = request.DataStore.GetValue("Username");
-
             string url = $"https://management.azure.com/subscriptions/{ba.IdSubscription}/resourceGroups/{ba.NameResourceGroup}/providers/Microsoft.StreamAnalytics/streamingjobs/{nameStreamAnalyticsJob}/outputs/{aliasOutput}?api-version=2015-10-01";
 
-            StreamAnalyticsOutputSqlPropertiesWrapper body = new StreamAnalyticsOutputSqlPropertiesWrapper(server, database, user, password, parameters.Table);
+            StreamAnalyticsOutputSqlPropertiesWrapper body = new StreamAnalyticsOutputSqlPropertiesWrapper(sql, parameters.Table);
 
             string error = await ahc.Test(HttpMethod.Put, url, JsonUtility.Serialize(body));
 

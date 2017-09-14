@@ -1,13 +1,15 @@
-﻿namespace Microsoft.Deployment.Common.Model.StreamAnalytics
+﻿using Microsoft.Deployment.Common.Model.Bpst;
+
+namespace Microsoft.Deployment.Common.Model.StreamAnalytics
 {
     public class StreamAnalyticsOutputSqlPropertiesDatasource
     {
         public StreamAnalyticsOutputSqlPropertiesDatasourceProperties Properties;
         public string Type = "Microsoft.Sql/Server/Database";
 
-        public StreamAnalyticsOutputSqlPropertiesDatasource(string server, string database, string user, string password, string table)
+        public StreamAnalyticsOutputSqlPropertiesDatasource(BpstSql sql, string table)
         {
-            Properties = new StreamAnalyticsOutputSqlPropertiesDatasourceProperties(server, database, user, password, table);
+            Properties = new StreamAnalyticsOutputSqlPropertiesDatasourceProperties(sql, table);
         }
     }
 }

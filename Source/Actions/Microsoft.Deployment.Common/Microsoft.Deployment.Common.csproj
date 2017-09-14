@@ -177,6 +177,7 @@
     <Compile Include="Model\Azure\FunctionStatusWrapper.cs" />
     <Compile Include="Model\Azure\FunctionWrapper.cs" />
     <Compile Include="Model\Bpst\BpstAzure.cs" />
+    <Compile Include="Model\Bpst\BpstSql.cs" />
     <Compile Include="Model\Custom\NewsEntity.cs" />
     <Compile Include="Model\DataPullStatus.cs" />
     <Compile Include="Model\EventHub\EventHub.cs" />

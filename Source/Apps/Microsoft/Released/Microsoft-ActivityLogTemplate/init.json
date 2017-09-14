@@ -1,8 +1,4 @@
 ﻿{
-    "MSI": {
-        "Guid": "2F142293-C7B5-4C57-8FFE-75F636688C9E"
-    },
-
     "Install": {
         "Pages": [
             {
@@ -41,7 +37,7 @@
                 "name": "$SiteCommon$/pages-gallery/sql.html",
                 "newSqlDatabase": "activityLogDB",
                 "showAzureSql": false,
-                "showNewSqlOption": "true",
+                "showNewSqlOption": true,
                 "sqlInstance": "NewSql",
                 "subtitle": "$translate(INIT_SQL_SUBTITLE_AAL)",
                 "title": "$translate(INIT_SQL_TITLE)",
@@ -71,6 +67,8 @@
                 "name": "$SiteCommon$/pages-gallery/summary.html",
                 "sendCompletionNotification": false,
                 "values": {
+                    "Subscription": "$(this.MS.DataStore.getJson('SelectedSubscription').DisplayName)",
+                    "Resource Group": "$(this.MS.DataStore.getValue('SelectedResourceGroup'))",
                     "Target Server": "$(this.MS.DataStore.getValue('Server'))",
                     "Target Database": "$(this.MS.DataStore.getValue('Database'))",
                     "Target Username": "$(this.MS.DataStore.getValue('Username'))"
@@ -194,7 +192,7 @@
                 "name": "Microsoft-CreateStreamAnalyticsJob"
             },
             {
-                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_INPUT)",
+                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_INPUT_EVENTHUB)",
                 "name": "Microsoft-SetStreamAnalyticsInputAsEventHub"
             },
             {

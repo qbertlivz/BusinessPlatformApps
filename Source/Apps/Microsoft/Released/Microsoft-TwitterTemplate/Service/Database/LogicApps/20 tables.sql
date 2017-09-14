@@ -137,7 +137,7 @@ CREATE TABLE pbist_twitter.minimum_tweets
 CREATE TABLE pbist_twitter.twitter_query
 (
     Id            INT NOT NULL PRIMARY KEY,
-    IsAdvanced    NCHAR(20) NOT NULL,
+    IsAdvanced    BIT NOT NULL,
     QueryString   NVARCHAR(MAX) NOT NULL,
     TweetId       NCHAR(20) NULL
 );

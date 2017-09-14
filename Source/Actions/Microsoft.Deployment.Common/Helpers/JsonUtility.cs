@@ -27,6 +27,11 @@ namespace Microsoft.Deployment.Common.Helpers
             return string.IsNullOrEmpty(json) ? default(T) : JsonConvert.DeserializeObject<T>(json);
         }
 
+        public static T Deserialize<T>(JToken json)
+        {
+            return json == null ? default(T) : Deserialize<T>(json.ToString());
+        }
+
         public static T DeserializeContent<T>(string content)
         {
             T value = default(T);

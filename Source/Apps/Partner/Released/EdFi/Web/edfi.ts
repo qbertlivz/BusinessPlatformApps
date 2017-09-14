@@ -8,12 +8,30 @@ export class Customize extends ViewModelBase {
     sqlServerProductionApiLogin: string = '';
     sqlServerProductionApiPassword: string = '';
 
+    localOrganizationID: string = '';
+    stateOrganizationID: string = '';
+    agencyCategoryType: string = '';
+    institutionName: string = '';
+    institutionAddress: string = '';
+    institutionCity: string = '';
+    institutionState: string = '';
+    institutionZip: string = '';
+
     async onNavigatingNext(): Promise<boolean> {
 
         this.MS.DataStore.addToDataStore('sqlServerAdminLogin', this.sqlServerAdminLogin, DataStoreType.Public);
         this.MS.DataStore.addToDataStore('sqlServerAdminPassword', this.sqlServerAdminPassword, DataStoreType.Private);
         this.MS.DataStore.addToDataStore('sqlServerProductionApiLogin', this.sqlServerProductionApiLogin, DataStoreType.Public);
         this.MS.DataStore.addToDataStore('sqlServerProductionApiPassword', this.sqlServerProductionApiPassword, DataStoreType.Private);
+
+        this.MS.DataStore.addToDataStore('localOrganizationID', this.sqlServerProductionApiLogin, DataStoreType.Public);
+        this.MS.DataStore.addToDataStore('stateOrganizationID', this.sqlServerProductionApiLogin, DataStoreType.Public);
+        this.MS.DataStore.addToDataStore('agencyCategoryType', this.sqlServerProductionApiLogin, DataStoreType.Public);
+        this.MS.DataStore.addToDataStore('institutionName', this.sqlServerProductionApiLogin, DataStoreType.Public);
+        this.MS.DataStore.addToDataStore('institutionAddress', this.sqlServerProductionApiLogin, DataStoreType.Public);
+        this.MS.DataStore.addToDataStore('institutionCity', this.sqlServerProductionApiLogin, DataStoreType.Public);
+        this.MS.DataStore.addToDataStore('institutionState', this.sqlServerProductionApiLogin, DataStoreType.Public);
+        this.MS.DataStore.addToDataStore('institutionZip', this.sqlServerProductionApiLogin, DataStoreType.Public);
 
         return true;
     }

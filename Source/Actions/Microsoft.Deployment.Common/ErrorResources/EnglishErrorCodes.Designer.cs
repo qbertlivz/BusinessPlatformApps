@@ -97,6 +97,24 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No API Management Services were found in your Azure Subscription.
+        /// </summary>
+        public static string ApiManagementErrorNoServicesFound {
+            get {
+                return ResourceManager.GetString("ApiManagementErrorNoServicesFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to create a new API Management Logger.
+        /// </summary>
+        public static string ApiManagementFailedToCreateLogger {
+            get {
+                return ResourceManager.GetString("ApiManagementFailedToCreateLogger", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to It seems you&apos;re not running the correct platform version of Dynamics 365 for Finance and Operations. The template requires at least Platform Update 8..
         /// </summary>
         public static string AxWrongPlatform {
@@ -210,6 +228,15 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         public static string DisabledDomainCredsEnabled {
             get {
                 return ResourceManager.GetString("DisabledDomainCredsEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred while querying Event Hub access keys.
+        /// </summary>
+        public static string EventHubFailedToQueryKeys {
+            get {
+                return ResourceManager.GetString("EventHubFailedToQueryKeys", resourceCulture);
             }
         }
         
@@ -570,6 +597,42 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         public static string SqlLoginFailed {
             get {
                 return ResourceManager.GetString("SqlLoginFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to set a new Stream Analytics Input.
+        /// </summary>
+        public static string StreamAnalyticsSetInputFailure {
+            get {
+                return ResourceManager.GetString("StreamAnalyticsSetInputFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to set Stream Analytics output.
+        /// </summary>
+        public static string StreamAnalyticsSetOutputFailure {
+            get {
+                return ResourceManager.GetString("StreamAnalyticsSetOutputFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to toggle the state of the Stream Analytics job.
+        /// </summary>
+        public static string StreamAnalyticsToggleFailure {
+            get {
+                return ResourceManager.GetString("StreamAnalyticsToggleFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to update the Stream Analytics Job query.
+        /// </summary>
+        public static string StreamAnalyticsUpdateQueryFailure {
+            get {
+                return ResourceManager.GetString("StreamAnalyticsUpdateQueryFailure", resourceCulture);
             }
         }
         

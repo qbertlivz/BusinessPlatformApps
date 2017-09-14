@@ -19,7 +19,8 @@
             {
                 "azureProviders": [
                     "Microsoft.ApiManagement",
-                    "Microsoft.EventHub"
+                    "Microsoft.EventHub",
+                    "Microsoft.StreamAnalytics"
                 ],
                 "defaultLocation": "5",
                 "displayname": "Login",
@@ -101,10 +102,10 @@
                 "displayname": "$translate(INIT_ACTION_CREATING_STREAM_ANALYTICS_JOB)",
                 "name": "Microsoft-DeployAzureArmTemplate"
             },
-            //{
-            //    "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_INPUT)",
-            //    "name": "Microsoft-SetStreamAnalyticsInputAsEventHub"
-            //},
+            {
+                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_INPUT)",
+                "name": "Microsoft-SetStreamAnalyticsInput"
+            },
             //{
             //    "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_SH_OUTPUT)",
             //    "name": "Microsoft-SetServiceHealthOutput"

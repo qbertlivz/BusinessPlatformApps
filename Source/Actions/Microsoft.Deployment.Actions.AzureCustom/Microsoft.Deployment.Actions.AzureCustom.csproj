@@ -271,6 +271,7 @@
     <Compile Include="PowerApp\GetPowerAppEnvironment.cs" />
     <Compile Include="PowerApp\WranglePowerApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StreamAnalytics\SetStreamAnalyticsInput.cs" />
     <Compile Include="Twitter\ConsentTwitterConnectionToLogicApp.cs" />
     <Compile Include="Twitter\CreateTwitterConnectionToLogicApp.cs" />
     <Compile Include="Twitter\DeployTwitterCSharpFunctionAssets.cs" />

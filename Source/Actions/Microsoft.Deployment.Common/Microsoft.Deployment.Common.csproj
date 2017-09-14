@@ -260,6 +260,12 @@
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsEventName.cs" />
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsEventSource.cs" />
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsHttpRequest.cs" />
+    <Compile Include="Model\StreamAnalytics\StreamAnalyticsInputDatasource.cs" />
+    <Compile Include="Model\StreamAnalytics\StreamAnalyticsInputDatasourceProperties.cs" />
+    <Compile Include="Model\StreamAnalytics\StreamAnalyticsInputProperties.cs" />
+    <Compile Include="Model\StreamAnalytics\StreamAnalyticsInputPropertiesWrapper.cs" />
+    <Compile Include="Model\StreamAnalytics\StreamAnalyticsInputSerialization.cs" />
+    <Compile Include="Model\StreamAnalytics\StreamAnalyticsInputSerializationProperties.cs" />
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsOperationName.cs" />
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsProperties.cs" />
     <Compile Include="Model\StreamAnalytics\StreamAnalyticsResourceProviderName.cs" />

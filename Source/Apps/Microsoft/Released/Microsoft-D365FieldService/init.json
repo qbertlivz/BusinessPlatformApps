@@ -24,35 +24,35 @@
                 "name": "$SiteCommon$/pages-gallery/getting-started.html",
                 "templateName": "$translate(INIT_D365_FS_TITLE)"
             },
-          {
-            "displayname": "Dynamics 365 Login",
-            "entities": {
-              "account": "accountid",
-              "bookableresource": "bookableresourceid",
-              "bookableresourcebooking": "bookableresourcebookingid",
-              "bookingstatus": "bookingstatusid",
-              "msdyn_customerasset": "msdyn_customerassetid",
-              "msdyn_incidenttype": "msdyn_incidenttypeid",
-              "msdyn_workorder": "msdyn_workorderid",
-              "msdyn_workorderproduct": "msdyn_workorderproductid",
-              "msdyn_workorderservice": "msdyn_workorderserviceid",
-              "msdyn_workordertype": "msdyn_workordertypeid",
-              "product": "productid",
-              "resource": "resourceid",
-              "service": "serviceid",
-              "serviceappointment": "activityid",
-              "task": "activityid",
-              "territory": "territoryid"
+            {
+                "displayname": "Dynamics 365 Login",
+                "entities": {
+                    "account": "accountid",
+                    "bookableresource": "bookableresourceid",
+                    "bookableresourcebooking": "bookableresourcebookingid",
+                    "bookingstatus": "bookingstatusid",
+                    "msdyn_customerasset": "msdyn_customerassetid",
+                    "msdyn_incidenttype": "msdyn_incidenttypeid",
+                    "msdyn_workorder": "msdyn_workorderid",
+                    "msdyn_workorderproduct": "msdyn_workorderproductid",
+                    "msdyn_workorderservice": "msdyn_workorderserviceid",
+                    "msdyn_workordertype": "msdyn_workordertypeid",
+                    "product": "productid",
+                    "resource": "resourceid",
+                    "service": "serviceid",
+                    "serviceappointment": "activityid",
+                    "task": "activityid",
+                    "territory": "territoryid"
+                },
+                "name": "$SiteCommon$/pages-gallery/mscrm-login.html",
+                "oauthType": "mscrm",
+                "pricingCalculatorUrl": "$translate(INIT_D365_CALCULATOR)",
+                "pricingCost": "$translate(INIT_D365_PRICING_COST)",
+                "pricingUrl": "$translate(INIT_D365_PRICING_URL)",
+                "azureProviders": [
+                    "Microsoft.AnalysisServices"
+                ]
             },
-            "name": "$SiteCommon$/pages-gallery/mscrm-login.html",
-            "oauthType": "mscrm",
-            "pricingCalculatorUrl": "$translate(INIT_D365_CALCULATOR)",
-            "pricingCost": "$translate(INIT_D365_PRICING_COST)",
-            "pricingUrl": "$translate(INIT_D365_PRICING_URL)",
-            "azureProviders": [
-              "Microsoft.AnalysisServices"
-            ]
-          },
             {
                 "displayname": "Login to the Key Vault",
                 "name": "$SiteCommon$/pages-gallery/keyvault-login.html",
@@ -107,20 +107,20 @@
                     }
                 ]
             },
-          {
-            "datastoreEntriesToValidate": [
-              "AzureToken",
-              "SqlConnectionString"
-            ],
-            "displayname": "Progress",
-            "name": "$SiteCommon$/pages-gallery/progress.html",
-            "filename": "$save('FieldService.pbix')",
-            "showCounts": true,
-            "finishedActionName": "$run('Microsoft-CrmGetProfileStatus')",
-            "asDatabase": "FieldService",
-            "filenameSSAS": "FieldServiceAS.pbix",
-            "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
-          }
+            {
+                "datastoreEntriesToValidate": [
+                    "AzureToken",
+                    "SqlConnectionString"
+                ],
+                "displayname": "Progress",
+                "name": "$SiteCommon$/pages-gallery/progress.html",
+                "filename": "$save('FieldService.pbix')",
+                "showCounts": true,
+                "finishedActionName": "$run('Microsoft-CrmGetProfileStatus')",
+                "asDatabase": "FieldService",
+                "filenameSSAS": "FieldServiceAS.pbix",
+                "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
+            }
         ],
 
         "Actions": [
@@ -231,34 +231,34 @@
                 "SqlSchema": "$save('fso')",
                 "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
             },
-          {
-            "DeploymentName": "SqlConnectionDeployment",
-            "displayname": "$translate(NOTIFIER_CREATING_DATABASE_CONNECTION)",
-            "name": "Microsoft-CreateSqlConnector",
-            "ApiConnectionName": "$save('sqlNotifierConnection')",
-            "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
-          },
-          {
-            "DeploymentName": "NotifierLogicApp",
-            "displayname": "$translate(NOTIFIER_CREATING_NOTIFIER_APP)",
-            "name": "Microsoft-DeployNotifierLogicApp",
-            "logicAppName": "notifierLogicApp",
-            "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
-          },
-          {
-            "displayname": "$translate(NOTIFIER_CONFIGURE_NOTIFIER_APP)",
-            "name": "Microsoft-ConfigureNotifier",
-            "SqlConfigTable": "[fso].[configuration]",
-            "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
-          },
-          {
-            "displayname": "$translate(INIT_ACTION_WAITING_DATA)",
-            "FinishedActionName": "Microsoft-CrmGetProfileStatus",
-            "IsWaiting": true,
-            "name": "Microsoft-GetDataPullStatus",
-            "SqlServerIndex": 0,
-            "TargetSchema": "dbo"
-          }
+            {
+                "DeploymentName": "SqlConnectionDeployment",
+                "displayname": "$translate(NOTIFIER_CREATING_DATABASE_CONNECTION)",
+                "name": "Microsoft-CreateSqlConnector",
+                "ApiConnectionName": "$save('sqlNotifierConnection')",
+                "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+            },
+            {
+                "DeploymentName": "NotifierLogicApp",
+                "displayname": "$translate(NOTIFIER_CREATING_NOTIFIER_APP)",
+                "name": "Microsoft-DeployNotifierLogicApp",
+                "logicAppName": "notifierLogicApp",
+                "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+            },
+            {
+                "displayname": "$translate(NOTIFIER_CONFIGURE_NOTIFIER_APP)",
+                "name": "Microsoft-ConfigureNotifier",
+                "SqlConfigTable": "[fso].[configuration]",
+                "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_WAITING_DATA)",
+                "FinishedActionName": "Microsoft-CrmGetProfileStatus",
+                "IsWaiting": true,
+                "name": "Microsoft-GetDataPullStatus",
+                "SqlServerIndex": 0,
+                "TargetSchema": "dbo"
+            }
         ]
     },
 

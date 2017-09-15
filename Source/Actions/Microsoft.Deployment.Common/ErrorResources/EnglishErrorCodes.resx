@@ -312,4 +312,7 @@
   <data name="StreamAnalyticsToggleFailure" xml:space="preserve">
     <value>Failed to toggle the state of the Stream Analytics job</value>
   </data>
+  <data name="FacebookTokenAuthFailed" xml:space="preserve">
+    <value>The page id or token provided is invalid.</value>
+  </data>
 </root>

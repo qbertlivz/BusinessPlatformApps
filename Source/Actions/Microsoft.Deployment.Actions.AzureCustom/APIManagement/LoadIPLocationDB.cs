@@ -79,70 +79,67 @@ namespace Microsoft.Deployment.Actions.AzureCustom.APIManagement
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            WebRequest zipFileRequest = WebRequest.Create(GEOLITE_CITY);
-            SqlConnection targetConnection = new SqlConnection(request.DataStore.GetValue("SqlConnectionString"));
 
-            using (HttpWebResponse response = (HttpWebResponse)zipFileRequest.GetResponse())
+            using (SqlConnection targetConnection = new SqlConnection(request.DataStore.GetValue("SqlConnectionString")))
             {
-                if (response.StatusCode != HttpStatusCode.OK)
-                    return new ActionResponse(ActionStatus.Failure);
-
-                using (Stream zipStream = response.GetResponseStream())
+                targetConnection.Open();
+                WebRequest zipFileRequest = WebRequest.Create(GEOLITE_CITY);
+                using (HttpWebResponse response = (HttpWebResponse)zipFileRequest.GetResponse())
                 {
-                    ZipArchive zipFile = new ZipArchive(zipStream, ZipArchiveMode.Read);
-                    ZipArchiveEntry blocksIPv4 = null;
-                    for (int i = 0; i < zipFile.Entries.Count; i++)
+                    if (response.StatusCode != HttpStatusCode.OK)
+                        return new ActionResponse(ActionStatus.Failure);
+
+                    using (Stream zipStream = response.GetResponseStream())
                     {
-                        if (zipFile.Entries[i].Name.EndsWith("GeoLite2-City-Blocks-IPv4.csv"))
+                        ZipArchive zipFile = new ZipArchive(zipStream, ZipArchiveMode.Read);
+                        ZipArchiveEntry blocksIPv4 = null;
+                        for (int i = 0; i < zipFile.Entries.Count; i++)
                         {
-                            blocksIPv4 = zipFile.Entries[i];
-                            break;
+                            if (zipFile.Entries[i].Name.EndsWith("GeoLite2-City-Blocks-IPv4.csv"))
+                            {
+                                blocksIPv4 = zipFile.Entries[i];
+                                break;
+                            }
                         }
-                    }
 
-                    targetConnection.Open();
-                    using (SqlCommand cmd = new SqlCommand("TRUNCATE TABLE dbo.[GeoLite2-City-Blocks-IPv4];" +
-                                                            "ALTER INDEX [IX_GeoLite2-City-Blocks-IPv4] ON dbo.[GeoLite2-City-Blocks-IPv4] DISABLE;" +
-                                                            "ALTER INDEX [IX_GeoLite2-City-Blocks-IPv4_IPPart] ON dbo.[GeoLite2-City-Blocks-IPv4] DISABLE;", targetConnection))
-                    {
-                        cmd.CommandTimeout = 0;
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    SqlBulkCopy bulkCopy = new SqlBulkCopy(targetConnection);
-                    using (StreamReader sr = new StreamReader(blocksIPv4.Open()))
-                    {
-                        DataTable blocksTable = GetBlocksTable();
-                        CsvReader csv = new CsvReader(sr);
-                        csv.Configuration.DetectColumnCountChanges = true;
-                        csv.Configuration.HasHeaderRecord = true;
-
-                        bulkCopy.DestinationTableName = "dbo.[GeoLite2-City-Blocks-IPv4]";
-                        do
+                        // TODO: move out to their own action
+                        using (SqlCommand cmd = new SqlCommand("TRUNCATE TABLE dbo.[GeoLite2-City-Blocks-IPv4];" +
+                                                                "ALTER INDEX [IX_GeoLite2-City-Blocks-IPv4] ON dbo.[GeoLite2-City-Blocks-IPv4] DISABLE;" +
+                                                                "ALTER INDEX [IX_GeoLite2-City-Blocks-IPv4_IPPart] ON dbo.[GeoLite2-City-Blocks-IPv4] DISABLE;", targetConnection) { CommandTimeout = 0 })
                         {
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        SqlBulkCopy bulkCopy = new SqlBulkCopy(targetConnection) { BulkCopyTimeout = 0 };
+                        using (StreamReader sr = new StreamReader(blocksIPv4.Open()))
+                        {
+                            DataTable blocksTable = GetBlocksTable();
+                            CsvReader csv = new CsvReader(sr);
+                            csv.Configuration.DetectColumnCountChanges = true;
+                            csv.Configuration.HasHeaderRecord = true;
+
+                            bulkCopy.DestinationTableName = "dbo.[GeoLite2-City-Blocks-IPv4]";
+                            do
+                            {
                                 LoadDataTable(csv, blocksTable, BATCH_SIZE);
                                 bulkCopy.WriteToServer(blocksTable);
-                        } while (!sr.EndOfStream);
-                    }
-                    bulkCopy.Close();
+                            } while (!sr.EndOfStream);
+                        }
+                        bulkCopy.Close();
 
-                    using (SqlCommand cmd = new SqlCommand("UPDATE dbo.[GeoLite2-City-Blocks-IPv4] SET IPpart=LEFT([network], CHARINDEX('.', [network]) - 1)", targetConnection))
-                    {
-                        cmd.CommandTimeout = 0;
-                        cmd.ExecuteNonQuery();
-                        cmd.CommandText = "ALTER INDEX [IX_GeoLite2-City-Blocks-IPv4] ON dbo.[GeoLite2-City-Blocks-IPv4] REBUILD";
-                        cmd.ExecuteNonQuery();
-                        cmd.CommandText = "ALTER INDEX [IX_GeoLite2-City-Blocks-IPv4_IPPart] ON dbo.[GeoLite2-City-Blocks-IPv4] REBUILD";
-                        cmd.ExecuteNonQuery();
+                        // TODO: move out to their own action
+                        using (SqlCommand cmd = new SqlCommand("UPDATE dbo.[GeoLite2-City-Blocks-IPv4] SET IPpart=LEFT([network], CHARINDEX('.', [network]) - 1)", targetConnection) { CommandTimeout = 0 })
+                        {
+                            cmd.ExecuteNonQuery();
+                            cmd.CommandText = "ALTER INDEX [IX_GeoLite2-City-Blocks-IPv4] ON dbo.[GeoLite2-City-Blocks-IPv4] REBUILD";
+                            cmd.ExecuteNonQuery();
+                            cmd.CommandText = "ALTER INDEX [IX_GeoLite2-City-Blocks-IPv4_IPPart] ON dbo.[GeoLite2-City-Blocks-IPv4] REBUILD";
+                            cmd.ExecuteNonQuery();
+                        }
                     }
-
-                    targetConnection.Close();
                 }
             }
-                
-            
-            
-            
+
             return new ActionResponse(ActionStatus.Success);
         }
     }

@@ -3,6 +3,11 @@
     public class StreamAnalyticsInputSerialization
     {
         public StreamAnalyticsInputSerializationProperties Properties;
-        public string Type = "Json";
+        public string Type = "CSV";
+
+        public StreamAnalyticsInputSerialization()
+        {
+            Properties = new StreamAnalyticsInputSerializationProperties();
+        }
     }
 }

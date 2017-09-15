@@ -250,6 +250,15 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The page id or token provided is invalid..
+        /// </summary>
+        public static string FacebookTokenAuthFailed {
+            get {
+                return ResourceManager.GetString("FacebookTokenAuthFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login failed for user.
         /// </summary>
         public static string ImpersonationFailed {
@@ -597,6 +606,33 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         public static string StreamAnalyticsSetInputFailure {
             get {
                 return ResourceManager.GetString("StreamAnalyticsSetInputFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to set Stream Analytics output.
+        /// </summary>
+        public static string StreamAnalyticsSetOutputFailure {
+            get {
+                return ResourceManager.GetString("StreamAnalyticsSetOutputFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to toggle the state of the Stream Analytics job.
+        /// </summary>
+        public static string StreamAnalyticsToggleFailure {
+            get {
+                return ResourceManager.GetString("StreamAnalyticsToggleFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to update the Stream Analytics Job query.
+        /// </summary>
+        public static string StreamAnalyticsUpdateQueryFailure {
+            get {
+                return ResourceManager.GetString("StreamAnalyticsUpdateQueryFailure", resourceCulture);
             }
         }
         

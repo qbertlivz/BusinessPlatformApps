@@ -219,14 +219,15 @@ CREATE VIEW VisualFreqSecond AS
     Where TimeUnit = 's';
 go
 
-CREATE VIEW [dbo].[IPAddressSummary]
-AS
-select distinct IPAddress
-from dbo.Request
+CREATE VIEW IPAddressSummary AS
+    SELECT DISTINCT
+        IPAddress
+    FROM Request
 go
 
-CREATE VIEW [dbo].[SubscriptionIPAddress]
-AS
-select distinct SubscriptionId, IPAddress
-from dbo.Request
+CREATE VIEW SubscriptionIPAddress AS
+    SELECT DISTINCT
+        SubscriptionId,
+        IPAddress
+    FROM Request
 go

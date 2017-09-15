@@ -192,7 +192,7 @@
                 "name": "Microsoft-CreateStreamAnalyticsJob"
             },
             {
-                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_INPUT)",
+                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_INPUT_EVENTHUB)",
                 "name": "Microsoft-SetStreamAnalyticsInputAsEventHub"
             },
             {

@@ -136,3 +136,5 @@ BEGIN
 	AND CreatedDate > DATEADD(day, -3, SYSDATETIME())
 
 END
+GO
+

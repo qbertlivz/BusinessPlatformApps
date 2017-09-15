@@ -70,6 +70,8 @@ CREATE NONCLUSTERED INDEX [IX_Request_Longitude] ON [dbo].[Request]
 
 CREATE NONCLUSTERED INDEX [nci_wi_Request_IPAddressApi] ON [dbo].[Request] ([IPAddress], [Api]) INCLUDE ([CreatedDate], [Latitude], [Longitude], [Operation], [Product], [RequestId]) WITH (ONLINE = ON)
 
+CREATE NONCLUSTERED INDEX [IX_Request_IP_Api] ON [dbo].[Request] ([IPAddress], [ApiID]) INCLUDE ([CreatedDate], [OperationID], [ProductID], [RequestId]) WITH (ONLINE = ON)
+
 CREATE TABLE [dbo].[Response] (
     [Id]          UNIQUEIDENTIFIER NOT NULL,
     [CreatedDate] DATETIME         NULL,

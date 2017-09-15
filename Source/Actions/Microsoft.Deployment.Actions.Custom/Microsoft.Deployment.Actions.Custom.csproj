@@ -160,9 +160,13 @@
     <Compile Include="Ax\ValidateAxInstance.cs" />
     <Compile Include="CustomerData\CustomerInfo.cs" />
     <Compile Include="CustomerData\PushToSimplement.cs" />
+    <Compile Include="Facebook\GetPermanentPageToken.cs" />
+    <Compile Include="Facebook\PopulateFacebookPages.cs" />
     <Compile Include="Facebook\ValidateFacebookDeveloperAccount.cs" />
     <Compile Include="Facebook\SearchFacebookPage.cs" />
     <Compile Include="Facebook\ValidateFacebookPage.cs" />
+    <Compile Include="Facebook\ValidateFacebookPermanentPageToken.cs" />
+    <Compile Include="GetFacebookAuthUri.cs" />
     <Compile Include="Informatica\CleanInformaticaEnvironment.cs" />
     <Compile Include="Informatica\CreateInformaticaConnectionSalesforce.cs" />
     <Compile Include="Informatica\CreateInformaticaConnectionSql.cs" />

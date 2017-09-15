@@ -40,6 +40,7 @@ namespace Microsoft.Deployment.Site.Service
             Constants.BpstNotifierUrl = ConfigurationManager.ConnectionStrings["BpstNotifierUrl"].ToString();
             Constants.AxLocatorClientId = ConfigurationManager.ConnectionStrings["AxLocatorClientId"].ToString();
             Constants.AxLocatorSecret = ConfigurationManager.ConnectionStrings["AxLocatorSecret"].ToString();
+            Constants.FacebookClientSecret = ConfigurationManager.ConnectionStrings["FacebookSecret"].ToString();
 
             var appXmlType = config.Formatters.XmlFormatter.SupportedMediaTypes.FirstOrDefault(t => t.MediaType == "application/xml");
             config.Formatters.XmlFormatter.SupportedMediaTypes.Remove(appXmlType);

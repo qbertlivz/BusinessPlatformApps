@@ -51,15 +51,18 @@ namespace Microsoft.Deployment.Actions.Custom.Facebook
         public static async Task<string> GetUserId(string uri)
         {
             string requestUri = uri;
-            HttpClient client = new HttpClient();
-            var response = await client.GetAsync(requestUri);
-            string responseObj = await response.Content.ReadAsStringAsync();
-            if (!response.IsSuccessStatusCode)
+            string responseObj = string.Empty;
+            using (HttpClient client = new HttpClient())
             {
-                throw new Exception();
+                var response = await client.GetAsync(requestUri);
+                responseObj = await response.Content.ReadAsStringAsync();
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception();
+                }
             }
 
-            string id = JObject.Parse(responseObj)["id"].ToString();
+            string id = string.IsNullOrEmpty(responseObj) ? string.Empty : JObject.Parse(responseObj)["id"].ToString();
             return id;
         }
 
@@ -67,11 +70,14 @@ namespace Microsoft.Deployment.Actions.Custom.Facebook
         {
             string requestUri = uri;
             string responsePayload = string.Empty;
-            HttpClient client = new HttpClient();
-            var response = await client.GetAsync(requestUri);
-            string responseObj = await response.Content.ReadAsStringAsync();
-
-            if (!response.IsSuccessStatusCode)
+            string responseObj = string.Empty;
+            HttpResponseMessage response;
+            using (HttpClient client = new HttpClient())
+            {
+                response = await client.GetAsync(requestUri);
+                responseObj = await response.Content.ReadAsStringAsync();
+            }
+            if (response != null && !response.IsSuccessStatusCode)
             {
                 throw new Exception(await response.Content.ReadAsStringAsync());
             }
@@ -82,7 +88,7 @@ namespace Microsoft.Deployment.Actions.Custom.Facebook
             }
             else
             {
-                responsePayload = JObject.Parse(responseObj)[property].ToString();
+                responsePayload = string.IsNullOrEmpty(responseObj) ? string.Empty : JObject.Parse(responseObj)[property].ToString();
             }
             return responsePayload;
         }

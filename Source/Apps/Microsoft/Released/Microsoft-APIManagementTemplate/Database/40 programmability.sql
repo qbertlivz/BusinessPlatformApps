@@ -125,3 +125,16 @@ BEGIN
     ORDER BY CreatedDate ASC
 END
 go
+
+CREATE PROCEDURE FFTDataExtraction
+AS
+BEGIN
+
+	SELECT Id, CreatedDate, IPAddress
+	FROM Request
+	WHERE IPAddress IS NOT NULL
+	AND CreatedDate > DATEADD(day, -3, SYSDATETIME())
+
+END
+go
+

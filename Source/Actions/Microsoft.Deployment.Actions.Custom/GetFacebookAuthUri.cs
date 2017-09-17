@@ -18,7 +18,7 @@ namespace Microsoft.Deployment.Actions.Custom
         {
             string clientId = Constants.FacebookClientId;
             var redirectUri = request.Info.WebsiteRootUrl + Constants.WebsiteRedirectPath;
-            var authUri = "https://www.facebook.com/v2.10/dialog/oauth?client_id=" + clientId + "&redirect_uri=" + redirectUri + "&response_type=code&granted_scopes=manage_pages,publish_pages";
+            var authUri = "https://www.facebook.com/v2.10/dialog/oauth?client_id=" + clientId + "&redirect_uri=" + redirectUri + "&response_type=code&scope=manage_pages,publish_pages,pages_show_list";
             return new ActionResponse(ActionStatus.Success, JsonUtility.GetJObjectFromStringValue(authUri.ToString()));
         }
     }

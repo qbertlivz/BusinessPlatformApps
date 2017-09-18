@@ -65,7 +65,7 @@
               "SqlConnectionString"
             ],
             "displayname": "Deploy",
-            "filename": "$save('APIManagementTemplate.pbix')",
+            "filename": "$save('Azure_APIM_Analytics.pbix')",
             "name": "$SiteCommon$/pages-gallery/progress.html",
             "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))",
             "uniqueIdFunction": "$save(this.MS.UtilityService.getUniqueId(10))",

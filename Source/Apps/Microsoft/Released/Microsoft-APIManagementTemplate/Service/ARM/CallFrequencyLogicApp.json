@@ -53,8 +53,8 @@
                 "method": "post",
                 "path": "/api/None",
                 "queries": {
-                  "API_Key": "[parameters('apikeyentities')]",
-                  "API_URL": "[parameters('apiurlentities')]",
+                  "API_Key": "[parameters('apikey')]",
+                  "API_URL": "[parameters('apiurl')]",
                   "GlobalKeys": "frequency",
                   "GlobalValues": "'min,h'"
                 }
@@ -90,10 +90,10 @@
                 "connectionName": "AzureMLConnector",
                 "id": "[concat('/subscriptions/', parameters('subscription'), '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureml')]"
               },
-              "sql_1": {
-                "connectionId": "[concat('/subscriptions/', parameters('subscription'), '/resourceGroups/',parameters('resourcegroup'),'/providers/Microsoft.Web/connections/sql')]",
-                "connectionName": "MySqlConnector",
-                "id": "[concat('/subscriptions/', parameters('subscription'), '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/sql')]"
+              "sql": {
+                "connectionId": "[concat('/subscriptions/', parameters('subscription'), '/resourceGroups/' ,parameters('resourceGroup'),'/providers/Microsoft.Web/connections/sql')]",
+                "connectionName": "sql",
+                "id": "[concat('/subscriptions/' , parameters('subscription'), '/providers/Microsoft.Web/locations/',resourceGroup().location , '/managedApis/sql')]"
               }
             }
           }

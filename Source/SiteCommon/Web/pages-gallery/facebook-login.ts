@@ -25,14 +25,18 @@ export class AzureLogin extends ViewModelBase {
 
     async onLoaded(): Promise<void> {
         super.onLoaded();
+        this.onInvalidate();
         this.ownsPage = null;
         this.showOldLogin = false;
         this.oauthType = "Facebook";
         await this.MS.UtilityService.getToken(this.oauthType, async () => { this.setValidated(); });
         this.pages = this.MS.DataStore.getJson("data");
+
         if (this.pages && this.pages.length > 0) {
             this.isValidated = true;
             this.showValidation = false;
+            this.ownsPage = true;
+            this.showOldLogin = false;
             this.selectedPage = this.pages[0];
         }
     }
@@ -92,7 +96,6 @@ export class AzureLogin extends ViewModelBase {
         this.onInvalidate();
        
         if (!this.ownsPage) {
-            //this.ownsPage = false;
             this.showOldLogin = true;
             this.facebookClientId = '';
             this.facebookClientSecret = '';
@@ -102,7 +105,6 @@ export class AzureLogin extends ViewModelBase {
             this.showOldLogin = false;
             this.pageId = '';
             this.permanentPageToken = '';
-            //this.noOwnsPage = 'off';
         }
     }
 }

@@ -65,7 +65,7 @@
               "SqlConnectionString"
             ],
             "displayname": "Deploy",
-            "filename": "$save('APIManagementTemplate.pbix')",
+            "filename": "$save('Azure_APIM_Analytics.pbix')",
             "name": "$SiteCommon$/pages-gallery/progress.html",
             "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))",
             "uniqueIdFunction": "$save(this.MS.UtilityService.getUniqueId(10))",
@@ -240,6 +240,17 @@
         },
         {
           "DeploymentName": "GraphLogicApp",
+          "displayname": "$translate(INIT_ACTION_VALIDATING_LOGIC_APP)",
+          "name": "Microsoft-WaitForArmDeploymentStatus"
+        },
+        {
+          "DeploymentName": "ProcessIPAddressesLogicApp",
+          "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_SCHEDULER)",
+          "LogicAppName": "ProcessIPAddressesLogicApp",
+          "name": "Microsoft-ProcessIPAddressesLogicApp"
+        },
+        {
+          "DeploymentName": "ProcessIPAddressesLogicApp",
           "displayname": "$translate(INIT_ACTION_VALIDATING_LOGIC_APP)",
           "name": "Microsoft-WaitForArmDeploymentStatus"
         }

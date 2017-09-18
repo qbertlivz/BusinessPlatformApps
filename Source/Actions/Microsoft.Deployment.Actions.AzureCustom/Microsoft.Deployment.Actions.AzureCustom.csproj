@@ -194,6 +194,8 @@
     <Compile Include="ActivityLogs\StartStreamAnalyticsJob.cs" />
     <Compile Include="ActivityLogs\ValidateLogProfile.cs" />
     <Compile Include="ActivityLogs\VerifyLogProfileEventHub.cs" />
+    <Compile Include="ApiManagement\CallFrequencyLogicApp.cs" />
+    <Compile Include="ApiManagement\DeployGraphCallsLogicApp.cs" />
     <Compile Include="ApiManagement\LoadIPLocationDB.cs" />
     <Compile Include="ApiManagement\CreateApiManagementLogger.cs" />
     <Compile Include="ApiManagement\GetApiManagementServices.cs" />

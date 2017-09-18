@@ -17,7 +17,7 @@ using Microsoft.Deployment.Common.Helpers;
 namespace Microsoft.Deployment.Actions.AzureCustom.ApiManagement
 {
     [Export(typeof(IAction))]
-    public class DeployGraphCallsLogicApp : BaseAction
+    public class ProcessIPAddressesLogicApp : BaseAction
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {

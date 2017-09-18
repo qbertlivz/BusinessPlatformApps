@@ -19,6 +19,8 @@ export class AzureLogin extends ViewModelBase {
         this.MS.UtilityService.connectToFacebook();
         this.pageId = '';
         this.permanentPageToken = '';
+        this.facebookClientId = '';
+        this.facebookClientSecret = '';
     }
 
     async onLoaded(): Promise<void> {
@@ -29,6 +31,8 @@ export class AzureLogin extends ViewModelBase {
         await this.MS.UtilityService.getToken(this.oauthType, async () => { this.setValidated(); });
         this.pages = this.MS.DataStore.getJson("data");
         if (this.pages && this.pages.length > 0) {
+            this.isValidated = true;
+            this.showValidation = false;
             this.selectedPage = this.pages[0];
         }
     }

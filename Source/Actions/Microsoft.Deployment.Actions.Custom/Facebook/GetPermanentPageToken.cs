@@ -28,10 +28,9 @@ namespace Microsoft.Deployment.Actions.Custom.Facebook
             {
                 if (!string.IsNullOrEmpty(code))
                 {
-                    var shortLivedAccessToken = await GetToken($"https://graph.facebook.com/oauth/access_token?client_id={clientId}&client_secret={clientSecret}&redirect_uri={redirectUri}&code={code}&granted_scopes=manage_pages,publish_pages", "access_token");
-                    var longLivedAccessToken = await GetToken($"https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id={clientId}&client_secret={clientSecret}&fb_exchange_token={shortLivedAccessToken}&granted_scopes=manage_pages,publish_pages", "access_token");
-                    var id = await GetUserId($"https://graph.facebook.com/v2.10/me?access_token={longLivedAccessToken}");
-                    var pagePayload = await GetToken($"https://graph.facebook.com/v2.10/{id}/accounts?access_token={longLivedAccessToken}");
+                    var shortLivedAccessToken = await GetToken($"https://graph.facebook.com/oauth/access_token?client_id={clientId}&client_secret={clientSecret}&redirect_uri={redirectUri}&code={code}&scope=manage_pages,publish_pages", "access_token");
+                    var longLivedAccessToken = await GetToken($"https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id={clientId}&client_secret={clientSecret}&fb_exchange_token={shortLivedAccessToken}&scope=manage_pages,publish_pages", "access_token");
+                    var pagePayload = await GetToken($"https://graph.facebook.com/v2.10/me/accounts?access_token={longLivedAccessToken}");
                     pages = JsonUtility.GetJObjectFromJsonString(pagePayload);
                     request.DataStore.AddObjectDataStore("FacebookPages", JsonUtility.GetJObjectFromObject(pages), DataStoreType.Private);
                 }
@@ -51,15 +50,18 @@ namespace Microsoft.Deployment.Actions.Custom.Facebook
         public static async Task<string> GetUserId(string uri)
         {
             string requestUri = uri;
-            HttpClient client = new HttpClient();
-            var response = await client.GetAsync(requestUri);
-            string responseObj = await response.Content.ReadAsStringAsync();
-            if (!response.IsSuccessStatusCode)
+            string responseObj = string.Empty;
+            using (HttpClient client = new HttpClient())
             {
-                throw new Exception();
+                var response = await client.GetAsync(requestUri);
+                responseObj = await response.Content.ReadAsStringAsync();
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception();
+                }
             }
 
-            string id = JObject.Parse(responseObj)["id"].ToString();
+            string id = string.IsNullOrEmpty(responseObj) ? string.Empty : JObject.Parse(responseObj)["id"].ToString();
             return id;
         }
 
@@ -67,11 +69,14 @@ namespace Microsoft.Deployment.Actions.Custom.Facebook
         {
             string requestUri = uri;
             string responsePayload = string.Empty;
-            HttpClient client = new HttpClient();
-            var response = await client.GetAsync(requestUri);
-            string responseObj = await response.Content.ReadAsStringAsync();
-
-            if (!response.IsSuccessStatusCode)
+            string responseObj = string.Empty;
+            HttpResponseMessage response;
+            using (HttpClient client = new HttpClient())
+            {
+                response = await client.GetAsync(requestUri);
+                responseObj = await response.Content.ReadAsStringAsync();
+            }
+            if (response != null && !response.IsSuccessStatusCode)
             {
                 throw new Exception(await response.Content.ReadAsStringAsync());
             }
@@ -82,7 +87,7 @@ namespace Microsoft.Deployment.Actions.Custom.Facebook
             }
             else
             {
-                responsePayload = JObject.Parse(responseObj)[property].ToString();
+                responsePayload = string.IsNullOrEmpty(responseObj) ? string.Empty : JObject.Parse(responseObj)[property].ToString();
             }
             return responsePayload;
         }

@@ -60,6 +60,9 @@
       <HintPath>..\..\packages\Microsoft.Azure.Management.KeyVault.2.0.1-preview\lib\net45\Microsoft.Azure.Management.KeyVault.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Azure.Management.MachineLearning, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Azure.Management.MachineLearning.1.0.0\lib\net45\Microsoft.Azure.Management.MachineLearning.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Data.Edm, Version=5.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Data.Edm.5.8.2\lib\net40\Microsoft.Data.Edm.dll</HintPath>

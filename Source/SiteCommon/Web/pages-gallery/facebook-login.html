@@ -6,9 +6,7 @@
 
     <!-- Flow selection -->
     <div>
-        <p class="st-text">
-            Do you own one or more of the pages that you would like to deploy the template for?
-        </p>
+        <p class="st-text">${MS.Translate.FACEBOOK_LOGIN_CHOICE}</p>
         <div>
             <label class="st-text">
                 <input type="radio" model.bind="true" checked.bind="ownsPage" name="ownsPageRadio" change.delegate="onRadioChanged()" />
@@ -25,6 +23,11 @@
 
     <!-- Old Facebook -->
     <div class="st-float" if.bind="!ownsPage && showOldLogin">
+        <p class="st-text">
+            <bpst-link a-description="${MS.Translate.FACEBOOK_LOGIN_DESCRIPTION_A}" a-link="${MS.Translate.FACEBOOK_LOGIN_LINK_A}" a-link-text="${MS.Translate.COMMON_HERE}"></bpst-link>
+            <bpst-link a-description="${MS.Translate.FACEBOOK_LOGIN_DESCRIPTION_B}" a-link="${MS.Translate.FACEBOOK_LOGIN_LINK_B}" a-link-text="${MS.Translate.COMMON_HERE}"></bpst-link>
+            <bpst-link a-description="${MS.Translate.FACEBOOK_LOGIN_DESCRIPTION_C}" a-link="${MS.Translate.FACEBOOK_LOGIN_LINK_C}" a-link-text="${MS.Translate.COMMON_HERE}"></bpst-link>
+        </p>
         <p class="st-text">${MS.Translate.FACEBOOK_LOGIN_APP_ID}</p>
         <input class="st-input" type="text" placeholder="12345678" change.delegate="onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="facebookClientId" />
 
@@ -50,7 +53,7 @@
             </select>
         </div>
 
-        <div if.bind="!this.selectedPage">
+        <div if.bind="!pages">
             <p class="st-float st-text" click.trigger="viewmodel.showAdvanced = !viewmodel.showAdvanced" if.bind="!MS.HttpService.isServiceBusy">
                 <span class="glyphicon pbi-glyph-circlering glyph-small st-toggle" if.bind="viewmodel.showAdvanced"></span>
                 <span class="st-toggle-collapse" if.bind="viewmodel.showAdvanced">-</span>
@@ -59,12 +62,16 @@
             </p>
 
             <div class="st-float" if.bind="viewmodel.showAdvanced">
+                <p class="st-text">
+                    <bpst-link a-description="${MS.Translate.FACEBOOK_LOGIN_DESCRIPTION_D}" a-link="${MS.Translate.FACEBOOK_LOGIN_LINK_D}" a-link-text="${MS.Translate.COMMON_HERE}"></bpst-link>
+                    <bpst-link a-description="${MS.Translate.FACEBOOK_LOGIN_DESCRIPTION_E}" a-link="${MS.Translate.FACEBOOK_LOGIN_LINK_E}" a-link-text="${MS.Translate.COMMON_HERE}"></bpst-link>
+                </p>
                 <div>
-                    <p class="st-text">Insert page id:</p>
+                    <p class="st-text">${MS.Translate.FACEBOOK_PAGE_ID}</p>
                     <input class="st-input" type="text" change.delegate="onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="pageId" />
                 </div>
                 <div>
-                    <p class="st-text">Insert permanent page token:</p>
+                    <p class="st-text">${MS.Translate.FACEBOOK_PERMANENT_ACCESS_TOKEN}</p>
                     <input class="st-input" type="text" change.delegate="onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="permanentPageToken" />
                 </div>
                 <div>

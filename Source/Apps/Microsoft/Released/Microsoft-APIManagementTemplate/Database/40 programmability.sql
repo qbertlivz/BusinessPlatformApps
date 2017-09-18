@@ -6,44 +6,43 @@ SET CONCAT_NULL_YIELDS_NULL ON;
 SET QUOTED_IDENTIFIER       ON;
 go
 
-CREATE PROCEDURE EdgeTablesSwap
+CREATE PROCEDURE pbist_apimgmt.sp_edgetablesswap
 AS
 BEGIN
     -- SET NOCOUNT ON added to prevent extra result sets from
     -- interfering with SELECT statements.
     SET NOCOUNT ON
 
-    BEGIN TRANSACTION
-        EXEC sp_rename @objname='CallExtendedEdgeList', @newname='CallExtendedEdgeList_TEMP'
-        EXEC sp_rename @objname='CallExtendedEdgeList_STAGE', @newname='CallExtendedEdgeList'
-        EXEC sp_rename @objname='CallExtendedEdgeList_TEMP', @newname='CallExtendedEdgeList_STAGE'
+    EXEC sp_rename @objname='pbist_apimgmt.callextendededgelist', @newname='pbist_apimgmt.callextendededgelist_temp';
+    EXEC sp_rename @objname='pbist_apimgmt.callextendededgelist_staging', @newname='pbist_apimgmt.callextendededgelist';
+    EXEC sp_rename @objname='pbist_apimgmt.callextendededgelist_temp', @newname='pbist_apimgmt.callextendededgelist_staging';
+    DROP TABLE pbist_apimgmt.callextendededgelist_temp;
+    TRUNCATE TABLE pbist_apimgmt.callextendededgelist_staging;
 
-        EXEC sp_rename @objname='CallProbabilityEdgeList', @newname='CallProbabilityEdgeList_TEMP'
-        EXEC sp_rename @objname='CallProbabilityEdgeList_STAGE', @newname='CallProbabilityEdgeList'
-        EXEC sp_rename @objname='CallProbabilityEdgeList_TEMP', @newname='CallProbabilityEdgeList_STAGE'
-        TRUNCATE TABLE dbo.CallExtendedEdgeList_STAGE
-        TRUNCATE TABLE dbo.CallProbabilityEdgeList_STAGE
-    COMMIT
-END
+    EXEC sp_rename @objname='pbist_apimgmt.callprobabilityedgelist', @newname='pbist_apimgmt.callprobabilityedgelist_temp';
+    EXEC sp_rename @objname='pbist_apimgmt.callprobabilityedgelist_staging', @newname='pbist_apimgmt.callprobabilityedgelist';
+    EXEC sp_rename @objname='pbist_apimgmt.callprobabilityedgelist_temp', @newname='pbist_apimgmt.callprobabilityedgelist_staging';
+    DROP TABLE pbist_apimgmt.callprobabilityedgelist_temp;
+    TRUNCATE TABLE pbist_apimgmt.callprobabilityedgelist_staging;
+END;
 go
 
-CREATE PROCEDURE FFTTableSwap
+CREATE PROCEDURE pbist_apimgmt.sp_ffttableswap
 AS
 BEGIN
     -- SET NOCOUNT ON added to prevent extra result sets from
     -- interfering with SELECT statements.
-    SET NOCOUNT ON
+    SET NOCOUNT ON;
 
-    BEGIN TRANSACTION
-        EXEC sp_rename @objname='FFT', @newname='FFT_TEMP'
-        EXEC sp_rename @objname='FFT_STAGE', @newname='FFT'
-        EXEC sp_rename @objname='FFT_TEMP', @newname='FFT_STAGE'
-        TRUNCATE TABLE dbo.FFT_STAGE
-    COMMIT
-END
+    EXEC sp_rename @objname='pbist_apimgmt.fft', @newname='pbist_apimgmt.fft_temp';
+    EXEC sp_rename @objname='pbist_apimgmt.fft_staging', @newname='pbist_apimgmt.fft';
+    EXEC sp_rename @objname='pbist_apimgmt.fft_temp', @newname='pbist_apimgmt.fft_staging';
+    DROP TABLE pbist_apimgmt.fft_temp;
+    TRUNCATE TABLE pbist_apimgmt.fft_staging;
+END;
 go
 
-CREATE PROCEDURE GetDistinctIpAddressesInWindow
+CREATE PROCEDURE pbist_apimgmt.sp_getdistinctipaddressesinwindow
 (
     -- Add the parameters for the stored procedure here
     @Start varchar(255) = NULL,
@@ -62,12 +61,12 @@ BEGIN
 
     -- SET NOCOUNT ON added to prevent extra result sets from
     -- interfering with SELECT statements.
-    SET NOCOUNT ON
+    SET NOCOUNT ON;
 
     -- Insert statements for procedure here
     SELECT TOP (@MaxRows) IPAddress
     FROM 
-        Request
+        pbist_apimgmt.request
     WHERE
         IPAddress IS NOT NULL
         AND RequestId IS NOT NULL
@@ -77,11 +76,11 @@ BEGIN
         AND CreatedDate >= @StartDate
         AND CreatedDate < @EndDate
         GROUP BY IPAddress
-    ORDER BY COUNT(IPAddress) DESC
-END
+    ORDER BY COUNT(IPAddress) DESC;
+END;
 go
 
-CREATE PROCEDURE GetRequestsByIpAddressInWindow
+CREATE PROCEDURE pbist_apimgmt.sp_getrequestsbyipaddressinwindow
 (
     -- Add the parameters for the stored procedure here
     @IpAddress varchar(20) = NULL,
@@ -100,11 +99,10 @@ BEGIN
 
     -- SET NOCOUNT ON added to prevent extra result sets from
     -- interfering with SELECT statements.
-    SET NOCOUNT ON
+    SET NOCOUNT ON;
 
     -- Insert statements for procedure here
     SELECT TOP 100000
-        Id,
         RequestId,
         Product,
         Operation,
@@ -112,7 +110,7 @@ BEGIN
         CreatedDate,
         IPAddress 
     FROM 
-        Request
+        pbist_apimgmt.request
     WHERE
         IPAddress IS NOT NULL
         AND RequestId IS NOT NULL
@@ -122,19 +120,17 @@ BEGIN
         AND IPAddress = @IpAddress
         AND CreatedDate >= @StartDate
         AND CreatedDate < @EndDate
-    ORDER BY CreatedDate ASC
-END
+    ORDER BY CreatedDate;
+END;
 go
 
-CREATE PROCEDURE FFTDataExtraction
+CREATE PROCEDURE pbist_apimgmt.sp_fftdataextraction
 AS
 BEGIN
-
-	SELECT Id, CreatedDate, IPAddress
-	FROM Request
-	WHERE IPAddress IS NOT NULL
-	AND CreatedDate > DATEADD(day, -3, SYSDATETIME())
-
-END
+    SET NOCOUNT ON;
+    
+	SELECT CreatedDate, IPAddress
+	FROM pbist_apimgmt.request
+	WHERE IPAddress IS NOT NULL	AND CreatedDate > DATEADD(day, -3, SYSDATETIME())
+END;
 go
-

@@ -2,6 +2,10 @@
 {
     public static class Constants
     {
+        // Azure ARM
+        public const int ACTION_WAIT_INTERVAL = 5000; // in milliseconds
+        // END Azure ARM
+
         public const string AppsPath = "Apps";
         public const string AppsWebPath = "Web";
         public const string SiteCommonPath = "SiteCommon";
@@ -49,5 +53,9 @@
         public const string MsCrmResource = "b861dbcc-a7ef-4219-a005-0e4de4ea7dcf";
         public const string MsCrmToken = "https://login.windows.net/common/oauth2/token";
 
+        //Facebook constants
+        public const string FacebookGraphUrl = "https://graph.facebook.com";
+        public const string FacebookClientId = "1566056443462682";
+        public static string FacebookClientSecret = string.Empty;
     }
 }

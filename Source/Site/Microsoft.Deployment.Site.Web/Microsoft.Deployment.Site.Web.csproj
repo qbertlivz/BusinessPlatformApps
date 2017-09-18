@@ -22,6 +22,7 @@
     call gulp.cmd build-typescript
     call gulp.cmd post-build
 )</PostBuildEvent>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
   </PropertyGroup>
 
   <ItemGroup>

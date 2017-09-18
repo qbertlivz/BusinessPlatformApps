@@ -282,5 +282,15 @@ namespace Microsoft.Deployment.Tests.Actions.Facebook
             response = TestManager.ExecuteAction("Microsoft-WaitForArmDeploymentStatus", dataStore);
             Assert.IsTrue(response.IsSuccess);
         }
+
+        [TestMethod]
+        public void ValidateFacebookPermanentPageToken()
+        {
+            var dataStore = new DataStore();
+            dataStore.AddToDataStore("PageId", "");
+            dataStore.AddToDataStore("PermanentPageToken", "");
+            var response = TestManager.ExecuteAction("Microsoft-ValidateFacebookPermanentPageToken", dataStore);
+            Assert.IsTrue(response.IsSuccess);
+        }
     }
 }

@@ -279,4 +279,40 @@
   <data name="AxWrongPlatform" xml:space="preserve">
     <value>It seems you're not running the correct platform version of Dynamics 365 for Finance and Operations. The template requires at least Platform Update 8.</value>
   </data>
+  <data name="ActivityLogsExportEventHubTimeout" xml:space="preserve">
+    <value>Time out occurred while exporting the Activity Log to Event Hub</value>
+  </data>
+  <data name="ActivityLogsGetHistoricalDataError" xml:space="preserve">
+    <value>An error occurred while pulling historical Activity Log data</value>
+  </data>
+  <data name="ActivityLogsInsufficientPermissions" xml:space="preserve">
+    <value>Your account has insufficient permissions to export activity logs to Event Hub in this subscription</value>
+  </data>
+  <data name="ActivityLogsErrorExportingToEventHub" xml:space="preserve">
+    <value>An error occurred while exporting the Activity Log to EventHub</value>
+  </data>
+  <data name="ApiManagementErrorNoServicesFound" xml:space="preserve">
+    <value>No API Management Services were found in your Azure Subscription</value>
+  </data>
+  <data name="EventHubFailedToQueryKeys" xml:space="preserve">
+    <value>An error occurred while querying Event Hub access keys</value>
+  </data>
+  <data name="ApiManagementFailedToCreateLogger" xml:space="preserve">
+    <value>Failed to create a new API Management Logger</value>
+  </data>
+  <data name="StreamAnalyticsSetInputFailure" xml:space="preserve">
+    <value>Failed to set a new Stream Analytics Input</value>
+  </data>
+  <data name="StreamAnalyticsSetOutputFailure" xml:space="preserve">
+    <value>Failed to set Stream Analytics output</value>
+  </data>
+  <data name="StreamAnalyticsUpdateQueryFailure" xml:space="preserve">
+    <value>Failed to update the Stream Analytics Job query</value>
+  </data>
+  <data name="StreamAnalyticsToggleFailure" xml:space="preserve">
+    <value>Failed to toggle the state of the Stream Analytics job</value>
+  </data>
+  <data name="FacebookTokenAuthFailed" xml:space="preserve">
+    <value>The page id or token provided is invalid.</value>
+  </data>
 </root>

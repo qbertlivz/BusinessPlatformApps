@@ -81,7 +81,7 @@ gulp.task('strip-typescript-reference-paths', function () {
 
 gulp.task('build-typescript', function () {
     return gulp.src(['wwwroot/**/*.ts', 'typings/**.*'])
-        //.pipe(sourcemaps.init({ loadMaps: true }))
+        .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(typescript({
             alwaysStrict: true,
             emitDecoratorMetadata: true,
@@ -93,21 +93,21 @@ gulp.task('build-typescript', function () {
             noUnusedLocals: true,
             noUnusedParameters: true,
             removeComments: true,
-            //sourceMap: true,
+            sourceMap: true,
             target: 'es6'
         }))
         .pipe(babel({
             plugins: ['transform-runtime'],
             presets: ['es2015']
         }))
-        //.pipe(sourcemaps.write('.', {
-        //    includeContent: false,
-        //    sourceRoot: '/'
-        //}))
+        .pipe(sourcemaps.write('.', {
+            includeContent: false,
+            sourceRoot: '/'
+        }))
         .pipe(gulp.dest('wwwroot/'));
 });
 
 gulp.task('post-build', function () {
-    return bundler.bundle(config);
-    //return bundler.unbundle(config);
+    //return bundler.bundle(config);
+    return bundler.unbundle(config);
 });

@@ -27,6 +27,8 @@ namespace Microsoft.Deployment.Tests.Actions.PartnerTests
             // Testing to see if the tear down works
             response = await TestManager.ExecuteActionAsync("Microsoft-DeploySQLScripts", dataStore, "NealAnalytics-OfficeAudit");
             Assert.IsTrue(response.IsSuccess);
+
+
         }
     }
 }

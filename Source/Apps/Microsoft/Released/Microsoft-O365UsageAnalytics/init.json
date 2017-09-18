@@ -47,7 +47,7 @@
           "title": "$translate(INIT_SQL_TITLE)"
         },
         {
-          "displayname": "Bring Your Own Entities",
+          "displayname": "Bring Your Own Data",
           "name": "bring-your-own-entities.html"
         },
         {

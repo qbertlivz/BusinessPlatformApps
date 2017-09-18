@@ -249,11 +249,11 @@
             //    "LogicAppName": "ProcessIPAddressesLogicApp",
             //    "name": "Microsoft-ProcessIPAddressesLogicApp"
             //},
-            {
-                "DeploymentName": "ProcessIPAddressesLogicApp",
-                "displayname": "$translate(INIT_ACTION_VALIDATING_LOGIC_APP)",
-                "name": "Microsoft-WaitForArmDeploymentStatus"
-            }
+            //{
+            //    "DeploymentName": "ProcessIPAddressesLogicApp",
+            //    "displayname": "$translate(INIT_ACTION_VALIDATING_LOGIC_APP)",
+            //    "name": "Microsoft-WaitForArmDeploymentStatus"
+            //}
         ]
     }
 }

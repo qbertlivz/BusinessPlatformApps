@@ -15,8 +15,7 @@
                     "$translate(INIT_GETTING_STARTED_CONNECT_AS_PBI)"
                 ],
                 "name": "$SiteCommon$/pages-gallery/getting-started.html",
-                "templateName": "Brand And Campaign Management For Facebook",
-                "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
+                "templateName": "Brand And Campaign Management For Facebook"                
             },
             {
                 "displayname": "Facebook Login",
@@ -77,7 +76,8 @@
                 "filename": "$save('FacebookTemplate.pbix')",
                 "name": "$SiteCommon$/pages-gallery/progress.html",
                 "Schema": "$save('fb')",
-                "showCounts": false
+                "showCounts": false,
+                "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
             }
         ],
 

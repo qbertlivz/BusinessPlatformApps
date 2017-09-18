@@ -2,7 +2,7 @@
     "Install": {
       "Pages": [
         {
-          "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-OfficeActivityLog/Web/Images/OAUAPBIST.png",
+          "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-O365UsageAnalytics/Web/Images/OAUAPBIST.png",
           "displayname": "Getting Started",
           "list1": [
             "Office 365 subscription",
@@ -44,7 +44,16 @@
           "showNewSqlOption": true,
           "sqlInstance": "NewSql",
           "subtitle": "$translate(INIT_SQL_SUBTITLE_AAL)",
-          "title": "$translate(INIT_SQL_TITLE)",
+          "title": "$translate(INIT_SQL_TITLE)"
+        },
+        {
+          "displayname": "Bring Your Own Entities",
+          "name": "bring-your-own-entities.html"
+        },
+        {
+          "displayname": "Customize",
+          "name": "customize.html",
+          "skip": "$run(this.MS.DataStore.getValue('BringYourOwnEntities') === this.MS.Option.NO)"
         },
         {
           "displayCompletionNotification": false,
@@ -72,7 +81,13 @@
         }
       ],
 
-        "Actions": [
-        ]
+      "Actions": [
+        {
+          "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
+          "name": "Microsoft-DeploySQLScripts",
+          "SqlScriptsFolder": "Service/Database/",
+          "SqlServerIndex": "0"
+        }
+      ]
     }
 }

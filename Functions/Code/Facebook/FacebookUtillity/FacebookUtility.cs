@@ -123,7 +123,7 @@ namespace FacebookUtillity
                         responseObj = await response.Content.ReadAsStringAsync();
                         if (!response.IsSuccessStatusCode)
                         {
-                            throw new Exception();
+                            throw new Exception(responseObj);
                         }
                     }
 

@@ -24,6 +24,10 @@ export class UtilityService {
         window.location.href = await this.MS.HttpService.getExecuteResponseAsync('Microsoft-GetAzureAuthUri', 'value', { oauthType: openAuthorizationType });
     }
 
+    async connectToAzureSPN(): Promise<void> {
+        window.location.href = await this.MS.HttpService.getExecuteResponseAsync('Microsoft-GetAzureAuthUriForSPN');
+    }
+
     async connectToFacebook(): Promise<void> {
         window.location.href = await this.MS.HttpService.getExecuteResponseAsync('Microsoft-GetFacebookAuthUri');
     }

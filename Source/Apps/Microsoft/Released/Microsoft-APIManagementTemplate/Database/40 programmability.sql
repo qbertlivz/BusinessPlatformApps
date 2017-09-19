@@ -104,9 +104,9 @@ BEGIN
     -- Insert statements for procedure here
     SELECT TOP 100000
         RequestId,
-        Product,
-        Operation,
-        Api,
+        ProductId As Product,
+		OperationId As Operation,
+		ApiId As Api,
         CreatedDate,
         IPAddress 
     FROM 

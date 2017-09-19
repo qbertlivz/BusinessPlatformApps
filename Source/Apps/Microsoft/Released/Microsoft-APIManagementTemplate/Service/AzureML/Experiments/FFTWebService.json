@@ -31,7 +31,7 @@
               "certificateThumbprint": ""
             },
             "Database Query": {
-              "value": "EXEC [dbo].[FFTDataExtraction]",
+              "value": "EXEC [pbist_apimgmt].[FFTDataExtraction]",
               "certificateThumbprint": ""
             }
           }
@@ -81,7 +81,7 @@
               "certificateThumbprint": ""
             },
             "Data Table Name": {
-              "value": "fft_stage",
+              "value": "pbist_apimgmt.fft_stage",
               "certificateThumbprint": ""
             },
             "Comma separated list of datatable columns": {

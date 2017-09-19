@@ -91,7 +91,7 @@
                       }
                     },
                     "method": "post",
-                    "path": "/datasets/default/procedures/@{encodeURIComponent(encodeURIComponent('[dbo].[GetRequestsByIpAddressInWindow]'))}"
+                    "path": "/datasets/default/procedures/@{encodeURIComponent(encodeURIComponent('[pbist_apimgmt].[GetRequestsByIpAddressInWindow]'))}"
                   },
                   "runAfter": {},
                   "type": "ApiConnection"
@@ -114,7 +114,7 @@
                   }
                 },
                 "method": "post",
-                "path": "/datasets/default/procedures/@{encodeURIComponent(encodeURIComponent('[dbo].[GetDistinctIpAddressesInWindow]'))}"
+                "path": "/datasets/default/procedures/@{encodeURIComponent(encodeURIComponent('[pbist_apimgmt].[GetDistinctIpAddressesInWindow]'))}"
               },
               "runAfter": {},
               "type": "ApiConnection"
@@ -127,7 +127,7 @@
                   }
                 },
                 "method": "post",
-                "path": "/datasets/default/procedures/@{encodeURIComponent(encodeURIComponent('[dbo].[EdgeTablesSwap]'))}"
+                "path": "/datasets/default/procedures/@{encodeURIComponent(encodeURIComponent('[pbist_apimgmt].[EdgeTablesSwap]'))}"
               },
               "runAfter": {
                 "Extract_Edge_Lists_for_Every_IP": [

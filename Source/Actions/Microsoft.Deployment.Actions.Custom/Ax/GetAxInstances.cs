@@ -32,6 +32,16 @@ namespace Microsoft.Deployment.Actions.Custom.Ax
                 return new ActionResponse(ActionStatus.Failure, "User Object Id cannot be null. ");
             }
 
+            if (string.IsNullOrEmpty(tenantId))
+            {
+                return new ActionResponse(ActionStatus.Failure, "Tenant Id cannot be null. ");
+            }
+
+            if (string.IsNullOrEmpty(axToken))
+            {
+                return new ActionResponse(ActionStatus.Failure, "No Dynamics 365 token available.");
+            }
+
             var ctx = new AuthenticationContext(string.Format(Constants.AxLocatorLoginAuthority, tenantId));
             var token = await ctx.AcquireTokenAsync(Constants.AxErpResource, new ClientCredential(Constants.AxLocatorClientId, Constants.AxLocatorSecret));
 
@@ -61,7 +71,7 @@ namespace Microsoft.Deployment.Actions.Custom.Ax
                 return new ActionResponse(ActionStatus.Success, JsonUtility.Serialize(axInstances));
             }
 
-            return new ActionResponse(ActionStatus.Failure);
+            return new ActionResponse(ActionStatus.Success);
         }
     }
 }

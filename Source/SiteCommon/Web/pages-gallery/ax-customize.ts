@@ -18,7 +18,11 @@ export class Customize extends ViewModelBase {
 
     async onValidate(): Promise<boolean> {
         if (this.axBaseUrl) {
-            if (this.urlRegex.test(this.axBaseUrl)) {
+            this.selectedInstance = '';
+            if (!this.axBaseUrl.endsWith('/')) {
+                this.axBaseUrl = this.axBaseUrl + '/';
+            }
+            if (this.urlRegex.test(this.axBaseUrl)) {              
                 this.MS.DataStore.addToDataStore('AxInstanceName', this.axBaseUrl, DataStoreType.Public);
                 this.isValidated = await this.validateAxInstance();
             } else {
@@ -60,9 +64,7 @@ export class Customize extends ViewModelBase {
 
     async getInstances(): Promise<void> {
         this.instances = await this.MS.HttpService.getResponseAsync('Microsoft-GetAxInstances');
-        if (!this.instances || (this.instances && this.instances.length === 0)) {
-            this.MS.ErrorService.message = 'Failed to retrieve AX instances.';
-        } else {
+        if (this.instances && this.instances.length > 0) {
             this.selectedInstance = this.instances[0];
         }
     }

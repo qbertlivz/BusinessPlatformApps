@@ -44,15 +44,15 @@
         },
         "actions": {
             "Execute_stored_procedure": {
-                "inputs": {
-                    "host": {
-                        "connection": {
-                            "name": "@parameters('$connections')['sql']['connectionId']"
-                        }
-                    },
-                    "method": "post",
-                    "path": "/datasets/default/procedures/@{encodeURIComponent(encodeURIComponent('[dbo].[ProcessIPAddressLocations]'))}"
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['sql']['connectionId']"
+                  }
                 },
+                "method": "post",
+                "path": "/datasets/default/procedures/@{encodeURIComponent(encodeURIComponent('[pbist_apimgmt].[ProcessIPAddressLocations]'))}"
+              },
                 "runAfter": {},
                 "type": "ApiConnection"
             }

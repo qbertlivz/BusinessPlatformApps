@@ -20,11 +20,12 @@
                 "templateName": "$translate(INIT_API_MANAGEMENT_TITLE)"
             },
             {
-                "azureProviders": [
-                    "Microsoft.ApiManagement",
-                    "Microsoft.EventHub",
-                    "Microsoft.StreamAnalytics"
-                ],
+              "azureProviders": [
+                "Microsoft.ApiManagement",
+                "Microsoft.EventHub",
+                "Microsoft.StreamAnalytics",
+                "Microsoft.MachineLearning"
+              ],
                 "defaultLocation": "5",
                 "displayname": "Login",
                 "name": "$SiteCommon$/pages-gallery/azure-login.html",
@@ -116,26 +117,26 @@
             {
                 "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_OUTPUT_SQL)",
                 "name": "Microsoft-AddStreamAnalyticsOutputSql",
-                "streamAnalyticsOutputSql": {
-                    "name": "TemplatesSQLRequest",
-                    "table": "Request"
-                }
+              "streamAnalyticsOutputSql": {
+                "name": "TemplatesSQLRequest",
+                "table": "pbist_apimgmt.Request"
+              }
             },
             {
                 "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_OUTPUT_SQL)",
                 "name": "Microsoft-AddStreamAnalyticsOutputSql",
-                "streamAnalyticsOutputSql": {
-                    "name": "TemplatesSQLResponse",
-                    "table": "Response"
-                }
+              "streamAnalyticsOutputSql": {
+                "name": "TemplatesSQLResponse",
+                "table": "pbist_apimgmt.Response"
+              }
             },
             {
                 "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_OUTPUT_SQL)",
                 "name": "Microsoft-AddStreamAnalyticsOutputSql",
-                "streamAnalyticsOutputSql": {
-                    "name": "TemplatesSQLError",
-                    "table": "Error"
-                }
+              "streamAnalyticsOutputSql": {
+                "name": "TemplatesSQLError",
+                "table": "pbist_apimgmt.Error"
+              }
             },
             {
                 "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_QUERY)",

@@ -14,6 +14,7 @@
     ADF_EMAILS_TITLE: `Multiple email adresses need to be comma separated.`,
     API_MANAGEMENT_SERVICE: `API Management Service:`,
     API_MANAGEMENT_TITLE: `Connect to API Management`,
+    API_MANAGEMENT_WARNING: `Deploying this solution template will overwrite any existing global policy defined in your API Management instance.`,
     APP_CONTACT_US: `CONTACT US`,
     APP_CONTACT_US_LINK: `mailto:PBISolnTemplates@microsoft.com`,
     APP_EXPERIENCING_AN_ERROR: `Experiencing an error? Click here to let us know.`,

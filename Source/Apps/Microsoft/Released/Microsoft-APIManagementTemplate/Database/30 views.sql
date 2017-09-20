@@ -6,36 +6,13 @@ SET CONCAT_NULL_YIELDS_NULL ON;
 SET QUOTED_IDENTIFIER       ON;
 go
 
-CREATE VIEW pbist_apimgmt.vw_requestresponse AS
-SELECT a.RequestId,
-        a.CreatedDate,
-        DATEDIFF(ms, a.CreatedDate, b.CreatedDate) AS ExecutionTime,
-        a.Operation,
-        a.OperationId,
-        a.Api,
-        a.ApiId,
-        a.Product,
-        a.ProductId,
-        a.SubscriptionId,
-        a.SubscriptionName,
-        a.IPAddress,
-        a.Latitude,
-        a.Longitude,
-        a.City,
-        b.StatusCode,
-        b.StatusReason,
-        a.Length AS RequestLength,
-        b.Length AS ResponseLength
-FROM pbist_apimgmt.request a LEFT OUTER JOIN pbist_apimgmt.response b ON A.RequestId = B.RequestId;
-go
-
 CREATE VIEW pbist_apimgmt.vw_apimerrordetail AS
 SELECT a.[RequestId],
-       a.[CreatedDate] AS CreatedDateTime,
+       a.[CreatedDate],
        a.[ServiceName],
        a.[Source],
        a.[Reason],
-      a.[Message],
+       a.[Message],
        b.Operation,
        b.OperationId,
        b.Api,
@@ -44,19 +21,8 @@ SELECT a.[RequestId],
        b.ProductId,
        b.SubscriptionId,
        b.SubscriptionName,
-       b.IPAddress,
-       CAST(a.CreatedDate as date) AS CreatedDate  
+       b.IPAddress
 FROM pbist_apimgmt.[error] a LEFT OUTER JOIN pbist_apimgmt.request b ON A.RequestId = B.RequestId;
-go
-
-
-CREATE VIEW pbist_apimgmt.vw_requestsummary AS
-SELECT SubscriptionId,
-       COUNT(a.RequestId) AS RequestNumber,
-       SUM( CAST( b.Length AS BIGINT ))  AS TransferredBytes,
-       SUM(DATEDIFF(ms, a.CreatedDate, b.CreatedDate)) AS TotalExecutionTime
-  FROM pbist_apimgmt.[request] a INNER JOIN pbist_apimgmt.response b ON a.RequestId = b.RequestId
-  GROUP BY SubscriptionId;
 go
 
 CREATE VIEW pbist_apimgmt.[vw_date]
@@ -80,7 +46,7 @@ go
 
 CREATE VIEW pbist_apimgmt.vw_apisummary
 AS
-    SELECT DISTINCT ApiID, LAST_VALUE(Api) OVER (PARTITION BY OperationID ORDER BY ApiID ASC ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING) AS Api
+    SELECT DISTINCT ApiID, LAST_VALUE(Api) OVER (PARTITION BY ApiID ORDER BY ApiID ASC ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING) AS Api
     FROM pbist_apimgmt.request;
 go
 
@@ -92,41 +58,42 @@ go
 
 CREATE VIEW pbist_apimgmt.vw_productsummary
 AS
-    SELECT DISTINCT OperationID, LAST_VALUE(Operation) OVER (PARTITION BY OperationID ORDER BY OperationID ASC ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING) AS Operation
+    SELECT DISTINCT ProductID, LAST_VALUE(Product) OVER (PARTITION BY ProductID ORDER BY ProductID ASC ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING) AS Product
     FROM pbist_apimgmt.request;
 go
 
 CREATE VIEW pbist_apimgmt.vw_subscriptionsummary
 AS
-    SELECT DISTINCT SubscriptionID, LAST_VALUE(SubscriptionName) OVER (PARTITION BY SubscriptionID ORDER BY ProductID ASC ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING) AS Subscription
+    SELECT DISTINCT SubscriptionID, LAST_VALUE(SubscriptionName) OVER (PARTITION BY SubscriptionID ORDER BY SubscriptionID ASC ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING) AS Subscription
     FROM pbist_apimgmt.request;
 go
 
 CREATE VIEW pbist_apimgmt.vw_allrequestdata AS
 SELECT a.RequestId,
-        a.CreatedDate,
-        DATEDIFF(ms, a.CreatedDate, b.CreatedDate) AS ExecutionTime,
-        a.Operation,
-        a.OperationId,
-        a.Api,
-        a.ApiId,
-        a.Product,
-        a.ProductId,
-        a.SubscriptionId,
-        a.SubscriptionName,
-        a.IPAddress,
-        a.Latitude,
-        a.Longitude,
-        a.City,
-        b.StatusCode,
-        b.StatusReason,
-        a.Length AS RequestLength,
-        b.Length AS ResponseLength,
-        IsError = 
-        CASE   
-            WHEN StatusCode >= 200 AND StatusCode < 300 THEN 0
-            ELSE 1
-        END   
+		a.CreatedDate AS CreatedDateTime,
+		DATEDIFF(ms, a.CreatedDate, b.CreatedDate) AS ExecutionTime,
+		a.Operation,
+		a.OperationId,
+		a.Api,
+		a.ApiId,
+		a.Product,
+		a.ProductId,
+		a.SubscriptionId,
+		a.SubscriptionName,
+		a.IPAddress,
+		a.Latitude,
+		a.Longitude,
+		a.City,
+		b.StatusCode,
+		b.StatusReason,
+		a.Length AS RequestLength,
+		b.Length AS ResponseLength,
+		IsError = 
+		CASE   
+			WHEN StatusCode >= 200 AND StatusCode < 300 THEN 0
+			ELSE 1
+		END,
+		CAST(a.CreatedDate as date) AS CreatedDate   
 FROM pbist_apimgmt.request a INNER JOIN pbist_apimgmt.response b ON a.RequestId = b.RequestId
 WHERE a.CreatedDate > DATEADD(day, -90, SYSDATETIME())
 go
@@ -141,7 +108,7 @@ go
 
 CREATE VIEW pbist_apimgmt.vw_visualcallprobabilityedgelist AS
 SELECT
-        el.Product, el.Api, el.Operation, el.RelatedProduct, el.RelatedApi, el.RelatedOperation,
+        el.Product AS ProductID, el.Api AS ApiID, el.Operation AS OperationID, el.RelatedProduct AS RelatedProductID,el.RelatedApi AS RelatedApiID, el.RelatedOperation AS RelatedOperationID,
         Count(distinct el.IPAddress) as users,
         Cast(100.0 * SUM(CallRelationshipCount) / t2.SourceCount as INT) as CallProbability
 From 
@@ -158,12 +125,12 @@ go
 CREATE VIEW pbist_apimgmt.vw_visualipedgecounts
 AS
     SELECT
-        Product,
-        Api,
-        Operation,
-        RelatedProduct,
-        RelatedApi,
-        RelatedOperation,
+        Product AS ProductID,
+        Api AS ApiID,
+        Operation AS OperationID,
+        RelatedProduct AS RelatedProductID,
+        RelatedApi AS RelatedApiID,
+        RelatedOperation AS RelatedOperationID,
         DATEADD(hour, DATEDIFF(hour, 0, CreatedDate), 0) as datetime_hour_bin,
         IPAddress,
         Count(*) as counts

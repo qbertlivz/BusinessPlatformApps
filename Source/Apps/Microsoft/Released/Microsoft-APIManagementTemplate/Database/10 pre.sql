@@ -7,12 +7,8 @@ SET QUOTED_IDENTIFIER       ON;
 go
 
 -- Views
-IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='pbist_apimgmt' AND TABLE_NAME='vw_requestresponse' AND TABLE_TYPE='VIEW')
-    DROP VIEW pbist_apimgmt.vw_requestresponse;
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='pbist_apimgmt' AND TABLE_NAME='vw_apimerrordetail' AND TABLE_TYPE='VIEW')
-    DROP VIEW pbist_apimgmt.vw_apimerrordetail;
-IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='pbist_apimgmt' AND TABLE_NAME='vw_requestsummary' AND TABLE_TYPE='VIEW')
-    DROP VIEW pbist_apimgmt.vw_requestsummary;                                                           
+    DROP VIEW pbist_apimgmt.vw_apimerrordetail;                                                        
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='pbist_apimgmt' AND TABLE_NAME='vw_date' AND TABLE_TYPE='VIEW')
     DROP VIEW pbist_apimgmt.vw_date;                                                                  
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='pbist_apimgmt' AND TABLE_NAME='vw_apisummary' AND TABLE_TYPE='VIEW')

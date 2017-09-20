@@ -8,7 +8,7 @@ go
 
 CREATE VIEW pbist_apimgmt.vw_apimerrordetail AS
 SELECT a.[RequestId],
-       a.[CreatedDate],
+       a.[CreatedDate] AS CreatedDateTime,
        a.[ServiceName],
        a.[Source],
        a.[Reason],
@@ -21,7 +21,8 @@ SELECT a.[RequestId],
        b.ProductId,
        b.SubscriptionId,
        b.SubscriptionName,
-       b.IPAddress
+       b.IPAddress,
+       CAST(a.CreatedDate as date) AS CreatedDate  
 FROM pbist_apimgmt.[error] a LEFT OUTER JOIN pbist_apimgmt.request b ON A.RequestId = B.RequestId;
 go
 

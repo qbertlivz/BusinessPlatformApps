@@ -12,7 +12,7 @@ SELECT a.[RequestId],
        a.[ServiceName],
        a.[Source],
        a.[Reason],
-       a.[Message],
+      a.[Message],
        b.Operation,
        b.OperationId,
        b.Api,
@@ -25,6 +25,7 @@ SELECT a.[RequestId],
        CAST(a.CreatedDate as date) AS CreatedDate  
 FROM pbist_apimgmt.[error] a LEFT OUTER JOIN pbist_apimgmt.request b ON A.RequestId = B.RequestId;
 go
+
 
 CREATE VIEW pbist_apimgmt.[vw_date]
 AS

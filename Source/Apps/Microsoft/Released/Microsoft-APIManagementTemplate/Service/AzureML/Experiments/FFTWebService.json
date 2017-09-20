@@ -31,7 +31,7 @@
               "certificateThumbprint": ""
             },
             "Database Query": {
-              "value": "EXEC [pbist_apimgmt].[FFTDataExtraction]",
+              "value": "EXEC [pbist_apimgmt].[sp_fftdataextraction]",
               "certificateThumbprint": ""
             }
           }

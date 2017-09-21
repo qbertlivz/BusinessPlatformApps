@@ -28,8 +28,8 @@ namespace Microsoft.Deployment.Actions.Custom.Facebook
             {
                 if (!string.IsNullOrEmpty(code))
                 {
-                    var shortLivedAccessToken = await GetToken($"https://graph.facebook.com/oauth/access_token?client_id={clientId}&client_secret={clientSecret}&redirect_uri={redirectUri}&code={code}&scope=manage_pages,publish_pages", "access_token");
-                    var longLivedAccessToken = await GetToken($"https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id={clientId}&client_secret={clientSecret}&fb_exchange_token={shortLivedAccessToken}&scope=manage_pages,publish_pages", "access_token");
+                    var shortLivedAccessToken = await GetToken($"https://graph.facebook.com/oauth/access_token?client_id={clientId}&client_secret={clientSecret}&redirect_uri={redirectUri}&code={code}&scope=manage_pages,read_insights", "access_token");
+                    var longLivedAccessToken = await GetToken($"https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id={clientId}&client_secret={clientSecret}&fb_exchange_token={shortLivedAccessToken}&scope=manage_pages,read_insights", "access_token");
                     var pagePayload = await GetToken($"https://graph.facebook.com/v2.10/me/accounts?access_token={longLivedAccessToken}");
                     pages = JsonUtility.GetJObjectFromJsonString(pagePayload);
                     request.DataStore.AddObjectDataStore("FacebookPages", JsonUtility.GetJObjectFromObject(pages), DataStoreType.Private);

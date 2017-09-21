@@ -13,16 +13,16 @@ BEGIN
     -- interfering with SELECT statements.
     SET NOCOUNT ON
 
-    EXEC sp_rename @objname='pbist_apimgmt.callextendededgelist', @newname='pbist_apimgmt.callextendededgelist_temp';
-    EXEC sp_rename @objname='pbist_apimgmt.callextendededgelist_staging', @newname='pbist_apimgmt.callextendededgelist';
-    EXEC sp_rename @objname='pbist_apimgmt.callextendededgelist_temp', @newname='pbist_apimgmt.callextendededgelist_staging';
-    DROP TABLE pbist_apimgmt.callextendededgelist_temp;
+    EXEC sp_rename @objname='pbist_apimgmt.callextendededgelist', @newname='callextendededgelist_temp';
+    EXEC sp_rename @objname='pbist_apimgmt.callextendededgelist_staging', @newname='callextendededgelist';
+    EXEC sp_rename @objname='pbist_apimgmt.callextendededgelist_temp', @newname='callextendededgelist_staging';
+    --DROP TABLE pbist_apimgmt.callextendededgelist_temp;
     TRUNCATE TABLE pbist_apimgmt.callextendededgelist_staging;
 
-    EXEC sp_rename @objname='pbist_apimgmt.callprobabilityedgelist', @newname='pbist_apimgmt.callprobabilityedgelist_temp';
-    EXEC sp_rename @objname='pbist_apimgmt.callprobabilityedgelist_staging', @newname='pbist_apimgmt.callprobabilityedgelist';
-    EXEC sp_rename @objname='pbist_apimgmt.callprobabilityedgelist_temp', @newname='pbist_apimgmt.callprobabilityedgelist_staging';
-    DROP TABLE pbist_apimgmt.callprobabilityedgelist_temp;
+    EXEC sp_rename @objname='pbist_apimgmt.callprobabilityedgelist', @newname='callprobabilityedgelist_temp';
+    EXEC sp_rename @objname='pbist_apimgmt.callprobabilityedgelist_staging', @newname='callprobabilityedgelist';
+    EXEC sp_rename @objname='pbist_apimgmt.callprobabilityedgelist_temp', @newname='callprobabilityedgelist_staging';
+    --DROP TABLE pbist_apimgmt.callprobabilityedgelist_temp;
     TRUNCATE TABLE pbist_apimgmt.callprobabilityedgelist_staging;
 END;
 go
@@ -34,10 +34,10 @@ BEGIN
     -- interfering with SELECT statements.
     SET NOCOUNT ON;
 
-    EXEC sp_rename @objname='pbist_apimgmt.fft', @newname='pbist_apimgmt.fft_temp';
-    EXEC sp_rename @objname='pbist_apimgmt.fft_staging', @newname='pbist_apimgmt.fft';
-    EXEC sp_rename @objname='pbist_apimgmt.fft_temp', @newname='pbist_apimgmt.fft_staging';
-    DROP TABLE pbist_apimgmt.fft_temp;
+    EXEC sp_rename @objname='pbist_apimgmt.fft', @newname='fft_temp';
+    EXEC sp_rename @objname='pbist_apimgmt.fft_staging', @newname='fft';
+    EXEC sp_rename @objname='pbist_apimgmt.fft_temp', @newname='fft_staging';
+    --DROP TABLE pbist_apimgmt.fft_temp;
     TRUNCATE TABLE pbist_apimgmt.fft_staging;
 END;
 go
@@ -128,8 +128,7 @@ CREATE PROCEDURE pbist_apimgmt.sp_fftdataextraction
 AS
 BEGIN
     SET NOCOUNT ON;
-    
-	SELECT CreatedDate, IPAddress
+	SELECT RequestId, CreatedDate, IPAddress
 	FROM pbist_apimgmt.request
 	WHERE IPAddress IS NOT NULL	AND CreatedDate > DATEADD(day, -3, SYSDATETIME())
 END;

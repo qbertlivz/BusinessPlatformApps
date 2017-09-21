@@ -51,7 +51,7 @@
                   }
                 },
                 "method": "post",
-                "path": "/datasets/default/procedures/@{encodeURIComponent(encodeURIComponent('[pbist_apimgmt].[ProcessIPAddressLocations]'))}"
+                "path": "/datasets/default/procedures/@{encodeURIComponent(encodeURIComponent('[pbist_apimgmt].[sp_ProcessIPAddressLocations]'))}"
               },
                 "runAfter": {},
                 "type": "ApiConnection"

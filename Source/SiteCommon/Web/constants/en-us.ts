@@ -295,6 +295,7 @@
     INIT_ACTION_DEPLOYING_CONNECTION_STRINGS: `Deploying connection strings`,
     INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION: `Deploying database configuration`,
     INIT_ACTION_DEPLOYING_EDFI_CLOUD_RESOURCES: `Deploying EdFi cloud resources`,
+    INIT_ACTION_DEPLOYING_IP_DATABASE: 'Deploying IP Address Database',
     INIT_ACTION_DEPLOYING_LOGIC_APP: `Deploying Logic App`,
     INIT_ACTION_DEPLOYING_LOGIC_APP_DATABASE: `Deploying Logic App database`,
     INIT_ACTION_DEPLOYING_NEWS: `Deploying News Functions`,

@@ -78,13 +78,13 @@ IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='pbist
 
 -- Functions
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='pbist_apimgmt' AND ROUTINE_NAME='fn_IPtoBigInt' AND ROUTINE_TYPE='FUNCTION')
-    DROP PROCEDURE pbist_apimgmt.fn_IPtoBigInt;
+    DROP FUNCTION pbist_apimgmt.fn_IPtoBigInt;
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='pbist_apimgmt' AND ROUTINE_NAME='fn_IsIpaddressInSubnetShortHand' AND ROUTINE_TYPE='FUNCTION')
-    DROP PROCEDURE pbist_apimgmt.fn_IsIpaddressInSubnetShortHand;
+    DROP FUNCTION pbist_apimgmt.fn_IsIpaddressInSubnetShortHand;
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='pbist_apimgmt' AND ROUTINE_NAME='fn_IsIpaddressInSubnet' AND ROUTINE_TYPE='FUNCTION')
-    DROP PROCEDURE pbist_apimgmt.fn_IsIpaddressInSubnet;
+    DROP FUNCTION pbist_apimgmt.fn_IsIpaddressInSubnet;
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='pbist_apimgmt' AND ROUTINE_NAME='fn_SubnetBitstoBigInt' AND ROUTINE_TYPE='FUNCTION')
-    DROP PROCEDURE pbist_apimgmt.fn_SubnetBitstoBigInt;
+    DROP FUNCTION pbist_apimgmt.fn_SubnetBitstoBigInt;
 
 IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name='pbist_apimgmt')
 BEGIN

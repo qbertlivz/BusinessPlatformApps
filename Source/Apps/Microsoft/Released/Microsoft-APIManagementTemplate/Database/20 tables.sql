@@ -6,9 +6,8 @@ SET CONCAT_NULL_YIELDS_NULL ON;
 SET QUOTED_IDENTIFIER ON;
 go
 
-CREATE TABLE dbo.Request
+CREATE TABLE pbist_apimgmt.request
 (
-    Id               UNIQUEIDENTIFIER NOT NULL,
     CreatedDate      DATETIME NULL,
     ServiceName      VARCHAR (200) NULL,
     RequestId        VARCHAR (50) NULL,
@@ -24,53 +23,44 @@ CREATE TABLE dbo.Request
     Length           INT NULL,
     Latitude         DECIMAL(9, 6) NULL,
     Longitude        DECIMAL(9, 6) NULL,
-    City             VARCHAR(30) NULL,
-    CONSTRAINT PK_Request_1 PRIMARY KEY CLUSTERED ( Id ASC )
+    City             VARCHAR(30) NULL
 );
+CREATE NONCLUSTERED INDEX IX_Request_RequestId_1 ON pbist_apimgmt.request ( RequestId ASC );
+CREATE NONCLUSTERED INDEX IX_Request_ApiID_1 ON pbist_apimgmt.request ( ApiID );
+CREATE NONCLUSTERED INDEX IX_Request_OperationID_1 ON pbist_apimgmt.request ( OperationID );
+CREATE NONCLUSTERED INDEX IX_Request_ProductID_1 ON pbist_apimgmt.request ( ProductID );
+CREATE NONCLUSTERED INDEX IX_Request_SubscriptionId_1 ON pbist_apimgmt.request ( SubscriptionId );
+CREATE NONCLUSTERED INDEX IX_Request_IPAddress ON pbist_apimgmt.request ( IPAddress ASC );
+CREATE NONCLUSTERED INDEX IX_Request_Latitude ON pbist_apimgmt.request ( Latitude ASC );
+CREATE NONCLUSTERED INDEX IX_Request_Longitude ON pbist_apimgmt.request ( Longitude ASC );
+CREATE NONCLUSTERED INDEX nci_wi_Request_IPAddressApi ON pbist_apimgmt.Request (IPAddress, Api) INCLUDE (CreatedDate, Latitude, Longitude, Operation, Product, RequestId);
 
-ALTER TABLE dbo.Request ADD DEFAULT (Newsequentialid()) FOR Id;
 
-CREATE NONCLUSTERED INDEX IX_Request_RequestId_1 ON dbo.Request ( RequestId ASC );
-CREATE NONCLUSTERED INDEX IX_Request_ApiID_1 ON dbo.Request ( ApiID );
-CREATE NONCLUSTERED INDEX IX_Request_OperationID_1 ON dbo.Request ( OperationID );
-CREATE NONCLUSTERED INDEX IX_Request_ProductID_1 ON dbo.Request ( ProductID );
-CREATE NONCLUSTERED INDEX IX_Request_SubscriptionId_1 ON dbo.Request ( SubscriptionId );
-CREATE NONCLUSTERED INDEX IX_Request_IPAddress ON dbo.Request ( IPAddress ASC );
-CREATE NONCLUSTERED INDEX IX_Request_Latitude ON dbo.Request ( Latitude ASC );
-CREATE NONCLUSTERED INDEX IX_Request_Longitude ON dbo.Request ( Longitude ASC );
-CREATE NONCLUSTERED INDEX nci_wi_Request_IPAddressApi ON dbo.Request (IPAddress, Api) INCLUDE (CreatedDate, Latitude, Longitude, Operation, Product, RequestId);
-
-CREATE TABLE dbo.Response
+CREATE TABLE pbist_apimgmt.response
 (
-    Id           UNIQUEIDENTIFIER NOT NULL,
     CreatedDate  DATETIME NULL,
     ServiceName  VARCHAR (200) NULL,
     RequestId    VARCHAR (50) NULL,
     StatusCode   INT NULL,
     StatusReason VARCHAR(200) NULL,
-    Length       INT NULL,
-    CONSTRAINT PK_Response_1 PRIMARY KEY CLUSTERED ( Id ASC )
+    [Length]     INT NULL
 );
+CREATE NONCLUSTERED INDEX IX_Response_RequestId_1 ON pbist_apimgmt.response ( RequestId ASC );
 
-ALTER TABLE dbo.Response ADD DEFAULT (Newsequentialid()) FOR Id;
-CREATE NONCLUSTERED INDEX IX_Response_RequestId_1 ON dbo.Response ( RequestId ASC );
 
-CREATE TABLE dbo.Error
+CREATE TABLE pbist_apimgmt.error
 (
-    Id          UNIQUEIDENTIFIER NOT NULL,
     CreatedDate DATETIME NULL,
     ServiceName VARCHAR (200) NULL,
     RequestId   VARCHAR (50) NULL,
     Source      VARCHAR (200) NULL,
     Reason      VARCHAR (200) NULL,
-    Message     VARCHAR(200) NULL,
-    CONSTRAINT PK_Error_1 PRIMARY KEY CLUSTERED ( Id ASC )
+    Message     VARCHAR(200) NULL
 );
+CREATE NONCLUSTERED INDEX IX_Error_RequestId_1 ON pbist_apimgmt.error ( RequestId ASC );
 
-ALTER TABLE dbo.Error ADD DEFAULT (Newsequentialid()) FOR Id;
-CREATE NONCLUSTERED INDEX IX_Error_RequestId_1 ON dbo.Error ( RequestId ASC );
 
-CREATE TABLE dbo.[Date]
+CREATE TABLE pbist_apimgmt.[date]
 (
     date_key               INT NOT NULL,
     full_date              DATE NOT NULL,
@@ -91,7 +81,8 @@ CREATE TABLE dbo.[Date]
     CONSTRAINT pk_dim_date PRIMARY KEY CLUSTERED ( date_key ASC )
 );
 
-CREATE TABLE dbo.[GeoLite2-City-Blocks-IPv4]
+
+CREATE TABLE pbist_apimgmt.[geolite2-city-blocks-ipv4]
 (
     network                        CHAR(20) NOT NULL,
     geoname_id                     INT NULL,
@@ -104,12 +95,12 @@ CREATE TABLE dbo.[GeoLite2-City-Blocks-IPv4]
     longitude                      NUMERIC(8,4) NULL,
     accuracy_radius                INT NULL,
     IPpart                         CHAR(3) NULL
-)
+);
+CREATE NONCLUSTERED INDEX [IX_GeoLite2-City-Blocks-IPv4] ON pbist_apimgmt.[geolite2-city-blocks-ipv4] ( network ASC );
+CREATE NONCLUSTERED INDEX [IX_GeoLite2-City-Blocks-IPv4_IPPart] ON pbist_apimgmt.[geolite2-city-blocks-ipv4] ( IPPart ASC ) INCLUDE ( latitude, longitude, network);
 
-CREATE NONCLUSTERED INDEX [IX_GeoLite2-City-Blocks-IPv4] ON dbo.[GeoLite2-City-Blocks-IPv4] ( network ASC );
-CREATE NONCLUSTERED INDEX [IX_GeoLite2-City-Blocks-IPv4_IPPart] ON dbo.[GeoLite2-City-Blocks-IPv4] ( IPPart ASC ) INCLUDE ( latitude, longitude, network);
 
-CREATE TABLE dbo.CallExtendedEdgeList
+CREATE TABLE pbist_apimgmt.callextendededgelist
 (
     RequestId          VARCHAR(50) NOT NULL,
     Product            VARCHAR(200) NOT NULL,
@@ -124,7 +115,8 @@ CREATE TABLE dbo.CallExtendedEdgeList
     IPAddress          VARCHAR(20) NOT NULL
 );
 
-CREATE TABLE dbo.CallExtendedEdgeList_STAGE
+
+CREATE TABLE pbist_apimgmt.callextendededgelist_staging
 (
     RequestId          VARCHAR(50) NOT NULL,
     Product            VARCHAR(200) NOT NULL,
@@ -139,7 +131,8 @@ CREATE TABLE dbo.CallExtendedEdgeList_STAGE
     IPAddress          VARCHAR(20) NOT NULL
 );
 
-CREATE TABLE dbo.CallProbabilityEdgeList
+
+CREATE TABLE pbist_apimgmt.callprobabilityedgelist
 (
     Product                VARCHAR(200) NOT NULL,
     Api                    VARCHAR(200) NOT NULL,
@@ -152,7 +145,8 @@ CREATE TABLE dbo.CallProbabilityEdgeList
     StartingCallTotalCount INT NOT NULL
 );
 
-CREATE TABLE dbo.CallProbabilityEdgeList_STAGE
+
+CREATE TABLE pbist_apimgmt.callprobabilityedgelist_staging
 (
     Product                VARCHAR(200) NOT NULL,
     Api                    VARCHAR(200) NOT NULL,
@@ -165,25 +159,21 @@ CREATE TABLE dbo.CallProbabilityEdgeList_STAGE
     StartingCallTotalCount INT NOT NULL
 );
 
-CREATE TABLE dbo.FFT
+
+CREATE TABLE pbist_apimgmt.fft
 (
-    Id        UNIQUEIDENTIFIER NOT NULL,
     IPAddress VARCHAR(20) NOT NULL,
     TimeUnit  VARCHAR(50) NOT NULL,
     CallFreq  DECIMAL(18, 0) NOT NULL,
     Position  INT NOT NULL
 );
 
-ALTER TABLE dbo.FFT ADD DEFAULT (Newsequentialid()) FOR Id;
 
-CREATE TABLE dbo.FFT_STAGE
+CREATE TABLE pbist_apimgmt.fft_staging
 (
-    Id        UNIQUEIDENTIFIER NOT NULL,
     IPAddress VARCHAR(20) NOT NULL,
     TimeUnit  VARCHAR(50) NOT NULL,
     CallFreq  DECIMAL(18, 0) NOT NULL,
     Position  INT NOT NULL
 );
-
-ALTER TABLE dbo.FFT_STAGE ADD DEFAULT (Newsequentialid()) FOR Id;
 go

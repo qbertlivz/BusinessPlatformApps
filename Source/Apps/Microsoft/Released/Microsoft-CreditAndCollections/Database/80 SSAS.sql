@@ -101,7 +101,7 @@ BEGIN
 	DECLARE @returnValue INT;
 	SELECT @returnValue = Count(*)
 	FROM   information_schema.tables
-	WHERE  ( table_schema = 'pbist_twitter' AND
+	WHERE  ( table_schema = 'dbo' AND
 				 table_name IN (SELECT [value] FROM STRING_SPLIT(@tables,',') WHERE RTRIM([value])<>'' ));
     if(@returnValue = 20)
     BEGIN
@@ -135,7 +135,7 @@ BEGIN
 	WHILE @@FETCH_STATUS = 0  
 	BEGIN 
 		DECLARE @retValue INT=0;
-		SET @stmt = 'SELECT @var = COUNT(*) FROM pbist_twitter.' + QuoteName(@p1);
+		SET @stmt = 'SELECT @var = COUNT(*) FROM dbo.' + QuoteName(@p1);
 		DECLARE @ParmDefinition NVARCHAR(500) = N'@var int OUTPUT';
 		EXECUTE sp_executesql @stmt, @ParmDefinition, @var = @retValue OUTPUT;
 		SET @returnValue = @returnValue + @retValue;		

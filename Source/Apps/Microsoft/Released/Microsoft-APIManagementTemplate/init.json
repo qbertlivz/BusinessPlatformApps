@@ -180,14 +180,14 @@
             {
                 "CommitmentPlan": "commitmentplan",
                 "DeploymentName": "AzureML",
-                "displayname": "$translate(INIT_ACTION_DEPLOYING_AZURE_ML)",
+                "displayname": "$translate(INIT_ACTION_APIM_DEPLOY_AZUREML_SERVICE)",
                 "name": "Microsoft-DeployAzureMLWebServiceFromFile",
                 "WebServiceFile": "Service/AzureML/Experiments/FFTWebService.json",
                 "WebServiceName": "$run('FFTWebService' + this.MS.DataStore.getValue('uniqueId'))"
             },
             {
                 "DeploymentName": "Function",
-                "displayname": "$translate(INIT_ACTION_DEPLOYING_NEWS)",
+                "displayname": "$translate(INIT_ACTION_APIM_DEPLOY_FUNCTION)",
                 "FunctionName": "$save(this.MS.DataStore.getValue('uniqueIdFunction'))",
                 "name": "Microsoft-DeployAzureFunction",
                 "RepoUrl": "https://github.com/juluczni/AzureFunctionsNewsTemplate",
@@ -195,7 +195,7 @@
             },
             {
                 "DeploymentName": "Function",
-                "displayname": "$translate(INIT_ACTION_VALIDATING_NEWS)",
+                "displayname": "$translate(INIT_ACTION_APIM_DEPLOY_FUNCTION_VALIDATING)",
                 "name": "Microsoft-WaitForArmDeploymentStatus"
             },
             {
@@ -204,7 +204,7 @@
                 },
 
                 "DeploymentName": "FunctionSettings",
-                "displayname": "$translate(INIT_ACTION_SETTING_UP_AS_SCHEDULER)",
+                "displayname": "$translate(INIT_ACTION_APIM_DEPLOY_FUNCTION_SETTINGS)",
                 "name": "Microsoft-DeployAzureFunctionConnectionStrings"
             },
             {
@@ -218,7 +218,7 @@
                     "username": "$ds(Username)"
                 },
                 "DeploymentName": "sql",
-                "displayname": "$translate(INIT_ACTION_UPDATING_COGNITIVE_SERVICE_CONNECTOR)",
+                "displayname": "$translate(INIT_ACTION_APIM_DEPLOY_SQL_CONNECTOR)",
                 "name": "Microsoft-UpdateBlobStorageConnector"
             },
             {
@@ -226,12 +226,12 @@
                 "ConnectorName": "azureml",
                 "ConnectorPayload": {},
                 "DeploymentName": "azureml",
-                "displayname": "$translate(INIT_ACTION_UPDATING_COGNITIVE_SERVICE_CONNECTOR)",
+                "displayname": "$translate(INIT_ACTION_APIM_DEPLOY_AZUREML_CONNECTOR)",
                 "name": "Microsoft-UpdateBlobStorageConnector"
             },
             {
                 "DeploymentName": "CallFrequencyLogicApp",
-                "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_SCHEDULER)",
+                "displayname": "$translate(INIT_ACTION_APIM_DEPLOY_CALL_FREQ_LOGIC_APP)",
                 "LogicAppName": "CallFrequencyLogicApp",
                 "name": "Microsoft-CallFrequencyLogicApp"
             },
@@ -242,7 +242,7 @@
             },
             {
                 "DeploymentName": "GraphLogicApp",
-                "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_SCHEDULER)",
+                "displayname": "$translate(INIT_ACTION_APIM_DEPLOY_CALL_GRAPH_LOGIC_APP)",
                 "LogicAppName": "GraphLogicApp",
                 "name": "Microsoft-DeployGraphCallsLogicApp"
             },
@@ -253,7 +253,7 @@
             },
             {
                "DeploymentName": "ProcessIPAddressesLogicApp",
-               "displayname": "$translate(INIT_ACTION_DEPLOYING_AML_SCHEDULER)",
+               "displayname": "$translate(INIT_ACTION_APIM_DEPLOY_IPADDRESS_LOGIC_APP)",
                "LogicAppName": "ProcessIPAddressesLogicApp",
                "name": "Microsoft-ProcessIPAddressesLogicApp"
             },

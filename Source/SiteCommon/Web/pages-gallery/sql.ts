@@ -219,7 +219,7 @@ export class Sql extends ViewModelBase {
             passwordError = this.MS.Translate.SQL_ERROR_PASSWORD_LENGTH;
         } else if ((/\s/g).test(pwd)) {
             passwordError = this.MS.Translate.SQL_ERROR_PASSWORD_SPACES;
-        } else if (!(/[A-Z]/).test(pwd) || (/^[a-zA-Z0-9]*$/).test(pwd)) {
+        } else if (!((/[A-Z]/).test(pwd) && (/[a-z]/).test(pwd) && (/[0-9]/).test(pwd) && (/[!@#$%^&*()_\-+=`~{}|\\:;"'<,>.?/]/).test(pwd))) {
             passwordError = this.MS.Translate.SQL_ERROR_PASSWORD_SPECIAL_CHARACTERS;
         }
         return passwordError;

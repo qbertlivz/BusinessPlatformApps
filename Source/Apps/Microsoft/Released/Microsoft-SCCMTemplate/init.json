@@ -45,7 +45,7 @@
                 "credentialTarget": "pbi_sccm",
                 "displayname": "Source",
                 "hideSqlAuth": true,
-                "isCreateAzureSqlSelected": true,
+                "isCreateAzureSqlSelected": false,
                 "name": "$SiteCommon$/pages-gallery/sql.html",
                 "onNext": [
                     {

@@ -213,13 +213,15 @@ export class Sql extends ViewModelBase {
 
     private validatePassword(pwd: string, pwd2: string, length: number): string {
         let passwordError: string = '';
+        let specialChar: RegExp = /[\!\@\#\$\%\^\&\*\(\)\_\\\-\+\=\`\~\{\}\|\\\:\;\"\'\<\,\>\.\?/]/;
+
         if (pwd !== pwd2) {
             passwordError = this.MS.Translate.SQL_ERROR_PASSWORD_MATCH;
         } else if (length && pwd.length < length) {
             passwordError = this.MS.Translate.SQL_ERROR_PASSWORD_LENGTH;
         } else if ((/\s/g).test(pwd)) {
             passwordError = this.MS.Translate.SQL_ERROR_PASSWORD_SPACES;
-        } else if (!((/[A-Z]/).test(pwd) && (/[a-z]/).test(pwd) && (/[0-9]/).test(pwd) && (/[!@#$%^&*()_\-+=`~{}|\\:;"'<,>.?/]/).test(pwd))) {
+        } else if (!((/[A-Z]/).test(pwd) && (/[a-z]/).test(pwd) && (/[0-9]/).test(pwd) && specialChar.test(pwd))) {
             passwordError = this.MS.Translate.SQL_ERROR_PASSWORD_SPECIAL_CHARACTERS;
         }
         return passwordError;

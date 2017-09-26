@@ -553,7 +553,7 @@
     SQL_ERROR_PASSWORD_LENGTH: `Password must be at least eight characters long.`,
     SQL_ERROR_PASSWORD_MATCH: `Passwords do not match.`,
     SQL_ERROR_PASSWORD_SPACES: `Password should not contain spaces.`,
-    SQL_ERROR_PASSWORD_SPECIAL_CHARACTERS: `Password must contain at least one uppercase character and at least one special character.`,
+    SQL_ERROR_PASSWORD_SPECIAL_CHARACTERS: `Your password must contain characters from three of the following categories – English uppercase letters, English lowercase letters, numbers (0-9), and non-alphanumeric characters (!, $, #, %, etc.).`,
     SQL_ERROR_USERNAME_ALPHANUMERIC: `must only contain alphanumeric characters or hyphens.`,
     SQL_ERROR_USERNAME_HYPHEN: `must not start or end with a hyphen.`,
     SQL_ERROR_USERNAME_LENGTH: `must not be longer than 63 characters.`,

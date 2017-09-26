@@ -29,9 +29,3 @@ The flow of the Facebook solution template is as follows:
 -   Azure Function also calls textual analytics cognitive service to work out sentiment of tweet
 
 -   Power BI imports data into it from Azure SQL and renders pre-defined reports
-
-
-### Estimated Costs
-
-Here is an estimate of the Azure costs (Logic Apps, Azure Functions, Azure SQL, Azure ML, Cognitive Services) based on the number of articles processed:
-

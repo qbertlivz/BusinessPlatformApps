@@ -12,7 +12,6 @@ export class AzureLogin extends ViewModelBase {
     showOldLogin: boolean = false;
     facebookClientId: string = '';
     facebookClientSecret: string = '';
-    firstSelection: boolean = true;
     buttonSelection: string = '';
 
     async connect(): Promise<void> {
@@ -31,6 +30,14 @@ export class AzureLogin extends ViewModelBase {
         this.oauthType = "Facebook";
         await this.MS.UtilityService.getToken(this.oauthType, async () => { this.setValidated(); });
         this.pages = this.MS.DataStore.getJson("data");
+
+        if (this.MS.DataStore.getJson("data") && this.pages.length == 0) {
+            this.MS.ErrorService.message = 'It seems like you do not own any pages. Please try a different authentication mechanism.';
+            this.isValidated = false;
+            this.showValidation = true;
+            this.ownsPage = null;
+            this.pages = null;
+        }
 
         if (this.pages && this.pages.length > 0) {
             this.isValidated = true;

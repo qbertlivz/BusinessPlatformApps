@@ -86,7 +86,13 @@
                 "newPassword": "$(this.MS.DataStore.getValue('sqlServerProductionApiPassword'))",
                 "sqlServerAdminLogin": "$(this.MS.DataStore.getValue('sqlServerAdminLogin'))",
                 "sqlServerAdminPassword": "$(this.MS.DataStore.getValue('sqlServerAdminPassword'))",
-                "additionalSchemas":  "edfi"
+                "additionalSchemas": "edfi"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
+                "name": "Microsoft-DeploySQLScripts",
+                "SqlServerIndex": "0",
+                "SqlScriptsFolder": "Database"
             }
         ]
     }

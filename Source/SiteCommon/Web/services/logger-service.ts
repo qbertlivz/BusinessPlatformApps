@@ -28,6 +28,18 @@ export class LoggerService {
         this.OperationId = applicationInsights.context.operation.id;
     }
 
+    getSessionId(): string {
+        let sessionId: string = '';
+
+        if (this.appInsights != null &&
+            this.appInsights.context != null &&
+            this.appInsights.context.session != null) {
+            sessionId = this.appInsights.context.session.id;
+        }
+
+        return sessionId;
+    }
+
     trackDeploymentEnd(isSucess: any): void {
         let properties: any = this.getPropertiesForTelemetry();
         properties.UserGenId = this.UserGenId;

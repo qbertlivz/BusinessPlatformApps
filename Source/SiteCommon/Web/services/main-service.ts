@@ -50,8 +50,6 @@ export class MainService {
         let experienceTypeString: string = this.UtilityService.getQueryParameter(QueryParameter.TYPE);
         this.experienceType = (<any>ExperienceType)[experienceTypeString];
 
-        this.mscc = new Mscc(this.msccBanner, this.msccLearnMore);
-
         this.ErrorService = new ErrorService(this);
         this.HttpService = new HttpService(this, httpClient);
         this.NavigationService = new NavigationService(this);
@@ -107,6 +105,8 @@ export class MainService {
             if (this.templateData && this.templateData[actions]) {
                 this.DeploymentService.init(this.templateData[actions]);
             }
+
+            this.mscc = new Mscc(this.msccBanner, this.msccLearnMore);
         }
     }
 }

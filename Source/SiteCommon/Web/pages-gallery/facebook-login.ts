@@ -32,9 +32,7 @@ export class AzureLogin extends ViewModelBase {
         this.pages = this.MS.DataStore.getJson("data");
 
         if (this.MS.DataStore.getJson("data") && this.pages.length == 0) {
-            this.MS.ErrorService.message = 'It seems like you do not own any pages. Please try a different authentication mechanism.';
-            this.isValidated = false;
-            this.showValidation = true;
+            this.MS.ErrorService.set(this.MS.Translate.FACEBOOK_NO_PAGES_ERROR);
             this.ownsPage = null;
             this.pages = null;
         }
@@ -101,13 +99,13 @@ export class AzureLogin extends ViewModelBase {
 
     onRadioChanged(): void {
         this.onInvalidate();
-       
+
         if (!this.ownsPage) {
             this.showOldLogin = true;
             this.facebookClientId = '';
             this.facebookClientSecret = '';
         }
-       else {
+        else {
             this.ownsPage = true;
             this.showOldLogin = false;
             this.pageId = '';

@@ -68,6 +68,9 @@ GO
 ALTER TABLE [adtlog].[user] ADD  DEFAULT (getdate()) FOR [EntryTime]
 GO
 
+CREATE NONCLUSTERED INDEX IDX_audit_data
+ON [adtlog].[audit_data] ([Id])
+
 CREATE NONCLUSTERED INDEX IDX_stagingAuditDataId
 ON [adtlog].[staging_audit_data] ([Id])
 

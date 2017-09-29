@@ -8,6 +8,7 @@ import { InitParser } from './init-parser';
 import { MainService } from './main-service';
 
 export class ViewModelBase {
+    downloadLink: string = null;
     hasConsent: boolean = false;
     isActivated: boolean = false;
     isAuthenticated: boolean = true;
@@ -59,6 +60,11 @@ export class ViewModelBase {
 
     determineActivationStrategy(): any {
         return activationStrategy.replace;
+    }
+
+    downloadMsi(): void {
+        this.setConsent();
+        window.open(this.viewmodel.downloadLink, '_blank');
     }
 
     loadParameters(): void {

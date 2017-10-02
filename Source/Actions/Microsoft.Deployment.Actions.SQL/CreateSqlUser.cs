@@ -34,7 +34,6 @@ namespace Microsoft.Deployment.Actions.SQL
 
             string newUser = request.DataStore.GetValue("newUser");
             string newPassword = request.DataStore.GetValue("newPassword");
-
             using (SqlConnection cn = new SqlConnection(cnBuilder.ToString()))
             {
                 cn.Open();
@@ -46,7 +45,11 @@ namespace Microsoft.Deployment.Actions.SQL
             }
 
             cnBuilder.InitialCatalog = request.DataStore.GetValue("databasename");
-            using (SqlConnection cn = new SqlConnection(cnBuilder.ToString()))
+            // Add the final connection string to the datastore
+            request.DataStore.RemoveFirst("SqlConnectionString");
+            request.DataStore.AddToDataStore("SqlConnectionString", cnBuilder.ToString(), DataStoreType.Private);
+
+            using (SqlConnection cn = new SqlConnection(request.DataStore.GetValue("SqlConnectionString")))
             {
                 cn.Open();
                 using (SqlCommand cmd = new SqlCommand() { Connection = cn, CommandTimeout = 0 })

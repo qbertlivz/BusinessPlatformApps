@@ -8,6 +8,8 @@ import { InitParser } from './init-parser';
 import { MainService } from './main-service';
 
 export class ViewModelBase {
+    downloadLink: string = null;
+    hasConsent: boolean = false;
     isActivated: boolean = false;
     isAuthenticated: boolean = true;
     isValidated: boolean = false;
@@ -58,6 +60,11 @@ export class ViewModelBase {
 
     determineActivationStrategy(): any {
         return activationStrategy.replace;
+    }
+
+    downloadMsi(): void {
+        this.setConsent();
+        window.open(this.viewmodel.downloadLink, '_blank');
     }
 
     loadParameters(): void {
@@ -111,6 +118,7 @@ export class ViewModelBase {
             } finally {
                 this.MS.NavigationService.isCurrentlyNavigating = false;
                 this.navigationMessage = '';
+                this.setConsent();
             }
         }
     }
@@ -154,6 +162,13 @@ export class ViewModelBase {
             }
         }
         return cleanedViewModel;
+    }
+
+    setConsent(): void {
+        if (!this.hasConsent) {
+            this.MS.mscc.setConsent();
+            this.hasConsent = true;
+        }
     }
 
     setValidated(showValidation: boolean = true): boolean {

@@ -34,12 +34,7 @@ namespace Microsoft.Deployment.Actions.Custom.Facebook
                     pages = JsonUtility.GetJObjectFromJsonString(pagePayload);
                     request.DataStore.AddObjectDataStore("FacebookPages", JsonUtility.GetJObjectFromObject(pages), DataStoreType.Private);
                 }
-
-                if (pages["data"].Count() > 0)
-                {
-                    return new ActionResponse(ActionStatus.Success);
-                }
-                return new ActionResponse(ActionStatus.Failure);
+                return new ActionResponse(ActionStatus.Success);
             }
             catch
             {

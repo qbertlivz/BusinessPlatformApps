@@ -232,6 +232,7 @@
     FACEBOOK_LOGIN_CHOICE: `Do you own the page you would like to monitor?`,
     FACEBOOK_PAGE_ID: `Insert page id:`,
     FACEBOOK_PERMANENT_ACCESS_TOKEN: `Insert permanent page token:`,
+    FACEBOOK_NO_PAGES_ERROR: `It seems like you do not own any pages. Please try a different authentication mechanism.`,
     GETTING_STARTED_COMPANY: `Company:`,
     GETTING_STARTED_EMAIL: `Email:`,
     GETTING_STARTED_EMAIL_CONFIRMATION: `Email Confirmation:`,

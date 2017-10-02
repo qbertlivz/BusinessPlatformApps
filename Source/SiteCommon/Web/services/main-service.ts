@@ -15,6 +15,7 @@ import { DeploymentService } from './deployment-service';
 import { ErrorService } from './error-service';
 import { HttpService } from './http-service';
 import { LoggerService } from './logger-service';
+import { Mscc } from './mscc';
 import { NavigationService } from './navigation-service';
 import { TranslateService } from './translate-service';
 import { UtilityService } from './utility-service';
@@ -29,6 +30,9 @@ export class MainService {
     HttpService: HttpService;
     LoggerService: LoggerService;
     MS: MainService;
+    mscc: Mscc;
+    msccBanner: any;
+    msccLearnMore: any;
     NavigationService: NavigationService;
     Option: Option = new Option();
     Router: Router;
@@ -41,7 +45,7 @@ export class MainService {
         (<any>window).MainService = this;
 
         this.UtilityService = new UtilityService(this);
-        this.appName = this.UtilityService.getQueryParameter(QueryParameter.NAME); 
+        this.appName = this.UtilityService.getQueryParameter(QueryParameter.NAME);
 
         let experienceTypeString: string = this.UtilityService.getQueryParameter(QueryParameter.TYPE);
         this.experienceType = (<any>ExperienceType)[experienceTypeString];
@@ -101,6 +105,8 @@ export class MainService {
             if (this.templateData && this.templateData[actions]) {
                 this.DeploymentService.init(this.templateData[actions]);
             }
+
+            this.mscc = new Mscc(this.msccBanner, this.msccLearnMore);
         }
     }
 }

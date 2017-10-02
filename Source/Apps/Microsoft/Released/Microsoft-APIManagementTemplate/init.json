@@ -53,9 +53,9 @@
       {
         "name": "$SiteCommon$/pages-gallery/choose-analysis-server.html",
         "displayname": "AAS",
-        "showDescription": true,
+        "showDescription": true
 
-        "ssasEnabled": "true"
+        //"ssasEnabled": "true"
       },
       {
         "displayname": "Login to Analysis Services",

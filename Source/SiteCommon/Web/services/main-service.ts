@@ -106,7 +106,9 @@ export class MainService {
                 this.DeploymentService.init(this.templateData[actions]);
             }
 
-            this.mscc = new Mscc(this.msccBanner, this.msccLearnMore);
+            if (!this.HttpService.isOnPremise) {
+                this.mscc = new Mscc(this.msccBanner, this.msccLearnMore);
+            }
         }
     }
 }

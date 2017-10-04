@@ -92,22 +92,34 @@ export class ProgressViewModel extends ViewModelBase {
 
     async queryRecordCounts(): Promise<void> {
         if (this.showCounts && !this.isDataPullDone && !this.MS.DeploymentService.hasError) {
-            let dataPullStatus: DataPullStatus = new DataPullStatus(await this.MS.HttpService.getResponseAsync('Microsoft-GetDataPullStatus', {
+            let dataPullStatusResponse: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetDataPullStatus', {
                 FinishedActionName: this.finishedActionName,
                 SqlServerIndex: this.sqlServerIndex,
                 TargetSchema: this.targetSchema
-            }));
-            if (dataPullStatus) {
-                this.recordCounts = dataPullStatus.status;
-                this.sliceStatus = dataPullStatus.slices;
-                this.isDataPullDone = dataPullStatus.isFinished;
-                this.queryRecordCounts();
+            });
+
+            if (dataPullStatusResponse.IsSuccess) {
+                let dataPullStatus: DataPullStatus = new DataPullStatus(dataPullStatusResponse);
+
+                if (dataPullStatus) {
+                    this.recordCounts = dataPullStatus.status;
+                    this.sliceStatus = dataPullStatus.slices;
+                    this.isDataPullDone = dataPullStatus.isFinished;
+                    this.queryRecordCounts();
+                } else {
+                    this.queryRecordCountsError();
+                }
             } else {
-                this.MS.DeploymentService.hasError = true;
+                this.queryRecordCountsError();
             }
         } else {
             this.showPublishReport = this.enablePublishReport;
         }
+    }
+
+    queryRecordCountsError(): void {
+        this.isDataPullDone = false;
+        this.MS.DeploymentService.hasError = true;
     }
 
     async wrangle(): Promise<void> {

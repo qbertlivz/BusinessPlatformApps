@@ -166,7 +166,9 @@ export class ViewModelBase {
 
     setConsent(): void {
         if (!this.hasConsent) {
-            this.MS.mscc.setConsent();
+            if (!this.MS.HttpService.isOnPremise) {
+                this.MS.mscc.setConsent();
+            }
             this.hasConsent = true;
         }
     }

@@ -8,31 +8,31 @@ go
 
 CREATE TABLE pbist_sccm.computer
 (
-	machineid          INT NOT NULL,
-	sitecode           NVARCHAR(3) NULL,
-	name               NVARCHAR(256) NULL,
-	[operating system] NVARCHAR(256) NULL,
-	[client type]      TINYINT NULL,
-	manufacturer       NVARCHAR(255) NULL,
-	model              NVARCHAR(255) NULL,
-	[platform]         NVARCHAR(255) NULL,
-	[physical memory]  BIGINT NULL,
-	[deleted date]     DATETIME NULL
+    machineid          INT NOT NULL,
+    sitecode           NVARCHAR(3) NULL,
+    name               NVARCHAR(256) NULL,
+    [operating system] NVARCHAR(256) NULL,
+    [client type]      TINYINT NULL,
+    manufacturer       NVARCHAR(255) NULL,
+    model              NVARCHAR(255) NULL,
+    [platform]         NVARCHAR(255) NULL,
+    [physical memory]  BIGINT NULL,
+    [deleted date]     DATETIME NULL
 );
 
 CREATE TABLE pbist_sccm.computermalware
 (
-	 threatid                     BIGINT NULL,
-	 machineid                    INT NOT NULL,
-	 [detection date]             DATETIME NULL,
-	 [observer product name]      NVARCHAR(32) NOT NULL,
-	 [observer product version]   NVARCHAR(255) NULL,
-	 [observer detection]         NVARCHAR(8) NULL,
-	 [remediation type]           NVARCHAR(11) NULL,
-	 [remediation result]         NVARCHAR(5) NOT NULL,
-	 [remediation error code]     INT NULL,
-	 [remediation pending action] NVARCHAR(16) NOT NULL,
-	 [is active malware]          NVARCHAR(5) NOT NULL
+     threatid                     BIGINT NULL,
+     machineid                    INT NOT NULL,
+     [detection date]             DATETIME NULL,
+     [observer product name]      NVARCHAR(32) NOT NULL,
+     [observer product version]   NVARCHAR(255) NULL,
+     [observer detection]         NVARCHAR(8) NULL,
+     [remediation type]           NVARCHAR(11) NULL,
+     [remediation result]         NVARCHAR(5) NOT NULL,
+     [remediation error code]     INT NULL,
+     [remediation pending action] NVARCHAR(16) NOT NULL,
+     [is active malware]          NVARCHAR(5) NOT NULL
 );
 
 CREATE TABLE pbist_sccm.malware
@@ -48,7 +48,7 @@ CREATE  TABLE  pbist_sccm.computerprogram
     machineid       INT NOT NULL,
     [program name]  NVARCHAR(max)  NOT NULL,
     publisher       NVARCHAR(max)  NULL,
-    [version]       NVARCHAR(250)  NULL,
+    [version]       NVARCHAR(max)  NULL,
     [timestamp]     DATETIME NULL
 );
 
@@ -72,7 +72,7 @@ CREATE  TABLE  pbist_sccm.program
 (
       [program name]  NVARCHAR(max)  NOT NULL,
       publisher       NVARCHAR(max)  NULL,
-      [version]       NVARCHAR(250)  NULL,
+      [version]       NVARCHAR(max)  NULL,
 );
 
 CREATE  TABLE  pbist_sccm.scanhistory 
@@ -231,7 +231,7 @@ CREATE TABLE pbist_sccm.computerprogram_staging
     machineid       INT NOT NULL,
     [program name]  NVARCHAR(max) NOT NULL,
     publisher       NVARCHAR(max)  NULL,
-    [version]       NVARCHAR(250)  NULL,
+    [version]       NVARCHAR(max)  NULL,
     [timestamp]     DATETIME NULL
 );
 
@@ -256,7 +256,7 @@ CREATE TABLE pbist_sccm.program_staging
 (
       [program name]  NVARCHAR(max)  NOT NULL,
       publisher       NVARCHAR(max)  NULL,
-      [version]       NVARCHAR(250)  NULL
+      [version]       NVARCHAR(max)  NULL
 );
 
 
@@ -352,8 +352,8 @@ CREATE  TABLE  pbist_sccm.computercollection_staging
 
 
 CREATE TABLE pbist_sccm.[entityinitialcount](
-	[entityname] [nvarchar](40) NULL,
-	[initialcount] INT NULL,
-	[lastcount] INT NULL,
-	[lasttimestamp] DATETIME2 NULL
+    [entityname] [nvarchar](40) NULL,
+    [initialcount] INT NULL,
+    [lastcount] INT NULL,
+    [lasttimestamp] DATETIME2 NULL
 );

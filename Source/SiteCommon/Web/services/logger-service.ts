@@ -40,14 +40,14 @@ export class LoggerService {
         return sessionId;
     }
 
-    trackDeploymentEnd(isSucess: any): void {
+    trackDeploymentEnd(isSuccess: any): void {
         let properties: any = this.getPropertiesForTelemetry();
         properties.UserGenId = this.UserGenId;
         properties.SessionId = this.SessionId;
         properties.UserId = this.UserId;
         properties.OperationId = this.OperationId;
         properties.TemplateName = this.MS.NavigationService.appName;
-        properties.Sucess = isSucess;
+        properties.Sucess = isSuccess;
         this.appInsights.trackEvent('UI-DeploymentEnd', properties);
     }
 

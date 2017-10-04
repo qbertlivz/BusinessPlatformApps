@@ -44,7 +44,7 @@ export class ProgressViewModel extends ViewModelBase {
     }
 
     async executeActions(): Promise<void> {
-        if (await this.MS.DeploymentService.executeActions() && !this.isUninstall) {
+        if (await this.MS.DeploymentService.executeActions(this.showCounts) && !this.isUninstall) {
             await this.wrangle();
 
             this.queryRecordCounts();
@@ -105,6 +105,11 @@ export class ProgressViewModel extends ViewModelBase {
                     this.recordCounts = dataPullStatus.status;
                     this.sliceStatus = dataPullStatus.slices;
                     this.isDataPullDone = dataPullStatus.isFinished;
+
+                    if (this.isDataPullDone) {
+                        this.MS.LoggerService.trackDeploymentEnd(true);
+                    }
+
                     this.queryRecordCounts();
                 } else {
                     this.queryRecordCountsError();

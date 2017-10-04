@@ -20,7 +20,7 @@ export class DeploymentService {
         this.MS = MainService;
     }
 
-    async executeActions(): Promise<boolean> {
+    async executeActions(showCounts: boolean = false): Promise<boolean> {
         if (this.isFinished && !this.hasError) {
             return false;
         }
@@ -90,7 +90,7 @@ export class DeploymentService {
             this.MS.LoggerService.trackUninstallEnd(!this.hasError);
         }
         if (this.experienceType === ExperienceType.Install) {
-            this.MS.LoggerService.trackDeploymentEnd(!this.hasError);
+            this.MS.LoggerService.trackDeploymentEnd(!this.hasError && !showCounts);
         }
         this.isFinished = true;
 

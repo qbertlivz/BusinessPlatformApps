@@ -14,7 +14,7 @@ export class AzureLogin extends ViewModelBase {
     bingUrl: string = '';
     bingtermsofuse: string = '';
     connectionType: AzureConnection = AzureConnection.Organizational;
-    defaultLocation: number = 23;
+    defaultLocation: number = 5;
     oauthType: string = '';
     pricingCalculator: string = '';
     pricingCalculatorUrl: string = '';

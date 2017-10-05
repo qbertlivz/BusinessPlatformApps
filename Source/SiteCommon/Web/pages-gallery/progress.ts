@@ -125,6 +125,7 @@ export class ProgressViewModel extends ViewModelBase {
     queryRecordCountsError(): void {
         this.isDataPullDone = false;
         this.MS.DeploymentService.hasError = true;
+        this.MS.LoggerService.trackDeploymentEnd(false);
     }
 
     async wrangle(): Promise<void> {

@@ -89,8 +89,8 @@ export class DeploymentService {
         if (this.experienceType === ExperienceType.Uninstall) {
             this.MS.LoggerService.trackUninstallEnd(!this.hasError);
         }
-        if (this.experienceType === ExperienceType.Install) {
-            this.MS.LoggerService.trackDeploymentEnd(!this.hasError && !showCounts);
+        if (this.experienceType === ExperienceType.Install && !showCounts) {
+            this.MS.LoggerService.trackDeploymentEnd(!this.hasError);
         }
         this.isFinished = true;
 

@@ -97,7 +97,7 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No API Management Services were found in your Azure Subscription.
+        ///   Looks up a localized string similar to No fully provisioned API Management Services were found in your Azure Subscription.
         /// </summary>
         public static string ApiManagementErrorNoServicesFound {
             get {

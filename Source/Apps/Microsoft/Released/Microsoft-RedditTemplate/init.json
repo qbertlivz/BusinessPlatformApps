@@ -1,0 +1,70 @@
+{
+  "Install": {
+    "Pages": [
+      {
+        "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-APIManagementTemplate/Web/Images/api-management.png",
+        "displayname": "Getting Started",
+        "list1": [
+          "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",
+          "$translate(INIT_GETTING_STARTED_PBI_DESKTOP)",
+          "$translate(INIT_GETTING_STARTED_PBI_PRO)",
+          "$translate(INIT_GETTING_STARTED_REDDIT_SOCIALGIST)"
+        ],
+        "list2": [
+          "$translate(INIT_GETTING_STARTED_AZURE_API_MANAGEMENT_STREAM_SQL)",
+          "$translate(INIT_GETTING_STARTED_AZURE_API_MANAGEMENT_PROCESS_DATA)",
+          "$translate(INIT_GETTING_STARTED_CONNECT_AS_PBI)"
+        ],
+        "name": "$SiteCommon$/pages-gallery/getting-started.html",
+        "subtitle": "$translate(INIT_REDDIT_SUBTITLE)",
+        "templateName": "$translate(INIT_REDDIT_TITLE)"
+      },
+      {
+        "azureProviders": [
+          "Microsoft.MachineLearning"
+        ],
+        "defaultLocation": "5",
+        "displayname": "Azure Login",
+        "name": "$SiteCommon$/pages-gallery/azure-login.html",
+        "pricingCalculatorUrl": "$translate(INIT_REDDIT_PRICING_CALCULATOR)",
+        "pricingCost": "$translate(INIT_REDDIT_PRICING_COST)",
+        "pricingUrl": "$translate(INIT_REDDIT_PRICING_URL)"
+      },
+      {
+        "displayname": "Search Terms",
+        "name": "search-terms.html"
+      },
+      {
+        "displayname": "Bring Your Own Entities",
+        "name": "bring-your-own-entities.html"
+      },
+      {
+        "displayname": "Customize",
+        "name": "customize.html",
+        "skip": "$run(this.MS.DataStore.getValue('BringYourOwnEntities') === this.MS.Option.NO)"
+      },
+      {
+        "displayname": "Summary",
+        "name": "$SiteCommon$/pages-gallery/summary.html",
+        "values": {
+          "Target Server": "$(this.MS.DataStore.getValue('Server'))",
+          "Target Database": "$(this.MS.DataStore.getValue('Database'))",
+          "Target Username": "$(this.MS.DataStore.getValue('Username'))",
+          "Search Query": "$(this.MS.DataStore.getValue('SearchQuery'))"
+        }
+      },
+      {
+        "datastoreEntriesToValidate": [
+          "AzureToken",
+          "SqlConnectionString"
+        ],
+        "displayname": "Deploy",
+        "downloadPbiText": "$translate(INIT_REDDIT_DOWNLOAD)",
+        "enablePublishReport": "$run(this.MS.DataStore.getValue('ssasDisabled') === 'false')",
+        "filename": "$save('RedditTemplate.pbix')",
+        "name": "$SiteCommon$/pages-gallery/progress.html",
+        "uniqueId": "$save(this.MS.UtilityService.getUniqueId(8))"
+      }
+    ]
+  }
+}

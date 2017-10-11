@@ -44,7 +44,8 @@ export class ProgressViewModel extends ViewModelBase {
     }
 
     async executeActions(): Promise<void> {
-        if (await this.MS.DeploymentService.executeActions(this.showCounts) && !this.isUninstall) {
+        //if (await this.MS.DeploymentService.executeActions(this.showCounts) && !this.isUninstall) {
+        if (await this.MS.DeploymentService.executeActions() && !this.isUninstall) {
             await this.wrangle();
 
             this.queryRecordCounts();
@@ -106,9 +107,9 @@ export class ProgressViewModel extends ViewModelBase {
                     this.sliceStatus = dataPullStatus.slices;
                     this.isDataPullDone = dataPullStatus.isFinished;
 
-                    if (this.isDataPullDone) {
-                        this.MS.LoggerService.trackDeploymentEnd(true);
-                    }
+                    //if (this.isDataPullDone) {
+                    //    this.MS.LoggerService.trackDeploymentEnd(true);
+                    //}
 
                     this.queryRecordCounts();
                 } else {
@@ -125,7 +126,7 @@ export class ProgressViewModel extends ViewModelBase {
     queryRecordCountsError(): void {
         this.isDataPullDone = false;
         this.MS.DeploymentService.hasError = true;
-        this.MS.LoggerService.trackDeploymentEnd(false);
+        //this.MS.LoggerService.trackDeploymentEnd(false);
     }
 
     async wrangle(): Promise<void> {

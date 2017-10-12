@@ -65,6 +65,14 @@
         "name": "$SiteCommon$/pages-gallery/progress.html",
         "uniqueId": "$save(this.MS.UtilityService.getUniqueId(8))"
       }
+    ],
+    "Actions": [
+      {
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
+        "name": "Microsoft-DeploySQLScripts",
+        "SqlScriptsFolder": "Database/",
+        "SqlServerIndex": "0"
+      }
     ]
   }
 }

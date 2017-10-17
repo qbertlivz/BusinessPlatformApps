@@ -236,3 +236,4 @@ BEGIN
 	TRUNCATE TABLE reddit.Staging_KeyPhrases;
 END
 GO
+

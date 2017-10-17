@@ -210,3 +210,59 @@ CREATE VIEW reddit.KeyPhraseCountView AS
 	FROM reddit.KeyPhrases 
 	GROUP BY LOWER(keyPhrase);
 GO
+
+-- subreddit /r name to display name mapping view
+CREATE VIEW reddit.SubredditMappingView AS
+	SELECT DISTINCT subreddit AS fancySubreddit, 
+		SUBSTRING(
+			url,
+			CHARINDEX('reddit.com/r/',url)+13,
+			CHARINDEX('/',
+				url,
+				CHARINDEX('reddit.com/r/',url)+13
+			)-13-CHARINDEX('reddit.com/r/',url)
+		) AS simpleSubreddit
+	FROM reddit.AllDocumentsView;
+GO
+
+CREATE VIEW reddit.EmbeddedUrlSubredditView AS
+	SELECT documentId, 
+		embeddedUrl, 
+		Docs.subreddit AS sourceSubreddit,
+		CASE 
+			WHEN 
+				CHARINDEX('/',
+					embeddedUrl,
+					CHARINDEX('reddit.com/r/',embeddedUrl)+13
+				) > 0 
+				THEN 
+					SUBSTRING(embeddedUrl,
+						CHARINDEX('reddit.com/r/',embeddedUrl)+13,
+						CHARINDEX('/',
+							embeddedUrl,
+							CHARINDEX('reddit.com/r/',embeddedUrl)+13
+						)-13-CHARINDEX('reddit.com/r/',embeddedUrl)
+					)
+			WHEN 
+				CHARINDEX(')',
+					embeddedUrl,
+					CHARINDEX('reddit.com/r/',embeddedUrl)+13
+				) > 0 
+				THEN 
+					SUBSTRING(embeddedUrl,
+						CHARINDEX('reddit.com/r/',embeddedUrl)+13,
+						CHARINDEX(')',
+							embeddedUrl,
+							CHARINDEX('reddit.com/r/',embeddedUrl)+13
+						)-13-CHARINDEX('reddit.com/r/',embeddedUrl)
+					)
+			ELSE 
+				SUBSTRING(embeddedUrl,
+					CHARINDEX('reddit.com/r/',embeddedUrl)+13,
+					LEN(embeddedUrl)
+				)
+		END AS destinationSubreddit
+	FROM reddit.EmbeddedUrls AS URLS 
+	INNER JOIN reddit.Documents AS Docs ON URLS.documentId=Docs.id 
+	WHERE CHARINDEX('reddit.com/r/',embeddedUrl)>0;
+GO

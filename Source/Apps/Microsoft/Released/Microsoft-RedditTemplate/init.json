@@ -32,6 +32,7 @@
       },
       {
         "displayname": "Search Terms",
+<<<<<<< HEAD
         "name": "search-terms.html"
       },
       {
@@ -42,6 +43,9 @@
         "displayname": "Customize",
         "name": "customize.html",
         "skip": "$run(this.MS.DataStore.getValue('BringYourOwnEntities') === this.MS.Option.NO)"
+=======
+        "name": "$SiteCommon$/pages-gallery/bring-your-own-entities-customize.html"
+>>>>>>> ef11749e... Enabling storage account and updating the reddit-architecture diagram.  The search step is removed since we are GOING to use the define entities step to generate our search string instead.
       },
       {
         "displayname": "Summary",
@@ -72,7 +76,55 @@
         "name": "Microsoft-DeploySQLScripts",
         "SqlScriptsFolder": "Database/",
         "SqlServerIndex": "0"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_POPULATE_REDDIT_ENTITIES)",
+        "name": "Microsoft-PopulateUserDefinedEntities",
+        "skip": "$run(this.MS.DataStore.getValue('BringYourOwnEntities') === this.MS.Option.NO)"
+      },
+      {
+        "DeploymentName": "StorageAccount",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_STORAGE_ACCOUNT)",
+        "name": "Microsoft-CreateAzureStorageAccount",
+        "StorageAccountEncryptionEnabled": "false",
+        "StorageAccountName": "$save('redditstorage' + this.MS.DataStore.getValue('uniqueId'))",
+        "StorageAccountType": "Standard_LRS"
+      },
+      {
+        "DeploymentName": "StorageAccount",
+        "displayname": "$translate(INIT_ACTION_VALIDATING_STORAGE_ACCOUNT)",
+        "name": "Microsoft-WaitForArmDeploymentStatus"
+      },
+      {
+        "DeploymentName": "StorageAccount",
+        "displayname": "$translate(INIT_ACTION_GETTING_STORAGE_ACCOUNT_KEY)",
+        "name": "Microsoft-GetStorageAccountKey"
+      },
+      {
+        "DeploymentName": "StorageAccount",
+        "displayname": "$translate(INIT_ACTION_VALIDATING_STORAGE_ACCOUNT_KEY)",
+        "name": "Microsoft-WaitForArmDeploymentStatus"
+      },
+      {
+        "DeploymentName": "StorageAccount",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_STORAGE_ACCOUNT_CONTAINER)",
+        "name": "Microsoft-DeployStorageAccountContainer",
+        "StorageAccountContainer": "reddit"
       }
+/*      ,
+      {
+        "DeploymentName": "Function",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_NEWS)",
+        "FunctionName": "$save('function' + this.MS.DataStore.getValue('uniqueId'))",
+        "name": "Microsoft-DeployAzureFunction",
+        "RepoUrl": "https://github.com/juluczni/AzureFunctionsNewsTemplate",
+        "Branch": "newsbranch"
+      },
+      {
+        "DeploymentName": "Function",
+        "displayname": "$translate(INIT_ACTION_VALIDATING_NEWS)",
+        "name": "Microsoft-WaitForArmDeploymentStatus"
+      }*/
     ]
   }
 }

@@ -207,6 +207,7 @@
             },
             {
                 "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_INPUT_EVENTHUB)",
+                "inputSerialization": "Json",
                 "name": "Microsoft-AddStreamAnalyticsInputEventHub",
                 "nameStreamAnalyticsInputEventHub": "EventHubInput"
             },
@@ -233,6 +234,10 @@
             {
                 "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_QUERY)",
                 "name": "Microsoft-SetStreamAnalyticsQuery"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_VERIFY_EVENT_HUB)",
+                "name": "Microsoft-VerifyLogProfileEventHub"
             },
             {
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_STREAM_ANALYTICS)",

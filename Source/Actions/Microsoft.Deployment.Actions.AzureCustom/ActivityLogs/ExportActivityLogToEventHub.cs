@@ -13,6 +13,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
     [Export(typeof(IAction))]
     public class ExportActivityLogToEventHub : BaseAction
     {
+        private const string INSIGHTS_OPERATIONAL_LOGS = "insights-operational-logs";
         private const int ATTEMPTS = 42;
         private const int WAIT = 2500;
 
@@ -40,6 +41,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             {
                 logProfileError = await ahc.Test(HttpMethod.Put, uri);
             }
+
+            request.DataStore.AddToDataStore("nameEventHub", INSIGHTS_OPERATIONAL_LOGS, DataStoreType.Private);
 
             return isSuccess
                 ? new ActionResponse(ActionStatus.Success)

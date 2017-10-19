@@ -1,7 +1,8 @@
 ﻿<template>
-    <h1 class="st-title">${MS.Translate.BYOE_CUSTOMIZE_TITLE}</h1>
+    <h1 class="st-title">${MS.Translate.REDDIT_SEARCH_AND_ENTITIES_TITLE}</h1>
+    <p class="st-subtitle">${MS.Translate.REDDIT_SEARCH_AND_ENTITIES_SUBTITLE}</p>
 
-    <p class="st-text">${MS.Translate.BYOE_CUSTOMIZE_SELECT_ENTITY}</p>
+    <p class="st-text">${MS.Translate.REDDIT_SEARCH_AND_ENTITIES_SELECT_ENTITY}</p>
 
     <button class="primary" click.trigger="entityAdd()">${MS.Translate.BYOE_CUSTOMIZE_ADD_ENTITY}</button>
     <label class="st-button-right st-file-upload">
@@ -27,37 +28,25 @@
 
         <p class="st-text">${MS.Translate.BYOE_CUSTOMIZE_ENTITY_SELECT}</p>
         <p>
-            <select class="btn btn-default dropdown-toggle st-input" value.bind="selectedEntity">
+            <select class="btn btn-default dropdown-toggle st-input" value.bind="selectedEntity" change.delegate="viewmodel.onInvalidate()">
                 <option repeat.for="entity of entities" model.bind="entity">${entity.name}</option>
             </select>
         </p>
 
         <p class="st-text">${MS.Translate.BYOE_CUSTOMIZE_EDIT_NAME}</p>
-        <input class="st-input" type="text" value.bind="selectedEntity.name" />
-
-        <div>
-            <div class="st-input-float">
-                <p class="st-text">${MS.Translate.COMMON_COLOR}</p>
-                <input class="st-input st-input-tiny" type="color" value.bind="selectedEntity.color" />
-            </div>
-
-            <div class="st-input-float">
-                <p class="st-text">${MS.Translate.COMMON_ICON}</p>
-                <div class="st-dropdown" css="color: ${selectedEntity.color}">
-                    <i class="fa fa-${selectedEntity.icon}"></i>
-                    <i class="glyphicon pbi-glyph-caretdown glyph-mini"></i>
-                    <div class="st-dropdown-content">
-                        <i repeat.for="icon of icons" click.trigger="iconSelect(icon)" class="fa fa-${icon} ${selectedEntity.icon == icon ? 'st-dropdown-content-selected' : ''}"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <input class="st-input" type="text" value.bind="selectedEntity.name" change.delegate="viewmodel.onInvalidate()"/>
 
         <p class="st-text">${MS.Translate.BYOE_CUSTOMIZE_ENTITY_VALUES}</p>
         <p>
             <textarea class="st-input" value.bind="selectedEntity.values"></textarea>
         </p>
 
-        <button class="primary" click.trigger="entityRemove()">${MS.Translate.BYOE_CUSTOMIZE_REMOVE_ENTITY}</button>
+        <p class="st-float">
+            <button class="primary" click.trigger="entityRemove()">${MS.Translate.BYOE_CUSTOMIZE_REMOVE_ENTITY}</button>
+        </p>
+
+        <p class="st-float">
+            <button class="primary" click.trigger="onValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_VALIDATE}</button>
+        </p>
     </div>
 </template>

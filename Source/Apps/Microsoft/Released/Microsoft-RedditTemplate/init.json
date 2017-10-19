@@ -2,7 +2,7 @@
   "Install": {
     "Pages": [
       {
-        "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-APIManagementTemplate/Web/Images/api-management.png",
+        "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-RedditTemplate/Web/Images/reddit-architecture.png",
         "displayname": "Getting Started",
         "list1": [
           "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",
@@ -31,21 +31,19 @@
         "pricingUrl": "$translate(INIT_REDDIT_PRICING_URL)"
       },
       {
-        "displayname": "Search Terms",
-<<<<<<< HEAD
-        "name": "search-terms.html"
+        "displayname": "SQL Database",
+        "isAzureSql": true,
+        "name": "$SiteCommon$/pages-gallery/sql.html",
+        "newSqlDatabase": "reddit",
+        "showAzureSql": false,
+        "showNewSqlOption": true,
+        "sqlInstance": "NewSql",
+        "subtitle": "$translate(INIT_SQL_SUBTITLE)",
+        "title": "$translate(INIT_SQL_TITLE)"
       },
       {
-        "displayname": "Bring Your Own Entities",
-        "name": "bring-your-own-entities.html"
-      },
-      {
-        "displayname": "Customize",
-        "name": "customize.html",
-        "skip": "$run(this.MS.DataStore.getValue('BringYourOwnEntities') === this.MS.Option.NO)"
-=======
-        "name": "$SiteCommon$/pages-gallery/bring-your-own-entities-customize.html"
->>>>>>> ef11749e... Enabling storage account and updating the reddit-architecture diagram.  The search step is removed since we are GOING to use the define entities step to generate our search string instead.
+        "displayname": "Entities to Search",
+        "name": "search-and-user-defined-entities.html"
       },
       {
         "displayname": "Summary",
@@ -79,8 +77,7 @@
       },
       {
         "displayname": "$translate(INIT_ACTION_POPULATE_REDDIT_ENTITIES)",
-        "name": "Microsoft-PopulateUserDefinedEntities",
-        "skip": "$run(this.MS.DataStore.getValue('BringYourOwnEntities') === this.MS.Option.NO)"
+        "name": "Microsoft-PopulateRedditUserDefinedEntities"
       },
       {
         "DeploymentName": "StorageAccount",

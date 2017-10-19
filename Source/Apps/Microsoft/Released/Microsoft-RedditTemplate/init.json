@@ -107,21 +107,51 @@
         "displayname": "$translate(INIT_ACTION_DEPLOYING_STORAGE_ACCOUNT_CONTAINER)",
         "name": "Microsoft-DeployStorageAccountContainer",
         "StorageAccountContainer": "reddit"
-      }
-/*      ,
+      },
+/*      {
+        "CommitmentPlan": "commitmentplan",
+        "DeploymentName": "AzureML",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_AZURE_ML)",
+        "name": "Microsoft-DeployAzureMLWebServiceFromFile",
+        "WebServiceFile": "Service/AzureML/Experiments/RedditML.json",
+        "WebServiceName": "$run('EntitiesWebService' + this.MS.DataStore.getValue('uniqueId'))"
+      },*/
       {
         "DeploymentName": "Function",
-        "displayname": "$translate(INIT_ACTION_DEPLOYING_NEWS)",
-        "FunctionName": "$save('function' + this.MS.DataStore.getValue('uniqueId'))",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_REDDIT)",
+        "FunctionName": "$save('redditfunction' + this.MS.DataStore.getValue('uniqueId'))",
         "name": "Microsoft-DeployAzureFunction",
-        "RepoUrl": "https://github.com/juluczni/AzureFunctionsNewsTemplate",
-        "Branch": "newsbranch"
+        "RepoUrl": "https://github.com/dwaynepryce/RedditAzureFunctions.git",
+        "Branch": "reddit-release-latest"
       },
       {
         "DeploymentName": "Function",
-        "displayname": "$translate(INIT_ACTION_VALIDATING_NEWS)",
+        "displayname": "$translate(INIT_ACTION_VALIDATING_REDDIT)",
         "name": "Microsoft-WaitForArmDeploymentStatus"
-      }*/
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CREATING_FUNCTION)",
+        "name": "Microsoft-CheckFunctionStatus"
+      },
+      {
+        "AppSettingKeys": {
+          "AzureMLApiKey": "8Fltuv4gd1VczQqMnsn3J/aP10Z5zLxnhWbSu5EAwQBAdq6scsxPX11XD9/bkfJERBYbwfMtulNgoo+42Acc1A==",
+          "AzureMLBaseUrl": "https://ussouthcentral.services.azureml.net/subscriptions/d5c2c202066a45d3ace1e5a8e167a7b9/services/813f3bbadd00447e8af716f31f596adc/jobs?api-version=2.0",
+          "SocialGistApiKey": "75fa803ed43e6464e45a566ec296074b",
+          "ProcessPostBatchSize": "10",
+          "QueryTerms": "$ds(SearchCriteria)",
+          "MaximumResultsPerSearch": "100",
+          "SocialGistApiRequestTimeoutInSeconds": "300",
+          "ResultLimitPerPage": "10",
+          "RedditPostQueueName": "reddit-source",
+          "AzureMLJobQueueName": "reddit-azureml-job-source",
+          "StorageQueueConnection": "$ds($ds(StorageAccountConnectionString))",
+          "ScheduledRedditQueryFrequency": "0 0 1 * * *",
+          "ScheduledAzureMLFrequency": "0 */30 * * * *"
+        },
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_APP_SETTINGS)",
+        "name": "Microsoft-DeployAzureFunctionAppSettings"
+      }
     ]
   }
 }

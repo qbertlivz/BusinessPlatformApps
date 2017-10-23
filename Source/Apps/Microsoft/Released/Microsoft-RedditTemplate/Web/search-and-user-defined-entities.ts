@@ -93,6 +93,9 @@ export class Customize extends ViewModelBase {
         if (allValidAliases.length > 0 && allValidAliases.length <= this.maximumTotalAliases) {
             this.setValidated();
 
+            for (let i = 0; i < allValidAliases.length; i++) {
+                allValidAliases[i] = `"${allValidAliases[i]}"`;
+            }
             const searchString: string = allValidAliases.join('|');
             this.MS.DataStore.addToDataStore("SearchCriteria", searchString, DataStoreType.Public);
 

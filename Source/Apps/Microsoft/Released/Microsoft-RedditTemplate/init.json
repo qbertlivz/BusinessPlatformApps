@@ -108,14 +108,24 @@
         "name": "Microsoft-DeployStorageAccountContainer",
         "StorageAccountContainer": "reddit"
       },
-/*      {
+      {
+        "DeploymentName": "StorageAccount",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_AZURE_ML_ASSETS)",
+        "name": "Microsoft-UploadAssetBlobStorage",
+        "StorageAccountConnectionString": "$ds(StorageAccountConnectionString)",
+        "BlobContainer": "reddit",
+        "AssetFile": "Service/AzureML/TwitterModel.ilearner"
+      },
+      {
         "CommitmentPlan": "commitmentplan",
         "DeploymentName": "AzureML",
         "displayname": "$translate(INIT_ACTION_DEPLOYING_AZURE_ML)",
-        "name": "Microsoft-DeployAzureMLWebServiceFromFile",
-        "WebServiceFile": "Service/AzureML/Experiments/RedditML.json",
-        "WebServiceName": "$run('EntitiesWebService' + this.MS.DataStore.getValue('uniqueId'))"
-      },*/
+        "name": "Microsoft-DeployRedditAzureMLWebServiceFromFile",
+        "WebServiceFile": "Service/AzureML/RedditML.json",
+        "WebServiceName": "$run('RedditProcessDoc' + this.MS.DataStore.getValue('uniqueId'))",
+        "SentimentModelUri": "$ds(AssetAccessUri)",
+        "AssetModelAzureMLName": "Mini Twitter sentiment analysis [trained model] - Copy"
+      },
       {
         "DeploymentName": "Function",
         "displayname": "$translate(INIT_ACTION_DEPLOYING_REDDIT)",
@@ -142,10 +152,10 @@
           "QueryTerms": "$ds(SearchCriteria)",
           "MaximumResultsPerSearch": "100",
           "SocialGistApiRequestTimeoutInSeconds": "300",
-          "ResultLimitPerPage": "10",
+          "ResultLimitPerPage": "100",
           "RedditPostQueueName": "reddit-source",
           "AzureMLJobQueueName": "reddit-azureml-job-source",
-          "StorageQueueConnection": "$ds($ds(StorageAccountConnectionString))",
+          "StorageQueueConnection": "$ds(StorageAccountConnectionString)",
           "ScheduledRedditQueryFrequency": "0 0 1 * * *",
           "ScheduledAzureMLFrequency": "0 */30 * * * *"
         },

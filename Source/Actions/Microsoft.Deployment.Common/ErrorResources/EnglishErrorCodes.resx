@@ -292,7 +292,7 @@
     <value>An error occurred while exporting the Activity Log to EventHub</value>
   </data>
   <data name="ApiManagementErrorNoServicesFound" xml:space="preserve">
-    <value>No API Management Services were found in your Azure Subscription</value>
+    <value>No fully provisioned API Management Services were found in your Azure Subscription</value>
   </data>
   <data name="EventHubFailedToQueryKeys" xml:space="preserve">
     <value>An error occurred while querying Event Hub access keys</value>

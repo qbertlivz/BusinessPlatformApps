@@ -2,14 +2,14 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
   "contentVersion": "1.1.0.0",
   "parameters": {
-    "name": {
+    "nameStreamAnalyticsJob": {
       "type": "String"
     }
   },
   "resources": [
     {
       "type": "Microsoft.StreamAnalytics/StreamingJobs",
-      "name": "[parameters('name')]",
+      "name": "[parameters('nameStreamAnalyticsJob')]",
       "apiVersion": "2016-03-01",
       "location": "[resourceGroup().location]",
       "properties": {

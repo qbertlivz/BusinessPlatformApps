@@ -20,6 +20,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.APIManagement
             AzureHttpClient ahc = new AzureHttpClient(ba.TokenAzure);
 
             string aliasInput = request.DataStore.GetValue("nameStreamAnalyticsInputEventHub");
+            string inputSerialization = request.DataStore.GetValue("inputSerialization") ?? "CSV";
             string keyPrimary = request.DataStore.GetValue("EventHubPrimaryKey");
             string nameEventHub = request.DataStore.GetValue("nameEventHub");
             string nameNamespace = request.DataStore.GetValue("nameNamespace");
@@ -27,7 +28,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.APIManagement
 
             string url = $"https://management.azure.com/subscriptions/{ba.IdSubscription}/resourceGroups/{ba.NameResourceGroup}/providers/Microsoft.StreamAnalytics/streamingjobs/{nameStreamAnalyticsJob}/inputs/{aliasInput}?api-version=2015-10-01";
 
-            StreamAnalyticsInputPropertiesWrapper body = new StreamAnalyticsInputPropertiesWrapper(nameEventHub, nameNamespace, keyPrimary);
+            StreamAnalyticsInputPropertiesWrapper body = new StreamAnalyticsInputPropertiesWrapper(nameEventHub, nameNamespace, keyPrimary, inputSerialization);
 
             string error = await ahc.Test(HttpMethod.Put, url, JsonUtility.Serialize(body));
 

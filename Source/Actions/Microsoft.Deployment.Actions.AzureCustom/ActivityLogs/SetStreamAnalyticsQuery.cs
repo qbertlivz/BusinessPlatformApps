@@ -18,7 +18,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
             string token = request.DataStore.GetJson("AzureToken", "access_token");
             string subscription = request.DataStore.GetJson("SelectedSubscription", "SubscriptionId");
             string resourceGroup = request.DataStore.GetValue("SelectedResourceGroup");
-            string jobName = request.DataStore.GetValue("SAJob");
+            string jobName = request.DataStore.GetValue("nameStreamAnalyticsJob");
             string transformationName = "Transformation";
             string apiVersion = "2015-10-01";
             string query = File.ReadAllText(Path.Combine(request.Info.App.AppFilePath, "Service/TextHelpers/SAquery.txt"));

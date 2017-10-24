@@ -3,11 +3,12 @@
     public class StreamAnalyticsInputSerialization
     {
         public StreamAnalyticsInputSerializationProperties Properties;
-        public string Type = "CSV";
+        public string Type;
 
-        public StreamAnalyticsInputSerialization()
+        public StreamAnalyticsInputSerialization(string serialization)
         {
             Properties = new StreamAnalyticsInputSerializationProperties();
+            Type = serialization;
         }
     }
 }

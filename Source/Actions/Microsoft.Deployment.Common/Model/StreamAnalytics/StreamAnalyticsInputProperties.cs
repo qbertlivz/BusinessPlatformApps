@@ -6,10 +6,10 @@
         public StreamAnalyticsInputSerialization Serialization;
         public string Type = "stream";
 
-        public StreamAnalyticsInputProperties(string nameEventHub, string nameNamespace, string key)
+        public StreamAnalyticsInputProperties(string nameEventHub, string nameNamespace, string key, string serialization)
         {
             Datasource = new StreamAnalyticsInputDatasource(nameEventHub, nameNamespace, key);
-            Serialization = new StreamAnalyticsInputSerialization();
+            Serialization = new StreamAnalyticsInputSerialization(serialization);
         }
     }
 }

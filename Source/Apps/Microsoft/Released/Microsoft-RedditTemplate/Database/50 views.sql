@@ -266,3 +266,27 @@ CREATE VIEW reddit.EmbeddedUrlSubredditView AS
 	INNER JOIN reddit.Documents AS Docs ON URLS.documentId=Docs.id 
 	WHERE CHARINDEX('reddit.com/r/',embeddedUrl)>0;
 GO
+
+CREATE VIEW reddit.TopDocumentsByDayView AS
+	SELECT id, 
+			entity,
+			RowNum
+		FROM (
+			SELECT id, 
+			score, 
+			entity, 
+			publishedDayPrecision, 
+			RowNum = ROW_NUMBER() 
+				OVER (PARTITION BY publishedDayPrecision, 
+					entity 
+					order by score desc
+				)
+				FROM ( 
+					SELECT DISTINCT entity,
+							Docs.id, 
+							score, 
+							publishedDayPrecision
+						FROM reddit.Documents Docs INNER JOIN reddit.UserDefinedEntities Ents ON Docs.id=Ents.documentId
+					) tbl1
+		) tbl2 WHERE RowNum <= 5
+GO

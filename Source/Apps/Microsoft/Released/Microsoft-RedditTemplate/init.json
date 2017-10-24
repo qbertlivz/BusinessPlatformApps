@@ -145,7 +145,7 @@
       },
       {
         "AppSettingKeys": {
-          "SqlConnectionString": "$ds(SqlConnectionString)"
+          "SqlConnection": "$ds(SqlConnectionString)"
         },
         "displayname": "$translate(INIT_ACTION_DEPLOYING_CONNECTION_STRINGS)",
         "name": "Microsoft-DeployAzureFunctionConnectionStrings"

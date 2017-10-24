@@ -315,4 +315,7 @@
   <data name="FacebookTokenAuthFailed" xml:space="preserve">
     <value>The page id or token provided is invalid.</value>
   </data>
+  <data name="ActivityLogsVerifyInsightsTimeout" xml:space="preserve">
+    <value>Timed out while waiting for the Activity Log Exported Event Hub to become available</value>
+  </data>
 </root>

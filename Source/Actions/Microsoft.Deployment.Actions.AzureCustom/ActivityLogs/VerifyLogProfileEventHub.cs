@@ -17,7 +17,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
     public class VerifyLogProfileEventHub : BaseAction
     {
         private const string INSIGHTS = "insights-operational-logs";
-        private const int RETRIES = 300;
+        private const int RETRIES = 1000;
         private TimeSpan SLEEP = new TimeSpan(0, 0, 10);
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)

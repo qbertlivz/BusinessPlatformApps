@@ -353,7 +353,7 @@
     INIT_ACTION_VALIDATING_STORAGE_ACCOUNT: `Validating Storage Account`,
     INIT_ACTION_VALIDATING_STORAGE_ACCOUNT_KEY: `Validating Storage Account Key`,
     INIT_ACTION_VALIDATING_TWITTER_FUNCTION: `Validating Twitter function`,
-    INIT_ACTION_VERIFY_EVENT_HUB: `Verifying the insights-operational-logs Event Hub - this can take about half an hour`,
+    INIT_ACTION_VERIFY_EVENT_HUB: `Verifying the insights-operational-logs Event Hub - this can take about an hour`,
     INIT_ACTION_WAITING_AS_SCHEDULER: `Waiting for Analysis Services scheduler`,
     INIT_ACTION_WAITING_DATA: `Waiting for data to appear in the destination`,
     INIT_ACTION_WAITING_DEPLOYMENT: `Waiting for deployment`,

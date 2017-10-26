@@ -52,6 +52,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
                     }
                 }
 
+                await RequestUtility.CallAction(request, "Microsoft-ExportActivityLogToEventHub");
+
                 return new ActionResponse(ActionStatus.InProgress);
             }
             else

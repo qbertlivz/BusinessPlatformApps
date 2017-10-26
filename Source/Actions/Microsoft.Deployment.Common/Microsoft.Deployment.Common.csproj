@@ -159,6 +159,9 @@
     <Compile Include="Helpers\StringEnumConverterLower.cs" />
     <Compile Include="Helpers\StringExtension.cs" />
     <Compile Include="Controller\Logger.cs" />
+    <Compile Include="Model\ActivityLog\ActivityLogProfile.cs" />
+    <Compile Include="Model\ActivityLog\ActivityLogProfileProperties.cs" />
+    <Compile Include="Model\ActivityLog\ActivityLogProfileRetentionPolicy.cs" />
     <Compile Include="Model\ApiManagement\ApiManagementLogger.cs" />
     <Compile Include="Model\ApiManagement\ApiManagementLoggerProperties.cs" />
     <Compile Include="Model\ApiManagement\ApiManagementLoggerPropertiesCredentials.cs" />

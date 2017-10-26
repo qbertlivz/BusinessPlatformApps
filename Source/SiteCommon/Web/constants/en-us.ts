@@ -344,6 +344,7 @@
     INIT_ACTION_SCHEDULING_TASK: `Scheduling task`,
     INIT_ACTION_SETTING_UP_AS_SCHEDULER: `Setting up scheduler`,
     INIT_ACTION_SQL_TOOLS: `Installing SQL Tools`,
+    INIT_ACTION_START_REDDIT_PIPELINE: `Starting Reddit Data Sync`,
     INIT_ACTION_STARTING_D365_PROFILE: `Starting Dynamics 365 Profile`,
     INIT_ACTION_STARTING_INFORMATICA_TASK: `Starting Informatica Task`,
     INIT_ACTION_UPDATING_APIM_POLICY: `Updating API Management Policy`,

@@ -14,7 +14,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
     [Export(typeof(IAction))]
     public class UploadAssetBlobStorage : BaseAction
     {
-
         public const string StorageAccountConnectionString = "StorageAccountConnectionString";
         public const string BlobContainer = "BlobContainer";
         public const string AssetFile = "AssetFile";

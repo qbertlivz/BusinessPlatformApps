@@ -18,21 +18,21 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
         {
             BpstAzure ba = new BpstAzure(request.DataStore);
 
+            string nameLogProfile = RandomGenerator.GetRandomHexadecimal("bpst-al-lp-");
             string nameNamespace = request.DataStore.GetValue("nameNamespace");
 
             string body = $"{{\"id\":null,\"location\":null,\"name\":null,\"properties\":{{\"categories\":[\"Write\",\"Delete\",\"Action\"],\"storageAccountId\":null,\"locations\":[\"australiaeast\",\"australiasoutheast\",\"brazilsouth\",\"canadacentral\",\"canadaeast\",\"centralindia\",\"centralus\",\"eastasia\",\"eastus\",\"eastus2\",\"japaneast\",\"japanwest\",\"koreacentral\",\"koreasouth\",\"northcentralus\",\"northeurope\",\"southcentralus\",\"southindia\",\"southeastasia\",\"uksouth\",\"ukwest\",\"westcentralus\",\"westeurope\",\"westindia\",\"westus\",\"westus2\",\"global\"],\"retentionPolicy\":{{\"enabled\":false,\"days\":0}},\"serviceBusRuleId\":\"/subscriptions/{ba.IdSubscription}/resourceGroups/{ba.NameResourceGroup}/providers/Microsoft.EventHub/namespaces/{nameNamespace}/authorizationrules/RootManageSharedAccessKey\"}},\"tags\":null}}";
-            string url = $"https://management.azure.com/subscriptions/{ba.IdSubscription}/providers/microsoft.insights/logprofiles/default?api-version=2016-03-01";
+            string url = $"https://management.azure.com/subscriptions/{ba.IdSubscription}/providers/microsoft.insights/logprofiles/{nameLogProfile}?api-version=2016-03-01";
 
             AzureHttpClient ahc = new AzureHttpClient(ba.TokenAzure, ba.IdSubscription);
 
-            string logProfileErrorDelete = await ahc.Test(HttpMethod.Delete, url);
             string logProfileErrorPut = await ahc.Test(HttpMethod.Put, url, body);
 
             request.DataStore.AddToDataStore("nameEventHub", INSIGHTS_OPERATIONAL_LOGS, DataStoreType.Private);
 
             return string.IsNullOrEmpty(logProfileErrorPut)
                 ? new ActionResponse(ActionStatus.Success)
-                : new ActionResponse(ActionStatus.Failure, new ActionResponseExceptionDetail("ActivityLogsErrorExportingToEventHub", $"{logProfileErrorPut} ({logProfileErrorDelete})"));
+                : new ActionResponse(ActionStatus.Failure, new ActionResponseExceptionDetail("ActivityLogsErrorExportingToEventHub", logProfileErrorPut));
         }
     }
 }

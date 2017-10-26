@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.Composition;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.Deployment.Common.ActionModel;
@@ -14,6 +15,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
     public class ExportActivityLogToEventHub : BaseAction
     {
         private const string INSIGHTS_OPERATIONAL_LOGS = "insights-operational-logs";
+        private const int ATTEMPTS = 42;
+        private const int WAIT = 2500;
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
@@ -27,13 +30,24 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
 
             AzureHttpClient ahc = new AzureHttpClient(ba.TokenAzure, ba.IdSubscription);
 
-            string logProfileErrorPut = await ahc.Test(HttpMethod.Put, url, JsonUtility.Serialize(logProfile));
+            bool isSuccess = await ahc.IsSuccess(HttpMethod.Put, url, body);
+            
+            for (int i = 0; i < ATTEMPTS && !isSuccess; i++) {
+                Thread.Sleep(WAIT);
+                isSuccess = await ahc.IsSuccess(HttpMethod.Put, url, body);
+            }
+            
+            string logProfileError = string.Empty;
+            if (!isSuccess)
+            {
+                logProfileError = await ahc.Test(HttpMethod.Put, url, body);
+            }
 
             request.DataStore.AddToDataStore("nameEventHub", INSIGHTS_OPERATIONAL_LOGS, DataStoreType.Private);
 
-            return string.IsNullOrEmpty(logProfileErrorPut)
+            return isSuccess
                 ? new ActionResponse(ActionStatus.Success)
-                : new ActionResponse(ActionStatus.Failure, new ActionResponseExceptionDetail("ActivityLogsErrorExportingToEventHub", logProfileErrorPut));
+                : new ActionResponse(ActionStatus.Failure, new ActionResponseExceptionDetail("ActivityLogsErrorExportingToEventHub", logProfileError));
         }
     }
 }

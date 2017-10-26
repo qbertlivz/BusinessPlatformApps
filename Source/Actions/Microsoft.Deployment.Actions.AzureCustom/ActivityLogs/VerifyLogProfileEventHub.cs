@@ -17,8 +17,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
     public class VerifyLogProfileEventHub : BaseAction
     {
         private const string INSIGHTS = "insights-operational-logs";
-        private const int RETRIES = 1000;
-        private TimeSpan SLEEP = new TimeSpan(0, 0, 10);
+        private const int RETRIES = 1500;
+        private TimeSpan SLEEP = new TimeSpan(0, 1, 0);
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
@@ -31,8 +31,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
             {
                 attemptsInsights++;
                 request.DataStore.AddToDataStore("attemptsInsights", attemptsInsights.ToString(), DataStoreType.Public);
-
-                Thread.Sleep(SLEEP);
 
                 string url = $"https://management.azure.com/subscriptions/{ba.IdSubscription}/resourceGroups/{ba.NameResourceGroup}/providers/Microsoft.EventHub/namespaces/{nameNamespace}/eventhubs?api-version=2015-08-01";
                 string body = $"\"parameters\": {{\"namespaceName\":\"{nameNamespace}\",\"resourceGroupName\":\"{ba.NameResourceGroup}\",\"api-version\":\"2015-08-01\", \"subscriptionId\": \"{ba.IdSubscription}\"}}";
@@ -51,6 +49,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
                         }
                     }
                 }
+
+                Thread.Sleep(SLEEP);
 
                 return new ActionResponse(ActionStatus.InProgress);
             }

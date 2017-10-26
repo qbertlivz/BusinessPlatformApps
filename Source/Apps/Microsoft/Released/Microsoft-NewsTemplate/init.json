@@ -114,8 +114,8 @@
             {
                 "CognitiveServiceKey": "",
                 "CognitiveServiceName": "BingCognitiveService",
-                "CognitiveServiceType": "Bing.Search",
-                "CognitiveSkuName": "S2",
+                "CognitiveServiceType": "Bing.Search.v7",
+                "CognitiveSkuName": "S5",
                 "DeploymentName": "CognitiveBing",
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_COGNITIVE_SERVICE)",
                 "KeyNumber": "1",
@@ -250,7 +250,8 @@
                 "ConnectorDisplayName": "bingsearch",
                 "ConnectorName": "bingsearch",
                 "ConnectorPayload": {
-                    "apiKey": "$dsall(CognitiveServiceKey)[1]"
+                    "apiKey": "$dsall(CognitiveServiceKey)[1]",
+                    "apiVersion": "v7.0"
                 },
                 "DeploymentName": "CognitiveBing",
                 "displayname": "$translate(INIT_ACTION_UPDATING_COGNITIVE_SERVICE_CONNECTOR)",

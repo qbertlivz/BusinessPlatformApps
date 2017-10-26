@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Net.Http;
 using System.Threading;
@@ -16,39 +17,48 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
     public class VerifyLogProfileEventHub : BaseAction
     {
         private const string INSIGHTS = "insights-operational-logs";
-        private const int RETRIES = 20;
-        private const int SLEEP = 10000;
+        private const int RETRIES = 1000;
+        private TimeSpan SLEEP = new TimeSpan(0, 0, 10);
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             BpstAzure ba = new BpstAzure(request.DataStore);
 
+            int attemptsInsights = request.DataStore.GetCount("attemptsInsights");
             string nameNamespace = request.DataStore.GetValue("nameNamespace");
-            string uri = $"https://management.azure.com/subscriptions/{ba.IdSubscription}/resourceGroups/{ba.NameResourceGroup}/providers/Microsoft.EventHub/namespaces/{nameNamespace}/eventhubs?api-version=2015-08-01";
-            string body = $"\"parameters\": {{\"namespaceName\":\"{nameNamespace}\",\"resourceGroupName\":\"{ba.NameResourceGroup}\",\"api-version\":\"2015-08-01\", \"subscriptionId\": \"{ba.IdSubscription}\"}}";
-            AzureHttpClient ahc = new AzureHttpClient(ba.TokenAzure, ba.IdSubscription);
-            bool areHubsPresent = false;
-            for (int i = 0; i < RETRIES && !areHubsPresent; i++)
+
+            if (attemptsInsights < RETRIES)
             {
-                if (!areHubsPresent)
-                {
-                    Thread.Sleep(SLEEP);
-                }
-                List<EventHub> hubs = await ahc.RequestValue<List<EventHub>>(HttpMethod.Get, uri, body);
+                attemptsInsights++;
+                request.DataStore.AddToDataStore("attemptsInsights", attemptsInsights.ToString(), DataStoreType.Public);
+
+                Thread.Sleep(SLEEP);
+
+                string url = $"https://management.azure.com/subscriptions/{ba.IdSubscription}/resourceGroups/{ba.NameResourceGroup}/providers/Microsoft.EventHub/namespaces/{nameNamespace}/eventhubs?api-version=2015-08-01";
+                string body = $"\"parameters\": {{\"namespaceName\":\"{nameNamespace}\",\"resourceGroupName\":\"{ba.NameResourceGroup}\",\"api-version\":\"2015-08-01\", \"subscriptionId\": \"{ba.IdSubscription}\"}}";
+
+                AzureHttpClient ahc = new AzureHttpClient(ba.TokenAzure, ba.IdSubscription);
+
+                List<EventHub> hubs = await ahc.RequestValue<List<EventHub>>(HttpMethod.Get, url, body);
 
                 if (!hubs.IsNullOrEmpty())
                 {
-                    foreach(EventHub hub in hubs)
+                    foreach (EventHub hub in hubs)
                     {
                         if (hub.Name.EqualsIgnoreCase(INSIGHTS))
                         {
-                            areHubsPresent = true;
-                            break;
+                            return new ActionResponse(ActionStatus.Success);
                         }
                     }
                 }
+
+                return new ActionResponse(ActionStatus.InProgress);
             }
-            return areHubsPresent ? new ActionResponse(ActionStatus.Success) : new ActionResponse(ActionStatus.Failure);
+            else
+            {
+                return new ActionResponse(ActionStatus.Failure, new ActionResponseExceptionDetail("ActivityLogsVerifyInsightsTimeout"));
+            }
+
         }
     }
 }

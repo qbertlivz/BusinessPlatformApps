@@ -95,7 +95,7 @@ SET @cr = CURSOR FAST_FORWARD FOR
               WHERE TABLE_TYPE='BASE TABLE' AND 
                     TABLE_SCHEMA='dbo' AND 
                     TABLE_NAME IN ('systemuser', 'StatusMetadata','AttributeMetadata', 'TargetMetadata','StateMetadata', 'salesorderdetail', 'salesorder', 'quotedetail', 'quote', 'OptionSetMetadata', 'opportunity', 'msdyn_transactioncategory',
-                                   'msdyn_timeentry', 'msdyn_resourcerequirementdetail', 'msdyn_resourcerequirement', 'msdyn_resourcerequest', 'msdyn_project', 'msdyn_organizationalunit', 'msdyn_orderlineresourcecategory',
+                                   'msdyn_timeentry', 'msdyn_resourcerequirementdetail', 'msdyn_resourcerequirement', 'msdyn_resourcerequest', 'msdyn_project', 'msdyn_projecttask', 'msdyn_organizationalunit', 'msdyn_orderlineresourcecategory',
                                    'msdyn_estimateline', 'msdyn_actual', 'GlobalOptionSetMetadata', 'bookingstatus', 'bookableresourcecategoryassn', 'bookableresourcecategory', 'bookableresourcebooking', 'bookableresource',
                                    'account');
 OPEN @cr;
@@ -135,7 +135,7 @@ SET @cr = CURSOR FAST_FORWARD FOR
                                                                                            'bookableresourcecategoryIdType', 'bookableresourcecategoryType', 'bookableresourceIdType', 'bookableresourceType',
                                                                                            'bookingstatusIdType', 'bookingstatusType', 'msdyn_actualIdType', 'msdyn_actualType', 'msdyn_estimatelineIdType',
                                                                                            'msdyn_estimatelineType', 'msdyn_orderlineresourcecategoryIdType', 'msdyn_orderlineresourcecategoryType',
-                                                                                           'msdyn_organizationalunitIdType', 'msdyn_organizationalunitType', 'msdyn_projectIdType', 'msdyn_projectType',
+                                                                                           'msdyn_organizationalunitIdType', 'msdyn_organizationalunitType', 'msdyn_projectIdType', 'msdyn_projectType', 'msdyn_projecttaskIdType', 'msdyn_projecttaskType',
                                                                                            'msdyn_resourcerequestIdType', 'msdyn_resourcerequestType', 'msdyn_resourcerequirementdetailIdType', 
                                                                                            'msdyn_resourcerequirementdetailType', 'msdyn_resourcerequirementIdType', 'msdyn_resourcerequirementType', 
                                                                                            'msdyn_timeentryIdType', 'msdyn_timeentryType', 'msdyn_transactioncategoryIdType', 'msdyn_transactioncategoryType', 

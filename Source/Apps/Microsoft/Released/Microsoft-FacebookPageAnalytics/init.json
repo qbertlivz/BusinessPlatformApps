@@ -71,7 +71,8 @@
             },
             {
                 "datastoreEntriesToValidate": [
-                    "SqlConnectionString"
+                    "SqlConnectionString",
+                    "Filename"
                 ],
                 "displayname": "Progress",
                 "enablePublishReport": "$run(this.MS.DataStore.getValue('ssasDisabled') === 'false')",

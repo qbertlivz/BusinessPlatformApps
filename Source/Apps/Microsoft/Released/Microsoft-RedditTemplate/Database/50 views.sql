@@ -290,3 +290,45 @@ CREATE VIEW reddit.TopDocumentsByDayView AS
 					) tbl1
 		) tbl2 WHERE RowNum <= 5
 GO
+
+/*
+Gather the current and previous week's counts, average score, and average sentitment for all weeks in the dataset per entity. Make sure that each entity has a record for each week.
+tmpAggregates = initial counts per week
+tmpAggregates2 = set of entities and weeks
+*/
+CREATE VIEW reddit.WeekOverWeekView AS
+	WITH tmpAggregates AS (
+		SELECT COUNT(1) AS cnt, 
+			AVG(tbl1.score) AS avg_score, 
+			AVG(tbl1.sentiment) AS avg_sentiment, 
+			entity, 
+			tbl1.publishedWeekPrecision 
+		FROM reddit.AllDocumentsView tbl1 
+		JOIN reddit.UserDefinedEntities tbl2 ON tbl1.id = tbl2.documentId 
+		GROUP BY entity, tbl1.publishedWeekPrecision
+	)
+	, tmpAggregates2 AS (
+		SELECT publishedWeekPrecision, 
+			entity 
+		FROM (SELECT DISTINCT publishedWeekPrecision FROM reddit.AllDocumentsView) tbl1 
+		CROSS JOIN (SELECT DISTINCT entity FROM reddit.UserDefinedEntities) tbl2
+	)
+	SELECT entity, 
+		publishedWeekPrecision, 
+		LAG(publishedWeekPrecision, 1) OVER(PARTITION BY entity ORDER BY publishedweekprecision) AS priorweek, 
+		LAG(cnt, 1) OVER(PARTITION BY entity ORDER BY publishedweekprecision) AS priorweekcnt, 
+		cnt, 
+		LAG(avg_score, 1) OVER(PARTITION BY entity ORDER BY publishedweekprecision) AS priorweekavg_score, 
+		avg_score, 
+		LAG(avg_sentiment, 1) OVER(PARTITION BY entity ORDER BY publishedweekprecision) AS priorweekavg_sentiment, 
+		avg_sentiment  
+	FROM (
+		SELECT tbl2.publishedWeekPrecision, 
+			tbl2.entity, 
+			COALESCE(tbl1.cnt, 0) AS cnt, 
+			COALESCE(tbl1.avg_score, 0) AS avg_score, 
+			COALESCE(tbl1.avg_sentiment, 0) AS avg_sentiment 
+		FROM tmpAggregates tbl1 
+		RIGHT OUTER JOIN tmpAggregates2 tbl2 ON tbl1.publishedWeekPrecision = tbl2.publishedWeekPrecision AND tbl1.entity = tbl2.entity
+	) tbl3
+GO

@@ -110,7 +110,8 @@ CREATE TABLE reddit.UserDefinedEntityDefinitions
 (
     regex			NVARCHAR(200) NOT NULL,
     entityType		NVARCHAR(30) NOT NULL,
-    entityValue		NVARCHAR(MAX) NULL
+    entityValue		NVARCHAR(MAX) NULL,
+	color           NVARCHAR(7) NOT NULL
 );
 
 -- Staging (Sentiment)

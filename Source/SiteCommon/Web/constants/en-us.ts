@@ -337,6 +337,7 @@
     INIT_ACTION_REMOVING_TASK: `Removing task`,
     INIT_ACTION_RETRIEVING_POWERAPP_ENVIRONMENT: `Retrieving PowerApp environment`,
     INIT_ACTION_RETRIEVING_SALESFORCE_METADATA: `Retrieving metadata from Salesforce`,
+    INIT_ACTION_RETRIEVING_SOCIALGIST_API_KEY: `Retrieving customer API key from SocialGist for Reddit`,
     INIT_ACTION_RUNNING_LOGIC_APP_HISTORICAL: `Running Logic App historical`,
     INIT_ACTION_RUNNING_TASK: `Running task`,
     INIT_ACTION_SCHEDULING_DATA_LOADS: `Scheduling data loads for future data`,

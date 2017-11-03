@@ -15,6 +15,47 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
     [Export(typeof(IAction))]
     class PopulateRedditUserDefinedEntities : BaseAction
     {
+        // there has got to be a better way to specify colors like this
+        private static readonly List<string> predefinedColors = new List<string>
+        {
+            "#01B8AA",
+            "#FD625E",
+            "#F2C80F",
+            "#8AD4EB",
+            "#FE9666", 
+            "#A66999",
+            "#3599B8",
+            "#DFBFBF",
+            "#4AC5BB",
+            "#5F6B6D",
+            "#FB8281",
+            "#F4D25A",
+            "#7F898A",
+            "#A4DDEE",
+            "#FDAB89",
+            "#B687AC",
+            "#28738A",
+            "#A78F8F",
+            "#168980",
+            "#293537",
+            "#BB4A4A",
+            "#B59525",
+            "#475052",
+            "#6A9FB0",
+            "#BD7150",
+            "#7B4F71",
+            "#1B4D5C",
+            "#706060",
+            "#0F5C55",
+            "#1C2325",
+            "#7D3231",
+            "#796419",
+            "#303637"
+        };
+
+        // we can only have 32 aliases max across all entities (because SocialGist' API only allows for 32 query terms in a search)
+        private const int maximumAllowedEntities = 32;
+
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             List<NewsEntity> userEntities = JsonUtility.Deserialize<List<NewsEntity>>(request.DataStore.GetValue("UserDefinedEntities"));
@@ -25,8 +66,14 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
                 
                 var userEntityTable = UserEntitiesTable();
 
+                var count = 0;
+
                 foreach (NewsEntity userEntity in userEntities)
                 {
+                    if (count == maximumAllowedEntities)
+                    {
+                        throw new Exception($"More than 32 aliases across all provided entities [{userEntities.Count}] were found; 32 is the maximum number allowed.");
+                    }
                     var values = new List<string>(
                                userEntity.Values.Split(new string[] { "\n" },
                                System.StringSplitOptions.RemoveEmptyEntries));
@@ -37,10 +84,11 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
                         userEntityRow["regex"] = value ;
                         userEntityRow["entityValue"] = value;
                         userEntityRow["entityType"] = userEntity.Name;
+                        userEntityRow["color"] = predefinedColors[count];
                         userEntityTable.Rows.Add(userEntityRow);
+                        count++;
                     }
                 }
-                
                 BulkInsert(sqlConn, userEntityTable, "reddit.UserDefinedEntityDefinitions");
             }
 
@@ -72,6 +120,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
             table.Columns.Add("regex");
             table.Columns.Add("entityType");
             table.Columns.Add("entityValue");
+            table.Columns.Add("color");
             return table;
         }
     }

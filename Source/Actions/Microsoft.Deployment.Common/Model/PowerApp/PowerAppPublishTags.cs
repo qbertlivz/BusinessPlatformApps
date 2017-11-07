@@ -9,7 +9,7 @@ namespace Microsoft.Deployment.Common.Model.PowerApp
         [JsonProperty("minimumRequiredApiVersion")]
         public string MinimumRequiredApiVersion = "2.2.0";
         [JsonProperty("publisherVersion")]
-        public string PublisherVersion;
+        public string PublisherVersion = "2.0.720";
         [JsonProperty("primaryDeviceHeight")]
         public string PrimaryDeviceHeight = "768";
         [JsonProperty("primaryDeviceWidth")]

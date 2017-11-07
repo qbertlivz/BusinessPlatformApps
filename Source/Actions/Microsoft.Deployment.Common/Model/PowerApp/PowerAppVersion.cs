@@ -5,7 +5,7 @@ namespace Microsoft.Deployment.Common.Model.PowerApp
     public class PowerAppVersion
     {
         [JsonProperty("build")]
-        public int Build;
+        public int Build = 720;
         [JsonProperty("major")]
         public int Major = 2;
         [JsonProperty("majorRevision")]

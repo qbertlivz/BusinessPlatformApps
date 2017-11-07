@@ -35,6 +35,7 @@
                     "msdyn_resourcerequirement": "msdyn_resourcerequirementid",
                     "msdyn_resourcerequest": "msdyn_resourcerequestid",
                     "msdyn_project": "msdyn_projectid",
+                    "msdyn_projecttask": "msdyn_projecttaskid",
                     "msdyn_organizationalunit": "msdyn_organizationalunitid",
                     "msdyn_orderlineresourcecategory": "msdyn_orderlineresourcecategoryid",
                     "msdyn_estimateline": "msdyn_estimatelineid",
@@ -112,7 +113,7 @@
                 "name": "Microsoft-SetConfigValueInSql",
                 "SqlConfigTable": "[psa].[configuration]",
                 "SqlEntryName": "Tables",
-                "SqlEntryValue": "account, bookableresource, bookableresourcebooking, bookableresourcecategory, bookableresourcecategoryassn, bookingstatus, msdyn_actual, msdyn_estimateline, msdyn_orderlineresourcecategory, msdyn_organizationalunit, msdyn_project, msdyn_resourcerequest, msdyn_resourcerequirement, msdyn_resourcerequirementdetail, msdyn_timeentry, msdyn_transactioncategory, opportunity, quote, quotedetail, salesorder, salesorderdetail, systemuser",
+                "SqlEntryValue": "account, bookableresource, bookableresourcebooking, bookableresourcecategory, bookableresourcecategoryassn, bookingstatus, msdyn_actual, msdyn_estimateline, msdyn_orderlineresourcecategory, msdyn_organizationalunit, msdyn_project, msdyn_projecttask, msdyn_resourcerequest, msdyn_resourcerequirement, msdyn_resourcerequirementdetail, msdyn_timeentry, msdyn_transactioncategory, opportunity, quote, quotedetail, salesorder, salesorderdetail, systemuser",
                 "SqlGroup": "SolutionTemplate",
                 "SqlServerIndex": "0",
                 "SqlSubGroup": "StandardConfiguration"

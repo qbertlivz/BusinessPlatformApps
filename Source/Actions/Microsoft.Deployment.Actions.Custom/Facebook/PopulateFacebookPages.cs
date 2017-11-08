@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Linq;
+﻿using System.ComponentModel.Composition;
+using System.Data.SqlClient;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
+
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
@@ -19,19 +17,17 @@ namespace Microsoft.Deployment.Actions.Custom.Facebook
             string page = request.DataStore.GetValue("FacebookPageId");
             string permanentPageToken = request.DataStore.GetValue("FacebookPageToken");
             string connString = request.DataStore.GetValue("SqlConnectionString");
+            string cmdInsert = "INSERT INTO fbpa.PageTable(idpage, name) VALUES(@pageId, @pageName)";
 
             string pageName = await GetPageName(page, permanentPageToken);
 
-            SqlUtility.RunCommand(connString, GetInsertCommand(page, pageName), Common.Enums.SqlCommandType.ExecuteWithoutData);
+            SqlUtility.RunCommand(connString, cmdInsert, Common.Enums.SqlCommandType.ExecuteWithoutData, new SqlParameter[] { new SqlParameter("@pageId", page),
+                                                                                                                              new SqlParameter("@pageName", pageName)
+                                                                                                                            }
+                                 );
 
             return new ActionResponse(ActionStatus.Success);
 
-        }
-
-        public string GetInsertCommand(string pageId, string pageName)
-        {
-            var cmd = $"INSERT fbpa.PageTable(idpage, name) VALUES('{pageId}','{pageName}')";
-            return cmd;
         }
 
         public async Task<string> GetPageName(string pageId, string token)

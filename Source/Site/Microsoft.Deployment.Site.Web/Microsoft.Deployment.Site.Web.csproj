@@ -14,6 +14,7 @@
     <PackageTargetFallback>$(PackageTargetFallback);dotnet5.6;dnxcore50;portable-net45+win8</PackageTargetFallback>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <PreBuildEvent>IF "%IS_TEAM_CITY%" == "y" (
     call gulp.cmd pre-build
     call gulp.cmd strip-typescript-reference-paths

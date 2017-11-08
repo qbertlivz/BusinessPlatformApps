@@ -218,6 +218,9 @@
     <Compile Include="Model\PBI\PBIReport.cs" />
     <Compile Include="Model\PBI\PBIWorkspace.cs" />
     <Compile Include="Model\PBI\PBIWorkspaces.cs" />
+    <Compile Include="Model\PowerApp\PowerAppConsent.cs" />
+    <Compile Include="Model\PowerApp\PowerAppConsents.cs" />
+    <Compile Include="Model\PowerApp\PowerAppConsentScopes.cs" />
     <Compile Include="Model\PowerApp\PowerAppMetadata.cs" />
     <Compile Include="Model\PowerApp\PowerAppConnection.cs" />
     <Compile Include="Model\PowerApp\PowerAppConnectionReferences.cs" />

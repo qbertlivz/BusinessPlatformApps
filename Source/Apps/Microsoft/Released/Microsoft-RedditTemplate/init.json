@@ -168,7 +168,8 @@
                     "AzureMLJobQueueName": "reddit-azureml-job-source",
                     "StorageQueueConnection": "$ds(StorageAccountConnectionString)",
                     "ScheduledRedditQueryFrequency": "0 0 1 * * *",
-                    "ScheduledAzureMLFrequency": "0 */30 * * * *"
+                    "ScheduledAzureMLFrequency": "0 */30 * * * *",
+                    "WEBSITE_MAX_DYNAMIC_APPLICATION_SCALE_OUT": "1" 
                 },
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_APP_SETTINGS)",
                 "name": "Microsoft-DeployAzureFunctionAppSettings"

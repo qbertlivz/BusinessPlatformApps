@@ -225,6 +225,13 @@ CREATE VIEW reddit.SubredditMappingView AS
 	FROM reddit.AllDocumentsView;
 GO
 
+-- Count of embedded URL domains
+CREATE VIEW reddit.EmbeddedUrlDomainCountView AS
+SELECT [embeddedUrlDomain], count(embeddedUrlDomain) usageCount
+  FROM [reddit].[EmbeddedUrls]
+  GROUP BY embeddedUrlDomain
+GO
+
 CREATE VIEW reddit.EmbeddedUrlSubredditView AS
 	SELECT documentId, 
 		embeddedUrl, 

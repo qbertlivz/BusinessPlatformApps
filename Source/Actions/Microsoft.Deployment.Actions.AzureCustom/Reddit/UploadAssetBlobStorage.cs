@@ -14,18 +14,18 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
     [Export(typeof(IAction))]
     public class UploadAssetBlobStorage : BaseAction
     {
-        public const string StorageAccountConnectionString = "StorageAccountConnectionString";
-        public const string BlobContainer = "BlobContainer";
-        public const string AssetFile = "AssetFile";
-        public const string AccessAssetUriParameter = "AccessAssetUriParameter";
+        public const string StorageAccountConnectionStringKey = "StorageAccountConnectionString";
+        public const string BlobContainerKey = "BlobContainer";
+        public const string AssetFileKey = "AssetFile";
+        public const string AccessAssetUriParameterKey = "AccessAssetUriParameter";
         public const string DefaultAccessAssetUriParameter = "AssetAccessUri";
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var storageAccountConnectionString = request.DataStore.GetValue(StorageAccountConnectionString);
-            var blobContainerName = request.DataStore.GetValue(BlobContainer);
-            var assetFile = request.DataStore.GetValue(AssetFile);
-            var accessAssetUriParameter = request.DataStore.GetValue(AccessAssetUriParameter);
+            var storageAccountConnectionString = request.DataStore.GetValue(StorageAccountConnectionStringKey);
+            var blobContainerName = request.DataStore.GetValue(BlobContainerKey);
+            var assetFile = request.DataStore.GetValue(AssetFileKey);
+            var accessAssetUriParameter = request.DataStore.GetValue(AccessAssetUriParameterKey);
 
             if (string.IsNullOrWhiteSpace(accessAssetUriParameter))
             {
@@ -35,17 +35,17 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
             var errors = new List<string>();
             if (string.IsNullOrWhiteSpace(storageAccountConnectionString))
             {
-                errors.Add($"{StorageAccountConnectionString} not defined");
+                errors.Add($"{StorageAccountConnectionStringKey} not defined");
             }
 
             if (string.IsNullOrWhiteSpace(blobContainerName))
             {
-                errors.Add($"{BlobContainer} not defined");
+                errors.Add($"{BlobContainerKey} not defined");
             }
 
             if (string.IsNullOrWhiteSpace(assetFile))
             {
-                errors.Add($"{AssetFile} not defined");
+                errors.Add($"{AssetFileKey} not defined");
             }
 
             if (errors.Count != 0)
@@ -69,7 +69,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
                     assetFile,
                     null,
                     DefaultErrorCodes.DefaultErrorCode,
-                    $"{AssetFile} {assetFile} not found"
+                    $"{AssetFileKey} {assetFile} not found"
                 );
             }
 
@@ -77,10 +77,10 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
             {
                 return new ActionResponse(
                     ActionStatus.Failure,
-                    storageAccountConnectionString,
+                    null,
                     null,
                     DefaultErrorCodes.DefaultErrorCode,
-                    $"Azure storage account {storageAccountConnectionString} was not resolvable"
+                    $"Azure storage account was not resolvable.  Unable to upload trained model for Azure ML experiment."
                 );
             }
 

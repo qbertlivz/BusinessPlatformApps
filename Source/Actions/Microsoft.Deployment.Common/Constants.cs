@@ -57,5 +57,9 @@
         public const string FacebookGraphUrl = "https://graph.facebook.com";
         public const string FacebookClientId = "1566056443462682";
         public static string FacebookClientSecret = string.Empty;
+
+        //SocialGist (Reddit) constants
+        public const string SocialGistProvisionKeyUrl = "";
+        public static string SocialGistProvisionKeySecret = string.Empty;
     }
 }

@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
+using Microsoft.Deployment.Common.ErrorCode;
 using Microsoft.Deployment.Common.Helpers;
 using Microsoft.Deployment.Common.Model.Custom;
 
@@ -60,39 +61,52 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
         {
             List<NewsEntity> userEntities = JsonUtility.Deserialize<List<NewsEntity>>(request.DataStore.GetValue("UserDefinedEntities"));
 
-            if (userEntities != null)
+            try
             {
-                var sqlConn = request.DataStore.GetValue("SqlConnectionString");
-                
-                var userEntityTable = UserEntitiesTable();
-
-                var count = 0;
-
-                foreach (NewsEntity userEntity in userEntities)
+                if (userEntities != null)
                 {
-                    if (count == maximumAllowedEntities)
-                    {
-                        throw new Exception($"More than 32 aliases across all provided entities [{userEntities.Count}] were found; 32 is the maximum number allowed.");
-                    }
-                    var values = new List<string>(
-                               userEntity.Values.Split(new string[] { "\n" },
-                               System.StringSplitOptions.RemoveEmptyEntries));
+                    var sqlConn = request.DataStore.GetValue("SqlConnectionString");
 
-                    foreach (var value in values)
+                    var userEntityTable = UserEntitiesTable();
+
+                    var count = 0;
+
+                    foreach (NewsEntity userEntity in userEntities)
                     {
-                        var userEntityRow = userEntityTable.NewRow();
-                        userEntityRow["regex"] = value ;
-                        userEntityRow["entityValue"] = value;
-                        userEntityRow["entityType"] = userEntity.Name;
-                        userEntityRow["color"] = predefinedColors[count];
-                        userEntityTable.Rows.Add(userEntityRow);
-                        count++;
+                        if (count == maximumAllowedEntities)
+                        {
+                            throw new Exception($"More than 32 aliases across all provided entities [{userEntities.Count}] were found; 32 is the maximum number allowed.");
+                        }
+                        var values = new List<string>(
+                            userEntity.Values.Split(new string[] {"\n"},
+                                System.StringSplitOptions.RemoveEmptyEntries));
+
+                        foreach (var value in values)
+                        {
+                            var userEntityRow = userEntityTable.NewRow();
+                            userEntityRow["regex"] = value;
+                            userEntityRow["entityValue"] = value;
+                            userEntityRow["entityType"] = userEntity.Name;
+                            userEntityRow["color"] = predefinedColors[count];
+                            userEntityTable.Rows.Add(userEntityRow);
+                            count++;
+                        }
                     }
+                    BulkInsert(sqlConn, userEntityTable, "reddit.UserDefinedEntityDefinitions");
                 }
-                BulkInsert(sqlConn, userEntityTable, "reddit.UserDefinedEntityDefinitions");
-            }
 
-            return new ActionResponse(ActionStatus.Success);
+                return new ActionResponse(ActionStatus.Success);
+            }
+            catch (Exception e)
+            {
+                return new ActionResponse(
+                    ActionStatus.Failure,
+                    null,
+                    e,
+                    DefaultErrorCodes.DefaultErrorCode,
+                    "An error occurred populating search entities"
+                );
+            }
         }
 
 

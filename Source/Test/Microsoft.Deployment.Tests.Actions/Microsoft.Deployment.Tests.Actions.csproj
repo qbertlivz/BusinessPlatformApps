@@ -179,6 +179,7 @@
     <Compile Include="TestHelpers\AAD.cs" />
     <Compile Include="TestHelpers\Credential.cs" />
     <Compile Include="TestHelpers\ObjectExtensionMethods.cs" />
+    <Compile Include="TestHelpers\StorageAccountCreds.cs" />
     <Compile Include="TestHelpers\SalesforceCreds.cs" />
     <Compile Include="TestHelpers\SqlCreds.cs" />
     <Compile Include="TestHelpers\TestManager.cs" />

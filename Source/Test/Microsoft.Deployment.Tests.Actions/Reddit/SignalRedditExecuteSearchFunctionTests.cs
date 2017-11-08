@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.Deployment.Actions.AzureCustom.Reddit;
 using Microsoft.Deployment.Common.ActionModel;
@@ -11,15 +12,11 @@ namespace Microsoft.Deployment.Tests.Actions.Reddit
     [TestClass]
     public class SignalRedditExecuteSearchFunctionTests
     {
-        /// <summary>
-        /// This field requires an actual storage account connection string.  It must not be left empty.  It must be valid.
-        /// </summary>
-        // I tested this with a storage account on Project Essex' subscription.  I also am not going to put actual connection strings out on Github.
-        private const string WorkingStorageAccountConnectionString = "";
-
-
+      
         private const string storageQueueName = "line";
-        private readonly string brokenStorageAccountConnectionString = WorkingStorageAccountConnectionString.Replace("Account", "ACC");
+
+        private readonly string workingStorageAccountConnectionString = Credential.Instance.StorageAccount.StorageAccountConnectionString;
+        private readonly string brokenStorageAccountConnectionString = Credential.Instance.StorageAccount.StorageAccountConnectionString.Replace("Account", "ACC");
 
         [TestMethod]
         public async Task MissingArguments()
@@ -28,24 +25,37 @@ namespace Microsoft.Deployment.Tests.Actions.Reddit
 
             var response = await TestManager.ExecuteActionAsync("Microsoft-SignalExecuteRedditSearchFunction", dataStore, "Microsoft-RedditTemplate");
             Assert.IsTrue(response.Status == ActionStatus.Failure);
+            var expected = new List<string>()
+            {
+                $"{SignalExecuteRedditSearchFunction.StorageAccountConnectionStringKey} not defined",
+                $"{SignalExecuteRedditSearchFunction.StorageQueueNameKey} not defined"
+            };
+            Assert.IsInstanceOfType(response.Body, typeof(List<string>));
+            CollectionAssert.AreEqual(expected, (List<string>)response.Body);
         }
 
+        // should be enabled once a valid StorageAccount.StorageAccountConnectionString is put in the credential.json
+        [Ignore]
         [TestMethod]
         public async Task BadConnectionString()
         {
             var dataStore = await TestManager.GetDataStore();
-            dataStore.AddToDataStore(SignalExecuteRedditSearchFunction.StorageAccountConnectionString, brokenStorageAccountConnectionString, DataStoreType.Public);
+            dataStore.AddToDataStore(SignalExecuteRedditSearchFunction.StorageAccountConnectionStringKey, brokenStorageAccountConnectionString, DataStoreType.Public);
+            dataStore.AddToDataStore(SignalExecuteRedditSearchFunction.StorageQueueNameKey, storageQueueName, DataStoreType.Public);
 
             var response = await TestManager.ExecuteActionAsync("Microsoft-SignalExecuteRedditSearchFunction", dataStore, "Microsoft-RedditTemplate");
             Assert.IsTrue(response.Status == ActionStatus.Failure);
+            Assert.AreEqual("Azure storage account was not resolvable.  This is required to start function processing", response.ExceptionDetail.AdditionalDetailsErrorMessage);
         }
 
+        // should be enabled once a valid StorageAccount.StorageAccountConnectionString is put in the credential.json
+        [Ignore]
         [TestMethod]
         public async Task TestAddToQueue()
         {
             var dataStore = await TestManager.GetDataStore();
-            dataStore.AddToDataStore(SignalExecuteRedditSearchFunction.StorageAccountConnectionString, WorkingStorageAccountConnectionString, DataStoreType.Public);
-            dataStore.AddToDataStore(SignalExecuteRedditSearchFunction.StorageQueueName, storageQueueName, DataStoreType.Public);
+            dataStore.AddToDataStore(SignalExecuteRedditSearchFunction.StorageAccountConnectionStringKey, workingStorageAccountConnectionString, DataStoreType.Public);
+            dataStore.AddToDataStore(SignalExecuteRedditSearchFunction.StorageQueueNameKey, storageQueueName, DataStoreType.Public);
 
             var response = await TestManager.ExecuteActionAsync("Microsoft-SignalExecuteRedditSearchFunction", dataStore, "Microsoft-RedditTemplate");
             Assert.IsTrue(response.Status == ActionStatus.Success);
@@ -54,14 +64,16 @@ namespace Microsoft.Deployment.Tests.Actions.Reddit
         [TestCleanup]
         public void CleanQueue()
         {
-            if (!CloudStorageAccount.TryParse(WorkingStorageAccountConnectionString, out var cloudStorageAccount))
+            if (!CloudStorageAccount.TryParse(workingStorageAccountConnectionString, out var cloudStorageAccount))
             {
-                throw new Exception($"Unable to connect to {WorkingStorageAccountConnectionString} to remove queue {storageQueueName}");
+                Debug.WriteLine($"Unable to connect to {workingStorageAccountConnectionString} to remove queue {storageQueueName}");
             }
-
-            var queueClient = cloudStorageAccount.CreateCloudQueueClient();
-            var cloudQueue = queueClient.GetQueueReference(storageQueueName);
-            cloudQueue.DeleteIfExists();
+            else
+            {
+                var queueClient = cloudStorageAccount.CreateCloudQueueClient();
+                var cloudQueue = queueClient.GetQueueReference(storageQueueName);
+                cloudQueue.DeleteIfExists();
+            }
         }
         
     }

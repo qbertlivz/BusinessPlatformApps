@@ -13,26 +13,26 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
     [Export(typeof(IAction))]
     public class SignalExecuteRedditSearchFunction : BaseAction
     {
-        public const string StorageAccountConnectionString = "StorageAccountConnectionString";
-        public const string StorageQueueName = "StorageQueueName";
+        public const string StorageAccountConnectionStringKey = "StorageAccountConnectionString";
+        public const string StorageQueueNameKey = "StorageQueueName";
 
         public static readonly CloudQueueMessage BeginMessage = new CloudQueueMessage("begin"); 
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var storageAccountConnectionString = request.DataStore.GetValue(StorageAccountConnectionString);
-            var storageQueueName = request.DataStore.GetValue(StorageQueueName);
+            var storageAccountConnectionString = request.DataStore.GetValue(StorageAccountConnectionStringKey);
+            var storageQueueName = request.DataStore.GetValue(StorageQueueNameKey);
 
             var errors = new List<string>();
 
             if (string.IsNullOrWhiteSpace(storageAccountConnectionString))
             {
-                errors.Add($"{StorageAccountConnectionString} not defined");
+                errors.Add($"{StorageAccountConnectionStringKey} not defined");
             }
 
             if (string.IsNullOrWhiteSpace(storageQueueName))
             {
-                errors.Add($"{StorageQueueName} not defined");
+                errors.Add($"{StorageQueueNameKey} not defined");
             }
 
             if (errors.Count != 0)
@@ -51,10 +51,10 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
             {
                 return new ActionResponse(
                     ActionStatus.Failure,
-                    storageAccountConnectionString,
+                    null,
                     null,
                     DefaultErrorCodes.DefaultErrorCode,
-                    $"Azure storage account {storageAccountConnectionString} was not resolvable"
+                    $"Azure storage account was not resolvable.  This is required to start function processing"
                 );
             }
 

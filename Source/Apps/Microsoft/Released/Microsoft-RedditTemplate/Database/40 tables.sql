@@ -1,5 +1,6 @@
 -- Documents
-CREATE TABLE reddit.Documents(
+CREATE TABLE reddit.Documents 
+(
     id reddit.DOC_ID,
     content VARCHAR(MAX),
 	score INT,
@@ -25,7 +26,8 @@ CREATE TABLE reddit.Documents(
 CREATE INDEX IDX_Documents_isComment ON reddit.Documents (isComment);
 
 -- Sentiment
-CREATE TABLE reddit.Sentiment (
+CREATE TABLE reddit.Sentiment 
+(
     documentId reddit.DOC_ID,
     sentiment DECIMAL(18,17),
 
@@ -35,7 +37,8 @@ CREATE TABLE reddit.Sentiment (
 CREATE INDEX IDX_Sentiment_documentId ON reddit.Sentiment (documentId);
 
 -- Sub-Reddits
-CREATE TABLE reddit.Posts (
+CREATE TABLE reddit.Posts 
+(
     documentId reddit.DOC_ID,
     title VARCHAR(200),
 	mediaPreviewUrl NVARCHAR(2048) NULL,
@@ -44,7 +47,8 @@ CREATE TABLE reddit.Posts (
 );
 
 -- Comments
-CREATE TABLE reddit.Comments (
+CREATE TABLE reddit.Comments 
+(
     documentId reddit.DOC_ID,
     parentId reddit.DOC_ID NOT NULL,
 	postId reddit.DOC_ID NOT NULL,
@@ -57,7 +61,8 @@ CREATE TABLE reddit.Comments (
 CREATE INDEX IDX_Comments_parentId ON reddit.Comments (parentId);
 
 -- Key Phrases
-CREATE TABLE reddit.KeyPhrases (
+CREATE TABLE reddit.KeyPhrases 
+(
     documentId reddit.DOC_ID,
     keyPhrase VARCHAR(500),
 
@@ -67,7 +72,8 @@ CREATE TABLE reddit.KeyPhrases (
 CREATE INDEX IDX_KeyPhrases_documentId ON reddit.KeyPhrases (documentId);
 
 -- Embedded Links
-CREATE TABLE reddit.EmbeddedUrls (
+CREATE TABLE reddit.EmbeddedUrls 
+(
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
     documentId reddit.DOC_ID,
     embeddedUrl VARCHAR(500),
@@ -79,7 +85,8 @@ CREATE TABLE reddit.EmbeddedUrls (
 CREATE INDEX IDX_EmbeddedUrls_documentId ON reddit.EmbeddedUrls (documentId);
 
 -- Entities
-CREATE TABLE reddit.Entities (
+CREATE TABLE reddit.Entities 
+(
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
     documentId reddit.DOC_ID,
     entity VARCHAR(500),
@@ -92,7 +99,8 @@ CREATE TABLE reddit.Entities (
 
 CREATE INDEX IDX_Entities_documentId ON reddit.Entities (documentId);
 
-CREATE TABLE reddit.UserDefinedEntities (
+CREATE TABLE reddit.UserDefinedEntities 
+(
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
     documentId reddit.DOC_ID,
     entity VARCHAR(500),
@@ -115,13 +123,15 @@ CREATE TABLE reddit.UserDefinedEntityDefinitions
 );
 
 -- Staging (Sentiment)
-CREATE TABLE reddit.Staging_Sentiment (
+CREATE TABLE reddit.Staging_Sentiment 
+(
     documentId reddit.DOC_ID,
     sentiment DECIMAL(18,17)
 );
 
 -- Staging (Entities)
-CREATE TABLE reddit.Staging_Entities (
+CREATE TABLE reddit.Staging_Entities 
+(
     documentId reddit.DOC_ID,
     entity VARCHAR(500),
     entityType VARCHAR(20),
@@ -130,7 +140,8 @@ CREATE TABLE reddit.Staging_Entities (
 );
 
 -- Staging (Key Phrases)
-CREATE TABLE reddit.Staging_KeyPhrases (
+CREATE TABLE reddit.Staging_KeyPhrases 
+(
     documentId reddit.DOC_ID,
     keyPhrase VARCHAR(500)
 );

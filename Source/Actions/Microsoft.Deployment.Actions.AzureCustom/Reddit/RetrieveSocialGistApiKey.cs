@@ -4,8 +4,10 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
+using Microsoft.Deployment.Common;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
+using Microsoft.Deployment.Common.ErrorCode;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
 {
@@ -16,14 +18,33 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            // Using the super private Microsoft key, make an HTTP request to a SocialGist endpoint (tbd) and request a new Social Gist API key is generated
-            // once retrieved, put it in "SocialGistApiKey" in the DataStore (note: must it be public?  Can it be private?  Better to be private, but I don't really know how the DS keeps things secure)
-            var socialGistApiKey = await RetrieveKey("tbd", "changeme");
-
-            // currently returns no value, which we then use and place into the AzureFunction AppSetting step.  Once you populate this with the real value from SocialGist, you shouldn't have to change
-            // the init.json
-            request.DataStore.AddToDataStore("SocialGistApiKey", socialGistApiKey, DataStoreType.Public);
-            return new ActionResponse(ActionStatus.Success);
+            // Using the super private Microsoft key, make an HTTP request to a SocialGist endpoint and request a new Social Gist Reddit API key is generated on behalf of the user
+            // once retrieved, put it in "SocialGistApiKey" in the DataStore 
+            try
+            {
+                var socialGistApiKey = await RetrieveKey(
+                    Constants.SocialGistProvisionKeyUrl,
+                    Constants.SocialGistProvisionKeySecret
+                );
+                // currently returns no value, which we then use and place into the AzureFunction AppSetting step.  Once you populate this with the real value from SocialGist, you shouldn't have to change
+                // the init.json
+                request.DataStore.AddToDataStore(
+                    "SocialGistApiKey", 
+                    socialGistApiKey, 
+                    DataStoreType.Private
+                );
+                return new ActionResponse(ActionStatus.Success);
+            }
+            catch (Exception e)
+            {
+                return new ActionResponse(
+                    ActionStatus.Failure,
+                    null,
+                    e,
+                    DefaultErrorCodes.DefaultErrorCode,
+                    "An error occurred contacting SocialGist for your Reddit API key"
+                );
+            }
         }
 
         internal async Task<string> RetrieveKey(

@@ -2,7 +2,7 @@
   "Install": {
     "Pages": [
       {
-        "architectureDiagram": "dist/Apps/Partner/Released/NealAnalytics-PBITelemetry/Web/pbi-telemetry.png",
+        "architectureDiagram": "dist/Apps/Partner/Released/NealAnalytics-OfficeAudit/Web/pbi-telemetry.png",
         "displayname": "Getting Started",
         "list1": [
           "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",

@@ -68,9 +68,16 @@
         }
       },
       {
-        "displayname": "Deploy",
-        "filename": "PowerBITelemetry.pbix",
-        "name": "$SiteCommon$/pages-gallery/progress.html"
+        "datastoreEntriesToValidate": [
+          "SqlConnectionString"
+        ],
+        "displayname": "Progress",
+        "enablePublishReport": "$run(this.MS.DataStore.getValue('ssasDisabled') === 'false')",
+        "filename": "$save('PowerBITelemetry.pbix')",
+        "name": "$SiteCommon$/pages-gallery/progress.html",
+        "Schema": "$save('adtlog')",
+        "showCounts": false,
+        "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
       }
     ],
 
@@ -80,6 +87,34 @@
         "name": "Microsoft-DeploySQLScripts",
         "SqlServerIndex": "0",
         "SqlScriptsFolder": "Service/Database"
+      },
+      {
+        "DeploymentName": "Deployment1",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_AZURE_FUNCTION)",
+        "FunctionName": "$save('solutiontemplatefunc' + this.MS.DataStore.getValue('uniqueId'))",
+        "name": "Microsoft-DeployAzureFunction",
+        "RepoUrl": "https://github.com/mohaali/NealEtl",
+        "sku": "Standard"
+      },
+      {
+        "DeploymentName": "Deployment1",
+        "displayname": "$translate(INIT_ACTION_WAITING_DEPLOYMENT)",
+        "name": "Microsoft-WaitForArmDeploymentStatus"
+      },
+      {
+        "displayname": "$translate(INIT_ACTION_CREATING_FUNCTION)",
+        "name": "Microsoft-CheckFunctionStatus"
+      },
+      {
+        "AppSettingKeys": {
+          "AuditDb": "$ds(SqlConnectionString)",
+          "Schema": "$ds(Schema)",
+          "ClientSecret": "$ds(SPNKey)",
+          "Tenant": "$ds(SPNTenantId)",
+          "ClientId": "$ds(SPNAppId)"
+        },
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_CONNECTION_STRINGS)",
+        "name": "Microsoft-DeployAzureFunctionConnectionStrings"
       }
     ]
   }

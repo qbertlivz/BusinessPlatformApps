@@ -83,6 +83,10 @@
 
     "Actions": [
       {
+        "displayname": "Start Audit Data",
+        "name": "Microsoft-StartAuditData"
+      },
+      {
         "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
         "name": "Microsoft-DeploySQLScripts",
         "SqlServerIndex": "0",

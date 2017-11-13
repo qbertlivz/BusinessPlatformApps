@@ -68,35 +68,35 @@ select incidentid                          AS [Case Id],
 				[Option] as [Value], 
 				[LocalizedLabel] 
 				from [dbo].[GlobalOptionSetMetadata] 
-				where  [OptionsetName] = 'caseorigincode'
+				where  [OptionsetName] = 'caseorigincode' and [LocalizedLabelLanguageCode] = 1033
 			) coc on i.caseorigincode= coc.[value]
 		LEFT OUTER JOIN
 		(select 
 				[Option] as [Value], 
 				[LocalizedLabel] 
 				from [dbo].optionsetmetadata 
-				where [OptionsetName] = 'prioritycode' and EntityName='incident'
+				where [OptionsetName] = 'prioritycode' and EntityName='incident' and [LocalizedLabelLanguageCode] = 1033
 		) prio on i.prioritycode = prio.[value]
 		LEFT OUTER JOIN
 		(select 
 				[Option] as [Value], 
 				[LocalizedLabel] 
 				from [dbo].optionsetmetadata 
-				where [OptionsetName] = 'customersatisfactioncode' and EntityName='incident'
+				where [OptionsetName] = 'customersatisfactioncode' and EntityName='incident'and [LocalizedLabelLanguageCode] = 1033
 		) csat on i.customersatisfactioncode = csat.[value]
 		LEFT OUTER JOIN 
 		(select 
 				[Option] as [Value], 
 				[LocalizedLabel] 
 				from [dbo].optionsetmetadata 
-				where [OptionsetName] = 'status' and EntityName='slakpiinstance'
+				where [OptionsetName] = 'status' and EntityName='slakpiinstance' and [LocalizedLabelLanguageCode] = 1033
 		) resolvekpistat on slakpiresolve.[status] = resolvekpistat.[value]
 		LEFT OUTER JOIN 
 		(select 
 				[Option] as [Value], 
 				[LocalizedLabel] 
 				from [dbo].optionsetmetadata 
-				where [OptionsetName] = 'status' and EntityName='slakpiinstance'
+				where [OptionsetName] = 'status' and EntityName='slakpiinstance' and [LocalizedLabelLanguageCode] = 1033
 		) responsekpistat on slakpiresponse.[status] = responsekpistat.[value]
 
 
@@ -180,7 +180,7 @@ LEFT OUTER JOIN (
      [Option] as [Value], 
      [LocalizedLabel] 
    FROM [dbo].[GlobalOptionSetMetadata] 
-   WHERE  [OptionsetName] = 'msdyn_npstype'
+   WHERE  [OptionsetName] = 'msdyn_npstype' and [LocalizedLabelLanguageCode] = 1033
 ) nps on sr.msdyn_npstype= nps.[value]
 
 GO

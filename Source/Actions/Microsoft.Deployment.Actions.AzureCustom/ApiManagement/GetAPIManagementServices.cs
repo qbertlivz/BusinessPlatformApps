@@ -14,6 +14,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.APIManagement
     [Export(typeof(IAction))]
     public class GetApiManagementServices : BaseAction
     {
+        private const string SUCCEEDED = "Succeeded";
+
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             BpstAzure ba = new BpstAzure(request.DataStore);
@@ -24,9 +26,21 @@ namespace Microsoft.Deployment.Actions.AzureCustom.APIManagement
 
             List<ApiManagementService> apiManagementServices = await ahc.RequestValue<List<ApiManagementService>>(HttpMethod.Get, url);
 
-            return apiManagementServices.IsNullOrEmpty()
+            List<ApiManagementService> activeApiManagementServices = new List<ApiManagementService>();
+
+            if (!apiManagementServices.IsNullOrEmpty())
+            {
+                activeApiManagementServices = apiManagementServices.FindAll(service => IsServiceActive(service));
+            }
+
+            return activeApiManagementServices.IsNullOrEmpty()
                 ? new ActionResponse(ActionStatus.Failure, new ActionResponseExceptionDetail("ApiManagementErrorNoServicesFound"))
-                : new ActionResponse(ActionStatus.Success, JsonUtility.Serialize(apiManagementServices));
+                : new ActionResponse(ActionStatus.Success, JsonUtility.Serialize(activeApiManagementServices));
+        }
+
+        private bool IsServiceActive(ApiManagementService service)
+        {
+            return service != null && service.Properties != null && !string.IsNullOrEmpty(service.Properties.ProvisioningState) && service.Properties.ProvisioningState.EqualsIgnoreCase(SUCCEEDED);
         }
     }
 }

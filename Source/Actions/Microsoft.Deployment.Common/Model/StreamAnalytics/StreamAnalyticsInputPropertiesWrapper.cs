@@ -4,9 +4,9 @@
     {
         public StreamAnalyticsInputProperties Properties;
 
-        public StreamAnalyticsInputPropertiesWrapper(string nameEventHub, string nameNamespace, string key)
+        public StreamAnalyticsInputPropertiesWrapper(string nameEventHub, string nameNamespace, string key, string serialization)
         {
-            Properties = new StreamAnalyticsInputProperties(nameEventHub, nameNamespace, key);
+            Properties = new StreamAnalyticsInputProperties(nameEventHub, nameNamespace, key, serialization);
         }
     }
 }

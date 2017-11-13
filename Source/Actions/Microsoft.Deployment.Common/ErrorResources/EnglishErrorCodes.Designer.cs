@@ -97,7 +97,16 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No API Management Services were found in your Azure Subscription.
+        ///   Looks up a localized string similar to Timed out while waiting for the Activity Log Exported Event Hub to become available.
+        /// </summary>
+        public static string ActivityLogsVerifyInsightsTimeout {
+            get {
+                return ResourceManager.GetString("ActivityLogsVerifyInsightsTimeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No fully provisioned API Management Services were found in your Azure Subscription.
         /// </summary>
         public static string ApiManagementErrorNoServicesFound {
             get {

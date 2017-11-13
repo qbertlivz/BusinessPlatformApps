@@ -57,7 +57,10 @@ namespace Microsoft.Deployment.Actions.AzureCustom.PowerApp
                                 if (await ahc.IsSuccess(HttpMethod.Post, string.Format(PowerAppUtility.URL_POWERAPPS_SQL_CONNECTION_UPDATE, sqlConnectionId, environmentId),
                                     JsonUtility.Serialize<PowerAppSqlConnectionUpdate>(new PowerAppSqlConnectionUpdate(metadata.Name))))
                                 {
-                                    request.DataStore.AddToDataStore("PowerAppUri", string.Format(PowerAppUtility.URL_POWERAPPS_WEB, metadata.Name));
+                                    if (await ahc.IsSuccess(HttpMethod.Post, string.Format(PowerAppUtility.URL_POWERAPPS_RECORD_SCOPES_CONSENT, metadata.Name), JsonUtility.Serialize<PowerAppConsents>(new PowerAppConsents(sqlConnectionId))))
+                                    {
+                                        request.DataStore.AddToDataStore("PowerAppUri", string.Format(PowerAppUtility.URL_POWERAPPS_WEB, metadata.Name));
+                                    }
                                 }
                             }
                         }

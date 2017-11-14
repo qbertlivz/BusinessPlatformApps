@@ -32,13 +32,13 @@
         public const string WebsiteRedirectPath = "/redirect.html";
         public const string AppInsightsKey = "app_insights_key";
 
-        //Notifications Constants
+        // Notifications
         public static string BpstDeploymentIdDatabase = string.Empty;
         public static string BpstNotifierUrl = "https://prod-27.northcentralus.logic.azure.com:443/workflows/0cdb1a801fa84af99477894c1fa202ba/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=HKNuTDXQWw5KosQlKnSxRR-yHGxiVlCr0np732KpOXQ";
 
         public const string Office365ClientId = "5a75fd0b-23ec-4e09-ac55-b2c2050286de";
 
-        //Ax Constants 
+        // Ax
         public const string AxClientId = "bcf1cb1c-74d6-460c-941a-22f0110f1090";
         public const string AxErpResource = "00000015-0000-0000-c000-000000000000";
         public static string AxLocatorClientId = string.Empty;
@@ -46,16 +46,19 @@
         public const string AxLocatorBaseUrl = "https://infra.locator.dynamics.com";
         public const string AxLocatorLoginAuthority = "https://login.windows.net/{0}";
 
-        //Crm Constants
+        // Crm
         public const string CrmProfileName = "bpst-mscrm-profile";
         public const string MsCrmAuthority = "https://login.windows.net/common/oauth2/authorize?";
         public const string MsCrmClientId = "fb430120-4027-46b2-8499-95e0e8a3e646";
         public const string MsCrmResource = "b861dbcc-a7ef-4219-a005-0e4de4ea7dcf";
         public const string MsCrmToken = "https://login.windows.net/common/oauth2/token";
 
-        //Facebook constants
+        // Facebook
         public const string FacebookGraphUrl = "https://graph.facebook.com";
         public const string FacebookClientId = "1566056443462682";
         public static string FacebookClientSecret = string.Empty;
+
+        // Informatica
+        public static string InformaticaRegistrationCode = string.Empty;
     }
 }

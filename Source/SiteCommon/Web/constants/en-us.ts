@@ -398,6 +398,7 @@
     INIT_GETTING_STARTED_DATA_MODEL: `Import a data model into Power BI`,
     INIT_GETTING_STARTED_DATA_MODEL_EXCEED: `Your data model doesn't exceed 1GB (about 10 million rows for opportunities, accounts, and leads)`,
     INIT_GETTING_STARTED_DATA_PULL_SALESFORCE: `Data pulled from Salesforce into an Azure SQL Database using Azure Data Factory`,
+    INIT_GETTING_STARTED_DATA_PULL_SALESFORCE_INFORMATICA: `Data pulled from Salesforce into an Azure SQL Database using Informatica`,
     INIT_GETTING_STARTED_DATA_PULL_SAP: `Data pulled daily from SAP & stored in a database optimized for reporting`,
     INIT_GETTING_STARTED_DATA_PULL_SCCM: `Data pulled daily from System Center Configuration Manager & stored in a SQL database optimized for reporting`,
     INIT_GETTING_STARTED_DEDICATED_SSAS: `Use an on premises SQL Server but without a dedicated Analysis Services Server`,

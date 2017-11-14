@@ -16,6 +16,7 @@ export class DataMovement extends ViewModelBase {
     informaticaAgentId: string = '';
     informaticaAgentLocation: string = '';
     informaticaAgents: InformaticaAgent[] = [];
+    isRegistered: boolean = false;
     nameFirst: string = '';
     nameLast: string = '';
     password: string = '';
@@ -85,7 +86,10 @@ export class DataMovement extends ViewModelBase {
                     this.MS.DataStore.addToDataStore('InformaticaNameFirst', this.nameFirst, DataStoreType.Private);
                     this.MS.DataStore.addToDataStore('InformaticaNameLast', this.nameLast, DataStoreType.Private);
 
-                    if (!(await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-RegisterInformaticaAccount'))) {
+                    if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-RegisterInformaticaAccount')) {
+                        this.informaticaAccount = 'Existing';
+                        this.isRegistered = true;
+                    } else {
                         break;
                     }
                 }

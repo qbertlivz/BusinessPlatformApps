@@ -172,6 +172,7 @@
     <Compile Include="Informatica\GetInformaticaAgentLocation.cs" />
     <Compile Include="Informatica\GetInformaticaAgents.cs" />
     <Compile Include="Informatica\GetInformaticaTaskStatus.cs" />
+    <Compile Include="Informatica\RegisterInformaticaAccount.cs" />
     <Compile Include="Informatica\StartInformaticaTask.cs" />
     <Compile Include="Informatica\VerifyInformaticaCredentials.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

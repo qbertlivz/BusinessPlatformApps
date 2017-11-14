@@ -205,6 +205,9 @@
     <Compile Include="Model\Informatica\InformaticaObject.cs" />
     <Compile Include="Model\Informatica\InformaticaOrganizationEdition.cs" />
     <Compile Include="Model\Informatica\InformaticaOrganizationLicenseInformation.cs" />
+    <Compile Include="Model\Informatica\InformaticaRegistration.cs" />
+    <Compile Include="Model\Informatica\InformaticaRegistrationOrganization.cs" />
+    <Compile Include="Model\Informatica\InformaticaRegistrationUser.cs" />
     <Compile Include="Model\Informatica\InformaticaRuntimeEnvironment.cs" />
     <Compile Include="Model\Informatica\InformaticaSchedule.cs" />
     <Compile Include="Model\Informatica\InformaticaTask.cs" />

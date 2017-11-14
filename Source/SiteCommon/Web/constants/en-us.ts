@@ -177,6 +177,7 @@
     CUSTOMIZE_RECURRENCE_OPTIONS: `Configure how often you want to do an incremental refresh:`,
     DATA_MOVEMENT_AZURE_DATA_FACTORY: `Azure Data Factory`,
     DATA_MOVEMENT_AZURE_DATA_FACTORY_DESCRIPTION: `Azure Data Factory is a Microsoft cloud data movement service. We create everything for the initial copy of your Salesforce data into the target database. Once that data is copied, the Azure data Factory pipeline moves new and updated records only.`,
+    DATA_MOVEMENT_COMPANY: `Company:`,
     DATA_MOVEMENT_D365: `Dynamics 365 Export Service`,
     DATA_MOVEMENT_D365_DESCRIPTION: `The Dynamics 365 Export Service replicates Dynamics 365 (online) data to a Microsoft Azure SQL Database store in a customer-owned Microsoft Azure subscription. We create everything for the initial copy of your Dynamics 365 data into the target database. Once that data is copied, the Dynamics 365 export service moves new and updated records only.`,
     DATA_MOVEMENT_D365_PASSWORD: `Dynamics 365 Password:`,

@@ -22,7 +22,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             var tenant = request.DataStore.GetFirstValue("SPNTenantId");
             var clientId = request.DataStore.GetFirstValue("SPNAppId");
             string authBase = string.Format(Constants.AzureAuthUri, tenant);
-            string authUri = AzureTokenUtility.GetAuthUriForServicePrincipal(clientId, request.Info.WebsiteRootUrl + Constants.WebsiteRedirectPath, authBase);
+            string authUri = AzureTokenUtility.GetAuthUriForServicePrincipal(clientId, authBase, request.Info.WebsiteRootUrl + Constants.WebsiteRedirectPath);
 
             return new ActionResponse(ActionStatus.Success, JsonUtility.GetJObjectFromStringValue(authUri.ToString()));
         }

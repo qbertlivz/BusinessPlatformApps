@@ -11,7 +11,7 @@ export class O365Login extends AzureLogin {
         let createADresponseBody: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-CreateADApplication');
         if (createADresponseBody.IsSuccess) {
             this.MS.DataStore.addObjectToDataStore(createADresponseBody.Body, DataStoreType.Private);
-            await this.MS.UtilityService.connectToAzure(this.openAuthorizationType.O365);
+            await this.MS.UtilityService.connectToAzureSPN();
         }
     }
 

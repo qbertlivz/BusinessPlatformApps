@@ -339,3 +339,20 @@ CREATE VIEW reddit.WeekOverWeekView AS
 		RIGHT OUTER JOIN tmpAggregates2 tbl2 ON tbl1.publishedWeekPrecision = tbl2.publishedWeekPrecision AND tbl1.entity = tbl2.entity
 	) tbl3
 GO
+
+/* Duplicate data so the chord chart can be filtered on a single column instead of needing both a source and dest filter
+*/
+CREATE VIEW reddit.ChordChartSubredditAuthorConnections AS
+	SELECT
+		subreddit1 AS subreddit, 
+		subreddit1 AS sourceSubreddit, 
+		subreddit2 AS destSubreddit, 
+		CoAuthorScore 
+	FROM reddit.PostAndCommentCoauthorsView 
+	UNION 
+	SELECT subreddit2 AS subreddit, 
+		subreddit1 AS sourceSubreddit, 
+		subreddit2 AS destSubreddit, 
+		CoAuthorScore 
+	FROM reddit.PostAndCommentCoauthorsView 
+GO

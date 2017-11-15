@@ -106,7 +106,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
                     $"{StartHourParameter}({startHourUtc}) is larger than {EndHourParameter}({endHourUtc}).  Please provide a range between 0 and 23."
                 );
             }
-            return null;
+            return null; // all values accounted for, all values within range.
         }
     }
 }

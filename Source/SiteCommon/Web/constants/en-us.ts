@@ -347,6 +347,7 @@
     INIT_ACTION_RETRIEVING_SOCIALGIST_API_KEY: `Retrieving customer API key from SocialGist for Reddit`,
     INIT_ACTION_RUNNING_LOGIC_APP_HISTORICAL: `Running Logic App historical`,
     INIT_ACTION_RUNNING_TASK: `Running task`,
+    INIT_ACTION_SCHEDULING_DAILY_REFRESH: `Scheduling daily refresh of data`,
     INIT_ACTION_SCHEDULING_DATA_LOADS: `Scheduling data loads for future data`,
     INIT_ACTION_SCHEDULING_HISTORICAL: `Scheduling one time data load for historical data`,
     INIT_ACTION_SCHEDULING_TASK: `Scheduling task`,

@@ -148,6 +148,10 @@
                 "name": "Microsoft-CheckFunctionStatus"
             },
             {
+                "displayname": "$translate(INIT_ACTION_SCHEDULING_DAILY_REFRESH)",
+                "name": "Microsoft-RandomizeScheduledStartTime"
+            },
+            {
                 "AppSettingKeys": {
                     "SqlConnection": "$ds(SqlConnectionString)"
                 },
@@ -167,7 +171,7 @@
                     "RedditPostQueueName": "reddit-source",
                     "AzureMLJobQueueName": "reddit-azureml-job-source",
                     "StorageQueueConnection": "$ds(StorageAccountConnectionString)",
-                    "ScheduledRedditQueryFrequency": "0 0 1 * * *",
+                    "ScheduledRedditQueryFrequency": "$ds(RandomScheduleCronTime)",
                     "ScheduledAzureMLFrequency": "0 */30 * * * *",
                     "SearchToThreadTimeDelayInSeconds": "60"
                 },

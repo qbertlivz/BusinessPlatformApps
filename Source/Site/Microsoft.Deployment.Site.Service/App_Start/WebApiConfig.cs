@@ -41,6 +41,7 @@ namespace Microsoft.Deployment.Site.Service
             Constants.AxLocatorClientId = ConfigurationManager.ConnectionStrings["AxLocatorClientId"].ToString();
             Constants.AxLocatorSecret = ConfigurationManager.ConnectionStrings["AxLocatorSecret"].ToString();
             Constants.FacebookClientSecret = ConfigurationManager.ConnectionStrings["FacebookSecret"].ToString();
+            Constants.InformaticaRegistrationCode = ConfigurationManager.ConnectionStrings["InformaticaRegistrationCode"].ToString();
             Constants.SocialGistProvisionKeySecret = ConfigurationManager.ConnectionStrings["SocialGistRedditSecret"].ToString();
 
             var appXmlType = config.Formatters.XmlFormatter.SupportedMediaTypes.FirstOrDefault(t => t.MediaType == "application/xml");

@@ -8,7 +8,7 @@
                 "dataSources": [
                     {
                         "name": "CreditCollectionDataSource",
-                        "connectionString": "Provider=SQLNCLI11;Data Source=pbisttestax21.database.windows.net;Initial Catalog=CreditAndCollections;User ID=pbiadmin;Persist Security Info=true",
+                        "connectionString": "Provider=SQLNCLI11;Data Source=server.database.windows.net;Initial Catalog=CreditAndCollections;User ID=pbiadmin;Persist Security Info=true",
                         "impersonationMode": "impersonateServiceAccount",
                         "annotations": [
                             {

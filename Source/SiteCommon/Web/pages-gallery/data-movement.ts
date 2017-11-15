@@ -9,12 +9,18 @@ import { ScribeOrganization } from '../models/scribe-organization';
 import { ViewModelBase } from '../services/view-model-base';
 
 export class DataMovement extends ViewModelBase {
+    company: string = '';
     dataMovement: string = '';
     dataMovementType: DataMovementType = new DataMovementType();
+    informaticaAccount: string = 'Existing';
     informaticaAgentId: string = '';
     informaticaAgentLocation: string = '';
     informaticaAgents: InformaticaAgent[] = [];
+    isRegistered: boolean = false;
+    nameFirst: string = '';
+    nameLast: string = '';
     password: string = '';
+    passwordConfirmation: string = '';
     scribeAgentId: string = '';
     scribeAgentInstall: ScribeAgentInstall = new ScribeAgentInstall();
     scribeAgents: ScribeAgent[] = [];
@@ -69,6 +75,24 @@ export class DataMovement extends ViewModelBase {
             case this.dataMovementType.Informatica:
                 this.MS.DataStore.addToDataStore('InformaticaUsername', this.username, DataStoreType.Private);
                 this.MS.DataStore.addToDataStore('InformaticaPassword', this.password, DataStoreType.Private);
+
+                if (this.informaticaAccount === 'New') {
+                    if (this.password !== this.passwordConfirmation) {
+                        this.MS.ErrorService.set(this.MS.Translate.DATA_MOVEMENT_INFORMATICA_PASSWORD_MATCH);
+                        break;
+                    }
+
+                    this.MS.DataStore.addToDataStore('InformaticaCompany', this.company, DataStoreType.Private);
+                    this.MS.DataStore.addToDataStore('InformaticaNameFirst', this.nameFirst, DataStoreType.Private);
+                    this.MS.DataStore.addToDataStore('InformaticaNameLast', this.nameLast, DataStoreType.Private);
+
+                    if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-RegisterInformaticaAccount')) {
+                        this.informaticaAccount = 'Existing';
+                        this.isRegistered = true;
+                    } else {
+                        break;
+                    }
+                }
 
                 if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-VerifyInformaticaCredentials')) {
                     if (this.MS.HttpService.isOnPremise) {

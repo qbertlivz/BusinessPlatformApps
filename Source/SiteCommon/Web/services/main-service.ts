@@ -23,6 +23,7 @@ import { UtilityService } from './utility-service';
 @inject(Router, HttpClient)
 export class MainService {
     appName: string;
+    etl: string;
     experienceType: ExperienceType;
     DataStore: DataStore;
     DeploymentService: DeploymentService;
@@ -71,6 +72,8 @@ export class MainService {
 
         this.LoggerService = new LoggerService(this);
         this.DeploymentService = new DeploymentService(this);
+
+        this.etl = this.UtilityService.getQueryParameter(QueryParameter.ETL);
     }
 
     // Uninstall or any other types go here

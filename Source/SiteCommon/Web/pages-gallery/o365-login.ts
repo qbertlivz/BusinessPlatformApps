@@ -27,6 +27,8 @@ export class O365Login extends AzureLogin {
             else {
                 this.setValidated();
             }
+
+            this.MS.UtilityService.removeItem('queryUrl');
         }
     }
 

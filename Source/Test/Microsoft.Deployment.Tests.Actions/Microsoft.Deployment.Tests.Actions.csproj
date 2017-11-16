@@ -170,6 +170,7 @@
     <Compile Include="PBITests\PBITests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reddit\DeployRedditAzureMLServiceFromFileTests.cs" />
+    <Compile Include="Reddit\RetrieveSocialGistApiKeyTests.cs" />
     <Compile Include="Reddit\SignalRedditExecuteSearchFunctionTests.cs" />
     <Compile Include="Reddit\UploadAssetBlobStorageTests.cs" />
     <Compile Include="ScribeTests\ScribeTests.cs" />

@@ -24,6 +24,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             string authBase = string.Format(Constants.AzureAuthUri, tenant);
             string authUri = AzureTokenUtility.GetAuthUriForServicePrincipal(clientId, authBase, request.Info.WebsiteRootUrl + Constants.WebsiteRedirectPath);
 
+            // hack to allow the SPN to be propagated in AD
+            await Task.Delay(50000);
             return new ActionResponse(ActionStatus.Success, JsonUtility.GetJObjectFromStringValue(authUri.ToString()));
         }
     }

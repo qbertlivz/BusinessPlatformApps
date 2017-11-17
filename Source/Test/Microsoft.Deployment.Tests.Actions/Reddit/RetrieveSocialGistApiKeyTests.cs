@@ -4,11 +4,11 @@ using Microsoft.Deployment.Tests.Actions.TestHelpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Deployment.Common.ActionModel;
 
 namespace Microsoft.Deployment.Tests.Actions.Reddit
 {
@@ -45,7 +45,7 @@ namespace Microsoft.Deployment.Tests.Actions.Reddit
         }
 
         // retrieve key tests (live against system, disabled)
-        //[Ignore]
+        [Ignore]
         [TestMethod]
         public async Task TestRetrieveKey_works()
         {
@@ -94,6 +94,7 @@ namespace Microsoft.Deployment.Tests.Actions.Reddit
                 using (var client = new HttpClient())
                 {
                     var response = await client.SendAsync(httpRequestMessage);
+                    response.EnsureSuccessStatusCode();
                 }
             }
             catch (Exception e)

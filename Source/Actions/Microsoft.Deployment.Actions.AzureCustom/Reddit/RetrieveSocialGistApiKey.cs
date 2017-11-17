@@ -19,6 +19,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
     public class RetrieveSocialGistApiKey : BaseAction
     {
         private const string SocialGistApiGenerationTemplate = "PowerBI";
+        public const string SocialGistApiKeyParameter = "SocialGistApiKey";
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
@@ -36,7 +37,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
                     return new ActionResponse(
                         ActionStatus.Failure,
                         null,
-                        null,
+                        exception,
                         DefaultErrorCodes.DefaultErrorCode,
                         "An error occurred contacting SocialGist for your Reddit API key"
                     );
@@ -44,7 +45,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
                 // currently returns no value, which we then use and place into the AzureFunction AppSetting step.  Once you populate this with the real value from SocialGist, you shouldn't have to change
                 // the init.json
                 request.DataStore.AddToDataStore(
-                    "SocialGistApiKey", 
+                    SocialGistApiKeyParameter, 
                     socialGistApiKey, 
                     DataStoreType.Private
                 );

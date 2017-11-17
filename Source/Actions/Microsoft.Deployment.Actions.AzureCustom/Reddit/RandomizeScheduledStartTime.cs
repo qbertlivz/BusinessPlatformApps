@@ -14,12 +14,11 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
         public const string EndHourParameter = "RangeEndHourUtc";
         public const string RandomScheduleCronTime = "RandomScheduleCronTime";
 
-        private const int DefaultStartTimeUtc = 1; // 5pm PST to UTC
-        private const int DefaultEndTimeUtc = 12; // 7am EST to UTC
+        public const int DefaultStartTimeUtc = 1; // 5pm PST to UTC
+        public const int DefaultEndTimeUtc = 12; // 7am EST to UTC
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-
             if (!int.TryParse(request.DataStore.GetValue(StartHourParameter), out int startHourUtc))
             {
                 startHourUtc = -1;

@@ -22,8 +22,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            // Using the super private Microsoft key, make an HTTP request to a SocialGist endpoint and request a new Social Gist Reddit API key is generated on behalf of the user
-            // once retrieved, put it in "SocialGistApiKey" in the DataStore 
             try
             {
                 var socialGistApiKey = await RetrieveKey(
@@ -31,6 +29,18 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
                     Constants.SocialGistProvisionKeyUserName,
                     Constants.SocialGistProvisionKeyPassphrase
                 );
+                if (socialGistApiKey == null)
+                {
+                    // the only way this can happen is in KeyFromJson - either the json format has changed, or we did not get json back, or something about it confused json.net's parser.
+                    var exception = new Exception("An error occurred contacting SocialGist for your Reddit API key.  The response from SocialGist was unexpected and parsing failed.");
+                    return new ActionResponse(
+                        ActionStatus.Failure,
+                        null,
+                        null,
+                        DefaultErrorCodes.DefaultErrorCode,
+                        "An error occurred contacting SocialGist for your Reddit API key"
+                    );
+                }
                 // currently returns no value, which we then use and place into the AzureFunction AppSetting step.  Once you populate this with the real value from SocialGist, you shouldn't have to change
                 // the init.json
                 request.DataStore.AddToDataStore(
@@ -82,8 +92,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
                     throw new Exception("Unable to contact Social Gist key management service.");
                 }
                 var jsonBody = await response.Content.ReadAsStringAsync();
-                // this is probably wrong, as it's almost definitely going to be a json response to us, not just a straight string
-                return key;
+                return KeyFromJson(jsonBody);
             }
         }
 
@@ -102,47 +111,22 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
 
         public string KeyFromJson(string jsonBody)
         {
-            var obj = JsonUtility.GetJsonObjectFromJsonString(jsonBody);
-            var nodes = obj.SelectToken("$.response.Keys.Key[0]");
-            if (nodes == null)
+            try
+            {
+                var obj = JsonUtility.GetJsonObjectFromJsonString(jsonBody);
+                var nodes = obj.SelectToken("$.response.Keys.Key[0]");
+                if (nodes == null)
+                {
+                    return null;
+                }
+                return nodes.Value<string>("Key");
+            }
+            catch (Exception)
             {
                 return null;
             }
-            return nodes.Value<string>("Key");
         }
     }
-
-    /*
-     * {
-    "response": {
-        "Request": {
-            "Actual": {
-                "rt": "json"
-            }
-        },
-        "Keys": {
-            "Key": [
-                {
-                    "Key": "6a7a33fa213b4fc701b24b76a57b01e2",
-                    "Description": "Microsoft PowerBI - DwayneTest1",
-                    "Enabled": 1,
-                    "RequestsPerDay": "1000",
-                    "DataCounters": {
-                        "MaxMatches": "10000",
-                        "MaxDataSet": "100",
-                        "MaxResultsDays": "No Limit"
-                    },
-                    "DataSources": {
-                        "SelectedSources": "",
-                        "DedicatedContentProviderId": 245
-                    }
-                }
-            ]
-        },
-        "Timer": []
-    }
-}
-*/
 }
  
  

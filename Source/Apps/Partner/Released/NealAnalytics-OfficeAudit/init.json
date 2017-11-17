@@ -54,13 +54,14 @@
         "showAzureSql": false,
         "showNewSqlOption": "true",
         "sqlInstance": "NewSql",
-        "sqlServer": "pbitelemetry",
         "subtitle": "$translate(INIT_SQL_SUBTITLE)",
         "title": "$translate(INIT_SQL_TITLE)"
       },
       {
         "displayname": "Summary",
+        "displayCompletionNotification": false,
         "name": "$SiteCommon$/pages-gallery/summary.html",
+        "sendCompletionNotification": false,
         "values": {
           "Target Server": "$(this.MS.DataStore.getValue('Server'))",
           "Target Database": "$(this.MS.DataStore.getValue('Database'))",
@@ -71,10 +72,11 @@
         "datastoreEntriesToValidate": [
           "SqlConnectionString"
         ],
+
         "displayname": "Progress",
-        "enablePublishReport": "$run(this.MS.DataStore.getValue('ssasDisabled') === 'false')",
         "filename": "$save('PowerBITelemetry.pbix')",
         "name": "$SiteCommon$/pages-gallery/progress.html",
+        "enablePublishReport": false,
         "Schema": "$save('adtlog')",
         "showCounts": false,
         "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
@@ -83,14 +85,10 @@
 
     "Actions": [
       {
-        "displayname": "Start Audit Data",
-        "name": "Microsoft-StartAuditData"
-      },
-      {
         "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
         "name": "Microsoft-DeploySQLScripts",
         "SqlServerIndex": "0",
-        "SqlScriptsFolder": "Service/Database"
+        "SqlScriptsFolder": "Database"
       },
       {
         "DeploymentName": "Deployment1",
@@ -119,6 +117,10 @@
         },
         "displayname": "$translate(INIT_ACTION_DEPLOYING_CONNECTION_STRINGS)",
         "name": "Microsoft-DeployAzureFunctionConnectionStrings"
+      },
+      {
+        "displayname": "Start Audit Data",
+        "name": "Microsoft-StartAuditData"
       }
     ]
   }

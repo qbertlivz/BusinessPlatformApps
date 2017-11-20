@@ -122,6 +122,14 @@ CREATE TABLE reddit.UserDefinedEntityDefinitions
 	color           NVARCHAR(7) NOT NULL
 );
 
+-- Number of comments per reddit post
+CREATE TABLE reddit.PostCommentCount (
+	postId reddit.DOC_ID,
+	commentCount INT,
+
+	CONSTRAINT [PK_PostCommentCount] PRIMARY KEY CLUSTERED ([postId] ASC) WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF)
+);
+
 -- Staging (Sentiment)
 CREATE TABLE reddit.Staging_Sentiment 
 (

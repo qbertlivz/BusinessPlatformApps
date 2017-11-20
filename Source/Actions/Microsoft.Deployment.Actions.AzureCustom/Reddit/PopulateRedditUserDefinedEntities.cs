@@ -84,7 +84,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
                         foreach (var value in values)
                         {
                             var userEntityRow = userEntityTable.NewRow();
-                            userEntityRow["regex"] = value;
+                            userEntityRow["regex"] = $"\\b{value}\\b"; // each term should be split on a word boundary
                             userEntityRow["entityValue"] = value;
                             userEntityRow["entityType"] = userEntity.Name;
                             userEntityRow["color"] = predefinedColors[count];

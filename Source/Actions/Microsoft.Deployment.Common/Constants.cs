@@ -62,7 +62,8 @@
         public static string InformaticaRegistrationCode = string.Empty;
 
         // SocialGist (Reddit)
-        public const string SocialGistProvisionKeyUrl = "";
-        public static string SocialGistProvisionKeySecret = string.Empty;
+        public const string SocialGistProvisionKeyUrl = "https://api.boardreader.com/v1/Keys/List";
+        public static string SocialGistProvisionKeyUserName = string.Empty;
+        public static string SocialGistProvisionKeyPassphrase = string.Empty;
     }
 }

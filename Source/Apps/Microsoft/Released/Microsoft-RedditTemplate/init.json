@@ -136,7 +136,7 @@
                 "FunctionName": "$save('redditfunction' + this.MS.DataStore.getValue('uniqueId'))",
                 "name": "Microsoft-DeployAzureFunction",
                 "RepoUrl": "https://github.com/dwaynepryce/RedditAzureFunctions.git",
-                "Branch": "reddit-release-latest"
+                "Branch": "release/0.5.x"
             },
             {
                 "DeploymentName": "Function",
@@ -146,6 +146,10 @@
             {
                 "displayname": "$translate(INIT_ACTION_CREATING_FUNCTION)",
                 "name": "Microsoft-CheckFunctionStatus"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_SCHEDULING_DAILY_REFRESH)",
+                "name": "Microsoft-RandomizeScheduledStartTime"
             },
             {
                 "AppSettingKeys": {
@@ -167,9 +171,9 @@
                     "RedditPostQueueName": "reddit-source",
                     "AzureMLJobQueueName": "reddit-azureml-job-source",
                     "StorageQueueConnection": "$ds(StorageAccountConnectionString)",
-                    "ScheduledRedditQueryFrequency": "0 0 1 * * *",
+                    "ScheduledRedditQueryFrequency": "$ds(RandomScheduleCronTime)",
                     "ScheduledAzureMLFrequency": "0 */30 * * * *",
-                    "WEBSITE_MAX_DYNAMIC_APPLICATION_SCALE_OUT": "1" 
+                    "SearchToThreadTimeDelayInSeconds": "60"
                 },
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_APP_SETTINGS)",
                 "name": "Microsoft-DeployAzureFunctionAppSettings"

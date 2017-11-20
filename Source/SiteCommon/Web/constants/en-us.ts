@@ -447,7 +447,7 @@
     INIT_PBI_TELEMETRY_TEMPLATE_NAME: `Power BI (and O365) Adoption Solution Template`,
     INIT_REDDIT_DOWNLOAD: `Open the Power BI report (.pbix file) to explore your data. If you have opened your report but are not seeing any data, check back in a few hours. It could take some time to find articles. Publish the report for others to see in your Power BI workspace. You will need Power BI Desktop to open this file - download it`,
     INIT_REDDIT_PRICING_CALCULATOR: `https://azure.microsoft.com/en-us/pricing/calculator/`,
-    INIT_REDDIT_PRICING_COST: `By clicking next and deploying the template, you authorize Microsoft to create Azure resources on your subscription and bill based on their respective pricing rates.  The approximate base cost of the Azure resources used by this template is SOME DOLLARS a day, and a Social Gist Reddit API key is SOME DOLLARS as well.  These costs are estimates only and subject to change.`,
+    INIT_REDDIT_PRICING_COST: `By clicking next and deploying the template, you authorize Microsoft to create Azure resources on your subscription and bill based on their respective pricing rates.  The approximate base cost of the Azure resources used by this template is $7 a day, and a Social Gist Reddit API key is SOME DOLLARS as well.  These costs are estimates only and subject to change.`,
     INIT_REDDIT_PRICING_URL: `https://github.com/Microsoft/BusinessPlatformApps/blob/dev/Source/Apps/Microsoft/Released/Microsoft-RedditTemplate/README.md`,
     INIT_REDDIT_SUBTITLE: `Welcome to the Reddit brand and campaign management solution template`,
     INIT_REDDIT_TITLE: `Brand and Campaign Management for Reddit`,

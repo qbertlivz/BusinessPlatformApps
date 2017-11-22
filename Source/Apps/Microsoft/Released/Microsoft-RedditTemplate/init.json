@@ -136,7 +136,7 @@
                 "FunctionName": "$save('redditfunction' + this.MS.DataStore.getValue('uniqueId'))",
                 "name": "Microsoft-DeployAzureFunction",
                 "RepoUrl": "https://github.com/dwaynepryce/RedditAzureFunctions.git",
-                "Branch": "release/0.5.x"
+                "Branch": "release/0.6.x"
             },
             {
                 "DeploymentName": "Function",

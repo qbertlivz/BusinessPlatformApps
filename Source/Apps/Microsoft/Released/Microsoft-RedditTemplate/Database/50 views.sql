@@ -356,3 +356,18 @@ CREATE VIEW reddit.ChordChartSubredditAuthorConnections AS
 		CoAuthorScore 
 	FROM reddit.PostAndCommentCoauthorsView 
 GO
+
+/*
+All documents to run through Machine Learning.  This is done in a view
+so that the AML runner can check for available data before running
+the experiment.
+*/
+CREATE VIEW reddit.AzureMachineLearningInputView AS
+	SELECT TOP 50000 
+		content, 
+		id AS messageId, 
+		(ROW_NUMBER() OVER (ORDER BY id) - 1) AS ExperimentDocId 
+	FROM reddit.AllDocumentsView 
+	WHERE
+		content IS NOT NULL AND LEN(content) > 0 AND sentiment IS NULL
+GO

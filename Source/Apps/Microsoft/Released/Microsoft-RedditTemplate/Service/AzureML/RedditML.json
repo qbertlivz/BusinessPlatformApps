@@ -336,7 +336,7 @@
               "certificateThumbprint": ""
             },
             "Database Query": {
-              "value": "select top 50000 content, id AS messageId, (ROW_NUMBER() OVER (ORDER BY id) - 1) AS ExperimentDocId from reddit.AllDocumentsView where content IS NOT NULL AND LEN(content) > 0 AND sentiment IS NULL",
+              "value": "select top 50000 content, messageId, ExperimentDocId FROM reddit.AzureMachineLearningInputView",
               "certificateThumbprint": ""
             }
           }
@@ -728,7 +728,7 @@
         "name": "Mini Twitter sentiment analysis [trained model] - Copy",
         "type": "Resource",
         "locationInfo": {
-          "uri": "https://mcleantestmachinelearn.blob.core.windows.net/azuremlassetscontainer/dbaaf78708314e2f9223456c53b32c2f.ilearner"
+          "uri": "https://mcleantestmachinelearn.blob.core.windows.net/azuremlassetscontainer/405e6efb86ed486aa9e4b6cbdc543352.ilearner"
         },
         "outputPorts": {
           "Results dataset": {

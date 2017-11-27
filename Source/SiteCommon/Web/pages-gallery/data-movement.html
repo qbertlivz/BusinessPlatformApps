@@ -78,7 +78,7 @@
         </div>
 
         <div class="st-float" if.bind="informaticaAgentLocation">
-            <bpst-link class="st-float" a-description="${MS.Translate.DATA_MOVEMENT_INFORMATICA_ONPREMISE_AGENT}" a-link="informaticaAgentLocation" a-link-text="${MS.Translate.COMMON_HERE}"></bpst-link>
+            <bpst-link class="st-float" a-description="${MS.Translate.DATA_MOVEMENT_INFORMATICA_ONPREMISE_AGENT}" a-link="${informaticaAgentLocation}" a-link-text="${MS.Translate.COMMON_HERE}"></bpst-link>
         </div>
 
         <div class="st-float" change.delegate="OnScribeOrganizationChanged()" if.bind="scribeOrganizations && scribeOrganizations.length > 0">

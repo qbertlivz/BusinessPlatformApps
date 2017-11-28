@@ -2,6 +2,7 @@
 
 import { DataMovementType } from '../models/data-movement-type';
 import { InformaticaAgent } from '../models/informatica-agent';
+import { InformaticaRuntimeEnvironment } from '../models/informatica-runtime-environment';
 import { ScribeAgent } from '../models/scribe-agent';
 import { ScribeAgentInstall } from '../models/scribe-agent-install';
 import { ScribeOrganization } from '../models/scribe-organization';
@@ -16,7 +17,7 @@ export class DataMovement extends ViewModelBase {
     informaticaAgentId: string = '';
     informaticaAgentLocation: string = '';
     informaticaAgents: InformaticaAgent[] = [];
-    isRegistered: boolean = false;
+    isRegistered: boolean = this.MS.HttpService.isOnPremise;
     nameFirst: string = '';
     nameLast: string = '';
     password: string = '';
@@ -96,7 +97,25 @@ export class DataMovement extends ViewModelBase {
 
                 if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-VerifyInformaticaCredentials')) {
                     if (this.MS.HttpService.isOnPremise) {
-                        this.informaticaAgents = await this.MS.HttpService.getResponseAsync('Microsoft-GetInformaticaAgents');
+                        let informaticaRuntimeEnvironments: InformaticaRuntimeEnvironment[] = await this.MS.HttpService.getResponseAsync('Microsoft-GetInformaticaAgents');
+
+                        let informaticaAgents: InformaticaAgent[] = [];
+
+                        if (informaticaRuntimeEnvironments && informaticaRuntimeEnvironments.length > 0) {
+                            for (let i = 0; i < informaticaRuntimeEnvironments.length; i++) {
+                                let informaticaRuntimeEnvironment: InformaticaRuntimeEnvironment = informaticaRuntimeEnvironments[i];
+                                if (informaticaRuntimeEnvironment && informaticaRuntimeEnvironment.agents && informaticaRuntimeEnvironment.agents.length > 0) {
+                                    for (let j = 0; j < informaticaRuntimeEnvironment.agents.length; j++) {
+                                        let informaticaAgent: InformaticaAgent = informaticaRuntimeEnvironment.agents[j];
+                                        if (informaticaAgent && informaticaAgent.name !== 'Informatica Cloud Hosted Agent') {
+                                            informaticaAgents.push(informaticaAgent);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        this.informaticaAgents = informaticaAgents;
 
                         if (this.informaticaAgents && this.informaticaAgents.length > 0) {
                             this.informaticaAgentId = this.informaticaAgents[0].id;

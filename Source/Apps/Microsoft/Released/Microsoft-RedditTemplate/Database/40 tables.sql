@@ -4,7 +4,7 @@ CREATE TABLE reddit.Documents
     id reddit.DOC_ID,
     content VARCHAR(MAX),
 	score INT,
-	controversiality BIT,
+	controversiality FLOAT NULL,
     gilded INT,
     author VARCHAR(100),
     subreddit VARCHAR(200),

@@ -7,17 +7,19 @@
                 "list1": [
                     "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",
                     "$translate(INIT_GETTING_STARTED_PBI_DESKTOP)",
-                    "$translate(INIT_GETTING_STARTED_PBI_PRO)",
-                    "$translate(INIT_GETTING_STARTED_REDDIT_SOCIALGIST)"
+                    "$translate(INIT_GETTING_STARTED_PBI_PRO)"
                 ],
                 "list2": [
-                    "$translate(INIT_GETTING_STARTED_AZURE_API_MANAGEMENT_STREAM_SQL)",
-                    "$translate(INIT_GETTING_STARTED_AZURE_API_MANAGEMENT_PROCESS_DATA)",
+                    "$translate(INIT_GETTING_STARTED_REDDIT_PROCESS_DATA)",
                     "$translate(INIT_GETTING_STARTED_CONNECT_AS_PBI)"
                 ],
                 "name": "$SiteCommon$/pages-gallery/getting-started.html",
                 "subtitle": "$translate(INIT_REDDIT_SUBTITLE)",
                 "templateName": "$translate(INIT_REDDIT_TITLE)"
+            },
+            {
+                "displayname": "Details",
+                "name":  "details.html" 
             },
             {
                 "azureProviders": [
@@ -63,7 +65,7 @@
                 "displayname": "Deploy",
                 "downloadPbiText": "$translate(INIT_REDDIT_DOWNLOAD)",
                 "enablePublishReport": "$run(this.MS.DataStore.getValue('ssasDisabled') === 'false')",
-                "filename": "$save('RedditTemplate.pbix')",
+                "filename": "$save('RedditOverview.pbix|RedditAdvancedAnalytics.pbix|RedditTargetingActivation.pbix')",
                 "name": "$SiteCommon$/pages-gallery/progress.html",
                 "uniqueId": "$save(this.MS.UtilityService.getUniqueId(8))"
             }
@@ -136,7 +138,7 @@
                 "FunctionName": "$save('redditfunction' + this.MS.DataStore.getValue('uniqueId'))",
                 "name": "Microsoft-DeployAzureFunction",
                 "RepoUrl": "https://github.com/dwaynepryce/RedditAzureFunctions.git",
-                "Branch": "release/0.6.x"
+                "Branch": "release/0.7.x"
             },
             {
                 "DeploymentName": "Function",

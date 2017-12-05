@@ -32,7 +32,12 @@ namespace RedditCore.DataModel
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return DocumentId == other.DocumentId && string.Equals(Entity, other.Entity) && string.Equals(EntityType, other.EntityType) && EntityOffset == other.EntityOffset && EntityLength == other.EntityLength && Id == other.Id;
+            return DocumentId == other.DocumentId 
+                && string.Equals(Entity, other.Entity, StringComparison.OrdinalIgnoreCase) 
+                && string.Equals(EntityType, other.EntityType, StringComparison.OrdinalIgnoreCase) 
+                && EntityOffset == other.EntityOffset 
+                && EntityLength == other.EntityLength 
+                && Id == other.Id;
         }
 
         public override bool Equals(object obj)

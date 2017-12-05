@@ -2,12 +2,12 @@
 CREATE TABLE reddit.Documents 
 (
     id reddit.DOC_ID,
-    content VARCHAR(MAX),
+    content NVARCHAR(MAX),
 	score INT,
 	controversiality FLOAT NULL,
     gilded INT,
-    author VARCHAR(100),
-    subreddit VARCHAR(200),
+    author NVARCHAR(100),
+    subreddit NVARCHAR(200),
     isComment BIT NULL,
 
 	publishedTimestamp			DATETIME NOT NULL,
@@ -40,7 +40,7 @@ CREATE INDEX IDX_Sentiment_documentId ON reddit.Sentiment (documentId);
 CREATE TABLE reddit.Posts 
 (
     documentId reddit.DOC_ID,
-    title VARCHAR(200),
+    title NVARCHAR(200),
 	mediaPreviewUrl NVARCHAR(2048) NULL,
 
     CONSTRAINT PK_PostsPrimaryKey PRIMARY KEY CLUSTERED (documentId)
@@ -64,7 +64,7 @@ CREATE INDEX IDX_Comments_parentId ON reddit.Comments (parentId);
 CREATE TABLE reddit.KeyPhrases 
 (
     documentId reddit.DOC_ID,
-    keyPhrase VARCHAR(500),
+    keyPhrase NVARCHAR(400),
 
     CONSTRAINT PK_KeyPhrasesPrimaryKey PRIMARY KEY CLUSTERED (documentId, keyPhrase),
 );
@@ -76,8 +76,8 @@ CREATE TABLE reddit.EmbeddedUrls
 (
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
     documentId reddit.DOC_ID,
-    embeddedUrl VARCHAR(500),
-    embeddedUrlDomain VARCHAR(100)
+    embeddedUrl NVARCHAR(500),
+    embeddedUrlDomain NVARCHAR(100)
 
 	CONSTRAINT [PK_EmbeddedUrls] PRIMARY KEY CLUSTERED ([id] ASC) WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF)
 );
@@ -89,8 +89,8 @@ CREATE TABLE reddit.Entities
 (
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
     documentId reddit.DOC_ID,
-    entity VARCHAR(500),
-    entityType VARCHAR(20),
+    entity NVARCHAR(500),
+    entityType NVARCHAR(20),
     entityOffset INT,
     entityLength INT,
 
@@ -103,8 +103,8 @@ CREATE TABLE reddit.UserDefinedEntities
 (
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
     documentId reddit.DOC_ID,
-    entity VARCHAR(500),
-    entityType VARCHAR(20),
+    entity NVARCHAR(500),
+    entityType NVARCHAR(20),
     entityOffset INT,
     entityLength INT,
 
@@ -141,8 +141,8 @@ CREATE TABLE reddit.Staging_Sentiment
 CREATE TABLE reddit.Staging_Entities 
 (
     documentId reddit.DOC_ID,
-    entity VARCHAR(500),
-    entityType VARCHAR(20),
+    entity NVARCHAR(500),
+    entityType NVARCHAR(20),
     entityOffset INT,
     entityLength INT
 );
@@ -151,5 +151,5 @@ CREATE TABLE reddit.Staging_Entities
 CREATE TABLE reddit.Staging_KeyPhrases 
 (
     documentId reddit.DOC_ID,
-    keyPhrase VARCHAR(500)
+    keyPhrase NVARCHAR(400)
 );

@@ -51,6 +51,11 @@ namespace RedditAzureFunctions
                 if (result != null)
                 {
                     queueCollector.Add(result.JobId);
+                    log.Verbose($"AzureML Web Service called; JobId=[{result.JobId}]");
+                }
+                else
+                {
+                    log.Verbose("No data to run through AzureML; no AML job started.");
                 }
             }
 

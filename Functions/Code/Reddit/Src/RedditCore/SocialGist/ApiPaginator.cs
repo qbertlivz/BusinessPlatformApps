@@ -66,7 +66,7 @@ namespace RedditCore.SocialGist
                 offset = finalList.Count;
                 if (!int.TryParse(result.Object.response.Total, out apiResponseTotal))
                 {
-                    const string errorMessage = "For some reason, the Total number of results was either not returned or not a number from SocialGist!";
+                    var errorMessage = $"For some reason, the Total number of results was either not returned or not a number from SocialGist!  Returned: [{result.Object.response.Total}]";
                     log.Error(errorMessage);
                     throw new ApiPaginatorException(errorMessage);
                 }

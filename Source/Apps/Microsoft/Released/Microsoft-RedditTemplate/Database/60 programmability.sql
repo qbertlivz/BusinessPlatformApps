@@ -40,12 +40,12 @@ CREATE OR ALTER PROCEDURE reddit.InsertComment
 (
 	-- General
     @NewDocId reddit.DOC_ID,
-	@content VARCHAR(MAX),
+	@content NVARCHAR(MAX),
     @score INT,
     @controversiality FLOAT,
     @gilded INT,
-    @author VARCHAR(100) = NULL,
-	@subreddit VARCHAR(200),
+    @author NVARCHAR(100) = NULL,
+	@subreddit NVARCHAR(200),
 
 	-- Timestamps
 	@publishedTimestamp			DATETIME,
@@ -132,12 +132,12 @@ CREATE OR ALTER PROCEDURE reddit.InsertPost
 (
 	-- General
     @NewDocId reddit.DOC_ID,
-	@content VARCHAR(MAX),
+	@content NVARCHAR(MAX),
     @score INT,
     @controversiality FLOAT,
     @gilded INT,
-    @author VARCHAR(100) = NULL,
-	@subreddit VARCHAR(200),
+    @author NVARCHAR(100) = NULL,
+	@subreddit NVARCHAR(200),
 
 	-- Timestamps
 	@publishedTimestamp			DATETIME,
@@ -151,7 +151,7 @@ CREATE OR ALTER PROCEDURE reddit.InsertPost
 	@url NVARCHAR(2048),
 
 	-- Subreddit-specific
-    @title VARCHAR(200),
+    @title NVARCHAR(200),
 	@mediaPreviewUrl NVARCHAR(2048)
 )
 AS

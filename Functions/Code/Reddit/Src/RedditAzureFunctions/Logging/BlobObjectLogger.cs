@@ -34,7 +34,6 @@ namespace RedditAzureFunctions.Logging
                 var sasUri = new Uri(this.configuration.ObjectLogSASUrl);
                 var accountName = sasUri.Host.TrimEndString(".blob.core.windows.net");
                 StorageCredentials creds = new StorageCredentials(sasUri.Query);
-                //var x = creds.AccountName;
                 CloudStorageAccount strAcc = new CloudStorageAccount(creds, accountName, endpointSuffix: null, useHttps: true);
                 CloudBlobClient blobClient = strAcc.CreateCloudBlobClient();
 
@@ -65,7 +64,7 @@ namespace RedditAzureFunctions.Logging
             }
             catch (Exception ex)
             {
-                this.logger.Error("Error logging data to the permanant store", ex);
+                this.logger.Error("Error logging data to the permanent store", ex);
             }
         }
     }

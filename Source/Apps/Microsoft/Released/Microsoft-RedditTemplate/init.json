@@ -55,7 +55,9 @@
                     "Target Database": "$(this.MS.DataStore.getValue('Database'))",
                     "Target Username": "$(this.MS.DataStore.getValue('Username'))",
                     "Search Query": "$(this.MS.DataStore.getValue('SearchQuery'))"
-                }
+                },
+                "displayCompletionNotification": false,
+                "sendCompletionNotification": false
             },
             {
                 "datastoreEntriesToValidate": [
@@ -138,7 +140,7 @@
                 "FunctionName": "$save('redditfunction' + this.MS.DataStore.getValue('uniqueId'))",
                 "name": "Microsoft-DeployAzureFunction",
                 "RepoUrl": "https://github.com/dwaynepryce/RedditAzureFunctions.git",
-                "Branch": "release/0.7.x"
+                "Branch": "release/0.8.x"
             },
             {
                 "DeploymentName": "Function",

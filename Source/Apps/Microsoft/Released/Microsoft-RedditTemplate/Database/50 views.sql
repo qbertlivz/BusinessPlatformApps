@@ -357,6 +357,15 @@ CREATE VIEW reddit.ChordChartSubredditAuthorConnections AS
 	FROM reddit.PostAndCommentCoauthorsView 
 GO
 
+CREATE VIEW reddit.ChordChartEmbeddedUrlsView AS 
+	SELECT
+		subreddit,
+		embeddedUrlDomain,
+		COUNT(1) AS ConnectionScore
+	FROM reddit.EmbeddedUrls EU INNER JOIN reddit.AllDocumentsView ADV ON EU.documentId=ADV.id 
+	GROUP BY subreddit, embeddedUrlDomain
+GO
+
 /*
 All documents to run through Machine Learning.  This is done in a view
 so that the AML runner can check for available data before running

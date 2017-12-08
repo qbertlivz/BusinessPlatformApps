@@ -74,7 +74,7 @@
         ],
 
         "displayname": "Progress",
-        "filename": "$save('PowerBITelemetry.pbix')",
+        "filename": "$save('Power BI Usage Metrics.pbix')",
         "name": "$SiteCommon$/pages-gallery/progress.html",
         "enablePublishReport": false,
         "Schema": "$save('adtlog')",

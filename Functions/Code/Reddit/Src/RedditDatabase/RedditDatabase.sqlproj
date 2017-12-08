@@ -59,6 +59,7 @@
     <Folder Include="Properties" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="00 content check.sql" />
     <None Include="10 pre.sql" />
     <None Include="20 schema.sql" />
     <None Include="30 types.sql" />

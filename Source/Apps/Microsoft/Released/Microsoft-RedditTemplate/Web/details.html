@@ -1,32 +1,39 @@
 ﻿<template>
+    <require from="../../../../../SiteCommon/Web/templates/bpst-link.html"></require>
+
     <h1 class="st-title">${MS.Translate.REDDIT_DETAILS_TITLE}</h1>
     <p>
         ${MS.Translate.DETAILS_REDDIT_TRIAL}<a href="${MS.Translate.DETAILS_REDDIT_CONTACT_URL}" target="_blank">${MS.Translate.DETAILS_REDDIT_CONTACT}</a>
     </p>
+    <p>
+        ${MS.Translate.DETAILS_REDDIT_PRIVACY_TOS1}<a href="${MS.Translate.DETAILS_REDDIT_PRIVACY_URL}" target="_blank">${MS.Translate.DETAILS_REDDIT_PRIVACY_TITLE}</a>${MS.Translate.DETAIS_REDDIT_PRIVACE_TOS2}<a href="${DETAIS_SOCIALGIST_TERMS_OF_SERVICE_URL}" target="_blank">${MS.Translate.DETAIS_SOCIALGIST_TERMS_OF_SERVICE_TITLE}</a>
+    </p>
 
-        <p>${MS.Translate.DETAILS_REDDIT_FIRST_NAME}</p>
-        <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.nameFirst" />
-        <p>${MS.Translate.DETAILS_REDDIT_LAST_NAME}</p>
-        <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.nameLast" />
-        <p>${MS.Translate.DETAILS_REDDIT_COMPANY}</p>
-        <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.company" />
-        <p>${MS.Translate.DETAILS_REDDIT_EMAIL}</p>
-        <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.email" />
-        <p>${MS.Translate.DETAILS_REDDIT_EMAIL_CONFIRMATION}</p>
-        <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.emailConfirmation" />
-        <p>${MS.Translate.DETAILS_REDDIT_DESCRIPTION_OF_USE}</p>
-        <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.descriptionOfUse" />
+    <p>${MS.Translate.DETAILS_REDDIT_FIRST_NAME}</p>
+    <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.nameFirst" />
+    <p>${MS.Translate.DETAILS_REDDIT_LAST_NAME}</p>
+    <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.nameLast" />
+    <p>${MS.Translate.DETAILS_REDDIT_COMPANY}</p>
+    <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.company" />
+    <p>${MS.Translate.DETAILS_REDDIT_JOB_TITLE}</p>
+    <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.jobTitle" />
+    <p>${MS.Translate.DETAILS_REDDIT_EMAIL}</p>
+    <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.email" />
+    <p>${MS.Translate.DETAILS_REDDIT_EMAIL_CONFIRMATION}</p>
+    <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.emailConfirmation" />
+    <p>${MS.Translate.DETAILS_REDDIT_DESCRIPTION_OF_USE}</p>
+    <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.descriptionOfUse" />
 
-        <div class="st-label-wrapper">
-            <label class="st-label">
-                <input type="checkbox" tabindex="-1" checked.bind="registration.accepted" disabled.bind="MS.HttpService.isServiceBusy">
-                <span class="smallFontSize">${registration.validation}</span>
-            </label>
-        </div>
+    <div class="st-label-wrapper">
+        <label class="st-label">
+            <input type="checkbox" tabindex="-1" checked.bind="registration.accepted" disabled.bind="MS.HttpService.isServiceBusy">
+            <span class="st-text">${MS.Translate.DETAILS_REDDIT_ACCEPT_TERMS}</span>
+        </label>
+    </div>
 
-        <button class="primary" click.trigger="clickRegister()" disabled.bind="!registration.accepted || MS.HttpService.isServiceBusy">${MS.Translate.COMMON_REGISTER}</button>
+    <button class="primary" click.trigger="clickRegister()" disabled.bind="!registration.accepted || MS.HttpService.isServiceBusy">${MS.Translate.COMMON_REGISTER}</button>
 
-        <p class="smallFontSize">
-            <bpst-link a-description="${registration.privacy}" a-link="${registration.link}" a-link-text="${registration.privacyTitle}" a-description2="${MS.Translate.COMMON_AND}" a-link2="${registration.eulaLink}" a-link-text2="${registration.eulaLinkText}"></bpst-link>
-        <p>
+    <p class="st-privacy smallFontSize">
+        <bpst-link a-description="${MS.Translate.COGNITIVE_SERVICES_PRIVACY_2_A}" a-link="${MS.Translate.COGNITIVE_SERVICES_TERMS_LINK}" a-link-text="${MS.Translate.COMMON_HERE}" a-description2="${MS.Translate.COGNITIVE_SERVICES_PRIVACY_2_B}"></bpst-link>
+    </p>
 </template>

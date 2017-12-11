@@ -1,6 +1,32 @@
 ﻿<template>
     <h1 class="st-title">${MS.Translate.REDDIT_DETAILS_TITLE}</h1>
-    <p class="st-subtitle">${MS.Translate.REDDIT_DETAILS_SUBTITLE}</p>
+    <p>
+        ${MS.Translate.DETAILS_REDDIT_TRIAL}<a href="${MS.Translate.DETAILS_REDDIT_CONTACT_URL}" target="_blank">${MS.Translate.DETAILS_REDDIT_CONTACT}</a>
+    </p>
 
-    <p class="st-text">${MS.Translate.REDDIT_DETAILS_ABOUT_SOCIALGIST}</p>
+        <p>${MS.Translate.DETAILS_REDDIT_FIRST_NAME}</p>
+        <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.nameFirst" />
+        <p>${MS.Translate.DETAILS_REDDIT_LAST_NAME}</p>
+        <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.nameLast" />
+        <p>${MS.Translate.DETAILS_REDDIT_COMPANY}</p>
+        <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.company" />
+        <p>${MS.Translate.DETAILS_REDDIT_EMAIL}</p>
+        <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.email" />
+        <p>${MS.Translate.DETAILS_REDDIT_EMAIL_CONFIRMATION}</p>
+        <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.emailConfirmation" />
+        <p>${MS.Translate.DETAILS_REDDIT_DESCRIPTION_OF_USE}</p>
+        <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.descriptionOfUse" />
+
+        <div class="st-label-wrapper">
+            <label class="st-label">
+                <input type="checkbox" tabindex="-1" checked.bind="registration.accepted" disabled.bind="MS.HttpService.isServiceBusy">
+                <span class="smallFontSize">${registration.validation}</span>
+            </label>
+        </div>
+
+        <button class="primary" click.trigger="clickRegister()" disabled.bind="!registration.accepted || MS.HttpService.isServiceBusy">${MS.Translate.COMMON_REGISTER}</button>
+
+        <p class="smallFontSize">
+            <bpst-link a-description="${registration.privacy}" a-link="${registration.link}" a-link-text="${registration.privacyTitle}" a-description2="${MS.Translate.COMMON_AND}" a-link2="${registration.eulaLink}" a-link-text2="${registration.eulaLinkText}"></bpst-link>
+        <p>
 </template>

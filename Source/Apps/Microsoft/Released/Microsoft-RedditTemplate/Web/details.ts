@@ -19,18 +19,18 @@ export class Details extends ViewModelBase {
             this.registration.company.length === 0 ||
             this.registration.jobTitle.length === 0 ||
             this.registration.descriptionOfUse.length === 0) {
-            error += "All fields are required.";
+            error += this.MS.Translate.DETAILS_REDDIT_MISSING_FIELDS_ERROR;
         }
 
         if (this.registration.emailConfirmation.length === 0 ||
             this.registration.email.length === 0 ||
             this.registration.email !== this.registration.emailConfirmation ||
             this.registration.email.indexOf('@') === -1) {
-            error += " Email and Email Confirmation are both required and must match";
+            error += this.MS.Translate.DETAILS_REDDIT_EMAIL_ERROR;
         }
 
         if (!this.registration.accepted) {
-            error += " You must accept the correspondence terms";
+            error += this.MS.Translate.DETAILS_REDDIT_MARKETING_ERROR;
         }
 
         if (error.length !== 0) {

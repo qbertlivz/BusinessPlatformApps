@@ -12,19 +12,19 @@
     <p>${MS.Translate.DETAILS_REQUIRED_FIELDS}</p>
 
     <p>${MS.Translate.DETAILS_REDDIT_FIRST_NAME}</p>
-    <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.nameFirst" />
+    <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.nameFirst" change.delegate="viewmodel.onInvalidate()" />
     <p>${MS.Translate.DETAILS_REDDIT_LAST_NAME}</p>
-    <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.nameLast" />
+    <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.nameLast" change.delegate="viewmodel.onInvalidate()" />
     <p>${MS.Translate.DETAILS_REDDIT_COMPANY}</p>
-    <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.company" />
+    <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.company" change.delegate="viewmodel.onInvalidate()" />
     <p>${MS.Translate.DETAILS_REDDIT_JOB_TITLE}</p>
-    <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.jobTitle" />
+    <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.jobTitle" change.delegate="viewmodel.onInvalidate()" />
     <p>${MS.Translate.DETAILS_REDDIT_EMAIL}</p>
-    <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.email" />
+    <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.email" change.delegate="viewmodel.onInvalidate()" />
     <p>${MS.Translate.DETAILS_REDDIT_EMAIL_CONFIRMATION}</p>
-    <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.emailConfirmation" />
+    <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.emailConfirmation" change.delegate="viewmodel.onInvalidate()" />
     <p>${MS.Translate.DETAILS_REDDIT_DESCRIPTION_OF_USE}</p>
-    <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.descriptionOfUse" />
+    <input class="st-input" type="text" disabled.bind="MS.HttpService.isServiceBusy" value.bind="registration.descriptionOfUse" change.delegate="viewmodel.onInvalidate()" />
 
     <div class="st-label-wrapper">
         <label class="st-label">
@@ -32,5 +32,9 @@
             <span class="st-text">${MS.Translate.DETAILS_REDDIT_ACCEPT_TERMS}</span>
         </label>
     </div>
+
+    <p class="st-float">
+        <button class="primary" click.trigger="onValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_VALIDATE}</button>
+    </p>
 
 </template>

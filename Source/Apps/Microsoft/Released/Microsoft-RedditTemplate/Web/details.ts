@@ -1,5 +1,6 @@
 ﻿import { ViewModelBase } from '../../../../../SiteCommon/Web/services/view-model-base'
 import { Registration } from './registration';
+import { DataStoreType } from '../../../../../SiteCommon/Web/enums/data-store-type';
 
 export class Details extends ViewModelBase {
     registration: Registration = new Registration();
@@ -37,6 +38,14 @@ export class Details extends ViewModelBase {
             this.isValidated = false;
         } else {
             this.isValidated = true;
+
+            this.MS.DataStore.addToDataStore('FirstName', this.registration.nameFirst, DataStoreType.Public);
+            this.MS.DataStore.addToDataStore('LastName', this.registration.nameLast, DataStoreType.Public);
+            this.MS.DataStore.addToDataStore('CompanyName', this.registration.company, DataStoreType.Public);
+            this.MS.DataStore.addToDataStore('JobTitle', this.registration.jobTitle, DataStoreType.Public);
+            this.MS.DataStore.addToDataStore('DescriptionOfUse', this.registration.descriptionOfUse, DataStoreType.Public);
+            this.MS.DataStore.addToDataStore('EMail', this.registration.email, DataStoreType.Public);
+            this.MS.DataStore.addToDataStore('AcceptCorrespondenceTerms', this.registration.accepted, DataStoreType.Public);
         }
 
         return this.isValidated;

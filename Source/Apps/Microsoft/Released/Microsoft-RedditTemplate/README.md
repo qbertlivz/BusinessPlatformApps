@@ -43,7 +43,7 @@ See https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-ti
 
 Here is an estimate of the Azure costs:
 
-Please keep in mind these are **estimated costs and subject to change.** For a more detailed breakdown of the various components please refer to the [Azure calculator](https://azure.microsoft.com/en-us/pricing/calculator/) and select Logic App, Azure Function, Azure SQL and Azure ML. You can tweak all the options to see what the costs will look like and what modifications may suit your needs best.
+Please keep in mind these are **estimated costs and subject to change.** For a more detailed breakdown of the various components please refer to the [Azure calculator](https://azure.microsoft.com/en-us/pricing/calculator/) and select the resources listed below. You can tweak all the options to see what the costs will look like and what modifications may suit your needs best.
 
 The following defaults are set for you in the template (you can modify any of these after things get set up):
 

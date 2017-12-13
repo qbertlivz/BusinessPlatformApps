@@ -455,6 +455,7 @@
     INIT_GETTING_STARTED_WHAT_D365: `What Dynamics 365 instance do you use?`,
     INIT_GETTING_STARTED_WHERE: `Where do you want to copy your data?`,
     INIT_NEWS_DOWNLOAD: `Open the Power BI report (.pbix file) to explore your data. If you have opened your report but are not seeing any data, check back in a few hours. It could take some time to find articles. Publish the report for others to see in your Power BI workspace. You will need Power BI Desktop to open this file - download it`,
+    INIT_REDDIT_DOWNLOAD: `Open the Power BI report (.pbix file) to explore your data. If you have opened your report but are not seeing any data, check back in a few hours. It could take some time to find articles. Publish the report for others to see in your Power BI workspace. You will need Power BI Desktop to open this file - download it`,
     INIT_NEWS_PRICING_CALCULATOR: `https://azure.microsoft.com/en-us/pricing/calculator/`,
     INIT_NEWS_PRICING_COST: `By clicking next and deploying the template, you authorize Microsoft to create Azure resources on your subscription and bill based on their respective pricing rates.  The approximate base cost of the Azure resources used by this template is $10 a day, and every 1,000 articles will incur an additional cost of approximately $12.  These costs are estimates only and subject to change.`,
     INIT_NEWS_PRICING_URL: `https://github.com/Microsoft/BusinessPlatformApps/blob/dev/Source/Apps/Microsoft/Released/Microsoft-NewsTemplate/README.md`,

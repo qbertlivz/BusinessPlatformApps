@@ -22,6 +22,7 @@ export class Gettingstarted extends ViewModelBase {
     showSelection: boolean = false;
     subtitle: string = '';
     templateName: string = '';
+    terms: Registration = new Registration();
     upgrade: boolean = false;
 
     async clickRegister(): Promise<void> {

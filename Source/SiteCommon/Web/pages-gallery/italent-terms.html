@@ -1,0 +1,48 @@
+﻿<template>
+    <p class="st-header">${MS.Translate.ITALENT_COMP_NAME}</p>
+    <p class="st-header">${MS.Translate.ITALENT_TERMS_TITLE}</p>
+    <p class="st-privacy smallFontSize">
+        <span>${MS.Translate.ITALENT_TERMS_CONDITIONS_0}</span>
+    </p>
+    <p class="st-privacy smallFontSize">
+        <span>${MS.Translate.ITALENT_TERMS_CONDITIONS_1}</span>
+    </p>
+    <p class="st-privacy smallFontSize">
+        <span>${MS.Translate.ITALENT_TERMS_CONDITIONS_2}</span>
+    </p>
+    <p class="st-privacy smallFontSize">
+        <span>${MS.Translate.ITALENT_TERMS_CONDITIONS_3}</span>
+    </p>
+    <p class="st-privacy smallFontSize">
+        <span>${MS.Translate.ITALENT_TERMS_CONDITIONS_4}</span>
+    </p>
+    <p class="st-privacy smallFontSize">
+        <span>${MS.Translate.ITALENT_TERMS_CONDITIONS_5}</span>
+    </p>
+    <p class="st-privacy smallFontSize">
+        <span>${MS.Translate.ITALENT_TERMS_CONDITIONS_6}</span>
+    </p>
+    <p class="st-privacy smallFontSize">
+        <span>${MS.Translate.ITALENT_TERMS_CONDITIONS_7}</span>
+    </p>
+    <p class="st-privacy smallFontSize">
+        <span>${MS.Translate.ITALENT_TERMS_CONDITIONS_8}</span>
+    </p>
+    <p class="st-privacy smallFontSize">
+        <span>${MS.Translate.ITALENT_TERMS_CONDITIONS_9}</span>
+    </p>
+    <p class="st-privacy smallFontSize">
+        <span>${MS.Translate.ITALENT_TERMS_CONDITIONS_10}</span>
+    </p>
+    <p class="st-privacy smallFontSize">
+        <span>${MS.Translate.ITALENT_TERMS_CONDITIONS_11}</span>
+    </p>
+    <p class="st-privacy smallFontSize">
+        <span>${MS.Translate.ITALENT_TERMS_CONDITIONS_12}</span>
+    </p>
+    <br />
+    <p class="st-text">
+        <input type="checkbox" change.delegate="verifyChecked()" checked.bind="isTermsChecked" disabled.bind="MS.HttpService.isServiceBusy">
+        <span>${MS.Translate.ITALENT_TERMS_CONFIRMATION}</span>
+    </p>
+</template>

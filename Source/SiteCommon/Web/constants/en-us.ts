@@ -608,7 +608,7 @@
     INIT_GETTING_STARTED_TANDC_LINK: 'https://github.com/Microsoft/BusinessPlatformApps/blob/dev/Source/Apps/Partner/Released/iTalent-SocialAnalyticsByLithium/Web/iTalentDigitalTandC.html',
     LITHIUM_LOGIN_LINK_1: `https://www.lithium.com/company/pricing/price-quote`,
     LITHIUM_LOGIN_LINK_2: `https://github.com/Microsoft/BusinessPlatformApps/blob/dev/Source/Apps/Partner/Released/iTalent-SocialAnalyticsByLithium/Readme.md`,
-    LITHIUM_LOGIN_LINK_3: `https://www.youtube.com/watch?v=AEzHk_O1RK4&feature=youtu.be`,
+    LITHIUM_LOGIN_LINK_3: `https://www.youtube.com`,
     LITHIUM_LOGIN_TENANT_ID: 'Tenant ID: ',
     LITHIUM_LOGIN_CLIENT_ID: 'Client ID: ',
     LITHIUM_LOGIN_CLIENT_SECRET: 'Client Secret: ',
@@ -617,5 +617,5 @@
     INIT_LITHIUM_PRICING_URL: `https://github.com/Microsoft/BusinessPlatformApps/blob/dev/Source/Apps/Partner/Released/iTalent-SocialAnalyticsByLithium/Readme.md#estimated-costs`,
     ITALENT_COMP_NAME: `iTalent Digital, Inc.`,
     INIT_ACTION_RESTART_AZURE_FUNCTION: `Restarting function`,
-    INIT_ACTION_CHECK_AZURE_FUNCTION_RUNNING_STATUS: 'Restarting azure function'
+    INIT_ACTION_CHECK_AZURE_FUNCTION_RUNNING_STATUS: 'Checking azure function running status'
 };

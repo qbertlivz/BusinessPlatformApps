@@ -81,7 +81,7 @@
         "FunctionName": "$save('LithiumSolutionTemplate-' + this.MS.DataStore.getValue('uniqueId'))",
         "name": "Microsoft-DeployAzureFunction",
         "RepoUrl": "https://github.com/sekharpusuluri/iTalent",
-        "sku": "Basic"
+        "sku": "Standard"
       },
       {
         "DeploymentName": "DeployAzureFunction",
@@ -104,12 +104,9 @@
         "name": "Microsoft-DeployAzureFunctionConnectionStrings"
       },
       {
-
         "displayname": "$translate(INIT_ACTION_CHECK_AZURE_FUNCTION_RUNNING_STATUS)",
-        "name": "Microsoft-RestartAzureFunction"
-
+        "name": "Microsoft-CheckAzureFunctionRunningStatus"
       }
-
-        ]
-      }
+    ]
+  }
 }

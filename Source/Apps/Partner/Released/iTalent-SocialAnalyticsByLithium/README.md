@@ -1,4 +1,4 @@
-LithiumSocial Analytics for Lithium Solution Template Documentation
+Social Analytics for Lithium Solution Template by iTalent Digital Documentation
 ===========================================================
 
 # Table of Contents
@@ -15,8 +15,8 @@ LithiumSocial Analytics for Lithium Solution Template Documentation
 
 ### Introduction
 
-The Social Analytics for Lithium solution template provides analytics about your community, The template stands up an end-to-end solution that pulls the data from Lithium API's, enriches the data for analytics in Azure SQL. Users can then use pre-built Power BI reports to analyze the data and finding insights.
-The template is aimed at anyone who is interesting in Lithium community topics, replies, boards, categories and users.
+The Social Analytics for Lithium solution template provides analytics about your community, the template stands up an end-to-end solution that pulls the data from Lithium API's, enriches the data for analytics in Azure SQL. Users can then use pre-built Power BI reports to analyze the data and finding insights.
+The template is aimed at anyone who is interesting in Lithium community users, boards, categories, topics and replies.
 
 The “Social Analytics for Lithium” by iTalent Digital solution template lets you gain insights about your community by looking at important metrics like total registered users, boards, topics, messages, solutions and kudos. The Power BI Reports provide the community growth in terms of number of users, messages and solution overtime, and analyse board and category level issues and solutions of the product.
 
@@ -30,7 +30,7 @@ The template lets you do things like:
 
 -	Go back in history to do trend analysis to see your community growth.
 
-The following document provides a walkthrough of the architecture, a deep dive into every component and information on pricing. For any questions not covered in this document, please contact the team at <pbitemplate@italentdigital.com>
+The following document provides a walkthrough of the architecture, a deep dive into every component, comments on customizability as well as information on additional topics like pricing. For any questions not covered in this document, please contact the team at <pbitemplate@italentdigital.com>
 
 ### Architecture
 
@@ -42,7 +42,7 @@ The flow of the Social Analytics for Lithium solution template is as follows:
 
 -   Azure Function pushes the data to Azure SQL
 
--	Azure Function also calls Azure SQL procedurs to transform and enrich the data for analytics
+-	Azure SQL cleans, transforms and enriches the data for analytics
 
 -   Power BI imports data into it from Azure SQL and renders pre-defined reports
 
@@ -51,13 +51,13 @@ The flow of the Social Analytics for Lithium solution template is as follows:
 
 Setting up the template requires the following:
 
+-   Lithium Community User Account
+
 -   Access to an Azure subscription
 
 -   Power BI Desktop (latest version)
 
 -   Power BI Pro (to share the template with others)
-
--   Lithium Community User Account
 
 
 ### How to Install
@@ -66,7 +66,9 @@ To get started with the solution, navigate to the [Social Analytics for Lithium 
 
 **Getting Started:** Starting page introducing the template and explaining the architecture.
 
-![Image](Resources/media/start.png)
+![Image](Resources/media/0gettingstarted.png)
+
+![Image](Resources/media/1lithiumlogin.png)
 
 **Lithium:** Use your Lithium credentials to connect to Lithium 
 
@@ -90,5 +92,22 @@ As a user navigates away from this page a new resource group gets spun up on the
 
 ### Estimated Costs
 
-Here is an estimate of the Azure costs (Azure Functions, Azure SQL) based on the number of articles processed:
+The cost of the Social Analytics for Lithium solution template is the total of the costs associated with the Azure resources used therein. Two Azure resources are consumed:
 
+•	Azure Functions
+
+•	Azure SQL Database
+
+
+**Azure Resources						Monthly Cost**
+Azure Functions (Standard Tier)		$75.00
+Azure SQL Database (Standard 1)		$30.00
+
+
+The Lithium connector cost is not included in this document. Its available [here](https://www.lithium.com/company/pricing/price-quote).
+
+Detailed Azure functions costs can be found here [here](https://azure.microsoft.com/en-us/pricing/details/functions/).
+
+Detailed Azure SQL Database service costs are found [here](https://azure.microsoft.com/en-us/pricing/details/sql-database/). The default Azure SQL Database service tier is S1 but can be modified during or after provisioning. If available, an existing Azure SQL Server and Database can be used. 
+
+Power BI costs are not included in this document. The Power BI cost estimator is available [here](https://powerbi.microsoft.com/en-us/pricing/).

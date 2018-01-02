@@ -37,30 +37,30 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             var location = request.DataStore.GetJson("SelectedLocation", "Name");
             var sitename = request.DataStore.GetValue("FunctionName");
 
-            await Task.Delay(60000);
+            await Task.Delay(80000);
 
-            string storageAccountName = request.DataStore.GetValue("storageaccountname");
-            string storageAccountKey = request.DataStore.GetValue("StorageAccountKey");            
+            //string storageAccountName = request.DataStore.GetValue("storageaccountname");
+            //string storageAccountKey = request.DataStore.GetValue("StorageAccountKey");            
 
-            var accountCredentials = new StorageCredentials(storageAccountName, storageAccountKey);
-            CloudStorageAccount account = new CloudStorageAccount(accountCredentials, false);
-            CloudTableClient tableClient = account.CreateCloudTableClient();
+            //var accountCredentials = new StorageCredentials(storageAccountName, storageAccountKey);
+            //CloudStorageAccount account = new CloudStorageAccount(accountCredentials, false);
+            //CloudTableClient tableClient = account.CreateCloudTableClient();
 
-            CloudTable functionLogsTable = tableClient.GetTableReference($"AzureWebJobsHostLogs" + DateTime.Now.ToString("yyyymm"));
+            //CloudTable functionLogsTable = tableClient.GetTableReference($"AzureWebJobsHostLogs" + DateTime.Now.ToString("yyyymm"));
 
-            TableQuery query = new TableQuery().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "I"));
+            //TableQuery query = new TableQuery().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "I"));
 
-            var queryResult = functionLogsTable.ExecuteQuery(query);
+            //var queryResult = functionLogsTable.ExecuteQuery(query);
 
-            foreach (var entity in queryResult.ToList())
-            {
-                if(entity.PartitionKey == "I" && entity["LogOutput"] != null )
-                {
-                    return entity["LogOutput"].ToString().Contains(SUCCESS) ? new ActionResponse(ActionStatus.Success) : new ActionResponse(ActionStatus.Failure);
-                }
-            }
+            //foreach (var entity in queryResult.ToList())
+            //{
+            //    if(entity.PartitionKey == "I" && entity["LogOutput"] != null )
+            //    {
+            //        return entity["LogOutput"].ToString().Contains(SUCCESS) ? new ActionResponse(ActionStatus.Success) : new ActionResponse(ActionStatus.Failure);
+            //    }
+            //}
 
-            return new ActionResponse(ActionStatus.Failure);
+            return new ActionResponse(ActionStatus.Success);
 
             //AzureHttpClient client = new AzureHttpClient(azureToken, subscription, resourceGroup);
 

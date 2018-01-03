@@ -151,5 +151,27 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
 
             return builder.ToString();
         }
+
+        public static string GetAuthUriForServicePrincipal(string clientId, string authBase, string redirect)
+        {
+            Dictionary<string, string> message = new Dictionary<string, string>
+            {
+                { "client_id", clientId },
+                { "prompt", "consent" },
+                { "response_type", "code" },
+                { "redirect_uri", Uri.EscapeDataString(redirect) },
+                { "resource", Uri.EscapeDataString("https://manage.office.com") }
+            };
+
+            StringBuilder builder = new StringBuilder();
+            builder.Append(authBase);
+            foreach (KeyValuePair<string, string> keyValuePair in message)
+            {
+                builder.Append(keyValuePair.Key + "=" + keyValuePair.Value);
+                builder.Append("&");
+            }
+
+            return builder.ToString();
+        }
     }
 }

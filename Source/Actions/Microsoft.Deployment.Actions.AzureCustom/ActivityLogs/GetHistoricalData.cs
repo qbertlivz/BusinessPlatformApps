@@ -41,7 +41,9 @@ namespace Microsoft.Deployment.Actions.AzureCustom.ActivityLogs
 
             if (response == null || response.Value.IsNullOrEmpty())
             {
-                return new ActionResponse(ActionStatus.Failure, new ActionResponseExceptionDetail("ActivityLogsGetHistoricalDataError"));
+                //return new ActionResponse(ActionStatus.Failure, new ActionResponseExceptionDetail("ActivityLogsGetHistoricalDataError"));
+                // Historical Data is optional - let users continue even if not all their historical data is imported
+                return new ActionResponse(ActionStatus.Success);
             }
 
             foreach (ActivityLogEntry activity in response.Value)

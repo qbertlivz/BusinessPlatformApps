@@ -180,28 +180,52 @@
 
             // Continue normal
             {
-                "displayname": "$translate(INIT_ACTION_CREATING_EVENT_HUB)",
-                "name": "Microsoft-CreateEventHubNameSpace"
+                "AzureArmFile": "Service/ARM/EventHub.json",
+                "AzureArmParametersUnique": {
+                    "nameConsumerGroup": "bpst-al-cg-",
+                    "nameEventHub": "bpst-al-eh-",
+                    "nameNamespace": "bpst-al-ns-"
+                },
+                "displayname": "$translate(INIT_ACTION_CREATING_EVENTHUB)",
+                "name": "Microsoft-DeployAzureArmTemplate"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_GETTING_EVENTHUB_KEYS)",
+                "name": "Microsoft-GetEventHubKeys"
             },
             {
                 "displayname": "$translate(INIT_ACTION_EXPORT_ACTIVITY_LOG)",
                 "name": "Microsoft-ExportActivityLogToEventHub"
             },
             {
+                "AzureArmFile": "Service/ARM/StreamAnalytics.json",
+                "AzureArmParametersUnique": {
+                    "nameStreamAnalyticsJob": "bpst-al-saj-"
+                },
                 "displayname": "$translate(INIT_ACTION_CREATING_STREAM_ANALYTICS_JOB)",
-                "name": "Microsoft-CreateStreamAnalyticsJob"
+                "name": "Microsoft-DeployAzureArmTemplate"
             },
             {
                 "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_INPUT_EVENTHUB)",
-                "name": "Microsoft-SetStreamAnalyticsInputAsEventHub"
+                "inputSerialization": "Json",
+                "name": "Microsoft-AddStreamAnalyticsInputEventHub",
+                "nameStreamAnalyticsInputEventHub": "EventHubInput"
             },
             {
-                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_SH_OUTPUT)",
-                "name": "Microsoft-SetServiceHealthOutput"
+                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_OUTPUT_SQL)",
+                "name": "Microsoft-AddStreamAnalyticsOutputSql",
+                "streamAnalyticsOutputSql": {
+                    "name": "ServiceHealthOutput",
+                    "table": "bpst_aal.ServiceHealthData"
+                }
             },
             {
-                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_ADMIN_OUTPUT)",
-                "name": "Microsoft-SetAdministrativeOutput"
+                "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_OUTPUT_SQL)",
+                "name": "Microsoft-AddStreamAnalyticsOutputSql",
+                "streamAnalyticsOutputSql": {
+                    "name": "AdministrativeOutput",
+                    "table": "bpst_aal.AdministrativeData"
+                }
             },
             {
                 "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_JSON_HELPER)",
@@ -217,7 +241,7 @@
             },
             {
                 "displayname": "$translate(INIT_ACTION_DEPLOYING_STREAM_ANALYTICS)",
-                "name": "Microsoft-StartStreamAnalyticsJob"
+                "name": "Microsoft-ToggleStreamAnalytics"
             },
             {
                 "displayname": "$translate(INIT_ACTION_GET_HISTORICAL_ACTIVITY_LOG_DATA)",

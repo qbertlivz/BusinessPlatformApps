@@ -6,7 +6,7 @@
     "Install": {
         "Pages": [
             {
-                "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-SalesforceSalesManagement/Web/Images/salesforceArchitectureDiagram.png",
+                "architectureDiagram": "$run(this.MS.etl === 'Informatica' ? 'dist/Apps/Microsoft/Released/Microsoft-SalesforceSalesManagement/Web/Images/informatica.png' : 'dist/Apps/Microsoft/Released/Microsoft-SalesforceSalesManagement/Web/Images/salesforceArchitectureDiagram.png')",
                 "displayname": "Getting Started",
                 "list1": [
                     "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",
@@ -17,7 +17,7 @@
                 ],
                 "list2": [
                     "$translate(INIT_GETTING_STARTED_CLOUD_SOLUTION)",
-                    "$translate(INIT_GETTING_STARTED_DATA_PULL_SALESFORCE)",
+                    "$run(this.MS.etl === 'Informatica' ? this.MS.Translate.INIT_GETTING_STARTED_DATA_PULL_SALESFORCE_INFORMATICA : this.MS.Translate.INIT_GETTING_STARTED_DATA_PULL_SALESFORCE)",
                     "$translate(INIT_GETTING_STARTED_CONNECT_AS_PBI)"
                 ],
                 "name": "$SiteCommon$/pages-gallery/getting-started.html",
@@ -55,10 +55,11 @@
                 "skip": "$run(this.MS.HttpService.isOnPremise)"
             },
             {
-                "dataMovement": "$run(this.MS.HttpService.isOnPremise ? 'Informatica' : 'ADF')",
+                "dataMovement": "$run(this.MS.HttpService.isOnPremise || this.MS.etl === 'Informatica' ? 'Informatica' : 'ADF')",
                 "displayname": "Data Movement",
                 "name": "$SiteCommon$/pages-gallery/data-movement.html",
-                "showAdf": "$run(!this.MS.HttpService.isOnPremise)"
+                "showAdf": "$run(!this.MS.HttpService.isOnPremise && this.MS.etl !== 'Informatica')",
+                "showScribe": "$run(this.MS.etl !== 'Informatica')"
             },
             {
                 "displayname": "Salesforce",

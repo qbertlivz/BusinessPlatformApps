@@ -68,9 +68,9 @@ To get started with the solution, navigate to the [Social Analytics for Lithium 
 
 ![Image](Resources/media/0gettingstarted.png)
 
-![Image](Resources/media/1lithiumlogin.png)
+**Lithium Login:** Use OAuth to sign into your community account. You will need to provide your community app TenantID, ClientID, Client Secret and Authorization Redirect URL. You can find these details in your community admin settings. To get these details sign into your community and navigate to "Community Admin".
 
-**Lithium:** Use your Lithium credentials to connect to Lithium 
+![Image](Resources/media/1lithiumlogin.png)
 
 **Azure:** Use OAuth to sign into your Azure account. You will notice you have a choice between signing into an organizational account and a Microsoft (work/school account).
 

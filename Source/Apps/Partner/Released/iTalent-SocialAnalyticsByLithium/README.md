@@ -156,13 +156,13 @@ public static void Run(TimerInfo myTimer, TraceWriter log)
         log.Info($"Completed the Lithium ETL execution at: {DateTime.Now} .");
     }
 }
-
+```
 
 The iTalent.LithiumConnector API contains all the methods required to pull the data from Lithium V2 API's using the credential provided and pushes the data into Azure SQL passed to the method.
 
 The API pulls all users, user badges, boards, categories, last 30 days of messages and kudos from Lithium community in JSON format and pushes the data into Azure SQL staging tables. It also pulls the community name and inserts into it.Parameters table in the database. Subsequnt runs will pull only last one day of messages along with all other feed data.
 
-```Messages JSON
+```Messages sample JSON
 {
 	"type": "message",
 	"id": "300022",
@@ -189,6 +189,8 @@ The API pulls all users, user badges, boards, categories, last 30 days of messag
     "views": 2100
 	}
 },
+```
+
 
 After all the Lithium data pushes to the Azure SQL staging table, the API calls the it.SyncData stored procedure in the database to merge all the data into actual reporting tables.  To learn more about the schema please go to the Data Model Schema section.
 

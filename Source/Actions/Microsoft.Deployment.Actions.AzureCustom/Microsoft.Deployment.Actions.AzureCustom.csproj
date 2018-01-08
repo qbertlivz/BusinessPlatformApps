@@ -264,7 +264,6 @@
     <Compile Include="CreateSqlConnector.cs" />
     <Compile Include="ActivityLogs\CreateEventHubNameSpace.cs" />
     <Compile Include="FTPUtilityTest.cs" />
-    <Compile Include="Functions\CheckAzureFunctionRunningStatus.cs" />
     <Compile Include="LogicApp\LogicAppConnector.cs" />
     <Compile Include="LogicApp\ForceRunLogicApp.cs" />
     <Compile Include="News\DeployAzureMLSchedulerLogicApp.cs" />

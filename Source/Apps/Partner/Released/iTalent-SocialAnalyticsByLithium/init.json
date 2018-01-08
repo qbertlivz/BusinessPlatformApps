@@ -58,13 +58,16 @@
         }
       },
       {
-        "datastoreEntriesToValidate": [
-          "SqlConnectionString"
-        ],
         "displayname": "Progress",
+        "filename": "$save('SocialAnalyticsforLithium.pbix')",
         "name": "$SiteCommon$/pages-gallery/progress.html",
         "showCounts": false,
-        "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
+        "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))",
+        "SiteName": "$save(this.uniqueIdFunction)",
+        "datastoreEntriesToValidate": [
+          "AzureToken",
+          "SqlConnectionString"
+        ]
       }
 
     ],
@@ -100,12 +103,8 @@
           "LithiumRefreshToken": "$ds(LithiumRefreshToken)",
           "SqlConnectionString": "$ds(SqlConnectionString)"
         },
-        "displayname": "$translate(INIT_ACTION_DEPLOYING_CONNECTION_STRINGS)",
-        "name": "Microsoft-DeployAzureFunctionConnectionStrings"
-      },
-      {
-        "displayname": "$translate(INIT_ACTION_CHECK_AZURE_FUNCTION_RUNNING_STATUS)",
-        "name": "Microsoft-CheckAzureFunctionRunningStatus"
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_APP_SETTINGS)",
+        "name": "Microsoft-DeployAzureFunctionAppSettings"
       }
     ]
   }

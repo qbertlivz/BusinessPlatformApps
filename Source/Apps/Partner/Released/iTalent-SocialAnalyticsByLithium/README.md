@@ -7,7 +7,7 @@ Social Analytics for Lithium Solution Template by iTalent Digital Documentation
 3. [System Requirements](#system-requirements)
 4. [How to Install](#how-to-install)
 5. [Architecture Deep Dive](#architecture-deep-dive)
-6. [Model Schema](#model-schema)
+6. [Data Model Schema](#data-model-schema)
 7. [Reports Walkthrough](#report-walkthrough)
 8. [Estimated Costs](#estimated-costs)
 
@@ -66,11 +66,17 @@ To get started with the solution, navigate to the [Social Analytics for Lithium 
 
 **Getting Started:** Starting page introducing the template and explaining the architecture.
 
-![Image](Resources/media/0gettingstarted.png)
+![Image](Resources/media/gettingstarted.png)
 
-**Lithium Login:** Use OAuth to sign into your community account. You will need to provide your community app TenantID, ClientID, Client Secret and Authorization Redirect URL. You can find these details in your community admin settings. To get these details sign into your community and navigate to "Community Admin".
+**Lithium Login:** Use OAuth to sign into your community account. You will need to provide your community app TenantID, ClientID, Client Secret and Refresh Access Token (we will not make any changes to your Lithium community account).
 
-![Image](Resources/media/1lithiumlogin.png)
+![Image](Resources/media/lithiumlogin.png)
+
+You can find TenantID, ClientID, Client Secret details in your community admin settings. To get these details sign into your community and navigate to Community Admin > SYSTEM > API Apps.
+
+![Image](Resources/media/lithiumsettings.png)
+
+*Refresh Token*  Refresh token is required to refresh the access tokens along with other credentials. Access tokens allow the community members to make REST calls with the Community API.  If you already have a refresh token to generate an access to token for your community to make API calls, you can provide that refresh token. If you don't have the refresh token please follow the steps provided [here](https://community.lithium.com/t5/Developer-Documentation/bd-p/dev-doc-portal?section=oauth2#requestAccessRefresh) to generate your refresh key.
 
 **Azure:** Use OAuth to sign into your Azure account. You will notice you have a choice between signing into an organizational account and a Microsoft (work/school account).
 
@@ -83,10 +89,105 @@ If you belong to a single domain, simply hover over your e-mail address in the s
 
 In this case, the domain is: richtkhotmail.362.onmicrosoft.com.
 
-![Image](Resources/media/image5.png)
+![Image](Resources/media/connectazure.png)
+
 Logging into Azure gives the application access to your Azure subscription and permits spinning up Azure services on your behalf. If you want a more granular breakdown of the costs, please scroll down to the Estimated Costs section.
 
 As a user navigates away from this page a new resource group gets spun up on their Azure subscription (the name is random but always prefixed by ‘SolutionTemplate-‘). This name can be changed under the advanced settings tab. All newly created resources go into this container.
+
+**Azure SQL:** Connect to an existing SQL Server or provide details which the application will use to spin up an Azure SQL on your behalf. Only Azure SQL is supported for this template. If a user chooses to spin up a new Azure SQL, this will get deployed in their Azure subscription inside the newly created resource group.
+
+![Image](Resources/media/azuresql.png)
+
+**Summary:** Summary page outlining all the choices the user made.
+
+![Image](Resources/media/summary.png)
+
+**Deploy:** When you navigate to the deployment page the setup process gets kicked off. SQL scripts run to create the necessary tables and views. An Azure Function then gets spun up on your Azure subscription. An Azure ML webservice is deployed to your subscription that will do the sentiment scoring. Finally, a Logic App is created that has a connection to your Azure Function.
+
+**It is important that you do not navigate away from this page while deployment takes place.** Once everything gets deployed a download link will appear for a Power BI file which consists of the pre-defined reports.
+
+![Image](Resources/media/progress.png)
+
+**Power BI Report:** Once you download the Power BI desktop file you will need to connect it to your data. Open the pbix and follow the instructions on the front page.
+
+![Image](Resources/media/downloadreport.png)
+
+
+### Architecture Deep Dive
+
+The following section will break down how the template works by going through all the components of the solution.
+
+![Image](Web/Images/lithiumArchitectureDiagram.png)
+
+**Azure Resources:**
+You can access all of the resources that have been spun up by logging into the Azure portal. Everything should be under one resource group (unless a user was using an existing SQL server. In this case the SQL Server will appear in whatever resource group it already existed in).
+
+![Image](Web/Images/azureresources.png)
+
+
+Here is an example of what gets spun up for a user. We will go through each of these items one by one:
+
+![Image](Web/Images/azurefunction.png)
+
+**Azure Function:**
+Azure functions are serverless compute service that enables you to run code on-demand without having to explicitly provision or manage infrastructure. These functions will run a script or piece of code in response to a variety of events. 
+
+A time trigger azure function will be created during the solution template deployment and schedule to run everyday at 6.00 AM (this can be changed from function schedule settings) in a newly create azure resources in your azure subscription. 
+
+
+The Run method in the "LithiumETL" azure function calls the LoadandProcessLithiumData method with Lithium credentials and Azure SQL connection string in iTalent.LithiumConnector.GetLithiumData class. 
+
+![Image](Web/Images/timerfunction.png)
+
+
+The iTalent.LithiumConnector API contains all the methods required to pull the data from Lithium V2 API's using the credential provided and pushes the data into Azure SQL passed to the method.
+
+The API pulls all users, user badges, boards, categories, last 30 days of messages and kudos from Lithium community in JSON format and pushes the data into Azure SQL staging tables. It also pulls the community name and inserts into it.Parameters table in the database. Subsequnt runs will pull only last one day of messages along with all other feed data.
+
+![Image](Web/Images/samplemessages_json.png)
+
+After all the Lithium data pushes to the Azure SQL staging table, the API calls the it.SyncData stored procedure in the database to merge all the data into actual reporting tables.  To learn more about the schema please go to the Data Model Schema section.
+
+
+### Data Model Schema
+
+Here is an overview of the tables found in the model:
+
+| **Table Name**       | **Description **                                                                                                                                                                                                                                              |
+|----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Badges               | A badge is a type of visual reward that community members can earn for completing specific community actions or for achieving important community milestones																																																																		  |
+| Boards               | A board is the parent of a conversation (a thread of topic messages and replies). Boards can be contained in categories to provide a structure for your community, although a board can live outside of a category as well.
+																										    |
+| Categories           | Categories are the highest-level nodes of your community. Depending on the business purpose for your community, your categories might reflect lines of business, product lines, or other high-level divisions.
+																										    |
+| Kudos                | Kudos are a way for users to give approval to content they like. A kudo boosts the value of a post and improves the reputation of its author.
+																										    |
+| Messages             | The messages collection represents any kind of post made to the community using one of the Lithium conversation styles. It can represent:
+							•	a forum post (a topic or reply)
+							•	a knowledge base article or a comment about the article
+							•	a question or answer posted to a Q&A board, or any associated comment
+							•	a blog article or a comment on the article
+							•	an idea submitted to an Idea Exchange or any comment on an idea
+							•	a contest entry or comment on an entry
+							•	a topic posted to a group discussion board or any associated reply
+							•	a product review or any associated comment
+
+																										    |
+| UserBadges           | Represents Badges earned by the user.
+																										    |
+| Users                | The users’ collection represents registered community users. Users exist within a single community and do not cross over between communities.
+																										    |
+
+
+Below is a breakdown of the columns found in every table:
+
+
+
+
+
+
+
 
 
 

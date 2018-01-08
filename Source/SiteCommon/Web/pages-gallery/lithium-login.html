@@ -33,6 +33,9 @@
             <button class="primary" disabled.bind="!lithiumTenantId || !lithiumClientId || !lithiumClientSecret || !lithiumRefreshToken" click.trigger="onValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_VALIDATE}</button>
         </p>
     </div>
+    <p class="st-text">
+        <bpst-link a-description="${MS.Translate.INIT_GETTING_STARTED_TANDC_MESSAGE}" a-link="${MS.Translate.INIT_GETTING_STARTED_TANDC_LINK}" a-link-text="iTalent Digital, Inc."></bpst-link>
+    </p>
     <div>
         <p class="st-float">By Clicking Next you are agreeing to the Terms and condition of <a target="_blank" href="https://github.com/sekharpusuluri/BusinessPlatformApps/blob/dev/Source/Apps/Partner/Released/iTalent-SocialAnalyticsByLithium/Resources/iTalentDigitalTandC.md">iTalent Digital, Inc.</a></p>
     </div>

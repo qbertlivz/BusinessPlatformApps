@@ -8,8 +8,9 @@ Social Analytics for Lithium Solution Template by iTalent Digital Documentation
 4. [How to Install](#how-to-install)
 5. [Architecture Deep Dive](#architecture-deep-dive)
 6. [Data Model Schema](#data-model-schema)
-7. [Reports Walkthrough](#report-walkthrough)
-8. [Estimated Costs](#estimated-costs)
+7. [Reports](#reports)
+8. [Extension and Customizations](#extension-and-customizations)
+9. [Estimated Costs](#estimated-costs)
 
 
 
@@ -199,82 +200,173 @@ After all the Lithium data pushes to the Azure SQL staging table, the API calls 
 
 Here is an overview of the tables found in the model:
 
-| **Table Name**       |   **Description**                                                                                                                                                                                                                                             |
-|----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Badges               | A badge is a type of visual reward that community members can earn for completing specific community actions or for achieving important community milestones																																																																		  |
-| Boards               | A board is the parent of a conversation (a thread of topic messages and replies). Boards can be contained in categories to provide a structure for your community, although a board can live outside of a category as well.
-																										    |
-| Categories           | Categories are the highest-level nodes of your community. Depending on the business purpose for your community, your categories might reflect lines of business, product lines, or other high-level divisions.
-																										    |
-| Kudos                | Kudos are a way for users to give approval to content they like. A kudo boosts the value of a post and improves the reputation of its author.
-																										    |
-| Messages             | The messages collection represents any kind of post made to the community using one of the Lithium conversation styles. It can represent:
-							•	a forum post (a topic or reply)
-							•	a knowledge base article or a comment about the article
-							•	a question or answer posted to a Q&A board, or any associated comment
-							•	a blog article or a comment on the article
-							•	an idea submitted to an Idea Exchange or any comment on an idea
-							•	a contest entry or comment on an entry
-							•	a topic posted to a group discussion board or any associated reply
-							•	a product review or any associated comment
-																										    |
-| UserBadges           | Represents Badges earned by the user.
-																										    |
-| Users                | The users’ collection represents registered community users. Users exist within a single community and do not cross over between communities.
-																										    |
+|**Table Name**        |   **Description**|
+|----------------------|-----------------------------------------------------------------------------------------|
+| Badges               | A badge is a type of visual reward that community members can earn for completing specific community actions or for achieving important community milestones. |
+| Boards               | A board is the parent of a conversation (a thread of topic messages and replies). Boards can be contained in categories to provide a structure for your community, although a board can live outside of a category as well.|
+| Categories           | Categories are the highest-level nodes of your community. Depending on the business purpose for your community, your categories might reflect lines of business, product lines, or other high-level divisions.|
+| Kudos                | Kudos are a way for users to give approval to content they like. A kudo boosts the value of a post and improves the reputation of its author.|
+| Messages             | The messages collection represents any kind of post made to the community using one of the Lithium conversation styles. It can represent: <ul><li>a forum post (a topic or reply)</li><li>a knowledge base article or a comment about the article</li><li>a question or answer posted to a Q&A board, or any associated comment</li><li>a blog article or a comment on the article</li><li>an idea submitted to an Idea Exchange or any comment on an idea</li><li>a contest entry or comment on an entry</li><li>a topic posted to a group discussion board or any associated reply</li><li>a product review or any associated comment</li></ul>|
+| UserBadges           | Represents Badges earned by the user.|
+| Users                | The users’ collection represents registered community users. Users exist within a single community and do not cross over between communities.|
 
 
 Below is a breakdown of the columns found in every table:
 
-| **Badges**               |                                                        |
+|**Badges**                |                                                        |
 |--------------------------|--------------------------------------------------------|
 | **Column Name**          | **Description**                                        |
-| BadgeId                  | Unique value for the badge table                       |
-| BadgeTitle	           | Name of the badge                                      |
-| BadgeIconUrl	           | URL of the badge icon image uploaded in the Community  |
-| ModifiedBy	           | User name who runs the solution template (system user) |
-| ModifiedDate	           | Data row updated/inserted date                         |
-
-| **Boards**               |                                                        
-																												|
-|--------------------------|--------------------------------------------------------
-																												|
-| **Column Name**          | **Description**                                        
-																												|
-| BoardID                  | The unique ID of the resource as defined in Community Admin                       
-																												|
-| BoardTitle	           | The title of the board as defined in Community Admin
-																												|
-| ConversationStyle	       | The conversation style of the board. Possible values:
-								•	blog - a blog
-								•	contest - a contest board
-								•	forum - a forum board (discussions)
-								•	idea - an idea exchange board
-								•	qanda - a Q&A board
-								•	tkb - a knowledge base
-																												|
-| ParentCategoryID         | The parent category of this board, i.e. the category in which the board appears in the community structure. The value is null if the board is	located directly under the community (not within any category). This field must be explicitly set to null when creating/updating a board to	signify that the board belongs at the community (root) level.			
-																												|
-| IsHidden				   | Whether or not this board is hidden from view in the community UI. Boards can be hidden from lists and menus by selecting Edit Properties in Community Admin > Community Structure.
-																												|
-| BoardMessages            | Messages count in the board (topics and comments/replies) 
-																												|
-| BoardTopics			   | Topic messages count (i.e. the root messages) within a board
-																												|
-| BoardViews			   | The number of views for the board
-																												|
-| BoardDepth			   | The depth of the board in the community structure
-																												|
-| ModifiedBy		       | User name who runs the solution template (system user)
-																												|
-| ModifiedDate	           | Data row updated/inserted date
-																												|
+| BadgeId                  | Unique value for the badge table.                      |
+| BadgeTitle	           | Name of the badge.                                     |
+| BadgeIconUrl	           | URL of the badge icon image uploaded in the Community. |
+| ModifiedBy	           | User name who runs the solution template (system user).|
+| ModifiedDate	           | Data row updated/inserted date.                        |
 
 
+|**Boards**                |                                                                                       |
+|--------------------------|---------------------------------------------------------------------------------------|
+| **Column Name**          | **Description**                                                                       |
+| BoardID                  | The unique ID of the resource as defined in Community Admin.                          |
+| BoardTitle               | The title of the board as defined in Community Admin.                                 |
+| ConversationStyle        | The conversation style of the board. Possible values: <ul><li>blog - a blog</li><li>contest - a contest board</li><li>forum - a forum board (discussions)</li><li>idea - an idea exchange board</li><li>qanda - a Q&A board</li><li>tkb - a knowledge base</li></ul>|
+| ParentCategoryID         | The parent category of this board, i.e. the category in which the board appears in the community structure. The value is null if the board is located directly under the community (not within any category). This field must be explicitly set to null when creating/updating a board to signify that the board belongs at the community (root) level.|
+| IsHidden                 | Whether or not this board is hidden from view in the community UI. Boards can be hidden from lists and menus by selecting Edit Properties in Community Admin > Community Structure. |
+| BoardMessages            | Messages count in the board (topics and comments/replies).                            |
+| BoardTopics              | Topic messages count (i.e. the root messages) within a board.                         |
+| BoardViews               | The number of views for the board.                                                    |
+| BoardDepth               | The depth of the board in the community structure.                                    |
+| ModifiedBy               | User name who runs the solution template (system user).                               |
+| ModifiedDate             | Data row updated/inserted date.                                                       |
 
 
+|**Categories**            |                                                                       |
+|--------------------------|-----------------------------------------------------------------------|
+| **Column Name**          | **Description**                                                       |
+| CategoryID               | The unique ID of the category as defined in Community Admin.          |
+| CategoryTitle            | The title of the category as defined in Community Admin.              |
+| IsHidden                 | Whether or not the category is hidden from view in the UI. Categories can be hidden from lists and menus by selecting Edit Properties in Community Admin > Community Structure. |
+| CategoryMessages         | Messages count in the category (aggregate messages count in all boards within that category). |
+| CategoryTopics           | Topic messages count in the category (aggregate topic messages count in all boards within that category). |
+| CategoryViews            | The number of views for the category.                                 |
+| CategoryDepth            | The depth of the category in the community structure.                 |
+| ModifiedBy	           | User name who runs the solution template (system user).               |
+| ModifiedDate             | Data row updated/inserted date.                                       |
 
 
+|**Kudos**					|																		|
+|---------------------------|-----------------------------------------------------------------------|
+| **Column Name**			| **Description**														|
+| KudoID					| The unique ID of the kudo.											|
+| MessageID					| The MessageID that the kudo was given to.								|
+| KudoDate					| The date the kudo was given.											|
+| KudoUserID				| The UserID who gave the kudo.											|
+| KudoWeight				| The weight of this kudo.												|
+| ModifiedBy				| User name who runs the solution template (system user).				|
+| ModifiedDate				| Data row updated/inserted date.										|
+
+
+|**Messages**					|																	|
+|---------------------------|-----------------------------------------------------------------------|
+| **Column Name**			| **Description**														|
+| MessageKey				| Auto Incremented field.												|
+| MessageID					| The unique ID of the message. |
+| UserID					| The UserID who posted the message. |
+| MessageSubject			| The subject of the message. |
+| BoardID					| The BoardID in which the message appears. A board can be of type: forum, tkb, qanda, blog, idea, contest, group, or review. The conversation style is derived from the board type of the board that contains the message. |
+| Topic						| The root message of the conversation in which the message appears. Filtering by topic.id returns all replies to a message in a flattened (unthreaded) view. Alternatively see parent. |
+| ParentMessageID			| The parent of the message. Filtering by parent.id returns only direct replies or comments to the specified message. (This can be used to replicate a threaded view of messages.) Alternatively, see topic. |
+| PostedDate				| The date and time that the message was posted to the community.  |
+| MessageDepth				| How many levels away from the topic message the message appears in the conversation thread. Zero (0) indicates that the message is topic message; 1 indicates a reply; 2 indicates a reply to a reply, and so on. |
+| IsSolution				| Used with forum and Q&A boards. Whether the message has been marked as an Accepted Solution. |
+| SolutionDate				| Included in the response when IsSolution is true. Includes additional information about the solution. Returns empty if IsSolution is false. |
+| MessageViews				| The number of views for the Message. |
+| MessageKudos				| The query to retrieve kudos given count to the message. |
+| DeviceType				| The kind of device being used to view the message. |
+| ModifiedBy				| User name who runs the solution template(system user). |
+| ModifiedDate				| Data row updated/inserted date. |
+
+
+|**UserBadges**					|																	|
+|---------------------------|-----------------------------------------------------------------------|
+| **Column Name**			| **Description**														|
+| UserID					| The UserID who received the badge.									|
+| BadgeId					| Unique badge ID (from Badges table) earned by the user.				|
+| BadgeActivationDate		| Date from when the badge is active.									|
+| BadgeEarnedDate			| Date user has earned the badge.										|
+| ModifiedBy				| User name who runs the solution template (system user).				|
+| ModifiedDate				| Data row updated/inserted date.										|
+
+
+|**Users**					|																		|
+|---------------------------|-----------------------------------------------------------------------|
+| **Column Name**			| **Description**														|
+| UserId					| The unique ID of the user.											|
+| UserName					| The login name of the user.											|
+| Deleted 					| Whether or not the user's account is deleted (close account). True if deleted. |
+| RegistrationDate			| Date the user registered with the community.							|
+| LastVisited				| Date/time the user was last active on the community.					|
+| Banned					| Whether or not the user is banned. True if banned.					|
+| ModifiedBy				| User name who runs the solution template (system user).				|
+| ModifiedDate				| Data row updated/inserted date.										|
+
+
+### Reports
+The following section walks through each report page outlining the intent of the page.
+
+**Community**
+
+This page will give community level details like Total users, new registration (last 28 days), total boards and categories in the community. And visuals explained below.
+<ul>
+<li><b>Total members</b> Cummulative sum of number of registrations till date.</li>
+<li><b>New members</b> Count of registrations done.</li>
+<li><b>Retention (Engagers)</b> % of members who have logged in at least once in the last 31 days, and have engaged (posted content) in the community.</li>
+<li><b>Retention (Viewers)</b> % of members who have logged in at least once in the last 31 days, and have viewed content in the community.</li>
+<li><b>Boards</b> Total number of boards in the community.</li>
+<li><b>Categories</b> Total number of categories in the community.</li>
+<li><b>Registrations by date</b> Bar graph representing the count of registrations.</li>
+<li><b>Message views by device type</b> Pie chart representing the message views count by device type (eg. Desktop, Mobile, Tablet).</li>
+<li><b>Top 10 users by messages</b> Bar graph representing the top 10 users who posted content (count of topics and replies in descending order) in the community.</li>
+<li><b>Post by Categories</b> Stacked area chart representing the count of topics and replies posted in the respective categories by user.</li>
+</ul>
+
+![Image](Resources/media/communitypage.png)
+
+
+**Content**
+
+Content page will gives total number of topics, replies, solutions and kudos for last 30 day's of data.
+<ul>
+<li><b>Topics</b> Number of conversations initiated by users</li>
+<li><b>Replies</b> Number of replies posted by users</li>
+<li><b>Solutions</b> Count of solutions authored</li>
+<li><b>Kudos</b> Count of kudos given to posts in the community</li>
+<li><b>Messages by date</b> Line chart representing count of topics and replies in the community by date</li>
+<li><b>Replies by topic</b> Stacked area chart representing the count of replies to each topic </li>
+<li><b>Top 10 boards by message views</b> Funnel graph representing the top 10 boards in the descending order of page views</li>
+<li><b>Solution views by category</b> Stacked area chart representing the count of solution views by category</li>
+<li><b>Solutions by topic</b> Tree map representing the count of solutions for each topic</li>
+</ul>
+
+![Image](Resources/media/contentpage.png)
+
+
+**Users**
+User page give insights about the user activities and their contribution to the community.
+<ul>
+<li><b>Community activity by user</b> Stacked bar graph representing the count of topics, replies, kudos received, solutions authored by user</li>
+<li><b>Badges earned</b> Tabular view of badges earned by users in the last 31 days </li>
+<li><b>Topics</b> Bar graph representing the top 10 users in the descending order of count of topics created</li>
+<li><b>Replies</b> Bar graph representing the top 10 users in the descending order of count of replies posted</li>
+<li><b>Solutions</b> Bar graph representing the top 10 users in the descending order of count of solutions authored</li>
+<li><b>Kudos</b> Bar graph representing the top 10 users in the descending order of count of kudos received</li>
+</ul>
+
+![Image](Resources/media/userspage.png)
+
+
+### Extension and Customizations
+
+The The Social Analytics for Lithium Solution is free to try and use as-is. If you want to extend or customize the solution please reach out to us at <pbitemplate@italentdigital.com>, we will help you extending the solution as per your needs.
 
 
 ### Estimated Costs

@@ -123,12 +123,12 @@ The following section will break down how the template works by going through al
 **Azure Resources:**
 You can access all of the resources that have been spun up by logging into the Azure portal. Everything should be under one resource group (unless a user was using an existing SQL server. In this case the SQL Server will appear in whatever resource group it already existed in).
 
-![Image](Web/Images/azureresources.png)
+![Image](Resources/media/azureresources.png)
 
 
 Here is an example of what gets spun up for a user. We will go through each of these items one by one:
 
-![Image](Web/Images/azurefunction.png)
+![Image](Resources/media/azurefunction.png)
 
 **Azure Function:**
 Azure functions are serverless compute service that enables you to run code on-demand without having to explicitly provision or manage infrastructure. These functions will run a script or piece of code in response to a variety of events. 
@@ -138,14 +138,57 @@ A time trigger azure function will be created during the solution template deplo
 
 The Run method in the "LithiumETL" azure function calls the LoadandProcessLithiumData method with Lithium credentials and Azure SQL connection string in iTalent.LithiumConnector.GetLithiumData class. 
 
-![Image](Web/Images/timerfunction.png)
+```C#
+public static void Run(TimerInfo myTimer, TraceWriter log)
+{
+    string strTenantID = ConfigurationManager.AppSettings["LithiumTenantId"].ToString();
+    string strClientID = ConfigurationManager.AppSettings["LithiumClientId"].ToString();
+    string strClientSecret = ConfigurationManager.AppSettings["LithiumClientSecret"].ToString();
+    string strRefreshToken = ConfigurationManager.AppSettings["LithiumRefreshToken"].ToString();
+    string strSQLConn = ConfigurationManager.AppSettings["SqlConnectionString"].ToString();
+
+    if (strSQLConn != string.Empty && strTenantID != string.Empty && strClientID != string.Empty && strClientSecret != string.Empty && strRefreshToken != string.Empty)
+    {
+        log.Info($"Starting the Lithium ETL execution at: {DateTime.Now.ToString()}");
+
+        new GetLithiumData(log).LoadandProcessLithiumData(strSQLConn, strTenantID, strClientID, strClientSecret, strRefreshToken);
+
+        log.Info($"Completed the Lithium ETL execution at: {DateTime.Now} .");
+    }
+}
 
 
 The iTalent.LithiumConnector API contains all the methods required to pull the data from Lithium V2 API's using the credential provided and pushes the data into Azure SQL passed to the method.
 
 The API pulls all users, user badges, boards, categories, last 30 days of messages and kudos from Lithium community in JSON format and pushes the data into Azure SQL staging tables. It also pulls the community name and inserts into it.Parameters table in the database. Subsequnt runs will pull only last one day of messages along with all other feed data.
 
-![Image](Web/Images/samplemessages_json.png)
+```Messages JSON
+{
+	"type": "message",
+	"id": "300022",
+	"subject": "Lithium Solution template",
+	"board": "KnowledgeBase",
+	"topic": "Lithium Solution template",
+	"post_time": "2017-02-10T02:00:00.000-07:00",
+	"is_solution": false,
+	"metrics": {
+	"type": "message_metrics",
+	"views": 1000
+	}
+},
+{
+    "type": "message",
+    "id": "300023",
+    "subject": "Create a new community",
+    "board": "KnowledgeBase",
+    "topic": "Create a new community",
+    "post_time": "2017-02-10T02:00:01.088-07:00",
+    "is_solution": false,
+    "metrics": {
+    "type": "message_metrics",
+    "views": 2100
+	}
+},
 
 After all the Lithium data pushes to the Azure SQL staging table, the API calls the it.SyncData stored procedure in the database to merge all the data into actual reporting tables.  To learn more about the schema please go to the Data Model Schema section.
 
@@ -154,7 +197,7 @@ After all the Lithium data pushes to the Azure SQL staging table, the API calls 
 
 Here is an overview of the tables found in the model:
 
-| **Table Name**       | **Description **                                                                                                                                                                                                                                              |
+| **Table Name**       |   **Description**                                                                                                                                                                                                                                             |
 |----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Badges               | A badge is a type of visual reward that community members can earn for completing specific community actions or for achieving important community milestones																																																																		  |
 | Boards               | A board is the parent of a conversation (a thread of topic messages and replies). Boards can be contained in categories to provide a structure for your community, although a board can live outside of a category as well.
@@ -172,7 +215,6 @@ Here is an overview of the tables found in the model:
 							•	a contest entry or comment on an entry
 							•	a topic posted to a group discussion board or any associated reply
 							•	a product review or any associated comment
-
 																										    |
 | UserBadges           | Represents Badges earned by the user.
 																										    |
@@ -182,7 +224,49 @@ Here is an overview of the tables found in the model:
 
 Below is a breakdown of the columns found in every table:
 
+| **Badges**               |                                                        |
+|--------------------------|--------------------------------------------------------|
+| **Column Name**          | **Description**                                        |
+| BadgeId                  | Unique value for the badge table                       |
+| BadgeTitle	           | Name of the badge                                      |
+| BadgeIconUrl	           | URL of the badge icon image uploaded in the Community  |
+| ModifiedBy	           | User name who runs the solution template (system user) |
+| ModifiedDate	           | Data row updated/inserted date                         |
 
+| **Boards**               |                                                        
+																												|
+|--------------------------|--------------------------------------------------------
+																												|
+| **Column Name**          | **Description**                                        
+																												|
+| BoardID                  | The unique ID of the resource as defined in Community Admin                       
+																												|
+| BoardTitle	           | The title of the board as defined in Community Admin
+																												|
+| ConversationStyle	       | The conversation style of the board. Possible values:
+								•	blog - a blog
+								•	contest - a contest board
+								•	forum - a forum board (discussions)
+								•	idea - an idea exchange board
+								•	qanda - a Q&A board
+								•	tkb - a knowledge base
+																												|
+| ParentCategoryID         | The parent category of this board, i.e. the category in which the board appears in the community structure. The value is null if the board is	located directly under the community (not within any category). This field must be explicitly set to null when creating/updating a board to	signify that the board belongs at the community (root) level.			
+																												|
+| IsHidden				   | Whether or not this board is hidden from view in the community UI. Boards can be hidden from lists and menus by selecting Edit Properties in Community Admin > Community Structure.
+																												|
+| BoardMessages            | Messages count in the board (topics and comments/replies) 
+																												|
+| BoardTopics			   | Topic messages count (i.e. the root messages) within a board
+																												|
+| BoardViews			   | The number of views for the board
+																												|
+| BoardDepth			   | The depth of the board in the community structure
+																												|
+| ModifiedBy		       | User name who runs the solution template (system user)
+																												|
+| ModifiedDate	           | Data row updated/inserted date
+																												|
 
 
 

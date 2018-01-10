@@ -3,6 +3,11 @@
         "Pages": [
             {
                 "architectureDiagram": "dist/Apps/Partner/Released/NealAnalytics-PbiUsageMetrics/Web/pbi-telemetry.png",
+                "contact": {
+                    "email": "davidb",
+                    "emailDomain": "nealanalytics.com",
+                    "text": "$translate(INIT_PBI_TELEMETRY_CONTACT)"
+                },
                 "displayname": "Getting Started",
                 "list1": [
                     "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",

@@ -8,8 +8,7 @@
                     "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",
                     "$translate(INIT_GETTING_STARTED_PBI_DESKTOP)",
                     "$translate(INIT_GETTING_STARTED_PBI_PRO)",
-                    "$translate(INIT_GETTING_STARTED_O365_ADMIN_CREDENTIALS)",
-                    "$translate(INIT_GETTING_STARTED_O365)"
+                    "$translate(INIT_GETTING_STARTED_O365_ADMIN_CREDENTIALS)"
                 ],
                 "list2": [
                     "$translate(INIT_GETTING_STARTED_CLOUD_SOLUTION)",

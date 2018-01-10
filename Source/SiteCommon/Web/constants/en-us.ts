@@ -465,6 +465,7 @@
     INIT_NEWS_TITLE: `Advanced Search with Bing News`,
     INIT_O365_PRIVACY: `By deploying this solution template, you are agreeing to`,
     INIT_O365_PRIVACY_TITLE: `Neal Analytics' Privacy Statement`,
+    INIT_PBI_TELEMETRY_CONTACT: 'Contact support for white-glove service',
     INIT_PBI_TELEMETRY_PRICING_CALCULATOR_URL: `https://azure.microsoft.com/en-us/pricing/calculator/`,
     INIT_PBI_TELEMETRY_PRICING_COST: `By clicking next and deploying the template, you authorize Microsoft to create Azure resources on your subscription and bill based on their respective pricing rates. The approximate base cost of the Azure resources used by this template is $200 a month. These costs are estimates only and subject to change.`,
     INIT_PBI_TELEMETRY_PRICING_URL: `https://azure.microsoft.com/en-us/pricing/calculator/`,

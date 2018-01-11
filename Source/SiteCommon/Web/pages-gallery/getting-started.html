@@ -83,7 +83,7 @@
     <!-- Contact -->
     <div class="st-text" if.bind="contact.email">
         <p class="smallFontSize">
-            <a href="${contact.email + '@' + contact.emailDomain}" target="_top">${contact.text}</a>
+            <a href="${'mailto:' + contact.email + '@' + contact.emailDomain}" target="_top">${contact.text}</a>
         </p>
     </div>
 

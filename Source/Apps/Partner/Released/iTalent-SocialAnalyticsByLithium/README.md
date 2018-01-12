@@ -16,7 +16,7 @@ Social Analytics for Lithium Solution Template by iTalent Digital Documentation
 
 ### Introduction
 
-The Social Analytics for Lithium solution template provides valuable community learnings. The template stands up an end-to-end solution that pulls the data from Lithium API's while, enriching the data for analytics in Azure SQL. It allows users to create customized reports or utilize pre-built Power BI reports to analyze the data and discover extensive insights. This solution template is useful for those interested in Lithium community users, boards, categories, topics and replies.
+The Social Analytics for Lithium solution template provides valuable community learnings. The template stands up an end-to-end solution that pulls the data from Lithium API's while enriching the data for analytics in Azure SQL. It allows users to create customized reports or utilize pre-built Power BI reports to analyze the data and discover extensive insights. This solution template is useful for those interested in Lithium community users, boards, categories, topics and replies.
 
 iTalent Digital’s “Social Analytics for Lithium” solution provides important community insights by looking at metrics like total registered users, boards, topics, messages, solutions and kudos. The Power BI reports illustrate community growth in terms of the number of users, messages and solution overtime, while also providing an analysis board, as well as category-level issues and product solutions.
 

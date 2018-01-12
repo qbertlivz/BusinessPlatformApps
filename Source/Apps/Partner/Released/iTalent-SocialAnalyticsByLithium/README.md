@@ -20,7 +20,7 @@ The Social Analytics for Lithium solution template provides valuable community l
 
 iTalent Digital’s “Social Analytics for Lithium” solution provides important community insights by looking at metrics like total registered users, boards, topics, messages, solutions and kudos. The Power BI reports illustrate community growth in terms of the number of users, messages and solution overtime, while also providing an analysis board, as well as category-level issues and product solutions.
 
-This powerfule solution template makes it possible to:
+This powerful solution template makes it possible to:
 
 -   Get started quickly with pre-built data models for reporting advanced community and social analytics.
 -   Use an intuitive, wizard-based UI to deploy, data integration and Power BI reports.
@@ -71,7 +71,7 @@ To get started with the solution, navigate to the [Social Analytics for Lithium 
 
 ![Image](Resources/media/lithiumlogin.png)
 
-To locate your TenantID, ClientID, or Client Secret details, access your Community admin settings by signing into your community and navigatinge to Community Admin > SYSTEM > API Apps.
+To locate your TenantID, ClientID, or Client Secret details, access your Community admin settings by signing into your community and navigating to Community Admin > SYSTEM > API Apps.
 
 ![Image](Resources/media/lithiumsettings.png)
 
@@ -98,7 +98,7 @@ As you navigate away from this page, a new resource group is spun up on your Azu
 
 ![Image](Resources/media/azuresql.png)
 
-**Summary:** This page outlines all of the choices made by the user.
+**Summary:** This page outlines all the choices made by the user.
 
 ![Image](Resources/media/summary.png)
 
@@ -123,7 +123,7 @@ The following section will explain how the template works by going through all t
 ![Image](Web/Images/lithiumArchitectureDiagram.png)
 
 **Azure Resources:**
-You can access the resources that have been spun up by logging into the Azure portal. Everything should be under one resource group unless a user was using an existing SQL server. In that case, the SQL Server will appear in the resource group it already existed in.
+You can access the resources that have been spun up by logging into the Azure portal. Everything should be under one resource group unless a user is using an existing SQL server. In that case, the SQL Server will appear in the resource group it already existed in.
 
 ![Image](Resources/media/azureresources.png)
 
@@ -134,11 +134,11 @@ Here is an example of what gets spun up for a user. We will go through each of t
 
 **Azure Function:**
 
-Azure functions are serverless compute services that enable you to run code on-demand, without having to explicitly provision or manage infrastructure. These functions will run a script or piece of code in response to a variety of events.
+Azure functions are serverless compute services that enable you to run code on-demand, without having to explicitly provision, or manage infrastructure. These functions will run a script or piece of code in response to a variety of events.
 
-A time-trigger azure function is created during the solution template deployment and is scheduled to run every day at 6:00 AM (this can be changed from function schedule settings ) in a newly created azure resources in your azure subscription.
+A time-trigger azure function is created during the solution template deployment and is scheduled to run every day at 6:00 AM (this can be changed from function schedule settings ) in a newly created Azure resources in your Azure subscription.
 
-The Run method in the "LithiumETL" azure function calls the LoadandProcessLithiumData method with Lithium credentials and Azure SQL connection string in iTalent.LithiumConnector.GetLithiumData class.
+The Run method in the "LithiumETL" Azure function calls the LoadandProcessLithiumData method with Lithium credentials and Azure SQL connection string in iTalent.LithiumConnector.GetLithiumData class.
 
 
 ```C#
@@ -161,7 +161,7 @@ public static void Run(TimerInfo myTimer, TraceWriter log)
 }
 ```
 
-The iTalent.LithiumConnector API contains all of the methods required to pull the data from Lithium V2 API's, using the credential provided, and pushes the data into Azure SQL passed to the method.
+The iTalent.LithiumConnector API contains all the methods required to pull the data from Lithium V2 API's, using the credential provided, and pushes the data into Azure SQL passed to the method.
 
 The API pulls all users, user badges, boards, categories, the last 30 days of messages and kudos from Lithium community in JSON format and pushes the data into Azure SQL staging tables. It also pulls the community name and inserts into it.Parameters table in the database. Subsequent runs will pull only last one day  of messages. along with all other feed data.
 
@@ -339,7 +339,7 @@ The community page will give community level details like total users, new regis
 
 **Content**
 
-The content page will provide thes total number of topics, replies, solutions and kudos for last 30 days worth of data.
+The content page will provide thes total number of topics, replies, solutions and kudos for last 30 day's worth of data.
 <ul>
 <li><b>Topics:</b> Number of conversations initiated by users.</li>
 <li><b>Replies:</b> Number of replies posted by users.</li>

@@ -27,7 +27,7 @@ This powerful solution template makes it possible to:
 -   Get insights about community users visitor growth and contributions to the community.
 -   Go back in history to execute a trend analysis and evaluate community growth.
 
-The following document provides a walkthrough of the architecture, a deep dive into each component, comments on customization options, as well as information on additional topics like pricing. For any questions not covered in this document, please contact the team at <pbitemplate@italentdigital.com>
+The following document provides a walkthrough of the architecture, a deep dive into each component, comments on customization options, as well as information on additional topics like pricing. For any questions not covered in this document, please contact the team at <pbisa@italentdigital.com>
 
 ### Architecture
 
@@ -369,9 +369,10 @@ The user page give insights about user activities and their contributions to the
 ![Image](Resources/media/userspage.png)
 
 
+
 ### Extension and Customizations
 
-The Social Analytics for Lithium solution is free to try and use as-is. To customize this template for your specific needs, please reach out to us at pbitemplate@italentdigital.com and, we will help extend the solution.
+The Social Analytics for Lithium solution is free to try and use as-is. To customize this template for your specific needs, please reach out to us at pbisa@italentdigital.com and, we will help extend the solution.
 
 <p><strong><a href="#table-of-contents">Back to Top</a></strong></p>
 

@@ -1,7 +1,7 @@
 ﻿import { DataStoreType } from '../enums/data-store-type';
 import { ViewModelBase } from '../services/view-model-base';
 
-export class AzureLogin extends ViewModelBase {
+export class LithiumLogin extends ViewModelBase {
     lithiumTenantId: string = '';
     lithiumClientId: string = '';
     lithiumClientSecret: string = '';

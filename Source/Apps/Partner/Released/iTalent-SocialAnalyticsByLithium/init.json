@@ -46,7 +46,7 @@
       {
         "displayname": "Summary",
         "displayCompletionNotification": false,
-        "sendCompletionNotification": true,
+        "sendCompletionNotification": true,        
         "name": "$SiteCommon$/pages-gallery/summary.html",
         "values": {
           "Lithium TenantID": "$(this.MS.DataStore.getValue('LithiumTenantId'))",

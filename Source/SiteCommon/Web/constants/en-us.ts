@@ -608,7 +608,7 @@
     INIT_GETTING_STARTED_TANDC_LINK: 'https://github.com/Microsoft/BusinessPlatformApps/blob/dev/Source/Apps/Partner/Released/iTalent-SocialAnalyticsByLithium/Resources/iTalentDigitalTandC.md',
     LITHIUM_LOGIN_LINK_1: `https://www.lithium.com/company/pricing/price-quote`,
     LITHIUM_LOGIN_LINK_2: `https://github.com/sekharpusuluri/BusinessPlatformApps/blob/dev/Source/Apps/Partner/Released/iTalent-SocialAnalyticsByLithium/README.md`,
-    LITHIUM_LOGIN_LINK_3: `https://www.youtube.com`,
+    LITHIUM_LOGIN_LINK_3: `https://www.youtube.com/watch?v=E_hcir8PXdI`,
     LITHIUM_LOGIN_TENANT_ID: 'Tenant ID: ',
     LITHIUM_LOGIN_CLIENT_ID: 'Client ID: ',
     LITHIUM_LOGIN_CLIENT_SECRET: 'Client Secret: ',

@@ -70,7 +70,7 @@
                   }
                 },
                 "method": "post",
-                "path": "/datasets/default/procedures/@{encodeURIComponent(encodeURIComponent('[pbist_apimgmt].[FFTTableSwap]'))}"
+                "path": "/datasets/default/procedures/@{encodeURIComponent(encodeURIComponent('[pbist_apimgmt].[sp_ffttableswap]'))}"
               },
               "runAfter": {
                 "Batch_Job_No_Input_and_Output": [

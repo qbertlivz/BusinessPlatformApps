@@ -292,7 +292,7 @@
     <value>An error occurred while exporting the Activity Log to EventHub</value>
   </data>
   <data name="ApiManagementErrorNoServicesFound" xml:space="preserve">
-    <value>No API Management Services were found in your Azure Subscription</value>
+    <value>No fully provisioned API Management Services were found in your Azure Subscription</value>
   </data>
   <data name="EventHubFailedToQueryKeys" xml:space="preserve">
     <value>An error occurred while querying Event Hub access keys</value>
@@ -314,6 +314,9 @@
   </data>
   <data name="FacebookTokenAuthFailed" xml:space="preserve">
     <value>The page id or token provided is invalid.</value>
+  </data>
+  <data name="ActivityLogsVerifyInsightsTimeout" xml:space="preserve">
+    <value>Timed out while waiting for the Activity Log Exported Event Hub to become available</value>
   </data>
   <data name="LithiumCredentialsInvalid" xml:space="preserve">
     <value>Login failed, check that you have entered in the correct TenantID, ClientID, ClientSecret, RefreshToken</value>

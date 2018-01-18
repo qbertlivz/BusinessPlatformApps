@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
 using Microsoft.Deployment.Common.Helpers;
+using Microsoft.Deployment.Common;
 
 namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
 {
@@ -40,6 +41,9 @@ namespace Microsoft.Deployment.Actions.AzureCustom.AzureToken
             payload.homepage = "www.test.com";
             payload.identifierUris = new string[1];
             payload.identifierUris[0] = "https://test.com/" + RandomGenerator.GetRandomLowerCaseCharacters(10);
+
+            payload.replyUrls = new string[1];
+            payload.replyUrls[0] = request.Info.WebsiteRootUrl + Constants.WebsiteRedirectPath;
 
             payload.passwordCredentials = new ExpandoObject[1];
             payload.passwordCredentials[0] = new ExpandoObject();

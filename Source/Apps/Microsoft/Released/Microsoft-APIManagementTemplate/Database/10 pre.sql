@@ -7,12 +7,8 @@ SET QUOTED_IDENTIFIER       ON;
 go
 
 -- Views
-IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='pbist_apimgmt' AND TABLE_NAME='vw_requestresponse' AND TABLE_TYPE='VIEW')
-    DROP VIEW pbist_apimgmt.vw_requestresponse;
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='pbist_apimgmt' AND TABLE_NAME='vw_apimerrordetail' AND TABLE_TYPE='VIEW')
-    DROP VIEW pbist_apimgmt.vw_apimerrordetail;
-IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='pbist_apimgmt' AND TABLE_NAME='vw_requestsummary' AND TABLE_TYPE='VIEW')
-    DROP VIEW pbist_apimgmt.vw_requestsummary;                                                           
+    DROP VIEW pbist_apimgmt.vw_apimerrordetail;                                                        
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='pbist_apimgmt' AND TABLE_NAME='vw_date' AND TABLE_TYPE='VIEW')
     DROP VIEW pbist_apimgmt.vw_date;                                                                  
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='pbist_apimgmt' AND TABLE_NAME='vw_apisummary' AND TABLE_TYPE='VIEW')
@@ -43,6 +39,8 @@ IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='pbist_api
     DROP VIEW pbist_apimgmt.vw_subscriptionipaddress;
 
 -- Tables
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='pbist_apimgmt' AND TABLE_NAME='configuration' AND TABLE_TYPE='BASE TABLE')
+    DROP TABLE pbist_apimgmt.[configuration];
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='pbist_apimgmt' AND TABLE_NAME='request' AND TABLE_TYPE='BASE TABLE')
     DROP TABLE pbist_apimgmt.request;
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='pbist_apimgmt' AND TABLE_NAME='response' and table_type='BASE TABLE')
@@ -77,6 +75,18 @@ IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='pbist
     DROP PROCEDURE pbist_apimgmt.sp_getrequestsbyipaddressinwindow;
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='pbist_apimgmt' AND ROUTINE_NAME='sp_fftdataextraction' AND ROUTINE_TYPE='PROCEDURE')
     DROP PROCEDURE pbist_apimgmt.sp_fftdataextraction;
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='pbist_apimgmt' AND ROUTINE_NAME='sp_ProcessIPAddressLocations' AND ROUTINE_TYPE='PROCEDURE')
+    DROP PROCEDURE pbist_apimgmt.sp_ProcessIPAddressLocations;
+
+-- Functions
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='pbist_apimgmt' AND ROUTINE_NAME='fn_IPtoBigInt' AND ROUTINE_TYPE='FUNCTION')
+    DROP FUNCTION pbist_apimgmt.fn_IPtoBigInt;
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='pbist_apimgmt' AND ROUTINE_NAME='fn_IsIpaddressInSubnetShortHand' AND ROUTINE_TYPE='FUNCTION')
+    DROP FUNCTION pbist_apimgmt.fn_IsIpaddressInSubnetShortHand;
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='pbist_apimgmt' AND ROUTINE_NAME='fn_IsIpaddressInSubnet' AND ROUTINE_TYPE='FUNCTION')
+    DROP FUNCTION pbist_apimgmt.fn_IsIpaddressInSubnet;
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='pbist_apimgmt' AND ROUTINE_NAME='fn_SubnetBitstoBigInt' AND ROUTINE_TYPE='FUNCTION')
+    DROP FUNCTION pbist_apimgmt.fn_SubnetBitstoBigInt;
 
 IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name='pbist_apimgmt')
 BEGIN

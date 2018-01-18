@@ -159,6 +159,9 @@
     <Compile Include="Helpers\StringEnumConverterLower.cs" />
     <Compile Include="Helpers\StringExtension.cs" />
     <Compile Include="Controller\Logger.cs" />
+    <Compile Include="Model\ActivityLog\ActivityLogProfile.cs" />
+    <Compile Include="Model\ActivityLog\ActivityLogProfileProperties.cs" />
+    <Compile Include="Model\ActivityLog\ActivityLogProfileRetentionPolicy.cs" />
     <Compile Include="Model\ApiManagement\ApiManagementLogger.cs" />
     <Compile Include="Model\ApiManagement\ApiManagementLoggerProperties.cs" />
     <Compile Include="Model\ApiManagement\ApiManagementLoggerPropertiesCredentials.cs" />
@@ -202,6 +205,9 @@
     <Compile Include="Model\Informatica\InformaticaObject.cs" />
     <Compile Include="Model\Informatica\InformaticaOrganizationEdition.cs" />
     <Compile Include="Model\Informatica\InformaticaOrganizationLicenseInformation.cs" />
+    <Compile Include="Model\Informatica\InformaticaRegistration.cs" />
+    <Compile Include="Model\Informatica\InformaticaRegistrationOrganization.cs" />
+    <Compile Include="Model\Informatica\InformaticaRegistrationUser.cs" />
     <Compile Include="Model\Informatica\InformaticaRuntimeEnvironment.cs" />
     <Compile Include="Model\Informatica\InformaticaSchedule.cs" />
     <Compile Include="Model\Informatica\InformaticaTask.cs" />
@@ -215,6 +221,9 @@
     <Compile Include="Model\PBI\PBIReport.cs" />
     <Compile Include="Model\PBI\PBIWorkspace.cs" />
     <Compile Include="Model\PBI\PBIWorkspaces.cs" />
+    <Compile Include="Model\PowerApp\PowerAppConsent.cs" />
+    <Compile Include="Model\PowerApp\PowerAppConsents.cs" />
+    <Compile Include="Model\PowerApp\PowerAppConsentScopes.cs" />
     <Compile Include="Model\PowerApp\PowerAppMetadata.cs" />
     <Compile Include="Model\PowerApp\PowerAppConnection.cs" />
     <Compile Include="Model\PowerApp\PowerAppConnectionReferences.cs" />

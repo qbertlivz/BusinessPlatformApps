@@ -7,7 +7,7 @@ namespace Microsoft.Deployment.Common.Model.PowerApp
         [JsonProperty("properties")]
         public PowerAppPublishProperties Properties;
         [JsonProperty("tags")]
-        public PowerAppPublishTags Tags;
+        public PowerAppPublishTags Tags = new PowerAppPublishTags();
 
         public PowerAppPublish(string appUri, string displayName, string environmentId, string sqlConnectionId)
         {

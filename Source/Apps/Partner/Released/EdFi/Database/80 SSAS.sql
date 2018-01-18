@@ -5,5 +5,3 @@ SET ANSI_NULL_DFLT_ON       ON;
 SET CONCAT_NULL_YIELDS_NULL ON;
 SET QUOTED_IDENTIFIER       ON;
 go
-
--- Not implemented

@@ -25,8 +25,13 @@
                 "name": "$SiteCommon$/pages-gallery/azure-login.html"
             },
             {
-                "displayname": "Customize",
+                "displayname": "Server credentials",
                 "name": "edfi.html",
+                "useDefaultValidateButton": true
+            },
+            {
+                "displayname": "Education Organization",
+                "name": "edfi-org.html",
                 "useDefaultValidateButton": true
             },
             {
@@ -86,7 +91,13 @@
                 "newPassword": "$(this.MS.DataStore.getValue('sqlServerProductionApiPassword'))",
                 "sqlServerAdminLogin": "$(this.MS.DataStore.getValue('sqlServerAdminLogin'))",
                 "sqlServerAdminPassword": "$(this.MS.DataStore.getValue('sqlServerAdminPassword'))",
-                "additionalSchemas":  "edfi"
+                "additionalSchemas": "edfi"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
+                "name": "Microsoft-DeploySQLScripts",
+                "SqlServerIndex": "0",
+                "SqlScriptsFolder": "Database"
             }
         ]
     }

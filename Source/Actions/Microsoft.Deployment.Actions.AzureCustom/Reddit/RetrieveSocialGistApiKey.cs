@@ -69,7 +69,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
             {
                 errors.Add(FormatRequiredParameterMessage("Description of Use"));
             }
-            
+
             if (!bool.TryParse(request.DataStore.GetValue(SocialgistRegistrationAcceptCorrespondenceTerms), out var acceptCorrespondenceTerms))
             {
                 errors.Add(FormatRequiredParameterMessage("Acceptance of Correspondence Terms"));
@@ -223,6 +223,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
         {
             var description = new SocialgistDescription
             {
+                Session = RandomGenerator.GetRandomHexadecimal(),
                 FirstName = firstName,
                 LastName = lastName,
                 Email = email,
@@ -238,6 +239,9 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
 
     public class SocialgistDescription
     {
+        [JsonProperty("session")]
+        public string Session { get; set; }
+
         [JsonProperty("firstname")]
         public string FirstName { get; set; }
 
@@ -261,5 +265,4 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Reddit
     }
 
 }
- 
- 
+

@@ -667,6 +667,8 @@
     TWITTER_TITLE: `Connect to Twitter`,
     TWITTER_VALIDATED: `Validated`,
     UNINSTALL_SUBTITLE: `The uninstaller will remove:`,
+    VSTS_DETAILS_DESCRIPTION: `If you need to learn how to get started click`,
+    VSTS_DETAILS_LINK: `https://docs.microsoft.com/en-us/vsts/accounts/use-personal-access-tokens-to-authenticate`,
     WINDOWS_AUTH_CURRENT: `Log in as current user?`,
     WINDOWS_AUTH_PASSWORD: `Password:`,
     WINDOWS_AUTH_TITLE: `Connect to Windows`,

@@ -62,7 +62,7 @@
         ],
         "displayname": "Progress",
         "enablePublishReport": "$run(this.MS.DataStore.getValue('ssasDisabled') === 'false')",
-        "filename": "$save('vststemplate.pbix')",
+        "filename": "$save('VSTSReport.pbix')",
         "name": "$SiteCommon$/pages-gallery/progress.html",
         "Schema": "$save('vs')",
         "showCounts": false,

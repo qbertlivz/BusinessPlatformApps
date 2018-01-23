@@ -1,4 +1,4 @@
-SET ANSI_NULLS              ON;
+﻿SET ANSI_NULLS              ON;
 SET ANSI_PADDING            ON;
 SET ANSI_WARNINGS           ON;
 SET ANSI_NULL_DFLT_ON       ON;

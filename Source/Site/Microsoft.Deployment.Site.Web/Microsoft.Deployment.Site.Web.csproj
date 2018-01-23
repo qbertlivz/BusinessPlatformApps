@@ -29,7 +29,7 @@
   <ItemGroup>
     <Compile Remove="node_modules" />
     <Compile Remove="typings" />
-        <None Update="wwwroot\**\*">
+    <None Update="wwwroot\**\*">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
   </ItemGroup>

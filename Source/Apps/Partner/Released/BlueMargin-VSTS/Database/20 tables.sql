@@ -13,8 +13,10 @@ CREATE TABLE [vs].[Configuration](
 	[value] [varchar](max) NULL,
 	[visible] [bit] NOT NULL
 )
+go
 
 ALTER TABLE [vs].[configuration] ADD  DEFAULT ((0)) FOR [visible]
+go
 
 CREATE TABLE [vs].[Iteration](
 	[IterationId] [int] IDENTITY(1,1) NOT NULL,
@@ -23,14 +25,14 @@ CREATE TABLE [vs].[Iteration](
 	[Path] [varchar](255) NULL,
 	[StartDate] [varchar](255) NULL,
 	[FinishDate] [varchar](255) NULL,
-	[url] [varchar](255) NULL,
+	[url] [varchar](500) NULL,
 	[ETLImportDate] [datetime] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[IterationId] ASC
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF)
 )
-GO
+go
 
 CREATE TABLE [vs].[Person](
 	[PersonId] [int] IDENTITY(1,1) NOT NULL,
@@ -44,14 +46,13 @@ PRIMARY KEY CLUSTERED
 	[PersonId] ASC
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF)
 )
-GO
-
+go
 
 CREATE TABLE [vs].[Project](
 	[ProjectId] [int] IDENTITY(1,1) NOT NULL,
 	[NativeId] [varchar](255) NULL,
 	[Name] [varchar](255) NULL,
-	[Description] [varchar](255) NULL,
+	[Description] [varchar](4000) NULL,
 	[url] [varchar](255) NULL,
 	[State] [varchar](255) NULL,
 	[Revision] [varchar](255) NULL,
@@ -62,8 +63,7 @@ PRIMARY KEY CLUSTERED
 	[ProjectId] ASC
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF)
 )
-GO
-
+go
 
 CREATE TABLE [vs].[stg_Iteration](
 	[StageId] [int] IDENTITY(1,1) NOT NULL,
@@ -79,13 +79,13 @@ PRIMARY KEY CLUSTERED
 	[StageId] ASC
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF)
 )
-GO
+go
 
 CREATE TABLE [vs].[stg_Project](
 	[StageId] [int] IDENTITY(1,1) NOT NULL,
 	[id] [varchar](255) NULL,
 	[name] [varchar](255) NULL,
-	[description] [varchar](255) NULL,
+	[description] [varchar](4000) NULL,
 	[url] [varchar](255) NULL,
 	[state] [varchar](255) NULL,
 	[revision] [varchar](255) NULL,
@@ -96,7 +96,7 @@ PRIMARY KEY CLUSTERED
 	[StageId] ASC
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF)
 )
-GO
+go
 
 CREATE TABLE [vs].[stg_WorkItem](
 	[StageId] [int] IDENTITY(1,1) NOT NULL,
@@ -128,7 +128,7 @@ CREATE TABLE [vs].[stg_WorkItem](
 	[HyperLinkCount] [int] NULL,
 	[ExternalLinkCount] [int] NULL,
 	[RelatedLinkCount] [int] NULL,
-	[Title] [varchar](255) NULL,
+	[Title] [varchar](1000) NULL,
 	[BoardColumnDone] [bit] NULL,
 	[ActivatedDate] [datetime] NULL,
 	[ActivatedBy] [varchar](255) NULL,
@@ -159,8 +159,7 @@ PRIMARY KEY CLUSTERED
 	[StageId] ASC
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF)
 )
-GO
-
+go
 
 CREATE TABLE [vs].[WorkItemRevision](
 	[WorkOrderRevisionId] [int] IDENTITY(1,1) NOT NULL,
@@ -192,7 +191,7 @@ CREATE TABLE [vs].[WorkItemRevision](
 	[HyperLinkCount] [int] NULL,
 	[ExternalLinkCount] [int] NULL,
 	[RelatedLinkCount] [int] NULL,
-	[Title] [varchar](255) NULL,
+	[Title] [varchar](1000) NULL,
 	[BoardColumnDone] [bit] NULL,
 	[ActivatedDate] [datetime] NULL,
 	[ActivatedBy] [varchar](255) NULL,
@@ -223,7 +222,7 @@ PRIMARY KEY CLUSTERED
 	[WorkOrderRevisionId] ASC
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF)
 )
-GO
+go
 
 CREATE TABLE [vs].[Date](
 	[date_key] [int] NOT NULL,
@@ -247,89 +246,94 @@ CREATE TABLE [vs].[Date](
 	[date_key] ASC
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF)
 )
-GO
+go
 
 ALTER TABLE [vs].[Iteration] ADD  DEFAULT (getdate()) FOR [ETLImportDate]
-GO
+go
 
 ALTER TABLE [vs].[Person] ADD  DEFAULT (getdate()) FOR [ETLImportDate]
-GO
+go
 
 ALTER TABLE [vs].[Project] ADD  DEFAULT (getdate()) FOR [ETLImportDate]
-GO
+go
 
 ALTER TABLE [vs].[stg_Iteration] ADD  DEFAULT (getdate()) FOR [ETLImportDate]
-GO
+go
 
 ALTER TABLE [vs].[stg_Project] ADD  DEFAULT (getdate()) FOR [ETLImportDate]
-GO
+go
 
 ALTER TABLE [vs].[stg_WorkItem] ADD  DEFAULT (getdate()) FOR [ETLImportDate]
-GO
+go
 
+CREATE NONCLUSTERED INDEX [IDX_NC_Iteration_StartDate_i_FinishDate] ON [vs].[WorkItemRevision]
+(
+	[StartDate] DESC
+) INCLUDE ([FinishDate])
+go
 
 CREATE NONCLUSTERED INDEX [IDX_NC_WIR_CreateDate] ON [vs].[WorkItemRevision]
 (
 	[CreatedDate] DESC
 )
-GO
+go
 
 CREATE NONCLUSTERED INDEX [IDX_NC_WIR_NativeId] ON [vs].[WorkItemRevision]
 (
 	[NativeId] DESC
 )
-GO
+go
 
 CREATE NONCLUSTERED INDEX [IDX_NC_WIR_AssignedTo] ON [vs].[WorkItemRevision]
 (
 	[AssignedTo] DESC
 )
-GO
+go
 
 CREATE NONCLUSTERED INDEX [IDX_NC_WIR_ChangedDate] ON [vs].[WorkItemRevision]
 (
 	[ChangedDate] DESC
 )
-GO
+go
 
 CREATE NONCLUSTERED INDEX [IDX_NC_WIR_ImportDate] ON [vs].[WorkItemRevision]
 (
 	[ETLImportDate] DESC
 )
-GO
+go
 
 CREATE NONCLUSTERED INDEX [IDX_NC_Iteration_NativeId] ON [vs].[Iteration]
 (
 	[NativeId] DESC
 )
-GO
+go
 
 CREATE NONCLUSTERED INDEX [IDX_NC_Person_NativeId] ON [vs].[Person]
 (
 	[NativeId] DESC
 )
-GO
+go
 
 CREATE NONCLUSTERED INDEX [IDX_NC_Project_NativeId] ON [vs].[Project]
 (
 	[NativeId] DESC
 )
-GO
+go
 
 CREATE NONCLUSTERED INDEX [IDX_NC_stg_WI_Id] ON [vs].[stg_WorkItem]
 (
 	[Id] DESC
 )
-GO
+go
 
 CREATE NONCLUSTERED INDEX [IDX_NC_stg_Proj_Id] ON [vs].[stg_Project]
 (
 	[Id] DESC
 )
-GO
+go
 
 CREATE NONCLUSTERED INDEX [IDX_NC_stg_Iteration_Id] ON [vs].[stg_Iteration]
 (
 	[Id] DESC
 )
-GO
+go

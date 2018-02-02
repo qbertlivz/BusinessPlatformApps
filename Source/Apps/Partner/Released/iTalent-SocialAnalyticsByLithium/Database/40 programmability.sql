@@ -1,3 +1,4 @@
+
 SET ANSI_NULLS              ON;
 SET ANSI_PADDING            ON;
 SET ANSI_WARNINGS           ON;
@@ -7,7 +8,6 @@ SET QUOTED_IDENTIFIER       ON;
 go
 
 -- Stored procedures
-
 CREATE PROCEDURE [it].[SyncData]
 AS
 
@@ -51,9 +51,9 @@ BEGIN TRY
 		USING 
 			(
 				SELECT DISTINCT id, author, [subject], board, topic, parent, 
-								CONVERT(date,post_time) post_time, depth, is_solution, solution_data, MAX(metrics) AS metrics, MAX(kudos) AS kudos, device_id
-						FROM [it].[STG_Messages]					
-					GROUP BY id, author, [subject], board, topic, parent, post_time, depth, is_solution, solution_data, device_id
+								CONVERT(date,post_time) post_time, MAX(depth) depth, is_solution, solution_data, MAX(metrics) AS metrics, MAX(kudos) AS kudos, device_id
+						FROM [it].[STG_Messages]
+					GROUP BY id, author, [subject], board, topic, parent, post_time, is_solution, solution_data, device_id
 			) S
 		ON S.Id = T.MessageID
 	WHEN NOT MATCHED BY TARGET THEN
@@ -132,6 +132,14 @@ BEGIN TRY
 	SET @CommnunityPageTitle = @CommnunityPageTitle + ' Overview for Past ' + @MessageDays + ' Days'
 	UPDATE [it].[Parameters] SET ParamValue = @CommnunityPageTitle WHERE ParamName = 'CommunityPageTitle'
 
+	-- Delete duplicate messages, if any in Messages table
+	;WITH CTE AS
+	(
+		SELECT *, ROW_NUMBER() OVER (PARTITION BY MessageID ORDER BY MessageID) AS RowNum FROM [it].[Messages]
+	)
+	DELETE FROM CTE WHERE RowNum <> 1
+
+
 	PRINT 'Truncating staging tables.'
 	TRUNCATE TABLE [it].[STG_Categories]
 	TRUNCATE TABLE [it].[STG_Boards]
@@ -156,5 +164,3 @@ BEGIN CATCH
 END CATCH   
 
 GO
-
-

@@ -1,9 +1,7 @@
 ﻿<template>
     <require from="../templates/bpst-link.html"></require>
-    
     <h1 class="st-title">${MS.Translate.LITHIUM_LOGIN_CONNECT_TITLE}</h1>
     <h4 class="st-subtitle">${MS.Translate.LITHIUM_LOGIN_CONNECT_SUBTITLE}</h4>
-    
     <div>
         <bpst-link a-description="${MS.Translate.LITHIUM_LOGIN_DESCRIPTION_1}" a-link="${MS.Translate.LITHIUM_LOGIN_LINK_1}" a-link-text="${MS.Translate.COMMON_HERE}"></bpst-link>
         <bpst-link a-description="${MS.Translate.LITHIUM_LOGIN_DESCRIPTION_2}" a-link="${MS.Translate.LITHIUM_LOGIN_LINK_2}" a-link-text="${MS.Translate.COMMON_HERE}"></bpst-link>
@@ -30,7 +28,7 @@
             <button class="primary" disabled.bind="!lithiumTenantId || !lithiumClientId || !lithiumClientSecret || !lithiumRefreshToken" click.trigger="onValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_VALIDATE}</button>
         </p>
     </div>
-    <p class="st-text">
+    <div class="st-text">
         <bpst-link a-description="${MS.Translate.INIT_GETTING_STARTED_TANDC_MESSAGE}" a-link="${MS.Translate.INIT_GETTING_STARTED_TANDC_LINK}" a-link-text="${MS.Translate.ITALENT_COMP_NAME}"></bpst-link>
-    </p>
+    </div>
 </template>

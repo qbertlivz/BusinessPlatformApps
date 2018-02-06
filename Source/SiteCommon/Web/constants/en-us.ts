@@ -683,7 +683,7 @@
     LITHIUM_LOGIN_DESCRIPTION_1: `In order to use this solution template you will need Lithium Account. You can set these up with Lithium `,
     LITHIUM_LOGIN_DESCRIPTION_2: `For a more detailed guide go `,
     LITHIUM_LOGIN_DESCRIPTION_3: `For a step by step guide on how to install the solution template watch the video `,
-    INIT_GETTING_STARTED_TANDC_LINK: 'https://github.com/Microsoft/BusinessPlatformApps/blob/dev/Source/Apps/Partner/Released/iTalent-SocialAnalyticsByLithium/Resources/iTalentDigitalTandC.md',
+    INIT_GETTING_STARTED_TANDC_LINK: 'http://italentdigital.com/pbisolution/iTalent-terms-and-conditions.html',
     LITHIUM_LOGIN_LINK_1: `https://www.lithium.com/company/pricing/price-quote`,
     LITHIUM_LOGIN_LINK_2: `https://github.com/sekharpusuluri/BusinessPlatformApps/blob/dev/Source/Apps/Partner/Released/iTalent-SocialAnalyticsByLithium/README.md`,
     LITHIUM_LOGIN_LINK_3: `https://www.youtube.com/watch?v=E_hcir8PXdI`,

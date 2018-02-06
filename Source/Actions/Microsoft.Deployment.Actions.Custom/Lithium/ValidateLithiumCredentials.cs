@@ -23,6 +23,9 @@ namespace Microsoft.Deployment.Actions.Custom.Lithium
             string strTokenUrl = "https://api.lithium.com/auth/v1/refreshToken";
             string strAccessToken = string.Empty;
 
+            ActionResponse failResponse = new ActionResponse(ActionStatus.Failure, null, null, $"LithiumCredentialsInvalid");            
+            ActionResponse successResponse = new ActionResponse(ActionStatus.Success);
+
             HttpWebRequest webRequest = WebRequest.Create(strTokenUrl) as HttpWebRequest;
             webRequest.Method = "POST";
             webRequest.ContentType = "application/json";
@@ -53,7 +56,7 @@ namespace Microsoft.Deployment.Actions.Custom.Lithium
 
                                 var strTitle = GetLithiumCommunityName(tenantId, clientId, strAccessToken);
 
-                               return strTitle == string.Empty ? new ActionResponse(ActionStatus.Failure, null, EnglishErrorCodes.LithiumCredentialsInvalid) : new ActionResponse(ActionStatus.Success, strTitle);
+                               return strTitle == string.Empty ? failResponse : successResponse;
                             }
                         }
                     }
@@ -61,10 +64,10 @@ namespace Microsoft.Deployment.Actions.Custom.Lithium
             }
             catch
             {
-                return new ActionResponse(ActionStatus.Failure, null, EnglishErrorCodes.LithiumCredentialsInvalid);
+                return failResponse;
             }
 
-            return new ActionResponse(ActionStatus.Success, strAccessToken);
+            return successResponse;
         }
 
         //Returns the community title 

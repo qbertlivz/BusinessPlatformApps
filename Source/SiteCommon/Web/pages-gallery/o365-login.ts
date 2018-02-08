@@ -32,6 +32,10 @@ export class O365Login extends AzureLogin {
         }
     }
 
+    async onNavigatingNext(): Promise<boolean> {
+        return true;
+    }
+
     getItem(key: any): any {
         let item: any = JSON.parse(window.sessionStorage.getItem(key));
         return item;

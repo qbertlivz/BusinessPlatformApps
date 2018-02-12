@@ -7,6 +7,7 @@ import { ViewModelBase } from '../services/view-model-base';
 
 export class Gettingstarted extends ViewModelBase {
     architectureDiagram: string = '';
+    contact: Registration = new Registration();
     downloadLink: string = '';
     isDownload: boolean = false;
     list1: string[] = [];

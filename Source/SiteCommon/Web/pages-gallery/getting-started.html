@@ -80,6 +80,13 @@
         <p>
     </div>
 
+    <!-- Contact -->
+    <div class="st-text" if.bind="contact.email">
+        <p class="smallFontSize">
+            <a href="${'mailto:' + contact.email + '@' + contact.emailDomain}" target="_top">${contact.text}</a>
+        </p>
+    </div>
+
     <!-- Download new version -->
     <div class="st-modal-background" if.bind="upgrade"></div>
     <div class="st-modal-background st-modal-wrapper" click.trigger="upgrade = false" if.bind="upgrade">

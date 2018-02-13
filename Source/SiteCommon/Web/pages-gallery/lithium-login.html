@@ -28,6 +28,7 @@
             <button class="primary" disabled.bind="!lithiumTenantId || !lithiumClientId || !lithiumClientSecret || !lithiumRefreshToken" click.trigger="onValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_VALIDATE}</button>
         </p>
     </div>
+    <br />
     <div class="st-text">
         <bpst-link a-description="${MS.Translate.INIT_GETTING_STARTED_TANDC_MESSAGE}" a-link="${MS.Translate.INIT_GETTING_STARTED_TANDC_LINK}" a-link-text="${MS.Translate.ITALENT_COMP_NAME}"></bpst-link>
     </div>

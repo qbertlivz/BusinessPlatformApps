@@ -29,7 +29,25 @@ CREATE TABLE [adtlog].[20_PowerBI](
 	[ReportId] [varchar](8000) NULL,
 	[ReportName] [varchar](8000) NULL,
 	[DatasetId] [varchar](8000) NULL,
-	[DatasetName] [varchar](8000) NULL
+	[DatasetName] [varchar](8000) NULL,
+	[DatasourceId] [varchar](8000) NULL,
+	[DatasourceName] [varchar](8000) NULL,
+	[CapacityId] [varchar](8000) NULL,
+	[CapacityName] [varchar](8000) NULL,
+	[DataConnectivityMode] [varchar](8000) NULL,
+	[Schedules] [varchar](8000) NULL,
+	[GatewayId] [varchar](8000) NULL,
+	[GatewayName] [varchar](8000) NULL,
+	[GatewayType] [varchar](8000) NULL,
+	[ImportId] [varchar](8000) NULL,
+	[ImportSource] [varchar](8000) NULL,
+	[ImportType] [varchar](8000) NULL,
+	[ImportDisplayName] [varchar](8000) NULL,
+	[OrgAppPermission] [varchar](8000) NULL,
+	[UserInformation] [varchar](8000) NULL,
+	[ArtifactId] [varchar](8000) NULL,
+	[ArtifactName] [varchar](8000) NULL,
+	[TileText] [varchar](8000) NULL
 )
 
 CREATE TABLE [adtlog].[staging_20_PowerBI](
@@ -56,7 +74,23 @@ CREATE TABLE [adtlog].[staging_20_PowerBI](
 	[ReportId] [varchar](8000) NULL,
 	[ReportName] [varchar](8000) NULL,
 	[DatasetId] [varchar](8000) NULL,
-	[DatasetName] [varchar](8000) NULL
+	[DatasetName] [varchar](8000) NULL,
+	[CapacityId] [varchar](8000) NULL,
+	[CapacityName] [varchar](8000) NULL,
+	[DataConnectivityMode] [varchar](8000) NULL,
+	[Schedules] [varchar](8000) NULL,
+	[GatewayId] [varchar](8000) NULL,
+	[GatewayName] [varchar](8000) NULL,
+	[GatewayType] [varchar](8000) NULL,
+	[ImportId] [varchar](8000) NULL,
+	[ImportSource] [varchar](8000) NULL,
+	[ImportType] [varchar](8000) NULL,
+	[ImportDisplayName] [varchar](8000) NULL,
+	[OrgAppPermission] [varchar](8000) NULL,
+	[UserInformation] [varchar](8000) NULL,
+	[ArtifactId] [varchar](8000) NULL,
+	[ArtifactName] [varchar](8000) NULL,
+	[TileText] [varchar](8000) NULL
 )
 
 CREATE TABLE [adtlog].[batch_log](

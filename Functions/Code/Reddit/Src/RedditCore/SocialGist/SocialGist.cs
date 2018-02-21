@@ -9,6 +9,7 @@ using System;
 using System.Text;
 using RedditCore.Http;
 using RedditCore.Telemetry;
+using System.Linq;
 
 namespace RedditCore.SocialGist
 {
@@ -54,7 +55,8 @@ namespace RedditCore.SocialGist
             parameters.Add("use_compression", true);
 
             var baseUrl = "http://redditcomments.socialgist.com/";
-            log.Info($"Request to: {baseUrl} with initial parameters: {parameters}.");
+            var paramMessage = string.Join(",", parameters.Select(kvp => kvp.Key + ": " + kvp.Value.ToString()));
+            log.Info($"Request to: {baseUrl} with initial parameters: {paramMessage}.");
 
             var uriBuilder = new UriBuilder(baseUrl);
             uriBuilder.QueryParamsFromDictionary(parameters);
@@ -123,7 +125,9 @@ namespace RedditCore.SocialGist
             var threadIdSet = new SortedSet<SocialGistPostId>();
 
             var baseUrl = "https://redditapi.socialgist.com/v1/Boards/Search";
-            log.Info($"Request to: {baseUrl} with initial parameters: {parameters}.");
+            var paramMessage = string.Join(",", parameters.Select(kvp => kvp.Key + ": " + kvp.Value.ToString()));
+
+            log.Info($"Request to: {baseUrl} with initial parameters: {paramMessage}.");
 
             var resultList = await paginator.PageThroughCallResults<SearchApiResponse, SearchResponse, SearchMatches, SearchMatch>(
                 baseUrl,

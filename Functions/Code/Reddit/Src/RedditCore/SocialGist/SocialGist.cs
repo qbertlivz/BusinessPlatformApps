@@ -53,7 +53,10 @@ namespace RedditCore.SocialGist
             parameters.Add("url", post.Url);
             parameters.Add("use_compression", true);
 
-            var uriBuilder = new UriBuilder("http://redditcomments.socialgist.com/");
+            var baseUrl = "http://redditcomments.socialgist.com/";
+            log.Info($"Request to: {baseUrl} with initial parameters: {parameters}.");
+
+            var uriBuilder = new UriBuilder(baseUrl);
             uriBuilder.QueryParamsFromDictionary(parameters);
 
             var result =
@@ -119,8 +122,11 @@ namespace RedditCore.SocialGist
 
             var threadIdSet = new SortedSet<SocialGistPostId>();
 
+            var baseUrl = "https://redditapi.socialgist.com/v1/Boards/Search";
+            log.Info($"Request to: {baseUrl} with initial parameters: {parameters}.");
+
             var resultList = await paginator.PageThroughCallResults<SearchApiResponse, SearchResponse, SearchMatches, SearchMatch>(
-                "https://redditapi.socialgist.com/v1/Boards/Search",
+                baseUrl,
                 parameters,
                 ResultLimitPerPage
             );

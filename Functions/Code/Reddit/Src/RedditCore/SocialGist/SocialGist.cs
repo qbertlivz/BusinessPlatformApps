@@ -103,6 +103,7 @@ namespace RedditCore.SocialGist
 
         public async Task<SortedSet<SocialGistPostId>> MatchesForQuery(
             string query,
+            string sortMode,
             long? startUnixTime = null
         )
         {
@@ -111,7 +112,7 @@ namespace RedditCore.SocialGist
             var parameters = GetBaseParameters();
             parameters.Add("query", query);
             parameters.Add("dn", "reddit.com");
-            parameters.Add("sort_mode", "time_desc");
+            parameters.Add("sort_mode", sortMode);
             parameters.Add("keep_original", "true");
             parameters.Add("group_mode", "thread");
             parameters.Add("match_mode", "boolean");

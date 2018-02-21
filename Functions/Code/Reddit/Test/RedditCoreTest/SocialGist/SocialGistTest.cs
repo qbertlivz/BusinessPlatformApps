@@ -62,7 +62,7 @@ namespace RedditCoreTest.SocialGist
                 socialGist.ResultLimitPerPage
             )).ReturnsAsync(expected);
 
-            var threadIdSet = await socialGist.MatchesForQuery("frogs", null);
+            var threadIdSet = await socialGist.MatchesForQuery("frogs", "time_desc", null);
 
             CollectionAssert.AreEquivalent(threadIdSet, new SortedSet<SocialGistPostId>()
             {

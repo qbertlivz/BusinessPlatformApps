@@ -11,6 +11,7 @@ namespace RedditCore.SocialGist
 
         Task<SortedSet<SocialGistPostId>> MatchesForQuery(
             string query,
+            string sortMode,
             long? startUnixTime = null
         );
 

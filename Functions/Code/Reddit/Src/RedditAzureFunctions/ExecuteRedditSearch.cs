@@ -61,6 +61,7 @@ namespace RedditAzureFunctions
                 {
                     threadMatches = socialGist.MatchesForQuery(
                         webConfiguration.QueryTerms,
+                        webConfiguration.QuerySortOrder,
                         null
                     ).Result;
 

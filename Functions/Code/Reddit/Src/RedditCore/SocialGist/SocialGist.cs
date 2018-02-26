@@ -9,6 +9,7 @@ using System;
 using System.Text;
 using RedditCore.Http;
 using RedditCore.Telemetry;
+using System.Linq;
 
 namespace RedditCore.SocialGist
 {
@@ -53,7 +54,11 @@ namespace RedditCore.SocialGist
             parameters.Add("url", post.Url);
             parameters.Add("use_compression", true);
 
-            var uriBuilder = new UriBuilder("http://redditcomments.socialgist.com/");
+            var baseUrl = "http://redditcomments.socialgist.com/";
+            var paramMessage = string.Join(",", parameters.Select(kvp => kvp.Key + ": " + kvp.Value.ToString()));
+            log.Info($"Request to: {baseUrl} with initial parameters: {paramMessage}.");
+
+            var uriBuilder = new UriBuilder(baseUrl);
             uriBuilder.QueryParamsFromDictionary(parameters);
 
             var result =
@@ -103,6 +108,7 @@ namespace RedditCore.SocialGist
 
         public async Task<SortedSet<SocialGistPostId>> MatchesForQuery(
             string query,
+            string sortMode,
             long? startUnixTime = null
         )
         {
@@ -111,15 +117,20 @@ namespace RedditCore.SocialGist
             var parameters = GetBaseParameters();
             parameters.Add("query", query);
             parameters.Add("dn", "reddit.com");
-            parameters.Add("sort_mode", "time_desc");
+            parameters.Add("sort_mode", sortMode);
             parameters.Add("keep_original", "true");
             parameters.Add("group_mode", "thread");
             parameters.Add("match_mode", "boolean");
 
             var threadIdSet = new SortedSet<SocialGistPostId>();
 
+            var baseUrl = "https://redditapi.socialgist.com/v1/Boards/Search";
+            var paramMessage = string.Join(",", parameters.Select(kvp => kvp.Key + ": " + kvp.Value.ToString()));
+
+            log.Info($"Request to: {baseUrl} with initial parameters: {paramMessage}.");
+
             var resultList = await paginator.PageThroughCallResults<SearchApiResponse, SearchResponse, SearchMatches, SearchMatch>(
-                "https://redditapi.socialgist.com/v1/Boards/Search",
+                baseUrl,
                 parameters,
                 ResultLimitPerPage
             );

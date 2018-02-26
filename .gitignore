@@ -72,3 +72,7 @@
 /Function/FacebookUtillity/obj/Release/CoreCompileInputs.cache
 /Functions/Code/Reddit/Src/RedditAzureFunctions/obj
 /Functions/Code/Reddit/Src/RedditCore/obj
+/Functions/Code/Reddit/Src/RedditAzureFunctions/bin/
+/Functions/Code/Reddit/Src/RedditCore/bin/
+/Functions/Code/Reddit/Test/RedditCoreTest/obj/
+/Functions/Code/Reddit/packages/

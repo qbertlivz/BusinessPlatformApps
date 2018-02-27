@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -34,7 +35,9 @@ namespace Microsoft.Deployment.Common.Actions.MsCrm
 
             Dictionary<string, int> initialCounts = new Dictionary<string, int>();
 
-            var proxy = new OrganizationWebProxyClient(new Uri($"{organizationUrl}XRMServices/2011/Organization.svc/web"), true)
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            ServicePointManager.CheckCertificateRevocationList = true;
+            OrganizationWebProxyClient proxy = new OrganizationWebProxyClient(new Uri($"{organizationUrl}XRMServices/2011/Organization.svc/web"), true)
             {
                 HeaderToken = crmToken["access_token"].ToString()
             };
@@ -53,11 +56,9 @@ namespace Microsoft.Deployment.Common.Actions.MsCrm
                             </entity> 
                         </fetch>";
 
-                    var fetchRequest = new ExecuteFetchRequest() { FetchXml = xml };
-
-                    var result = (ExecuteFetchResponse)proxy.Execute(fetchRequest);
-
-                    var xdoc = XDocument.Parse(result.FetchXmlResult);
+                    ExecuteFetchRequest fetchRequest = new ExecuteFetchRequest() { FetchXml = xml };
+                    ExecuteFetchResponse result = (ExecuteFetchResponse)proxy.Execute(fetchRequest);
+                    XDocument xdoc = XDocument.Parse(result.FetchXmlResult);
 
                     count = xdoc.Descendants().First(e => e.Name == $"{entry.Key}_count").Value;
                 }

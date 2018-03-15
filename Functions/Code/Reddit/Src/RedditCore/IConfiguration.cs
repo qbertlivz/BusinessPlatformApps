@@ -20,6 +20,8 @@ namespace RedditCore
 
         string QueryTerms { get; }
 
+        string QuerySortOrder { get; }
+
         // ReSharper disable once BuiltInTypeReferenceStyle
         int MaximumResultsPerSearch { get; }
 

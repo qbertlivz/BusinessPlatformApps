@@ -26,6 +26,9 @@ namespace Installer
 
             Startup();
 
+            CefSharpSettings.LegacyJavascriptBindingEnabled = true;
+            // TODO: https://github.com/cefsharp/CefSharp/issues/2246
+
             this.BrowserSetup.BrowserSettings.Javascript = CefSharp.CefState.Enabled;
             this.BrowserSetup.BrowserSettings.JavascriptDomPaste = CefSharp.CefState.Enabled;
             this.BrowserSetup.BrowserSettings.LocalStorage = CefSharp.CefState.Enabled;
@@ -53,11 +56,9 @@ namespace Installer
 #endif
             Directory.SetCurrentDirectory(appdir);
 
+            this.Show();
             this.BrowserSetup.Address = fullpath;
             this.BrowserSetup.Load(fullpath);
-
-            this.Show();
-            //this.Hide();
         }
         
 

@@ -45,6 +45,16 @@ namespace RedditAzureFunctions
         
         public string QueryTerms => ConfigurationManager.AppSettings["QueryTerms"];
 
+        /// <summary>
+        /// Choices here, from the SocialGist BoardReader API Documentation:
+        /// Defines the result sort type. Can be as follows:
+        /// ‘relevance’;
+        /// ‘time_relevance’, sorts by time segments(last hour/day/week/month) in descending order, and then by relevance in descending order; 
+        /// ‘time_desc’, most recent posts first; (default)
+        /// ‘time_asc’, oldest posts first.
+        /// </summary>
+        public string QuerySortOrder => GetOrDefault("QuerySortOrder", "time_desc");
+
         // ReSharper disable once BuiltInTypeReferenceStyle
         public int MaximumResultsPerSearch => int.Parse(ConfigurationManager.AppSettings["MaximumResultsPerSearch"]);
 

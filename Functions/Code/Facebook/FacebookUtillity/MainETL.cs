@@ -91,15 +91,19 @@ namespace FacebookUtillity
                     postRow["Id"] = post["id"];
                     postRow["Created Date"] = post["created_time"];
                     postRow["Message"] = post["message"];
-                    postRow["From Id"] = post["from"]["id"];
-                    int maxLength = Math.Min(post["from"]["name"].ToString().Length, 100);
-                    postRow["From Name"] = post["from"]["name"].ToString().Substring(0, maxLength);
+                    postRow["From Id"] = post["from"]?["id"];
+                    int maxLength = 0;
+                    if (post["from"]?["name"] != null)
+                    {
+                        maxLength = Math.Min((post["from"]["name"].ToString().Length), 100);
+                    }
+                    postRow["From Name"] = post["from"]?["name"].ToString().Substring(0, maxLength);
                     postRow["Media"] = post["picture"];
                     postRow["Page"] = page;
                     postRow["PageId"] = pageObj["id"].ToString();
                     postRow["PageDisplayName"] = pageObj["name"];
 
-                    if(post["comments"]["data"].Count() == 100 )
+                    if (post["comments"]["data"].Count() == 100)
                     {
                         postRow["Total Comments"] = Utility.ConvertToLong(post["comments"]["summary"]["total_count"]); ;
                     }
@@ -113,15 +117,17 @@ namespace FacebookUtillity
 
                     foreach (var comment in post["comments"]["data"])
                     {
-                       
+
                         DataRow commentRow = commentsDataTable.NewRow();
                         commentRow["Id"] = comment["id"];
                         commentRow["Created Date"] = comment["created_time"];
                         commentRow["Message"] = comment["message"];
-                        commentRow["From Id"] = comment["from"]["id"];
-
-                        maxLength = Math.Min(comment["from"]["name"].ToString().Length, 100);
-                        commentRow["From Name"] = comment["from"]["name"].ToString().Substring(0, maxLength);
+                        commentRow["From Id"] = comment["from"]?["id"];
+                        if (comment["from"]?["name"] != null)
+                        {
+                            maxLength = Math.Min(comment["from"]["name"].ToString().Length, 100);
+                        }
+                        commentRow["From Name"] = comment["from"]?["name"].ToString().Substring(0, maxLength);
                         commentRow["Post Id"] = post["id"];
                         commentRow["Page"] = page;
                         commentRow["PageId"] = pageObj["id"].ToString();

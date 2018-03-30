@@ -1,0 +1,45 @@
+﻿{
+    "Install": {
+      "Pages": [
+        {
+          "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-FinanceInsightsCreditAndCollections/Web/Images/creditAndCollectionsArchDiagram.png",
+          "displayname": "Getting Started",
+          "list1": [
+            "$translate(INIT_GETTING_STARTED_D365_FINANCE_OPERATIONS)",
+            "$translate(INIT_GETTING_STARTED_PBI_DESKTOP)",
+            "$translate(INIT_GETTING_STARTED_PBI_PRO)"
+          ],
+          "list2": [
+            "$translate(INIT_GETTING_STARTED_CDS_SOLUTION)",
+            "$translate(INIT_GETTING_STARTED_CONNECT_CDS_AS_PBI)"
+          ],
+          "name": "$SiteCommon$/pages-gallery/getting-started.html",
+          "templateName": "$translate(AX_FINANCE_INSIGHTS_COLLECTIONS_TEMPLATE_TITLE)"
+        },
+        {
+          "displayname": "Dynamics 365 Login",
+          "name": "$SiteCommon$/pages-gallery/ax-login.html"
+        },
+        {
+          "displayname": "Customize Dynamics AX",
+          "name": "$SiteCommon$/pages-gallery/cc-ax-customize.html",
+          "useDefaultValidateButton": true
+        },
+        {
+          "displayname": "Power BI Login",
+          "name": "$SiteCommon$/pages-gallery/pbi-login.html"
+        },
+        {
+          "displayname": "Customize Power BI",
+          "name": "$SiteCommon$/pages-gallery/pbi-customize.html"
+        },
+        {
+          "displayname": "Deploy",
+          "filename": "$save('CreditAndCollectionsImportMode.pbix')",
+          "name": "$SiteCommon$/pages-gallery/cc-progress.html",
+          "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
+        }
+      ],
+        "Actions": []
+    }
+}

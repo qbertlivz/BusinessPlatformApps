@@ -156,6 +156,7 @@
       <Link>Properties\SharedVersion.cs</Link>
     </Compile>
     <Compile Include="Ax\DeployAxLogicApp.cs" />
+    <Compile Include="Ax\GetAxInstancesCustom.cs" />
     <Compile Include="Ax\GetAxInstances.cs" />
     <Compile Include="Ax\UpdateAxConfigurationEntity.cs" />
     <Compile Include="Ax\ValidateAxInstance.cs" />

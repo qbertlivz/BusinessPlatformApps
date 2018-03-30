@@ -1,0 +1,10 @@
+﻿<template>
+    <h1 class="st-title">${MS.Translate.COMMON_CUSTOMIZE}</h1>
+    <h4 class="st-subtitle">${MS.Translate.CUSTOMIZE_SPECIFIC}</h4>
+    <div class="st-float-clear" if.bind="pbiWorkspaces && pbiWorkspaces.length > 0">
+        <p class="st-text">${MS.Translate.POWER_BI_INSTANCES}</p>
+        <select class="btn btn-default dropdown-toggle st-input" disabled.bind="MS.HttpService.isServiceBusy" value.bind="selectedPBIWorkspaceId">
+            <option repeat.for="pbiWorkspace of pbiWorkspaces" value.bind="pbiWorkspace.id">${pbiWorkspace.name}</option>
+        </select>
+    </div>
+</template>

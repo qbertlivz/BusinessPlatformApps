@@ -74,3 +74,6 @@
 /Functions/Code/Reddit/Src/RedditCore/bin/
 /Functions/Code/Reddit/Test/RedditCoreTest/obj/
 /Functions/Code/Reddit/packages/
+/Functions/Code/Facebook/FacebookUtillity/obj/Release
+/Functions/Code/Facebook/FacebookUtilityTest/obj/Release
+/Functions/Code/Facebook/FacebookOAuth/obj/Release

@@ -9,6 +9,7 @@ using Microsoft.Deployment.Common.ActionModel;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.Deployment.Common.Helpers;
+using System.Net;
 
 namespace Microsoft.Deployment.Actions.Custom.Ax
 {
@@ -19,6 +20,8 @@ namespace Microsoft.Deployment.Actions.Custom.Ax
         {
             var axToken = request.DataStore.GetJson("AxToken", "access_token").ToString();
             string instance = request.DataStore.GetValue("AxInstanceName");
+
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
             using (HttpClient client = new HttpClient())
             {

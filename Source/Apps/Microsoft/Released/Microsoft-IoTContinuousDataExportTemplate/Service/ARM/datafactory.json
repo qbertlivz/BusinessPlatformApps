@@ -1,0 +1,747 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "factoryName": {
+      "type": "string",
+      "metadata": "Data Factory Name",
+      "defaultValue": "jeffscratch"
+    },
+    "database_connectionString": {
+      "type": "secureString",
+      "metadata": "Secure string for 'connectionString' of 'SQL'",
+      "defaultValue": "don't know yet"
+    }
+  },
+  "variables": {
+    "factoryName": "[concat(parameters('factoryName'), '-', uniquestring(resourceGroup().id))]",
+    "factoryId": "[concat('Microsoft.DataFactory/factories/', variables('factoryName'))]",
+    "leftBracket": "["
+  },
+  "resources": [
+    {
+      "name": "[variables('factoryName')]",
+      "apiVersion": "2017-09-01-preview",
+      "type": "Microsoft.DataFactory/factories",
+      "location": "[resourceGroup().location]",
+      "properties": {},
+      "resources": [
+        {
+          "name": "[concat(variables('factoryName'), '/SQL')]",
+          "type": "Microsoft.DataFactory/factories/linkedServices",
+          "apiVersion": "2017-09-01-preview",
+          "properties": {
+            "type": "AzureSqlDatabase",
+            "typeProperties": {
+              "connectionString": {
+                "type": "SecureString",
+                "value": "[parameters('database_connectionString')]"
+              }
+            }
+          },
+          "dependsOn": [ "[variables('factoryName')]" ]
+        },
+        {
+          "name": "[concat(variables('factoryName'), '/ETL')]",
+          "type": "Microsoft.DataFactory/factories/pipelines",
+          "apiVersion": "2017-09-01-preview",
+          "properties": {
+            "activities": [
+              {
+                "name": "GetPreviousChangeTrackingVersion",
+                "type": "Lookup",
+                "dependsOn": [],
+                "policy": {
+                  "timeout": "00:00:59",
+                  "retry": 0,
+                  "retryIntervalInSeconds": 30
+                },
+                "typeProperties": {
+                  "source": {
+                    "type": "SqlSource"
+                  },
+                  "dataset": {
+                    "referenceName": "ChangeTracking",
+                    "type": "DatasetReference",
+                    "parameters": {}
+                  }
+                }
+              },
+              {
+                "name": "GetCurrentChangeTrackingVersion",
+                "type": "Lookup",
+                "dependsOn": [],
+                "policy": {
+                  "timeout": "00:00:59",
+                  "retry": 0,
+                  "retryIntervalInSeconds": 30
+                },
+                "typeProperties": {
+                  "source": {
+                    "type": "SqlSource",
+                    "sqlReaderQuery": "SELECT CHANGE_TRACKING_CURRENT_VERSION() as CurrentChangeTrackingVersion"
+                  },
+                  "dataset": {
+                    "referenceName": "ChangeTracking",
+                    "type": "DatasetReference",
+                    "parameters": {}
+                  }
+                }
+              },
+              {
+                "name": "TransformMeasurements",
+                "type": "SqlServerStoredProcedure",
+                "dependsOn": [
+                  {
+                    "activity": "GetPreviousChangeTrackingVersion",
+                    "dependencyConditions": [
+                      "Succeeded"
+                    ]
+                  },
+                  {
+                    "activity": "GetCurrentChangeTrackingVersion",
+                    "dependencyConditions": [
+                      "Succeeded"
+                    ]
+                  }
+                ],
+                "policy": {
+                  "timeout": "01:00:00",
+                  "retry": 0,
+                  "retryIntervalInSeconds": 30
+                },
+                "typeProperties": {
+                  "storedProcedureName": "TransformMeasurements",
+                  "storedProcedureParameters": {
+                    "PreviousChangeTrackingVersion": {
+                      "value": "@{activity('GetPreviousChangeTrackingVersion').output.firstRow.SYS_CHANGE_VERSION}",
+                      "type": "INT64"
+                    },
+                    "CurrentChangeTrackingVersion": {
+                      "value": "@{activity('GetCurrentChangeTrackingVersion').output.firstRow.CurrentChangeTrackingVersion}",
+                      "type": "INT64"
+                    }
+                  }
+                },
+                "linkedServiceName": {
+                  "referenceName": "SQL",
+                  "type": "LinkedServiceReference"
+                }
+              },
+              {
+                "name": "TransformProperties",
+                "type": "SqlServerStoredProcedure",
+                "dependsOn": [
+                  {
+                    "activity": "GetPreviousChangeTrackingVersion",
+                    "dependencyConditions": [
+                      "Succeeded"
+                    ]
+                  },
+                  {
+                    "activity": "GetCurrentChangeTrackingVersion",
+                    "dependencyConditions": [
+                      "Succeeded"
+                    ]
+                  }
+                ],
+                "policy": {
+                  "timeout": "01:00:00",
+                  "retry": 0,
+                  "retryIntervalInSeconds": 30
+                },
+                "typeProperties": {
+                  "storedProcedureName": "TransformProperties",
+                  "storedProcedureParameters": {
+                    "PreviousChangeTrackingVersion": {
+                      "value": "@{activity('GetPreviousChangeTrackingVersion').output.firstRow.SYS_CHANGE_VERSION}",
+                      "type": "INT64"
+                    },
+                    "CurrentChangeTrackingVersion": {
+                      "value": "@{activity('GetCurrentChangeTrackingVersion').output.firstRow.CurrentChangeTrackingVersion}",
+                      "type": "INT64"
+                    }
+                  }
+                },
+                "linkedServiceName": {
+                  "referenceName": "SQL",
+                  "type": "LinkedServiceReference"
+                }
+              },
+              {
+                "name": "TransformMeasurementDefinitions",
+                "type": "SqlServerStoredProcedure",
+                "dependsOn": [
+                  {
+                    "activity": "GetCurrentChangeTrackingVersion",
+                    "dependencyConditions": [
+                      "Succeeded"
+                    ]
+                  },
+                  {
+                    "activity": "GetPreviousChangeTrackingVersion",
+                    "dependencyConditions": [
+                      "Succeeded"
+                    ]
+                  }
+                ],
+                "policy": {
+                  "timeout": "01:00:00",
+                  "retry": 0,
+                  "retryIntervalInSeconds": 30
+                },
+                "typeProperties": {
+                  "storedProcedureName": "TransformMeasurementDefinitions",
+                  "storedProcedureParameters": {
+                    "PreviousChangeTrackingVersion": {
+                      "value": "@{activity('GetPreviousChangeTrackingVersion').output.firstRow.SYS_CHANGE_VERSION}",
+                      "type": "INT64"
+                    },
+                    "CurrentChangeTrackingVersion": {
+                      "value": "@{activity('GetCurrentChangeTrackingVersion').output.firstRow.CurrentChangeTrackingVersion}",
+                      "type": "INT64"
+                    }
+                  }
+                },
+                "linkedServiceName": {
+                  "referenceName": "SQL",
+                  "type": "LinkedServiceReference"
+                }
+              },
+              {
+                "name": "TransformPropertyDefinitions",
+                "type": "SqlServerStoredProcedure",
+                "dependsOn": [
+                  {
+                    "activity": "GetPreviousChangeTrackingVersion",
+                    "dependencyConditions": [
+                      "Succeeded"
+                    ]
+                  },
+                  {
+                    "activity": "GetCurrentChangeTrackingVersion",
+                    "dependencyConditions": [
+                      "Succeeded"
+                    ]
+                  }
+                ],
+                "policy": {
+                  "timeout": "01:00:00",
+                  "retry": 0,
+                  "retryIntervalInSeconds": 30
+                },
+                "typeProperties": {
+                  "storedProcedureName": "TransformPropertyDefinitions",
+                  "storedProcedureParameters": {
+                    "PreviousChangeTrackingVersion": {
+                      "value": "@{activity('GetPreviousChangeTrackingVersion').output.firstRow.SYS_CHANGE_VERSION}",
+                      "type": "INT64"
+                    },
+                    "CurrentChangeTrackingVersion": {
+                      "value": "@{activity('GetCurrentChangeTrackingVersion').output.firstRow.CurrentChangeTrackingVersion}",
+                      "type": "INT64"
+                    }
+                  }
+                },
+                "linkedServiceName": {
+                  "referenceName": "SQL",
+                  "type": "LinkedServiceReference"
+                }
+              },
+              {
+                "name": "TransformDevices",
+                "type": "SqlServerStoredProcedure",
+                "dependsOn": [
+                  {
+                    "activity": "GetPreviousChangeTrackingVersion",
+                    "dependencyConditions": [
+                      "Succeeded"
+                    ]
+                  },
+                  {
+                    "activity": "GetCurrentChangeTrackingVersion",
+                    "dependencyConditions": [
+                      "Succeeded"
+                    ]
+                  }
+                ],
+                "policy": {
+                  "timeout": "01:00:00",
+                  "retry": 0,
+                  "retryIntervalInSeconds": 30
+                },
+                "typeProperties": {
+                  "storedProcedureName": "TransformDevices",
+                  "storedProcedureParameters": {
+                    "PreviousChangeTrackingVersion": {
+                      "value": "@{activity('GetPreviousChangeTrackingVersion').output.firstRow.SYS_CHANGE_VERSION}",
+                      "type": "INT64"
+                    },
+                    "CurrentChangeTrackingVersion": {
+                      "value": "@{activity('GetCurrentChangeTrackingVersion').output.firstRow.CurrentChangeTrackingVersion}",
+                      "type": "INT64"
+                    }
+                  }
+                },
+                "linkedServiceName": {
+                  "referenceName": "SQL",
+                  "type": "LinkedServiceReference"
+                }
+              },
+              {
+                "name": "TransformModels",
+                "type": "SqlServerStoredProcedure",
+                "dependsOn": [
+                  {
+                    "activity": "GetPreviousChangeTrackingVersion",
+                    "dependencyConditions": [
+                      "Succeeded"
+                    ]
+                  },
+                  {
+                    "activity": "GetCurrentChangeTrackingVersion",
+                    "dependencyConditions": [
+                      "Succeeded"
+                    ]
+                  }
+                ],
+                "policy": {
+                  "timeout": "01:00:00",
+                  "retry": 0,
+                  "retryIntervalInSeconds": 30
+                },
+                "typeProperties": {
+                  "storedProcedureName": "TransformModels",
+                  "storedProcedureParameters": {
+                    "PreviousChangeTrackingVersion": {
+                      "value": "@{activity('GetPreviousChangeTrackingVersion').output.firstRow.SYS_CHANGE_VERSION}",
+                      "type": "INT64"
+                    },
+                    "CurrentChangeTrackingVersion": {
+                      "value": "@{activity('GetCurrentChangeTrackingVersion').output.firstRow.CurrentChangeTrackingVersion}",
+                      "type": "INT64"
+                    }
+                  }
+                },
+                "linkedServiceName": {
+                  "referenceName": "SQL",
+                  "type": "LinkedServiceReference"
+                }
+              },
+              {
+                "name": "UpdateChangeTrackingVersion",
+                "type": "SqlServerStoredProcedure",
+                "dependsOn": [
+                  {
+                    "activity": "TransformMeasurements",
+                    "dependencyConditions": [
+                      "Succeeded"
+                    ]
+                  },
+                  {
+                    "activity": "TransformProperties",
+                    "dependencyConditions": [
+                      "Succeeded"
+                    ]
+                  },
+                  {
+                    "activity": "TransformMeasurementDefinitions",
+                    "dependencyConditions": [
+                      "Succeeded"
+                    ]
+                  },
+                  {
+                    "activity": "TransformPropertyDefinitions",
+                    "dependencyConditions": [
+                      "Succeeded"
+                    ]
+                  },
+                  {
+                    "activity": "TransformDevices",
+                    "dependencyConditions": [
+                      "Succeeded"
+                    ]
+                  },
+                  {
+                    "activity": "TransformModels",
+                    "dependencyConditions": [
+                      "Succeeded"
+                    ]
+                  }
+                ],
+                "policy": {
+                  "timeout": "00:01:00",
+                  "retry": 0,
+                  "retryIntervalInSeconds": 30
+                },
+                "typeProperties": {
+                  "storedProcedureName": "UpdateChangeTrackingVersion",
+                  "storedProcedureParameters": {
+                    "CurrentTrackingVersion": {
+                      "value": "@{activity('GetCurrentChangeTrackingVersion').output.firstRow.CurrentChangeTrackingVersion}",
+                      "type": "INT64"
+                    }
+                  }
+                },
+                "linkedServiceName": {
+                  "referenceName": "SQL",
+                  "type": "LinkedServiceReference"
+                }
+              }
+            ]
+          },
+          "dependsOn": [
+            "[variables('factoryName')]",
+            "[concat(variables('factoryId'), '/datasets/ChangeTracking')]",
+            "[concat(variables('factoryId'), '/linkedServices/SQL')]"
+          ]
+        },
+        {
+          "name": "[concat(variables('factoryName'), '/ChangeTracking')]",
+          "type": "Microsoft.DataFactory/factories/datasets",
+          "apiVersion": "2017-09-01-preview",
+          "properties": {
+            "linkedServiceName": {
+              "referenceName": "SQL",
+              "type": "LinkedServiceReference"
+            },
+            "type": "AzureSqlTable",
+            "structure": [
+              {
+                "name": "SYS_CHANGE_VERSION",
+                "type": "Int64"
+              }
+            ],
+            "typeProperties": {
+              "tableName": "[concat(variables('leftBracket'), 'dbo].[ChangeTracking]')]"
+            }
+          },
+          "dependsOn": [
+            "[variables('factoryName')]",
+            "[concat(variables('factoryId'), '/linkedServices/SQL')]"
+          ]
+        },
+        {
+          "name": "[concat(variables('factoryName'), '/Stage Properties')]",
+          "type": "Microsoft.DataFactory/factories/datasets",
+          "apiVersion": "2017-09-01-preview",
+          "properties": {
+            "linkedServiceName": {
+              "referenceName": "SQL",
+              "type": "LinkedServiceReference"
+            },
+            "type": "AzureSqlTable",
+            "structure": [
+              {
+                "name": "id",
+                "type": "Int32"
+              },
+              {
+                "name": "deviceId",
+                "type": "String"
+              },
+              {
+                "name": "lastUpdated",
+                "type": "DateTime"
+              },
+              {
+                "name": "field",
+                "type": "String"
+              },
+              {
+                "name": "kind",
+                "type": "String"
+              },
+              {
+                "name": "numericValue",
+                "type": "Decimal"
+              },
+              {
+                "name": "stringValue",
+                "type": "String"
+              },
+              {
+                "name": "booleanValue",
+                "type": "Boolean"
+              }
+            ],
+            "typeProperties": {
+              "tableName": "[concat(variables('leftBracket'), 'stage].[Properties]')]"
+            }
+          },
+          "dependsOn": [
+            "[variables('factoryName')]",
+            "[concat(variables('factoryId'), '/linkedServices/SQL')]"
+          ]
+        },
+        {
+          "name": "[concat(variables('factoryName'), '/Stage Measurements')]",
+          "type": "Microsoft.DataFactory/factories/datasets",
+          "apiVersion": "2017-09-01-preview",
+          "properties": {
+            "linkedServiceName": {
+              "referenceName": "SQL",
+              "type": "LinkedServiceReference"
+            },
+            "type": "AzureSqlTable",
+            "structure": [
+              {
+                "name": "id",
+                "type": "Int32"
+              },
+              {
+                "name": "deviceId",
+                "type": "String"
+              },
+              {
+                "name": "timestamp",
+                "type": "DateTime"
+              },
+              {
+                "name": "field",
+                "type": "String"
+              },
+              {
+                "name": "numericValue",
+                "type": "Decimal"
+              },
+              {
+                "name": "stringValue",
+                "type": "String"
+              },
+              {
+                "name": "booleanValue",
+                "type": "Boolean"
+              }
+            ],
+            "typeProperties": {
+              "tableName": "[concat(variables('leftBracket'), 'stage].[Measurements]')]"
+            }
+          },
+          "dependsOn": [
+            "[variables('factoryName')]",
+            "[concat(variables('factoryId'), '/linkedServices/SQL')]"
+          ]
+        },
+        {
+          "name": "[concat(variables('factoryName'), '/Stage PropertyDefinitions')]",
+          "type": "Microsoft.DataFactory/factories/datasets",
+          "apiVersion": "2017-09-01-preview",
+          "properties": {
+            "linkedServiceName": {
+              "referenceName": "SQL",
+              "type": "LinkedServiceReference"
+            },
+            "type": "AzureSqlTable",
+            "structure": [
+              {
+                "name": "id",
+                "type": "Int32"
+              },
+              {
+                "name": "modelId",
+                "type": "String"
+              },
+              {
+                "name": "modelVersion",
+                "type": "String"
+              },
+              {
+                "name": "field",
+                "type": "String"
+              },
+              {
+                "name": "kind",
+                "type": "String"
+              },
+              {
+                "name": "dataType",
+                "type": "String"
+              },
+              {
+                "name": "name",
+                "type": "String"
+              },
+              {
+                "name": "optional",
+                "type": "Boolean"
+              }
+            ],
+            "typeProperties": {
+              "tableName": "[concat(variables('leftBracket'), 'stage].[PropertyDefinitions]')]"
+            }
+          },
+          "dependsOn": [
+            "[variables('factoryName')]",
+            "[concat(variables('factoryId'), '/linkedServices/SQL')]"
+          ]
+        },
+        {
+          "name": "[concat(variables('factoryName'), '/Stage_Devices')]",
+          "type": "Microsoft.DataFactory/factories/datasets",
+          "apiVersion": "2017-09-01-preview",
+          "properties": {
+            "linkedServiceName": {
+              "referenceName": "SQL",
+              "type": "LinkedServiceReference"
+            },
+            "type": "AzureSqlTable",
+            "structure": [
+              {
+                "name": "id",
+                "type": "Int32"
+              },
+              {
+                "name": "deviceId",
+                "type": "String"
+              },
+              {
+                "name": "modelId",
+                "type": "String"
+              },
+              {
+                "name": "modelVersion",
+                "type": "String"
+              },
+              {
+                "name": "name",
+                "type": "String"
+              },
+              {
+                "name": "description",
+                "type": "String"
+              },
+              {
+                "name": "simulated",
+                "type": "Boolean"
+              }
+            ],
+            "typeProperties": {
+              "[variables('factoryName')]": null,
+              "tableName": "[concat(variables('leftBracket'), 'stage].[Devices]')]"
+            }
+          },
+          "dependsOn": [
+            "[variables('factoryName')]",
+            "[concat(variables('factoryId'), '/linkedServices/SQL')]"
+          ]
+        },
+        {
+          "name": "[concat(variables('factoryName'), '/Stage Models')]",
+          "type": "Microsoft.DataFactory/factories/datasets",
+          "apiVersion": "2017-09-01-preview",
+          "properties": {
+            "linkedServiceName": {
+              "referenceName": "SQL",
+              "type": "LinkedServiceReference"
+            },
+            "type": "AzureSqlTable",
+            "structure": [
+              {
+                "name": "id",
+                "type": "Int32"
+              },
+              {
+                "name": "modelId",
+                "type": "String"
+              },
+              {
+                "name": "modelVersion",
+                "type": "String"
+              },
+              {
+                "name": "name",
+                "type": "String"
+              },
+              {
+                "name": "description",
+                "type": "String"
+              },
+              {
+                "name": "thumbnail",
+                "type": "String"
+              }
+            ],
+            "typeProperties": {
+              "[variables('factoryName')]": null,
+              "tableName": "[concat(variables('leftBracket'), 'stage].[Models]')]"
+            }
+          },
+          "dependsOn": [
+            "[variables('factoryName')]",
+            "[concat(variables('factoryId'), '/linkedServices/SQL')]"
+          ]
+        },
+        {
+          "name": "[concat(variables('factoryName'), '/Stage MeasurementDefinitions')]",
+          "type": "Microsoft.DataFactory/factories/datasets",
+          "apiVersion": "2017-09-01-preview",
+          "properties": {
+            "linkedServiceName": {
+              "referenceName": "SQL",
+              "type": "LinkedServiceReference"
+            },
+            "type": "AzureSqlTable",
+            "structure": [
+              {
+                "name": "id",
+                "type": "Int32"
+              },
+              {
+                "name": "modelId",
+                "type": "String"
+              },
+              {
+                "name": "modelVersion",
+                "type": "String"
+              },
+              {
+                "name": "field",
+                "type": "String"
+              },
+              {
+                "name": "kind",
+                "type": "String"
+              },
+              {
+                "name": "dataType",
+                "type": "String"
+              },
+              {
+                "name": "name",
+                "type": "String"
+              }
+            ],
+            "typeProperties": {
+              "tableName": "[concat(variables('leftBracket'), 'stage].[MeasurementDefinitions]')]"
+            }
+          },
+          "dependsOn": [
+            "[variables('factoryName')]",
+            "[concat(variables('factoryId'), '/linkedServices/SQL')]"
+          ]
+        },
+        {
+          "name": "[concat(variables('factoryName'), '/Hourly')]",
+          "type": "Microsoft.DataFactory/factories/triggers",
+          "apiVersion": "2017-09-01-preview",
+          "properties": {
+            "runtimeState": "Stopped",
+            "type": "TumblingWindowTrigger",
+            "typeProperties": {
+              "frequency": "Hour",
+              "interval": 1,
+              "startTime": "2018-01-23T19:00:00Z",
+              "delay": "00:00:00",
+              "maxConcurrency": 1,
+              "retryPolicy": {
+                "intervalInSeconds": 30
+              }
+            }
+          },
+          "dependsOn": [ "[variables('factoryName')]" ]
+        }
+      ]
+    }
+  ]
+}

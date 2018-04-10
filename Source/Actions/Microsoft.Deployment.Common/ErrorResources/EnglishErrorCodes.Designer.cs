@@ -124,6 +124,24 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your account does not have Administrator privileges for this instance of Dynamics 365.
+        /// </summary>
+        public static string AxAuthorizationError {
+            get {
+                return ResourceManager.GetString("AxAuthorizationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot connect to your Finance and Operations instance.
+        /// </summary>
+        public static string AxConnectionError {
+            get {
+                return ResourceManager.GetString("AxConnectionError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to It seems you&apos;re not running the correct platform version of Dynamics 365 for Finance and Operations. The template requires at least Platform Update 8..
         /// </summary>
         public static string AxWrongPlatform {

@@ -31,13 +31,21 @@ namespace Microsoft.Deployment.Actions.Custom.Ax
 
                 var response = await client.GetAsync($"data/BpstConfigurationEntities");
 
-                if (!response.IsSuccessStatusCode && response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                if (response.IsSuccessStatusCode)
                 {
-                    return new ActionResponse(ActionStatus.Failure, JsonUtility.GetJsonObjectFromJsonString(response.Content.ReadAsStringAsync().Result), null, "AxWrongPlatform", response.Content.ReadAsStringAsync().Result);
+                    return new ActionResponse(ActionStatus.Success);
+                }
+
+                switch (response.StatusCode)
+                {
+                    case HttpStatusCode.NotFound:
+                        return new ActionResponse(ActionStatus.Failure, JsonUtility.GetJsonObjectFromJsonString(response.Content.ReadAsStringAsync().Result), null, "AxWrongPlatform", response.Content.ReadAsStringAsync().Result);
+                    case HttpStatusCode.Unauthorized:
+                        return new ActionResponse(ActionStatus.Failure, response.ReasonPhrase, null, "AxAuthorizationError", response.ReasonPhrase);
+                    default:
+                        return new ActionResponse(ActionStatus.Failure, JsonUtility.GetJsonObjectFromJsonString(response.Content.ReadAsStringAsync().Result), null, "AxConnectionError", response.Content.ReadAsStringAsync().Result);
                 }
             }
-
-            return new ActionResponse(ActionStatus.Success);
         }
     }
 }

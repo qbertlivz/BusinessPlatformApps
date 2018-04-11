@@ -14,7 +14,7 @@
     }
   },
   "variables": {
-    "factoryName": "[concat(parameters('factoryName'), '-', uniquestring(resourceGroup().id))]",
+    "factoryName": "[concat(uniquestring(resourceGroup().id), '-', parameters('factoryName'))]",
     "factoryId": "[concat('Microsoft.DataFactory/factories/', variables('factoryName'))]",
     "leftBracket": "["
   },

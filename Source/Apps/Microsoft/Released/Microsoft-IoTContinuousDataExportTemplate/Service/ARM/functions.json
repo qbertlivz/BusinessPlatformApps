@@ -8,9 +8,14 @@
       "type": "string"
     },
 
-    "storage": {
-      "defaultValue": "DefaultEndpointsProtocol=https;AccountName=jeffscratch;AccountKey=QRYrElr9AnKXNvP7MXUHA4E0IjkyeBU3n64jKjyZcOjkE8MDNSH6BJ2sOPgTrOpfErSPUIf6xIrrO03I9uD4Lg==",
+    "blobStorageConnectionString": {
+      "defaultValue": "",
       "type": "securestring"
+    },
+
+    "functionStorage": {
+      "defaultValue": "",
+      "type": "string"
     },
 
     "databaseConnectionString": {
@@ -29,9 +34,9 @@
     }
   },
   "variables": {
-    "functionAppName": "[concat(parameters('siteName'), '-', uniquestring(resourceGroup().id))]",
-    "hostingPlanName": "[concat(parameters('siteName'), '-', uniquestring(resourceGroup().id), '-plan')]",
-    "storageAccountName": "[concat('functions', uniquestring(resourceGroup().id))]",
+    "functionAppName": "[parameters('siteName')]",
+    "hostingPlanName": "[concat(parameters('siteName'), '-plan')]",
+    "storageAccountName": "[parameters('functionStorage')]",
     "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
   },
   "resources": [
@@ -82,6 +87,7 @@
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
         "siteConfig": {
+          "alwaysOn": true,
           "appSettings": [
             {
               "name": "AzureWebJobsDashboard",
@@ -93,7 +99,7 @@
             },
             {
               "name": "BLOB_STORAGE",
-              "value": "[parameters('storage')]"
+              "value": "[parameters('blobStorageConnectionString')]"
             },
             {
               "name": "SQL_CONNECTIONSTRING",

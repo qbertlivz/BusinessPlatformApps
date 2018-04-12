@@ -17,11 +17,18 @@ namespace Microsoft.Deployment.Actions.SQL
         {
             string connectionString = request.DataStore.GetValueAtIndex("SqlConnectionString", "SqlServerIndex");
             string sqlScriptsFolder = request.DataStore.GetValue("SqlScriptsFolder");
+            bool enableTransaction = true;
+
+            var enableTransactionString = request.DataStore.GetValue("enableTransaction");
+            if (!string.IsNullOrWhiteSpace(enableTransactionString))
+            {
+                bool.TryParse(enableTransactionString, out enableTransaction);
+            }
 
             List<string> files = Directory.EnumerateFiles(Path.Combine(request.Info.App.AppFilePath, sqlScriptsFolder)).ToList();
             foreach (string file in files)
             {
-                SqlUtility.InvokeSqlCommand(connectionString, File.ReadAllText(file), new Dictionary<string, string>());
+                SqlUtility.InvokeSqlCommand(connectionString, File.ReadAllText(file), new Dictionary<string, string>(), enableTransaction: enableTransaction);
             }
 
             return new ActionResponse(ActionStatus.Success);

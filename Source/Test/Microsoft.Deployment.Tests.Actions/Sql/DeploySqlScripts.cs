@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Data.SqlClient;
+using System.Threading.Tasks;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Tests.Actions.TestHelpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -47,6 +48,25 @@ namespace Microsoft.Deployment.Tests.Actions.Sql
             dataStore.AddToDataStore("SqlScriptsFolder", "Service/Database/noetl");
 
             var response = await TestManager.ExecuteActionAsync("Microsoft-DeploySQLScripts", dataStore, "Microsoft-SCCMTemplate");
+            Assert.IsTrue(response.Status == ActionStatus.Success);
+        }
+
+        [TestMethod]
+        public async Task DeployIoTContinuousDataExport()
+        {
+            // Deploy AS Model based of the following pramaters
+            var dataStore = await TestManager.GetDataStore();
+
+            var connectionStringBuilder = new SqlConnectionStringBuilder() { DataSource = "bentest236.database.windows.net", InitialCatalog = "continuousDataExportDB", UserID = "benjamis", Password = "IoT20180412!" };
+
+            // Deploy IoT Continuous Data Export Database Scripts
+            // dataStore.AddToDataStore("SqlConnectionString", SqlCreds.GetSqlPagePayload("continuousDataExportDB"));
+            dataStore.AddToDataStore("SqlConnectionString", connectionStringBuilder.ConnectionString);
+            dataStore.AddToDataStore("SqlServerIndex", "0");
+            dataStore.AddToDataStore("SqlScriptsFolder", "Database");
+            dataStore.AddToDataStore("enableTransaction", "false");
+
+            var response = await TestManager.ExecuteActionAsync("Microsoft-DeploySQLScripts", dataStore, "Microsoft-IoTContinuousDataExportTemplate");
             Assert.IsTrue(response.Status == ActionStatus.Success);
         }
     }

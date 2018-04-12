@@ -25,7 +25,7 @@ namespace Microsoft.Deployment.Tests.Actions.TestHelpers
         private static CommonController Controller { get; set; }
         public static string TemplateName = "Microsoft-NewsTemplateTest";
 
-        private static async Task<DataStore> GetDataStoreWithToken(bool force = false, Dictionary<string, string> extraTokens = null, string subscriptionId = null, string resourceGroup = null)
+        private static async Task<DataStore> GetDataStoreWithToken(bool force = false, Dictionary<string, string> extraTokens = null, string subscriptionId = null, string resourceGroup = null, string region = null)
         {
             // Read from file DataStore
             if (File.Exists("datastore.json") && !force)
@@ -93,6 +93,12 @@ namespace Microsoft.Deployment.Tests.Actions.TestHelpers
 
             var locationResult = await TestManager.ExecuteActionAsync("Microsoft-GetLocations", dataStore);
             var location = locationResult.Body.GetJObject()["value"][5];
+
+            if (!string.IsNullOrWhiteSpace(region))
+            {
+                location = locationResult.Body.GetJObject()["value"].SingleOrDefault(l => l["Name"].ToString().Equals(region, StringComparison.OrdinalIgnoreCase));
+            }
+
             dataStore.AddToDataStore("SelectedLocation", location, DataStoreType.Public);
             dataStore.AddToDataStore("SelectedResourceGroup", resourceGroup ?? ResourceGroup);
 
@@ -102,9 +108,9 @@ namespace Microsoft.Deployment.Tests.Actions.TestHelpers
             return dataStore;
         }
 
-        public static async Task<DataStore> GetDataStore(bool force = false, Dictionary<string, string> extraTokens = null, string subscriptionId = null, string resourceGroup = null)
+        public static async Task<DataStore> GetDataStore(bool force = false, Dictionary<string, string> extraTokens = null, string subscriptionId = null, string resourceGroup = null, string region = null)
         {
-            var dataStore = await GetDataStoreWithToken(force, extraTokens, subscriptionId, resourceGroup);
+            var dataStore = await GetDataStoreWithToken(force, extraTokens, subscriptionId, resourceGroup, region);
             return dataStore;
         }
 

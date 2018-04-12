@@ -5,6 +5,7 @@
         "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-IoTContinuousDataExportTemplate/Web/Images/iot-continuous-data-export.png",
         "displayname": "Getting Started",
         "list1": [
+          "$translate(INIT_GETTING_STARTED_AZURE_IOT_CONTINUOUS_DATA_EXPORT)",
           "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",
           "$translate(INIT_GETTING_STARTED_PBI_DESKTOP)",
           "$translate(INIT_GETTING_STARTED_PBI_PRO)"
@@ -20,10 +21,9 @@
       },
       {
         "azureProviders": [
-          "Microsoft.EventHub",
           "Microsoft.DataFactory"
         ],
-        "defaultLocation": "5",
+        "defaultLocationName": "eastus",
         "displayname": "Login",
         "name": "$SiteCommon$/pages-gallery/azure-login.html",
         "pricingCalculatorUrl": "$translate(INIT_NEWS_PRICING_CALCULATOR)",
@@ -39,7 +39,8 @@
         "showNewSqlOption": true,
         "sqlInstance": "NewSql",
         "subtitle": "$translate(INIT_SQL_SUBTITLE_IOT_CDE)",
-        "title": "$translate(INIT_SQL_TITLE)"
+        "title": "$translate(INIT_SQL_TITLE)",
+        "sqlLocation": "eastus"
       },
       {
         "displayCompletionNotification": false,
@@ -55,7 +56,7 @@
         }
       },
       {
-        "asDatabase": "continuousDataExportDB",
+        // "asDatabase": "continuousDataExportDB",
         "datastoreEntriesToValidate": [
           "AzureToken",
           "SqlConnectionString"
@@ -63,12 +64,9 @@
         "displayname": "Deploy",
         "DoNotWait": "$save('1')",
         "filename": "$save('IoT-Continuous-Data-Export-Template.pbix')",
-        "finishedActionName": "Microsoft-GetHistoricalData",
         "name": "$SiteCommon$/pages-gallery/progress.html",
-        "showCounts": true,
-        "successMessage": "$translate(INIT_AAL_DOWNLOAD)",
-        "successMessage2": "$translate(INIT_AAL_DOWNLOAD_2)",
-        "targetSchema": "bpst_aal",
+        "showCounts": false,
+        "successMessage": "$translate(INIT_IOT_CDE_SUCCEEDED)",
         "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
       }
     ],
@@ -78,7 +76,8 @@
         "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
         "name": "Microsoft-DeploySQLScripts",
         "SqlServerIndex": "0",
-        "SqlScriptsFolder": "Database"
+        "SqlScriptsFolder": "Database",
+        "enableTransaction":  false
       },
       {
         "AzureArmFile": "Service/ARM/functions.json",
@@ -96,64 +95,16 @@
       },
       {
         "ZipFile": "Service/Data/functions.zip",
-        "displayname": "$translate(INIT_ACTION_GETTING_EVENTHUB_KEYS)",
+        "displayname": "$translate(INIT_ACTION_DEPLOYING_FUNCTION_CODE)",
         "name": "Microsoft-DeployIoTCDEFunctionCode"
       },
       {
-        "displayname": "$translate(INIT_ACTION_EXPORT_ACTIVITY_LOG)",
-        "name": "Microsoft-ExportActivityLogToEventHub"
-      },
-      {
-        "AzureArmFile": "Service/ARM/StreamAnalytics.json",
-        "AzureArmParametersUnique": {
-          "nameStreamAnalyticsJob": "bpst-al-saj-"
+        "AzureArmFile": "Service/ARM/datafactory.json",
+        "AzureArmParametersUniquePrefix": {
+          "factoryName": "test"
         },
-        "displayname": "$translate(INIT_ACTION_CREATING_STREAM_ANALYTICS_JOB)",
-        "name": "Microsoft-DeployAzureArmTemplate"
-      },
-      {
-        "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_INPUT_EVENTHUB)",
-        "inputSerialization": "Json",
-        "name": "Microsoft-AddStreamAnalyticsInputEventHub",
-        "nameStreamAnalyticsInputEventHub": "EventHubInput"
-      },
-      {
-        "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_OUTPUT_SQL)",
-        "name": "Microsoft-AddStreamAnalyticsOutputSql",
-        "streamAnalyticsOutputSql": {
-          "name": "ServiceHealthOutput",
-          "table": "bpst_aal.ServiceHealthData"
-        }
-      },
-      {
-        "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_OUTPUT_SQL)",
-        "name": "Microsoft-AddStreamAnalyticsOutputSql",
-        "streamAnalyticsOutputSql": {
-          "name": "AdministrativeOutput",
-          "table": "bpst_aal.AdministrativeData"
-        }
-      },
-      {
-        "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_JSON_HELPER)",
-        "name": "Microsoft-SetStreamAnalyticsJSONFunction"
-      },
-      {
-        "displayname": "$translate(INIT_ACTION_CONFIGURING_STREAM_ANALYTICS_QUERY)",
-        "name": "Microsoft-SetStreamAnalyticsQuery"
-      },
-      {
-        "displayname": "$translate(INIT_ACTION_VERIFY_EVENT_HUB)",
-        "name": "Microsoft-VerifyLogProfileEventHub"
-      },
-      {
-        "displayname": "$translate(INIT_ACTION_DEPLOYING_STREAM_ANALYTICS)",
-        "name": "Microsoft-ToggleStreamAnalytics"
-      },
-      {
-        "displayname": "$translate(INIT_ACTION_GET_HISTORICAL_ACTIVITY_LOG_DATA)",
-        "name": "Microsoft-GetDataPullStatus",
-        "FinishedActionName": "Microsoft-GetHistoricalData",
-        "TargetSchema": "bpst_aal"
+        "displayname": "$translate(INIT_ACTION_CREATING_DATA_FACTORY)",
+        "name": "Microsoft-DeployIoTCDEDataFactory"
       }
     ]
   }

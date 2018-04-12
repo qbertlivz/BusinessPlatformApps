@@ -7,14 +7,14 @@
       "metadata": "Data Factory Name",
       "defaultValue": "jeffscratch"
     },
-    "database_connectionString": {
+    "databaseConnectionString": {
       "type": "secureString",
       "metadata": "Secure string for 'connectionString' of 'SQL'",
       "defaultValue": "don't know yet"
     }
   },
   "variables": {
-    "factoryName": "[concat(uniquestring(resourceGroup().id), '-', parameters('factoryName'))]",
+    "factoryName": "[parameters('factoryName')]",
     "factoryId": "[concat('Microsoft.DataFactory/factories/', variables('factoryName'))]",
     "leftBracket": "["
   },
@@ -35,7 +35,7 @@
             "typeProperties": {
               "connectionString": {
                 "type": "SecureString",
-                "value": "[parameters('database_connectionString')]"
+                "value": "[parameters('databaseConnectionString')]"
               }
             }
           },

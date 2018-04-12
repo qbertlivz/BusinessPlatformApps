@@ -99,7 +99,7 @@ CREATE TABLE [stage].[Devices](
 	[name] [nvarchar](200) NOT NULL,
 	[description] [text] NULL,
 	[simulated] [bit] NOT NULL,
-	PRIMARY KEY CLUSTERED 
+	CONSTRAINT [Pk_Dim_Devices] PRIMARY KEY CLUSTERED 
 	(
 		[id] ASC
 	),
@@ -109,6 +109,10 @@ CREATE TABLE [stage].[Devices](
 	)
 );
 
+ALTER TABLE [stage].[Devices]
+ENABLE CHANGE_TRACKING  
+WITH (TRACK_COLUMNS_UPDATED = ON);
+
 CREATE TABLE [stage].[MeasurementDefinitions](
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[modelId] [nvarchar](50) NOT NULL,
@@ -117,11 +121,15 @@ CREATE TABLE [stage].[MeasurementDefinitions](
 	[kind] [nvarchar](50) NOT NULL,
 	[dataType] [nvarchar](100) NOT NULL,
 	[name] [nvarchar](200) NOT NULL,
-	PRIMARY KEY CLUSTERED 
+	CONSTRAINT [Pk_Dim_MeasurementDefinitions] PRIMARY KEY CLUSTERED 
 	(
 		[id] ASC
 	)
 );
+
+ALTER TABLE [stage].[MeasurementDefinitions]
+ENABLE CHANGE_TRACKING  
+WITH (TRACK_COLUMNS_UPDATED = ON);
 
 CREATE TABLE [stage].[Measurements](
 	[id] [int] IDENTITY(1,1) NOT NULL,
@@ -131,11 +139,15 @@ CREATE TABLE [stage].[Measurements](
 	[numericValue] [decimal](30, 10) NULL,
 	[stringValue] [nvarchar](max) NULL,
 	[booleanValue] [bit] NULL,
-	PRIMARY KEY CLUSTERED 
+	CONSTRAINT [Pk_Dim_Measurements] PRIMARY KEY CLUSTERED 
 	(
 		[id] ASC
 	)
 );
+
+ALTER TABLE [stage].[Measurements]
+ENABLE CHANGE_TRACKING  
+WITH (TRACK_COLUMNS_UPDATED = ON);
 
 CREATE TABLE [stage].[Models](
 	[id] [int] IDENTITY(1,1) NOT NULL,
@@ -144,11 +156,15 @@ CREATE TABLE [stage].[Models](
 	[name] [nvarchar](1000) NOT NULL,
 	[description] [text] NULL,
 	[thumbnail] [nvarchar](1000) NULL,
-	PRIMARY KEY CLUSTERED 
+	CONSTRAINT [Pk_Dim_Models] PRIMARY KEY CLUSTERED 
 	(
 		[id] ASC
 	)
 );
+
+ALTER TABLE [stage].[Models]
+ENABLE CHANGE_TRACKING  
+WITH (TRACK_COLUMNS_UPDATED = ON);
 
 CREATE TABLE [stage].[Properties](
 	[id] [int] IDENTITY(1,1) NOT NULL,
@@ -159,11 +175,15 @@ CREATE TABLE [stage].[Properties](
 	[numericValue] [decimal](30, 10) NULL,
 	[stringValue] [nvarchar](max) NULL,
 	[booleanValue] [bit] NULL,
-	PRIMARY KEY CLUSTERED 
+	CONSTRAINT [Pk_Dim_Properties] PRIMARY KEY CLUSTERED 
 	(
 		[id] ASC
 	)
 );
+
+ALTER TABLE [stage].[Properties]
+ENABLE CHANGE_TRACKING  
+WITH (TRACK_COLUMNS_UPDATED = ON);
 
 CREATE TABLE [stage].[PropertyDefinitions](
 	[id] [int] IDENTITY(1,1) NOT NULL,
@@ -174,11 +194,15 @@ CREATE TABLE [stage].[PropertyDefinitions](
 	[dataType] [nvarchar](100) NOT NULL,
 	[name] [nvarchar](200) NOT NULL,
 	[optional] [bit] NULL,
-	PRIMARY KEY CLUSTERED 
+	CONSTRAINT [Pk_Dim_PropertyDefinitions] PRIMARY KEY CLUSTERED 
 	(
 		[id] ASC
 	)
 );
+
+ALTER TABLE [stage].[PropertyDefinitions]
+ENABLE CHANGE_TRACKING  
+WITH (TRACK_COLUMNS_UPDATED = ON);
 
 CREATE TABLE [dbo].[date](
 	[date_key] [int] NOT NULL,
@@ -197,8 +221,8 @@ CREATE TABLE [dbo].[date](
 	[year] [smallint] NOT NULL,
 	[yearmo] [int] NOT NULL,
 	[same_day_year_ago_date] [date] NOT NULL,
- CONSTRAINT [pk_dim_date] PRIMARY KEY CLUSTERED 
-(
-	[date_key] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+	CONSTRAINT [pk_dim_date] PRIMARY KEY CLUSTERED 
+	(
+		[date_key] ASC
+	)
 );

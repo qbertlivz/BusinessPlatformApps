@@ -15,6 +15,7 @@ export class AzureLogin extends ViewModelBase {
     bingtermsofuse: string = '';
     connectionType: AzureConnection = AzureConnection.Organizational;
     defaultLocation: number = 5;
+    defaultLocationName: string = '';
     oauthType: string = '';
     pricingCalculator: string = '';
     pricingCalculatorUrl: string = '';
@@ -68,7 +69,13 @@ export class AzureLogin extends ViewModelBase {
 
         let locationsResponse: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetLocations');
         if (locationsResponse.IsSuccess) {
-            this.MS.DataStore.addToDataStore('SelectedLocation', locationsResponse.Body.value[this.defaultLocation], DataStoreType.Public);
+            if (this.defaultLocationName) {
+                let locationList: any[] = locationsResponse.Body.value;
+                this.MS.DataStore.addToDataStore('SelectedLocation', locationList.find(x => x.Name === this.defaultLocationName), DataStoreType.Public);
+            }
+            else {
+                this.MS.DataStore.addToDataStore('SelectedLocation', locationsResponse.Body.value[this.defaultLocation], DataStoreType.Public);
+            }
         }
 
         isSuccess = await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-CreateResourceGroup');

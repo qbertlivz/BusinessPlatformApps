@@ -68,6 +68,7 @@
     AX_TITLE: `Confirm connection to Dynamics 365 for Finance and Operations`,
     AX_SUBTITLE: `Confirm the connection to Dynamics 365 for Finance and Operations so we can start pulling data.`,
     AX_UPDATE_CONFIGURATION: `Updating entities`,
+    AX_ACTION_COPYDATA: `Copying Data`,
     BYOE_CUSTOMIZE_ADD_ENTITY: `Add Entity`,
     BYOE_CUSTOMIZE_CSV_INVALID: `The uploaded .csv file is in an invalid state`,
     BYOE_CUSTOMIZE_EDIT_NAME: `Edit Name:`,

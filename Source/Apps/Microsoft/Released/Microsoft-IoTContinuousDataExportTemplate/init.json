@@ -31,7 +31,11 @@
         "pricingUrl": "$translate(INIT_IOT_CDE_PRICING_URL)"
       },
       {
-        "displayname": "Target",
+        "displayname": "Blob Storage",
+        "name": "$SiteCommon$/pages-gallery/select-storage.html"
+      },
+      {
+        "displayname": "Database",
         "isAzureSql": true,
         "name": "$SiteCommon$/pages-gallery/sql.html",
         "newSqlDatabase": "continuousDataExportDB",
@@ -77,7 +81,7 @@
         "name": "Microsoft-DeploySQLScripts",
         "SqlServerIndex": "0",
         "SqlScriptsFolder": "Database",
-        "enableTransaction":  false
+        "enableTransaction": false
       },
       {
         "AzureArmFile": "Service/ARM/functions.json",

@@ -245,6 +245,7 @@
     <Compile Include="Common\ConsentConnectionToLogicApp.cs" />
     <Compile Include="Common\ExistsResourceGroup.cs" />
     <Compile Include="Common\DeployNotifierLogicApp.cs" />
+    <Compile Include="Common\GetAzureStorages.cs" />
     <Compile Include="Common\GetEmail.cs" />
     <Compile Include="Common\VerifyConnectionToLogicApp.cs" />
     <Compile Include="IoTContinuousDataExport\DeployIoTCDEDataFactory.cs" />

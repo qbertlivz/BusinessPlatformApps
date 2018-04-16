@@ -66,7 +66,9 @@ export class Customize extends ViewModelBase {
         if (queryParam) {
             let token = this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.CODE, queryParam);
             if (token === '') {
-                this.MS.ErrorService.set(this.MS.Translate.AX_LOGIN_UNKNOWN_ERROR, this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.ERROR_DESCRIPTION, queryParam));
+                if (this.axBaseUrl != this.MS.DataStore.getValue('ValidatedAxInstanceName')) {
+                    this.MS.ErrorService.set(this.MS.Translate.AX_LOGIN_UNKNOWN_ERROR, this.MS.UtilityService.getQueryParameterFromUrl(QueryParameter.ERROR_DESCRIPTION, queryParam));
+                }
             } else {
                 if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-GetAzureToken', { code: token, oauthType: openAuthorizationType })) {
                     await callback();
@@ -87,7 +89,11 @@ export class Customize extends ViewModelBase {
         if (this.axBaseUrl === this.MS.DataStore.getValue('ValidatedAxInstanceName')) {
             this.validationText = this.MS.Translate.NAVIGATION_SUCCESSFULLY_CONNECTED;
             this.setValidated();            
-        } else {
+        } else {            
+            let connecttodynamics365: any = this.MS.UtilityService.getItem('connecttodynamics365');
+            connecttodynamics365.axBaseUrl = this.axBaseUrl;
+            this.MS.UtilityService.saveItem('connecttodynamics365', connecttodynamics365);
+
             this.isValidated = false;
             this.onInvalidate();
         }

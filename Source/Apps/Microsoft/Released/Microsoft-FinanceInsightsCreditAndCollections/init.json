@@ -29,6 +29,12 @@
           "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
         }
       ],
-        "Actions": []
+      "Actions": [
+        {
+          "DeploymentName": "AxOdataAction",
+          "displayname": "$translate(AX_ACTION_COPYDATA)",
+          "name": "Microsoft-TriggerCDSAIntegrationJob"
+        }
+      ]
     }
 }

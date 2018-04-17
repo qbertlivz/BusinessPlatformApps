@@ -88,14 +88,14 @@ BEGIN
         (
             CASE
                 WHEN stage.Devices.modelId IS NOT NULL AND stage.Devices.modelVersion IS NOT NULL
-                THEN (stage.Devices.modelId + '/' + stage.Devices.modelId)
+                THEN (stage.Devices.modelId + '/' + stage.Devices.modelVersion)
                 ELSE NULL
             END
         ) AS model,
         (
             CASE
                 WHEN stage.Devices.modelId IS NOT NULL AND stage.Devices.modelVersion IS NOT NULL
-                THEN (stage.Devices.modelId + '/' + stage.Devices.modelId + '/' + stage.Measurements.field)
+                THEN (stage.Devices.modelId + '/' + stage.Devices.modelVersion + '/' + stage.Measurements.field)
                 ELSE NULL
             END
         ) AS definition,

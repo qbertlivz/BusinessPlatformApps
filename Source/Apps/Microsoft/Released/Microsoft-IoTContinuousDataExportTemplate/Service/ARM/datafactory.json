@@ -726,7 +726,7 @@
           "type": "Microsoft.DataFactory/factories/triggers",
           "apiVersion": "2017-09-01-preview",
           "properties": {
-            "runtimeState": "Stopped",
+            "runtimeState": "Started",
             "type": "TumblingWindowTrigger",
             "typeProperties": {
               "frequency": "Hour",

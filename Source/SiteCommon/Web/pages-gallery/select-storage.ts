@@ -23,19 +23,7 @@ export class SelectStorage extends ViewModelBase {
                 this.selectedStorageName = this.storagesList[0].StorageAccountName;
                 this.containersList = this.storagesList[0].Containers;
 
-                if (this.selectedContainerName && this.containersList.length > 0) {
-                    var container = this.containersList.find(x => x.Name === this.selectedContainerName);
-                    if (!container) {
-                        this.isValidated = true;
-                        return;
-                    }
-                }
-
                 this.selectedContainerName = this.containersList.length === 0 ? '' : this.containersList[0].Name;
-
-                if (this.selectedStorageName && this.selectedContainerName) {
-                    this.isValidated = true;
-                }
             }
         }
     }
@@ -43,6 +31,15 @@ export class SelectStorage extends ViewModelBase {
     async changeContainers(): Promise<void> {
         var storage = this.storagesList.find(x => x.StorageAccountName === this.selectedStorageName);
         this.containersList = storage.Containers;
+
+        if (this.selectedContainerName && this.containersList.length > 0) {
+            var container = this.containersList.find(x => x.Name === this.selectedContainerName);
+            if (container) {
+                this.isValidated = true;
+                return;
+            }
+        }
+
         this.selectedContainerName = this.containersList.length === 0 ? '' : this.containersList[0].Name;
 
         if (this.selectedStorageName && this.selectedContainerName) {
@@ -61,12 +58,17 @@ export class SelectStorage extends ViewModelBase {
         if (this.storagesList.length === 0) {
             await this.getStorages();
         }
+
+        if (this.selectedStorageName && this.selectedContainerName) {
+            this.isValidated = true;
+        }
     }
 
     async onNavigatingNext(): Promise<boolean> {
         let isSuccess: boolean = true;
 
         this.MS.DataStore.addToDataStore('SelectedStorageAccount', this.storagesList.find(x => x.StorageAccountName === this.selectedStorageName), DataStoreType.Public);
+        this.MS.DataStore.addToDataStore('SelectedStorageAccountName', this.selectedStorageName, DataStoreType.Public);
         this.MS.DataStore.addToDataStore('SelectedContainer', this.selectedContainerName, DataStoreType.Public);
 
         return isSuccess;

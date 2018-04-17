@@ -27,14 +27,13 @@ namespace Microsoft.Deployment.Actions.AzureCustom.IoTContinuousDataExport
             string tokenAzure = request.DataStore.GetJson("AzureToken", "access_token");
 
             string databaseConnectionString = request.DataStore.GetValue("SqlConnectionString");
+            string dataFactoryName = request.DataStore.GetValue("dataFactoryName");
 
             string deploymentName = request.DataStore.GetValue("DeploymentName") ?? request.DataStore.CurrentRoute;
 
-            var armParameters = request.DataStore.GetJson("AzureArmParameters");
-            var armParametersUniquePrefix = request.DataStore.GetJson("AzureArmParametersUniquePrefix");
-
             var payload = new AzureArmParameterGenerator();
 
+            var armParameters = request.DataStore.GetJson("AzureArmParameters");
             if (armParameters != null)
             {
                 foreach (var prop in armParameters.Children())
@@ -46,36 +45,13 @@ namespace Microsoft.Deployment.Actions.AzureCustom.IoTContinuousDataExport
                 }
             }
 
-            var uniqueValue = request.DataStore.GetValue("UniquePrefix", DataStoreType.Private);
-            if (string.IsNullOrWhiteSpace(uniqueValue))
-            {
-                var resourceManagerId = $"/subscriptions/{idSubscription}/resourceGroups/{nameResourceGroup}";
-                uniqueValue = GetUniqueString(resourceManagerId);
-                request.DataStore.AddToDataStore("UniquePrefix", uniqueValue, DataStoreType.Private);
-            }
-
-            if (armParametersUniquePrefix != null)
-            {
-                foreach (var prop in armParametersUniquePrefix.Children())
-                {
-                    string key = prop.Path.Split('.').Last();
-                    string value = prop.First().ToString();
-
-                    var valueUnique = $"{uniqueValue}{value}";
-                    payload.AddStringParam(key, valueUnique);
-
-                    request.DataStore.AddToDataStore(key, valueUnique, DataStoreType.Private);
-                }
-            }
-
             payload.AddStringParam("databaseConnectionString", databaseConnectionString);
+            payload.AddStringParam("factoryName", dataFactoryName);
 
             var armTemplate = JsonUtility.GetJObjectFromJsonString(System.IO.File.ReadAllText(Path.Combine(request.Info.App.AppFilePath, request.DataStore.GetValue("AzureArmFile"))));
             var armParamTemplate = JsonUtility.GetJObjectFromObject(payload.GetDynamicObject());
             armTemplate.Remove("parameters");
             armTemplate.Add("parameters", armParamTemplate["parameters"]);
-
-            ResourceManagementClient client = new ResourceManagementClient(new TokenCloudCredentials(idSubscription, tokenAzure));
 
             var deployment = new Microsoft.Azure.Management.Resources.Models.Deployment()
             {
@@ -86,6 +62,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.IoTContinuousDataExport
                 }
             };
 
+            ResourceManagementClient client = new ResourceManagementClient(new TokenCloudCredentials(idSubscription, tokenAzure));
             var validate = await client.Deployments.ValidateAsync(nameResourceGroup, deploymentName, deployment, new CancellationToken());
             if (!validate.IsValid)
             {
@@ -94,8 +71,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.IoTContinuousDataExport
             }
 
             var deploymentItem = await client.Deployments.CreateOrUpdateAsync(nameResourceGroup, deploymentName, deployment, new CancellationToken());
-
             ActionResponse r = await WaitForAction(client, nameResourceGroup, deploymentName);
+
             request.DataStore.AddToDataStore("ArmOutput", r.DataStore.GetValue("ArmOutput"), DataStoreType.Public);
             return r;
         }

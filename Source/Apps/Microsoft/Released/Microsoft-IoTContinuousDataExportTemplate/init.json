@@ -17,7 +17,8 @@
         ],
         "name": "$SiteCommon$/pages-gallery/getting-started.html",
         "subtitle": "$translate(INIT_IOT_CDE_SUBTITLE)",
-        "templateName": "$translate(INIT_IOT_CDE_TITLE)"
+        "templateName": "$translate(INIT_IOT_CDE_TITLE)",
+        "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
       },
       {
         "azureProviders": [
@@ -28,7 +29,10 @@
         "name": "$SiteCommon$/pages-gallery/azure-login.html",
         "pricingCalculatorUrl": "$translate(INIT_NEWS_PRICING_CALCULATOR)",
         "pricingCost": "$translate(INIT_IOT_CDE_PRICING_COST)",
-        "pricingUrl": "$translate(INIT_IOT_CDE_PRICING_URL)"
+        "pricingUrl": "$translate(INIT_IOT_CDE_PRICING_URL)",
+        "functionName": "$save('iot-cde-func-' + this.MS.DataStore.getValue('uniqueId'))",
+        "functionStorageAccountName": "$save('func' + this.MS.DataStore.getValue('uniqueId'))",
+        "dataFactoryName": "$save('iot-cde-dataf-'+ this.MS.DataStore.getValue('uniqueId'))"
       },
       {
         "displayname": "Blob Storage",
@@ -56,22 +60,24 @@
           "Resource Group": "$(this.MS.DataStore.getValue('SelectedResourceGroup'))",
           "Target Server": "$(this.MS.DataStore.getValue('Server'))",
           "Target Database": "$(this.MS.DataStore.getValue('Database'))",
-          "Target Username": "$(this.MS.DataStore.getValue('Username'))"
+          "Target Username": "$(this.MS.DataStore.getValue('Username'))",
+          "Blob Storage": "$(this.MS.DataStore.getValue('SelectedStorageAccountName'))",
+          "Blob Container": "$(this.MS.DataStore.getValue('SelectedContainer'))",
+          "Function Name": "$(this.MS.DataStore.getValue('functionName'))",
+          "DataFactory Name": "$(this.MS.DataStore.getValue('dataFactoryName'))"
         }
       },
       {
-        // "asDatabase": "continuousDataExportDB",
         "datastoreEntriesToValidate": [
           "AzureToken",
           "SqlConnectionString"
         ],
         "displayname": "Deploy",
-        "DoNotWait": "$save('1')",
         "filename": "$save('IoT-Continuous-Data-Export-Template.pbix')",
         "name": "$SiteCommon$/pages-gallery/progress.html",
         "showCounts": false,
         "successMessage": "$translate(INIT_IOT_CDE_SUCCEEDED)",
-        "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
+        "successMessage2": ""
       }
     ],
 
@@ -85,28 +91,21 @@
       },
       {
         "AzureArmFile": "Service/ARM/functions.json",
-        "AzureArmParameters": {
+        /*"AzureArmParameters": {
           "sku": "Standard",
           "workerSize": "Small",
-          "blobStorageConnectionString": "DefaultEndpointsProtocol=https;AccountName=jeffscratch;AccountKey=QRYrElr9AnKXNvP7MXUHA4E0IjkyeBU3n64jKjyZcOjkE8MDNSH6BJ2sOPgTrOpfErSPUIf6xIrrO03I9uD4Lg=="
-        },
-        "AzureArmParametersUniquePrefix": {
-          "siteName": "-continuousdataexport",
-          "functionStorage": "function"
-        },
+          "blobStorageConnectionString": ""
+        },*/
         "displayname": "$translate(INIT_ACTION_CREATING_FUNCTION)",
         "name": "Microsoft-DeployIoTCDEAzureFunction"
       },
       {
-        "ZipFile": "Service/Data/functions.zip",
+        "baseFunctionFolder": "service/data",
         "displayname": "$translate(INIT_ACTION_DEPLOYING_FUNCTION_CODE)",
         "name": "Microsoft-DeployIoTCDEFunctionCode"
       },
       {
         "AzureArmFile": "Service/ARM/datafactory.json",
-        "AzureArmParametersUniquePrefix": {
-          "factoryName": "test"
-        },
         "displayname": "$translate(INIT_ACTION_CREATING_DATA_FACTORY)",
         "name": "Microsoft-DeployIoTCDEDataFactory"
       }

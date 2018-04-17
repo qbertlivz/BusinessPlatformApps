@@ -4,7 +4,7 @@
   "parameters": {
 
     "siteName": {
-      "defaultValue": "test",
+      "defaultValue": "",
       "type": "string"
     },
 
@@ -13,7 +13,7 @@
       "type": "securestring"
     },
 
-    "functionStorage": {
+    "functionStorageAccountName": {
       "defaultValue": "",
       "type": "string"
     },
@@ -21,7 +21,7 @@
     "databaseConnectionString": {
       "defaultValue": "don't know yet",
       "type": "securestring"
-    },
+    }/*,
 
     "sku": {
       "defaultValue": "Standard",
@@ -31,12 +31,12 @@
     "workerSize": {
       "defaultValue": "Small",
       "type": "string"
-    }
+    }*/
   },
   "variables": {
     "functionAppName": "[parameters('siteName')]",
     "hostingPlanName": "[concat(parameters('siteName'), '-plan')]",
-    "storageAccountName": "[parameters('functionStorage')]",
+    "storageAccountName": "[parameters('functionStorageAccountName')]",
     "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
   },
   "resources": [
@@ -50,6 +50,7 @@
         "name": "Standard_LRS"
       }
     },
+    /*
     {
       "type": "Microsoft.Web/serverfarms",
       "apiVersion": "2015-04-01",
@@ -62,8 +63,8 @@
         "hostingEnvironment": "",
         "numberOfWorkers": 1
       }
-    },
-    /*{
+    },*/
+    {
       "type": "Microsoft.Web/serverfarms",
       "apiVersion": "2015-04-01",
       "name": "[variables('hostingPlanName')]",
@@ -73,7 +74,7 @@
         "computeMode": "Dynamic",
         "sku": "Dynamic"
       }
-    },*/
+    },
     {
       "apiVersion": "2015-08-01",
       "type": "Microsoft.Web/sites",
@@ -87,7 +88,7 @@
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
         "siteConfig": {
-          "alwaysOn": true,
+          // "alwaysOn": true,
           "appSettings": [
             {
               "name": "AzureWebJobsDashboard",
@@ -120,6 +121,10 @@
             {
               "name": "WEBSITE_NODE_DEFAULT_VERSION",
               "value": "6.5.0"
+            },
+            {
+              "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
+              "value": "true"
             }
           ]
         }

@@ -12,22 +12,37 @@ namespace Microsoft.Deployment.Tests.Actions.IoTContinuousDataExportTests
         [TestMethod]
         public async Task CreateDataFactory()
         {
-            var dataStore = await TestManager.GetDataStore(
-                force: true,
-                subscriptionId: "479b3e1f-a2af-4b91-b118-02a43df6d293", resourceGroup: "bentestgroup2", region: "eastus");
+            var dataStore = await TestManager.GetDataStore(force: true,
+                subscriptionId: "479b3e1f-a2af-4b91-b118-02a43df6d293", resourceGroup: "bentestgroup4", region: "eastus");
 
             // Deploy Data Factory
             dataStore.AddToDataStore("DeploymentName", "DataFactoryDeploymentTest");
 
+            string valueUnique = GetUniqueString(dataStore.GetJson("SelectedSubscription", "SubscriptionId"));
+            dataStore.AddToDataStore("uniqueId", valueUnique);
+
             dataStore.AddToDataStore("AzureArmFile", "Service/ARM/datafactory.json");
             dataStore.AddToDataStore("SqlConnectionString", "test connection string");
 
-            JObject functionParametersPrefix = new JObject();
-            functionParametersPrefix.Add("factoryName", "test");
-            dataStore.AddToDataStore("AzureArmParametersUniquePrefix", functionParametersPrefix);
+            dataStore.AddToDataStore("dataFactoryName", $"iot-cde-dataf-{valueUnique}");
 
             var response = TestManager.ExecuteAction("Microsoft-DeployIoTCDEDataFactory", dataStore, "Microsoft-IoTContinuousDataExportTemplate");
             Assert.IsTrue(response.IsSuccess);
+        }
+
+        private static string GetUniqueString(string id, int length = 10)
+        {
+            string result = "";
+            var buffer = System.Text.Encoding.UTF8.GetBytes(id);
+            var hashArray = new System.Security.Cryptography.SHA512Managed().ComputeHash(buffer);
+            for (int i = 1; i <= length; i++)
+            {
+                var b = hashArray[i];
+                var c = Convert.ToChar((b % 26) + (byte)'a');
+                result = result + c;
+            }
+
+            return result;
         }
     }
 }

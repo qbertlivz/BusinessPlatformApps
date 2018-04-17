@@ -33,8 +33,8 @@ CREATE TABLE [analytics].[MeasurementDefinitions](
 CREATE TABLE [analytics].[Measurements](
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[deviceId] [nvarchar](200) NOT NULL,
-	[model] [nvarchar](101) NOT NULL,
-	[definition] [nvarchar](357) NOT NULL,
+	[model] [nvarchar](101) NULL,
+	[definition] [nvarchar](357) NULL,
 	[timestamp] [datetime] NOT NULL,
 	[numericValue] [decimal](30, 10) NULL,
 	[stringValue] [nvarchar](max) NULL,
@@ -111,7 +111,7 @@ CREATE TABLE [stage].[Devices](
 
 ALTER TABLE [stage].[Devices]
 ENABLE CHANGE_TRACKING  
-WITH (TRACK_COLUMNS_UPDATED = ON);
+WITH (TRACK_COLUMNS_UPDATED = OFF);
 
 CREATE TABLE [stage].[MeasurementDefinitions](
 	[id] [int] IDENTITY(1,1) NOT NULL,
@@ -129,7 +129,7 @@ CREATE TABLE [stage].[MeasurementDefinitions](
 
 ALTER TABLE [stage].[MeasurementDefinitions]
 ENABLE CHANGE_TRACKING  
-WITH (TRACK_COLUMNS_UPDATED = ON);
+WITH (TRACK_COLUMNS_UPDATED = OFF);
 
 CREATE TABLE [stage].[Measurements](
 	[id] [int] IDENTITY(1,1) NOT NULL,
@@ -147,7 +147,7 @@ CREATE TABLE [stage].[Measurements](
 
 ALTER TABLE [stage].[Measurements]
 ENABLE CHANGE_TRACKING  
-WITH (TRACK_COLUMNS_UPDATED = ON);
+WITH (TRACK_COLUMNS_UPDATED = OFF);
 
 CREATE TABLE [stage].[Models](
 	[id] [int] IDENTITY(1,1) NOT NULL,
@@ -164,7 +164,7 @@ CREATE TABLE [stage].[Models](
 
 ALTER TABLE [stage].[Models]
 ENABLE CHANGE_TRACKING  
-WITH (TRACK_COLUMNS_UPDATED = ON);
+WITH (TRACK_COLUMNS_UPDATED = OFF);
 
 CREATE TABLE [stage].[Properties](
 	[id] [int] IDENTITY(1,1) NOT NULL,
@@ -183,7 +183,7 @@ CREATE TABLE [stage].[Properties](
 
 ALTER TABLE [stage].[Properties]
 ENABLE CHANGE_TRACKING  
-WITH (TRACK_COLUMNS_UPDATED = ON);
+WITH (TRACK_COLUMNS_UPDATED = OFF);
 
 CREATE TABLE [stage].[PropertyDefinitions](
 	[id] [int] IDENTITY(1,1) NOT NULL,
@@ -202,7 +202,7 @@ CREATE TABLE [stage].[PropertyDefinitions](
 
 ALTER TABLE [stage].[PropertyDefinitions]
 ENABLE CHANGE_TRACKING  
-WITH (TRACK_COLUMNS_UPDATED = ON);
+WITH (TRACK_COLUMNS_UPDATED = OFF);
 
 CREATE TABLE [dbo].[date](
 	[date_key] [int] NOT NULL,

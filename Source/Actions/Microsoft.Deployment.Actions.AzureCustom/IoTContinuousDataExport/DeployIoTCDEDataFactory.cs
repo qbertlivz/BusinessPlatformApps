@@ -2,6 +2,7 @@
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -74,6 +75,24 @@ namespace Microsoft.Deployment.Actions.AzureCustom.IoTContinuousDataExport
             ActionResponse r = await WaitForAction(client, nameResourceGroup, deploymentName);
 
             request.DataStore.AddToDataStore("ArmOutput", r.DataStore.GetValue("ArmOutput"), DataStoreType.Public);
+
+            if (!r.IsSuccess)
+            {
+                return r;
+            }
+
+            AzureHttpClient httpClient = new AzureHttpClient(tokenAzure, idSubscription, nameResourceGroup);
+            var response = await httpClient.ExecuteWithSubscriptionAndResourceGroupAsync(
+                HttpMethod.Post,
+                $"providers/Microsoft.DataFactory/factories/{dataFactoryName}/triggers/DefaultTrigger/start",
+                "2017-09-01-preview",
+                string.Empty);
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                return new ActionResponse(ActionStatus.Failure, error, null, DefaultErrorCodes.DefaultErrorCode, "Active trigger");
+            }
+
             return r;
         }
 

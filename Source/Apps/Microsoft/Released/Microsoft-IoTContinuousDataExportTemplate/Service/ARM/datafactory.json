@@ -722,24 +722,34 @@
           ]
         },
         {
-          "name": "[concat(variables('factoryName'), '/Hourly')]",
+          "name": "[concat(parameters('factoryName'), '/DefaultTrigger')]",
           "type": "Microsoft.DataFactory/factories/triggers",
           "apiVersion": "2017-09-01-preview",
           "properties": {
             "runtimeState": "Started",
-            "type": "TumblingWindowTrigger",
+            "pipelines": [
+              {
+                "pipelineReference": {
+                  "referenceName": "ETL",
+                  "type": "PipelineReference"
+                },
+                "parameters": {}
+              }
+            ],
+            "type": "ScheduleTrigger",
             "typeProperties": {
-              "frequency": "Hour",
-              "interval": 1,
-              "startTime": "2018-01-23T19:00:00Z",
-              "delay": "00:00:00",
-              "maxConcurrency": 1,
-              "retryPolicy": {
-                "intervalInSeconds": 30
+              "recurrence": {
+                "frequency": "Minute",
+                "interval": 15,
+                "startTime": "2018-04-19T23:35:00Z",
+                "timeZone": "UTC"
               }
             }
           },
-          "dependsOn": [ "[variables('factoryName')]" ]
+          "dependsOn": [
+            "[variables('factoryName')]",
+            "[concat(variables('factoryId'), '/pipelines/ETL')]"
+          ]
         }
       ]
     }

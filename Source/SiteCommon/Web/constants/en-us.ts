@@ -475,7 +475,7 @@
     INIT_IOT_CDE_SETUP_DOC_LINK: `https://www.microsoft.com`,
     INIT_IOT_CDE_SUBTITLE: `Welcome to the Azure IoT Continuous Data Export Analytics solution template.`,
     INIT_IOT_CDE_SUCCEEDED: `Now we have successfully deployed all components.`,
-    INIT_IOT_CDE_TITLE: `Azure IoT Continouse Data Export Analytics`,
+    INIT_IOT_CDE_TITLE: `Azure IoT Continuous Data Export Analytics`,
     INIT_NEWS_DOWNLOAD: `Open the Power BI report (.pbix file) to explore your data. If you have opened your report but are not seeing any data, check back in a few hours. It could take some time to find articles. Publish the report for others to see in your Power BI workspace. You will need Power BI Desktop to open this file - download it`,
     INIT_NEWS_PRICING_CALCULATOR: `https://azure.microsoft.com/en-us/pricing/calculator/`,
     INIT_NEWS_PRICING_COST: `By clicking next and deploying the template, you authorize Microsoft to create Azure resources on your subscription and bill based on their respective pricing rates.  The approximate base cost of the Azure resources used by this template is $10 a day, and every 1,000 articles will incur an additional cost of approximately $12.  These costs are estimates only and subject to change.`,

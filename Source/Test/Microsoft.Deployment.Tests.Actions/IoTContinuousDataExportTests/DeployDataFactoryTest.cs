@@ -12,8 +12,11 @@ namespace Microsoft.Deployment.Tests.Actions.IoTContinuousDataExportTests
         [TestMethod]
         public async Task CreateDataFactory()
         {
-            var dataStore = await TestManager.GetDataStore(force: true,
-                subscriptionId: "479b3e1f-a2af-4b91-b118-02a43df6d293", resourceGroup: "bentestgroup4", region: "eastus");
+            var dataStore = await TestManager.GetDataStore(
+                force: true,
+                subscriptionId: "479b3e1f-a2af-4b91-b118-02a43df6d293", 
+                resourceGroup: "bentestgroup4", 
+                region: "eastus");
 
             // Deploy Data Factory
             dataStore.AddToDataStore("DeploymentName", "DataFactoryDeploymentTest");

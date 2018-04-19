@@ -229,7 +229,6 @@ BEGIN
 END
 GO
 
-
 CREATE PROCEDURE [dbo].[UpdateChangeTrackingVersion] 
 	@CurrentTrackingVersion BIGINT
 AS
@@ -239,3 +238,24 @@ BEGIN
 	SET [SYS_CHANGE_VERSION] = @CurrentTrackingVersion
 END
 GO
+
+CREATE TYPE dbo.MeasurementsTableType AS TABLE
+(
+	[deviceId] [nvarchar](200) NOT NULL,
+	[timestamp] [datetime] NOT NULL,
+	[field] [nvarchar](255) NOT NULL,
+	[numericValue] [decimal](30, 10) NULL,
+	[stringValue] [nvarchar](max) NULL,
+	[booleanValue] [bit] NULL
+)
+GO
+
+CREATE PROCEDURE [dbo].[InsertMeasurements]
+    @tableType dbo.MeasurementsTableType readonly
+AS
+BEGIN
+    INSERT INTO [stage].[Measurements]
+	SELECT * FROM @tableType 
+END
+GO
+

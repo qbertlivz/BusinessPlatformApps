@@ -110,21 +110,22 @@ namespace Microsoft.Deployment.Common.Helpers
                 parameters.Append($"{parameter.Key}={parameter.Value}&");
             }
 
-            string requestUri = Constants.AzureManagementApi + $"/subscriptions/{this.Subscription}/resourceGroups/{this.ResourceGroup}/{relativeUrl}{parameters.ToString()}api-version={apiVersion}";
+            string requestUri = Constants.AzureManagementApi + $"subscriptions/{this.Subscription}/resourceGroups/{this.ResourceGroup}/{relativeUrl}{parameters.ToString()}api-version={apiVersion}";
 
             return await this.ExecuteGenericRequestWithHeaderAsync(method, requestUri, body);
         }
 
         public async Task<HttpResponseMessage> ExecuteWithSubscriptionAndResourceGroupAsync(HttpMethod method, string relativeUrl, string apiVersion, string body)
         {
-            string requestUri = Constants.AzureManagementApi + $"/subscriptions/{this.Subscription}/resourceGroups/{this.ResourceGroup}/{relativeUrl}?api-version={apiVersion}";
+            
+            string requestUri = Constants.AzureManagementApi + $"subscriptions/{this.Subscription}/resourceGroups/{this.ResourceGroup}/{relativeUrl}?api-version={apiVersion}";
 
             return await this.ExecuteGenericRequestWithHeaderAsync(method, requestUri, body);
         }
 
         public async Task<HttpResponseMessage> ExecuteWithSubscriptionAsync(HttpMethod method, string relativeUrl, string apiVersion, string body)
         {
-            string requestUri = Constants.AzureManagementApi + $"/subscriptions/{this.Subscription}/{relativeUrl}?api-version={apiVersion}";
+            string requestUri = Constants.AzureManagementApi + $"subscriptions/{this.Subscription}/{relativeUrl}?api-version={apiVersion}";
 
             return await this.ExecuteGenericRequestWithHeaderAsync(method, requestUri, body);
         }

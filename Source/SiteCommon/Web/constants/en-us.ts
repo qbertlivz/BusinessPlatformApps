@@ -593,6 +593,7 @@
     REDDIT_SEARCH_AND_ENTITIES_SELECT_ENTITY: `Get started by adding a new entity or uploading a .csv file containing your entities:`,
     REDDIT_SEARCH_AND_ENTITIES_SUBTITLE: `Entities are collections of aliases organized into groups.  They generally identify the same subject, like "XBOX" or "XBOX One".  You may have up to 32 aliases across all entities.`,
     REDDIT_SEARCH_AND_ENTITIES_TITLE: `Search Entities`,
+    RESOURCE_GROUP_LOCATION: `Resource Group Location:`,
     SALESFORCE_LOGIN_PASSWORD: `Salesforce Password:`,
     SALESFORCE_LOGIN_SUBTITLE: `We now need to set up a connection to Salesforce in order to pull data.`,
     SALESFORCE_LOGIN_TITLE: `Login to Salesforce`,

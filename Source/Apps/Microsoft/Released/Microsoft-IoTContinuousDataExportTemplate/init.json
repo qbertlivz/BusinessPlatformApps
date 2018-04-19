@@ -32,7 +32,9 @@
         "pricingUrl": "$translate(INIT_IOT_CDE_PRICING_URL)",
         "functionName": "$save('iot-cde-func-' + this.MS.DataStore.getValue('uniqueId'))",
         "functionStorageAccountName": "$save('func' + this.MS.DataStore.getValue('uniqueId'))",
-        "dataFactoryName": "$save('iot-cde-dataf-'+ this.MS.DataStore.getValue('uniqueId'))"
+        "dataFactoryName": "$save('iot-cde-dataf-'+ this.MS.DataStore.getValue('uniqueId'))",
+        "showLocations": true,
+        "allowedLocations": "eastus,eastus2,westeurope,southeastasia,eastus2euap"
       },
       {
         "displayname": "Blob Storage",

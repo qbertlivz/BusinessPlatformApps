@@ -17,7 +17,6 @@ using Microsoft.Hadoop.Avro.Container;
 
 using Microsoft.WindowsAzure.Storage.Blob;
 
-// Device Template processing
 // Device Template data processing
 public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
 {
@@ -170,7 +169,7 @@ private static void InsertMeasurementIntoTable(DeviceTemplate template, string f
 private static void InsertPropertyIntoTable(DeviceTemplate template, string field, Property property, PropertyKind kind, DataTable table)
 {
     var row = table.NewRow();
-    row["id"] = $"{template.TemplateId}/{template.TemplateVersion}/{field}";
+    row["id"] = $"{template.TemplateId}/{template.TemplateVersion}/{kind.ToString()}/{field}";
     row["model"] = $"{template.TemplateId}/{template.TemplateVersion}";
     row["field"] = field;
     row["kind"] = kind.ToString();
@@ -184,10 +183,10 @@ private static Measurement ProcessingMeasurement(AvroRecord record)
 {
     var name = record.GetField<string>("name");
 
-    var datatType = default(string);
+    var dataType = default(string);
     if (FieldExists(record, "dataType"))
     {
-        datatType = record.GetField<string>("dataType");
+        dataType = record.GetField<string>("dataType");
     }
 
     var category = default(string);
@@ -196,15 +195,15 @@ private static Measurement ProcessingMeasurement(AvroRecord record)
         category = record.GetField<string>("category");
     }
 
-    return new Measurement() { Name = name, DataType = datatType, Category = category };
+    return new Measurement() { Name = name, DataType = dataType, Category = category };
 }
 
 private static Property ProcessingProperty(AvroRecord record)
 {
     var name = record.GetField<string>("name");
-    var datatType = record.GetField<string>("dataType");
+    var dataType = record.GetField<string>("dataType");
 
-    return new Property() { Name = name, DataType = datatType };
+    return new Property() { Name = name, DataType = dataType };
 }
 
 private static DataTable CreateDeviceTemplatesTable()

@@ -7,48 +7,54 @@ SET QUOTED_IDENTIFIER       ON;
 GO
 
 CREATE PROCEDURE [dbo].[TransformMeasurements] 
-	@PreviousChangeTrackingVersion BIGINT, 
-	@CurrentChangeTrackingVersion BIGINT
 AS
 BEGIN
-    INSERT INTO analytics.Measurements (deviceId, model, definition, timestamp, numericValue, stringValue, booleanValue)
-	SELECT
-        stage.Measurements.deviceId,
-        (
-            CASE
-                WHEN stage.Devices.modelId IS NOT NULL AND stage.Devices.modelVersion IS NOT NULL
-                THEN (stage.Devices.modelId + '/' + stage.Devices.modelVersion)
-                ELSE NULL
-            END
-        ) AS model,
-        (
-            CASE
-                WHEN stage.Devices.modelId IS NOT NULL AND stage.Devices.modelVersion IS NOT NULL
-                THEN (stage.Devices.modelId + '/' + stage.Devices.modelVersion + '/' + stage.Measurements.field)
-                ELSE NULL
-            END
-        ) AS definition,
-        stage.Measurements.timestamp,
-        stage.Measurements.numericValue,
-        stage.Measurements.stringValue,
-        stage.Measurements.booleanValue
-	FROM stage.Measurements
-	INNER JOIN CHANGETABLE(CHANGES stage.Measurements, @PreviousChangeTrackingVersion) AS CT
-	ON CT.id = stage.Measurements.id
-    LEFT OUTER JOIN stage.Devices
-    ON stage.Devices.deviceId = stage.Measurements.deviceId
-	WHERE [CT].[SYS_CHANGE_VERSION] <= @CurrentChangeTrackingVersion
-END
-GO
+	DECLARE @PreviousChangeTrackingVersion BIGINT
+	DECLARE @CurrentChangeTrackingVersion BIGINT
 
+	SELECT @CurrentChangeTrackingVersion = CHANGE_TRACKING_CURRENT_VERSION()
+	SELECT @PreviousChangeTrackingVersion = MAX([SYS_CHANGE_VERSION]) FROM dbo.[ChangeTracking] WHERE TABLE_NAME = 'Measurements' GROUP BY TABLE_NAME;
 
-CREATE PROCEDURE [dbo].[UpdateChangeTrackingVersion] 
-	@CurrentTrackingVersion BIGINT
-AS
+	BEGIN TRY
 
-BEGIN
-	UPDATE [dbo].[ChangeTracking]
-	SET [SYS_CHANGE_VERSION] = @CurrentTrackingVersion;
+		BEGIN TRANSACTION
+
+			INSERT INTO analytics.Measurements (deviceId, model, definition, timestamp, numericValue, stringValue, booleanValue)
+			SELECT
+				M.deviceId,
+				D.model,
+				(
+					CASE
+						WHEN D.model IS NOT NULL
+						THEN (D.model + '/' + M.field)
+						ELSE M.field
+					END
+				) AS definition,
+				M.timestamp,
+				M.numericValue,
+				M.stringValue,
+				M.booleanValue
+			FROM stage.Measurements AS M
+			INNER JOIN CHANGETABLE(CHANGES stage.Measurements, @PreviousChangeTrackingVersion) AS CT ON CT.id = M.id
+			LEFT OUTER JOIN analytics.Devices AS D ON D.deviceId = M.deviceId
+			WHERE [CT].[SYS_CHANGE_VERSION] <= @CurrentChangeTrackingVersion;
+
+			UPDATE ChangeTracking
+			SET SYS_CHANGE_VERSION = @CurrentChangeTrackingVersion
+			WHERE TABLE_NAME = 'Measurements';
+	
+		COMMIT TRAN
+
+	END TRY
+	BEGIN CATCH
+		IF @@TRANCOUNT > 0
+			ROLLBACK TRAN --RollBack in case of Error
+
+		DECLARE @error nvarchar(4000) = ERROR_MESSAGE();
+		DECLARE @severity INT = ERROR_SEVERITY();
+		RAISERROR(@error, @severity, 1)
+	END CATCH
+
 END
 GO
 

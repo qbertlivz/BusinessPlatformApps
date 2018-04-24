@@ -127,7 +127,8 @@ private static void ProcessingProperty(Device device, KeyValuePair<string, dynam
     propertyRow["id"] = $"{device.DeviceId}/{propertyKind.ToString()}/{entry.Key}";
     propertyRow["deviceId"] = device.DeviceId;
     propertyRow["model"] = $"{device.DeviceTemplateId}/{device.DeviceTemplateVersion}";
-    propertyRow["definition"] = $"{device.DeviceTemplateId}/{device.DeviceTemplateVersion}/{entry.Key}";
+    propertyRow["definition"] = $"{device.DeviceTemplateId}/{device.DeviceTemplateVersion}/{propertyKind.ToString()}/{entry.Key}";
+    // TODO: decide what to do with this
     propertyRow["lastUpdated"] = DateTime.UtcNow;
     // propertyRow["field"] = entry.Key;
     // propertyRow["kind"] = propertyKind.ToString();

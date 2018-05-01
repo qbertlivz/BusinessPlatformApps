@@ -23,7 +23,11 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             var azureToken = request.DataStore.GetJson("AzureToken", "access_token");
+
+            // Show location selection on the page
             var showLocationsString = request.DataStore.GetValue("showLocations");
+            
+            // For certain service, it only exists in few regions so add the allowed location list
             var allowedLocations = request.DataStore.GetValue("allowedLocations");
 
             bool.TryParse(showLocationsString, out bool showLocations);

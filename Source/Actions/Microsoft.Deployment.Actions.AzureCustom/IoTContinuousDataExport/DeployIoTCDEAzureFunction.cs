@@ -52,7 +52,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.IoTContinuousDataExport
             payload.AddStringParam("functionStorageAccountName", functionStorageAccountName);
             payload.AddStringParam("databaseConnectionString", databaseConnectionString);
 
-            var armTemplate = JsonUtility.GetJObjectFromJsonString(System.IO.File.ReadAllText(Path.Combine(request.Info.App.AppFilePath, request.DataStore.GetValue("AzureArmFile"))));
+            var armTemplate = JsonUtility.GetJObjectFromJsonString(File.ReadAllText(Path.Combine(request.Info.App.AppFilePath, request.DataStore.GetValue("AzureArmFile"))));
             var armParamTemplate = JsonUtility.GetJObjectFromObject(payload.GetDynamicObject());
             armTemplate.Remove("parameters");
             armTemplate.Add("parameters", armParamTemplate["parameters"]);
@@ -81,22 +81,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.IoTContinuousDataExport
             return r;
         }
 
-        /*
-        private static string GetUniqueString(string id, int length = 13)
-        {
-            string result = "";
-            var buffer = System.Text.Encoding.UTF8.GetBytes(id);
-            var hashArray = new System.Security.Cryptography.SHA512Managed().ComputeHash(buffer);
-            for (int i = 1; i <= length; i++)
-            {
-                var b = hashArray[i];
-                var c = Convert.ToChar((b % 26) + (byte)'a');
-                result = result + c;
-            }
-
-            return result;
-        }*/
-
         private static async Task<ActionResponse> WaitForAction(ResourceManagementClient client, string resourceGroup, string deploymentName)
         {
             for (; ; )
@@ -114,7 +98,9 @@ namespace Microsoft.Deployment.Actions.AzureCustom.IoTContinuousDataExport
                     ActionResponse r = new ActionResponse(ActionStatus.Success, operations) { DataStore = new DataStore() };
                     string outputs = status.Deployment.Properties.Outputs;
                     if (!string.IsNullOrEmpty(outputs))
+                    {
                         r.DataStore.AddToDataStore("ArmOutput", outputs, DataStoreType.Public);
+                    }
 
                     return r;
                 }

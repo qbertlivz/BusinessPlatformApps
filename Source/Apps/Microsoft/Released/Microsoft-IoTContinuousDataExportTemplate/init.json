@@ -5,7 +5,7 @@
         "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-IoTContinuousDataExportTemplate/Web/Images/iot-continuous-data-export.png",
         "displayname": "Getting Started",
         "list1": [
-          "$translate(INIT_GETTING_STARTED_AZURE_IOT_CONTINUOUS_DATA_EXPORT)",
+          "$translate(INIT_GETTING_STARTED_AZURE_IOT_CENTRAL)",
           "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",
           "$translate(INIT_GETTING_STARTED_PBI_DESKTOP)",
           "$translate(INIT_GETTING_STARTED_PBI_PRO)"
@@ -18,7 +18,10 @@
         "name": "$SiteCommon$/pages-gallery/getting-started.html",
         "subtitle": "$translate(INIT_IOT_CDE_SUBTITLE)",
         "templateName": "$translate(INIT_IOT_CDE_TITLE)",
-        "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))"
+        "uniqueId": "$save(this.MS.UtilityService.getUniqueId(10))",
+        "prerequisiteDescription": "$translate(GETTING_STARTED_IOT_CDE_PREREQUISITE_DESCRIPTION)",
+        "prerequisiteLinkText": "$translate(GETTING_STARTED_IOT_CDE_PREREQUISITE_LINKTEXT)",
+        "prerequisiteLink": "$translate(GETTING_STARTED_IOT_CDE_PREREQUISITE_LINK)"
       },
       {
         "azureProviders": [
@@ -38,7 +41,10 @@
       },
       {
         "displayname": "Blob Storage",
-        "name": "$SiteCommon$/pages-gallery/select-storage.html"
+        "name": "$SiteCommon$/pages-gallery/select-storage.html",
+        "prerequisiteDescription": "$translate(INIT_IOT_CDE_SELECT_STORAGE_SUBTITLE2)",
+        "prerequisiteLink": "$translate(INIT_IOT_CDE_SETUP_DOC_LINK)",
+        "prerequisiteLinkText": "$translate(COMMON_HERE)"
       },
       {
         "displayname": "Database",
@@ -60,13 +66,13 @@
         "values": {
           "Subscription": "$(this.MS.DataStore.getJson('SelectedSubscription').DisplayName)",
           "Resource Group": "$(this.MS.DataStore.getValue('SelectedResourceGroup'))",
-          "Target Server": "$(this.MS.DataStore.getValue('Server'))",
-          "Target Database": "$(this.MS.DataStore.getValue('Database'))",
-          "Target Username": "$(this.MS.DataStore.getValue('Username'))",
           "Blob Storage": "$(this.MS.DataStore.getValue('SelectedStorageAccountName'))",
           "Blob Container": "$(this.MS.DataStore.getValue('SelectedContainer'))",
           "Function Name": "$(this.MS.DataStore.getValue('functionName'))",
-          "DataFactory Name": "$(this.MS.DataStore.getValue('dataFactoryName'))"
+          "DataFactory Name": "$(this.MS.DataStore.getValue('dataFactoryName'))",
+          "SQL Server": "$(this.MS.DataStore.getValue('Server'))",
+          "SQL Database": "$(this.MS.DataStore.getValue('Database'))",
+          "SQL Username": "$(this.MS.DataStore.getValue('Username'))"
         }
       },
       {
@@ -98,7 +104,7 @@
           "workerSize": "Small",
           "blobStorageConnectionString": ""
         },*/
-        "displayname": "$translate(INIT_ACTION_CREATING_FUNCTION)",
+        "displayname": "$translate(INIT_ACTION_CREATING_FUNCTION_IOT)",
         "name": "Microsoft-DeployIoTCDEAzureFunction"
       },
       {

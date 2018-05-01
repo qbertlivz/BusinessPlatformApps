@@ -33,7 +33,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.IoTContinuousDataExport
             string deploymentName = request.DataStore.GetValue("DeploymentName") ?? request.DataStore.CurrentRoute;
 
             var payload = new AzureArmParameterGenerator();
-
             var armParameters = request.DataStore.GetJson("AzureArmParameters");
             if (armParameters != null)
             {
@@ -81,6 +80,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.IoTContinuousDataExport
                 return r;
             }
 
+            // Active the function trigger
             AzureHttpClient httpClient = new AzureHttpClient(tokenAzure, idSubscription, nameResourceGroup);
             var response = await httpClient.ExecuteWithSubscriptionAndResourceGroupAsync(
                 HttpMethod.Post,
@@ -94,21 +94,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.IoTContinuousDataExport
             }
 
             return r;
-        }
-
-        private static string GetUniqueString(string id, int length = 13)
-        {
-            string result = "";
-            var buffer = System.Text.Encoding.UTF8.GetBytes(id);
-            var hashArray = new System.Security.Cryptography.SHA512Managed().ComputeHash(buffer);
-            for (int i = 1; i <= length; i++)
-            {
-                var b = hashArray[i];
-                var c = Convert.ToChar((b % 26) + (byte)'a');
-                result = result + c;
-            }
-
-            return result;
         }
 
         private static async Task<ActionResponse> WaitForAction(ResourceManagementClient client, string resourceGroup, string deploymentName)

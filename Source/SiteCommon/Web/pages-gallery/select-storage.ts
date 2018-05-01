@@ -11,6 +11,9 @@ export class SelectStorage extends ViewModelBase {
     selectedContainerName: string = '';
     storagesList: any[] = [];
     containersList: any[] = [];
+    prerequisiteDescription = '';
+    prerequisiteLink = '';
+    prerequisiteLinkText = '';
 
     async getStorages(): Promise<void> {
         let storages: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-GetAzureStorages');

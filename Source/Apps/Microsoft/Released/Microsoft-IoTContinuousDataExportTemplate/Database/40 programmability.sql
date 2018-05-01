@@ -58,23 +58,13 @@ BEGIN
 END
 GO
 
-CREATE TYPE dbo.MeasurementsTableType AS TABLE
-(
-	[deviceId] [nvarchar](200) NOT NULL,
-	[timestamp] [datetime] NOT NULL,
-	[field] [nvarchar](255) NOT NULL,
-	[numericValue] [decimal](30, 10) NULL,
-	[stringValue] [nvarchar](max) NULL,
-	[booleanValue] [bit] NULL
-);
-GO
 
 CREATE PROCEDURE [dbo].[InsertMeasurements]
     @tableType dbo.MeasurementsTableType readonly
 AS
 BEGIN
-    INSERT INTO [stage].[Measurements]
-	SELECT * FROM @tableType;
+    INSERT INTO [stage].[Measurements] ([messageId], [deviceId], [timestamp], [field], [numericValue], [stringValue], [booleanValue])
+	SELECT [messageId], [deviceId], [timestamp], [field], [numericValue], [stringValue], [booleanValue] FROM @tableType;
 END
 GO
 
@@ -197,3 +187,14 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE [dbo].[InsertMessages]
+    @tableType dbo.MessagesTableType readonly
+AS
+BEGIN
+
+	INSERT INTO [analytics].[Messages](id, deviceId, [Timestamp], Size)
+	SELECT id, deviceId, [Timestamp], Size
+	FROM @tableType;
+
+END
+GO

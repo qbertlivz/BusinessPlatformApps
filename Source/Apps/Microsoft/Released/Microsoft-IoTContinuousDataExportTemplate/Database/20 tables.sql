@@ -66,7 +66,7 @@ CREATE TABLE [analytics].[Measurements](
 	[numericValue] [decimal](30, 10) NULL,
 	[stringValue] [nvarchar](max) NULL,
 	[booleanValue] [bit] NULL,
-	PRIMARY KEY CLUSTERED 
+	PRIMARY KEY CLUSTERED
 	(
 		[id] ASC
 	)
@@ -155,6 +155,7 @@ CREATE TYPE dbo.PropertyDefinitionsTableType AS TABLE
 
 CREATE TABLE [stage].[Measurements](
 	[id] [int] IDENTITY(1,1) NOT NULL,
+	[messageId] UNIQUEIDENTIFIER NOT NULL,
 	[deviceId] [nvarchar](200) NOT NULL,
 	[timestamp] [datetime] NOT NULL,
 	[field] [nvarchar](255) NOT NULL,
@@ -170,6 +171,19 @@ CREATE TABLE [stage].[Measurements](
 ALTER TABLE [stage].[Measurements]
 ENABLE CHANGE_TRACKING  
 WITH (TRACK_COLUMNS_UPDATED = OFF);
+
+
+CREATE TYPE dbo.MeasurementsTableType AS TABLE
+(
+	[messageId] UNIQUEIDENTIFIER NOT NULL,
+	[deviceId] [nvarchar](200) NOT NULL,
+	[timestamp] [datetime] NOT NULL,
+	[field] [nvarchar](255) NOT NULL,
+	[numericValue] [decimal](30, 10) NULL,
+	[stringValue] [nvarchar](max) NULL,
+	[booleanValue] [bit] NULL
+);
+GO
 
 CREATE TABLE [dbo].[ChangeTracking](
 	[TABLE_NAME] NVARCHAR(255),
@@ -198,3 +212,29 @@ CREATE TABLE [dbo].[date](
 		[date_key] ASC
 	)
 );
+
+
+CREATE TABLE [analytics].[Messages](
+	[id] UNIQUEIDENTIFIER NOT NULL,
+	[deviceId] [nvarchar](200) NOT NULL,
+	[Timestamp] [DATETIME] NOT NULL,
+	[Size] INT NOT NULL,
+	CONSTRAINT [pk_analytics_Message] PRIMARY KEY CLUSTERED 
+	(
+		[id] ASC
+	)
+);
+
+
+CREATE TYPE dbo.MessagesTableType AS TABLE
+(
+	[id] UNIQUEIDENTIFIER NOT NULL,
+	[deviceId] [nvarchar](200) NOT NULL,
+	[Timestamp] [DATETIME] NOT NULL,
+	[Size] INT NOT NULL,
+	PRIMARY KEY CLUSTERED 
+	(
+		[id] ASC
+	)
+);
+

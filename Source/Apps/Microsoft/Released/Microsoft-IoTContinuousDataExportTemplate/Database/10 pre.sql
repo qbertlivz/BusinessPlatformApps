@@ -25,6 +25,8 @@ IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='analytics
     DROP TABLE analytics.Properties;
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='analytics' AND TABLE_NAME='PropertyDefinitions' AND TABLE_TYPE='BASE TABLE')
     DROP TABLE analytics.PropertyDefinitions;
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='analytics' AND TABLE_NAME='Messages' AND TABLE_TYPE='BASE TABLE')
+    DROP TABLE analytics.[Messages];
 
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='stage' AND TABLE_NAME='Measurements' AND TABLE_TYPE='BASE TABLE')
     DROP TABLE stage.Measurements;
@@ -45,6 +47,8 @@ IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='dbo' 
     DROP PROCEDURE dbo.InsertMeasurementDefinitions;	
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='dbo' AND ROUTINE_NAME='InsertPropertyDefinitions' AND ROUTINE_TYPE='PROCEDURE')
     DROP PROCEDURE dbo.InsertPropertyDefinitions;
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA='dbo' AND ROUTINE_NAME='InsertMessages' AND ROUTINE_TYPE='PROCEDURE')
+    DROP PROCEDURE dbo.InsertMessages;
 
 -- Table Types	
 IF EXISTS (SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'MeasurementsTableType')
@@ -59,7 +63,8 @@ IF EXISTS (SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'Measureme
 	DROP TYPE dbo.MeasurementDefinitionsTableType;
 IF EXISTS (SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'PropertyDefinitionsTableType')
 	DROP TYPE dbo.PropertyDefinitionsTableType;
-
+IF EXISTS (SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'MessagesTableType')
+	DROP TYPE dbo.MessagesTableType;
 
 IF NOT EXISTS (SELECT * FROM sys.schemas WHERE [name]='analytics')
 BEGIN

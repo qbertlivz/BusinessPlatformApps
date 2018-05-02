@@ -16,6 +16,10 @@ CREATE TABLE [analytics].[Devices](
 	)
 );
 
+ALTER TABLE [analytics].[Devices]
+ENABLE CHANGE_TRACKING  
+WITH (TRACK_COLUMNS_UPDATED = OFF);
+
 CREATE TYPE dbo.DevicesTableType AS TABLE
 (
 	[deviceId] [nvarchar](200) NOT NULL,
@@ -70,6 +74,12 @@ CREATE TABLE [analytics].[Measurements](
 	(
 		[id] ASC
 	)
+);
+
+CREATE INDEX IX_Measurements_Model
+ON analytics.Measurements
+(
+	model
 );
 
 CREATE TABLE [analytics].[Models](

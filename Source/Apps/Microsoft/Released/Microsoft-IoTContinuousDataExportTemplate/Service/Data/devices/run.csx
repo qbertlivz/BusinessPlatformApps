@@ -107,7 +107,7 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
         {
             cmd.Parameters.Add(new SqlParameter("@tableType", devicesTable));
             var rows = await cmd.ExecuteNonQueryAsync();
-            log.Info($"Added {rows} rows to the database");
+            log.Info($"Added/Updated {rows} rows to the database");
         }
 
         log.Info($"Inserting into table: {propertiesTable.TableName}");
@@ -115,7 +115,7 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
         {
             cmd.Parameters.Add(new SqlParameter("@tableType", propertiesTable));
             var rows = await cmd.ExecuteNonQueryAsync();
-            log.Info($"Added {rows} rows to the database");
+            log.Info($"Added/Updated {rows} rows to the database");
         }
     }
 }
@@ -130,8 +130,6 @@ private static void ProcessingProperty(Device device, KeyValuePair<string, dynam
     propertyRow["definition"] = $"{device.DeviceTemplateId}/{device.DeviceTemplateVersion}/{propertyKind.ToString()}/{entry.Key}";
     // TODO: decide what to do with this
     propertyRow["lastUpdated"] = DateTime.UtcNow;
-    // propertyRow["field"] = entry.Key;
-    // propertyRow["kind"] = propertyKind.ToString();
 
     switch (entry.Value)
     {
@@ -173,8 +171,6 @@ private static DataTable CreatePropertiesTable()
     table.Columns.Add(new DataColumn("model", typeof(string)) { MaxLength = 101 });
     table.Columns.Add(new DataColumn("definition", typeof(string)) { MaxLength = 408 });
     table.Columns.Add(new DataColumn("lastUpdated", typeof(DateTime)));
-    // table.Columns.Add(new DataColumn("field", typeof(string)) { MaxLength = 255 });
-    // table.Columns.Add(new DataColumn("kind", typeof(string)) { MaxLength = 50 });
     table.Columns.Add(new DataColumn("numericValue", typeof(decimal)));
     table.Columns.Add(new DataColumn("stringValue", typeof(string)));
     table.Columns.Add(new DataColumn("booleanValue", typeof(bool)));

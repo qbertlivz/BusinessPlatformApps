@@ -17,9 +17,10 @@ namespace Microsoft.Deployment.Actions.SQL
         {
             string connectionString = request.DataStore.GetValueAtIndex("SqlConnectionString", "SqlServerIndex");
             string sqlScriptsFolder = request.DataStore.GetValue("SqlScriptsFolder");
-            bool enableTransaction = true;
-
+            // For database level management scripts, such as enable change tracking will throw exception if transaction is enabled
             var enableTransactionString = request.DataStore.GetValue("enableTransaction");
+
+            bool enableTransaction = true;
             if (!string.IsNullOrWhiteSpace(enableTransactionString))
             {
                 bool.TryParse(enableTransactionString, out enableTransaction);

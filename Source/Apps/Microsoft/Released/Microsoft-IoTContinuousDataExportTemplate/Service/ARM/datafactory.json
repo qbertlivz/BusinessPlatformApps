@@ -48,9 +48,34 @@
           "properties": {
             "activities": [
               {
-                "name": "TransformMeasurements",
+                "name": "UpdateMeasurements",
                 "type": "SqlServerStoredProcedure",
                 "dependsOn": [],
+                "policy": {
+                  "timeout": "01:00:00",
+                  "retry": 0,
+                  "retryIntervalInSeconds": 30
+                },
+                "typeProperties": {
+                  "storedProcedureName": "UpdateMeasurements",
+                  "storedProcedureParameters": {}
+                },
+                "linkedServiceName": {
+                  "referenceName": "SQL",
+                  "type": "LinkedServiceReference"
+                }
+              },
+              {
+                "name": "TransformMeasurements",
+                "type": "SqlServerStoredProcedure",
+                "dependsOn": [
+                  {
+                    "activity": "UpdateMeasurements",
+                    "dependencyConditions": [
+                      "Succeeded"
+                    ]
+                  }
+                ],
                 "policy": {
                   "timeout": "01:00:00",
                   "retry": 0,

@@ -116,7 +116,6 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
     }
 
     var cs = ConfigurationManager.AppSettings["SQL_CONNECTIONSTRING"];
-    log.Info($"{cs}");
     using (SqlConnection conn = new SqlConnection(cs))
     {
         conn.Open();

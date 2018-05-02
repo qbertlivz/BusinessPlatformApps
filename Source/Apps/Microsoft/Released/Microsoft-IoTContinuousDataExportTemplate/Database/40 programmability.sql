@@ -59,6 +59,51 @@ END
 GO
 
 
+-- Device data may come after measurement data. 
+-- Update device data into measurement if device data is empty
+CREATE PROCEDURE [dbo].[UpdateMeasurements] 
+AS
+BEGIN
+	DECLARE @PreviousChangeTrackingVersion BIGINT
+	DECLARE @CurrentChangeTrackingVersion BIGINT
+
+	SELECT @CurrentChangeTrackingVersion = CHANGE_TRACKING_CURRENT_VERSION()
+	SELECT @PreviousChangeTrackingVersion = MAX([SYS_CHANGE_VERSION]) FROM dbo.[ChangeTracking] WHERE TABLE_NAME = 'Devices' GROUP BY TABLE_NAME;
+
+	BEGIN TRY
+
+		BEGIN TRANSACTION
+			UPDATE [analytics].[Measurements]
+			SET [model] = Devices.model,
+				[definition] = Devices.model + '/' + analytics.Measurements.[definition]
+			FROM 
+				(
+				SELECT analytics.Devices.* 
+				FROM analytics.Devices 
+				INNER JOIN CHANGETABLE(CHANGES analytics.Devices, @PreviousChangeTrackingVersion) AS CT ON CT.deviceId = analytics.Devices.deviceId AND [CT].[SYS_CHANGE_VERSION] <= @CurrentChangeTrackingVersion
+				) AS Devices
+			WHERE analytics.Measurements.model IS NULL AND Devices.deviceId = analytics.Measurements.deviceId
+
+			UPDATE ChangeTracking
+			SET SYS_CHANGE_VERSION = @CurrentChangeTrackingVersion
+			WHERE TABLE_NAME = 'Devices';
+	
+		COMMIT TRAN
+
+	END TRY
+	BEGIN CATCH
+		IF @@TRANCOUNT > 0
+			ROLLBACK TRAN --RollBack in case of Error
+
+		DECLARE @error nvarchar(4000) = ERROR_MESSAGE();
+		DECLARE @severity INT = ERROR_SEVERITY();
+		RAISERROR(@error, @severity, 1)
+	END CATCH
+
+END
+GO
+
+
 CREATE PROCEDURE [dbo].[InsertMeasurements]
     @tableType dbo.MeasurementsTableType readonly
 AS

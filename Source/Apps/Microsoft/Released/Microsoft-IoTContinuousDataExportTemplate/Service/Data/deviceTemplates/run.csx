@@ -116,6 +116,7 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
     }
 
     var cs = ConfigurationManager.AppSettings["SQL_CONNECTIONSTRING"];
+    log.Info($"{cs}");
     using (SqlConnection conn = new SqlConnection(cs))
     {
         conn.Open();
@@ -125,7 +126,7 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
         {
             cmd.Parameters.Add(new SqlParameter("@tableType", templatesTable));
             var rows = await cmd.ExecuteNonQueryAsync();
-            log.Info($"Added {rows} rows to the database");
+            log.Info($"Added/Updated {rows} rows to the database table {templatesTable.TableName}");
         }
 
         log.Info($"Inserting into table: {measurementDefinitionsTable.TableName}");
@@ -133,7 +134,7 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
         {
             cmd.Parameters.Add(new SqlParameter("@tableType", measurementDefinitionsTable));
             var rows = await cmd.ExecuteNonQueryAsync();
-            log.Info($"Added {rows} rows to the database");
+            log.Info($"Added/Updated {rows} rows to the database table {measurementDefinitionsTable.TableName}");
         }
 
         log.Info($"Inserting into table: {propertyDefinitionsTable.TableName}");
@@ -141,7 +142,7 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
         {
             cmd.Parameters.Add(new SqlParameter("@tableType", propertyDefinitionsTable));
             var rows = await cmd.ExecuteNonQueryAsync();
-            log.Info($"Added {rows} rows to the database");
+            log.Info($"Added/Updated {rows} rows to the database table {propertyDefinitionsTable.TableName}");
         }
     }
 }

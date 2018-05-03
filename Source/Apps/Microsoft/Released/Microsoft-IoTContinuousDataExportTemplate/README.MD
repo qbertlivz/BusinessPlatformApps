@@ -52,7 +52,7 @@ Setting up the template requires the following:
 
 ### How to Install
 
-Before diving into the components of the solution, we will go through how to set things up. To get started with the solution, navigate to the Azure IoT Central Analytics template page and click **Next**.
+Before diving into the components of the solution, we will go through how to set things up. To get started with the solution, navigate to the Azure IoT Central Analytics template page and click **Install Now**.
 
 **Getting Started:** Starting page introducing the template and explaining the architecture.
 

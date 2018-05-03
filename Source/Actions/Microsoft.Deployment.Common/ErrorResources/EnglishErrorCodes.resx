@@ -321,4 +321,10 @@
   <data name="LithiumCredentialsInvalid" xml:space="preserve">
     <value>Login failed, check that you have entered in the correct TenantID, ClientID, ClientSecret, RefreshToken</value>
   </data>
+  <data name="AxConnectionError" xml:space="preserve">
+    <value>Cannot connect to your Finance and Operations instance</value>
+  </data>
+  <data name="AxAuthorizationError" xml:space="preserve">
+    <value>Your account does not have Administrator privileges for this instance of Dynamics 365</value>
+  </data>
 </root>

@@ -2,7 +2,8 @@
     <require from="../templates/bpst-link.html"></require>
 
     <h1 class="st-title">${MS.Translate.PROGRESS_TITLE}</h1>
-    <p class="st-subtitle">${MS.Translate.PROGRESS_SUBTITLE}</p>    
+    <p class="st-subtitle" if.bind="!publishReportLink">${MS.Translate.PROGRESS_SUBTITLE}</p>
+    <p class="st-subtitle" if.bind="publishReportLink">${MS.Translate.PROGRESS_REPORT_DEPLOYED}</p>
 
     <!-- PBIX Download -->
     <div class="st-float" if.bind="MS.DeploymentService.isFinished && !MS.DeploymentService.hasError && !isUninstall">

@@ -14,16 +14,16 @@ Azure IoT Central Continuous Data Export Analysis Solution Template Documentatio
 
 
 ### Introduction
-The Azure IoT Central Continuous Data Export Analysis Solution Template offers analytics on top of devices, device templates and measurements data. An Activity Log is a collection of subscription-level events that have occured in Azure, providing full visibility into any write operations performed on the resources in your subscription. The solution template is built on a streaming platform involving Event Hub and Stream Analytics. Streaming events are collected in an Azure SQL database on top of the past 90 days of Acitivty Log data we pull in to get you started with historical trend analysis. Refresh your Power BI report to see Activity Log events appear in near real-time, or set up a streaming data set in Power BI (see Customization section). 
+The Azure IoT Central Continuous Data Export Analysis Solution Template offers analytics on top of devices, device templates and measurements data. ~~An Activity Log is a collection of subscription-level events that have occured in Azure, providing full visibility into any write operations performed on the resources in your subscription. The solution template is built on a streaming platform involving Event Hub and Stream Analytics. Streaming events are collected in an Azure SQL database on top of the past 90 days of Acitivty Log data we pull in to get you started with historical trend analysis. Refresh your Power BI report to see Activity Log events appear in near real-time, or set up a streaming data set in Power BI (see Customization section). ~~
 
 With the Azure IoT Central Continuous Data Export Analysis solution template, perform subscription-level analytics such as:
-
+~~
 -   Observe week over week changes in the aggregate number of failures or percentage of failures.
 
 -   Compare successful versus failed opereations for particular resource groups or callers in your subscription.
 
 -   Stay up to date with relevant Service Health announcements by regions, type, or a specific impacted resource. 
-
+~~
 The following document provides a walkthrough of the architecture, a deep dive into every component, comments on customizability as well as information on additional topics like estimated costs. For any questions not covered in this document, please contact the team at <PBISolnTemplates@microsoft.com>
 
 ### Architecture
@@ -52,7 +52,7 @@ Setting up the template requires the following:
 
 ### How to Install
 
-Before diving into the components of the solution, we will go through how to set things up. To get started with the solution, navigate to the Azure IoT Central Analytics template page and click **Install Now**.
+Before diving into the components of the solution, we will go through how to set things up. To get started with the solution, navigate to the Azure IoT Central Analytics template page and click **Next**.
 
 **Getting Started:** Starting page introducing the template and explaining the architecture.
 
@@ -87,7 +87,7 @@ As a user navigates away from this page a new resource group gets spun up on the
 
 The following section will break down how the template works by going through all the components of the solution.
 
-![Image](Resources/media/azure-activity-log.png)
+![Image](Resources/media/iot-continuous-data-export.png)
 
 Azure Resources:
 ----------------
@@ -98,14 +98,14 @@ You can access all of the resources that have been spun up by logging into the A
 
 
 ### Model Schema
-
+~~
 The Azure IoT Central Continuous team has published documentation on the Activity Log event schema [here](https://docs.microsoft.com/en-us/azure/monitoring-and-diagnostics/monitoring-activity-log-schema#administrative).
-
+~~
 ### Reports Walkthrough
 
 
 ### Customizations
-
+~~
 How to set up real time streaming from the solution template to Power BI:
 
 1.	Navigate to the Stream Analytics job through Azure Portal
@@ -191,7 +191,7 @@ Here’s a checklist you can use to troubleshoot issues connecting Stream Analyt
 6. Can you look into the Azure Stream Analytics logs to see if there are any warnings or errors?
 
 For more details on using Power BI as a real-time data streaming service, see https://powerbi.microsoft.com/en-us/documentation/powerbi-service-real-time-streaming/ 
-
+~~
 
 ### Estimated Costs
 

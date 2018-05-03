@@ -1,4 +1,4 @@
-Azure Activity Log Solution Template Documentation
+Azure IoT Central Continuous Data Export Analysis Solution Template Documentation
 ===========================================================
 
 # Table of Contents
@@ -14,9 +14,9 @@ Azure Activity Log Solution Template Documentation
 
 
 ### Introduction
-The Azure Activity Log Solution Template offers analytics on top of historical and live Activity Log events. An Activity Log is a collection of subscription-level events that have occured in Azure, providing full visibility into any write operations performed on the resources in your subscription. The solution template is built on a streaming platform involving Event Hub and Stream Analytics. Streaming events are collected in an Azure SQL database on top of the past 90 days of Acitivty Log data we pull in to get you started with historical trend analysis. Refresh your Power BI report to see Activity Log events appear in near real-time, or set up a streaming data set in Power BI (see Customization section). 
+The Azure IoT Central Continuous Data Export Analysis Solution Template offers analytics on top of devices, device templates and measurements data. An Activity Log is a collection of subscription-level events that have occured in Azure, providing full visibility into any write operations performed on the resources in your subscription. The solution template is built on a streaming platform involving Event Hub and Stream Analytics. Streaming events are collected in an Azure SQL database on top of the past 90 days of Acitivty Log data we pull in to get you started with historical trend analysis. Refresh your Power BI report to see Activity Log events appear in near real-time, or set up a streaming data set in Power BI (see Customization section). 
 
-With the Activity Log solution template, perform subscription-level analytics such as:
+With the Azure IoT Central Continuous Data Export Analysis solution template, perform subscription-level analytics such as:
 
 -   Observe week over week changes in the aggregate number of failures or percentage of failures.
 
@@ -28,15 +28,13 @@ The following document provides a walkthrough of the architecture, a deep dive i
 
 ### Architecture
 
-![Image](Resources/media/azure-activity-log.png)
+![Image](Resources/media/iot-continuous-data-export.png)
 
-The flow of the Azure Activity Log solution template consists of the following resources:
+The flow of the Azure IoT Central Continuous Data Export Analysis solution template consists of the following resources:
 
--   Activity Log events are streamed to Event Hub via Log Profiles
+-   Devices, Device Templates and Measurements data are streamed to Azure SQL database via Azure Functions
 
--   Event Hub forwards the events to Stream Analytics
-
--   Stream Analytics processes the data and populates a SQL database
+-   Data Factory processes the data and insert data into analysis table
 
 -   Power BI imports data from Azure SQL and renders pre-defined reports
 
@@ -46,13 +44,15 @@ Setting up the template requires the following:
 
 -   Access to an Azure subscription
 
+-	Set up Continuous Data Export in your Azure IoT Central app
+
 -   Power BI Desktop (latest version)
 
 -   Power BI Pro (to share the template with others)
 
 ### How to Install
 
-Before diving into the components of the solution, we will go through how to set things up. To get started with the solution, navigate to the Activity Log template page and click **Install Now**.
+Before diving into the components of the solution, we will go through how to set things up. To get started with the solution, navigate to the Azure IoT Central Analytics template page and click **Install Now**.
 
 **Getting Started:** Starting page introducing the template and explaining the architecture.
 
@@ -65,17 +65,18 @@ If you select a Microsoft account, you will need to provide the application with
 ![Image](Resources/media/login.PNG)
 Logging into Azure gives the application access to your Azure subscription and permits spinning up Azure services on your behalf. If you want a more granular breakdown of the costs, please scroll down to the Estimated Costs section.
 
+![Image](Resources/media/login-1.PNG)
 As a user navigates away from this page a new resource group gets spun up on their Azure subscription (the name is random but always prefixed by �SolutionTemplate-�). This name can be changed under the advanced settings tab. All newly created resources go into this container.
 
-**Target:** Connect to an existing SQL Server or provide details which the application will use to spin up an Azure SQL on your behalf. Only Azure SQL is supported for this template. If a user chooses to spin up a new Azure SQL, this will get deployed in their Azure subscription inside the newly created resource group.
+**Database:** Connect to an existing SQL Server or provide details which the application will use to spin up an Azure SQL on your behalf. Only Azure SQL is supported for this template. If a user chooses to spin up a new Azure SQL, this will get deployed in their Azure subscription inside the newly created resource group.
 
-![Image](Resources/media/target.PNG)
+![Image](Resources/media/sql-dtabase.PNG)
 
 **Summary:** Summary page outlining all the choices the user made.
 
 ![Image](Resources/media/summary.PNG)
 
-**Deploy:** When you navigate to the deployment page the setup process gets kicked off. SQL scripts run to create the necessary tables and views. Event Hub and Stream Analytics are deployed and connected to begin streaming your Activity Log data. Historical data is pulled in from the last 90 days of your activity log. 
+**Deploy:** When you navigate to the deployment page the setup process gets kicked off. SQL scripts run to create the necessary tables and views. Azure Functions and Data Factory are deployed and connected to begin consuming your Exported data. 
 
 **It is important that you do not navigate away from this page while deployment takes place.** Once everything gets deployed a download link will appear for a Power BI file which consists of the pre-defined reports.
 
@@ -98,7 +99,7 @@ You can access all of the resources that have been spun up by logging into the A
 
 ### Model Schema
 
-The Azure Activity Logs team has published documentation on the Activity Log event schema [here](https://docs.microsoft.com/en-us/azure/monitoring-and-diagnostics/monitoring-activity-log-schema#administrative).
+The Azure IoT Central Continuous team has published documentation on the Activity Log event schema [here](https://docs.microsoft.com/en-us/azure/monitoring-and-diagnostics/monitoring-activity-log-schema#administrative).
 
 ### Reports Walkthrough
 
@@ -194,14 +195,14 @@ For more details on using Power BI as a real-time data streaming service, see ht
 
 ### Estimated Costs
 
-Here is an estimate of the Azure costs (Event Hub, Stream Analytics, Azure SQL) involved:
+Here is an estimate of the Azure costs (Azure Function, Data Factory, Azure SQL) involved:
 
 The following defaults are set for you in the template (you can modify any of these after things get set up):
 
--   Stream Analytics : 1 Throughput Unit
+-   Azure Function : Consumption plan
 
--   Event Hub: 1 Throughput Unit
+-   Data Factory: 2 activities every 15 minutes
 
 -   Azure SQL: Standard S1
 
-Whilst the default setting should cater to most activity log template requirements, we encourage you to familiarize yourself with the various pricing options and tweak things to suit your needs.
+Whilst the default setting should cater to most IoT Central Data Analysis template requirements, we encourage you to familiarize yourself with the various pricing options and tweak things to suit your needs.

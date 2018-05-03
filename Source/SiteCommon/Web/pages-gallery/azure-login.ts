@@ -31,7 +31,7 @@ export class AzureLogin extends ViewModelBase {
     showPricingConfirmation: boolean = false;
     subscriptionsList: any[] = [];
     showLocations: boolean = false;
-    allowedLocations: string = ''; // Some services only existing in certain regions
+    allowedLocations: string = ''; // Some services only existing in certain regions so added region/location filter
 
     async connect(): Promise<void> {
         this.MS.UtilityService.connectToAzure(this.oauthType, this.isConnectionMicrosoft() ? this.azureDirectory : this.MS.Translate.DEFAULT_TENANT);
@@ -62,7 +62,7 @@ export class AzureLogin extends ViewModelBase {
                     }
                 }
 
-                this.valid();
+                this.validate();
                 this.showPricingConfirmation = true;
                 await this.MS.HttpService.executeAsync('Microsoft-PowerBiLogin');
             }
@@ -77,7 +77,7 @@ export class AzureLogin extends ViewModelBase {
         super.onLoaded();
 
         if (this.subscriptionsList.length > 0) {
-            this.valid();
+            this.validate();
         } else {
             await this.MS.UtilityService.getToken(this.oauthType, async () => {
                 await this.getSubscriptions();
@@ -122,7 +122,7 @@ export class AzureLogin extends ViewModelBase {
 
     changeSubscription(): void {
         if (!this.showLocations) {
-            this.valid();
+            this.validate();
             return;
         }
 
@@ -151,11 +151,11 @@ export class AzureLogin extends ViewModelBase {
             this.selectedLocationName = this.azureLocations.length === 0 || this.azureLocations.length <= this.defaultLocation ? '' : this.azureLocations[this.defaultLocation].Name;
         }
 
-        this.valid();
+        this.validate();
     }
 
     changeLocation(): void {
-        this.valid();
+        this.validate();
     }
 
     async validateResourceGroup(): Promise<boolean> {
@@ -166,13 +166,13 @@ export class AzureLogin extends ViewModelBase {
         this.MS.DataStore.addToDataStore('SelectedResourceGroup', this.selectedResourceGroup, DataStoreType.Public);
 
         if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-ExistsResourceGroup')) {
-            this.valid();
+            this.validate();
         }
 
         return this.isValidated;
     }
 
-    valid(): boolean {
+    validate(): boolean {
         if (!this.selectedSubscriptionId) {
             this.onInvalidate();
             return false;

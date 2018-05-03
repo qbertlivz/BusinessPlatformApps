@@ -14,7 +14,7 @@ Azure IoT Central Continuous Data Export Analysis Solution Template Documentatio
 
 
 ### Introduction
-The Azure IoT Central Continuous Data Export Analysis Solution Template offers analytics on top of devices, device templates and measurements data. ~~An Activity Log is a collection of subscription-level events that have occured in Azure~~, providing full visibility into any write operations performed on the resources in your subscription. The solution template is built on a streaming platform involving Event Hub and Stream Analytics. Streaming events are collected in an Azure SQL database on top of the past 90 days of Acitivty Log data we pull in to get you started with historical trend analysis. Refresh your Power BI report to see Activity Log events appear in near real-time, or set up a streaming data set in Power BI (see Customization section). 
+The Azure IoT Central Continuous Data Export Analysis Solution Template offers analytics on top of devices, device templates and measurements data. ~~An Activity Log is a collection of subscription-level events that have occured in Azure, providing full visibility into any write operations performed on the resources in your subscription~~. The solution template is built on a streaming platform involving Event Hub and Stream Analytics. Streaming events are collected in an Azure SQL database on top of the past 90 days of Acitivty Log data we pull in to get you started with historical trend analysis. Refresh your Power BI report to see Activity Log events appear in near real-time, or set up a streaming data set in Power BI (see Customization section). 
 
 With the Azure IoT Central Continuous Data Export Analysis solution template, perform subscription-level analytics such as:
 

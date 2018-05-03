@@ -15,7 +15,7 @@ namespace Microsoft.Deployment.Tests.Actions.IoTContinuousDataExportTests
             var dataStore = await TestManager.GetDataStore(
                 force: true,
                 subscriptionId: "479b3e1f-a2af-4b91-b118-02a43df6d293", 
-                resourceGroup: "bentestgroup4", 
+                resourceGroup: "SolutionTemplate-t8bthf0", 
                 region: "eastus");
 
             // Deploy Data Factory
@@ -27,7 +27,8 @@ namespace Microsoft.Deployment.Tests.Actions.IoTContinuousDataExportTests
             dataStore.AddToDataStore("AzureArmFile", "Service/ARM/datafactory.json");
             dataStore.AddToDataStore("SqlConnectionString", "test connection string");
 
-            dataStore.AddToDataStore("dataFactoryName", $"iot-cde-dataf-{valueUnique}");
+            //dataStore.AddToDataStore("dataFactoryName", $"iot-cde-dataf-{valueUnique}");
+            dataStore.AddToDataStore("dataFactoryName", Guid.NewGuid());
 
             var response = TestManager.ExecuteAction("Microsoft-DeployIoTCDEDataFactory", dataStore, "Microsoft-IoTContinuousDataExportTemplate");
             Assert.IsTrue(response.IsSuccess);

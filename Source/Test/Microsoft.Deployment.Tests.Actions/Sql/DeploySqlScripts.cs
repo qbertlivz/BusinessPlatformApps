@@ -57,11 +57,7 @@ namespace Microsoft.Deployment.Tests.Actions.Sql
             // Deploy AS Model based of the following pramaters
             var dataStore = await TestManager.GetDataStore();
 
-            var connectionStringBuilder = new SqlConnectionStringBuilder() { DataSource = "bentest247.database.windows.net", InitialCatalog = "continuousDataExportDB", UserID = "benjamis", Password = "IoT20180412!" };
-
-            // Deploy IoT Continuous Data Export Database Scripts
-            // dataStore.AddToDataStore("SqlConnectionString", SqlCreds.GetSqlPagePayload("continuousDataExportDB"));
-            dataStore.AddToDataStore("SqlConnectionString", connectionStringBuilder.ConnectionString);
+            dataStore.AddToDataStore("SqlConnectionString", SqlCreds.GetSqlPagePayload("continuousDataExportDB"));
             dataStore.AddToDataStore("SqlServerIndex", "0");
             dataStore.AddToDataStore("SqlScriptsFolder", "Database");
             dataStore.AddToDataStore("enableTransaction", "false");

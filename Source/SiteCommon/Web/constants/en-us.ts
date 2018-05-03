@@ -275,7 +275,7 @@
     GETTING_STARTED_FIRST_NAME: `First Name:`,
     GETTING_STARTED_IOT_CDE_PREREQUISITE_DESCRIPTION: `Before you begin, you need to set up Continuous Data Export in your IoT Central app `,
     GETTING_STARTED_IOT_CDE_PREREQUISITE_LINKTEXT: `learn more`,
-    GETTING_STARTED_IOT_CDE_PREREQUISITE_LINK: `https://www.microsoft.com/en-us/iot-central/`,
+    GETTING_STARTED_IOT_CDE_PREREQUISITE_LINK: `https://aka.ms/iotcentraldocscontinuousdataexport`,
     GETTING_STARTED_LAST_NAME: `Last Name:`,
     GETTING_STARTED_LIST_1: `To set up this solution template you will need:`,
     GETTING_STARTED_LIST_2: `Features of this architecture:`,

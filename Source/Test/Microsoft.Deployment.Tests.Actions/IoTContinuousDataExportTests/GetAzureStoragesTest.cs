@@ -12,7 +12,7 @@ namespace Microsoft.Deployment.Tests.Actions.IoTContinuousDataExportTests
         [TestMethod]
         public async Task GetAzureStorages()
         {
-            var dataStore = await TestManager.GetDataStore(subscriptionId: "479b3e1f-a2af-4b91-b118-02a43df6d293", resourceGroup: "bentestgroup3");
+            var dataStore = await TestManager.GetDataStore();
 
             var response = TestManager.ExecuteAction("Microsoft-GetAzureStorages", dataStore);
             Assert.IsTrue(response.IsSuccess);

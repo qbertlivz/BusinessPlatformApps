@@ -13,7 +13,7 @@ namespace Microsoft.Deployment.Tests.Actions.IoTContinuousDataExportTests
         [TestMethod]
         public async Task CreateAzureFunction()
         {
-            var dataStore = await TestManager.GetDataStore(force: true, subscriptionId: "479b3e1f-a2af-4b91-b118-02a43df6d293", resourceGroup: "bentestgroup3");
+            var dataStore = await TestManager.GetDataStore();
 
             // Deploy Function
             dataStore.AddToDataStore("DeploymentName", "FunctionDeploymentTest");
@@ -38,7 +38,7 @@ namespace Microsoft.Deployment.Tests.Actions.IoTContinuousDataExportTests
         [TestMethod]
         public async Task DeployFunctionCode()
         {
-            var dataStore = await TestManager.GetDataStore(subscriptionId: "479b3e1f-a2af-4b91-b118-02a43df6d293", resourceGroup: "bentestgroup2");
+            var dataStore = await TestManager.GetDataStore();
 
             // Deploy Function
             dataStore.AddToDataStore("DeploymentName", "FunctionDeploymentTest");

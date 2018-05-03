@@ -68,6 +68,9 @@ Logging into Azure gives the application access to your Azure subscription and p
 ![Image](Resources/media/login-1.png)
 As a user navigates away from this page a new resource group gets spun up on their Azure subscription (the name is random but always prefixed by �SolutionTemplate-�). This name can be changed under the advanced settings tab. All newly created resources go into this container.
 
+![Image](Resources/media/blob-storage.png)
+**Blob Storage** Select the exported storage account and container in your Azure subscription
+
 **Database:** Connect to an existing SQL Server or provide details which the application will use to spin up an Azure SQL on your behalf. Only Azure SQL is supported for this template. If a user chooses to spin up a new Azure SQL, this will get deployed in their Azure subscription inside the newly created resource group.
 
 ![Image](Resources/media/sql-database.png)

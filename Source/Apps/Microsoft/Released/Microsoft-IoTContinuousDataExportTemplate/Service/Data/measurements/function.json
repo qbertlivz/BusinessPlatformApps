@@ -4,7 +4,7 @@
       "name": "myBlob",
       "type": "blobTrigger",
       "direction": "in",
-      "path": "{container}/measurements/{year}/{month}/{day}/{hour}/{minute}/{name}",
+      "path": "{container}/measurements/{hub}/{year}/{month}/{day}/{hour}/{minute}/{name}",
       "connection": "Blob_STORAGE"
     }
   ],

@@ -98,55 +98,6 @@
           ]
         },
         {
-          "name": "[concat(variables('factoryName'), '/Stage Measurements')]",
-          "type": "Microsoft.DataFactory/factories/datasets",
-          "apiVersion": "2017-09-01-preview",
-          "properties": {
-            "linkedServiceName": {
-              "referenceName": "SQL",
-              "type": "LinkedServiceReference"
-            },
-            "type": "AzureSqlTable",
-            "structure": [
-              {
-                "name": "id",
-                "type": "Int32"
-              },
-              {
-                "name": "deviceId",
-                "type": "String"
-              },
-              {
-                "name": "timestamp",
-                "type": "DateTime"
-              },
-              {
-                "name": "field",
-                "type": "String"
-              },
-              {
-                "name": "numericValue",
-                "type": "Decimal"
-              },
-              {
-                "name": "stringValue",
-                "type": "String"
-              },
-              {
-                "name": "booleanValue",
-                "type": "Boolean"
-              }
-            ],
-            "typeProperties": {
-              "tableName": "[concat(variables('leftBracket'), 'stage].[Measurements]')]"
-            }
-          },
-          "dependsOn": [
-            "[variables('factoryName')]",
-            "[concat(variables('factoryId'), '/linkedServices/SQL')]"
-          ]
-        },
-        {
           "name": "[concat(parameters('factoryName'), '/DefaultTrigger')]",
           "type": "Microsoft.DataFactory/factories/triggers",
           "apiVersion": "2017-09-01-preview",
@@ -165,7 +116,7 @@
             "typeProperties": {
               "recurrence": {
                 "frequency": "Minute",
-                "interval": 15,
+                "interval": 5,
                 "startTime": "2018-04-19T23:35:00Z",
                 "timeZone": "UTC"
               }

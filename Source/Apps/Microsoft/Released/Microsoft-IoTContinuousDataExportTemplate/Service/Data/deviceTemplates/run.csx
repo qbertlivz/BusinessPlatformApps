@@ -39,14 +39,14 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
                     log.Info(record.ToString());
                     try
                     {
-                        var deviceTempalteId = record.GetField<string>("id");
+                        var deviceTemplateId = record.GetField<string>("id");
                         var deviceTemplateName = record.GetField<string>("name");
                         var deviceTemplateVersion = record.GetField<string>("version");
 
                         var measurementsRecord = record.GetField<AvroRecord>("measurements");
 
-                        var telemetriesMap = measurementsRecord.GetField<IDictionary<string, dynamic>>("telemetry");
-                        var telmetries = telemetriesMap.ToDictionary(e => e.Key, e => ProcessingMeasurement(e.Value as AvroRecord));
+                        var telemetryMap = measurementsRecord.GetField<IDictionary<string, dynamic>>("telemetry");
+                        var telemetry = telemetryMap.ToDictionary(e => e.Key, e => ProcessingMeasurement(e.Value as AvroRecord));
 
                         var statesMap = measurementsRecord.GetField<IDictionary<string, dynamic>>("states");
                         var states = statesMap.ToDictionary(e => e.Key, e => ProcessingMeasurement(e.Value as AvroRecord));
@@ -68,10 +68,10 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
 
                         templates.Add(new DeviceTemplate()
                         {
-                            TemplateId = deviceTempalteId,
+                            TemplateId = deviceTemplateId,
                             TemplateName = deviceTemplateName,
                             TemplateVersion = deviceTemplateVersion,
-                            Telmetries = telmetries,
+                            Telemetry = telemetry,
                             States = states,
                             Events = events,
                             CloudProperties = cloudProperties,
@@ -106,7 +106,7 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
 
         templatesTable.Rows.Add(templateRow);
 
-        template.Telmetries.ToList().ForEach(entry => InsertMeasurementIntoTable(template, entry.Key, entry.Value, MeasurementKind.Telemetry, measurementDefinitionsTable));
+        template.Telemetry.ToList().ForEach(entry => InsertMeasurementIntoTable(template, entry.Key, entry.Value, MeasurementKind.Telemetry, measurementDefinitionsTable));
         template.States.ToList().ForEach(entry => InsertMeasurementIntoTable(template, entry.Key, entry.Value, MeasurementKind.State, measurementDefinitionsTable));
         template.Events.ToList().ForEach(entry => InsertMeasurementIntoTable(template, entry.Key, entry.Value, MeasurementKind.Event, measurementDefinitionsTable));
 
@@ -116,6 +116,11 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
     }
 
     var cs = ConfigurationManager.AppSettings["SQL_CONNECTIONSTRING"];
+    if (string.IsNullOrWhiteSpace(cs)) // do it again :(
+    {
+        cs = ConfigurationManager.AppSettings["SQL_CONNECTIONSTRING"];
+    }
+
     using (SqlConnection conn = new SqlConnection(cs))
     {
         conn.Open();
@@ -206,6 +211,7 @@ private static Property ProcessingProperty(AvroRecord record)
     return new Property() { Name = name, DataType = dataType };
 }
 
+// The length for the columns matches the length inside database
 private static DataTable CreateDeviceTemplatesTable()
 {
     var table = new DataTable("Models");
@@ -252,7 +258,7 @@ private struct DeviceTemplate
     public string TemplateId { get; set; }
     public string TemplateName { get; set; }
     public string TemplateVersion { get; set; }
-    public IDictionary<string, Measurement> Telmetries { get; set; }
+    public IDictionary<string, Measurement> Telemetry { get; set; }
     public IDictionary<string, Measurement> States { get; set; }
     public IDictionary<string, Measurement> Events { get; set; }
     public IDictionary<string, Property> CloudProperties { get; set; }

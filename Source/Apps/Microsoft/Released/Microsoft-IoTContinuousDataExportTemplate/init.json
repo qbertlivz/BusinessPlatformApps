@@ -99,11 +99,6 @@
       },
       {
         "AzureArmFile": "Service/ARM/functions.json",
-        /*"AzureArmParameters": {
-          "sku": "Standard",
-          "workerSize": "Small",
-          "blobStorageConnectionString": ""
-        },*/
         "displayname": "$translate(INIT_ACTION_CREATING_FUNCTION_IOT)",
         "name": "Microsoft-DeployIoTCDEAzureFunction"
       },

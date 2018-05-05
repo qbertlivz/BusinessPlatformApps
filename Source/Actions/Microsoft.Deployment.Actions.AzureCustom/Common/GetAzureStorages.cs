@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
     public class GetAzureStorages : BaseAction
     {
         // Regular expression used to extract resource group
-        private Regex resourceGroupEx = new Regex("resourceGroups/([a-zA-Z0-9_-]*)/providers", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private Regex resourceGroupEx = new Regex("resourceGroups/([^/]+)/providers", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
@@ -35,21 +36,28 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
                 var storageAccounts = JsonUtility.GetJObjectFromJsonString(await response.Content.ReadAsStringAsync());
 
                 JArray array = new JArray();
-                foreach (var item in storageAccounts["value"])
+
+                var tasks = storageAccounts["value"].Select(async item =>
                 {
                     var storageAccountId = item["id"].ToString();
                     var storageAccountName = item["name"].ToString();
 
                     var connectionString = await this.GetStorageAccountConnectionStringAsync(azureToken, idSubscription, storageAccountName, storageAccountId);
-                    var containers = this.GetContainers(connectionString);
+                    var containers = await this.GetContainersAsync(connectionString);
 
-                    JObject newStorageAccountKey = new JObject();
-                    newStorageAccountKey.Add("StorageAccountId", storageAccountId);
-                    newStorageAccountKey.Add("StorageAccountName", storageAccountName);
-                    newStorageAccountKey.Add("StorageAccountConnectionString", connectionString);
-                    newStorageAccountKey.Add("Containers", containers);
+                    return new JObject
+                    {
+                        { "StorageAccountId", storageAccountId },
+                        { "StorageAccountName", storageAccountName },
+                        { "StorageAccountConnectionString", connectionString },
+                        { "Containers", containers }
+                    };
+                }).ToArray();
 
-                    array.Add(newStorageAccountKey);
+                await Task.WhenAll(tasks);
+                foreach (var task in tasks)
+                {
+                    array.Add(task.Result);
                 }
 
                 request.Logger.LogEvent("GetAzureStorages-result", new Dictionary<string, string>() { { "Storages", array.ToString() } });
@@ -61,6 +69,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             var error = await response.Content.ReadAsStringAsync();
             return new ActionResponse(ActionStatus.Failure, error, null, DefaultErrorCodes.DefaultErrorCode, "GetAzureStorages");
         }
+
+
 
         private async Task<string> GetStorageAccountConnectionStringAsync(string azureToken, string subscriptionId, string storageAccountName, string storageAccountId)
         {
@@ -80,21 +90,29 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Common
             return string.Empty;
         }
 
-        private JArray GetContainers(string storageAccountConnectionString)
+        private async Task<JArray> GetContainersAsync(string storageAccountConnectionString)
         {
             CloudStorageAccount storageAccount = CreateStorageAccountFromConnectionString(storageAccountConnectionString);
 
             // Create a blob client for interacting with the blob service.
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
 
-            var containers = blobClient.ListContainers();
+            BlobContinuationToken continuationToken = null;
+
             var array = new JArray();
-            foreach (var container in containers)
+            do
             {
-                JObject containerObject = new JObject();
-                containerObject.Add("Name", container.Name);
-                array.Add(containerObject);
+                var response = await blobClient.ListContainersSegmentedAsync(continuationToken);
+                foreach (var container in response.Results)
+                {
+                    JObject containerObject = new JObject
+                    {
+                        { "Name", container.Name }
+                    };
+                    array.Add(containerObject);
+                }
             }
+            while (continuationToken != null);
 
             return array;
         }

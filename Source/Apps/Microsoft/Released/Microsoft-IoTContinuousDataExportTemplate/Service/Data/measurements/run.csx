@@ -151,6 +151,7 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
     }
 }
 
+// The length for the columns matches the length inside database
 private static DataTable CreateMeasurementsTable()
 {
     var table = new DataTable("Measurements");

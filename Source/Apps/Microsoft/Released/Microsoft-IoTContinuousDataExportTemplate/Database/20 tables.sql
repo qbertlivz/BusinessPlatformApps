@@ -63,6 +63,7 @@ CREATE TYPE dbo.MeasurementDefinitionsTableType AS TABLE
 
 CREATE TABLE [analytics].[Measurements](
 	[id] [int] IDENTITY(1,1) NOT NULL,
+	[messageId] UNIQUEIDENTIFIER NOT NULL,
 	[deviceId] [nvarchar](200) NOT NULL,
 	[model] [nvarchar](101) NULL,
 	[definition] [nvarchar](357) NULL,

@@ -19,8 +19,9 @@ BEGIN
 
 		BEGIN TRANSACTION
 
-			INSERT INTO analytics.Measurements (deviceId, model, definition, timestamp, numericValue, stringValue, booleanValue)
+			INSERT INTO analytics.Measurements (messageId, deviceId, model, definition, timestamp, numericValue, stringValue, booleanValue)
 			SELECT
+				M.messageId,
 				M.deviceId,
 				D.model,
 				(

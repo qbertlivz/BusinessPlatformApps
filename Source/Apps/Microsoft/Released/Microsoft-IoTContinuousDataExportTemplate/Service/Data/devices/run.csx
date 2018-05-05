@@ -152,6 +152,7 @@ private static void ProcessingProperty(Device device, KeyValuePair<string, dynam
     propertiesTable.Rows.Add(propertyRow);
 }
 
+// The length for the columns matches the length inside database
 private static DataTable CreateDevicesTable()
 {
     var table = new DataTable("Devices");

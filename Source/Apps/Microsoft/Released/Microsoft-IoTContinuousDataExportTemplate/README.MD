@@ -20,7 +20,7 @@ With the Azure IoT Central Continuous Data Export Analysis solution template, pe
 ~~
 -   Observe week over week changes in the aggregate number of failures or percentage of failures.
 
--   Compare successful versus failed opereations for particular resource groups or callers in your subscription.
+-   Compare successful versus failed operations for particular resource groups or callers in your subscription.
 
 -   Stay up to date with relevant Service Health announcements by regions, type, or a specific impacted resource. ~~
 
@@ -66,7 +66,7 @@ If you select a Microsoft account, you will need to provide the application with
 Logging into Azure gives the application access to your Azure subscription and permits spinning up Azure services on your behalf. If you want a more granular breakdown of the costs, please scroll down to the Estimated Costs section.
 
 ![Image](Resources/media/login-1.png)
-As a user navigates away from this page a new resource group gets spun up on their Azure subscription (the name is random but always prefixed by �SolutionTemplate-�). This name can be changed under the advanced settings tab. All newly created resources go into this container.
+As a user navigates away from this page a new resource group gets spun up on their Azure subscription (the name is random but always prefixed by ‘SolutionTemplate-‘). This name can be changed under the advanced settings tab. All newly created resources go into this container.
 
 **Blob Storage:** Select the exported storage account and container in your Azure subscription
 ![Image](Resources/media/blob-storage.png)

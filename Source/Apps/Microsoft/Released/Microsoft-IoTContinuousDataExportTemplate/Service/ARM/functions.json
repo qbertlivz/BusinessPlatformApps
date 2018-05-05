@@ -21,17 +21,7 @@
     "databaseConnectionString": {
       "defaultValue": "don't know yet",
       "type": "securestring"
-    }/*,
-
-    "sku": {
-      "defaultValue": "Standard",
-      "type": "string"
-    },
-
-    "workerSize": {
-      "defaultValue": "Small",
-      "type": "string"
-    }*/
+    }
   },
   "variables": {
     "functionAppName": "[parameters('siteName')]",
@@ -50,20 +40,6 @@
         "name": "Standard_LRS"
       }
     },
-    /*
-    {
-      "type": "Microsoft.Web/serverfarms",
-      "apiVersion": "2015-04-01",
-      "name": "[variables('hostingPlanName')]",
-      "location": "[resourceGroup().location]",
-      "properties": {
-        "name": "[variables('hostingPlanName')]",
-        "sku": "[parameters('sku')]",
-        "workerSize": "[parameters('workerSize')]",
-        "hostingEnvironment": "",
-        "numberOfWorkers": 1
-      }
-    },*/
     {
       "type": "Microsoft.Web/serverfarms",
       "apiVersion": "2015-04-01",
@@ -88,7 +64,6 @@
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
         "siteConfig": {
-          // "alwaysOn": true,
           "appSettings": [
             {
               "name": "AzureWebJobsDashboard",

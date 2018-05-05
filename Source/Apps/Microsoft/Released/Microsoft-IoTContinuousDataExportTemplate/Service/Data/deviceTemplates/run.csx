@@ -115,11 +115,27 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
         template.DeviceSettings.ToList().ForEach(entry => InsertPropertyIntoTable(template, entry.Key, entry.Value, PropertyKind.DeviceSetting, propertyDefinitionsTable));
     }
 
-    var cs = ConfigurationManager.AppSettings["SQL_CONNECTIONSTRING"];
-    if (string.IsNullOrWhiteSpace(cs)) // do it again :(
+    // Sometime couldn't get connection string here so retry
+    var cs = default(string);
+    var maxRetry = 1000;
+    var i = 0;
+    while (string.IsNullOrWhiteSpace(cs) && i < maxRetry)
     {
         cs = ConfigurationManager.AppSettings["SQL_CONNECTIONSTRING"];
+        if (string.IsNullOrWhiteSpace(cs))
+        {
+            await System.Threading.Tasks.Task.Delay(100);
+        }
+
+        i++;
     }
+
+    if (string.IsNullOrWhiteSpace(cs))
+    {
+        throw new ConfigurationException("Couldn't read database connection string");
+    }
+
+    log.Info($"Tried {i} times to get the connection string");
 
     using (SqlConnection conn = new SqlConnection(cs))
     {

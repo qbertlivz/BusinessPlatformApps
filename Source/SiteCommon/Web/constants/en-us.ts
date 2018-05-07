@@ -57,7 +57,6 @@
     AZURE_LOGIN_SUBTITLE: `To create the solution we will be using a number of Azure Services which require an Azure subscription.`,
     AZURE_LOGIN_UNKNOWN_ERROR: `You do not have any Azure subscriptions linked to your account. You can get started with a free trial by clicking the link at the top of the page.`,
     AX_LOGIN_UNKNOWN_ERROR: `Cannot connect to your Finance and Operations instance.`,
-    AX_COLLECTIONS_TEMPLATE_TITLE: `Dynamics 365 for Finance and Operations - Credit and Collections`,    
     AZURE_STORAGE_ACCOUNT: `Storage account:`,
     AZURE_STORAGE_CONTAINER: `Container:`,
     AZURE_SUBSCRIPTION_STORAGE: `Showing Storage accounts in this Azure Subscription: `,

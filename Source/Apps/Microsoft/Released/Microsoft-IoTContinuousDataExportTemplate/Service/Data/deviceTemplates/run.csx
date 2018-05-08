@@ -20,7 +20,7 @@ using Microsoft.WindowsAzure.Storage.Blob;
 // Device Template data processing
 public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
 {
-    log.Info($"Processing blob {myBlob.StorageUri}");
+    log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Processing blob {myBlob.StorageUri}");
 
     var templates = new List<DeviceTemplate>();
     int parseFailCount = 0;
@@ -36,7 +36,7 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
             {
                 foreach (AvroRecord record in reader.Current.Objects)
                 {
-                    log.Info(record.ToString());
+                    log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - {record.ToString()}");
                     try
                     {
                         var deviceTemplateId = record.GetField<string>("id");
@@ -81,8 +81,8 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
                     }
                     catch (Exception e)
                     {
-                        log.Error("$Failed to process Avro record");
-                        log.Error(e.ToString());
+                        log.Error($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Failed to process Avro record");
+                        log.Error($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - {e.ToString()}");
                         parseFailCount++;
                     }
                 }
@@ -90,7 +90,7 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
         }
     }
 
-    log.Info($"Parsed {templates.Count} templates with {parseFailCount} failures");
+    log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Parsed {templates.Count} templates with {parseFailCount} failures");
 
     var templatesTable = CreateDeviceTemplatesTable();
     var measurementDefinitionsTable = CreateMeaurementDefinitionsTable();
@@ -115,54 +115,40 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
         template.DeviceSettings.ToList().ForEach(entry => InsertPropertyIntoTable(template, entry.Key, entry.Value, PropertyKind.DeviceSetting, propertyDefinitionsTable));
     }
 
-    // Sometime couldn't get connection string here so retry
-    var cs = default(string);
-    var maxRetry = 1000;
-    var i = 0;
-    while (string.IsNullOrWhiteSpace(cs) && i < maxRetry)
-    {
-        cs = ConfigurationManager.AppSettings["SQL_CONNECTIONSTRING"];
-        if (string.IsNullOrWhiteSpace(cs))
-        {
-            await System.Threading.Tasks.Task.Delay(100);
-        }
-
-        i++;
-    }
-
+    var cs = ConfigurationManager.AppSettings["SQL_CONNECTIONSTRING"];
     if (string.IsNullOrWhiteSpace(cs))
     {
         throw new ConfigurationException("Couldn't read database connection string");
     }
 
-    log.Info($"Tried {i} times to get the connection string");
+    log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Got the connection string");
 
     using (SqlConnection conn = new SqlConnection(cs))
     {
         conn.Open();
 
-        log.Info($"Inserting into table: {templatesTable.TableName}");
+        log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Inserting into table: {templatesTable.TableName}");
         using (SqlCommand cmd = new SqlCommand("dbo.[InsertDeviceTemplates]", conn) { CommandType = CommandType.StoredProcedure })
         {
             cmd.Parameters.Add(new SqlParameter("@tableType", templatesTable));
             var rows = await cmd.ExecuteNonQueryAsync();
-            log.Info($"Added/Updated {rows} rows to the database table {templatesTable.TableName}");
+            log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Added/Updated {rows} rows to the database table {templatesTable.TableName}");
         }
 
-        log.Info($"Inserting into table: {measurementDefinitionsTable.TableName}");
+        log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Inserting into table: {measurementDefinitionsTable.TableName}");
         using (SqlCommand cmd = new SqlCommand("dbo.[InsertMeasurementDefinitions]", conn) { CommandType = CommandType.StoredProcedure })
         {
             cmd.Parameters.Add(new SqlParameter("@tableType", measurementDefinitionsTable));
             var rows = await cmd.ExecuteNonQueryAsync();
-            log.Info($"Added/Updated {rows} rows to the database table {measurementDefinitionsTable.TableName}");
+            log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Added/Updated {rows} rows to the database table {measurementDefinitionsTable.TableName}");
         }
 
-        log.Info($"Inserting into table: {propertyDefinitionsTable.TableName}");
+        log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Inserting into table: {propertyDefinitionsTable.TableName}");
         using (SqlCommand cmd = new SqlCommand("dbo.[InsertPropertyDefinitions]", conn) { CommandType = CommandType.StoredProcedure })
         {
             cmd.Parameters.Add(new SqlParameter("@tableType", propertyDefinitionsTable));
             var rows = await cmd.ExecuteNonQueryAsync();
-            log.Info($"Added/Updated {rows} rows to the database table {propertyDefinitionsTable.TableName}");
+            log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Added/Updated {rows} rows to the database table {propertyDefinitionsTable.TableName}");
         }
     }
 }

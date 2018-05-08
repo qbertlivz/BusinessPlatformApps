@@ -19,7 +19,7 @@ using Newtonsoft.Json;
 // Process measurements data
 public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
 {
-    log.Info($"Processing blob {myBlob.StorageUri}");
+    log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Processing blob {myBlob.StorageUri}");
 
     IList<Message> messages = new List<Message>();
     int parseFailCount = 0;
@@ -35,7 +35,7 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
             {
                 foreach (AvroRecord record in reader.Current.Objects)
                 {
-                    log.Info(record.ToString());
+                    log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - {record.ToString()}");
                     try
                     {
                         var messageId = Guid.NewGuid();
@@ -61,8 +61,8 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
                                 }
                                 catch (Exception e)
                                 {
-                                    log.Error($"Failed to process the body for device {deviceId}");
-                                    log.Error(e.ToString());
+                                    log.Error($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Failed to process the body for device {deviceId}");
+                                    log.Error($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - {e.ToString()}");
                                     parseFailCount++;
                                 }
                             }
@@ -70,8 +70,8 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
                     }
                     catch (Exception e)
                     {
-                        log.Error("$Failed to process Avro record");
-                        log.Error(e.ToString());
+                        log.Error($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Failed to process Avro record");
+                        log.Error($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - {e.ToString()}");
                         parseFailCount++;
                     }
                 }
@@ -79,7 +79,7 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
         }
     }
 
-    log.Info($"Parsed {messages.Count} messages with {parseFailCount} failures");
+    log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Parsed {messages.Count} messages with {parseFailCount} failures");
 
     var measurementsTable = CreateMeasurementsTable();
     var messagesTable = CreateMessagesTable();
@@ -131,22 +131,22 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
     {
         conn.Open();
 
-        log.Info($"Inserting into table: {messagesTable.TableName}");
+        log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Inserting into table: {messagesTable.TableName}");
         using (SqlCommand cmd = new SqlCommand("dbo.[InsertMessages]", conn) { CommandType = CommandType.StoredProcedure })
         {
             cmd.Parameters.Add(new SqlParameter("@tableType", messagesTable));
 
             var rows = await cmd.ExecuteNonQueryAsync();
-            log.Info($"Added {rows} rows to the database");
+            log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Added {rows} rows to the database");
         }
 
-        log.Info($"Inserting into table: {measurementsTable.TableName}");
+        log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Inserting into table: {measurementsTable.TableName}");
         using (SqlCommand cmd = new SqlCommand("dbo.[InsertMeasurements]", conn) { CommandType = CommandType.StoredProcedure })
         {
             cmd.Parameters.Add(new SqlParameter("@tableType", measurementsTable));
 
             var rows = await cmd.ExecuteNonQueryAsync();
-            log.Info($"Added {rows} rows to the database");
+            log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Added {rows} rows to the database");
         }
     }
 }

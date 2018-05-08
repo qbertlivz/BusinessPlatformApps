@@ -20,7 +20,7 @@ using Microsoft.WindowsAzure.Storage.Blob;
 // Device data processing
 public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
 {
-    log.Info($"Processing blob {myBlob.StorageUri}");
+    log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Processing blob {myBlob.StorageUri}");
 
     var devices = new List<Device>();
     int parseFailCount = 0;
@@ -36,7 +36,7 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
             {
                 foreach (AvroRecord record in reader.Current.Objects)
                 {
-                    log.Info(record.ToString());
+                    log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - {record.ToString()}");
                     try
                     {
                         var deviceId = record.GetField<string>("id");
@@ -68,8 +68,8 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
                     }
                     catch (Exception e)
                     {
-                        log.Error("$Failed to process Avro record");
-                        log.Error(e.ToString());
+                        log.Error($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Failed to process Avro record");
+                        log.Error($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - {e.ToString()}");
                         parseFailCount++;
                     }
                 }
@@ -77,7 +77,7 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
         }
     }
 
-    log.Info($"Parsed {devices.Count} devices with {parseFailCount} failures");
+    log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Parsed {devices.Count} devices with {parseFailCount} failures");
 
     var devicesTable = CreateDevicesTable();
     var propertiesTable = CreatePropertiesTable();
@@ -102,20 +102,20 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
     {
         conn.Open();
 
-        log.Info($"Inserting into table: {devicesTable.TableName}");
+        log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Inserting into table: {devicesTable.TableName}");
         using (SqlCommand cmd = new SqlCommand("dbo.[InsertDevices]", conn) { CommandType = CommandType.StoredProcedure })
         {
             cmd.Parameters.Add(new SqlParameter("@tableType", devicesTable));
             var rows = await cmd.ExecuteNonQueryAsync();
-            log.Info($"Added/Updated {rows} rows to the database");
+            log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Added/Updated {rows} rows to the database");
         }
 
-        log.Info($"Inserting into table: {propertiesTable.TableName}");
+        log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Inserting into table: {propertiesTable.TableName}");
         using (SqlCommand cmd = new SqlCommand("dbo.[InsertProperties]", conn) { CommandType = CommandType.StoredProcedure })
         {
             cmd.Parameters.Add(new SqlParameter("@tableType", propertiesTable));
             var rows = await cmd.ExecuteNonQueryAsync();
-            log.Info($"Added/Updated {rows} rows to the database");
+            log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Added/Updated {rows} rows to the database");
         }
     }
 }

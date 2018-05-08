@@ -100,6 +100,10 @@
             {
               "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
               "value": "true"
+            },
+            {
+              "name": "WEBSITE_USE_PLACEHOLDER",
+              "value": "0"
             }
           ]
         }

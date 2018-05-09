@@ -16,6 +16,7 @@ using Microsoft.WindowsAzure.Storage.Blob;
 
 using Newtonsoft.Json;
 
+
 // Process measurements data
 public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
 {
@@ -35,7 +36,7 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
             {
                 foreach (AvroRecord record in reader.Current.Objects)
                 {
-                    log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - {record.ToString()}");
+                    // log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - {record.ToString()}");
                     try
                     {
                         var messageId = Guid.NewGuid();
@@ -132,21 +133,43 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
         conn.Open();
 
         log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Inserting into table: {messagesTable.TableName}");
-        using (SqlCommand cmd = new SqlCommand("dbo.[InsertMessages]", conn) { CommandType = CommandType.StoredProcedure })
+        using (SqlCommand cmd = new SqlCommand("dbo.[InsertMessages]", conn) { CommandType = CommandType.StoredProcedure, CommandTimeout = 60 })
         {
             cmd.Parameters.Add(new SqlParameter("@tableType", messagesTable));
 
-            var rows = await cmd.ExecuteNonQueryAsync();
-            log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Added {rows} rows to the database");
+            var stopWatch = System.Diagnostics.Stopwatch.StartNew();
+            try
+            {
+                var rows = await cmd.ExecuteNonQueryAsync();
+                stopWatch.Stop();
+                log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Added {rows} rows to the database table {messagesTable.TableName}. Elapsed: {stopWatch.Elapsed}");
+            }
+            catch (Exception exception)
+            {
+                stopWatch.Stop();
+                log.Error($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Elapsed: {stopWatch.Elapsed} - database table {messagesTable.TableName}", exception);
+                throw;
+            }
         }
 
         log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Inserting into table: {measurementsTable.TableName}");
-        using (SqlCommand cmd = new SqlCommand("dbo.[InsertMeasurements]", conn) { CommandType = CommandType.StoredProcedure })
+        using (SqlCommand cmd = new SqlCommand("dbo.[InsertMeasurements]", conn) { CommandType = CommandType.StoredProcedure, CommandTimeout = 60 })
         {
             cmd.Parameters.Add(new SqlParameter("@tableType", measurementsTable));
 
-            var rows = await cmd.ExecuteNonQueryAsync();
-            log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Added {rows} rows to the database");
+            var stopWatch = System.Diagnostics.Stopwatch.StartNew();
+            try
+            {
+                var rows = await cmd.ExecuteNonQueryAsync();
+                stopWatch.Stop();
+                log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Added {rows} rows to the database table {measurementsTable.TableName}. Elapsed: {stopWatch.Elapsed}");
+            }
+            catch (Exception exception)
+            {
+                stopWatch.Stop();
+                log.Error($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Elapsed: {stopWatch.Elapsed} - Database table {measurementsTable.TableName}", exception);
+                throw;
+            }
         }
     }
 }

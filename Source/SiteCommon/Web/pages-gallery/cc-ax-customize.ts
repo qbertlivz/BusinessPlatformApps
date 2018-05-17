@@ -79,7 +79,7 @@ export class Customize extends ViewModelBase {
     }    
 
     async validateAxInstance(): Promise<boolean> {
-        let validInstance: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-ValidateAxInstance');
+        let validInstance: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-ValidateAxInstanceCDSA');
         if (validInstance.IsSuccess)
             return true;
         return false;

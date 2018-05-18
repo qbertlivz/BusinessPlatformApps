@@ -10,25 +10,34 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Text;
 
+using Microsoft.Azure.WebJobs;
+
 using Microsoft.Hadoop.Avro;
 using Microsoft.Hadoop.Avro.Container;
 using Microsoft.WindowsAzure.Storage.Blob;
 
 using Newtonsoft.Json;
 
+private static int counter = 0;
 
 // Process measurements data
-public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
+public static async Task Run(CloudBlockBlob myBlob, TraceWriter log, ExecutionContext context)
 {
-    log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Processing blob {myBlob.StorageUri}");
+    log.Info($"{GetLogPrefix(context)} - Processing blob {myBlob.StorageUri}");
+
+    var currentCount = System.Threading.Interlocked.Increment(ref counter);
+    log.Info($"{GetLogPrefix(context)} - Current count {currentCount}");
 
     IList<Message> messages = new List<Message>();
     int parseFailCount = 0;
 
     using (var blobStream = new MemoryStream())
     {
+        var stopWatch = System.Diagnostics.Stopwatch.StartNew();
         await myBlob.DownloadToStreamAsync(blobStream);
+        stopWatch.Stop();
         blobStream.Position = 0;
+        log.Info($"{GetLogPrefix(context)} - Downloaded blob content. Length: {blobStream.Length}. Elapsed: {stopWatch.Elapsed}");
 
         using (var reader = AvroContainer.CreateGenericReader(blobStream))
         {
@@ -36,7 +45,7 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
             {
                 foreach (AvroRecord record in reader.Current.Objects)
                 {
-                    // log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - {record.ToString()}");
+                    // log.Info($"{GetLogPrefix(context)} - {record.ToString()}");
                     try
                     {
                         var messageId = Guid.NewGuid();
@@ -62,8 +71,8 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
                                 }
                                 catch (Exception e)
                                 {
-                                    log.Error($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Failed to process the body for device {deviceId}");
-                                    log.Error($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - {e.ToString()}");
+                                    log.Error($"{GetLogPrefix(context)} - Failed to process the body for device {deviceId}");
+                                    log.Error($"{GetLogPrefix(context)} - {e.ToString()}");
                                     parseFailCount++;
                                 }
                             }
@@ -71,8 +80,8 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
                     }
                     catch (Exception e)
                     {
-                        log.Error($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Failed to process Avro record");
-                        log.Error($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - {e.ToString()}");
+                        log.Error($"{GetLogPrefix(context)} - Failed to process Avro record");
+                        log.Error($"{GetLogPrefix(context)} - {e.ToString()}");
                         parseFailCount++;
                     }
                 }
@@ -80,14 +89,14 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
         }
     }
 
-    log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Parsed {messages.Count} messages with {parseFailCount} failures");
+    log.Info($"{GetLogPrefix(context)} - Parsed {messages.Count} messages with {parseFailCount} failures");
 
     var measurementsTable = CreateMeasurementsTable();
     var messagesTable = CreateMessagesTable();
     foreach (var message in messages)
     {
         var messageRow = messagesTable.NewRow();
-        messageRow["messageId"] = message.messageId;
+        messageRow["id"] = message.messageId;
         messageRow["deviceId"] = message.deviceId;
         messageRow["timestamp"] = message.timestamp;
         messageRow["size"] = message.messageSize;
@@ -132,7 +141,28 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
     {
         conn.Open();
 
-        log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Inserting into table: {messagesTable.TableName}");
+        using (SqlBulkCopy bulkCopy = new SqlBulkCopy(conn) { BulkCopyTimeout = 120 })
+        {
+            log.Info($"{GetLogPrefix(context)} - Inserting into table: {messagesTable.TableName}");
+            bulkCopy.DestinationTableName = "analytics.Messages";
+            var stopWatch = System.Diagnostics.Stopwatch.StartNew();
+            try
+            {
+                await bulkCopy.WriteToServerAsync(messagesTable);
+                stopWatch.Stop();
+                // log.Info($"{GetLogPrefix(context)} - Added {messagesTable.Rows.Count} rows to the database table {messagesTable.TableName}. Elapsed: {stopWatch.Elapsed}");
+            }
+            catch (Exception exception)
+            {
+                stopWatch.Stop();
+                log.Error($"{GetLogPrefix(context)} - Elapsed: {stopWatch.Elapsed} - database table {messagesTable.TableName}", exception);
+                System.Threading.Interlocked.Decrement(ref counter);
+                throw;
+            }
+        }
+
+        /*
+        log.Info($"{GetLogPrefix(context)} - Inserting into table: {messagesTable.TableName}");
         using (SqlCommand cmd = new SqlCommand("dbo.[InsertMessages]", conn) { CommandType = CommandType.StoredProcedure, CommandTimeout = 60 })
         {
             cmd.Parameters.Add(new SqlParameter("@tableType", messagesTable));
@@ -142,17 +172,45 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
             {
                 var rows = await cmd.ExecuteNonQueryAsync();
                 stopWatch.Stop();
-                log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Added {rows} rows to the database table {messagesTable.TableName}. Elapsed: {stopWatch.Elapsed}");
+                // log.Info($"{GetLogPrefix(context)} - Added {rows} rows to the database table {messagesTable.TableName}. Elapsed: {stopWatch.Elapsed}");
             }
             catch (Exception exception)
             {
                 stopWatch.Stop();
-                log.Error($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Elapsed: {stopWatch.Elapsed} - database table {messagesTable.TableName}", exception);
+                log.Error($"{GetLogPrefix(context)} - Elapsed: {stopWatch.Elapsed} - database table {messagesTable.TableName}", exception);
+                throw;
+            }
+        }*/
+
+        using (SqlBulkCopy bulkCopy = new SqlBulkCopy(conn) { BulkCopyTimeout = 120 })
+        {
+            foreach (DataColumn column in measurementsTable.Columns)
+            {
+                bulkCopy.ColumnMappings.Add(column.ColumnName, column.ColumnName);
+            }
+
+            log.Info($"{GetLogPrefix(context)} - Inserting into table: {measurementsTable.TableName}");
+            bulkCopy.DestinationTableName = "stage.Measurements";
+            var stopWatch = System.Diagnostics.Stopwatch.StartNew();
+            try
+            {
+                await bulkCopy.WriteToServerAsync(measurementsTable);
+                stopWatch.Stop();
+                log.Info($"{GetLogPrefix(context)} - Added {measurementsTable.Rows.Count} rows to the database table {measurementsTable.TableName}. Elapsed: {stopWatch.Elapsed}");
+            }
+            catch (Exception exception)
+            {
+                stopWatch.Stop();
+                log.Error($"{GetLogPrefix(context)} - Elapsed: {stopWatch.Elapsed} - database table {measurementsTable.TableName}", exception);
+                System.Threading.Interlocked.Decrement(ref counter);
                 throw;
             }
         }
 
-        log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Inserting into table: {measurementsTable.TableName}");
+        System.Threading.Interlocked.Decrement(ref counter);
+
+        /*
+        log.Info($"{GetLogPrefix(context)} - Inserting into table: {measurementsTable.TableName}");
         using (SqlCommand cmd = new SqlCommand("dbo.[InsertMeasurements]", conn) { CommandType = CommandType.StoredProcedure, CommandTimeout = 60 })
         {
             cmd.Parameters.Add(new SqlParameter("@tableType", measurementsTable));
@@ -162,16 +220,21 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
             {
                 var rows = await cmd.ExecuteNonQueryAsync();
                 stopWatch.Stop();
-                log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Added {rows} rows to the database table {measurementsTable.TableName}. Elapsed: {stopWatch.Elapsed}");
+                log.Info($"{GetLogPrefix(context)} - Added {rows} rows to the database table {measurementsTable.TableName}. Elapsed: {stopWatch.Elapsed}");
             }
             catch (Exception exception)
             {
                 stopWatch.Stop();
-                log.Error($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Elapsed: {stopWatch.Elapsed} - Database table {measurementsTable.TableName}", exception);
+                log.Error($"{GetLogPrefix(context)} - Elapsed: {stopWatch.Elapsed} - Database table {measurementsTable.TableName}", exception);
                 throw;
             }
-        }
+        }*/
     }
+}
+
+private static string GetLogPrefix(ExecutionContext context)
+{
+    return $"{System.DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - {context.InvocationId}";
 }
 
 // The length for the columns matches the length inside database
@@ -194,7 +257,7 @@ private static DataTable CreateMessagesTable()
 {
     var table = new DataTable("Messages");
 
-    table.Columns.Add(new DataColumn("messageId", typeof(Guid)));
+    table.Columns.Add(new DataColumn("id", typeof(Guid)));
     table.Columns.Add(new DataColumn("deviceId", typeof(string)) { MaxLength = 200 });
     table.Columns.Add(new DataColumn("timestamp", typeof(DateTime)));
     table.Columns.Add(new DataColumn("size", typeof(int)));

@@ -36,7 +36,7 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
             {
                 foreach (AvroRecord record in reader.Current.Objects)
                 {
-                    log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - {record.ToString()}");
+                    // log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - {record.ToString()}");
                     try
                     {
                         var deviceId = record.GetField<string>("id");
@@ -106,16 +106,38 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
         using (SqlCommand cmd = new SqlCommand("dbo.[InsertDevices]", conn) { CommandType = CommandType.StoredProcedure })
         {
             cmd.Parameters.Add(new SqlParameter("@tableType", devicesTable));
-            var rows = await cmd.ExecuteNonQueryAsync();
-            log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Added/Updated {rows} rows to the database");
+            var stopWatch = System.Diagnostics.Stopwatch.StartNew();
+            try
+            {
+                var rows = await cmd.ExecuteNonQueryAsync();
+                stopWatch.Stop();
+                log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Added/Updated {rows} rows to the database. Elapsed: {stopWatch.Elapsed}");
+            }
+            catch (Exception exception)
+            {
+                stopWatch.Stop();
+                log.Error($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Elapsed: {stopWatch.Elapsed}", exception);
+                throw;
+            }
         }
 
         log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Inserting into table: {propertiesTable.TableName}");
         using (SqlCommand cmd = new SqlCommand("dbo.[InsertProperties]", conn) { CommandType = CommandType.StoredProcedure })
         {
             cmd.Parameters.Add(new SqlParameter("@tableType", propertiesTable));
-            var rows = await cmd.ExecuteNonQueryAsync();
-            log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Added/Updated {rows} rows to the database");
+            var stopWatch = System.Diagnostics.Stopwatch.StartNew();
+            try
+            {
+                var rows = await cmd.ExecuteNonQueryAsync();
+                stopWatch.Stop();
+                log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Added/Updated {rows} rows to the database. Elapsed: {stopWatch.Elapsed}");
+            }
+            catch (Exception exception)
+            {
+                stopWatch.Stop();
+                log.Error($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Elapsed: {stopWatch.Elapsed}", exception);
+                throw;
+            }
         }
     }
 }

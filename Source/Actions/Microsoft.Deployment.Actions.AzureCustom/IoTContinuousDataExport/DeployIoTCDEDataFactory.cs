@@ -47,6 +47,7 @@ namespace Microsoft.Deployment.Actions.AzureCustom.IoTContinuousDataExport
 
             payload.AddStringParam("databaseConnectionString", databaseConnectionString);
             payload.AddStringParam("factoryName", dataFactoryName);
+            payload.AddStringParam("startTime", DateTime.UtcNow.ToString());
 
             var armTemplate = JsonUtility.GetJObjectFromJsonString(System.IO.File.ReadAllText(Path.Combine(request.Info.App.AppFilePath, request.DataStore.GetValue("AzureArmFile"))));
             var armParamTemplate = JsonUtility.GetJObjectFromObject(payload.GetDynamicObject());

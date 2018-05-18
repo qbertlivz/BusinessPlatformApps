@@ -61,27 +61,48 @@ CREATE TYPE dbo.MeasurementDefinitionsTableType AS TABLE
 	)
 );
 
-CREATE TABLE [analytics].[Measurements](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[messageId] UNIQUEIDENTIFIER NOT NULL,
-	[deviceId] [nvarchar](200) NOT NULL,
-	[model] [nvarchar](101) NULL,
-	[definition] [nvarchar](357) NULL,
-	[timestamp] [datetime] NOT NULL,
-	[numericValue] [decimal](30, 10) NULL,
-	[stringValue] [nvarchar](max) NULL,
-	[booleanValue] [bit] NULL,
-	PRIMARY KEY CLUSTERED
-	(
-		[id] ASC
-	)
-);
+IF EXISTS(select * from sys.database_service_objectives WHERE service_objective = 'S3' OR service_objective LIKE 'P%')	
+BEGIN
+	CREATE TABLE [analytics].[Measurements](
+		[id] [int] IDENTITY(1,1) NOT NULL,
+		[messageId] UNIQUEIDENTIFIER NOT NULL,
+		[deviceId] [nvarchar](200) NOT NULL,
+		[model] [nvarchar](101) NULL,
+		[definition] [nvarchar](357) NULL,
+		[timestamp] [datetime] NOT NULL,
+		[numericValue] [decimal](30, 10) NULL,
+		[stringValue] [nvarchar](max) NULL,
+		[booleanValue] [bit] NULL,
+	);
 
-CREATE INDEX IX_Measurements_Model
-ON analytics.Measurements
-(
-	model
-);
+	EXEC('CREATE CLUSTERED COLUMNSTORE INDEX CCI_Measurements  ON [analytics].[Measurements]');
+END
+ELSE
+BEGIN
+
+	CREATE TABLE [analytics].[Measurements](
+		[id] [int] IDENTITY(1,1) NOT NULL,
+		[messageId] UNIQUEIDENTIFIER NOT NULL,
+		[deviceId] [nvarchar](200) NOT NULL,
+		[model] [nvarchar](101) NULL,
+		[definition] [nvarchar](357) NULL,
+		[timestamp] [datetime] NOT NULL,
+		[numericValue] [decimal](30, 10) NULL,
+		[stringValue] [nvarchar](max) NULL,
+		[booleanValue] [bit] NULL,
+		PRIMARY KEY CLUSTERED
+		(
+			[id] ASC
+		)
+	);
+
+	CREATE INDEX IX_Measurements_Model
+	ON analytics.Measurements
+	(
+		model
+	);
+
+END;
 
 CREATE TABLE [analytics].[Models](
 	[id] [nvarchar](101) NOT NULL,
@@ -224,18 +245,30 @@ CREATE TABLE [dbo].[date](
 	)
 );
 
+IF EXISTS(select * from sys.database_service_objectives WHERE service_objective = 'S3' OR service_objective LIKE 'P%')	
+BEGIN
+	CREATE TABLE [analytics].[Messages](
+		[id] [uniqueidentifier] NOT NULL,
+		[deviceId] [nvarchar](200) NOT NULL,
+		[Timestamp] [datetime] NOT NULL,
+		[Size] [int] NOT NULL
+	);
 
-CREATE TABLE [analytics].[Messages](
-	[id] UNIQUEIDENTIFIER NOT NULL,
-	[deviceId] [nvarchar](200) NOT NULL,
-	[Timestamp] [DATETIME] NOT NULL,
-	[Size] INT NOT NULL,
-	CONSTRAINT [pk_analytics_Message] PRIMARY KEY CLUSTERED 
-	(
-		[id] ASC
-	)
-);
-
+	EXEC('CREATE CLUSTERED COLUMNSTORE INDEX CCI_Messages  ON [analytics].[Messages]');
+END
+ELSE
+BEGIN
+	CREATE TABLE [analytics].[Messages](
+		[id] UNIQUEIDENTIFIER NOT NULL,
+		[deviceId] [nvarchar](200) NOT NULL,
+		[Timestamp] [DATETIME] NOT NULL,
+		[Size] INT NOT NULL,
+		CONSTRAINT [pk_analytics_Message] PRIMARY KEY NONCLUSTERED 
+		(
+			[id] ASC
+		)
+	);
+END;
 
 CREATE TYPE dbo.MessagesTableType AS TABLE
 (
@@ -243,7 +276,7 @@ CREATE TYPE dbo.MessagesTableType AS TABLE
 	[deviceId] [nvarchar](200) NOT NULL,
 	[Timestamp] [DATETIME] NOT NULL,
 	[Size] INT NOT NULL,
-	PRIMARY KEY CLUSTERED 
+	PRIMARY KEY NONCLUSTERED 
 	(
 		[id] ASC
 	)

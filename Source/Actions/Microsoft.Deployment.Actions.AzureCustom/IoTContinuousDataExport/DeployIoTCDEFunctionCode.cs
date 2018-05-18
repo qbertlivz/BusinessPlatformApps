@@ -52,6 +52,17 @@ namespace Microsoft.Deployment.Actions.AzureCustom.IoTContinuousDataExport
             var subDirectories = sourceDirectory.GetDirectories();
             var destinationDirectory = new DirectoryInfo(Path.Combine(request.Info.App.AppFilePath, "temp", $"{deploymentName}_{uniqueId}"));
 
+            var hostFile = Path.Combine(sourceDirectory.FullName, "host.json");
+            if (File.Exists(hostFile))
+            {
+                if (!destinationDirectory.Exists)
+                {
+                    destinationDirectory.Create();
+                }
+
+                File.Copy(hostFile, Path.Combine(destinationDirectory.FullName, "host.json"));
+            }
+
             // Copy all files to a destination folder and replace container name
             foreach (var sub in subDirectories)
             {

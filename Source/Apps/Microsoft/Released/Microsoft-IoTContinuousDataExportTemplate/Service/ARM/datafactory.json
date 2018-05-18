@@ -11,6 +11,9 @@
       "type": "secureString",
       "metadata": "Secure string for 'connectionString' of 'SQL'",
       "defaultValue": "don't know yet"
+    },
+    "startTime": {
+      "type": "string"
     }
   },
   "variables": {
@@ -102,24 +105,24 @@
           "type": "Microsoft.DataFactory/factories/triggers",
           "apiVersion": "2017-09-01-preview",
           "properties": {
+            "type": "TumblingWindowTrigger",
             "runtimeState": "Started",
-            "pipelines": [
-              {
-                "pipelineReference": {
-                  "referenceName": "ETL",
-                  "type": "PipelineReference"
-                },
-                "parameters": {}
-              }
-            ],
-            "type": "ScheduleTrigger",
             "typeProperties": {
-              "recurrence": {
-                "frequency": "Minute",
-                "interval": 5,
-                "startTime": "2018-04-19T23:35:00Z",
-                "timeZone": "UTC"
+              "frequency": "Minute",
+              "interval": "15",
+              "startTime": "[parameters('startTime')]",
+              "delay": "00:00:00",
+              "maxConcurrency": 1,
+              "retryPolicy": {
+                "intervalInSeconds": 30
               }
+            },
+            "pipeline": {
+              "pipelineReference": {
+                "referenceName": "ETL",
+                "type": "PipelineReference"
+              },
+              "parameters": {}
             }
           },
           "dependsOn": [

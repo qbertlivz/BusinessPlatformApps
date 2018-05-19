@@ -159,8 +159,9 @@
     <Compile Include="Ax\GetAxInstancesCustom.cs" />
     <Compile Include="Ax\GetAxInstances.cs" />
     <Compile Include="Ax\UpdateAxConfigurationEntity.cs" />
-    <Compile Include="Ax\TriggerCDSAIntegrationJob.cs" />
+    <Compile Include="Ax\TriggerCDSAIntegrationProcess.cs" />
     <Compile Include="Ax\ValidateAxInstance.cs" />
+    <Compile Include="Ax\ValidateAxInstanceCDSA.cs" />
     <Compile Include="CustomerData\CustomerInfo.cs" />
     <Compile Include="CustomerData\PushToSimplement.cs" />
     <Compile Include="Facebook\GetPermanentPageToken.cs" />

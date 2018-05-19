@@ -27,7 +27,9 @@ export class Customize extends ViewModelBase {
 
         await this.getToken(this.oauthType, async () => {
             await this.getInstances();
-            this.selectedPBIWorkspaceId = this.pbiWorkspaces[0].id;
+            if (this.pbiWorkspaces.length > 0) {
+                this.selectedPBIWorkspaceId = this.pbiWorkspaces[0].id;
+            }
         });
 
         if (this.pbiWorkspaces && this.pbiWorkspaces.length > 0) {
@@ -37,7 +39,11 @@ export class Customize extends ViewModelBase {
 
     async getInstances(): Promise<void> {
         if (await this.MS.HttpService.isExecuteSuccessAsync('Microsoft-GetPBIClusterUri')) {
-            this.pbiWorkspaces = await this.MS.HttpService.getResponseAsync('Microsoft-GetPBIWorkspaces');            
+            this.pbiWorkspaces = await this.MS.HttpService.getResponseAsync('Microsoft-GetPBIWorkspacesCDSA');
+
+            if (this.pbiWorkspaces.length == 0) {
+                this.MS.ErrorService.set(this.MS.Translate.POWER_BI_APP_WORKSPACE);
+            }
         }
     }
 

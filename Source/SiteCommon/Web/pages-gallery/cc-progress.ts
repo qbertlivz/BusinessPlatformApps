@@ -31,10 +31,14 @@ export class ProgressViewModel extends ViewModelBase {
             this.MS.DeploymentService.isFinished = true;
             await this.wrangle();
 
-            this.publishReportLink = await this.MS.HttpService.getResponseAsync('Microsoft-PublishPBIReport', {
+            let response: string = await this.MS.HttpService.getResponseAsync('Microsoft-PublishPBIReportCDSA', {
                 PBIWorkspaceId: this.selectedPBIWorkspaceId,
                 PBIXLocation: this.pbixDownloadLink
             });
+
+            await this.MS.HttpService.getResponseAsync('Microsoft-UpdatePBIParameters');
+
+            this.publishReportLink = response;
         }
     }
 

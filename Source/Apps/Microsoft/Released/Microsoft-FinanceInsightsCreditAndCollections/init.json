@@ -33,7 +33,15 @@
         {
           "DeploymentName": "AxOdataAction",
           "displayname": "$translate(AX_ACTION_COPYDATA)",
-          "name": "Microsoft-TriggerCDSAIntegrationJob"
+          "name": "Microsoft-TriggerCDSAIntegrationProcess",
+          "AxInstanceEntityAction": "data/CDSAIntegrationEntities/Microsoft.Dynamics.DataEntities.ExportToExternalStorage"
+        },
+        {
+          "DeploymentName": "CreatePowerBIDatapoolReference",
+          "displayname": "$translate(POWER_BI_DATAPOOL_REFERENCE)",
+          "name": "Microsoft-CreatePBIDatapoolReference",
+          "DatapoolName": "Microsoft-CDSADatapool",
+          "DatapoolDescription": "Microsoft-CDSADatapool"
         }
       ]
     }

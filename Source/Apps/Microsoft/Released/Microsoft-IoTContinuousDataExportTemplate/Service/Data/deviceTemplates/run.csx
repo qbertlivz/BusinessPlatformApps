@@ -36,7 +36,6 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
             {
                 foreach (AvroRecord record in reader.Current.Objects)
                 {
-                    // log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - {record.ToString()}");
                     try
                     {
                         var deviceTemplateId = record.GetField<string>("id");
@@ -100,8 +99,8 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
     {
         var templateRow = templatesTable.NewRow();
         templateRow["id"] = $"{template.TemplateId}/{template.TemplateVersion}";
-        templateRow["modelId"] = template.TemplateId;
-        templateRow["modelVersion"] = template.TemplateVersion;
+        templateRow["deviceTemplateId"] = template.TemplateId;
+        templateRow["deviceTemplateVersion"] = template.TemplateVersion;
         templateRow["name"] = template.TemplateName;
 
         templatesTable.Rows.Add(templateRow);
@@ -163,7 +162,7 @@ private static void InsertMeasurementIntoTable(DeviceTemplate template, string f
 {
     var row = table.NewRow();
     row["id"] = $"{template.TemplateId}/{template.TemplateVersion}/{field}";
-    row["model"] = $"{template.TemplateId}/{template.TemplateVersion}";
+    row["deviceTemplate"] = $"{template.TemplateId}/{template.TemplateVersion}";
     row["field"] = field;
     row["kind"] = kind.ToString();
     row["dataType"] = measurement.DataType;
@@ -177,7 +176,7 @@ private static void InsertPropertyIntoTable(DeviceTemplate template, string fiel
 {
     var row = table.NewRow();
     row["id"] = $"{template.TemplateId}/{template.TemplateVersion}/{kind.ToString()}/{field}";
-    row["model"] = $"{template.TemplateId}/{template.TemplateVersion}";
+    row["deviceTemplate"] = $"{template.TemplateId}/{template.TemplateVersion}";
     row["field"] = field;
     row["kind"] = kind.ToString();
     row["dataType"] = property.DataType;
@@ -216,11 +215,11 @@ private static Property ProcessingProperty(AvroRecord record)
 // The length for the columns matches the length inside database
 private static DataTable CreateDeviceTemplatesTable()
 {
-    var table = new DataTable("Models");
+    var table = new DataTable("DeviceTemplates");
 
     table.Columns.Add(new DataColumn("id", typeof(string)) { MaxLength = 101 });
-    table.Columns.Add(new DataColumn("modelId", typeof(string)) { MaxLength = 50 });
-    table.Columns.Add(new DataColumn("modelVersion", typeof(string)) { MaxLength = 50 });
+    table.Columns.Add(new DataColumn("deviceTemplateId", typeof(string)) { MaxLength = 50 });
+    table.Columns.Add(new DataColumn("deviceTemplateVersion", typeof(string)) { MaxLength = 50 });
     table.Columns.Add(new DataColumn("name", typeof(string)) { MaxLength = 1000 });
 
     return table;
@@ -231,7 +230,7 @@ private static DataTable CreateMeaurementDefinitionsTable()
     var table = new DataTable("MeasurementDefinitions");
 
     table.Columns.Add(new DataColumn("id", typeof(string)) { MaxLength = 357 });
-    table.Columns.Add(new DataColumn("model", typeof(string)) { MaxLength = 101 });
+    table.Columns.Add(new DataColumn("deviceTemplate", typeof(string)) { MaxLength = 101 });
     table.Columns.Add(new DataColumn("field", typeof(string)) { MaxLength = 255 });
     table.Columns.Add(new DataColumn("kind", typeof(string)) { MaxLength = 50 });
     table.Columns.Add(new DataColumn("dataType", typeof(string)) { MaxLength = 100 });
@@ -246,7 +245,7 @@ private static DataTable CreatePropertyDefinitionsTable()
     var table = new DataTable("PropertyDefinitions");
 
     table.Columns.Add(new DataColumn("id", typeof(string)) { MaxLength = 408 });
-    table.Columns.Add(new DataColumn("model", typeof(string)) { MaxLength = 101 });
+    table.Columns.Add(new DataColumn("deviceTemplate", typeof(string)) { MaxLength = 101 });
     table.Columns.Add(new DataColumn("field", typeof(string)) { MaxLength = 255 });
     table.Columns.Add(new DataColumn("kind", typeof(string)) { MaxLength = 50 });
     table.Columns.Add(new DataColumn("dataType", typeof(string)) { MaxLength = 100 });

@@ -26,7 +26,7 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log, ExecutionCo
     log.Info($"{GetLogPrefix(context)} - Processing blob {myBlob.StorageUri}");
 
     var currentCount = System.Threading.Interlocked.Increment(ref counter);
-    log.Info($"{GetLogPrefix(context)} - Current count {currentCount}");
+    log.Info($"{GetLogPrefix(context)} - Concurrent job count: {currentCount}");
 
     IList<Message> messages = new List<Message>();
     int parseFailCount = 0;
@@ -45,7 +45,6 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log, ExecutionCo
             {
                 foreach (AvroRecord record in reader.Current.Objects)
                 {
-                    // log.Info($"{GetLogPrefix(context)} - {record.ToString()}");
                     try
                     {
                         var messageId = Guid.NewGuid();
@@ -120,7 +119,7 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log, ExecutionCo
                 case Int64 _:
                 case double _:
                 case float _:
-                    row["numericValue"] = decimal.Parse(entry.Value.ToString());
+                    row["numericValue"] = float.Parse(entry.Value.ToString());
                     break;
 
                 case null:
@@ -150,7 +149,7 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log, ExecutionCo
             {
                 await bulkCopy.WriteToServerAsync(messagesTable);
                 stopWatch.Stop();
-                // log.Info($"{GetLogPrefix(context)} - Added {messagesTable.Rows.Count} rows to the database table {messagesTable.TableName}. Elapsed: {stopWatch.Elapsed}");
+                log.Info($"{GetLogPrefix(context)} - Added {messagesTable.Rows.Count} rows to the database table {messagesTable.TableName}. Elapsed: {stopWatch.Elapsed}");
             }
             catch (Exception exception)
             {
@@ -160,27 +159,6 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log, ExecutionCo
                 throw;
             }
         }
-
-        /*
-        log.Info($"{GetLogPrefix(context)} - Inserting into table: {messagesTable.TableName}");
-        using (SqlCommand cmd = new SqlCommand("dbo.[InsertMessages]", conn) { CommandType = CommandType.StoredProcedure, CommandTimeout = 60 })
-        {
-            cmd.Parameters.Add(new SqlParameter("@tableType", messagesTable));
-
-            var stopWatch = System.Diagnostics.Stopwatch.StartNew();
-            try
-            {
-                var rows = await cmd.ExecuteNonQueryAsync();
-                stopWatch.Stop();
-                // log.Info($"{GetLogPrefix(context)} - Added {rows} rows to the database table {messagesTable.TableName}. Elapsed: {stopWatch.Elapsed}");
-            }
-            catch (Exception exception)
-            {
-                stopWatch.Stop();
-                log.Error($"{GetLogPrefix(context)} - Elapsed: {stopWatch.Elapsed} - database table {messagesTable.TableName}", exception);
-                throw;
-            }
-        }*/
 
         using (SqlBulkCopy bulkCopy = new SqlBulkCopy(conn) { BulkCopyTimeout = 120 })
         {
@@ -208,27 +186,6 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log, ExecutionCo
         }
 
         System.Threading.Interlocked.Decrement(ref counter);
-
-        /*
-        log.Info($"{GetLogPrefix(context)} - Inserting into table: {measurementsTable.TableName}");
-        using (SqlCommand cmd = new SqlCommand("dbo.[InsertMeasurements]", conn) { CommandType = CommandType.StoredProcedure, CommandTimeout = 60 })
-        {
-            cmd.Parameters.Add(new SqlParameter("@tableType", measurementsTable));
-
-            var stopWatch = System.Diagnostics.Stopwatch.StartNew();
-            try
-            {
-                var rows = await cmd.ExecuteNonQueryAsync();
-                stopWatch.Stop();
-                log.Info($"{GetLogPrefix(context)} - Added {rows} rows to the database table {measurementsTable.TableName}. Elapsed: {stopWatch.Elapsed}");
-            }
-            catch (Exception exception)
-            {
-                stopWatch.Stop();
-                log.Error($"{GetLogPrefix(context)} - Elapsed: {stopWatch.Elapsed} - Database table {measurementsTable.TableName}", exception);
-                throw;
-            }
-        }*/
     }
 }
 

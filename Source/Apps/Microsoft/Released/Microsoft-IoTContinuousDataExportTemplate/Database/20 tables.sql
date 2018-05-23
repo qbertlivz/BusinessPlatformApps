@@ -7,7 +7,7 @@ SET QUOTED_IDENTIFIER       ON;
 
 CREATE TABLE [analytics].[Devices](
 	[deviceId] [nvarchar](200) NOT NULL,
-	[model] [nvarchar](101) NOT NULL,
+	[deviceTemplate] [nvarchar](101) NOT NULL,
 	[name] [nvarchar](200) NOT NULL,
 	[simulated] [bit] NOT NULL,
 	PRIMARY KEY CLUSTERED 
@@ -23,7 +23,7 @@ WITH (TRACK_COLUMNS_UPDATED = OFF);
 CREATE TYPE dbo.DevicesTableType AS TABLE
 (
 	[deviceId] [nvarchar](200) NOT NULL,
-	[model] [nvarchar](101) NOT NULL,
+	[deviceTemplate] [nvarchar](101) NOT NULL,
 	[name] [nvarchar](200) NOT NULL,
 	[simulated] [bit] NOT NULL,
 	PRIMARY KEY CLUSTERED 
@@ -34,7 +34,7 @@ CREATE TYPE dbo.DevicesTableType AS TABLE
 
 CREATE TABLE [analytics].[MeasurementDefinitions](
 	[id] [nvarchar](357) NOT NULL,
-	[model] [nvarchar](101) NOT NULL,
+	[deviceTemplate] [nvarchar](101) NOT NULL,
 	[field] [nvarchar](255) NOT NULL,
 	[kind] [nvarchar](50) NOT NULL,
 	[dataType] [nvarchar](100) NULL,
@@ -49,7 +49,7 @@ CREATE TABLE [analytics].[MeasurementDefinitions](
 CREATE TYPE dbo.MeasurementDefinitionsTableType AS TABLE
 (
 	[id] [nvarchar](357) NOT NULL,
-	[model] [nvarchar](101) NOT NULL,
+	[deviceTemplate] [nvarchar](101) NOT NULL,
 	[field] [nvarchar](255) NOT NULL,
 	[kind] [nvarchar](50) NOT NULL,
 	[dataType] [nvarchar](100) NULL,
@@ -67,8 +67,8 @@ BEGIN
 		[id] [int] IDENTITY(1,1) NOT NULL,
 		[messageId] UNIQUEIDENTIFIER NOT NULL,
 		[deviceId] [nvarchar](200) NOT NULL,
-		[model] [nvarchar](101) NULL,
-		[definition] [nvarchar](357) NULL,
+		[deviceTemplate] [nvarchar](101) NULL,
+		[measurementDefinition] [nvarchar](357) NULL,
 		[timestamp] [datetime] NOT NULL,
 		[numericValue] [decimal](30, 10) NULL,
 		[stringValue] [nvarchar](max) NULL,
@@ -84,8 +84,8 @@ BEGIN
 		[id] [int] IDENTITY(1,1) NOT NULL,
 		[messageId] UNIQUEIDENTIFIER NOT NULL,
 		[deviceId] [nvarchar](200) NOT NULL,
-		[model] [nvarchar](101) NULL,
-		[definition] [nvarchar](357) NULL,
+		[deviceTemplate] [nvarchar](101) NULL,
+		[measurementDefinition] [nvarchar](357) NULL,
 		[timestamp] [datetime] NOT NULL,
 		[numericValue] [decimal](30, 10) NULL,
 		[stringValue] [nvarchar](max) NULL,
@@ -96,18 +96,18 @@ BEGIN
 		)
 	);
 
-	CREATE INDEX IX_Measurements_Model
+	CREATE INDEX IX_Measurements_DeviceTemplate
 	ON analytics.Measurements
 	(
-		model
+		deviceTemplate
 	);
 
 END;
 
-CREATE TABLE [analytics].[Models](
+CREATE TABLE [analytics].[DeviceTemplates](
 	[id] [nvarchar](101) NOT NULL,
-	[modelId] [nvarchar](50) NOT NULL,
-	[modelVersion] [nvarchar](50) NOT NULL,
+	[deviceTemplateId] [nvarchar](50) NOT NULL,
+	[deviceTemplateVersion] [nvarchar](50) NOT NULL,
 	[name] [nvarchar](1000) NOT NULL,
 	PRIMARY KEY CLUSTERED 
 	(
@@ -115,11 +115,11 @@ CREATE TABLE [analytics].[Models](
 	)
 );
 
-CREATE TYPE dbo.ModelsTableType AS TABLE
+CREATE TYPE dbo.DeviceTemplatesTableType AS TABLE
 (
 	[id] [nvarchar](101) NOT NULL,
-	[modelId] [nvarchar](50) NOT NULL,
-	[modelVersion] [nvarchar](50) NOT NULL,
+	[deviceTemplateId] [nvarchar](50) NOT NULL,
+	[deviceTemplateVersion] [nvarchar](50) NOT NULL,
 	[name] [nvarchar](1000) NOT NULL
 	PRIMARY KEY CLUSTERED 
 	(
@@ -130,8 +130,8 @@ CREATE TYPE dbo.ModelsTableType AS TABLE
 CREATE TABLE [analytics].[Properties](
 	[id] [nvarchar](507) NOT NULL,
 	[deviceId] [nvarchar](200) NOT NULL,
-	[model] [nvarchar](101) NOT NULL,
-	[definition] [nvarchar](408) NOT NULL,
+	[deviceTemplate] [nvarchar](101) NOT NULL,
+	[propertyDefinition] [nvarchar](408) NOT NULL,
 	[lastUpdated] [datetime] NOT NULL,
 	[numericValue] [decimal](30, 10) NULL,
 	[stringValue] [nvarchar](max) NULL,
@@ -146,8 +146,8 @@ CREATE TYPE [dbo].[PropertiesTableType] AS TABLE
 (
 	[id] [nvarchar](507) NOT NULL,
 	[deviceId] [nvarchar](200) NOT NULL,
-	[model] [nvarchar](101) NOT NULL,
-	[definition] [nvarchar](408) NOT NULL,
+	[deviceTemplate] [nvarchar](101) NOT NULL,
+	[propertyDefinition] [nvarchar](408) NOT NULL,
 	[lastUpdated] [datetime] NOT NULL,
 	[numericValue] [decimal](30, 10) NULL,
 	[stringValue] [nvarchar](max) NULL,
@@ -160,7 +160,7 @@ CREATE TYPE [dbo].[PropertiesTableType] AS TABLE
 
 CREATE TABLE [analytics].[PropertyDefinitions](
 	[id] [nvarchar](408) NOT NULL,
-	[model] [nvarchar](101) NOT NULL,
+	[deviceTemplate] [nvarchar](101) NOT NULL,
 	[field] [nvarchar](255) NOT NULL,
 	[kind] [nvarchar](50) NOT NULL,
 	[dataType] [nvarchar](100) NOT NULL,
@@ -174,7 +174,7 @@ CREATE TABLE [analytics].[PropertyDefinitions](
 CREATE TYPE dbo.PropertyDefinitionsTableType AS TABLE
 (
 	[id] [nvarchar](408) NOT NULL,
-	[model] [nvarchar](101) NOT NULL,
+	[deviceTemplate] [nvarchar](101) NOT NULL,
 	[field] [nvarchar](255) NOT NULL,
 	[kind] [nvarchar](50) NOT NULL,
 	[dataType] [nvarchar](100) NOT NULL,

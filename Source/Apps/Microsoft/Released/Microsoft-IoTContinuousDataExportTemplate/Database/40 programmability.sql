@@ -19,18 +19,18 @@ BEGIN
 
 		BEGIN TRANSACTION
 
-			INSERT INTO analytics.Measurements (messageId, deviceId, model, definition, timestamp, numericValue, stringValue, booleanValue)
+			INSERT INTO analytics.Measurements (messageId, deviceId, deviceTemplate, measurementDefinition, timestamp, numericValue, stringValue, booleanValue)
 			SELECT
 				M.messageId,
 				M.deviceId,
-				D.model,
+				D.deviceTemplate,
 				(
 					CASE
-						WHEN D.model IS NOT NULL
-						THEN (D.model + '/' + M.field)
+						WHEN D.deviceTemplate IS NOT NULL
+						THEN (D.deviceTemplate + '/' + M.field)
 						ELSE M.field
 					END
-				) AS definition,
+				) AS measurementDefinition,
 				M.timestamp,
 				M.numericValue,
 				M.stringValue,
@@ -75,15 +75,15 @@ BEGIN
 
 		BEGIN TRANSACTION
 			UPDATE [analytics].[Measurements]
-			SET [model] = Devices.model,
-				[definition] = Devices.model + '/' + analytics.Measurements.[definition]
+			SET [deviceTemplate] = Devices.deviceTemplate,
+				[measurementDefinition] = Devices.deviceTemplate + '/' + analytics.Measurements.[measurementDefinition]
 			FROM 
 				(
 				SELECT analytics.Devices.* 
 				FROM analytics.Devices 
 				INNER JOIN CHANGETABLE(CHANGES analytics.Devices, @PreviousChangeTrackingVersion) AS CT ON CT.deviceId = analytics.Devices.deviceId AND [CT].[SYS_CHANGE_VERSION] <= @CurrentChangeTrackingVersion
 				) AS Devices
-			WHERE analytics.Measurements.model IS NULL AND Devices.deviceId = analytics.Measurements.deviceId
+			WHERE analytics.Measurements.deviceTemplate IS NULL AND Devices.deviceId = analytics.Measurements.deviceId
 
 			UPDATE ChangeTracking
 			SET SYS_CHANGE_VERSION = @CurrentChangeTrackingVersion
@@ -122,16 +122,16 @@ BEGIN
 
 	MERGE [analytics].[Devices]
     USING (
-		SELECT deviceId, model, name, simulated FROM @tableType 
+		SELECT deviceId, deviceTemplate, name, simulated FROM @tableType 
 	) AS changes ON changes.deviceId = [analytics].[Devices].deviceId
 	WHEN MATCHED THEN
 		UPDATE SET
-			[analytics].[Devices].model = changes.model,
+			[analytics].[Devices].deviceTemplate = changes.deviceTemplate,
 			[analytics].[Devices].[name] = changes.[name],
 			[analytics].[Devices].simulated = changes.simulated
 	WHEN NOT MATCHED THEN
-		INSERT (deviceId, model, [name], simulated)
-		VALUES(changes.deviceId, changes.model, changes.[name], changes.simulated);
+		INSERT (deviceId, deviceTemplate, [name], simulated)
+		VALUES(changes.deviceId, changes.deviceTemplate, changes.[name], changes.simulated);
 
 END
 GO
@@ -144,42 +144,42 @@ BEGIN
 
 	MERGE [analytics].[Properties]
     USING (
-		SELECT id, deviceId, model, definition, lastUpdated, numericValue, stringValue, booleanValue FROM @tableType 
+		SELECT id, deviceId, deviceTemplate, propertyDefinition, lastUpdated, numericValue, stringValue, booleanValue FROM @tableType 
 	) AS changes ON changes.id = [analytics].[Properties].id
 	WHEN MATCHED THEN
 		UPDATE SET
 			[analytics].[Properties].deviceId = changes.deviceId,
-			[analytics].[Properties].model = changes.model,
-			[analytics].[Properties].definition = changes.definition,
+			[analytics].[Properties].deviceTemplate = changes.deviceTemplate,
+			[analytics].[Properties].propertyDefinition = changes.propertyDefinition,
 			[analytics].[Properties].lastUpdated = changes.lastUpdated,
 			[analytics].[Properties].numericValue = changes.numericValue,
 			[analytics].[Properties].stringValue = changes.stringValue,
 			[analytics].[Properties].booleanValue = changes.booleanValue
 	WHEN NOT MATCHED THEN
-		INSERT (id, deviceId, model, definition, lastUpdated, numericValue, stringValue, booleanValue)
-		VALUES(changes.id, changes.deviceId, changes.model, changes.definition, changes.lastUpdated, changes.numericValue, changes.stringValue, changes.booleanValue);
+		INSERT (id, deviceId, deviceTemplate, propertyDefinition, lastUpdated, numericValue, stringValue, booleanValue)
+		VALUES(changes.id, changes.deviceId, changes.deviceTemplate, changes.propertyDefinition, changes.lastUpdated, changes.numericValue, changes.stringValue, changes.booleanValue);
 
 END
 GO
 
 
 CREATE PROCEDURE [dbo].[InsertDeviceTemplates]
-    @tableType dbo.ModelsTableType readonly
+    @tableType dbo.DeviceTemplatesTableType readonly
 AS
 BEGIN
 
-	MERGE [analytics].[Models]
+	MERGE [analytics].[DeviceTemplates]
     USING (
-		SELECT id, modelId, modelVersion, [name] FROM @tableType 
-	) AS changes ON changes.id = [analytics].[Models].id
+		SELECT id, deviceTemplateId, deviceTemplateVersion, [name] FROM @tableType 
+	) AS changes ON changes.id = [analytics].[DeviceTemplates].id
 	WHEN MATCHED THEN
 		UPDATE SET
-			[analytics].[Models].modelId = changes.modelId,
-			[analytics].[Models].modelVersion = changes.modelVersion,
-			[analytics].[Models].[name] = changes.[name]
+			[analytics].[DeviceTemplates].deviceTemplateId = changes.deviceTemplateId,
+			[analytics].[DeviceTemplates].deviceTemplateVersion = changes.deviceTemplateVersion,
+			[analytics].[DeviceTemplates].[name] = changes.[name]
 	WHEN NOT MATCHED THEN
-		INSERT (id, modelId, modelVersion, [name])
-		VALUES(changes.id, changes.modelId, changes.modelVersion, changes.[name]);
+		INSERT (id, deviceTemplateId, deviceTemplateVersion, [name])
+		VALUES(changes.id, changes.deviceTemplateId, changes.deviceTemplateVersion, changes.[name]);
 
 END
 GO
@@ -192,19 +192,19 @@ BEGIN
 
 	MERGE [analytics].[MeasurementDefinitions]
     USING (
-		SELECT id, model, field, kind, dataType, [name], category FROM @tableType 
+		SELECT id, deviceTemplate, field, kind, dataType, [name], category FROM @tableType 
 	) AS changes ON changes.id = [analytics].[MeasurementDefinitions].id
 	WHEN MATCHED THEN
 		UPDATE SET
-			[analytics].[MeasurementDefinitions].model = changes.model,
+			[analytics].[MeasurementDefinitions].deviceTemplate = changes.deviceTemplate,
 			[analytics].[MeasurementDefinitions].field = changes.field,
 			[analytics].[MeasurementDefinitions].kind = changes.kind,
 			[analytics].[MeasurementDefinitions].dataType = changes.dataType,
 			[analytics].[MeasurementDefinitions].[name] = changes.[name],
 			[analytics].[MeasurementDefinitions].category = changes.category
 	WHEN NOT MATCHED THEN
-		INSERT (id, model, field, kind, dataType, [name], category)
-		VALUES(changes.id, changes.model, changes.field, changes.kind, changes.dataType, changes.[name], changes.category);
+		INSERT (id, deviceTemplate, field, kind, dataType, [name], category)
+		VALUES(changes.id, changes.deviceTemplate, changes.field, changes.kind, changes.dataType, changes.[name], changes.category);
 
 END
 GO
@@ -217,18 +217,18 @@ BEGIN
 
 	MERGE [analytics].[PropertyDefinitions]
     USING (
-		SELECT id, model, field, kind, dataType, [name] FROM @tableType 
+		SELECT id, deviceTemplate, field, kind, dataType, [name] FROM @tableType 
 	) AS changes ON changes.id = [analytics].[PropertyDefinitions].id
 	WHEN MATCHED THEN
 		UPDATE SET
-			[analytics].[PropertyDefinitions].model = changes.model,
+			[analytics].[PropertyDefinitions].deviceTemplate = changes.deviceTemplate,
 			[analytics].[PropertyDefinitions].field = changes.field,
 			[analytics].[PropertyDefinitions].kind = changes.kind,
 			[analytics].[PropertyDefinitions].dataType = changes.dataType,
 			[analytics].[PropertyDefinitions].[name] = changes.[name]
 	WHEN NOT MATCHED THEN
-		INSERT (id, model, field, kind, dataType, [name])
-		VALUES(changes.id, changes.model, changes.field, changes.kind, changes.dataType, changes.[name]);
+		INSERT (id, deviceTemplate, field, kind, dataType, [name])
+		VALUES(changes.id, changes.deviceTemplate, changes.field, changes.kind, changes.dataType, changes.[name]);
 
 END
 GO

@@ -86,7 +86,7 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
     {
         var deviceRow = devicesTable.NewRow();
         deviceRow["deviceId"] = device.DeviceId;
-        deviceRow["model"] = $"{device.DeviceTemplateId}/{device.DeviceTemplateVersion}";
+        deviceRow["deviceTemplate"] = $"{device.DeviceTemplateId}/{device.DeviceTemplateVersion}";
         deviceRow["name"] = device.DeviceName;
         deviceRow["simulated"] = device.Simulated;
 
@@ -148,9 +148,8 @@ private static void ProcessingProperty(Device device, KeyValuePair<string, dynam
 
     propertyRow["id"] = $"{device.DeviceId}/{propertyKind.ToString()}/{entry.Key}";
     propertyRow["deviceId"] = device.DeviceId;
-    propertyRow["model"] = $"{device.DeviceTemplateId}/{device.DeviceTemplateVersion}";
-    propertyRow["definition"] = $"{device.DeviceTemplateId}/{device.DeviceTemplateVersion}/{propertyKind.ToString()}/{entry.Key}";
-    // TODO: decide what to do with this
+    propertyRow["deviceTemplate"] = $"{device.DeviceTemplateId}/{device.DeviceTemplateVersion}";
+    propertyRow["propertyDefinition"] = $"{device.DeviceTemplateId}/{device.DeviceTemplateVersion}/{propertyKind.ToString()}/{entry.Key}";
     propertyRow["lastUpdated"] = DateTime.UtcNow;
 
     switch (entry.Value)
@@ -179,7 +178,7 @@ private static DataTable CreateDevicesTable()
 {
     var table = new DataTable("Devices");
     table.Columns.Add(new DataColumn("deviceId", typeof(string)) { MaxLength = 200 });
-    table.Columns.Add(new DataColumn("model", typeof(string)) { MaxLength = 101 });
+    table.Columns.Add(new DataColumn("deviceTemplate", typeof(string)) { MaxLength = 101 });
     table.Columns.Add(new DataColumn("name", typeof(string)) { MaxLength = 200 });
     table.Columns.Add(new DataColumn("simulated", typeof(bool)));
 
@@ -191,8 +190,8 @@ private static DataTable CreatePropertiesTable()
     var table = new DataTable("Properties");
     table.Columns.Add(new DataColumn("id", typeof(string)) { MaxLength = 507 });
     table.Columns.Add(new DataColumn("deviceId", typeof(string)) { MaxLength = 200 });
-    table.Columns.Add(new DataColumn("model", typeof(string)) { MaxLength = 101 });
-    table.Columns.Add(new DataColumn("definition", typeof(string)) { MaxLength = 408 });
+    table.Columns.Add(new DataColumn("deviceTemplate", typeof(string)) { MaxLength = 101 });
+    table.Columns.Add(new DataColumn("propertyDefinition", typeof(string)) { MaxLength = 408 });
     table.Columns.Add(new DataColumn("lastUpdated", typeof(DateTime)));
     table.Columns.Add(new DataColumn("numericValue", typeof(decimal)));
     table.Columns.Add(new DataColumn("stringValue", typeof(string)));

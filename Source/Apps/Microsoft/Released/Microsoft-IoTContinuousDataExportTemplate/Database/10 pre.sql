@@ -19,8 +19,8 @@ IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='analytics
     DROP TABLE analytics.MeasurementDefinitions;
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='analytics' AND TABLE_NAME='Measurements' AND TABLE_TYPE='BASE TABLE')
     DROP TABLE analytics.Measurements;
-IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='analytics' AND TABLE_NAME='Models' AND TABLE_TYPE='BASE TABLE')
-    DROP TABLE analytics.Models;
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='analytics' AND TABLE_NAME='DeviceTemplates' AND TABLE_TYPE='BASE TABLE')
+    DROP TABLE analytics.DeviceTemplates;
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='analytics' AND TABLE_NAME='Properties' AND TABLE_TYPE='BASE TABLE')
     DROP TABLE analytics.Properties;
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='analytics' AND TABLE_NAME='PropertyDefinitions' AND TABLE_TYPE='BASE TABLE')
@@ -59,8 +59,8 @@ IF EXISTS (SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'DevicesTa
 	DROP TYPE dbo.DevicesTableType;
 IF EXISTS (SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'PropertiesTableType')
 	DROP TYPE dbo.PropertiesTableType;
-IF EXISTS (SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'ModelsTableType')
-	DROP TYPE dbo.ModelsTableType;
+IF EXISTS (SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'DeviceTemplatesTableType')
+	DROP TYPE dbo.DeviceTemplatesTableType;
 IF EXISTS (SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'MeasurementDefinitionsTableType')
 	DROP TYPE dbo.MeasurementDefinitionsTableType;
 IF EXISTS (SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'PropertyDefinitionsTableType')

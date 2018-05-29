@@ -25,6 +25,14 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log, ExecutionCo
 {
     log.Info($"{GetLogPrefix(context)} - Processing blob {myBlob.StorageUri}");
 
+    await myBlob.FetchAttributesAsync();
+    var timestamp = myBlob.Properties.LastModified.Value;
+    if (DateTime.UtcNow.Subtract(timestamp.UtcDateTime) > TimeSpan.FromHours(1))
+    {
+        log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Blob timestamp: {timestamp} older than 1 hour, ignored");
+        return;
+    }
+
     var currentCount = System.Threading.Interlocked.Increment(ref counter);
     log.Info($"{GetLogPrefix(context)} - Concurrent job count: {currentCount}");
 

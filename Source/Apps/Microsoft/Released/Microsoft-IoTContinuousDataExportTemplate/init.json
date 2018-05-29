@@ -98,7 +98,7 @@
         "enableTransaction": false
       },
       {
-        "AzureArmFile": "Service/ARM/functions-dedicated.json",
+        "AzureArmFile": "Service/ARM/functions.json",
         "displayname": "$translate(INIT_ACTION_CREATING_FUNCTION_IOT)",
         "name": "Microsoft-DeployIoTCDEAzureFunction"
       },

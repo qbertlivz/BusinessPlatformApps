@@ -10,6 +10,7 @@ CREATE TABLE [analytics].[Devices](
 	[deviceTemplate] [nvarchar](101) NOT NULL,
 	[name] [nvarchar](200) NOT NULL,
 	[simulated] [bit] NOT NULL,
+	[timestamp] [datetime] NOT NULL,
 	PRIMARY KEY CLUSTERED 
 	(
 		[deviceId] ASC
@@ -26,6 +27,7 @@ CREATE TYPE dbo.DevicesTableType AS TABLE
 	[deviceTemplate] [nvarchar](101) NOT NULL,
 	[name] [nvarchar](200) NOT NULL,
 	[simulated] [bit] NOT NULL,
+	[timestamp] [DATETIME] NOT NULL,
 	PRIMARY KEY CLUSTERED 
 	(
 		[deviceId] ASC
@@ -40,6 +42,7 @@ CREATE TABLE [analytics].[MeasurementDefinitions](
 	[dataType] [nvarchar](100) NULL,
 	[name] [nvarchar](200) NOT NULL,
 	[category] [nvarchar](100) NULL,
+	[timestamp] [DATETIME] NOT NULL,
 	PRIMARY KEY CLUSTERED 
 	(
 		[id] ASC
@@ -55,6 +58,7 @@ CREATE TYPE dbo.MeasurementDefinitionsTableType AS TABLE
 	[dataType] [nvarchar](100) NULL,
 	[name] [nvarchar](200) NOT NULL,
 	[category] [nvarchar](100) NULL,
+	[timestamp] [DATETIME] NOT NULL,
 	PRIMARY KEY CLUSTERED 
 	(
 		[id] ASC
@@ -109,6 +113,7 @@ CREATE TABLE [analytics].[DeviceTemplates](
 	[deviceTemplateId] [nvarchar](50) NOT NULL,
 	[deviceTemplateVersion] [nvarchar](50) NOT NULL,
 	[name] [nvarchar](1000) NOT NULL,
+	[timestamp] [DATETIME] NOT NULL,
 	PRIMARY KEY CLUSTERED 
 	(
 		[id] ASC
@@ -120,7 +125,8 @@ CREATE TYPE dbo.DeviceTemplatesTableType AS TABLE
 	[id] [nvarchar](101) NOT NULL,
 	[deviceTemplateId] [nvarchar](50) NOT NULL,
 	[deviceTemplateVersion] [nvarchar](50) NOT NULL,
-	[name] [nvarchar](1000) NOT NULL
+	[name] [nvarchar](1000) NOT NULL,
+	[timestamp] [DATETIME] NOT NULL,
 	PRIMARY KEY CLUSTERED 
 	(
 		[id] ASC
@@ -132,7 +138,7 @@ CREATE TABLE [analytics].[Properties](
 	[deviceId] [nvarchar](200) NOT NULL,
 	[deviceTemplate] [nvarchar](101) NOT NULL,
 	[propertyDefinition] [nvarchar](408) NOT NULL,
-	[lastUpdated] [datetime] NOT NULL,
+	[timestamp] [datetime] NOT NULL,
 	[numericValue] [decimal](30, 10) NULL,
 	[stringValue] [nvarchar](max) NULL,
 	[booleanValue] [bit] NULL,
@@ -148,7 +154,7 @@ CREATE TYPE [dbo].[PropertiesTableType] AS TABLE
 	[deviceId] [nvarchar](200) NOT NULL,
 	[deviceTemplate] [nvarchar](101) NOT NULL,
 	[propertyDefinition] [nvarchar](408) NOT NULL,
-	[lastUpdated] [datetime] NOT NULL,
+	[timestamp] [datetime] NOT NULL,
 	[numericValue] [decimal](30, 10) NULL,
 	[stringValue] [nvarchar](max) NULL,
 	[booleanValue] [bit] NULL,
@@ -165,6 +171,7 @@ CREATE TABLE [analytics].[PropertyDefinitions](
 	[kind] [nvarchar](50) NOT NULL,
 	[dataType] [nvarchar](100) NOT NULL,
 	[name] [nvarchar](200) NOT NULL,
+	[timestamp] [DATETIME] NOT NULL,
 	PRIMARY KEY CLUSTERED 
 	(
 		[id] ASC
@@ -179,6 +186,7 @@ CREATE TYPE dbo.PropertyDefinitionsTableType AS TABLE
 	[kind] [nvarchar](50) NOT NULL,
 	[dataType] [nvarchar](100) NOT NULL,
 	[name] [nvarchar](200) NOT NULL,
+	[timestamp] [DATETIME] NOT NULL,
 	PRIMARY KEY CLUSTERED 
 	(
 		[id] ASC

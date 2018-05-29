@@ -45,8 +45,11 @@ export class SelectStorage extends ViewModelBase {
 
         this.selectedContainerName = this.containersList.length === 0 ? '' : this.containersList[0].Name;
 
-        if (this.selectedStorageName && this.selectedContainerName) {
+        if (this.selectedStorageName && this.selectedContainerName && this.selectedContainerName.length > 0) {
             this.isValidated = true;
+        }
+        else {
+            this.isValidated = false;
         }
     }
 
@@ -62,7 +65,7 @@ export class SelectStorage extends ViewModelBase {
             await this.getStorages();
         }
 
-        if (this.selectedStorageName && this.selectedContainerName) {
+        if (this.selectedStorageName && this.selectedContainerName && this.selectedContainerName.length > 0) {
             this.isValidated = true;
         }
     }

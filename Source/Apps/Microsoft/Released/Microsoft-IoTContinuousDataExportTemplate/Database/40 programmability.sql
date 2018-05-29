@@ -122,16 +122,17 @@ BEGIN
 
 	MERGE [analytics].[Devices]
     USING (
-		SELECT deviceId, deviceTemplate, name, simulated FROM @tableType 
-	) AS changes ON changes.deviceId = [analytics].[Devices].deviceId
-	WHEN MATCHED THEN
+		SELECT deviceId, deviceTemplate, name, simulated, [timestamp] FROM @tableType 
+	) AS changes ON changes.deviceId = [analytics].[Devices].deviceId 
+	WHEN MATCHED AND changes.[timestamp] > [analytics].[Devices].[timestamp] THEN
 		UPDATE SET
 			[analytics].[Devices].deviceTemplate = changes.deviceTemplate,
 			[analytics].[Devices].[name] = changes.[name],
-			[analytics].[Devices].simulated = changes.simulated
+			[analytics].[Devices].simulated = changes.simulated,
+			[analytics].[Devices].[timestamp] = changes.[timestamp]
 	WHEN NOT MATCHED THEN
-		INSERT (deviceId, deviceTemplate, [name], simulated)
-		VALUES(changes.deviceId, changes.deviceTemplate, changes.[name], changes.simulated);
+		INSERT (deviceId, deviceTemplate, [name], simulated, [timestamp])
+		VALUES(changes.deviceId, changes.deviceTemplate, changes.[name], changes.simulated, changes.[timestamp]);
 
 END
 GO
@@ -144,20 +145,20 @@ BEGIN
 
 	MERGE [analytics].[Properties]
     USING (
-		SELECT id, deviceId, deviceTemplate, propertyDefinition, lastUpdated, numericValue, stringValue, booleanValue FROM @tableType 
+		SELECT id, deviceId, deviceTemplate, propertyDefinition, [timestamp], numericValue, stringValue, booleanValue FROM @tableType 
 	) AS changes ON changes.id = [analytics].[Properties].id
-	WHEN MATCHED THEN
+	WHEN MATCHED AND changes.[timestamp] > [analytics].[Properties].[timestamp] THEN
 		UPDATE SET
 			[analytics].[Properties].deviceId = changes.deviceId,
 			[analytics].[Properties].deviceTemplate = changes.deviceTemplate,
 			[analytics].[Properties].propertyDefinition = changes.propertyDefinition,
-			[analytics].[Properties].lastUpdated = changes.lastUpdated,
+			[analytics].[Properties].[timestamp] = changes.[timestamp],
 			[analytics].[Properties].numericValue = changes.numericValue,
 			[analytics].[Properties].stringValue = changes.stringValue,
 			[analytics].[Properties].booleanValue = changes.booleanValue
 	WHEN NOT MATCHED THEN
-		INSERT (id, deviceId, deviceTemplate, propertyDefinition, lastUpdated, numericValue, stringValue, booleanValue)
-		VALUES(changes.id, changes.deviceId, changes.deviceTemplate, changes.propertyDefinition, changes.lastUpdated, changes.numericValue, changes.stringValue, changes.booleanValue);
+		INSERT (id, deviceId, deviceTemplate, propertyDefinition, [timestamp], numericValue, stringValue, booleanValue)
+		VALUES(changes.id, changes.deviceId, changes.deviceTemplate, changes.propertyDefinition, changes.[timestamp], changes.numericValue, changes.stringValue, changes.booleanValue);
 
 END
 GO
@@ -170,16 +171,17 @@ BEGIN
 
 	MERGE [analytics].[DeviceTemplates]
     USING (
-		SELECT id, deviceTemplateId, deviceTemplateVersion, [name] FROM @tableType 
+		SELECT id, deviceTemplateId, deviceTemplateVersion, [name], [timestamp] FROM @tableType 
 	) AS changes ON changes.id = [analytics].[DeviceTemplates].id
-	WHEN MATCHED THEN
+	WHEN MATCHED AND changes.[timestamp] > [analytics].[DeviceTemplates].[timestamp] THEN
 		UPDATE SET
 			[analytics].[DeviceTemplates].deviceTemplateId = changes.deviceTemplateId,
 			[analytics].[DeviceTemplates].deviceTemplateVersion = changes.deviceTemplateVersion,
-			[analytics].[DeviceTemplates].[name] = changes.[name]
+			[analytics].[DeviceTemplates].[name] = changes.[name],
+			[analytics].[DeviceTemplates].[timestamp] = changes.[timestamp]
 	WHEN NOT MATCHED THEN
-		INSERT (id, deviceTemplateId, deviceTemplateVersion, [name])
-		VALUES(changes.id, changes.deviceTemplateId, changes.deviceTemplateVersion, changes.[name]);
+		INSERT (id, deviceTemplateId, deviceTemplateVersion, [name], [timestamp])
+		VALUES(changes.id, changes.deviceTemplateId, changes.deviceTemplateVersion, changes.[name], changes.[timestamp]);
 
 END
 GO
@@ -192,19 +194,20 @@ BEGIN
 
 	MERGE [analytics].[MeasurementDefinitions]
     USING (
-		SELECT id, deviceTemplate, field, kind, dataType, [name], category FROM @tableType 
+		SELECT id, deviceTemplate, field, kind, dataType, [name], category, [timestamp] FROM @tableType 
 	) AS changes ON changes.id = [analytics].[MeasurementDefinitions].id
-	WHEN MATCHED THEN
+	WHEN MATCHED AND changes.[timestamp] > [analytics].[MeasurementDefinitions].[timestamp] THEN
 		UPDATE SET
 			[analytics].[MeasurementDefinitions].deviceTemplate = changes.deviceTemplate,
 			[analytics].[MeasurementDefinitions].field = changes.field,
 			[analytics].[MeasurementDefinitions].kind = changes.kind,
 			[analytics].[MeasurementDefinitions].dataType = changes.dataType,
 			[analytics].[MeasurementDefinitions].[name] = changes.[name],
-			[analytics].[MeasurementDefinitions].category = changes.category
+			[analytics].[MeasurementDefinitions].category = changes.category,
+			[analytics].[MeasurementDefinitions].[timestamp] = changes.[timestamp]
 	WHEN NOT MATCHED THEN
-		INSERT (id, deviceTemplate, field, kind, dataType, [name], category)
-		VALUES(changes.id, changes.deviceTemplate, changes.field, changes.kind, changes.dataType, changes.[name], changes.category);
+		INSERT (id, deviceTemplate, field, kind, dataType, [name], category, [timestamp])
+		VALUES(changes.id, changes.deviceTemplate, changes.field, changes.kind, changes.dataType, changes.[name], changes.category, changes.[timestamp]);
 
 END
 GO
@@ -217,18 +220,19 @@ BEGIN
 
 	MERGE [analytics].[PropertyDefinitions]
     USING (
-		SELECT id, deviceTemplate, field, kind, dataType, [name] FROM @tableType 
+		SELECT id, deviceTemplate, field, kind, dataType, [name], [timestamp] FROM @tableType 
 	) AS changes ON changes.id = [analytics].[PropertyDefinitions].id
-	WHEN MATCHED THEN
+	WHEN MATCHED AND changes.[timestamp] > [analytics].[PropertyDefinitions].[timestamp] THEN
 		UPDATE SET
 			[analytics].[PropertyDefinitions].deviceTemplate = changes.deviceTemplate,
 			[analytics].[PropertyDefinitions].field = changes.field,
 			[analytics].[PropertyDefinitions].kind = changes.kind,
 			[analytics].[PropertyDefinitions].dataType = changes.dataType,
-			[analytics].[PropertyDefinitions].[name] = changes.[name]
+			[analytics].[PropertyDefinitions].[name] = changes.[name],
+			[analytics].[PropertyDefinitions].[timestamp] = changes.[timestamp]
 	WHEN NOT MATCHED THEN
-		INSERT (id, deviceTemplate, field, kind, dataType, [name])
-		VALUES(changes.id, changes.deviceTemplate, changes.field, changes.kind, changes.dataType, changes.[name]);
+		INSERT (id, deviceTemplate, field, kind, dataType, [name], [timestamp])
+		VALUES(changes.id, changes.deviceTemplate, changes.field, changes.kind, changes.dataType, changes.[name], changes.[timestamp]);
 
 END
 GO

@@ -22,6 +22,9 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
 {
     log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Processing blob {myBlob.StorageUri}");
 
+    await myBlob.FetchAttributesAsync();
+    var timestamp = myBlob.Properties.LastModified.Value;
+
     var templates = new List<DeviceTemplate>();
     int parseFailCount = 0;
 
@@ -102,26 +105,20 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
         templateRow["deviceTemplateId"] = template.TemplateId;
         templateRow["deviceTemplateVersion"] = template.TemplateVersion;
         templateRow["name"] = template.TemplateName;
+        templateRow["timestamp"] = timestamp.UtcDateTime;
 
         templatesTable.Rows.Add(templateRow);
 
-        template.Telemetry.ToList().ForEach(entry => InsertMeasurementIntoTable(template, entry.Key, entry.Value, MeasurementKind.Telemetry, measurementDefinitionsTable));
-        template.States.ToList().ForEach(entry => InsertMeasurementIntoTable(template, entry.Key, entry.Value, MeasurementKind.State, measurementDefinitionsTable));
-        template.Events.ToList().ForEach(entry => InsertMeasurementIntoTable(template, entry.Key, entry.Value, MeasurementKind.Event, measurementDefinitionsTable));
+        template.Telemetry.ToList().ForEach(entry => InsertMeasurementIntoTable(template, entry.Key, entry.Value, MeasurementKind.Telemetry, measurementDefinitionsTable, timestamp));
+        template.States.ToList().ForEach(entry => InsertMeasurementIntoTable(template, entry.Key, entry.Value, MeasurementKind.State, measurementDefinitionsTable, timestamp));
+        template.Events.ToList().ForEach(entry => InsertMeasurementIntoTable(template, entry.Key, entry.Value, MeasurementKind.Event, measurementDefinitionsTable, timestamp));
 
-        template.CloudProperties.ToList().ForEach(entry => InsertPropertyIntoTable(template, entry.Key, entry.Value, PropertyKind.CloudProperty, propertyDefinitionsTable));
-        template.DeviceProperties.ToList().ForEach(entry => InsertPropertyIntoTable(template, entry.Key, entry.Value, PropertyKind.DeviceProperty, propertyDefinitionsTable));
-        template.DeviceSettings.ToList().ForEach(entry => InsertPropertyIntoTable(template, entry.Key, entry.Value, PropertyKind.DeviceSetting, propertyDefinitionsTable));
+        template.CloudProperties.ToList().ForEach(entry => InsertPropertyIntoTable(template, entry.Key, entry.Value, PropertyKind.CloudProperty, propertyDefinitionsTable, timestamp));
+        template.DeviceProperties.ToList().ForEach(entry => InsertPropertyIntoTable(template, entry.Key, entry.Value, PropertyKind.DeviceProperty, propertyDefinitionsTable, timestamp));
+        template.DeviceSettings.ToList().ForEach(entry => InsertPropertyIntoTable(template, entry.Key, entry.Value, PropertyKind.DeviceSetting, propertyDefinitionsTable, timestamp));
     }
 
     var cs = ConfigurationManager.AppSettings["SQL_CONNECTIONSTRING"];
-    if (string.IsNullOrWhiteSpace(cs))
-    {
-        throw new ConfigurationException("Couldn't read database connection string");
-    }
-
-    log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Got the connection string");
-
     using (SqlConnection conn = new SqlConnection(cs))
     {
         conn.Open();
@@ -158,7 +155,7 @@ public static bool FieldExists(dynamic dynObj, string fieldName)
     return recordFields.Any(f => f.Name.Equals(fieldName));
 }
 
-private static void InsertMeasurementIntoTable(DeviceTemplate template, string field, Measurement measurement, MeasurementKind kind, DataTable table)
+private static void InsertMeasurementIntoTable(DeviceTemplate template, string field, Measurement measurement, MeasurementKind kind, DataTable table, DateTimeOffset timestamp)
 {
     var row = table.NewRow();
     row["id"] = $"{template.TemplateId}/{template.TemplateVersion}/{field}";
@@ -168,11 +165,12 @@ private static void InsertMeasurementIntoTable(DeviceTemplate template, string f
     row["dataType"] = measurement.DataType;
     row["name"] = measurement.Name;
     row["category"] = measurement.Category;
+    row["timestamp"] = timestamp.UtcDateTime;
 
     table.Rows.Add(row);
 }
 
-private static void InsertPropertyIntoTable(DeviceTemplate template, string field, Property property, PropertyKind kind, DataTable table)
+private static void InsertPropertyIntoTable(DeviceTemplate template, string field, Property property, PropertyKind kind, DataTable table, DateTimeOffset timestamp)
 {
     var row = table.NewRow();
     row["id"] = $"{template.TemplateId}/{template.TemplateVersion}/{kind.ToString()}/{field}";
@@ -181,6 +179,7 @@ private static void InsertPropertyIntoTable(DeviceTemplate template, string fiel
     row["kind"] = kind.ToString();
     row["dataType"] = property.DataType;
     row["name"] = property.Name;
+    row["timestamp"] = timestamp.UtcDateTime;
 
     table.Rows.Add(row);
 }
@@ -221,6 +220,7 @@ private static DataTable CreateDeviceTemplatesTable()
     table.Columns.Add(new DataColumn("deviceTemplateId", typeof(string)) { MaxLength = 50 });
     table.Columns.Add(new DataColumn("deviceTemplateVersion", typeof(string)) { MaxLength = 50 });
     table.Columns.Add(new DataColumn("name", typeof(string)) { MaxLength = 1000 });
+    table.Columns.Add(new DataColumn("timestamp", typeof(DateTime)));
 
     return table;
 }
@@ -236,6 +236,7 @@ private static DataTable CreateMeaurementDefinitionsTable()
     table.Columns.Add(new DataColumn("dataType", typeof(string)) { MaxLength = 100 });
     table.Columns.Add(new DataColumn("name", typeof(string)) { MaxLength = 200 });
     table.Columns.Add(new DataColumn("category", typeof(string)) { MaxLength = 100 });
+    table.Columns.Add(new DataColumn("timestamp", typeof(DateTime)));
 
     return table;
 }
@@ -250,6 +251,7 @@ private static DataTable CreatePropertyDefinitionsTable()
     table.Columns.Add(new DataColumn("kind", typeof(string)) { MaxLength = 50 });
     table.Columns.Add(new DataColumn("dataType", typeof(string)) { MaxLength = 100 });
     table.Columns.Add(new DataColumn("name", typeof(string)) { MaxLength = 200 });
+    table.Columns.Add(new DataColumn("timestamp", typeof(DateTime)));
 
     return table;
 }

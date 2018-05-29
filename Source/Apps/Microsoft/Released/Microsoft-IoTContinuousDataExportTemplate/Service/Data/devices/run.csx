@@ -22,6 +22,9 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
 {
     log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Processing blob {myBlob.StorageUri}");
 
+    await myBlob.FetchAttributesAsync();
+    var timestamp = myBlob.Properties.LastModified.Value;
+
     var devices = new List<Device>();
     int parseFailCount = 0;
 
@@ -36,7 +39,6 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
             {
                 foreach (AvroRecord record in reader.Current.Objects)
                 {
-                    // log.Info($"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")} - {record.ToString()}");
                     try
                     {
                         var deviceId = record.GetField<string>("id");
@@ -89,12 +91,13 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
         deviceRow["deviceTemplate"] = $"{device.DeviceTemplateId}/{device.DeviceTemplateVersion}";
         deviceRow["name"] = device.DeviceName;
         deviceRow["simulated"] = device.Simulated;
+        deviceRow["timestamp"] = timestamp.UtcDateTime;
 
         devicesTable.Rows.Add(deviceRow);
 
-        device.CloudProperties.ToList().ForEach(entry => ProcessingProperty(device, entry, PropertyKind.CloudProperty, propertiesTable));
-        device.DeviceProperties.ToList().ForEach(entry => ProcessingProperty(device, entry, PropertyKind.DeviceProperty, propertiesTable));
-        device.DeviceSettings.ToList().ForEach(entry => ProcessingProperty(device, entry, PropertyKind.DeviceSetting, propertiesTable));
+        device.CloudProperties.ToList().ForEach(entry => ProcessingProperty(device, entry, PropertyKind.CloudProperty, propertiesTable, timestamp));
+        device.DeviceProperties.ToList().ForEach(entry => ProcessingProperty(device, entry, PropertyKind.DeviceProperty, propertiesTable, timestamp));
+        device.DeviceSettings.ToList().ForEach(entry => ProcessingProperty(device, entry, PropertyKind.DeviceSetting, propertiesTable, timestamp));
     }
 
     var cs = ConfigurationManager.AppSettings["SQL_CONNECTIONSTRING"];
@@ -142,7 +145,7 @@ public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
     }
 }
 
-private static void ProcessingProperty(Device device, KeyValuePair<string, dynamic> entry, PropertyKind propertyKind, DataTable propertiesTable)
+private static void ProcessingProperty(Device device, KeyValuePair<string, dynamic> entry, PropertyKind propertyKind, DataTable propertiesTable, DateTimeOffset timestamp)
 {
     var propertyRow = propertiesTable.NewRow();
 
@@ -150,7 +153,7 @@ private static void ProcessingProperty(Device device, KeyValuePair<string, dynam
     propertyRow["deviceId"] = device.DeviceId;
     propertyRow["deviceTemplate"] = $"{device.DeviceTemplateId}/{device.DeviceTemplateVersion}";
     propertyRow["propertyDefinition"] = $"{device.DeviceTemplateId}/{device.DeviceTemplateVersion}/{propertyKind.ToString()}/{entry.Key}";
-    propertyRow["lastUpdated"] = DateTime.UtcNow;
+    propertyRow["timestamp"] = timestamp.UtcDateTime;
 
     switch (entry.Value)
     {
@@ -181,6 +184,7 @@ private static DataTable CreateDevicesTable()
     table.Columns.Add(new DataColumn("deviceTemplate", typeof(string)) { MaxLength = 101 });
     table.Columns.Add(new DataColumn("name", typeof(string)) { MaxLength = 200 });
     table.Columns.Add(new DataColumn("simulated", typeof(bool)));
+    table.Columns.Add(new DataColumn("timestamp", typeof(DateTime)));
 
     return table;
 }
@@ -192,7 +196,7 @@ private static DataTable CreatePropertiesTable()
     table.Columns.Add(new DataColumn("deviceId", typeof(string)) { MaxLength = 200 });
     table.Columns.Add(new DataColumn("deviceTemplate", typeof(string)) { MaxLength = 101 });
     table.Columns.Add(new DataColumn("propertyDefinition", typeof(string)) { MaxLength = 408 });
-    table.Columns.Add(new DataColumn("lastUpdated", typeof(DateTime)));
+    table.Columns.Add(new DataColumn("timestamp", typeof(DateTime)));
     table.Columns.Add(new DataColumn("numericValue", typeof(decimal)));
     table.Columns.Add(new DataColumn("stringValue", typeof(string)));
     table.Columns.Add(new DataColumn("booleanValue", typeof(bool)));

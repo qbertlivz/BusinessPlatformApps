@@ -25,6 +25,7 @@ While installing Visual Studio 2017, the following features are required:
     * Data storage and processing
 3. Other Toolsets
     * .NET Core cross-platform development
+    * Gulp
 4. GitHub Extension for Visual Studio (found under Individual components > Uncategorized)
 
 While Visual Studio 2017 installs, Fork the BPST Framework repository. The simplest way to Fork is to use the Fork button at the top right of this page:

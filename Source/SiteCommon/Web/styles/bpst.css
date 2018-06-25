@@ -747,6 +747,33 @@ ul {
     padding-left: 21px;
 }
 
+.tile {
+    background-color: #fff;
+    height: 240px;
+    line-height: 240px;
+    margin: 0px 16px 16px 0px;
+    max-width: 100%;
+    text-align: center;
+    width: 240px;
+    overflow: hidden;    
+}
+
+.tile,
+.tile a {
+    display: inline-block;
+    color: black;
+}
+
+.tile a {
+    width: 100%;
+}
+
+.disabled {
+    pointer-events: none;
+    cursor: default;
+    opacity: 0.6;
+}
+
 /********************************************************************************************
 * Spinner
 ********************************************************************************************/

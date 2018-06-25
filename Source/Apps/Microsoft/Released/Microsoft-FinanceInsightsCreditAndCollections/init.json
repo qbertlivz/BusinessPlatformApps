@@ -15,8 +15,16 @@
           "templateName": "$translate(AX_FINANCE_INSIGHTS_COLLECTIONS_TEMPLATE_TITLE)"
         },
         {
+          "displayname": "Choose a data source",
+          "name": "$SiteCommon$/pages-gallery/cc-ax-datasource.html"
+        },
+        {
           "displayname": "Connect to Dynamics 365",
           "name": "$SiteCommon$/pages-gallery/cc-ax-customize.html"
+        },
+        {
+          "displayname": "Your Storage account",
+          "name": "$SiteCommon$/pages-gallery/cc-cdsa-storage.html"
         },
         {
           "displayname": "Connect to Power BI",

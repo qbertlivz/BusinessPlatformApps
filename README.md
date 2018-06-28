@@ -54,9 +54,9 @@ The solution requires .NET Core 1.0.4, for which the installer is no longer easi
 1. Download the latest version of [.NET Core SDK >= 2.X](https://www.microsoft.com/net/download/windows)
 2. Download the [.NET Core 1.0.4 SDK Binaries](https://www.microsoft.com/net/download/dotnet-core/sdk-1.0.4)
 3. Extract the downloaded .zip
-4. From inside the .zip, copy shared\Microsoft.NETCore.App\* to C:\Program Files\dotnet\Microsoft.NETCore.App\ (or wherever you installed the latest .NET Core)
-5. From inside the .zip, copy sdk\* to C:\Program Files\dotnet\sdk\ (or wherever you installed the latest .NET Core)
-6. From inside the .zip, copy host\fxr\* to C:\Program Files\dotnet\host\fxr\ (or wherever you installed the latest .NET Core)
+4. From inside the .zip, copy shared\Microsoft.NETCore.App\\* to C:\Program Files\dotnet\Microsoft.NETCore.App\ (or wherever you installed the latest .NET Core)
+5. From inside the .zip, copy sdk\\* to C:\Program Files\dotnet\sdk\ (or wherever you installed the latest .NET Core)
+6. From inside the .zip, copy host\fxr\\* to C:\Program Files\dotnet\host\fxr\ (or wherever you installed the latest .NET Core)
 
 ## Debugging Locally
 

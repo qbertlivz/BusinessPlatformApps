@@ -477,7 +477,7 @@
     INIT_GETTING_STARTED_WHERE: `Where do you want to copy your data?`,
     INIT_GETTING_STARTED_CDS_SOLUTION: `Fully leveraged with CDS-A platform`,
     INIT_GETTING_STARTED_CONNECT_CDS_AS_PBI: `Connect to CDS-A platform and import data into Power BI`,
-    INIT_IOT_CDE_PRICING_COST: `By clicking next and deploying the template, you authorize Microsoft to create Azure resources on your subscription and bill based on their respective pricing rates.  The approximate base cost of the Azure resources used by this template is $3.27 a day.  These costs are estimates only and subject to change.`,
+    INIT_IOT_CDE_PRICING_COST: `By clicking next and deploying the template, you authorize Microsoft to create Azure resources on your subscription and bill based on their respective pricing rates.  The approximate base cost of the Azure resources used by this template is $1.10 a day.  These costs are estimates only and subject to change.`,
     INIT_IOT_CDE_PRICING_URL: `https://github.com/Microsoft/BusinessPlatformApps/blob/lance-stream/README.md`,
     INIT_IOT_CDE_SELECT_STORAGE_TITLE: `Connect to your Azure Blob Storage Account`,
     INIT_IOT_CDE_SELECT_STORAGE_SUBTITLE: `Select the Azure Blob Storage account and container that match the Storage account and container used by Continuous Data Export in IoT Central.`,

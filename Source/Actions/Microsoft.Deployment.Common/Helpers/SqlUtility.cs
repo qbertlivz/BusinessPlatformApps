@@ -140,6 +140,7 @@ namespace Microsoft.Deployment.Common.Helpers
             try
             {
                 cn = new SqlConnection(connectionString);
+                cn.Open();
                 using (SqlCommand cmd = new SqlCommand(databasePermissionsQuery, cn))
                 {
                     cmd.CommandTimeout = 0;

@@ -46,28 +46,28 @@ Before diving into the components of the solution, we will go through how to set
 
 **Getting Started:** Starting page introducing the template and explaining the architecture.
 
-![1-Get started](Web/images/1-get-started.PNG)
+![1-Get started](Web/images/1-get-started.png)
 
 **Login:** Choose between signing into an organizational account and a Microsoft (work/school) account to connect to Azure.
 
 If you select a Microsoft account, you will need to provide the application with a domain directory. You can find your domain by logging into the Azure portal and choosing from those listed when you click your e-mail in the top right hand corner.
 
-![2-Connect to Azure](Web/images/2-connect-to-azure.PNG)
+![2-Connect to Azure](Web/images/2-connect-to-azure.png)
 
 Logging into Azure gives the application access to your Azure subscription and lets us spin up Azure services on your behalf. If you want a more granular breakdown of the costs, see [estimated costs](#estimated-costs).
 
 Pick your Azure subscription to provision the Azure services under. In the Advanced tab, you can change the Resource Group name and location from the default values. When you click "Next", a new resource group will be spun up under your Azure subscription.
 
 **Connect to Azure Blob Storage:** Select the storage account and container in your Azure subscription where your IoT Central data has been exported to.
-![4-storage](Web/images/4-storage.PNG)
+![4-storage](Web/images/4-storage.png)
 
 **Database:** Connect to an existing Azure SQL Server or provide details to create a new SQL Server on your behalf. If you choose to create a new SQL Server, this will get deployed in your Azure subscription inside the newly created resource group.
 
-![5-database](Web/images/5-database.PNG)
+![5-database](Web/images/5-database.png)
 
 **Summary:** Summary page outlining all the new resources to be created and existing resources to connect to.
 
-![6-summary](Web/images/6-summary.PNG)
+![6-summary](Web/images/6-summary.png)
 
 **Deploy:** SQL scripts run to create and connect the Azure Functions and Azure Data Factory resources into your resource group.
 

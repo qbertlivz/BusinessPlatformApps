@@ -79,7 +79,7 @@ Pick your Azure subscription to provision the Azure services under. In the Advan
 
 All of the resources that have been created can be accessed in the Azure portal. Everything should be under one resource group (unless a user was using an existing SQL server. In this case the SQL Server will appear in whatever resource group it already existed in).
 
-![Azure Portal view of resource group](Web/images/azure-portal.PNG)
+![Azure Portal view of resource group](Web/images/Azure-portal.PNG)
 
 The specifics of each resource and how it gets used is described below.
 

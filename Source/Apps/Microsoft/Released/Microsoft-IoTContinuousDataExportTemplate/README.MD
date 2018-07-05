@@ -1,4 +1,4 @@
-Azure IoT Central Continuous Data Export Analytics Solution Template Documentation
+Azure IoT Central Analytics Solution Template Documentation
 ===========================================================
 
 # Table of Contents

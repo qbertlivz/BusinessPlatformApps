@@ -223,6 +223,15 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occured while creating datapool reference..
+        /// </summary>
+        public static string DatapoolCreateError {
+            get {
+                return ResourceManager.GetString("DatapoolCreateError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please contact us using the provided email link.
         /// </summary>
         public static string DefaultAdditionalDetailsMessage {

@@ -327,4 +327,7 @@
   <data name="AxAuthorizationError" xml:space="preserve">
     <value>Your account does not have Administrator privileges for this instance of Dynamics 365</value>
   </data>
+  <data name="DatapoolCreateError" xml:space="preserve">
+    <value>An error occured while creating datapool reference.</value>
+  </data>
 </root>

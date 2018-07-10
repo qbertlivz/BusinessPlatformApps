@@ -39,7 +39,9 @@
         public const string Office365ClientId = "5a75fd0b-23ec-4e09-ac55-b2c2050286de";
 
         // Ax
-        public const string AxClientId = "bcf1cb1c-74d6-460c-941a-22f0110f1090";
+        // TODO: Temporary workaround to make use of different Ax AAD App
+        //public const string AxClientId = "bcf1cb1c-74d6-460c-941a-22f0110f1090";
+        public const string AxClientId = "8ef37296-497f-45e7-9c2a-024c26beccbd";
         public const string AxErpResource = "00000015-0000-0000-c000-000000000000";
         public static string AxLocatorClientId = string.Empty;
         public static string AxLocatorSecret = string.Empty;

@@ -67,6 +67,8 @@ namespace Microsoft.Deployment.Actions.Custom.Ax
                     return false;
                 }
 
+                request.DataStore.AddToDataStore("StorageAccountName", storageAccountName, DataStoreType.Private);
+                request.DataStore.AddToDataStore("StorageAccountKey", storageAccountKey, DataStoreType.Private);
                 request.DataStore.AddToDataStore("KeyVaultSubscriptionId", azureSubscriptionId, DataStoreType.Private);
                 request.DataStore.AddToDataStore("KeyVaultResourceGroupName", azureResourceGroupName, DataStoreType.Private);
                 request.DataStore.AddToDataStore("KeyVaultName", keyVaultName, DataStoreType.Private);

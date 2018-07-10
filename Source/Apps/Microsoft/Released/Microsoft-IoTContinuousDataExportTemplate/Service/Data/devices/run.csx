@@ -17,6 +17,8 @@ using Microsoft.Hadoop.Avro.Container;
 
 using Microsoft.WindowsAzure.Storage.Blob;
 
+using Newtonsoft.Json;
+
 // Device data processing
 public static async Task Run(CloudBlockBlob myBlob, TraceWriter log)
 {

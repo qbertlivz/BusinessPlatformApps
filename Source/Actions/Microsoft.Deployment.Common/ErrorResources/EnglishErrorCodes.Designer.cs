@@ -223,6 +223,24 @@ namespace Microsoft.Deployment.Common.ErrorResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not fetch information from Cuna API..
+        /// </summary>
+        public static string CunaApiCallFailure {
+            get {
+                return ResourceManager.GetString("CunaApiCallFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cuna API returned no reponse..
+        /// </summary>
+        public static string CunaApiNoResponse {
+            get {
+                return ResourceManager.GetString("CunaApiNoResponse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An error occured while creating datapool reference..
         /// </summary>
         public static string DatapoolCreateError {

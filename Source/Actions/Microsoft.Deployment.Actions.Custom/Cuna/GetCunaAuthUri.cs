@@ -12,7 +12,7 @@ namespace Microsoft.Deployment.Actions.Custom.Cuna
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var url = $"https://federationdemo.cunamutual.com/idp/startSSO.ping?PartnerSpId=https%3A%2F%2Faea-powerbi.cunamutual.com";
+            var url = Constants.CunaTokenUrl;
             return new ActionResponse(ActionStatus.Success, JsonUtility.GetJObjectFromStringValue(url));
         }
     }

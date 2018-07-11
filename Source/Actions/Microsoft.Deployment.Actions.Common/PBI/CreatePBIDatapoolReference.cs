@@ -47,7 +47,7 @@ namespace Microsoft.Deployment.Actions.Custom.Ax
                     request.DataStore.AddToDataStore("PBIDatapoolId", JsonUtility.GetJObjectProperty(JsonUtility.GetJsonObjectFromJsonString(response.Content.ReadAsStringAsync().Result), "id"), DataStoreType.Public);
                     return new ActionResponse(ActionStatus.Success);
                 }
-                return new ActionResponse(ActionStatus.Failure, JsonUtility.GetJsonObjectFromJsonString(response.Content.ReadAsStringAsync().Result), null, "DatapoolCreateError", response.Content.ReadAsStringAsync().Result);
+                return new ActionResponse(ActionStatus.Failure, JsonUtility.GetJsonObjectFromJsonString(response.Content.ReadAsStringAsync().Result), null, "DatapoolCreateError", response.StatusCode.ToString());
             }
         }
     }

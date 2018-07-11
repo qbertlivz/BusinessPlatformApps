@@ -49,10 +49,10 @@ namespace Microsoft.Deployment.Site.Service
             Constants.CunaTokenUrl = ConfigurationManager.ConnectionStrings["CunaTokenUrl"].ToString();
             Constants.CunaApiUrl = ConfigurationManager.ConnectionStrings["CunaApiUrl"].ToString();
             Constants.CunaApiAadInstance = ConfigurationManager.ConnectionStrings["CunaApiAadInstance"].ToString();
-            Constants.CunaApiAadTenant = ConfigurationManager.ConnectionStrings["CunaApiAadTenant"].ToString();
+            Constants.CunaApiAadTenantId = ConfigurationManager.ConnectionStrings["CunaApiAadTenantId"].ToString();
             Constants.CunaApiAadClientId = ConfigurationManager.ConnectionStrings["CunaApiAadClientId"].ToString();
             Constants.CunaApiAadResourceId = ConfigurationManager.ConnectionStrings["CunaApiAadResourceId"].ToString();
-            Constants.CunaApiAadCertificateName = ConfigurationManager.ConnectionStrings["CunaApiAadCertificateName"].ToString();
+            Constants.CunaApiAadSecret = ConfigurationManager.ConnectionStrings["CunaApiAadSecret"].ToString();
             Constants.CunaTokenValidateCertificate = ConfigurationManager.ConnectionStrings["CunaTokenValidateCertificate"].ToString();
 
             var appXmlType = config.Formatters.XmlFormatter.SupportedMediaTypes.FirstOrDefault(t => t.MediaType == "application/xml");

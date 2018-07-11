@@ -73,10 +73,10 @@
         public static string CunaTokenUrl = string.Empty;
         public static string CunaApiUrl = string.Empty;
         public static string CunaApiAadInstance = string.Empty;
-        public static string CunaApiAadTenant = string.Empty;
+        public static string CunaApiAadTenantId = string.Empty;
         public static string CunaApiAadClientId = string.Empty;
         public static string CunaApiAadResourceId = string.Empty;
-        public static string CunaApiAadCertificateName = string.Empty;
+        public static string CunaApiAadSecret = string.Empty;
         public static string CunaTokenValidateCertificate = string.Empty;
 
         //PowerBI

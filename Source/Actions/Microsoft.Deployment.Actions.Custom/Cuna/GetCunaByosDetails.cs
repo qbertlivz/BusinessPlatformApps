@@ -22,9 +22,6 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Cuna
     {
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
-            var cunaStatausKey = "CunaStatus";
-            var cunaMessageKey = "CunaMessage";
-
             var userId = request.DataStore.GetValue("userId");
             var contractId = request.DataStore.GetValue("contractId");
             var cunaApiAccessToken = request.DataStore.GetValue("CunaApiAccessToken");
@@ -36,34 +33,26 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Cuna
 
             var response = await GetByosDetails(Constants.CunaApiUrl, userId, contractId, customerUpn, tenantId, cunaApiAccessToken);
 
-            if(response["status"] != null)
+            if(response?["Status"] != null)
             {
-                request.DataStore.AddToDataStore(cunaStatausKey, response["status"], DataStoreType.Private);
+                request.DataStore.AddToDataStore("CunaStatus", response["Status"]?.ToString(), DataStoreType.Private);
 
-                if (response["status"].ToString().Equals("success", StringComparison.InvariantCultureIgnoreCase) && response["details"] != null)
+                if (response["Status"].ToString().Equals("success", StringComparison.InvariantCultureIgnoreCase) && response["Details"] != null)
                 {
-                    request.DataStore.AddToDataStore("DatapoolName", response["details"]["DatapoolName"], DataStoreType.Private);
-                    request.DataStore.AddToDataStore("DatapoolDescription", response["details"]["DatapoolDescription"], DataStoreType.Private);
-                    request.DataStore.AddToDataStore("KeyVaultSubscriptionId", response["details"]["KeyVaultSubscriptionId"], DataStoreType.Private);
-                    request.DataStore.AddToDataStore("KeyVaultResourceGroupName", response["details"]["KeyVaultResourceGroupName"], DataStoreType.Private);
-                    request.DataStore.AddToDataStore("KeyVaultName", response["details"]["KeyVaultName"], DataStoreType.Private);
-                    request.DataStore.AddToDataStore("KeyVaultSecretPath", response["details"]["KeyVaultSecretPath"], DataStoreType.Private);
+                    request.DataStore.AddToDataStore("DatapoolName", response["Details"]["Name"]?.ToString(), DataStoreType.Private);
+                    request.DataStore.AddToDataStore("DatapoolDescription", response["Details"]["Description"]?.ToString(), DataStoreType.Private);
+                    request.DataStore.AddToDataStore("KeyVaultSubscriptionId", response["Details"]["SubscriptionID"]?.ToString(), DataStoreType.Private);
+                    request.DataStore.AddToDataStore("KeyVaultResourceGroupName", response["Details"]["ResourceGroupName"]?.ToString(), DataStoreType.Private);
+                    request.DataStore.AddToDataStore("KeyVaultName", response["Details"]["VaultName"]?.ToString(), DataStoreType.Private);
+                    request.DataStore.AddToDataStore("KeyVaultSecretPath", response["Details"]["SecretPath"]?.ToString(), DataStoreType.Private);
+                    return new ActionResponse(ActionStatus.Success, response.ToString(), true);
                 }
                 else
                 {
-                    if(response["message"] != null)
-                    {
-                        request.DataStore.AddToDataStore(cunaMessageKey, response["message"], DataStoreType.Private);
-                    }
+                    return new ActionResponse(ActionStatus.Failure, response, null, "CunaApiCallFailure", response["message"]?.ToString());
                 }
             }
-            else
-            {
-                request.DataStore.AddToDataStore(cunaStatausKey, "failure", DataStoreType.Private);
-                request.DataStore.AddToDataStore(cunaMessageKey, "An unknown error occured", DataStoreType.Private);
-            }
-            
-            return new ActionResponse(ActionStatus.Success, response.ToString(), true);
+           return new ActionResponse(ActionStatus.Failure, null , null, "CunaApiNoResponse");
         }
 
         public async Task<JObject> GetByosDetails(

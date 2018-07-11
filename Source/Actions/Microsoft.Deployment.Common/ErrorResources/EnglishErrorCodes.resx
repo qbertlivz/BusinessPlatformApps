@@ -330,4 +330,10 @@
   <data name="DatapoolCreateError" xml:space="preserve">
     <value>An error occured while creating datapool reference.</value>
   </data>
+  <data name="CunaApiNoResponse" xml:space="preserve">
+    <value>Cuna API returned no reponse.</value>
+  </data>
+  <data name="CunaApiCallFailure" xml:space="preserve">
+    <value>Could not fetch information from Cuna API.</value>
+  </data>
 </root>

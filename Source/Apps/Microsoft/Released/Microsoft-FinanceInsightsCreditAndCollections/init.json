@@ -23,8 +23,17 @@
           "name": "$SiteCommon$/pages-gallery/cc-ax-customize.html"
         },
         {
+          "displayname": "Storage account",
+          "name": "$SiteCommon$/pages-gallery/cc-storage-details.html",
+          "skip": "$run(this.MS.DataStore.getValue('StorageAccountName') !== null && this.MS.DataStore.getValue('StorageAccountKey') !== null && this.MS.DataStore.getValue('StorageAccountName') !== '' && this.MS.DataStore.getValue('StorageAccountKey') !== '')"
+        },
+        {
           "displayname": "Your Storage account",
           "name": "$SiteCommon$/pages-gallery/cc-cdsa-storage.html"
+        },
+        {
+          "displayname": "Choose Data",
+          "name": "$SiteCommon$/pages-gallery/cc-ax-entitydata.html"
         },
         {
           "displayname": "Connect to Power BI",

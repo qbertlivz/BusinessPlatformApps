@@ -41,7 +41,7 @@
         // Ax
         // TODO: Temporary workaround to make use of different Ax AAD App
         //public const string AxClientId = "bcf1cb1c-74d6-460c-941a-22f0110f1090";
-        public const string AxClientId = "8ef37296-497f-45e7-9c2a-024c26beccbd";
+        public const string AxClientId = "2b34cc99-8434-4e46-810f-95bc256b3961";
         public const string AxErpResource = "00000015-0000-0000-c000-000000000000";
         public static string AxLocatorClientId = string.Empty;
         public static string AxLocatorSecret = string.Empty;

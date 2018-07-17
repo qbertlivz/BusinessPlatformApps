@@ -38,11 +38,11 @@ namespace Microsoft.Deployment.Actions.Custom.Cuna
                     }
                 }
             }
-            catch
+            catch(Exception ex)
             {
-                throw new InvalidOperationException("Failed to validate the authentication token.");
+                return new ActionResponse(ActionStatus.Failure, new ActionResponseExceptionDetail("CunaAuthTokenValidationFailed", ex.Message));
             }
-            return new ActionResponse(ActionStatus.Failure);
+            return new ActionResponse(ActionStatus.Failure,null, null, "CunaAuthTokenValidationFailed");
         }
 
         private string DecodeToken(string encodedToken)

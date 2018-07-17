@@ -29,9 +29,9 @@ namespace Microsoft.Deployment.Actions.Custom.Cuna
                 request.DataStore.AddToDataStore("CunaApiAccessToken", result.AccessToken, DataStoreType.Private);
                 return new ActionResponse(ActionStatus.Success);
             }
-            catch
+            catch(Exception ex)
             {
-                throw new InvalidOperationException("Failed to get Cuna access token");
+                return new ActionResponse(ActionStatus.Failure, new ActionResponseExceptionDetail("CunaGetApiAccessTokenFailed", ex.Message));
             }
         }
     }

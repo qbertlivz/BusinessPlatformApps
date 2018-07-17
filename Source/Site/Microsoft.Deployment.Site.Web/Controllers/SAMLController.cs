@@ -14,13 +14,13 @@ namespace Microsoft.Deployment.Site.Web.Controllers
             {
                 CookieOptions options = new CookieOptions {
                     Expires = DateTime.UtcNow.AddMinutes(30),
-                    //Secure = true //TODO: Enable secure in production
+                    Secure = true
                     //HttpOnly = true //TODO: App logic prevents this. Possible XSS attack target.
                 };
                 Response.Cookies.Append("samlAuthCode", samlResponse, options);
             }
-            //TODO: Change to https
-            return Redirect("http://" + Request.Host + Request.PathBase + "/redirect.html");
+
+            return Redirect(Request.Scheme + "://" + Request.Host + Request.PathBase + "/redirect.html");
         }
     }
 }

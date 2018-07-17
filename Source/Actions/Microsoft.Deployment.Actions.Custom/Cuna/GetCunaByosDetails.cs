@@ -26,33 +26,54 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Cuna
             var contractId = request.DataStore.GetValue("contractId");
             var cunaApiAccessToken = request.DataStore.GetValue("CunaApiAccessToken");
             var pbiToken = request.DataStore.GetJson("PBIToken", "access_token").ToString();
+            JwtSecurityToken jwtToken = null;
 
-            JwtSecurityToken jwtToken = new JwtSecurityToken(pbiToken);
+            try
+            {
+                jwtToken = new JwtSecurityToken(pbiToken);
+            }
+            catch(Exception ex)
+            {
+                return new ActionResponse(ActionStatus.Failure, null, null, "CunaInvalidRequest", ex.Message);
+            }
+
             var customerUpn = jwtToken.Claims.First(c => c.Type == "upn")?.Value;
             var tenantId = jwtToken.Claims.First(c => c.Type == "tid")?.Value;
 
-            var response = await GetByosDetails(Constants.CunaApiUrl, userId, contractId, customerUpn, tenantId, cunaApiAccessToken);
-
-            if(response?["Status"] != null)
+            if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(contractId) || string.IsNullOrWhiteSpace(cunaApiAccessToken) || string.IsNullOrWhiteSpace(customerUpn) || string.IsNullOrWhiteSpace(tenantId))
             {
-                request.DataStore.AddToDataStore("CunaStatus", response["Status"]?.ToString(), DataStoreType.Private);
-
-                if (response["Status"].ToString().Equals("success", StringComparison.InvariantCultureIgnoreCase) && response["Details"] != null)
-                {
-                    request.DataStore.AddToDataStore("DatapoolName", response["Details"]["Name"]?.ToString(), DataStoreType.Private);
-                    request.DataStore.AddToDataStore("DatapoolDescription", response["Details"]["Description"]?.ToString(), DataStoreType.Private);
-                    request.DataStore.AddToDataStore("KeyVaultSubscriptionId", response["Details"]["SubscriptionID"]?.ToString(), DataStoreType.Private);
-                    request.DataStore.AddToDataStore("KeyVaultResourceGroupName", response["Details"]["ResourceGroupName"]?.ToString(), DataStoreType.Private);
-                    request.DataStore.AddToDataStore("KeyVaultName", response["Details"]["VaultName"]?.ToString(), DataStoreType.Private);
-                    request.DataStore.AddToDataStore("KeyVaultSecretPath", response["Details"]["SecretPath"]?.ToString(), DataStoreType.Private);
-                    return new ActionResponse(ActionStatus.Success, response.ToString(), true);
-                }
-                else
-                {
-                    return new ActionResponse(ActionStatus.Failure, response, null, "CunaApiCallFailure", response["message"]?.ToString());
-                }
+                return new ActionResponse(ActionStatus.Failure, null, null, "CunaInvalidRequest");
             }
-           return new ActionResponse(ActionStatus.Failure, null , null, "CunaApiNoResponse");
+
+            try
+            {
+                var response = await GetByosDetails(Constants.CunaApiUrl, userId, contractId, customerUpn, tenantId, cunaApiAccessToken);
+
+                if (response?["Status"] != null)
+                {
+                    request.DataStore.AddToDataStore("CunaStatus", response["Status"]?.ToString(), DataStoreType.Private);
+
+                    if (response["Status"].ToString().Equals("success", StringComparison.InvariantCultureIgnoreCase) && response["Details"] != null)
+                    {
+                        request.DataStore.AddToDataStore("DatapoolName", response["Details"]["Name"]?.ToString(), DataStoreType.Private);
+                        request.DataStore.AddToDataStore("DatapoolDescription", response["Details"]["Description"]?.ToString(), DataStoreType.Private);
+                        request.DataStore.AddToDataStore("KeyVaultSubscriptionId", response["Details"]["SubscriptionID"]?.ToString(), DataStoreType.Private);
+                        request.DataStore.AddToDataStore("KeyVaultResourceGroupName", response["Details"]["ResourceGroupName"]?.ToString(), DataStoreType.Private);
+                        request.DataStore.AddToDataStore("KeyVaultName", response["Details"]["VaultName"]?.ToString(), DataStoreType.Private);
+                        request.DataStore.AddToDataStore("KeyVaultSecretPath", response["Details"]["SecretPath"]?.ToString(), DataStoreType.Private);
+                        return new ActionResponse(ActionStatus.Success, response.ToString(), true);
+                    }
+                    else
+                    {
+                        return new ActionResponse(ActionStatus.Failure, response, null, "CunaApiCallFailure", response["message"]?.ToString());
+                    }
+                }
+                return new ActionResponse(ActionStatus.Failure, null, null, "CunaApiNoResponse");
+            }
+            catch(Exception ex)
+            {
+                return new ActionResponse(ActionStatus.Failure, new ActionResponseExceptionDetail("CunaApiResponseProcessingFailed", ex.Message));
+            }
         }
 
         public async Task<JObject> GetByosDetails(
@@ -90,15 +111,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Cuna
 
         public JObject GetJsonObject(string jsonBody)
         {
-            try
-            {
-                var obj = JsonUtility.GetJsonObjectFromJsonString(jsonBody);
-                return obj;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            var obj = JsonUtility.GetJsonObjectFromJsonString(jsonBody);
+            return obj;
         }
     }
 }

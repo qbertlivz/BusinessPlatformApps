@@ -165,6 +165,10 @@
     <Compile Include="Ax\TriggerCDSAIntegrationProcess.cs" />
     <Compile Include="Ax\ValidateAxInstance.cs" />
     <Compile Include="Ax\ValidateAxInstanceCDSA.cs" />
+    <Compile Include="Cuna\GetCunaApiAccessToken.cs" />
+    <Compile Include="Cuna\GetCunaAuthUri.cs" />
+    <Compile Include="Cuna\GetCunaByosDetails.cs" />
+    <Compile Include="Cuna\ValidateCunaToken.cs" />
     <Compile Include="CustomerData\CustomerInfo.cs" />
     <Compile Include="CustomerData\PushToSimplement.cs" />
     <Compile Include="Facebook\GetPermanentPageToken.cs" />

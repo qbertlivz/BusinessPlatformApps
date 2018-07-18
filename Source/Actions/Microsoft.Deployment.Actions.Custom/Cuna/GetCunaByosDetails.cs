@@ -105,14 +105,8 @@ namespace Microsoft.Deployment.Actions.AzureCustom.Cuna
                     throw new Exception("Unable to contact Cuna API service.");
                 }
                 var jsonBody = await response.Content.ReadAsStringAsync();
-                return GetJsonObject(jsonBody);
+                return JsonUtility.GetJsonObjectFromJsonString(jsonBody);
             }
-        }
-
-        public JObject GetJsonObject(string jsonBody)
-        {
-            var obj = JsonUtility.GetJsonObjectFromJsonString(jsonBody);
-            return obj;
         }
     }
 }

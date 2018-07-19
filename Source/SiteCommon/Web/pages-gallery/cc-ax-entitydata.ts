@@ -30,15 +30,19 @@ export class AxEntityData extends ViewModelBase {
                 selected: false
             },
             {
-                name: 'Budget',
-                title: 'Budget, Ledger and product information',
+                name: 'Warehouse',
+                title: 'Inventory, warehouses and product information',
                 subtitle: 'By analyzing your aggregated Financial results with thousands of data sources from across the world, system will identify and forecast drivers that are impacting your bottom line.',
-                value: 'BudgetActivityMeasure',
+                value: 'WHSWarehouse',
                 selected: false
             }];
         }
         if (this.measurements.filter(m => m.selected).length > 0) {
             this.isValidated = true;
+
+            this.MS.DataStore.addToDataStore('SelectedMeasurements',
+                this.measurements.filter(m => m.selected).map(m => m.value).join(","),
+                DataStoreType.Public);
         }
     }
 

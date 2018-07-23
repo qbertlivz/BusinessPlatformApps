@@ -12,15 +12,10 @@ namespace Microsoft.Deployment.Site.Web.Controllers
             string samlResponse = Request.Form["SAMLResponse"];
             if(!string.IsNullOrWhiteSpace(samlResponse))
             {
-                CookieOptions options = new CookieOptions {
-                    Expires = DateTime.UtcNow.AddMinutes(30),
-                    Secure = true
-                    //HttpOnly = true //TODO: App logic prevents this. Possible XSS attack target.
-                };
-                Response.Cookies.Append("samlAuthCode", samlResponse, options);
+                ViewData["samlAuthCode"] = samlResponse;
             }
 
-            return Redirect(Request.Scheme + "://" + Request.Host + Request.PathBase + "/redirect.html");
+            return View("~/Views/Redirect.cshtml");
         }
     }
 }

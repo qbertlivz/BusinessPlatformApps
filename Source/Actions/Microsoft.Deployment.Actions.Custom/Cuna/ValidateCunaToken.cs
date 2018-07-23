@@ -9,6 +9,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Xml;
 
 namespace Microsoft.Deployment.Actions.Custom.Cuna
@@ -47,7 +48,8 @@ namespace Microsoft.Deployment.Actions.Custom.Cuna
 
         private string DecodeToken(string encodedToken)
         {
-            byte[] data = Convert.FromBase64String(encodedToken);
+            var htmlDecoded = HttpUtility.HtmlDecode(encodedToken);
+            byte[] data = Convert.FromBase64String(htmlDecoded);
             string decodedToken = Encoding.UTF8.GetString(data);
             return decodedToken;
         }

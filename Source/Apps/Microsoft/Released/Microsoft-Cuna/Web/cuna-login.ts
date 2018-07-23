@@ -24,7 +24,7 @@ export class CunaLogin extends ViewModelBase {
     }
 
     async validateCunaToken(): Promise<boolean> {
-        let token = await this.getCunaToken();
+        let token = this.getCunaToken();
         if (token && token !== '') {
             this.MS.DataStore.addToDataStore('CunaSamlAuthToken', token, DataStoreType.Private);
             let isValidToken: ActionResponse = await this.MS.HttpService.executeAsync('Microsoft-ValidateCunaToken');
@@ -36,19 +36,9 @@ export class CunaLogin extends ViewModelBase {
         return false;
     }
 
-    async getCunaToken(): Promise<string> {
-        let cookieName = 'samlAuthCode';
-        const nameLenPlus = (cookieName.length + 1);
-        let cookieValue = document.cookie
-            .split(';')
-            .map(c => c.trim())
-            .filter(cookie => {
-                return cookie.substring(0, nameLenPlus) === `${cookieName}=`;
-            })
-            .map(cookie => {
-                return decodeURIComponent(cookie.substring(nameLenPlus));
-            })[0] || null;
-
-        return cookieValue;
+    getCunaToken(): string {
+        let authCodeName = 'samlAuthCode';
+        let authCode:any = this.MS.UtilityService.getItem(authCodeName);        
+        return authCode;
     }
 }

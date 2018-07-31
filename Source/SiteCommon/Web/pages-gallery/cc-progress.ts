@@ -18,9 +18,12 @@ export class ProgressViewModel extends ViewModelBase {
     powerAppFileName: string = '';
     publishReportLink: string = '';
     recordCounts: any[] = [];
+    redirectInSameTab: boolean = false;
     selectedPBIWorkspaceId: string = '';
     showCounts: boolean = false;
     showPublishReport: boolean = false;
+    showDownloadButton: boolean = true;
+    showBackButton: boolean = true;
     sliceStatus: any[] = [];
     successMessage: string = this.MS.Translate.PROGRESS_ALL_DONE;
     successMessage2: string = this.MS.Translate.PROGRESS_ALL_DONE2;
@@ -39,6 +42,8 @@ export class ProgressViewModel extends ViewModelBase {
             await this.MS.HttpService.getResponseAsync('Microsoft-UpdatePBIParameters');
 
             this.publishReportLink = response;
+            if (!this.showBackButton)
+                this.showBackButtonOnFinalPage = false;
         }
     }
 

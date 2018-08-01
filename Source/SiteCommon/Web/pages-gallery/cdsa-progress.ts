@@ -32,7 +32,7 @@ export class ProgressViewModel extends ViewModelBase {
     async executeActions(): Promise<void> {
         if (await this.MS.DeploymentService.executeActions() && !this.isUninstall) {
             this.MS.DeploymentService.isFinished = true;
-            await this.wrangle();
+            await this.getPbixPath();
 
             if (this.pbixDownloadLinks.length > 1)
                 this.redirectInSameTab = false;
@@ -74,24 +74,16 @@ export class ProgressViewModel extends ViewModelBase {
         }
     }
     
-    async wrangle(): Promise<void> {
+    async getPbixPath(): Promise<void> {
         let response: ActionResponse = null;
 
-        response = await this.MS.HttpService.executeAsync('Microsoft-WranglePBICDSA', { FileName: this.filename });
+        response = await this.MS.HttpService.executeAsync('Microsoft-GetPbixPath', { FileName: this.filename });
         
         if (response.IsSuccess) {
             this.pbixDownloadLinks = JSON.parse(response.Body.Value);
         }
-
-        if (this.hasPowerApp) {
-            let powerAppUri: string = this.MS.DataStore.getValue('PowerAppUri');
-
-            if (powerAppUri) {
-                this.isPowerAppReady = true;
-                this.powerAppDownloadLink = powerAppUri;
-            } else {
-                this.hasPowerApp = false;
-            }
+        else {
+            this.MS.ErrorService.set(this.MS.Translate.CDSA_GET_PBIX_PATH_FAILED);
         }
     }
 }

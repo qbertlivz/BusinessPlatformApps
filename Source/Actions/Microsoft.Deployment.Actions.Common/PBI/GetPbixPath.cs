@@ -19,24 +19,11 @@ namespace Microsoft.Deployment.Actions.Common.PBI
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             string[] originalFiles = request.DataStore.GetValue("FileName").Split('|');
-            var tempFolders = new string[originalFiles.Length];
             var serverPaths = new string[originalFiles.Length];
 
             for (int i = 0; i < originalFiles.Length; i++)
             {
-                string templateFullPath = request.Info.App.AppFilePath + $"/service/PowerBI/{originalFiles[i]}";
-                tempFolders[i] = Path.GetRandomFileName();
-                Directory.CreateDirectory(request.Info.App.AppFilePath + $"/Temp/{tempFolders[i]}");
-
-                using (PBIXUtils wrangler = new PBIXUtils(templateFullPath, request.Info.App.AppFilePath + $"/Temp/{tempFolders[i]}/{originalFiles[i]}"))
-                {
-                    //Wrangling not required
-                }
-            }
-
-            for (int i = 0; i < originalFiles.Length; i++)
-            {
-                serverPaths[i] = request.Info.ServiceRootUrl + request.Info.ServiceRelativePath + request.Info.App.AppRelativeFilePath + $"/Temp/{tempFolders[i]}/{originalFiles[i]}";
+                serverPaths[i] = request.Info.ServiceRootUrl + request.Info.ServiceRelativePath + request.Info.App.AppRelativeFilePath + $"/service/PowerBI/{originalFiles[i]}";
             }
 
             return new ActionResponse(ActionStatus.Success, JsonUtility.Serialize<string[]>(serverPaths));

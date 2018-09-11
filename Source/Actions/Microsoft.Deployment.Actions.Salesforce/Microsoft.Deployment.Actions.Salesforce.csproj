@@ -101,7 +101,6 @@
     <Compile Include="ADFDeployPipelines.cs" />
     <Compile Include="ADFSliceStatus.cs" />
     <Compile Include="Helpers\SalesforceConcurrencyMapper.cs" />
-    <Compile Include="Helpers\SecurityHelper.cs" />
     <Compile Include="Helpers\SqlConfigQueries.cs" />
     <Compile Include="Helpers\TypeMapper.cs" />
     <Compile Include="Models\ADFField.cs" />

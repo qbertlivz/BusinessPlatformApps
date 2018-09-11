@@ -158,6 +158,7 @@
     <Compile Include="Helpers\RestClient.cs" />
     <Compile Include="Helpers\RetryUtility.cs" />
     <Compile Include="Helpers\ScribeUtility.cs" />
+    <Compile Include="Helpers\SecurityHelper.cs" />
     <Compile Include="Helpers\SqlUtility.cs" />
     <Compile Include="Helpers\StringEnumConverterLower.cs" />
     <Compile Include="Helpers\StringExtension.cs" />

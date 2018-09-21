@@ -13,6 +13,12 @@ namespace Microsoft.Deployment.Common.Controller
 {
     public class CommonController
     {
+        private HashSet<string> disabledApps = new HashSet<string>()
+        {
+            "Microsoft-FacebookPageAnalytics",
+            "Microsoft-FacebookTemplate"
+        };
+
         public CommonController(CommonControllerModel commonControllerModel)
         {
             this.CommonControllerModel = commonControllerModel;
@@ -37,9 +43,11 @@ namespace Microsoft.Deployment.Common.Controller
 
         public App GetApp(UserInfo info)
         {
-
             Logger logger = new Logger(info, this.CommonControllerModel);
             info.ActionName = "GetApp";
+
+            if (disabledApps.Contains(info.AppName))
+                info.AppName = "Microsoft-Disabled";
 
             var start = DateTime.Now;
             var app = this.CommonControllerModel.AppFactory.Apps[info.AppName];

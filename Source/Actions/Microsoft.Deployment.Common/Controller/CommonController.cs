@@ -16,7 +16,8 @@ namespace Microsoft.Deployment.Common.Controller
         private HashSet<string> disabledApps = new HashSet<string>()
         {
             "Microsoft-FacebookPageAnalytics",
-            "Microsoft-FacebookTemplate"
+            "Microsoft-FacebookTemplate",
+            "Simplement-SAP-ARTemplate"
         };
 
         public CommonController(CommonControllerModel commonControllerModel)

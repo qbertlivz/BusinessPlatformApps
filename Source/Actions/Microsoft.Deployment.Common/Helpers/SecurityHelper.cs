@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Microsoft.Deployment.Actions.Salesforce.Helpers
+namespace Microsoft.Deployment.Common.Helpers
 {
     public static class SecurityHelper
     {

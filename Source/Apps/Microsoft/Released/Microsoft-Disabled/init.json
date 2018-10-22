@@ -1,0 +1,12 @@
+{
+    "Install": {
+        "Pages": [
+            {
+                "displayname": "Disabled",
+                "name": "disabled.html"
+            }
+        ],
+
+        "Actions": []
+    }
+}

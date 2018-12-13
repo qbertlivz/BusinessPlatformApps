@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Solution Template</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Reduce the time to implement a Power BI solution">
+    <meta name="author" content="">
+    <title>Business Platform Solution Template</title>
+    <link rel="stylesheet" href="dist/SiteCommon/Web/styles/pbi.css" />
+    <link rel="stylesheet" href="dist/SiteCommon/Web/styles/bpst.css" />
+    <link rel="stylesheet" href="jspm_packages/npm/font-awesome@4.6.3/css/font-awesome.min.css" />
+
+    <!-- Fix for bug in Microsoft Edge: https://github.com/Microsoft/ChakraCore/issues/1415 -->
+    <script>
+        if (window && window.navigator && window.navigator.userAgent && /Edge\/1[0-4]\./.test(window.navigator.userAgent)) {
+            Function.prototype.call = function (t) {
+                return this.apply(t, Array.prototype.slice.apply(arguments, [1]));
+            };
+        }
+    </script>
+
+    <!-- Cookie Compliance Resources -->
+    <link rel="stylesheet" href="dist/SiteCommon/Web/styles/mscc-0.3.6.min.css" />
+</head>
+<body aurelia-app="main">
+    <div class="st-header semiboldFont">
+        <span class="powervisuals-glyph boxes-four boxes-stacked st-icon-ms"></span>
+        <span>Microsoft</span>
+        <span class="st-header-bar">|</span>
+        <span>Power BI</span>
+    </div>
+    <div class="st-content regularFont">
+        <div class="st-center-outer">
+            <div class="st-center-inner">
+                <span class="st-loader st-loader-small"></span>
+            </div>
+        </div>
+    </div>
+
+    <script src="jspm_packages/system.js"></script>
+    <script src="dist/SiteCommon/Web/scripts/ai.1.0.0-build00159.min.js"></script>
+    <script src="config.js"></script>
+
+    <script>
+        System.import('babel/browser-polyfill');
+        System.import('aurelia-bootstrapper');
+    </script>
+</body>
+</html>

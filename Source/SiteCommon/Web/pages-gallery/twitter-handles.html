@@ -1,0 +1,13 @@
+﻿<template>
+    <h1 class="st-title">${MS.Translate.TWITTER_HANDLES_TITLE}</h1>
+    <p class="st-subtitle">${MS.Translate.TWITTER_HANDLES_SUBTITLE}</p>
+
+    <div class="st-float">
+        <p class="st-text">${MS.Translate.TWITTER_HANDLES_OPTIONAL}</p>
+        <input class="st-input" type="text" placeholder="@MSPowerBI @Azure" change.delegate="viewmodel.onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.accounts" />
+    </div>
+
+    <p class="st-float">
+        <button class="primary" click.trigger="viewmodel.onValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_VALIDATE}</button>
+    </p>
+</template>

@@ -1,0 +1,16 @@
+﻿<template>
+    <h1 class="st-title">${MS.Translate.SEARCH_TERMS_TITLE}</h1>
+    <p class="st-subtitle">${MS.Translate.SEARCH_TERMS_SUBTITLE}</p>
+    <p>
+        <bpst-link a-description="${MS.Translate.COMMON_CHECK_OUT_THE}" a-link="${MS.Translate.SEARCH_TERMS_LINK}" a-link-text="${MS.Translate.SEARCH_TERMS_GUIDELINES}" a-description2="${MS.Translate.COMMON_FOR_MORE_DETAILS}"></bpst-link>
+    </p>
+
+    <div class="st-float">
+        <p class="st-text">${MS.Translate.SEARCH_TERMS_QUERY}</p>
+        <input class="st-input" type="text" placeholder.bind="MS.Translate.SEARCH_TERMS_QUERY_EXAMPLE" change.delegate="viewmodel.onInvalidate()" disabled.bind="MS.HttpService.isServiceBusy" value.bind="viewmodel.searchQuery" />
+    </div>
+
+    <p class="st-float">
+        <button class="primary" click.trigger="viewmodel.onValidate()" if.bind="!MS.HttpService.isServiceBusy">${MS.Translate.COMMON_VALIDATE}</button>
+    </p>
+</template>

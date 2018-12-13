@@ -1,0 +1,19 @@
+﻿<template>
+    <require from="../templates/bpst-link.html"></require>
+
+    <div class="st-float-clear">
+        <h1 class="st-title">${MS.Translate.AX_LOGIN_TITLE}</h1>
+        <p class="st-subtitle">${MS.Translate.AX_LOGIN_SUBTITLE}</p>
+    </div>
+
+    <!-- AX url -->
+    <div class="st-float-clear">
+        <p class="st-text" title="${MS.Translate.CUSTOMIZE_BASE_URL_DESCRIPTION}">${MS.Translate.AX_CUSTOM_URL_NO_DROPDOWN}</p>
+        <input class="st-input" type="text" placeholder="https://yourinstance.cloudax.dynamics.com/" disabled.bind="viewmodel.MS.HttpService.isServiceBusy" value.bind="axBaseUrl" keyup.delegate="onChange()">
+    </div>
+
+    <div class="st-float-clear">
+        <button class="primary" click.trigger="connect()" disabled.bind="!axBaseUrl">${MS.Translate.AX_LOGIN_CONNECT}</button>
+    </div>
+
+</template>

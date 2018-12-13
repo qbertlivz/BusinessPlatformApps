@@ -1,0 +1,24 @@
+﻿<template bindable="router, viewmodel">
+    <div class="st-nav">
+        <ul class="st-tabs" if.bind="router.pages && router.pages.length > 1">
+            <li repeat.for="tab of router.pages">
+                <div class="st-tab ${tab.isActive ? 'st-tab-active' : ''} ${tab.isComplete ? 'st-tab-complete' : ''}">
+                    <span class="glyphicon glyph-small pbi-glyph-circlering st-icon"></span>
+                    <span class="powervisuals-glyph checkmark st-icon st-icon-checkmark" if.bind="tab.isComplete"></span>
+                    <span class="st-icon ${$index + 1 < 10 ? 'st-icon-tab' : 'st-icon-tab-large'}" if.bind="!tab.isComplete">${$index + 1}</span>
+                    <span class="st-tab-text">${tab.DisplayName}</span>
+                </div>
+            </li>
+        </ul>
+        <div class="st-legal">
+            <div class="st-legal-tabs">
+                <span class="glyphicon pbi-glyph-link glyph-small st-icon-legal"></span>
+                <span><a class="st-legal-text" href="${viewmodel.MS.Translate.NAVBAR_MICROSOFT_PRIVACY_STATEMENT_LINK}" target="_blank">${viewmodel.MS.Translate.NAVBAR_MICROSOFT_PRIVACY_STATEMENT}</a></span>
+            </div>
+            <div class="st-legal-tabs">
+                <span class="glyphicon pbi-glyph-link glyph-small st-icon-legal"></span>
+                <span><a class="st-legal-text" href="${viewmodel.MS.Translate.NAVBAR_TERMS_USE_LINK}" target="_blank">${viewmodel.MS.Translate.NAVBAR_TERMS_USE}</a></span>
+            </div>
+        </div>
+    </div>
+</template>

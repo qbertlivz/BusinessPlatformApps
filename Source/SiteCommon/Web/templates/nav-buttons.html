@@ -1,0 +1,44 @@
+﻿<template bindable="viewmodel">
+    <!-- Validation -->
+    <p class="st-float" if.bind="viewmodel.useDefaultValidateButton">
+        <button class="primary" click.trigger="viewmodel.onValidate()" disabled.bind="viewmodel.MS.HttpService.isServiceBusy" if.bind="!MS.HttpService.isServiceBusy">${viewmodel.MS.Translate.COMMON_VALIDATE}</button>
+    </p>
+    <p class="st-validated" if.bind="viewmodel.showValidation || viewmodel.MS.ErrorService.message">
+        <span class="glyphicon glyph-small pbi-glyph-circlering st-icon"></span>
+        <span class="glyphicon pbi-glyph-close st-icon st-icon-checkmark" if.bind="viewmodel.MS.ErrorService.message"></span>
+        <span class="powervisuals-glyph checkmark st-icon st-icon-checkmark" if.bind="!viewmodel.MS.ErrorService.message"></span>
+        <span class="st-tab-text st-error" if.bind="viewmodel.MS.ErrorService.message">${viewmodel.MS.ErrorService.message}</span>
+        <span class="st-tab-text" if.bind="!viewmodel.MS.ErrorService.message && viewmodel.validationText">${viewmodel.validationText}</span>
+        <span class="st-tab-text" if.bind="!viewmodel.MS.ErrorService.message && !viewmodel.validationText">${viewmodel.MS.Translate.NAVIGATION_SUCCESSFULLY_VALIDATED}</span>
+    </p>
+    <p class="st-float st-text" click.trigger="viewmodel.showValidationDetails = !viewmodel.showValidationDetails" if.bind="viewmodel.MS.ErrorService.details">
+        <span class="glyphicon pbi-glyph-circlering glyph-small st-toggle" if.bind="viewmodel.showValidationDetails"></span>
+        <span class="st-toggle-collapse" if.bind="viewmodel.showValidationDetails">-</span>
+        <span class="glyphicon pbi-glyph-addcircle glyph-small st-toggle" if.bind="!viewmodel.showValidationDetails"></span>
+        <span>${viewmodel.MS.Translate.NAVIGATION_VIEW_DETAILS}</span>
+    </p>
+    <p class="st-float st-text" if.bind="viewmodel.showValidationDetails">${viewmodel.MS.ErrorService.details}</p>
+    <p class="st-float st-text" if.bind="viewmodel.MS.ErrorService.logLocation">
+        <span>${viewmodel.MS.Translate.NAVIGATION_LOGS}</span>
+        <span>${viewmodel.MS.ErrorService.logLocation}</span>
+    </p>
+
+    <!-- Spinner -->
+    <div class="st-float">
+        <span class="st-loader st-loader-small" if.bind="viewmodel.MS.HttpService.isServiceBusy"></span>
+        <span class="st-text" if.bind="viewmodel.MS.NavigationService.isCurrentlyNavigating">${viewmodel.navigationMessage}</span>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <p class="st-nav-buttons" if.bind="viewmodel && viewmodel.DeploymentService.NavigationService.templateName !== ''">
+        <button class="default st-buttons-back" click.trigger="viewmodel.navigateBack()" disabled.bind="viewmodel.MS.HttpService.isServiceBusy || viewmodel.MS.NavigationService.isCurrentlyNavigating" if.bind="!viewmodel.MS.NavigationService.isFirstPage() && viewmodel.showBackButtonOnFinalPage">${viewmodel.MS.Translate.NAVIGATION_BACK}</button>
+        <button class="primary" click.trigger="viewmodel.navigateNext()" disabled.bind="!viewmodel.isValidated || viewmodel.MS.HttpService.isServiceBusy || viewmodel.MS.NavigationService.isCurrentlyNavigating" if.bind="!viewmodel.isDownload && !viewmodel.MS.NavigationService.isLastPage()">${viewmodel.textNext}</button>
+        <button class="primary" click.trigger="viewmodel.downloadMsi()" disabled.bind="!viewmodel.isValidated || !viewmodel.isAuthenticated || viewmodel.MS.HttpService.isServiceBusy" if.bind="viewmodel.isDownload && (viewmodel.downloadLink || !viewmodel.isAuthenticated)">${viewmodel.MS.Translate.COMMON_DOWNLOAD}</button>
+    </p>
+
+    <!-- Privacy Statement -->
+    <div class="st-privacy smallFontSize" if.bind="viewmodel.showPrivacy">
+        <p>${viewmodel.MS.Translate.NAVIGATION_MS_PRIVACY}</p>
+        <a href="${viemodel.MS.Translate.NAVIGATION_MS_PRIVACY_LINK}" target="_blank">${viewmodel.MS.Translate.NAVIGATION_MS_PRIVACY_LINK_TEXT}</a>
+    </div>
+</template>

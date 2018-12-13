@@ -1,0 +1,179 @@
+﻿{
+    "MSI": {
+        "Guid": "88DC5CAB-D05D-4193-A432-30A09138D26D"
+    },
+
+    "Install": {
+        "Pages": [
+            {
+                "displayname": "Getting Started",
+                "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-SCCM2/Web/Images/SCCMArchitectureDiagram.png",
+                "isDownload": "$(!this.MS.HttpService.isOnPremise)",
+                "list1": [
+                    "$translate(INIT_GETTING_STARTED_SCCM)",
+                    "$translate(INIT_GETTING_STARTED_DESTINATION)",
+                    "$translate(INIT_GETTING_STARTED_NET)",
+                    "$translate(INIT_GETTING_STARTED_PBI_DESKTOP)",
+                    "$translate(INIT_GETTING_STARTED_PBI_PRO)"
+                ],
+                "list2": [
+                    "$translate(INIT_GETTING_STARTED_SCALABLE)",
+                    "$translate(INIT_GETTING_STARTED_DATA_PULL_SCCM)",
+                    "$translate(INIT_GETTING_STARTED_IMPORT_DATA_PBI)"
+                ],
+                "name": "$SiteCommon$/pages-gallery/getting-started.html",
+                "subtitle": "$translate(INIT_SCCM_SUBTITLE)",
+                "templateName": "$translate(INIT_SCCM_TITLE)"
+            },
+            {
+                "displayname": "Login",
+                "onValidateActions": [
+                    {
+                        "name": "Microsoft-ValidateAdminPrivileges"
+                    },
+                    {
+                        "name": "Microsoft-ValidateSecurityOptions"
+                    },
+                    {
+                        "name": "Microsoft-ValidatePowerShellVersion"
+                    }
+                ],
+                "name": "$SiteCommon$/pages-gallery/windows-auth.html",
+                "subtitle": "$translate(INIT_SCCM_LOGIN)"
+            },
+            {
+                "credentialTarget": "pbi_sccm",
+                "displayname": "Source",
+                "hideSqlAuth": true,
+                "name": "$SiteCommon$/pages-gallery/sql.html",
+                "onNext": [
+                    {
+                        "name": "Microsoft-CheckSCCMVersion",
+                        "useImpersonation": true
+                    }
+                ],
+                "showAllWriteableDatabases": false,
+                "showAzureSql": false,
+                "subtitle": "$translate(INIT_SOURCE_SCCM_SUBTITLE)",
+                "title": "$translate(INIT_SOURCE_SCCM_TITLE)",
+                "useImpersonation": true
+            },
+            {
+                "credentialTarget": "pbi_sccm",
+                "displayname": "Target",
+                "name": "$SiteCommon$/pages-gallery/sql.html",
+                "onNext": [
+                    {
+                        "name": "Microsoft-CheckSQLVersion",
+                        "useImpersonation": true
+                    },
+                    {
+                        "name": "Microsoft-CompareSqlLCIDs",
+                        "useImpersonation": true
+                    }
+                ],
+                "showSqlRecoveryModeHint": true,
+                "subtitle": "$translate(INIT_SQL_SUBTITLE)",
+                "title": "$translate(INIT_SQL_TITLE)",
+                "useImpersonation": true
+            },
+            {
+                "displayname": "Customize",
+                "name": "$SiteCommon$/pages-gallery/customize-sccm.html"
+            },
+            {
+                "displayname": "Summary",
+                "name": "$SiteCommon$/pages-gallery/summary.html",
+                "values": {
+                    "Target Server": "$(this.MS.DataStore.getValue('Server'))",
+                    "Target Database": "$(this.MS.DataStore.getValue('Database'))",
+                    "Target Username": "$(this.MS.DataStore.getValue('Username'))"
+                }
+            },
+            {
+                "datastoreEntriesToValidate": [
+                    "ImpersonationPassword"
+                ],
+                "displayname": "Progress",
+                "filename": "$save('SCCMSolutionTemplate2.pbix')",
+                "finishedActionName": "Microsoft-GetTaskStatus",
+                "name": "$SiteCommon$/pages-gallery/progress.html",
+                "showCounts": true,
+                "sqlServerIndex": 1,
+                "targetSchema": "pbist_sccm"
+            }
+        ],
+
+        "Actions": [
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
+                "name": "Microsoft-DeploySQLScripts",
+                "SqlScriptsFolder": "Service/Database/NoETL",
+                "SqlServerIndex": "1",
+                "useImpersonation": true
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+                "name": "Microsoft-SetConfigValueInSql",
+                "SqlConfigTable": "pbist_sccm.[configuration]",
+                "SqlServerIndex": "1",
+                "useImpersonation": true
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_SQL_TOOLS)",
+                "name": "Microsoft-InstallSqlTools"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_COPYING_DATALOAD_SCRIPTS)",
+                "name": "Microsoft-InstallSCCM"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_BATCH_PERMISSION)",
+                "name": "Microsoft-AddLogonAsBatchPermission"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_SCHEDULING_TASK)",
+                "name": "Microsoft-CreateTask"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_RUNNING_TASK)",
+                "name": "Microsoft-RunTask"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_WAITING_DATA)",
+                "FinishedActionName": "Microsoft-GetTaskStatus",
+                "name": "Microsoft-GetDataPullStatus",
+                "SqlServerIndex": 1,
+                "TargetSchema": "pbist_sccm",
+                "useImpersonation": true
+            }
+        ]
+    },
+
+    "Uninstall": {
+        "Pages": [
+            {
+                "displayname": "Uninstall Progress",
+                "isUninstall": true,
+                "name": "$SiteCommon$/pages-gallery/progress.html",
+                "successMessage": "$translate(INIT_UNINSTALL_SUCCESS)"
+            }
+        ],
+        "Actions": [
+            {
+                "displayname": "$translate(INIT_ACTION_REMOVING_TASK)",
+                "name": "Microsoft-RemoveTask",
+                "TaskName": "Power BI Solution Template - SCCM"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_REMOVING_FILES)",
+                "name": "Microsoft-RemoveFiles"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_FINISHING_CLEANUP)",
+                "name": "Microsoft-RemoveFiles",
+                "TargetPath": "C:\\Program Files\\Microsoft Templates\\Microsoft-SCCM2\\Apps\\Microsoft\\Released\\Microsoft-SCCM2\\Temp"
+            }
+        ]
+    }
+}

@@ -1,0 +1,354 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AzureLoginFailed" xml:space="preserve">
+    <value>Sorry, there was an error signing you in</value>
+  </data>
+  <data name="AzureTokenExpired" xml:space="preserve">
+    <value>Sorry,the azure token expired, please try again in a new tab</value>
+  </data>
+  <data name="AzureWebsiteNameTaken" xml:space="preserve">
+    <value>Sorry, the Azure website name is already taken</value>
+  </data>
+  <data name="CredentialGuardEnabled" xml:space="preserve">
+    <value>This particular version of Windows 10 has Credential Guard enabled and a known issue prevents our scheduled job from running correctly. Please disable Credential Guard (https://www.microsoft.com/en-us/download/details.aspx?id=53337) or upgrade to Windows 10 Creators Update.</value>
+  </data>
+  <data name="DefaultErrorCode" xml:space="preserve">
+    <value>An error has occurred, see additional details to learn more</value>
+  </data>
+  <data name="DefaultLoginFailed" xml:space="preserve">
+    <value>Login failed, please check that you have entered in the correct credentials</value>
+  </data>
+  <data name="DisabledDomainCredsEnabled" xml:space="preserve">
+    <value>This template requires group policy "Network access: Do not allow storage of passwords and credentials for network authentication" to be disabled</value>
+  </data>
+  <data name="ImpersonationFailed" xml:space="preserve">
+    <value>Login failed for user</value>
+  </data>
+  <data name="IncorrectNTCredentials" xml:space="preserve">
+    <value>Login failed, check that you have entered in the correct Windows credentials</value>
+  </data>
+  <data name="InstallSQLToolsFailed" xml:space="preserve">
+    <value>Installing SQL Tools failed, please verify you are executing the installer as an Administrator</value>
+  </data>
+  <data name="NoDatabasesFound" xml:space="preserve">
+    <value>No SQL databases were found in the selected SQL Server</value>
+  </data>
+  <data name="NotAdmin" xml:space="preserve">
+    <value>This program needs to be executed as an adminstrator with elevated permissions</value>
+  </data>
+  <data name="NotSccmDB" xml:space="preserve">
+    <value>This does not look like an SCCM database or you do not have read permissions</value>
+  </data>
+  <data name="SccmVersionFormatUnexpected" xml:space="preserve">
+    <value>SCCM version format has an unexpected format</value>
+  </data>
+  <data name="SccmVersionNotFound" xml:space="preserve">
+    <value>Could not find SCCM version</value>
+  </data>
+  <data name="SccmVersionTooLow" xml:space="preserve">
+    <value>SCCM version is lower than expected (should be at least 2012 R2 SP1)</value>
+  </data>
+  <data name="SqlDatabaseAlreadyExists" xml:space="preserve">
+    <value>Sorry, the Azure Sql database server is already taken</value>
+  </data>
+  <data name="SqlLoginFailed" xml:space="preserve">
+    <value>Login to SQL failed</value>
+  </data>
+  <data name="SQL_VersionTooLow" xml:space="preserve">
+    <value>The target SQL server must be at least version 2008 R2 SP3</value>
+  </data>
+  <data name="TwitterAccountsInvalid" xml:space="preserve">
+    <value>One or more of the accounts you entered could not be found</value>
+  </data>
+  <data name="CreateTaskPasswordMissing" xml:space="preserve">
+    <value>The password is missing</value>
+  </data>
+  <data name="RunningTaskFailed" xml:space="preserve">
+    <value>Unable to run the scheduled task, please check Task Scheduler</value>
+  </data>
+  <data name="SccmTaskNotFound" xml:space="preserve">
+    <value>The SCCM scheduled task could not be found</value>
+  </data>
+  <data name="TaskSchedulerRunFailed" xml:space="preserve">
+    <value>The scheduled task did not complete successfully</value>
+  </data>
+  <data name="CredMgrReadError" xml:space="preserve">
+    <value>Cannot read from the Credential Manager or the entry was not found</value>
+  </data>
+  <data name="CredMgrWriteError" xml:space="preserve">
+    <value>Cannot write to the Credential Manager</value>
+  </data>
+  <data name="SQL_DenyLocalAndExpress" xml:space="preserve">
+    <value>The target SQL server edition cannot be Express or local DB</value>
+  </data>
+  <data name="CannotStartPowerShell" xml:space="preserve">
+    <value>Cannot start PowerShell</value>
+  </data>
+  <data name="LowPowerShellVersion" xml:space="preserve">
+    <value>PowerShell version too low - please upgrade to latest version https://msdn.microsoft.com/en-us/powershell/wmf/5.0/requirements"</value>
+  </data>
+  <data name="MsCrm_NoOrg" xml:space="preserve">
+    <value>No Dynamics 365 organization with this URL could be found</value>
+  </data>
+  <data name="MsCrm_NoOrgs" xml:space="preserve">
+    <value>No Dynamics 365 organizations were found</value>
+  </data>
+  <data name="SQL_DenyPDW" xml:space="preserve">
+    <value>Microsoft Azure SQL Data Warehouse is not supported</value>
+  </data>
+  <data name="MsCrm_ErrorCreateProfile" xml:space="preserve">
+    <value>Could not create replication profile</value>
+  </data>
+  <data name="MsCrm_ErrorActivateProfile" xml:space="preserve">
+    <value>Could not activate replication profile</value>
+  </data>
+  <data name="SalesforceLoginInvalid" xml:space="preserve">
+    <value>Login failed, check that you have entered the correct username, password and token.</value>
+  </data>
+  <data name="MsCrm_ErrorRegisterKv" xml:space="preserve">
+    <value>Cannot register the KeyVault as a provider in this subscription</value>
+  </data>
+  <data name="SQL_CannotRetrieveCollations" xml:space="preserve">
+    <value>Cannot retrieve source or target database locale IDs</value>
+  </data>
+  <data name="SQL_TargetCollationDoesntMatch" xml:space="preserve">
+    <value>The target database must have the same locale ID as the source database</value>
+  </data>
+  <data name="MsCrm_Unauthorized" xml:space="preserve">
+    <value>Your account does not have System Administrator privileges for this instance of Dynamics 365</value>
+  </data>
+  <data name="MsCrm_MetadataError" xml:space="preserve">
+    <value>Failed to read metadata for your Dynamics 365 organization</value>
+  </data>
+  <data name="RegisterProviderError" xml:space="preserve">
+    <value>This Azure account does not have sufficient permissions to register the required provider</value>
+  </data>
+  <data name="PowerAppNoEnvironment" xml:space="preserve">
+    <value>No PowerApp environments were found for this Azure account</value>
+  </data>
+  <data name="SQL_CompatLevelTooLow" xml:space="preserve">
+    <value>Target database's compatibility level should be at least 100</value>
+  </data>
+  <data name="Scribe_No_Organizations" xml:space="preserve">
+    <value>No Scribe organizations with an active Replication Services subscription were found for your account</value>
+  </data>
+  <data name="SQL_NoConnectionsInDatastore" xml:space="preserve">
+    <value>The datastore does not contain any connection strings</value>
+  </data>
+  <data name="SQL_MalformedConfigValues" xml:space="preserve">
+    <value>Unexpected error - the SQL configuration values are inconsistent</value>
+  </data>
+  <data name="SQL_MissingConfigValues" xml:space="preserve">
+    <value>Unexpected error - not all SQL configuration values were specified</value>
+  </data>
+  <data name="ResourceGroupAlreadyExists" xml:space="preserve">
+    <value>A resource group with this name already exists.  Please choose another name for a new resource group.</value>
+  </data>
+  <data name="NotPSAInstance" xml:space="preserve">
+    <value>This does not look like a PSA instance.</value>
+  </data>
+  <data name="FacebookPagesInvalid" xml:space="preserve">
+    <value>One or more of the pages you entered could not be found</value>
+  </data>
+  <data name="DefaultAdditionalDetailsMessage" xml:space="preserve">
+    <value>Please contact us using the provided email link</value>
+  </data>
+  <data name="MsCrm_No_Organizations" xml:space="preserve">
+    <value>No Dynamics 365 organizations were found, verify that your username and password are correct</value>
+  </data>
+  <data name="SalesforceInvalidType" xml:space="preserve">
+    <value>You may not have read access to one of the following objects: Opportunity, Account, Lead, Product2, OpportunityLineItem, OpportunityStage, User, UserRole. Please check.</value>
+  </data>
+  <data name="AxWrongPlatform" xml:space="preserve">
+    <value>It seems you're not running the correct platform version of Dynamics 365 for Finance and Operations. The template requires at least Platform Update 8.</value>
+  </data>
+  <data name="ActivityLogsExportEventHubTimeout" xml:space="preserve">
+    <value>Time out occurred while exporting the Activity Log to Event Hub</value>
+  </data>
+  <data name="ActivityLogsGetHistoricalDataError" xml:space="preserve">
+    <value>An error occurred while pulling historical Activity Log data</value>
+  </data>
+  <data name="ActivityLogsInsufficientPermissions" xml:space="preserve">
+    <value>Your account has insufficient permissions to export activity logs to Event Hub in this subscription</value>
+  </data>
+  <data name="ActivityLogsErrorExportingToEventHub" xml:space="preserve">
+    <value>An error occurred while exporting the Activity Log to EventHub</value>
+  </data>
+  <data name="ApiManagementErrorNoServicesFound" xml:space="preserve">
+    <value>No fully provisioned API Management Services were found in your Azure Subscription</value>
+  </data>
+  <data name="EventHubFailedToQueryKeys" xml:space="preserve">
+    <value>An error occurred while querying Event Hub access keys</value>
+  </data>
+  <data name="ApiManagementFailedToCreateLogger" xml:space="preserve">
+    <value>Failed to create a new API Management Logger</value>
+  </data>
+  <data name="StreamAnalyticsSetInputFailure" xml:space="preserve">
+    <value>Failed to set a new Stream Analytics Input</value>
+  </data>
+  <data name="StreamAnalyticsSetOutputFailure" xml:space="preserve">
+    <value>Failed to set Stream Analytics output</value>
+  </data>
+  <data name="StreamAnalyticsUpdateQueryFailure" xml:space="preserve">
+    <value>Failed to update the Stream Analytics Job query</value>
+  </data>
+  <data name="StreamAnalyticsToggleFailure" xml:space="preserve">
+    <value>Failed to toggle the state of the Stream Analytics job</value>
+  </data>
+  <data name="FacebookTokenAuthFailed" xml:space="preserve">
+    <value>The page id or token provided is invalid.</value>
+  </data>
+  <data name="ActivityLogsVerifyInsightsTimeout" xml:space="preserve">
+    <value>Timed out while waiting for the Activity Log Exported Event Hub to become available</value>
+  </data>
+  <data name="LithiumCredentialsInvalid" xml:space="preserve">
+    <value>Login failed, check that you have entered in the correct TenantID, ClientID, ClientSecret, RefreshToken</value>
+  </data>
+  <data name="AxConnectionError" xml:space="preserve">
+    <value>Cannot connect to your Finance and Operations instance</value>
+  </data>
+  <data name="AxAuthorizationError" xml:space="preserve">
+    <value>Your account does not have Administrator privileges for this instance of Dynamics 365</value>
+  </data>
+  <data name="DatapoolCreateError" xml:space="preserve">
+    <value>An error occured while creating datapool reference.</value>
+  </data>
+  <data name="CunaApiNoResponse" xml:space="preserve">
+    <value>Cuna API returned no reponse.</value>
+  </data>
+  <data name="CunaApiCallFailure" xml:space="preserve">
+    <value>Could not fetch information from Cuna API.</value>
+  </data>
+  <data name="CunaApiResponseProcessingFailed" xml:space="preserve">
+    <value>Failed to process response from Cuna</value>
+  </data>
+  <data name="CunaAuthTokenValidationFailed" xml:space="preserve">
+    <value>Failed to validate the authentication token</value>
+  </data>
+  <data name="CunaGetApiAccessTokenFailed" xml:space="preserve">
+    <value>Failed to get Cuna API access token</value>
+  </data>
+  <data name="CunaInvalidRequest" xml:space="preserve">
+    <value>Invalid request</value>
+  </data>
+  <data name="PBIWorkspaceCreateFailed" xml:space="preserve">
+    <value>Failed to create Power BI workspace.</value>
+  </data>
+</root>

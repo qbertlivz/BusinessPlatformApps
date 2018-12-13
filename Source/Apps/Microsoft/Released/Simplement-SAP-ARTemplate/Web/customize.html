@@ -1,0 +1,10 @@
+﻿<template>
+    <h1 class="st-title">${MS.Translate.COMMON_CUSTOMIZE}</h1>
+
+    <div class="st-float">
+        <p class="st-text">${MS.Translate.CUSTOMIZE_DAILY_TRIGGER_TIME}</p>
+        <select class="btn btn-default dropdown-toggle st-input" disabled.bind="viewmodel.MS.HttpService.isServiceBusy" value.bind="viewmodel.dailyTrigger">
+            <option repeat.for="dailyTriggerOption of viewmodel.dailyTriggers">${dailyTriggerOption}</option>
+        </select>
+    </div>
+</template>

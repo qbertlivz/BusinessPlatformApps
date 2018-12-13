@@ -1,0 +1,41 @@
+{
+  "Install": {
+    "Pages": [
+      {
+        "name": "$SiteCommon$/pages-gallery/getting-started.html",
+        "displayname": "Getting Started",
+        "showPrivacy": false,
+        "subtitle": "This is my new template",
+        "templateName": "Tutorial"
+      },
+
+      // AzurePage
+      {
+        "name": "$SiteCommon$/pages-gallery/azure-login.html",
+        "displayname": "Login",
+        "pricingUrl": "http://url",
+        "pricingCost": "Cost goes here"
+      },
+
+      // Progress
+      {
+        "name": "$SiteCommon$/pages-gallery/progress.html",
+        "displayname": "Deploy",
+      }
+    ],
+
+    "Actions": [
+      {
+        "name": "Microsoft-DeployAzureArmTemplate",
+        "displayname": "Deploy Arm File",
+        "AzureArmFile": "Service/Arm/armtemplate.json",
+        "AzureArmParameters": {
+          "SqlServerName": "$(this.MS.UtilityService.getUniqueId(18))",
+          "SqlDatabaseName": "database",
+          "Username": "testuser",
+          "Password": "P@ssw0rd123"
+        }
+      }
+    ]
+  }
+}

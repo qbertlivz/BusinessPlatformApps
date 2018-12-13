@@ -1,0 +1,180 @@
+﻿{
+    "Install": {
+        "Pages": [
+            {
+                "architectureDiagram": "dist/Apps/Microsoft/Released/Microsoft-PSA/Web/Images/psa-sales-management.png",
+                "displayname": "Getting Started",
+                "list1": [
+                    "$translate(INIT_GETTING_STARTED_D365_DECEMBER)",
+                    "$translate(INIT_GETTING_STARTED_D365_ADMIN)",
+                    "$translate(INIT_GETTING_STARTED_D365_AZURE_TENANT)",
+                    "$translate(INIT_GETTING_STARTED_D365_VOLUME)",
+                    "$translate(INIT_GETTING_STARTED_PBI_DESKTOP)",
+                    "$translate(INIT_GETTING_STARTED_PBI_PRO)"
+                ],
+                "list2": [
+                    "$translate(INIT_GETTING_STARTED_CLOUD_SOLUTION)",
+                    "$translate(INIT_GETTING_STARTED_D365_EXPORT)",
+                    "$translate(INIT_GETTING_STARTED_CONNECT_AS_PBI)"
+                ],
+                "name": "$SiteCommon$/pages-gallery/getting-started.html",
+                "templateName": "$translate(INIT_D365_PSA_TITLE)"
+            },
+            {
+                "displayname": "Dynamics 365 Login",
+                "entities": {
+                    "systemuser": "systemuserid",
+                    "salesorderdetail": "salesorderdetailid",
+                    "salesorder": "salesorderid",
+                    "quotedetail": "quotedetailid",
+                    "quote": "quoteid",
+                    "opportunity": "opportunityid",
+                    "msdyn_transactioncategory": "msdyn_transactioncategoryid",
+                    "msdyn_timeentry": "msdyn_timeentryid",
+                    "msdyn_resourcerequirementdetail": "msdyn_resourcerequirementdetailid",
+                    "msdyn_resourcerequirement": "msdyn_resourcerequirementid",
+                    "msdyn_resourcerequest": "msdyn_resourcerequestid",
+                    "msdyn_project": "msdyn_projectid",
+                    "msdyn_projecttask": "msdyn_projecttaskid",
+                    "msdyn_organizationalunit": "msdyn_organizationalunitid",
+                    "msdyn_orderlineresourcecategory": "msdyn_orderlineresourcecategoryid",
+                    "msdyn_estimateline": "msdyn_estimatelineid",
+                    "msdyn_actual": "msdyn_actualid",
+                    "bookingstatus": "bookingstatusid",
+                    "bookableresourcecategoryassn": "bookableresourcecategoryassnid",
+                    "bookableresourcecategory": "bookableresourcecategoryid",
+                    "bookableresourcebooking": "bookableresourcebookingid",
+                    "bookableresource": "bookableresourceid",
+                    "account": "accountid"
+                },
+                "name": "$SiteCommon$/pages-gallery/mscrm-login.html",
+                "oauthType": "mscrm",
+                "pricingCost": "$translate(INIT_D365_PRICING_COST)",
+                "pricingUrl": "$translate(INIT_D365_PRICING_URL)",
+                "ProfileName": "$save('bpst-psa-profile')"
+            },
+            {
+                "displayname": "Login to the Key Vault",
+                "name": "$SiteCommon$/pages-gallery/keyvault-login.html",
+                "oauthType": "keyvault"
+            },
+            {
+                "displayname": "Target",
+                "isAzureSql": true,
+                "name": "$SiteCommon$/pages-gallery/sql.html",
+                "newSqlDatabase": "$(this.MS.UtilityService.getUniqueId(10))",
+                "showAzureSql": false,
+                "showNewSqlOption": true,
+                "showSkuS1": false,
+                "sqlInstance": "NewSql",
+                "sqlSku": "S2",
+                "subtitle": "$translate(INIT_SQL_SUBTITLE_D365)",
+                "title": "$translate(INIT_SQL_TITLE)",
+                "checkSqlVersion": true
+            },
+            {
+                "displayname": "Summary",
+                "name": "$SiteCommon$/pages-gallery/summary.html",
+                "values": {
+                    "Organization URL": "$(this.MS.DataStore.getValue('OrganizationUrl'))",
+                    "Target Server": "$(this.MS.DataStore.getValue('Server'))",
+                    "Target Database": "$(this.MS.DataStore.getValue('Database'))",
+                    "Target Username": "$(this.MS.DataStore.getValue('Username'))"
+                },
+                "onNext": [
+                    {
+                        "name": "Microsoft-CrmGetEntityInitialCounts"
+                    }
+                ]
+            },
+            {
+                "datastoreEntriesToValidate": [
+                    "AzureToken",
+                    "SqlConnectionString"
+                ],
+                "displayname": "Progress",
+                "name": "$SiteCommon$/pages-gallery/progress.html",
+                "filename": "$save('PSA_AccountManager.pbix|PSA_PracticeManager.pbix|PSA_ResourceManager.pbix')",
+                "showCounts": true,
+                "finishedActionName": "Microsoft-CrmGetProfileStatus",
+                "targetSchema": "psa"
+            }
+        ],
+
+        "Actions": [
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
+                "name": "Microsoft-DeploySQLScripts",
+                "SqlScriptsFolder": "Service/Database",
+                "SqlServerIndex": "0"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_DATABASE_CONFIGURATION)",
+                "name": "Microsoft-SetConfigValueInSql",
+                "SqlConfigTable": "[psa].[configuration]",
+                "SqlEntryName": "Tables",
+                "SqlEntryValue": "account, bookableresource, bookableresourcebooking, bookableresourcecategory, bookableresourcecategoryassn, bookingstatus, msdyn_actual, msdyn_estimateline, msdyn_orderlineresourcecategory, msdyn_organizationalunit, msdyn_project, msdyn_projecttask, msdyn_resourcerequest, msdyn_resourcerequirement, msdyn_resourcerequirementdetail, msdyn_timeentry, msdyn_transactioncategory, opportunity, quote, quotedetail, salesorder, salesorderdetail, systemuser",
+                "SqlGroup": "SolutionTemplate",
+                "SqlServerIndex": "0",
+                "SqlSubGroup": "StandardConfiguration"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_CONFIGURING_KEY_VAULT)",
+                "name": "Microsoft-CrmCreateVaultSecret"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_VALIDATING_D365_ENTITIES)",
+                "name": "Microsoft-CrmValidateEntities"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_CLEANING_D365_ENVIRONMENT)",
+                "name": "Microsoft-CrmDeleteProfile"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_VALIDATING_D365_PROFILE)",
+                "name": "Microsoft-CrmValidateProfile"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_CREATING_D365_PROFILE)",
+                "name": "Microsoft-CrmCreateProfile"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_STARTING_D365_PROFILE)",
+                "name": "Microsoft-CrmStartProfile"
+            },
+            {
+                "displayname": "$translate(NOTIFIER_INSERTING_INITIAL_COUNTS)",
+                "name": "Microsoft-InsertInitialCounts",
+                "SqlSchema": "$save('psa')",
+                "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+            },
+            {
+                "DeploymentName": "SqlConnectionDeployment",
+                "displayname": "$translate(NOTIFIER_CREATING_DATABASE_CONNECTION)",
+                "name": "Microsoft-CreateSqlConnector",
+                "ApiConnectionName": "$save('sqlNotifierConnection')",
+                "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+            },
+            {
+                "DeploymentName": "NotifierLogicApp",
+                "displayname": "$translate(NOTIFIER_CREATING_NOTIFIER_APP)",
+                "name": "Microsoft-DeployNotifierLogicApp",
+                "logicAppName": "notifierLogicApp",
+                "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+            },
+            {
+                "displayname": "$translate(NOTIFIER_CONFIGURE_NOTIFIER_APP)",
+                "name": "Microsoft-ConfigureNotifier",
+                "SqlConfigTable": "[psa].[configuration]",
+                "skip": "$run(!this.MS.DataStore.getValue('SendCompletionNotification'))"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_WAITING_DATA)",
+                "FinishedActionName": "Microsoft-CrmGetProfileStatus",
+                "name": "Microsoft-GetDataPullStatus",
+                "SqlServerIndex": 0,
+                "TargetSchema": "psa"
+            }
+        ]
+    }
+}

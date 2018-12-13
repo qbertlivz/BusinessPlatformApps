@@ -1,0 +1,19 @@
+﻿<template>
+    <require from="../templates/bpst-link.html"></require>
+    <h1 class="st-title">${MS.Translate.POWER_BI_LOGIN_CONNECT}</h1>
+    <p class="st-subtitle">${MS.Translate.POWER_BI_LOGIN_SUBTITLE}</p>
+    <div class="st-float-clear">
+        <button class="primary" click.trigger="connect()" disabled.bind="MS.HttpService.isServiceBusy">${MS.Translate.POWER_BI_LOGIN_CONNECT}</button>
+    </div>
+
+    <div class="st-float-clear" if.bind="creatingWorkspace">
+        <p class="st-text">${MS.Translate.POWER_BI_CREATING_WORKSPACE}</p>
+    </div>
+
+    <div class="st-float-clear" if.bind="pbiWorkspaces && pbiWorkspaces.length > 0">
+        <p class="st-text">${MS.Translate.POWER_BI_INSTANCES}</p>
+        <select class="btn btn-default dropdown-toggle st-input" disabled.bind="MS.HttpService.isServiceBusy" value.bind="selectedPBIWorkspaceId">
+            <option repeat.for="pbiWorkspace of pbiWorkspaces" value.bind="pbiWorkspace.id">${pbiWorkspace.name}</option>
+        </select>
+    </div>
+</template>

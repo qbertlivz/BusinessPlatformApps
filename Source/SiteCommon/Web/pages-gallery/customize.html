@@ -1,0 +1,70 @@
+﻿<template>
+    <h1 class="st-title">${MS.Translate.COMMON_CUSTOMIZE}</h1>
+    <h4 class="st-subtitle">${MS.Translate.CUSTOMIZE_SPECIFIC}</h4>
+
+    <p class="st-text">${MS.Translate.CUSTOMIZE_START_FISCAL_YEAR}</p>
+    <select class="btn btn-default dropdown-toggle st-input" value.bind="fiscalMonth">
+        <option value="1">${MS.Translate.COMMON_MONTH_0}</option>
+        <option value="2">${MS.Translate.COMMON_MONTH_1}</option>
+        <option value="3">${MS.Translate.COMMON_MONTH_2}</option>
+        <option value="4">${MS.Translate.COMMON_MONTH_3}</option>
+        <option value="5">${MS.Translate.COMMON_MONTH_4}</option>
+        <option value="6">${MS.Translate.COMMON_MONTH_5}</option>
+        <option value="7">${MS.Translate.COMMON_MONTH_6}</option>
+        <option value="8">${MS.Translate.COMMON_MONTH_7}</option>
+        <option value="9">${MS.Translate.COMMON_MONTH_8}</option>
+        <option value="10">${MS.Translate.COMMON_MONTH_9}</option>
+        <option value="11">${MS.Translate.COMMON_MONTH_10}</option>
+        <option value="12">${MS.Translate.COMMON_MONTH_11}</option>
+    </select>
+
+    <div class="st-float-clear" if.bind="showRefreshSchedule">
+        <p class="st-text">${MS.Translate.CUSTOMIZE_REFRESH_SCHEDULE}</p>
+        <select class="btn btn-default dropdown-toggle st-input" value.bind="refreshSchedule">
+            <option value="Daily">${MS.Translate.CUSTOMIZE_REFRESH_SCHEDULE_DAILY}</option>
+            <option value="Hourly">${MS.Translate.CUSTOMIZE_REFRESH_SCHEDULE_HOURLY}</option>
+            <option value="None">${MS.Translate.CUSTOMIZE_REFRESH_SCHEDULE_NONE}</option>
+        </select>
+    </div>
+
+    <!-- CRM url -->
+    <div class="st-float-clear" if.bind="showCrmUrl">
+        <p class="st-text" title="${MS.Translate.CUSTOMIZE_BASE_URL_DESCRIPTION}">${MS.Translate.CUSTOMIZE_BASE_URL} ${MS.Translate.COMMON_OPTIONAL}</p>
+        <input class="st-input" type="text" value.bind="baseUrl">
+    </div>
+
+    <!-- ADF Recurrence Options -->
+    <div class="st-float-clear" if.bind="showRecurrenceOptions">
+        <p class="st-text">${MS.Translate.CUSTOMIZE_RECURRENCE_OPTIONS}</p>
+        <select class="btn btn-default dropdown-toggle st-input" value.bind="recurrent">
+            <option>${MS.Translate.RECURRENT_NEVER}</option>
+            <option>${MS.Translate.RECURRENT_15_MINUTES}</option>
+            <option>${MS.Translate.RECURRENT_30_MINUTES}</option>
+            <option>${MS.Translate.RECURRENT_HOURLY}</option>
+            <option>${MS.Translate.RECURRENT_DAILY}</option>
+        </select>
+    </div>
+
+    <!--Additional Entities-->
+    <div class="st-float-clear" if.bind="addAdditionalEntities && !MS.HttpService.isServiceBusy">
+        <p class="st-text">Select additional entities that you want to be copied over during the data movement process:</p>
+        <div class="st-grid">
+            <div class="st-grid-row-left">
+                <p class="st-text">Source entities:</p>
+                <select class="st-multiple-selector btn st-input au-target st-selector-length" multiple value.bind="selectedAdd">
+                    <option repeat.for="item of additionalEntities" value.bind="item">${item}</option>
+                </select>
+            </div>
+            <div class="st-grid-row-buttons">
+                <button class="primary au-target st-grid-row-buttons-spacing" click.trigger="onAddingEntityToEntitiesToReplicate()" disabled.bind="selectedAdd.length === 0">Add</button>
+                <button class="primary au-target st-grid-row-buttons-spacing" click.trigger="onRemovingEntityFromEntitiesToReplicate()" disabled.bind="selectedRemove.length === 0">Remove</button>
+            </div>
+            <div class="st-grid-row-right">
+                <p class="st-text">Target entities:</p>
+                <select class="st-multiple-selector btn st-input au-target st-selector-length" multiple value.bind="selectedRemove">
+                    <option repeat.for="item of entitiesToReplicate" value.bind="item">${item}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</template>

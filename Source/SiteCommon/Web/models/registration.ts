@@ -1,0 +1,21 @@
+﻿export class Registration {
+    accepted: boolean = false;
+    action: string = '';
+    company: string = '';
+    contactLink: string = '';
+    contactLinkText: string = '';
+    download: string = '';
+    email: string = '';
+    emailConfirmation: string = '';
+    emailDomain: string = '';
+    emailsToBlock: string = '';
+    eulaLink: string = '';
+    eulaLinkText: string = '';
+    link: string = '';
+    nameFirst: string = '';
+    nameLast: string = '';
+    privacy: string = '';
+    privacyTitle: string = '';
+    text: string = '';
+    validation: string = '';
+}

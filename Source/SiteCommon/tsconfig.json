@@ -1,0 +1,22 @@
+﻿{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "removeComments": true,
+    "target": "es6"
+  },
+  "exclude": [
+    "jspm_packages",
+    "node_modules",
+    "src",
+    "wwwroot/dist"
+  ]
+}

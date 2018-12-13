@@ -1,0 +1,161 @@
+﻿{
+    "MSI": {
+        "Guid": "2F142293-C7B5-4C57-8FFE-75F636688C9C"
+    },
+
+    "Install": {
+        "Pages": [
+            {
+                "architectureDiagram": "dist/Apps/Microsoft/Released/Simplement-SAP-ARTemplate/Web/Images/sap-accounts-receivable.png",
+                "displayname": "Getting Started",
+                "isDownload": "$(!this.MS.HttpService.isOnPremise)",
+                "list1": [
+                    "$translate(INIT_GETTING_STARTED_SAP_READ_ACCESS)",
+                    "$translate(INIT_GETTING_STARTED_AZURE_SUBSCRIPTION)",
+                    "$translate(INIT_GETTING_STARTED_PBI_PRO)",
+                    "$translate(INIT_GETTING_STARTED_PBI_DESKTOP)",
+                    "$translate(INIT_GETTING_STARTED_SIMPLEMENT_TRIAL)"
+                ],
+                "list2": [
+                    "$translate(INIT_GETTING_STARTED_SCALABLE)",
+                    "$translate(INIT_GETTING_STARTED_DATA_PULL_SAP)",
+                    "$translate(INIT_GETTING_STARTED_IMPORT_DATA_PBI)"
+                ],
+                "name": "$SiteCommon$/pages-gallery/getting-started.html",
+                "registration": {
+                    "action": "Microsoft-PushToSimplement",
+                    "contactLink": "https://www.simplement.us/",
+                    "contactLinkText": "$translate(INIT_SIMPLEMENT_CONTACT)",
+                    "emailsToBlock": "gmail.com,.me,yahoo.com,hotmail.com,msn.com,.ba,.bf,.cd,.cq,.iq,.ir,.kr",
+                    "eulaLink": "https://www.simplement.us/eula",
+                    "eulaLinkText": "$translate(COMMON_TERMS_OF_USE)",
+                    "link": "https://www.simplement.us/privacy",
+                    "privacy": "$translate(INIT_SIMPLEMENT_PRIVACY)",
+                    "privacyTitle": "$translate(INIT_SIMPLEMENT_PRIVACY_TITLE)",
+                    "text": "$translate(INIT_SIMPLEMENT_TRIAL)",
+                    "validation": "$translate(INIT_SIMPLEMENT_YES)"
+                },
+                "subtitle": "$translate(INIT_SAP_SUBTITLE)",
+                "templateName": "$translate(INIT_SAP_TITLE)"
+            },
+            {
+                "displayname": "Login",
+                "name": "$SiteCommon$/pages-gallery/windows-auth.html",
+                "onValidateActions": [
+                    {
+                        "name": "Microsoft-ValidateAdminPrivileges"
+                    },
+                    {
+                        "name": "Microsoft-ValidateSecurityOptions"
+                    },
+                    {
+                        "name": "Microsoft-ValidatePowerShellVersion"
+                    }
+                ],
+                "subtitle": "$translate(INIT_SAP_LOGIN)"
+            },
+            {
+                "displayname": "SAP",
+                "name": "$SiteCommon$/pages-gallery/sap.html",
+                "useImpersonation": true
+            },
+            {
+                "credentialTarget": "Simplement.SolutionTemplate.AR.SQL",
+                "displayname": "Target",
+                "name": "$SiteCommon$/pages-gallery/sql.html",
+                "onNext": [
+                    {
+                        "name": "Microsoft-WriteSAPJson"
+                    }
+                ],
+                "subtitle": "$translate(INIT_SQL_SUBTITLE)",
+                "title": "$translate(INIT_SQL_TITLE)",
+                "useImpersonation": true
+            },
+            {
+                "displayname": "Customize",
+                "name": "customize.html"
+            },
+            {
+                "displayCompletionNotification": false,
+                "displayname": "Summary",
+                "name": "$SiteCommon$/pages-gallery/summary.html",
+                "sendCompletionNotification": false,
+                "values": {
+                    "Target Server": "$(this.MS.DataStore.getValue('Server'))",
+                    "Target Database": "$(this.MS.DataStore.getValue('Database'))",
+                    "Target Username": "$(this.MS.DataStore.getValue('Username'))"
+                }
+            },
+            {
+                "datastoreEntriesToValidate": [
+                    "ImpersonationPassword"
+                ],
+                "displayname": "Progress",
+                "filename": "$save('SAPSolutionTemplate.pbix')",
+                "finishedActionName": "Microsoft-GetTaskStatus",
+                "name": "$SiteCommon$/pages-gallery/progress.html",
+                "targetSchema": "sap"
+            }
+        ],
+
+        "Actions": [
+            {
+                "displayname": "$translate(INIT_ACTION_DEPLOYING_SQL_SCRIPTS)",
+                "name": "Microsoft-DeploySQLScripts",
+                "SqlScriptsFolder": "Service/Database/NoETL",
+                "SqlServerIndex": "0",
+                "useImpersonation": true
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_BATCH_PERMISSION)",
+                "name": "Microsoft-AddLogonAsBatchPermission"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_SCHEDULING_TASK)",
+                "name": "Microsoft-CreateTask"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_RUNNING_TASK)",
+                "name": "Microsoft-RunTask"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_WAITING_DATA)",
+                "FinishedActionName": "Microsoft-GetTaskStatus",
+                "name": "Microsoft-GetDataPullStatus",
+                "SqlServerIndex": 0,
+                "TargetSchema": "sap",
+                "useImpersonation": true
+            }
+        ]
+    },
+
+    "Uninstall": {
+        "Pages": [
+            {
+                "displayname": "Uninstall Progress",
+                "isUninstall": true,
+                "name": "$SiteCommon$/pages-gallery/progress.html",
+                "successMessage": "$translate(INIT_UNINSTALL_SUCCESS)"
+            }
+        ],
+
+        "Actions": [
+            {
+                "displayname": "$translate(INIT_ACTION_REMOVING_TASK)",
+                "name": "Microsoft-RemoveTask",
+                "TaskName": "Power BI Solution Template - Simplement SAP AR"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_REMOVING_FILES)",
+                "name": "Microsoft-RemoveFiles",
+                "TargetPath": "C:\\ProgramData\\Simplement, Inc"
+            },
+            {
+                "displayname": "$translate(INIT_ACTION_FINISHING_CLEANUP)",
+                "name": "Microsoft-RemoveFiles",
+                "TargetPath": "C:\\Program Files\\Microsoft Templates\\Simplement-SAP-ARTemplate\\Apps\\Microsoft\\Released\\Microsoft-SapAccountsReceivable\\Temp"
+            }
+        ]
+    }
+}

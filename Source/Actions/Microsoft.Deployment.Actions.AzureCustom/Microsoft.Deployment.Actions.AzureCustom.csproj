@@ -1,0 +1,353 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0B8DB384-F28C-4C1D-9E21-B0957AA9A736}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Deployment.Actions.AzureCustom</RootNamespace>
+    <AssemblyName>Microsoft.Deployment.Actions.AzureCustom</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>CS1998</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AzureMLPS">
+      <HintPath>..\..\ReferencedAssemblies\AzureMLPS.dll</HintPath>
+    </Reference>
+    <Reference Include="CsvHelper, Version=12.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\CsvHelper.12.0.1\lib\net45\CsvHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="Hyak.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Hyak.Common.1.2.2\lib\net452\Hyak.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AnalysisServices.Core, Version=13.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ReferencedAssemblies\Microsoft.AnalysisServices.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AnalysisServices.Tabular, Version=13.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ReferencedAssemblies\Microsoft.AnalysisServices.Tabular.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.7.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ApplicationInsights.2.7.2\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Azure.Common, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Azure.Common.2.2.1\lib\net452\Microsoft.Azure.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Azure.KeyVault.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Azure.KeyVault.Core.3.0.1\lib\net452\Microsoft.Azure.KeyVault.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Azure.Management.MachineLearning, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Azure.Management.MachineLearning.1.0.1\lib\net452\Microsoft.Azure.Management.MachineLearning.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Azure.ResourceManager, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Azure.Management.Resources.2.20.1-preview\lib\net40\Microsoft.Azure.ResourceManager.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.Edm, Version=5.8.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Data.Edm.5.8.4\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData, Version=5.8.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Data.OData.5.8.4\lib\net40\Microsoft.Data.OData.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.Services.Client, Version=5.8.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Data.Services.Client.5.8.4\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=4.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.4.4.1\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.JsonWebTokens, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.IdentityModel.JsonWebTokens.5.3.0\lib\net45\Microsoft.IdentityModel.JsonWebTokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Logging, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.IdentityModel.Logging.5.3.0\lib\net45\Microsoft.IdentityModel.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Tokens, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.IdentityModel.Tokens.5.3.0\lib\net45\Microsoft.IdentityModel.Tokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Rest.ClientRuntime, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Rest.ClientRuntime.2.3.18\lib\net452\Microsoft.Rest.ClientRuntime.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Rest.ClientRuntime.Azure, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Rest.ClientRuntime.Azure.3.3.18\lib\net452\Microsoft.Rest.ClientRuntime.Azure.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks">
+      <HintPath>..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions">
+      <HintPath>..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop">
+      <HintPath>..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Common">
+      <HintPath>..\..\packages\Microsoft.WindowsAzure.Common.1.4.1\lib\net45\Microsoft.WindowsAzure.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Common.NetFramework">
+      <HintPath>..\..\packages\Microsoft.WindowsAzure.Common.1.4.1\lib\net45\Microsoft.WindowsAzure.Common.NetFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=9.3.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\WindowsAzure.Storage.9.3.3\lib\net45\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.3.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Diagnostics.DiagnosticSource.4.5.1\lib\net45\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.IdentityModel.Tokens.Jwt.5.3.0\lib\net45\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http.Extensions">
+      <HintPath>..\..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.4\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Runtime" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Spatial, Version=5.8.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Spatial.5.8.4\lib\net40\System.Spatial.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processeroArchitecture=MSIL" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\SharedVersion.cs">
+      <Link>Properties\SharedVersion.cs</Link>
+    </Compile>
+    <Compile Include="ActivityLogs\CreateStreamAnalyticsJob.cs" />
+    <Compile Include="ActivityLogs\SetStreamAnalyticsJSONFunction.cs" />
+    <Compile Include="ActivityLogs\ExportActivityLogToEventHub.cs" />
+    <Compile Include="ActivityLogs\GetAppWorkspaces.cs" />
+    <Compile Include="ActivityLogs\GetEventHubPrimaryKey.cs" />
+    <Compile Include="ActivityLogs\GetHistoricalData.cs" />
+    <Compile Include="ActivityLogs\SetAdministrativeOutput.cs" />
+    <Compile Include="ActivityLogs\SetServiceHealthOutput.cs" />
+    <Compile Include="ActivityLogs\SetStreamAnalyticsInputAsEventHub.cs" />
+    <Compile Include="ActivityLogs\SetStreamAnalyticsQuery.cs" />
+    <Compile Include="ActivityLogs\StartStreamAnalyticsJob.cs" />
+    <Compile Include="ActivityLogs\ValidateLogProfile.cs" />
+    <Compile Include="ActivityLogs\VerifyLogProfileEventHub.cs" />
+    <Compile Include="ApiManagement\CallFrequencyLogicApp.cs" />
+    <Compile Include="ApiManagement\DeployGeoFill.cs" />
+    <Compile Include="ApiManagement\DeployGraphCallsLogicApp.cs" />
+    <Compile Include="ApiManagement\ProcessIPAddressesLogicApp.cs" />
+    <Compile Include="ApiManagement\LoadIPLocationDB.cs" />
+    <Compile Include="ApiManagement\CreateApiManagementLogger.cs" />
+    <Compile Include="ApiManagement\GetApiManagementServices.cs" />
+    <Compile Include="ApiManagement\UpdateApiManagementPolicy.cs" />
+    <Compile Include="Arm\DeployAzureArmTemplate.cs" />
+    <Compile Include="Arm\WaitForArmDeploymentStatus.cs" />
+    <Compile Include="AzureAS\AssignPermissionsForUser.cs" />
+    <Compile Include="AzureAS\DeployAzureASModel.cs" />
+    <Compile Include="AzureAS\CheckASServerNameAvailability.cs" />
+    <Compile Include="AzureAS\ValidateConnectionToAS.cs" />
+    <Compile Include="AzureML\DeployAzureMLExperiment.cs" />
+    <Compile Include="AzureML\DeployAzureMLWorkspace.cs" />
+    <Compile Include="AzureML\ExportAzureMLExperiment.cs" />
+    <Compile Include="AzureML\DeployAzureMLWebServiceFromFile.cs" />
+    <Compile Include="AzureSql\CreateAzureSql.cs" />
+    <Compile Include="AzureStorage\GetTextBlob.cs" />
+    <Compile Include="AzureToken\AzureTokenRequestMeta.cs" />
+    <Compile Include="AzureToken\AzureTokenUtility.cs" />
+    <Compile Include="AzureToken\CreateADApplication.cs" />
+    <Compile Include="AzureToken\CreateSpn.cs" />
+    <Compile Include="AzureToken\GetAzureAuthUriForSPN.cs" />
+    <Compile Include="AzureToken\GetAzureAuthUri.cs" />
+    <Compile Include="AzureToken\GetAzureToken.cs" />
+    <Compile Include="AzureToken\RefreshAzureToken.cs" />
+    <Compile Include="AzureUtility.cs" />
+    <Compile Include="CDM\CheckCDMEntities.cs" />
+    <Compile Include="CDM\CreateCDMEntity.cs" />
+    <Compile Include="CDM\CreateDatabase.cs" />
+    <Compile Include="CDM\CreateEnvironment.cs" />
+    <Compile Include="CDM\DeleteEnvironment.cs" />
+    <Compile Include="CDM\GetAllEnvironments.cs" />
+    <Compile Include="CDM\GetEnvironID.cs" />
+    <Compile Include="CDM\GetObjID.cs" />
+    <Compile Include="CDM\ProvisionCDM.cs" />
+    <Compile Include="CognitiveServices\CognitiveServicePayload.cs" />
+    <Compile Include="CognitiveServices\WaitForCognitiveService.cs" />
+    <Compile Include="CognitiveServices\RegisterCognitiveServices.cs" />
+    <Compile Include="Common\ConfigureNotifier.cs" />
+    <Compile Include="Common\ConsentConnectionToLogicApp.cs" />
+    <Compile Include="Common\ExistsResourceGroup.cs" />
+    <Compile Include="Common\DeployNotifierLogicApp.cs" />
+    <Compile Include="Common\GetAzureStorages.cs" />
+    <Compile Include="Common\GetEmail.cs" />
+    <Compile Include="Common\VerifyConnectionToLogicApp.cs" />
+    <Compile Include="IoTContinuousDataExport\DeployIoTCDEDataFactory.cs" />
+    <Compile Include="IoTContinuousDataExport\DeployIoTCDEFunctionCode.cs" />
+    <Compile Include="IoTContinuousDataExport\DeployIoTCDEAzureFunction.cs" />
+    <Compile Include="EventHub\GetEventHubKeys.cs" />
+    <Compile Include="Functions\CheckFunctionStatus.cs" />
+    <Compile Include="Functions\DeployAzureFunctionConnectionStrings.cs" />
+    <Compile Include="Functions\DeployAzureFunctionAppSettings.cs" />
+    <Compile Include="Common\DeployPrivateAssemblyToFunction.cs" />
+    <Compile Include="Common\RegisterBapiService.cs" />
+    <Compile Include="Common\RegisterProviderBeta.cs" />
+    <Compile Include="Common\RegisterProvider.cs" />
+    <Compile Include="Common\UpdateBlobStorageConnector.cs" />
+    <Compile Include="Common\CreateAzureStorageAccount.cs" />
+    <Compile Include="Common\CreateConnectorToLogicApp.cs" />
+    <Compile Include="Common\CreateResourceGroup.cs" />
+    <Compile Include="Common\DeleteResourceGroup.cs" />
+    <Compile Include="Functions\DeployAzureFunction.cs" />
+    <Compile Include="Common\DeployAzureFunctionAssets.cs" />
+    <Compile Include="CognitiveServices\DeployCognitiveService.cs" />
+    <Compile Include="Common\DeployStorageAccountContainer.cs" />
+    <Compile Include="Common\GetAzureSubscriptions.cs" />
+    <Compile Include="CognitiveServices\GetCognitiveKey.cs" />
+    <Compile Include="Common\GetLocations.cs" />
+    <Compile Include="AzureAS\DeployAzureAnalysisServices.cs" />
+    <Compile Include="Common\GetStorageAccountKey.cs" />
+    <Compile Include="CreateSqlConnector.cs" />
+    <Compile Include="ActivityLogs\CreateEventHubNameSpace.cs" />
+    <Compile Include="FTPUtilityTest.cs" />
+    <Compile Include="IoTContinuousDataExport\TriggerFunctionApp.cs" />
+    <Compile Include="LogicApp\LogicAppConnector.cs" />
+    <Compile Include="LogicApp\ForceRunLogicApp.cs" />
+    <Compile Include="News\DeployAzureMLSchedulerLogicApp.cs" />
+    <Compile Include="News\DeployNewsFunctionAsset.cs" />
+    <Compile Include="News\DeployNewsTemplateHistorical.cs" />
+    <Compile Include="News\DeployNewsTemplateLogicApp.cs" />
+    <Compile Include="News\PopulateUserDefinedEntities.cs" />
+    <Compile Include="News\RunNewsHistorical.cs" />
+    <Compile Include="O365\StartAuditData.cs" />
+    <Compile Include="PowerApp\CreatePowerAppSqlConnection.cs" />
+    <Compile Include="PowerApp\ConfigurePowerAppTables.cs" />
+    <Compile Include="PowerApp\DeployPowerApp.cs" />
+    <Compile Include="PowerApp\GetPowerAppEnvironment.cs" />
+    <Compile Include="PowerApp\WranglePowerApp.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reddit\DeployRedditAzureMLWebServiceFromFile.cs" />
+    <Compile Include="Reddit\PopulateRedditUserDefinedEntities.cs" />
+    <Compile Include="Reddit\RandomizeScheduledStartTime.cs" />
+    <Compile Include="Reddit\RetrieveSocialGistApiKey.cs" />
+    <Compile Include="Reddit\SignalExecuteRedditSearchFunction.cs" />
+    <Compile Include="Reddit\UploadAssetBlobStorage.cs" />
+    <Compile Include="StreamAnalytics\ToggleStreamAnalytics.cs" />
+    <Compile Include="StreamAnalytics\AddStreamAnalyticsInputEventHub.cs" />
+    <Compile Include="StreamAnalytics\AddStreamAnalyticsOutputSql.cs" />
+    <Compile Include="StreamAnalytics\UpdateStreamAnalyticsQuery.cs" />
+    <Compile Include="Twitter\ConsentTwitterConnectionToLogicApp.cs" />
+    <Compile Include="Twitter\CreateTwitterConnectionToLogicApp.cs" />
+    <Compile Include="Twitter\DeployTwitterCSharpFunctionAssets.cs" />
+    <Compile Include="Twitter\DeployTwitterFunction.cs" />
+    <Compile Include="Twitter\DeployTwitterHistoricalLogicApp.cs" />
+    <Compile Include="Twitter\DeployTwitterLogicApp.cs" />
+    <Compile Include="Twitter\GetLogicAppUrl.cs" />
+    <Compile Include="Twitter\DeployUserLogicApp.cs" />
+    <Compile Include="Twitter\GetTwitterConnection.cs" />
+    <Compile Include="Twitter\RunLogicApp.cs" />
+    <Compile Include="Twitter\RunLogicAppHistorical.cs" />
+    <Compile Include="Twitter\UpdateTwitterLogicApp.cs" />
+    <Compile Include="Twitter\ValidateCognitiveKey.cs" />
+    <Compile Include="Twitter\ValidateTwitterAccount.cs" />
+    <Compile Include="Twitter\VerifyTwitterConnection.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Microsoft.Deployment.Common\Microsoft.Deployment.Common.csproj">
+      <Project>{38282763-a8de-485e-a5eb-e5e969f4385b}</Project>
+      <Name>Microsoft.Deployment.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

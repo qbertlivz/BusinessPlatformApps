@@ -5,17 +5,15 @@ using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Table;
 
+using Microsoft.Deployment.Common;
 using Microsoft.Deployment.Common.ActionModel;
 using Microsoft.Deployment.Common.Actions;
-using Microsoft.Deployment.Common.Helpers;
 
 namespace Microsoft.Deployment.Actions.Custom.CustomerData
 {
     [Export(typeof(IAction))]
     public class PushToSimplement : BaseAction
     {
-        private const string connectionToSimplement = "?sv=2015-04-05&ss=t&srt=o&sp=rwlacu&se=2050-08-06T05:33:54Z&st=2016-08-04T21:33:54Z&spr=https&sig=3zLV0npI9j1Pgd7sdymi69cVEA0D%2FhfSLodYomCv5Vg%3D";
-
         public override async Task<ActionResponse> ExecuteActionAsync(ActionRequest request)
         {
             string fName  = request.DataStore.GetValue("FirstName");
@@ -23,8 +21,8 @@ namespace Microsoft.Deployment.Actions.Custom.CustomerData
             string company = request.DataStore.GetValue("CompanyName");
             string email = request.DataStore.GetValue("RowKey");
 
-            StorageCredentials sasCredentials = new StorageCredentials(connectionToSimplement);
-            CloudTableClient tableClient = new CloudTableClient(new Uri("https://simpsolutiontemplate.table.core.windows.net/contact"), sasCredentials);
+            StorageCredentials sasCredentials = new StorageCredentials(Constants.SimplementSasToken);
+            CloudTableClient tableClient = new CloudTableClient(new Uri(Constants.SimplementBlobStorage), sasCredentials);
             CloudTable table = tableClient.GetTableReference("contact");
 
             CustomerInfoSimplement customerInfoSimplement = new CustomerInfoSimplement(email)

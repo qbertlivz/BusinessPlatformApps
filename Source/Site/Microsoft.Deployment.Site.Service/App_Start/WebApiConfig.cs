@@ -59,6 +59,21 @@ namespace Microsoft.Deployment.Site.Service
             Constants.SimplementBlobStorage = ConfigurationManager.ConnectionStrings["SimplementBlobStorage"].ToString();
             Constants.SimplementSasToken = ConfigurationManager.ConnectionStrings["SimplementSasToken"].ToString();
 
+            // Bpst
+            Constants.BpstNotifierUrl = ConfigurationManager.ConnectionStrings["BpstNotifierUrl"].ToString();
+
+            // Client Ids
+            Constants.MicrosoftClientId = ConfigurationManager.ConnectionStrings["MicrosoftClientId"].ToString();
+            Constants.ASClientId = ConfigurationManager.ConnectionStrings["ASClientId"].ToString();
+            Constants.MicrosoftClientIdCrm = ConfigurationManager.ConnectionStrings["MicrosoftClientIdCrm"].ToString();
+            Constants.MicrosoftClientIdPowerBI = ConfigurationManager.ConnectionStrings["MicrosoftClientIdPowerBI"].ToString();
+            Constants.Office365ClientId = ConfigurationManager.ConnectionStrings["Office365ClientId"].ToString();
+            Constants.AxClientId = ConfigurationManager.ConnectionStrings["AxClientId"].ToString();
+            Constants.AxErpResource = ConfigurationManager.ConnectionStrings["AxErpResource"].ToString();
+            Constants.MsCrmClientId = ConfigurationManager.ConnectionStrings["MsCrmClientId"].ToString();
+            Constants.MsCrmResource = ConfigurationManager.ConnectionStrings["MsCrmResource"].ToString();
+            Constants.FacebookClientId = ConfigurationManager.ConnectionStrings["FacebookClientId"].ToString();
+
             var appXmlType = config.Formatters.XmlFormatter.SupportedMediaTypes.FirstOrDefault(t => t.MediaType == "application/xml");
             config.Formatters.XmlFormatter.SupportedMediaTypes.Remove(appXmlType);
             //config.Services.Add(typeof(IExceptionLogger), new AiExceptionLogger());

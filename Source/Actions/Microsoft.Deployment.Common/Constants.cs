@@ -24,25 +24,24 @@
         public const string AzureAuthUri = "https://login.microsoftonline.com/{0}/oauth2/authorize?";
         public const string AzureTokenUri = "https://login.microsoftonline.com/{0}/oauth2/token";
 
-        public const string MicrosoftClientId = "6b317a7c-0749-49bd-9e8c-d906aa43f64b";
-        public const string ASClientId = "ecbb98ca-18e7-4f63-bb90-4534267a71b7";
-        public const string MicrosoftClientIdCrm = "affab8de-076f-4b2c-b62d-29860cb41ff8";
-        public const string MicrosoftClientIdPowerBI = "728cc6b6-9854-4601-a95a-152077d65d58";
+        public static string MicrosoftClientId = "";
+        public static string ASClientId = "";
+        public static string MicrosoftClientIdCrm = "";
+        public static string MicrosoftClientIdPowerBI = "";
         public const string MicrosoftClientSecret = "";
         public const string WebsiteRedirectPath = "/redirect.html";
         public const string AppInsightsKey = "app_insights_key";
 
         // Notifications
         public static string BpstDeploymentIdDatabase = string.Empty;
-        public static string BpstNotifierUrl = "https://prod-27.northcentralus.logic.azure.com:443/workflows/0cdb1a801fa84af99477894c1fa202ba/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=HKNuTDXQWw5KosQlKnSxRR-yHGxiVlCr0np732KpOXQ";
+        public static string BpstNotifierUrl = "";
 
-        public const string Office365ClientId = "5a75fd0b-23ec-4e09-ac55-b2c2050286de";
+        public static string Office365ClientId = "";
 
         // Ax
         // TODO: Temporary workaround to make use of different Ax AAD App
-        public const string AxClientId = "bcf1cb1c-74d6-460c-941a-22f0110f1090";
-        // public const string AxClientId = "2b34cc99-8434-4e46-810f-95bc256b3961";
-        public const string AxErpResource = "00000015-0000-0000-c000-000000000000";
+        public static string AxClientId = "";
+        public static string AxErpResource = "";
         public static string AxLocatorClientId = string.Empty;
         public static string AxLocatorSecret = string.Empty;
         public const string AxLocatorBaseUrl = "https://infra.locator.dynamics.com";
@@ -51,13 +50,13 @@
         // Crm
         public const string CrmProfileName = "bpst-mscrm-profile";
         public const string MsCrmAuthority = "https://login.windows.net/common/oauth2/authorize?";
-        public const string MsCrmClientId = "fb430120-4027-46b2-8499-95e0e8a3e646";
-        public const string MsCrmResource = "b861dbcc-a7ef-4219-a005-0e4de4ea7dcf";
+        public static string MsCrmClientId = "";
+        public static string MsCrmResource = "";
         public const string MsCrmToken = "https://login.windows.net/common/oauth2/token";
 
         // Facebook
         public const string FacebookGraphUrl = "https://graph.facebook.com";
-        public const string FacebookClientId = "1566056443462682";
+        public static string FacebookClientId = "";
         public static string FacebookClientSecret = string.Empty;
 
         // Informatica

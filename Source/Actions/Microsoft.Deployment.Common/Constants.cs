@@ -81,7 +81,11 @@
         public static string CunaApiAadSecret = string.Empty;
         public static string CunaTokenValidateCertificate = string.Empty;
 
-        //PowerBI
+        // PowerBI
         public const string PowerBiApiUrl = "https://api.powerbi.com/";
+
+        // Simplement
+        public static string SimplementBlobStorage = string.Empty;
+        public static string SimplementSasToken = string.Empty;
     }
 }
